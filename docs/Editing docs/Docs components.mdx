@@ -1,0 +1,344 @@
+
+# Docs components
+
+This section introduce how to use mdx components to enrich your docs content. We support most markdown applications.
+
+## Titles and headings
+Best used for page headers.
+```markdown
+# Your Page Header
+```
+
+| How to Write             | Rendered Output          |
+| :----------------------- | :----------------------- |
+| `# Heading level 1`      | <h1>Heading level 1</h1> |
+| `## Heading level 2`     | <h2>Heading level 2</h2> |
+| `### Heading level 3`    | <h3>Heading level 3</h3> |
+| `#### Heading level 4`   | <h4>Heading level 4</h4> |
+| `##### Heading level 5`  | <h5>Heading level 5</h5> |
+| `###### Heading level 6` | <h6>Heading level 6</h6> |
+
+## Text formatting
+We support most markdown formatting. 
+
+| Style  | How to write        | Rendered Output            |
+| :----- | :------------------ | :------------------------- |
+| Bold   | `**Bold text**`     | <strong>Bold text</strong> |
+| Italic | `_Italic text_`     | <em>Italic text</em>       |
+| Strike | `~~Strikethrough~~` | <s>Strikethrough</s>       |
+
+You can combine these to emphasize text with bold and italics at the same time. For example, you can write `**_Bold with Italic_**` or `__*Bold with Italic*__` to get **_Bold with Italic_** text.
+
+If you want to write superscript or subscript text, you need to use HTML.
+
+| Style       | How to write             |Rendered Output         |
+| :---        | :---                     | :---                   |
+| Superscript | `<sup>superscript</sup>` | <sup>superscript</sup> |
+| Subscript   | `<sub>subscript</sub>`   | <sub>subscript</sub>   |
+
+
+
+## lists
+
+You can order your content into ordered number lists or unrdered bulleted lists. 
+
+### Number list
+Best used for Number list.
+```markdown
+1. First list
+2. Second list
+3. Third list 
+```
+
+
+
+### Bulleted list
+
+You can add`-`, `*`, or`+` in front of each line items to create bulleted lists.
+
+Best used for bulleted list.
+```markdown
+- First list
+- Second list
+- Third list 
+```
+
+- First list
+- Second list
+- Third list 
+
+
+
+## Links
+
+Inorder to create a link, you can enclose the link text in brackets (e.g., [Docuo]) and then follow it immediately with the URL in parentheses (e.g., (https://www.spreading.ai/)).
+
+```markdown
+I love using [Docuo](https://www.spreading.ai/) to generate online docs.
+```
+
+The rendered output looks like this:
+I love using [Docuo](https://www.spreading.ai/) to generate online docs.
+
+
+
+## Quotes
+
+You can add a `>` in front of a paragraph to create a quote.
+
+```markdown
+> I love using Docuo to generate online docs.
+```
+
+The rendered output looks like this:
+
+> I love using Docuo to generate online docs.
+
+
+
+## Divider
+
+Best used for divider.
+```markdown
+---
+```
+
+
+
+## Tables
+> We support the [offical markdown table syntax](https://www.markdownguide.org/extended-syntax/#tables).
+
+To add a table, use three or more hyphens `---` to create each column’s header, and use pipes `|` to separate each column. You should also add a pipe on either end of the row.
+
+```markdown
+| Title | Description  |
+| ----- | ------------ |
+| Item1 | Destription1 |
+| Item2 | Destription2 |
+```
+
+The rendered output looks like this:
+
+| Title | Description  |
+| ----- | ------------ |
+| Item1 | Destription1 |
+| Item2 | Destription2 |
+
+
+
+## Callouts
+
+There are four types of callouts prepared for you to match different needs, including `<Tip>`, `<Note>`, `<Warning>`, and `<Error>`.
+
+- Tip
+```markdown
+<Tip title="Tip">This suggests a helpful tip</Tip>
+```
+
+The rendered output looks like this:
+<Tip title="Tip">This suggests a helpful tip</Tip>
+
+- Note
+```markdown
+<Note title="Note">This adds a note in the content</Note>
+```
+
+The rendered output looks like this:
+<Note title="Note">This adds a note in the content</Note>
+
+
+
+- Warning
+
+```markdown
+<Warning title="Warning">This raises a warning to watch out for</Warning>
+```
+
+The rendered output looks like this:
+<Warning title="Warning">This raises a warning to watch out for</Warning>
+
+- Error
+```markdown
+<Error title="ERROR">This raises a error to watch out for</Error>
+```
+
+The rendered output looks like this:
+<Error title="ERROR">This raises a error to watch out for</Error>
+
+## Code blocks
+### Inline code blocks
+You can enclose the inline code in backticks (e.g., `Docuo`) 
+```markdown
+Add a `inline code block` in a sentence.
+```
+
+The rendered output looks like this:
+Add a `inline code block` in a sentence.
+
+### Single Code blocks
+You can use fenced code blocks by enclosing code in three backticks.
+````markdown
+```
+helloWorld();
+```
+````
+The rendered output looks like this:
+```markdown
+helloWorld();
+```
+
+
+
+You can put the name of your programming language after the first three backticks to get syntax highlighting. Or you can indicate the lines to be highlighted in curly brackets.
+
+````markdown
+```jsx {1,4-6,11}
+import React from 'react';
+
+function MyComponent(props) {
+  if (props.isBar) {
+    return <div>Bar</div>;
+  }
+
+  return <div>Foo</div>;
+}
+
+export default MyComponent;
+```
+````
+```jsx {1,4-6,11}
+import React from 'react';
+
+function MyComponent(props) {
+  if (props.isBar) {
+    return <div>Bar</div>;
+  }
+
+  return <div>Foo</div>;
+}
+
+export default MyComponent;
+```
+
+
+
+
+You can add more text after the programming language to set the name of your code example. The text can be anything as long as its all in one line.
+````markdown
+```javascript helloWorld.js
+console.log("Hello World");
+```
+````
+```javascript helloWorld.js
+console.log("Hello World");
+```
+
+
+
+Code blocks show line numbers by default. If you want to hide line numbers, you can add `hideLineNumbers` at the end of the first three backticks.
+
+````markdown
+```jsx helloWorld.js {1,4-6,11} hideLineNumbers
+import React from 'react';
+
+function MyComponent(props) {
+  if (props.isBar) {
+    return <div>Bar</div>;
+  }
+
+  return <div>Foo</div>;
+}
+
+export default MyComponent;
+```
+````
+
+```jsx helloWorld.js {1,4-6,11} hideLineNumbers
+import React from 'react';
+
+function MyComponent(props) {
+  if (props.isBar) {
+    return <div>Bar</div>;
+  }
+
+  return <div>Foo</div>;
+}
+
+export default MyComponent;
+```
+
+### Code groups
+
+Use `<CodeGroup>` to aggregate multiple code blocks into one code group.
+
+````markdown
+<CodeGroup>
+```javascript helloWorld.js
+console.log("Hello World");
+```
+
+```python hello_world.py
+print('Hello World!')
+```
+
+```java HelloWorld.java
+class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+</CodeGroup>
+````
+
+
+
+The rendered output looks like this:
+
+<CodeGroup>
+
+```javascript helloWorld.js
+console.log("Hello World");
+```
+
+```python hello_world.py
+print('Hello World!')
+```
+
+```java HelloWorld.java
+class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+</CodeGroup>
+
+
+
+
+## Images
+We support displaying images through repository path or by adding image path
+```markdown
+<Frame width="300" height="auto" caption="image description text">
+  <img src="/path/image.jpg" />
+</Frame>
+```
+
+| Index   | Index type                      |Description                                                                         |
+| :---    | :---                            | :---                                                                               |
+| width   | value greater than 0, or "auto" | The width of the image. If "aoto" is set, the image width will adapt to the page.  |
+| height  | value greater than 0, or "auto" | The width of the image. If "aoto" is set, the image height will adapt to the page. |
+| caption | string                          | Text description at the bottom of the image.                                       |
+
+
+
+## Videos
+
+We support displaying Youtube，vimeo, and Loom online videos.
+```HTML
+<Video src="https://youtube.com/xxxxxx"/>
+```
+
+
+

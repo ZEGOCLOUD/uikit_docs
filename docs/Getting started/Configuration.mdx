@@ -1,0 +1,95 @@
+# Configuration
+
+<Tip title="INFO">
+Check the `docuo.config.json` [**API reference**](../Customizing/Customize%20with%20json%20file.mdx) for an exhaustive list of options.
+</Tip>
+
+Docuo has a unique take on configurations. We encourage you to congregate information about your site into one place. We guard the fields of this file and facilitate making this data object accessible across your site.
+
+Keeping a well-maintained `docuo.config.json` helps you, your collaborators, and your open source contributors to be able to focus on documentation while still being able to customize the site.
+
+## Syntax to declare `docuo.config.json`
+
+The `docuo.config.json` file is run in Node.js and should returns a standard json format of content.
+
+<CodeGroup>
+
+```json docuo.config
+{
+  "title": "Your site title",
+  "favicon": "Your site favicon",
+  "themeConfig": {
+    "navbar": {
+      "title": "Your navbar title",
+      "logo": "Your navbar logo",
+      "items": [
+        {
+          "type": "docSidebar",
+          "sidebarIds": ["mySidebar"],
+          "label": "Documentation",
+          "position": "left"
+        }
+      ]
+    },
+    "footer": {
+      "logo": "Your footer logo",
+      "caption": "Your caption",
+      "links": [
+        {
+          "title": "Product",
+          "items": [
+            {
+              "label": "documentation",
+              "to": "/"
+            }
+          ]
+        }
+      ],
+      "socials": [
+        {
+          "logo": "Twitter",
+          "href": "Your twitter url"
+        },
+        {
+          "logo": "LinkedIn",
+          "href": "Your linkedin url"
+        },
+        {
+          "logo": "Discord",
+          "href": "Your discord url"
+        },
+        {
+          "logo": "GitHub",
+          "href": "Your github url"
+        }
+      ]
+    }
+  }
+}
+```
+
+</CodeGroup>
+
+## What goes into a `docuo.config.json`?
+
+The high-level overview of Docuo configuration can be categorized into:
+
+- [Site metadata](./Configuration.mdx#site-metadata)
+- [Theme configurations](./Configuration.mdx#theme-configurations)
+
+### Site metadata
+
+Site metadata contains the essential global metadata such as `title` and `favicon`.
+
+They are used in several places such as your site's title and headings, browser tab icon, social sharing (Facebook, Twitter) information.
+
+It is recommended to check the [sitemeta docs](../Customizing/Customize%20with%20json%20file.mdx#title) for more information.
+
+### Theme configurations
+
+Theme config includes all the configurations needed to generate site themes, mainly including layout and site style.
+
+To set the layout, `navbar` and `footer`  can control the layout of header navbar and site footer items. You can also set the group display of your documentation using `anchors `and `tabs`
+
+Check [Theme Customization](../Customizing/Customize%20with%20json%20file.mdx#themeconfig) for more information.
+

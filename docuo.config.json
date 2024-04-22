@@ -1,0 +1,88 @@
+{
+  "title": "My site",
+  "description": "Start building modern documentation site in 4 steps - Docuo",
+  "favicon": "image/favicon.ico",
+  "themeConfig": {
+    "colorMode": {
+      "defaultMode": "dark",
+      "disableSwitch": false,
+      "respectPrefersColorScheme": false
+    },
+    "navbar": {
+      "title": "My project",
+      "logo": {
+        "light": "image/logo_light.png",
+        "dark": "image/logo_dark.png"
+      },
+      "items": [
+        {
+          "type": "docSidebar",
+          "sidebarIds": ["mySidebar"],
+          "label": "Documentation"
+        },
+        {
+          "type": "default",
+          "label": "Homepage",
+          "href": "https://www.spreading.ai"
+        }
+      ]
+    },
+    "footer": {
+      "logo": {
+        "light": "image/logo_light.png",
+        "dark": "image/logo_dark.png"
+      },
+      "caption": "My project",
+      "links": [
+        {
+          "title": "Product",
+          "items": [
+            {
+              "label": "Blog",
+              "href": "https://www.spreading.ai/blog"
+            },
+            {
+              "label": "Sign up",
+              "href": "https://app.spreading.ai/signup"
+            },
+            {
+              "label": "Log in",
+              "href": "https://app.spreading.ai/login"
+            }
+          ]
+        }
+      ],
+      "socials": [
+        {
+          "logo": "Twitter",
+          "href": "https://twitter.com/docuo_team"
+        },
+        {
+          "logo": "LinkedIn",
+          "href": "https://www.linkedin.com/company/spreadingai"
+        },
+        {
+          "logo": "Discord",
+          "href": "https://discord.gg/pgJFhUwzAU"
+        },
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/spreadingai"
+        }
+      ]
+    }
+  },
+  "search": {
+    "algolia": {
+      "appId": "YOUR_APP_ID",
+      "apiKey": "YOUR_API_KEY",
+      "indexName": "YOUR_INDEX_NAME"
+    }
+  },
+  "openapi": {
+    "petstore": {
+      "specPath": "docs/Using OpenAPI/OpenAPI Demo/petstore.yaml",
+      "outputDir": "docs/Using OpenAPI/OpenAPI Demo"
+    }
+  }
+}
