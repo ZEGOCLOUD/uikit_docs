@@ -1,53 +1,34 @@
 {
-  "title": "My site",
-  "description": "Start building modern documentation site in 4 steps - Docuo",
+  "title": "UIKit",
   "favicon": "image/favicon.ico",
   "themeConfig": {
     "colorMode": {
-      "defaultMode": "dark",
+      "defaultMode": "light",
       "disableSwitch": false,
       "respectPrefersColorScheme": false
     },
     "navbar": {
-      "title": "My project",
-      "logo": {
-        "light": "image/logo_light.png",
-        "dark": "image/logo_dark.png"
-      },
+      "title": "UIKit",
+      "logo": "image/logo.png",
       "items": [
         {
           "type": "docSidebar",
-          "sidebarIds": ["mySidebar"],
-          "label": "Documentation"
-        },
-        {
-          "type": "default",
-          "label": "Homepage",
-          "href": "https://www.spreading.ai"
+          "sidebarId": "mySidebar",
+          "label": "Documentation",
+          "position": "left"
         }
       ]
     },
     "footer": {
-      "logo": {
-        "light": "image/logo_light.png",
-        "dark": "image/logo_dark.png"
-      },
-      "caption": "My project",
+      "logo": "image/logo.png",
+      "caption": "UIKit",
       "links": [
         {
           "title": "Product",
           "items": [
             {
-              "label": "Blog",
-              "href": "https://www.spreading.ai/blog"
-            },
-            {
-              "label": "Sign up",
-              "href": "https://app.spreading.ai/signup"
-            },
-            {
-              "label": "Log in",
-              "href": "https://app.spreading.ai/login"
+              "label": "documentation",
+              "to": "/"
             }
           ]
         }
@@ -84,5 +65,19 @@
       "specPath": "docs/Using OpenAPI/OpenAPI Demo/petstore.yaml",
       "outputDir": "docs/Using OpenAPI/OpenAPI Demo"
     }
-  }
+  },
+  "instances": [
+    {
+      "id": "default",
+      "label": "Call Kit(Flutter)",
+      "path": "docs",
+      "routeBasePath": "callkit_flutter"
+    },
+    {
+      "id": "callkit_ios",
+      "label": "Call Kit(iOS)",
+      "path": "callkit_flutter_ios",
+      "routeBasePath": "callkit_ios"
+    }
+  ]
 }

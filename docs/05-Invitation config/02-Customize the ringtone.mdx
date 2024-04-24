@@ -1,0 +1,59 @@
+# Customize the ringtone
+
+> ​The ringtone can be categorized into online ringtone and offline ringtone. In general, if you want to keep the online and offline ringtones consistent, you need to use the same ringtone file to complete this configuration.
+
+### Online call invitation
+
+
+If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `ringtoneConfig` in the `ZegoUIKitPrebuiltCallInvitationService`'s init function.
+
+Here is the reference code:
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  // Modify your custom configurations here.
+  ringtoneConfig: const ZegoRingtoneConfig(
+    incomingCallPath: "assets/ringtone/incomingCallRingtone.mp3",
+    outgoingCallPath: "assets/ringtone/outgoingCallRingtone.mp3",
+  ),
+);
+```
+
+## Ringtone for offline call invitation in Android
+
+
+1. Place a ringtone audio file in the `android/app/src/main/res/raw`, see [demo](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/tree/master/call_with_offline_invitation/android/app/src/main/res/raw).
+2. If there is no keep.xml in your project, please refer to the [demo](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/blob/master/call_with_offline_invitation/android/app/src/main/res/raw/keep.xml) and create one to ensure that the ringtone file will be included in your apk.
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/systemui_callring.jpeg" />
+</Frame>
+
+
+2. When calling `ZegoUIKitPrebuiltCallInvitationService.init`, configure the `androidNotificationConfig.sound` parameter with the file name (without the file extension).
+
+After the completion, the ringtone will be played when others receive System-UI offline call invitations.
+
+Here is the reference code:
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+...
+    notificationConfig: ZegoCallInvitationNotificationConfig(
+      androidNotificationConfig: ZegoAndroidNotificationConfig(
+        sound: "zego_incoming",
+      ),
+    ),
+...
+  );
+```
+
+## Ringtone for offline call invitation in iOS
+
+
+Due to Apple's restrictions, System-UI offline call invitations(VOIP) can only use iOS system ringtones.
