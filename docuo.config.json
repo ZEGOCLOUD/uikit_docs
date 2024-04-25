@@ -71,13 +71,7 @@
       "id": "default",
       "label": "Call Kit(Flutter)",
       "path": "docs",
-      "routeBasePath": "callkit_flutter"
-    },
-    {
-      "id": "callkit_ios",
-      "label": "Call Kit(iOS)",
-      "path": "callkit_flutter_ios",
-      "routeBasePath": "callkit_ios"
+      "routeBasePath": "callkit-flutter"
     }
   ]
 }
