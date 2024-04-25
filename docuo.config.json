@@ -11,44 +11,21 @@
       "title": "UIKit",
       "logo": "image/logo.png",
       "items": [
-        {
-          "type": "docSidebar",
-          "sidebarId": "mySidebar",
-          "label": "Documentation",
-          "position": "left"
-        }
       ]
     },
     "footer": {
-      "logo": "image/logo.png",
-      "caption": "UIKit",
+      "logo": "",
+      "caption": "",
       "links": [
-        {
-          "title": "Product",
-          "items": [
-            {
-              "label": "documentation",
-              "to": "/"
-            }
-          ]
-        }
       ],
       "socials": [
         {
-          "logo": "Twitter",
-          "href": "https://twitter.com/docuo_team"
-        },
-        {
-          "logo": "LinkedIn",
-          "href": "https://www.linkedin.com/company/spreadingai"
-        },
-        {
           "logo": "Discord",
-          "href": "https://discord.gg/pgJFhUwzAU"
+          "href": "https://discord.gg/EtNRATttyp"
         },
         {
           "logo": "GitHub",
-          "href": "https://github.com/spreadingai"
+          "href": "https://github.com/ZEGOCLOUD"
         }
       ]
     }
