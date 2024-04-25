@@ -16,18 +16,18 @@ There are usually three potential issues that can occur with online calls:
 If the UI does not respond after the caller clicks the call button, please check the following:
 
 1. Make sure that the userID of the user being called is valid.
-2. Check if there is any error reported on the caller side, please refer to [Check if there is any error on the calling side.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-there-is-any-error-on-the-calling-side)
-3. Check if the callee has correctly invoked the init function, please refer to [Check if the init logic is handled correctly.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
+2. Check if there is any error reported on the caller side, please refer to [Check if there is any error on the calling side.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-there-is-any-error-on-the-calling-side)
+3. Check if the callee has correctly invoked the init function, please refer to [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
 
 ### 2 There is a ringing sound but no incoming call dialog.
 
 
-Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
 
 ### 3 First time working fine, but subsequent openings of the application cannot show invitation dialogs.
 
 
-The problem usually occurs because the "auto login" related logic in your app does not call `ZegoUIKitPrebuiltCallInvitationService().init` after the user successfully "auto login", resulting in a failure to log in to our sdk. Please refer to [Check if the init logic is handled correctly.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
+The problem usually occurs because the "auto login" related logic in your app does not call `ZegoUIKitPrebuiltCallInvitationService().init` after the user successfully "auto login", resulting in a failure to log in to our sdk. Please refer to [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
 
 ### 4 No sound during call
 
@@ -57,7 +57,7 @@ Offline call issues can be complex and tricky, particularly on Android devices. 
 
 <Warning title="Warning">
 1. Before attempting to troubleshoot offline calls, please **make sure that the online call invitation feature is working properly**.
-2. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-test-device-has-granted-the-app-related-permissions)
+2. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-test-device-has-granted-the-app-related-permissions)
 </Warning>
 
 
@@ -65,25 +65,25 @@ Offline call issues can be complex and tricky, particularly on Android devices. 
 ### 6 I can receive the call invitation, but after clicking accept, it jumps to the app without entering the calling page.
 
 
-1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
-2. Please [Check if the init logic is handled correctly.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
+1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+2. Please [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-init-logic-is-handled-correctly)
 
 ### 7 I can receive call invitations, but only get notifications without accept and decline buttons on the invitation dialog.
 
 
-Please [Check if the ResourceID configuration is correct.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-resourceid-configuration-is-correct)
+Please [Check if the ResourceID configuration is correct.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-resourceid-configuration-is-correct)
 
 ### 8 I can receive the call invitation, but there is only ringing without an invitation dialog.
 
 
-1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
-2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-the-configuration-of-androidmanifestxml)
+1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-the-configuration-of-androidmanifestxml)
 
 ### 9 I can receive the call invitation, but after clicking accept, the application cannot be launched.
 
 
-1. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-test-device-has-granted-the-app-related-permissions)
-2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.spreading.io/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-the-configuration-of-androidmanifestxml)
+1. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-if-the-test-device-has-granted-the-app-related-permissions)
+2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#h-check-the-configuration-of-androidmanifestxml)
 
 
 
