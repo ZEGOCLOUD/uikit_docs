@@ -10,14 +10,12 @@
     "navbar": {
       "title": "UIKit",
       "logo": "image/logo.png",
-      "items": [
-      ]
+      "items": []
     },
     "footer": {
       "logo": "",
       "caption": "",
-      "links": [
-      ],
+      "links": [],
       "socials": [
         {
           "logo": "Discord",
@@ -32,9 +30,9 @@
   },
   "search": {
     "algolia": {
-      "appId": "YOUR_APP_ID",
-      "apiKey": "YOUR_API_KEY",
-      "indexName": "YOUR_INDEX_NAME"
+      "appId": "N61JOMLMAK",
+      "apiKey": "cc55591748c47b1e5e24d363cdf1d5eb",
+      "indexName": "zegocloud"
     }
   },
   "openapi": {
