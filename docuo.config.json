@@ -43,9 +43,9 @@
   },
   "instances": [
     {
-      "id": "default",
+      "id": "callkit_flutter",
       "label": "Call Kit(Flutter)",
-      "path": "docs",
+      "path": "docs_callkit_flutter",
       "routeBasePath": "callkit-flutter"
     }
   ]
