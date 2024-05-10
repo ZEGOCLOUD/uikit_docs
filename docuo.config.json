@@ -47,6 +47,36 @@
       "label": "Call Kit(Flutter)",
       "path": "docs_callkit_flutter",
       "routeBasePath": "callkit-flutter"
+    },
+    {
+      "id": "video_conference_kit_flutter",
+      "label": "Video Conference Kit(Flutter)",
+      "path": "docs_video_conference_kit_flutter",
+      "routeBasePath": "video-conference-kit-flutter"
+    },
+    {
+      "id": "video_conference_kit_android",
+      "label": "Video Conference Kit(Android)",
+      "path": "docs_video_conference_kit_android",
+      "routeBasePath": "video-conference-kit-android"
+    },
+    {
+      "id": "video_conference_kit_rn",
+      "label": "Video Conference Kit(RN)",
+      "path": "docs_video_conference_kit_rn",
+      "routeBasePath": "video-conference-kit-rn"
+    },
+    {
+      "id": "video_conference_kit_ios",
+      "label": "Video Conference Kit(iOS)",
+      "path": "docs_video_conference_kit_ios",
+      "routeBasePath": "video-conference-kit-ios"
+    },
+    {
+      "id": "video_conference_kit_web",
+      "label": "Video Conference Kit(Web)",
+      "path": "docs_video_conference_kit_web",
+      "routeBasePath": "video-conference-kit-web"
     }
   ]
 }

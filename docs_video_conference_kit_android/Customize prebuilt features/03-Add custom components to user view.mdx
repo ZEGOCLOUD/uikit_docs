@@ -1,0 +1,43 @@
+# Add custom components to user view
+
+- - -
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `setForegroundViewProvider` method.
+The `setForegroundViewProvider` requires you (the developer) to return a custom view that will be placed at the top of the view.
+
+Here is the reference code:
+
+```java {18-23}
+public class ConferenceActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_video_conference);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = userID;
+    String userName = userID;
+    String conferenceID = "testConferenceID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltVideoConferenceConfig config = new ZegoUIKitPrebuiltVideoConferenceConfig();
+    ZegoUIKitPrebuiltVideoConferenceFragment fragment = ZegoUIKitPrebuiltVideoConferenceFragment
+            .newInstance(appID, appSign, userID, userName, conferenceID, config);
+
+    fragment.setForegroundViewProvider(new ZegoViewProvider() {
+        @Override
+        public View getForegroundView(ZegoUIKitUser userInfo) {
+            return new ZegoVideoForegroundView(CallActivity.this, userInfo);
+        }
+    });
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```

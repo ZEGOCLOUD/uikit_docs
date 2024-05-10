@@ -1,0 +1,104 @@
+# Add custom components to user view
+
+- - -
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `foregroundBuilder` in `audioVideoViewConfig`.
+This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+> The position of the Widget can be specified by using the Flutter ` Positioned`. 
+
+Here shows **How to add a user avatar to the lower left corner during a conference**:
+
+
+```dart {15-38}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltVideoConference (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userID,
+      conferenceID: conferenceID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltVideoConferenceConfig(
+        audioVideoViewConfig: ZegoPrebuiltAudioVideoViewConfig(
+          foregroundBuilder: (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://your_server/app/avatar/${user.id}.png',
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Customize the audio view
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `backgroundBuilder` in `audioVideoViewConfig`.
+This callback, similar to other Flutter’s Builder callbacks, requires you to return a custom Widget that will be placed in the view in audio mode.
+
+> This config is only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on).
+> The position of the Widget can be specified by using the Flutter ` Positioned`. 
+
+Here shows **How to use a Gaussian Blur user image as the background image in audio mode**:
+
+
+```dart {15-30}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltVideoConference (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userID,
+      conferenceID: conferenceID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltVideoConferenceConfig(
+        audioVideoViewConfig: ZegoPrebuiltAudioVideoViewConfig(
+          backgroundBuilder: (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Image(
+                      image: NetworkImage(
+                        'https://your_server/app/user_image/${user.id}.png',
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
+      ),
+    );
+  }
+}
+```

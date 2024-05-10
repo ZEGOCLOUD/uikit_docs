@@ -1,0 +1,54 @@
+# Add custom components to user view
+
+- - -
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as, want to display the user avatars when the video view is displayed, adding user-level icons, etc., then you can use `getForegroundView` method.
+The `getForegroundView` requires you (the developer) to return a custom view that will be placed at the top of the view.
+
+Here is the reference code:
+
+```swift {38-40}
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID";
+    let selfUserName: String = "userName";
+    let yourAppID: UInt32 = YourAppID;
+    let yourAppSign: String = YourAppSign;
+    let conferenceID : String = "testConferenceID"
+    
+    @IBOutlet weak var userIDLabel: UILabel! {
+        didSet {
+            userIDLabel.text = selfUserID
+        }
+    }
+    @IBOutlet weak var userNameLabel: UILabel! {
+        didSet {
+            selfUserName = String(format: "zego_%@", selfUserID)
+            userNameLabel.text = selfUserName
+        }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func videoConference(_ sender: Any) {
+        
+        let config: ZegoUIkitPrebuiltVideoConferenceConfig = ZegoUIkitPrebuiltVideoConferenceConfig()
+        
+        let videoConferenceVC = ZegoUIKitPrebuiltVideoConferenceVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", conferenceID: conferenceID, config: config)
+        videoConferenceVC.modalPresentationStyle = .fullScreen
+
+        // Modify your custom configurations here.
+        videoConferenceVC.delegate = self
+
+
+        self.present(videoConferenceVC, animated: true, completion: nil)
+    }
+
+    // return your ForegroundView here.
+    func getForegroundView(_ userInfo: ZegoUIkitUser?) -> UIView? {
+        return YourCustomView()
+    }
+}
+```

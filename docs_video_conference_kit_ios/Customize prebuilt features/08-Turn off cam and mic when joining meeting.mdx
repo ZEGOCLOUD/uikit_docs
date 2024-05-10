@@ -1,0 +1,51 @@
+# Turn off cam and mic when joining meeting
+
+- - -
+
+When starting a conference, the Video Conference Kit (ZegoUIKitPrebuiltVideoConference) turns on the camera, and microphone, and uses the speaker as the audio output device by default.
+
+To change this default configuration, for example, turn off the camera when you start a conference or don't use the speaker (If the speaker is not used, the system's default audio output device, such as ear speaker, headset, Bluetooth, etc., will be used.), you can modify the following configurations:
+
+- `turnOnCameraWhenJoining`: Whether to turn on the camera when the conference starts. true: turn on (by default). false: turn off. 
+- `turnOnMicrophoneWhenJoining`: Whether to turn on the camera when the conference starts. true: turn on (by default). false: turn off. 
+- `useSpeakerWhenJoining`: Whether to use the speaker when the conference starts. true: use the speaker (by default). false: use the system's default audio output device, such as an ear speaker, headset, Bluetooth, etc.
+
+Here is the reference code:
+
+```swift {26-29}
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID";
+    let selfUserName: String = "userName";
+    let yourAppID: UInt32 = YourAppID;
+    let yourAppSign: String = YourAppSign;
+    let conferenceID : String = "testConferenceID"
+    
+    @IBOutlet weak var userIDLabel: UILabel! {
+        didSet {
+            userIDLabel.text = selfUserID
+        }
+    }
+    @IBOutlet weak var userNameLabel: UILabel! {
+        didSet {
+            selfUserName = String(format: "zego_%@", selfUserID)
+            userNameLabel.text = selfUserName
+        }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func videoConference(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIkitPrebuiltVideoConferenceConfig = ZegoUIkitPrebuiltVideoConferenceConfig()
+        config.turnOnCameraWhenJoining = false;
+        config.turnOnMicrophoneWhenJoining = false;
+        config.useSpeakerWhenJoining = true;
+        
+        let videoConferenceVC = ZegoUIKitPrebuiltVideoConferenceVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", conferenceID: conferenceID, config: config)
+        videoConferenceVC.modalPresentationStyle = .fullScreen
+        self.present(videoConferenceVC, animated: true, completion: nil)
+    }
+}
+```

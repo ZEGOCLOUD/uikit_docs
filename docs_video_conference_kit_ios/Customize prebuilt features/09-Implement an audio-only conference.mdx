@@ -1,0 +1,53 @@
+# Implement an audio-only conference
+
+- - -
+
+Video Conference Kit (ZegoUIKitPrebuiltVideoConference) defaults to video conference mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only conference.
+
+Camera-related logic is not required for audio-only conferences, so you can:
+
+- `bottomMenuBarConfig`: Configure this to delete the camera-related button.
+- `topMenuBarConfig`: Configure this to delete the camera-related button.
+- `turnOnCameraWhenJoining`: Configure this to only use the microphone when a conference starts.
+- `audioVideoViewConfig`: Configure this to delete the camera status icon on the view.
+
+Here is the reference code:
+
+```swift {26-30}
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID";
+    let selfUserName: String = "userName";
+    let yourAppID: UInt32 = YourAppID;
+    let yourAppSign: String = YourAppSign;
+    let conferenceID : String = "testConferenceID"
+    
+    @IBOutlet weak var userIDLabel: UILabel! {
+        didSet {
+            userIDLabel.text = selfUserID
+        }
+    }
+    @IBOutlet weak var userNameLabel: UILabel! {
+        didSet {
+            selfUserName = String(format: "zego_%@", selfUserID)
+            userNameLabel.text = selfUserName
+        }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func videoConference(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIkitPrebuiltVideoConferenceConfig = ZegoUIkitPrebuiltVideoConferenceConfig()
+        config.turnOnCameraWhenjoining = false;
+        config.audioVideoViewConfig.showCameraStateOnView = false;
+        config.bottomMenuBarConfig.buttons = [.toggleMicrophoneButton,.leaveButton,.swtichAudioOutputButton]
+        config.topMenuBarConfig.buttons = [.showMemberListButton]
+
+        let videoConferenceVC = ZegoUIKitPrebuiltVideoConferenceVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", conferenceID: conferenceID, config: config)
+        videoConferenceVC.modalPresentationStyle = .fullScreen
+        self.present(videoConferenceVC, animated: true, completion: nil)
+    }
+}
+```

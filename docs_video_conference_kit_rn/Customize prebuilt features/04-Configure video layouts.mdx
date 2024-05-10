@@ -1,0 +1,52 @@
+# Configure Video layouts
+
+- - -
+
+
+Video Conference Kit (ZegoUIkitPrebuiltVideoConference) currently supports the `gallery` layout, each layout has its own configurations. 
+To select and configure the layout you want, use the `layout` parameter in the `config`:
+
+#### Gallery layout
+
+The configuration supported by the gallery layout is:
+
+`addBorderRadiusAndSpacingBetweenView`: In gallery layout, this can be used to add border radius and spacing between speaker views. true: enabled (by default). false: disabled. 
+
+
+The effect is as follows:
+
+|Adding border radius and spacing | Without border radius and spacing|
+|----|----|
+|<Frame width="200" height="auto" ><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/conference/6.png" /></Frame> |<Frame width="200" height="auto" ><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/conference/6_false.png" /></Frame>|
+
+Here is the reference code:
+
+```js {17-22}
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltVideoConference from '@zegocloud/zego-uikit-prebuilt-video-conference-rn';
+import { ZegoLayoutMode } from '@zegocloud/zego-uikit-rn'
+
+export default function VideoConferencePage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltVideoConference
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                conferenceID={conferenceID}
+                
+                config={{
+                    onLeave: () => {props.navigation.navigate('HomePage')},
+                    layout:{
+                        mode: ZegoLayoutMode.gallery,
+                        config: {
+                            addBorderRadiusAndSpacingBetweenView: false
+                        }
+                    }
+                }}
+            />
+        </View>
+    );
+}
+```
