@@ -1,0 +1,16 @@
+- Build apps faster and easier
+  > When you want to prototype live streaming ASAP 
+  
+  > Consider speed or efficiency as the first priority. 
+
+- Customize UI as needed
+  > When you want to customize the UI based on your actual business needs
+  
+  > Don't want to waste time developing basic features
+
+Live Streaming Kit helps you to **integrate within the shortest possible time**, and it includes the business logic with the UI, allowing you to **customize features accordingly**.
+
+To finest-grained build a live stream app, you may try our [Live Streaming SDK\|_blank](!Low_Latency_Live-Overview/Overview) to make full customization.
+
+
+

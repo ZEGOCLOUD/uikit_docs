@@ -1,0 +1,1 @@
+- 已在 [ZEGO 控制台\|_blank](https://console.zego.im) 开通离线推送服务，详情请参考 [控制台 - 离线推送配置\|_blank](#15966) 。
