@@ -1,28 +1,7 @@
-import CompleteParameter from "/snippets/uikit/Web_UIKits_Complete_parameter_examples-en.md"
+import Part1 from "/snippets/uikit/WebUsingHTMLScriptPart1.mdx"
+import Part2 from "/snippets/uikit/WebUsingHTMLScriptPart2.mdx"
 
-# Using HTML script
-
-- - -
-
-This doc works in almost any programming language and frameworks, and supports both PC and mobile browsers (including WebViews).
-
-The Video Conference Kit SDK is written in pure JavaScript and natively supported by Web browsers, so you can refer to this doc if you're using JQuery, PHP, or JSP.
-
-## Getting started
-
-1. First, you'll need to generate a [Kit Token](../04-authentication-and-kit-token.mdx). 
-
-    <Note title="Note">
-    You can **skip generate Kit Token** if you wanna speed up your integration testing. Remember to generate the Kit Token by referring to [this](../04-authentication-and-kit-token.mdx) when you plan to make your app go live officially.
-    </Note>
-
-
-2. Then, replace the `appID` and `serverSecret` parameters in the following code with your project's AppID and ServerSecret that you get from [Admin Console](https://console.zegocloud.com/project). 
-
-    <Note title="Note">
-    - `userID` and `roomID` can only contain numbers, letters, and underlines (_). 
-    - Users that join the call with the same `roomID` can talk to each other. 
-    </Note>
+<Part1 />
 
 ```html {13,15-33}
 <html>
@@ -62,20 +41,5 @@ The Video Conference Kit SDK is written in pure JavaScript and natively supporte
 
 </html>
 ```
-    
-**And congratulations! You've finished all steps!**
 
-
-## Complete parameter examples
-
-You can also tailor the specific features by customizing parameters. Click here to check the complete parameter examples.
-
-<Accordion title="Examples" defaultOpen="false">
-<CompleteParameter/>
-</Accordion>
-
-## Related guide
-
-[Authentication and Kit Token](../04-authentication-and-kit-token.mdx)
-
-Follow the steps to generate a Kit Token.
+<Part2/>

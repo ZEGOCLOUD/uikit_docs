@@ -1,0 +1,24 @@
+# Using HTML script
+
+- - -
+
+This doc works in almost any programming language and frameworks, and supports both PC and mobile browsers (including WebViews).
+
+The Video Conference Kit SDK is written in pure JavaScript and natively supported by Web browsers, so you can refer to this doc if you're using JQuery, PHP, or JSP.
+
+## Getting started
+
+1. First, you'll need to generate a [Kit Token](../04-authentication-and-kit-token.mdx). 
+
+    <Note title="Note">
+    You can **skip generate Kit Token** if you wanna speed up your integration testing. Remember to generate the Kit Token by referring to [this](../04-authentication-and-kit-token.mdx) when you plan to make your app go live officially.
+    </Note>
+
+
+2. Then, replace the `appID` and `serverSecret` parameters in the following code with your project's AppID and ServerSecret that you get from [Admin Console](https://console.zegocloud.com/project). 
+
+    <Note title="Note">
+    - `userID` and `roomID` can only contain numbers, letters, and underlines (_). 
+    - Users that join the call with the same `roomID` can talk to each other. 
+    </Note>
+

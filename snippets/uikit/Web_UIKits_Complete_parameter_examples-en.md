@@ -1,4 +1,4 @@
-```javascript
+```js
 declare interface ZegoCloudRoomConfig {
   // 1 UI controls
   // 1.1 Global

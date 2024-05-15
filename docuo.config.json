@@ -49,6 +49,30 @@
       "routeBasePath": "callkit-flutter"
     },
     {
+      "id": "callkit_android",
+      "label": "Call Kit(Android)",
+      "path": "docs_callkit_android",
+      "routeBasePath": "callkit-android"
+    },
+    {
+      "id": "callkit_ios",
+      "label": "Call Kit(iOS)",
+      "path": "docs_callkit_ios",
+      "routeBasePath": "callkit-ios"
+    },
+    {
+      "id": "callkit_rn",
+      "label": "Call Kit(RN)",
+      "path": "docs_callkit_rn",
+      "routeBasePath": "callkit-rn"
+    },
+    {
+      "id": "callkit_web",
+      "label": "Call Kit(Web)",
+      "path": "docs_callkit_web",
+      "routeBasePath": "callkit-web"
+    },
+    {
       "id": "video_conference_kit_flutter",
       "label": "Video Conference Kit(Flutter)",
       "path": "docs_video_conference_kit_flutter",
@@ -77,30 +101,6 @@
       "label": "Video Conference Kit(Web)",
       "path": "docs_video_conference_kit_web",
       "routeBasePath": "video-conference-kit-web"
-    },
-    {
-      "id": "callkit_android",
-      "label": "Call Kit(Android)",
-      "path": "docs_callkit_android",
-      "routeBasePath": "callkit-android"
-    },
-    {
-      "id": "callkit_ios",
-      "label": "Call Kit(iOS)",
-      "path": "docs_callkit_ios",
-      "routeBasePath": "callkit-ios"
-    },
-    {
-      "id": "callkit_rn",
-      "label": "Call Kit(RN)",
-      "path": "docs_callkit_rn",
-      "routeBasePath": "callkit-rn"
-    },
-    {
-      "id": "callkit_web",
-      "label": "Call Kit(Web)",
-      "path": "docs_callkit_web",
-      "routeBasePath": "callkit-web"
     },
     {
       "id": "live_streaming_kit_android",
