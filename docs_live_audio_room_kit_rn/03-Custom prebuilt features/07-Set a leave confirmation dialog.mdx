@@ -1,0 +1,115 @@
+# Set a leave confirmation dialog
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) ends a live audio room by default when the user clicks the Leave room button or the Android’s Back button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to leave a live audio room, you can use the `confirmDialogInfo` config:
+
+1. `confirmDialogInfo`: After configuring this parameter, ZegoUIKitPrebuiltLiveAudioRoom will pop up a confirmation dialog box with the default style before ending the live audio room, showing the confirmation info you set.
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/leave_confirmation.gif" />
+  </Frame> 
+</div>
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeave: () => { props.navigation.navigate('HomePage') },
+                    confirmDialogInfo: {
+                        title: 'Leave the room',
+                        message: "Are you sure to leave the room?",
+                        cancelButtonName: "Cancel",
+                        confirmButtonName: "Leave",
+                    }
+                }}
+            />
+        </View>
+    );
+}
+```
+
+
+If the default dialog style can&rsquo;t meet your needs, or you want to pop up a more complex dialog, then you can use the `onLeaveConfirming` parameter. This parameter requires a value of type function and requires the function to return a `Promise`. You can set the confirmation dialog that you want to pop up in the `Promise`.
+
+And sure, you can also implement the logic that decides whether to end the live or not, or any other business logic in this callback as wanted.
+
+Here is the reference code:
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text, Alert } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeave: () => { props.navigation.navigate('HomePage') },
+                    onLeaveConfirming: () => {
+                        return new Promise((resolve, reject) => {
+                          Alert.alert(
+                            'This is your custom dialog.',
+                            'You can customize this dialog as needed.',
+                            [
+                              {
+                                text: 'Cancel',
+                                onPress: () => reject(),
+                                style: 'cancel',
+                              },
+                              {
+                                text: 'Exit',
+                                onPress: () => resolve(),
+                              },
+                            ],
+                          );
+                        });
+                    },
+                }}
+            />
+        </View>
+    );
+}
+```
+
+The effect of a custom dialog will be like this: 
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_confirm.gif" />
+  </Frame>
+</div>

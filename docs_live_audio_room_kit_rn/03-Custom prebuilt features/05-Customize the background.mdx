@@ -1,0 +1,87 @@
+# Customize the background
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) allows you to customize the background view of the live audio room.
+
+The reference code below implements the following custom settings, with the following effect:
+
+1. Show the title and roomID of the live audio room in the top left corner.
+2. Show a custom background image.
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/background.jpeg" />
+    </Frame>
+</div>
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text, ImageBackground } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+const image = {uri: ''};
+const background = () => {
+    return (
+        <View style={styles.backgroundView}>
+            <ImageBackground source={image} style={styles.image}>
+                <View style={styles.titleBar}>
+                    <Text style={styles.title}>A Live Audio Room</Text>
+                    <Text style={styles.id}>ID:{roomID}</Text>
+                </View>
+             </ImageBackground>
+        </View>
+    );
+};
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    background,
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    backgroundView: {
+        zIndex: -1,
+        width: '100%',
+        height: '100%',
+    },
+    titleBar: {
+        position: 'absolute',
+        top: 55,
+        paddingLeft: 18,
+        width: '100%',
+        height: 54,
+    },
+    title: {
+        fontSize: 16,
+        lineHeight: 33,
+        color: '#1B1B1B',
+    },
+    id: {
+        fontSize: 10,
+        color: '#606060',
+    },
+    image: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+    },
+})
+```

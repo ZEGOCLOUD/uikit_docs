@@ -1,0 +1,35 @@
+# Customize the seat-taking logic
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) enables you to customize your own business logic.
+
+The following are supported by the `ZegoUIKitPrebuiltLiveAudioRoomFragment`:
+
+- `applyToTakeSeat(ZegoUIKitPluginCallback callback)`: The audience can use this method to apply to take a speaker seat when the seat is closed.
+- `cancelSeatTakingRequest()`: The audience can use this method to cancel his seat-taking request.
+- `takeSeat(int index)`: Call this method to take a speaker seat. 
+- `leaveSeat()`: Call this method to leave the speaker seat.
+-  `acceptSeatTakingRequest(String audienceUserID)`: The host can use this method to accept the seat-taking request sent by the audience.
+- `rejectSeatTakingRequest(String audienceUserID)`: The host can use this method to reject the seat-taking request sent by the audience.
+- `inviteAudienceToTakeSeat(String audienceUserID)`: The host can use this method to invite the audience to take a seat to speak.
+- `acceptHostTakeSeatInvitation()`: The audience can use this method to accept the seat-taking invite sent by the host.
+- `openSeats`: Open all closed seats, once it is opened, the audience can take the seat by clicking it.
+- `closeSeats`: Close all open seats, once it is closed, the audience can only take the seat by inviting by the host or sending a seat-taking request.
+- `removeSpeakerFromSeat`: Call this method to remove the speaker on the seat.
+
+- `setSeatTakingRequestAudienceListener(ZegoSeatTakingRequestAudienceListener l)`: Listen to the seat-related events such as the seat-taking request being rejected or receiving a seat-taking invitation from the host.
+- `setSeatTakingRequestHostListener(ZegoSeatTakingRequestHostListener l)`: Listen to the seat-related events that the host receives, such as receiving a seat-taking request from the audience, canceling the seat-taking request, or a seat-taking invitation being rejected.
+
+
+- `setUserCountOrPropertyChangedListener(ZegoUserCountOrPropertyChangedListener l)`: Listen to the changes in the number of users or properties in the room.
+- `setSeatChangedListener(ZegoSeatsChangedListener l)`: Listen to the changes in the audience on the seats in the room.
+- `setSeatsLockedListener(ZegoSeatsClosedListener l)`: Listen to the opening and closing status of the seats in the room.
+
+
+<Note title="Note">
+The `memberListMoreButtonPressedListener` and `seatClickedListener` overrides Live Audio Room Kit's prebuilt logic, meaning that when you customize these events, the prebuilt events are no longer executed.
+And they are customizable in `ZegoUIKitPrebuiltLiveAudioRoomConfig`.
+</Note>
+
+- `config.bottomMenuBarConfig.memberListConfig.memberListMoreButtonPressedListener`: This is the click event of the default "More" button in the member list. Setting this can change the default behavior.
+
+- `config.seatConfig.seatClickedListener`: This is the click event of the default seats in a room. Setting this can change the default behavior.

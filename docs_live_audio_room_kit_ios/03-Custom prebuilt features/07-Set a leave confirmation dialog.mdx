@@ -1,0 +1,41 @@
+# Set a leave confirmation dialog
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) ends a live audio room by default when the user clicks the Leave the room button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to leave a live audio room, you can use the `confirmDialogInfo` config.
+
+`confirmDialogInfo`: After configuring this parameter, ZegoUIKitPrebuiltLiveAudioRoom will pop up a confirmation dialog box with the default style before leaving the live audio room, showing the confirmation info you set.
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/leave_confirmation.gif" />
+    </Frame>
+</div>
+
+```Swift
+class ViewController: UIViewController {
+
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = "YourAppSign"
+    let roomID: String = "YourRoomID"
+
+    @IBAction func startLiveAudio(_ sender: Any) {
+
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveAudioRoomConfig = ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        let firmDialogInfo = ZegoLeaveConfirmDialogInfo()
+        firmDialogInfo.title = "Leave the room"
+        firmDialogInfo.message = "Are you sure to leave the room?"
+        firmDialogInfo.confirmButtonName = "OK"
+        firmDialogInfo.cancelButtonName = "Cancel"
+        config.confirmDialogInfo = firmDialogInfo
+        let liveAudioVC = ZegoUIKitPrebuiltLiveAudioRoomVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName, roomID: roomID, config: config)
+        liveAudioVC.modalPresentationStyle = .fullScreen
+        self.present(liveAudioVC, animated: true, completion: nil)
+    }
+}
+```

@@ -1,0 +1,39 @@
+# Migrating to v2.0
+
+To provide you with a better user experience, we have released a new version: Live Audio Room Kit v2.0, and recommend you upgrade to this latest version. 
+
+This doc provides the steps and considerations for upgrading from v1.0 to v2.0.
+
+## Using the Live Audio Room Kit
+
+There are two steps you need to complete:
+
+### Step 1 Change the version
+
+Change the version of @zegocloud/zego-uikit-rn and @zegocloud/zego-uikit-prebuilt-live-audio-room-rn.
+
+You can change the version on your `package.json` file directory or run the following command:
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-audio-room-rn@2.0.0
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-audio-room-rn@2.0.0
+```
+</CodeGroup>
+
+### Step 2 Remove dependency package 
+
+Remove the dependency package of @zegocloud/zego-uikit-signaling-plugin-rn that is no longer maintained.
+
+<CodeGroup>
+```bash yarn
+yarn remove @zegocloud/zego-uikit-signaling-plugin-rn
+```
+
+```bash npm
+npm uninstall @zegocloud/zego-uikit-signaling-plugin-rn
+```
+</CodeGroup>

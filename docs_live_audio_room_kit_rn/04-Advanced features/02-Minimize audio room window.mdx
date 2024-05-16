@@ -1,0 +1,163 @@
+# Minimize audio room window
+
+With only three simple steps, you can achieve the effect of minimizing the audio room window within the application. 
+
+Ideally, the final effect will look like this:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/audio_room_mini.gif" />
+</Frame>
+
+## 1 Display the minimize button
+
+### 1.1 Use the minimize button provided by the Live Audio Room Kit
+
+The Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) provides a configuration for a minimize button, which you can place in the top or bottom toolbar. The following code is an example of placing it in the top toolbar, in the upper-right corner:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+    HOST_DEFAULT_CONFIG,
+    ZegoMenuBarButtonName,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    topMenuBarConfig: {
+                        buttons: [
+                            ZegoMenuBarButtonName.minimizingButton
+                        ],
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                }}
+            />
+        </View>
+    );
+}
+```
+
+### 1.2 Customize the minimize button
+
+You can also implement your own minimize button and place it where you need it, but you need to call the interface provided by the Live Audio Room Kit to minimize it after the button is clicked.
+
+You can refer to the following code:
+
+```js
+import React, { useRef } from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+    HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    const prebuiltRef = useRef();
+
+    const minimizeWindowHandle = () => {
+        // Here the interface is called to minimize
+        prebuiltRef.current.minimizeWindow();
+    }
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                ref={prebuiltRef}
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                }}
+            />
+
+            // Minimize button implemented by yourself
+            <Button title="minimize" onPress={minimizeWindowHandle} />
+        </View>
+    );
+}
+```
+
+## 2 Configure the floating minimized window
+
+Place the `ZegoUIKitPrebuiltLiveAudioRoomFloatingMinimizedView` component on the bottom level of the `NavigationContainer`.
+
+You can refer to the following code:
+
+```js
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import AppNavigation from './AppNavigation';
+import {
+    ZegoUIKitPrebuiltLiveAudioRoomFloatingMinimizedView,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function App() {
+    return (
+        <NavigationContainer>
+            <AppNavigation />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <ZegoUIKitPrebuiltLiveAudioRoomFloatingMinimizedView />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        </NavigationContainer>
+    );
+}
+```
+
+## 3 Handle operations after minimizing and maximizing
+
+You need to listen to the callbacks provided by the Live Audio Room Kit and execute the corresponding logic to restore to the previous state after minimizing and maximizing the window.
+
+You can refer to the following code:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+    HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    const { route } = props;
+    const { params } = route;
+    const { userID, userName, roomID } = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    onWindowMinimized: () => {
+                        // Navigate to a specific page, such as the homepage
+                        props.navigation.navigate('HomePage');
+                    },
+                    onWindowMaximized: () => {
+                        // Navigate to the current page, but be sure to include the original parameters of the page. If the current page has no parameters, they can be ignored
+                        props.navigation.navigate('HostPage', { userID, userName, roomID });
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                }}
+            />
+        </View>
+    );
+}
+```
+
+After completing the above three steps, you can now minimize the audio room window within the application.

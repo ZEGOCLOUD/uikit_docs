@@ -1,0 +1,44 @@
+# Customize user attributes
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) supports customizing the user attributes. The user attribute (userInRoomAttributes) is in the format of key-value pairs, which are used to implement customized functions, such as setting the user level and sharing it with in-room participants. 
+
+After you customized successfully (or in-room participants complete the customization), you (or in-room participants) will receive a notification through the `onUserCountOrPropertyChanged` callback, and the user attributes you customized will return in this callback.
+
+<Note title="Note">
+- For a single user, the sum of all Key-Value pairs must be within 100 bytes and a maximum of 20 pairs can be configured.
+- Each Key must be within 8 bytes.
+- Each Value must be within 64 bytes.
+</Note>
+
+Here is the reference code:
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    userInRoomAttributes: {},
+                    onUserCountOrPropertyChanged: (userList) => {},
+                }}
+            />
+        </View>
+    );
+}
+```

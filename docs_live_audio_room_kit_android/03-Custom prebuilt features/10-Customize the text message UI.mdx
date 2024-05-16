@@ -1,0 +1,77 @@
+# Customize the text message UI
+
+To customize the message list item, you can set up the `ZegoUIKitPrebuiltLiveAudioRoomConfig.inRoomMessageViewConfig.inRoomMessageItemViewProvider`. 
+
+You can get and read the `inRoomMessage` from the `inRoomMessageItemViewProvider`. The message is of type `ZegoInRoomMessage` and has the following structure:
+
+```java
+public class ZegoInRoomMessage {
+
+    public String message;
+    public long messageID;
+    public long timestamp;
+    public ZegoUIKitUser user;
+    public ZegoInRoomMessageState state;
+}
+```
+
+Besides, you can decide the effect when the message sent failed or successfully, and also set up the logic for sending the message again when the message failed to be sent.
+
+Here the reference code shows how to customize a message view:
+
+<CodeGroup>
+
+```java Java
+boolean isHost = ;
+ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+if (isHost) {
+     config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+} else {
+     config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+}
+config.inRoomMessageViewConfig.inRoomMessageItemViewProvider = new ZegoInRoomMessageItemViewProvider() {
+      @Override
+      public View onCreateView(ViewGroup parent) {
+          return new TextView(parent.getContext());
+      }
+
+      @Override
+      public void onBindView(View view, ZegoInRoomMessage inRoomMessage, int position) {
+           TextView textView = (TextView) view;
+           textView.setText(inRoomMessage.user.userName + " : " + inRoomMessage.message);
+       }
+};
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,appSign, userID, userName, roomID, config);
+
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+
+```
+
+```kotlin Kotlin
+val isHost = 
+val config = if (isHost) {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+} else {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+}
+
+config.inRoomMessageViewConfig.inRoomMessageItemViewProvider =
+     object : ZegoInRoomMessageItemViewProvider() {
+     fun onCreateView(parent: ViewGroup): View? {
+          return TextView(parent.context)
+}
+
+     fun onBindView(view: View, inRoomMessage: ZegoInRoomMessage, position: Int) {
+           val textView = view as TextView
+           textView.setText(inRoomMessage.user.userName + " : " + inRoomMessage.message)
+     }
+}
+
+val fragment: ZegoUIKitPrebuiltLiveAudioRoomFragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,appSign, userID, userName, roomID, config)
+
+supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+            .commitNow()
+
+```
+
+</CodeGroup>
