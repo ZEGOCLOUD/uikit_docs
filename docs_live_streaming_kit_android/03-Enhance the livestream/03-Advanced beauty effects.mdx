@@ -1,0 +1,896 @@
+# Advanced beauty effects
+
+- - -
+
+
+## What are advanced beauty effects?
+
+In addition to the basic beauty effects provided by the Live Streaming Kit, you can also choose to use advanced beauty effects to enhance your live streaming app. Advanced beauty effects include the following features: face beautification, face shape retouch, makeup, filters, stickers, and background segmentation.
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/effects.png" />
+</Frame>
+
+
+## Prerequisites
+
+Before you begin, make sure you complete the following:
+
+- Follow the integration steps by referring to the [Quick start](/live-streaming-kit-android/quick-start/quick-start) or [Quick start with co-hosting](//live-streaming-kit-android/quick-start/quick-start-(with-cohosting)).
+- **Contact ZEGOCLOUD Technical Support to activate the advanced beauty effects**.
+- Download the [demo](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_effects_demo_android) here.
+
+
+## Getting started
+
+### Integrate the SDK
+
+#### Add the dependency
+
+```groovy
+implementation 'com.github.ZEGOCLOUD:zego_uikit_beauty_plugin_android:+'
+``` 
+
+#### Add the initialization code
+
+As the initialization code has been added during Quick Start, you only need to add the beauty button in the `ZegoUIKitPrebuiltLiveStreamingConfig.bottomMenuBarConfig`. 
+
+```java
+//...
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+if (isHost) {
+    config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
+} else {
+    config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(true);
+}
+// add `ZegoMenuBarButtonName.BEAUTY_BUTTON` to host
+config.bottomMenuBarConfig = new ZegoBottomMenuBarConfig(
+  Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON, ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_FACING_BUTTON, ZegoMenuBarButtonName.BEAUTY_BUTTON),
+  Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON, ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON),
+  Collections.singletonList(ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON));
+
+ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(appID,appSign, userID, userName, liveID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+//...
+
+```
+
+### Add beauty effects resources
+
+Advanced beauty effects require corresponding beauty resources to be effective.
+
+#### Download resources
+
+Click to download the <a href="https://storage.zego.im/sdk-doc/Pics/zegocloud/uikit/BeautyResources.zip">beauty resources</a>, and extract the resources to your local folder.
+
+
+- Adding resources to Android:
+
+1. Create an assets folder under the `main` directory of your Android project (no need to create one if the assets folder already exists), like this:
+    **xxx/android/app/src/main/assets**
+
+2. Copy the downloaded `BeautyResources` folder to the assets directory.
+
+<Frame width="100%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/resources.png" />
+</Frame>
+
+### Run & Test
+
+So far, you can simply click the **Run** or **Debug** button to run and test your App on the device.
+
+
+## Customize the beauty effects as needed
+
+<Note title="Note">
+
+**FYI:** Our beauty effects package includes two plans: **Basic pan and Pro plan**. The Basic plan only includes basic beauty effects, while the Pro plan includes additional features such as face beautification, face shape retouch, facial feature enhancement, makeup looks, stickers, and filters. For more details, refer to [AI Effects](https://www.zegocloud.com/pricing/product-list#ai-effects).
+</Note>
+
+
+
+To customize the beauty effects, config the `beautyConfig` in `ZegoUIKitPrebuiltLiveStreamingConfig`.
+
+
+### Beauty effects
+
+Beauty effects included the 4 features: basic beauty effects, advanced beauty effects (face shape retouch), facial feature enhancement, and makeup looks. You can enable all four features or choose only a few of them.
+
+The Basic Plan only includes the basic beauty effects. If you require other features, choose the Pro Plan instead.
+
+#### Example 1: Selecting basic beauty effects and advanced beauty effects
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+
+```
+
+**Here's how it would look like:**
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/basic.png" />
+</Frame>
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/advanced.png" />
+</Frame>
+
+#### Example 2: Selecting all four features
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+**Here's how it would look like:**
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/makeup.png" />
+</Frame>
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/style.png" />
+</Frame>
+
+
+#### Filters
+
+The filters include a total of 10 different filter effects, You can use the following code to set them:
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+
+```
+**Here's how it would look like:**
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/filter.png" />
+</Frame>
+
+#### Stickers
+
+The sticker feature requires a relatively large amount of resources. You can choose whether to integrate the sticker feature based on your own needs. If you need to integrate it, you can refer to the following code:
+
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.stickerTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+
+```
+
+**Here's how it would look like:**
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/sticker.png" />
+</Frame>
+
+
+#### Background segmentation
+
+If you also need the background segmentation feature, refer to the following code to set it up.
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.stickerTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.backgroundTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+
+```
+
+For portrait segmentation in background segmentation, you need to provide a background image. You can put the image in the **BackgroundImages** folder and set it up through the config.
+
+
+```java
+BeautyResources/BackgroundImages/image1.jpg
+```
+
+Configure it through the code like this:
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.stickerTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.backgroundTypes());
+config.beautyConfig.effectsTypes = customTypes;
+config.beautyConfig.segmentationBackgroundImageName = "image1.jpg";
+
+//...
+
+```
+
+**Here's how it would look like:**
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/background.png" />
+</Frame>
+
+#### Make further customization
+
+In addition to the aforementioned function customization, you can also pass in a custom `effectsTypes` list to determine which beauty effect you want to use.
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.add(ZegoBeautyPluginEffectsType.FILTER_GRAY_FILMLIKE);
+customTypes.add(ZegoBeautyPluginEffectsType.FILTER_DREAMY_COZILY);
+
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+
+```
+
+### Customize UI
+
+The effectsBottomBar that pops up at the bottom supports custom UI. The captions indicate the customization options for each section, and each option will be explained in detail later on.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/bottombar_caption1.jpg" />
+</Frame>
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/bottombar_caption2.jpg" />
+</Frame>
+
+
+#### Customize text
+
+To customize the text related to the advanced beauty effects feature, you can use `ZegoBeautyPluginInnerText` like the following:
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.innerText.titleFilter = "Filters";
+config.beautyConfig.innerText.beautyBasicSmoothing = "Smoothing";
+config.beautyConfig.innerText.beautyMakeupLipstick = "Lipstick";
+
+//...   
+```
+
+#### Customize the background color
+
+To customize the background color of the view, refer to the following:
+
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.backgroundColor = Color.RED;
+
+//...   
+```
+
+#### Customize the text color
+
+To customize the text color, refer to the following:
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.selectedHeaderTitleTextColor = Color.GREEN;
+config.beautyConfig.uiConfig.selectedTextColor = Color.CYAN;
+
+//...   
+
+```
+
+#### Customize the back button icon
+
+To customize the back button icon, refer to the following:
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.backIcon = getDrawable(R.drawable.custom_back_icon); 
+
+//...   
+
+```
+
+
+### Resource management
+
+The downloaded resources mentioned above contain resources for all features. However, if you do not need all the features, you can delete some unnecessary resources to reduce the size of the app package.
+
+
+#### Resource description
+
+* Essential resources (required by **all features**, cannot be deleted)
+
+    ```
+    BeautyResources/CommonResources.bundle
+    BeautyResources/FaceDetection.model
+    ```
+
+* Essential resources for **stickers** (do not delete if you need to use the sticker feature)
+
+    ```
+    BeautyResources/StickerBaseResources.bundle
+    ```
+
+* Essential resources for **background segmentation** (do not delete if you need to use the background segmentation feature)
+
+    ```
+    BeautyResources/BackgroundSegmentation.model
+    ```
+
+* Feature resource folder
+
+    Each resource in the feature resource folder corresponds to a specific feature. If you need to use a certain feature, you should keep the corresponding resource folder. Otherwise, you may delete it.
+
+    ```
+    BeautyResources/AdvancedResources
+    ```
+
+#### Detailed feature resource 
+
+
+<Accordion title="Click here to learn the detailed feature resource table" defaultOpen="false">
+<table>
+  <colgroup>
+    <col width="10%"/>
+    <col width="10%"/>
+    <col width="32%"/>
+    <col width="48%"/>
+  </colgroup>
+  <thead>
+  <tr>
+    <th>&nbsp;Feature</th>
+    <th>&nbsp;Subfeature</th>
+    <th>&nbsp;Enumeration Name&nbsp;</th>
+    <th>&nbsp;Resource Name</th>
+    </tr>
+  </thead>
+<tbody>
+<tr>
+<td>Beautify</td>
+<td>Basic</td>
+<td>BASIC_SMOOTHING</td>
+<td>-</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BASIC_SKIN_TONE</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BASIC_BLUSHER</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BASIC_SHARPENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BASIC_WRINKLES</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BASIC_DARK_CIRCLES</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Advanced&nbsp;</td>
+<td>ADVANCED_FACE_SLIMMING&nbsp;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_EYES_ENLARGING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_EYES_BRIGHTENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_CHIN_LENGTHENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_MOUTH_RESHAPE</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_TEETH_WHITENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_NOSE_SLIMMING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_NOSE_LENGTHENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_FACE_SHORTENING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_MANDIBLE_SLIMMING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_CHEEKBONE_SLIMMING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>ADVANCED_FOREHEAD_SLIMMING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Makeup</td>
+<td>MAKEUP_LIPSTICK_CAMEO_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickCameoPink.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_LIPSTICK_SWEET_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickSweetOrange.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_LIPSTICK_RUST_RED&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickRustRed.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_LIPSTICK_CORAL</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickCoral.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_LIPSTICK_RED_VELVET</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickRedVelvet.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_BLUSHER_SLIGHTLY_DRUNK&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_BLUSHER_PEACH&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherPeach.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_BLUSHER_MILKY_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_BLUSHER_APRICOT_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherApricotPink.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_BLUSHER_SWEET_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherSweetOrange.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELASHES_NATURAL</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesNatural.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELASHES_TENDER&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesTender.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELASHES_CURL&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesCurl.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELASHES_EVERLONG&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesEverlong.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELASHES_THICK&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesThick.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELINER_NATURAL&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerNatural.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELINER_CAT_EYE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerCatEye.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELINER_NAUGHTY</td>
+<td>&nbsp;BeautyResources/AdvancedResources/beautyMakeupEyelinerNaughty.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELINER_INNOCENT</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerInnocent.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYELINER_DIGNIFIED</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerDignified.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYESHADOW_PINK_MIST</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYESHADOW_SHIMMER_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYESHADOW_TEA_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYESHADOW_BRIGHT_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_EYESHADOW_MOCHA_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_COLORED_CONTACTS_DARKNIGHT_BLACK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_COLORED_CONTACTS_STARRY_BLUE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_COLORED_CONTACTS_BROWN_GREEN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_COLORED_CONTACTS_LIGHTS_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>MAKEUP_COLORED_CONTACTS_CHOCOLATE_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td>Style Makeup</td>
+<td>STYLE_MAKEUP_INNOCENT_EYES</td>
+<td>&nbsp;BeautyResources/AdvancedResources/beautyStyleMakeupInnocentEyes.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STYLE_MAKEUP_MILKY_EYES</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupMilkyEyes.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STYLE_MAKEUP_CUTIE_COOL</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupCutieCool.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STYLE_MAKEUP_PURE_SEXY</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupPureSexy.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STYLE_MAKEUP_FLAWLESS</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupFlawless.bundle</td>
+</tr>
+<tr>
+<td>Filter</td>
+<td>Natural</td>
+<td>FILTER_NATURAL_CREAMY</td>
+<td>&nbsp;BeautyResources/AdvancedResources/filterNaturalCreamy.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_NATURAL_BRIGHTEN</td>
+<td>&nbsp;BeautyResources/AdvancedResources/filterNaturalBrighten.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_NATURAL_FRESH</td>
+<td>BeautyResources/AdvancedResources/filterNaturalFresh.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_NATURAL_AUTUMN</td>
+<td>BeautyResources/AdvancedResources/filterNaturalAutumn.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td>Gray&nbsp;</td>
+<td>FILTER_GRAY_MONET</td>
+<td>BeautyResources/AdvancedResources/filterGrayMonet.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_GRAY_NIGHT</td>
+<td>BeautyResources/AdvancedResources/filterGrayNight.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_GRAY_FILMLIKE</td>
+<td>&nbsp;BeautyResources/AdvancedResources/filterGrayFilmlike.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td>Dreamy&nbsp;</td>
+<td>FILTER_DREAMY_SUNSET</td>
+<td>BeautyResources/AdvancedResources/filterDreamySunset.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_DREAMY_COZILY</td>
+<td>&nbsp;BeautyResources/AdvancedResources/filterDreamyCozily.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>FILTER_DREAMY_SWEET</td>
+<td>BeautyResources/AdvancedResources/filterDreamySweet.bundle</td>
+</tr>
+<tr>
+<td>Sticker</td>
+<td></td>
+<td>Stickers</td>
+<td>STICKER_ANIMAL</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_DIVE</td>
+<td>BeautyResources/AdvancedResources/stickerDive.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_CAT</td>
+<td>BeautyResources/AdvancedResources/stickerCat.bundle&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_WATERMELON</td>
+<td>BeautyResources/AdvancedResources/stickerWatermelon.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_DEER</td>
+<td>BeautyResources/AdvancedResources/stickerDeer.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_COOL_GIRL</td>
+<td>&nbsp;BeautyResources/AdvancedResources/stickerCoolGirl.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_CLOWN</td>
+<td>BeautyResources/AdvancedResources/stickerClown.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_CLAW_MACHINE</td>
+<td>&nbsp;BeautyResources/AdvancedResources/stickerClawMachine.bundle</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>STICKER_SAILOR_MOON</td>
+<td>BeautyResources/AdvancedResources/stickerSailorMoon.bundle&nbsp;</td>
+</tr>
+<tr>
+<td>Background</td>
+<td></td>
+<td>BACKGROUND_PORTRAIT_SEGMENTATION&nbsp;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BACKGROUND_MOSAICING</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>BACKGROUND_GAUSSIAN_BLUR</td>
+<td></td>
+</tr>
+</tbody></table>
+</Accordion>
+
+### Listen to BeautyPlugin Events
+You can listen to BeautyPlugin events by `config.beautyConfig.beautyEventHandler`,if you have enabled faceDetection in `config.beautyConfig`,you can receive face detection data in `onFaceDetectionResult`.
+
+
+Please pay special attention to the `onInitResult` callback. If the initialization fails, the beauty function cannot be used. This is usually because the applicationID and appID of the current application are inconsistent with the registered applicationID and appID, or the license has expired.
+
+
+```java
+
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.beautyEventHandler = new IBeautyEventHandler() {
+    @Override
+    public void onInitResult(int errorCode, String message) {
+        super.onInitResult(errorCode, message);
+        Log.d(TAG, "onInitResult() called with: errorCode = [" + errorCode + "], message = [" + message + "]");
+    }
+
+    @Override
+    public void onError(int errorCode, String message) {
+        super.onError(errorCode, message);
+        Log.d(TAG, "onError() called with: errorCode = [" + errorCode + "], message = [" + message + "]");
+    }
+
+    @Override
+    public void onFaceDetectionResult(ZegoBeautyPluginFaceDetectionResult[] results) {
+        super.onFaceDetectionResult(results);
+        Log.d(TAG, "onFaceDetectionResult() called with: results = [" + results + "]");
+    }
+};
+
+//... 
+
+```

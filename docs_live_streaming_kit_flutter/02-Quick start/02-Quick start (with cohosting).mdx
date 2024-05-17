@@ -1,0 +1,185 @@
+import UIKITIOSDISABLEBITCODE from "/snippets/Reuse/UIKIT_IOS_DISABLE_BITCODE-en.md";
+import UIKITIOSPERMISSIONCONFIG from "/snippets/uikit/UIKIT_IOS_PERMISSION_CONFIG-en.mdx";
+import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
+
+# Quick start (with cohosting)
+
+- - -
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live_with_cohosting2.gif" />
+</Frame>
+
+## Prerequisites
+
+<UIKitInvitationPrerequisitesZIMSignaling/>
+
+## Integrate the SDK
+
+### Add ZegoUIKitPrebuiltLiveStreaming as dependencies
+
+Run the following code in your project's root directory: 
+
+```dart
+flutter pub add zego_uikit_signaling_plugin
+flutter pub add zego_uikit_prebuilt_live_streaming
+```
+
+### Import the SDK
+
+Now in your Dart code, import the Live Streaming Kit SDK.
+
+```dart
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
+import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming';
+```
+
+
+## Using the Live Streaming Kit
+
+- Specify the `userID` and `userName` for connecting the Live Streaming Kit service. 
+- `liveID` represents the live stream you want to start or watch.
+- Set the `config` to the `ZegoUIKitSignalingPlugin` plug-in.
+
+<div class="mk-hint">
+
+- `userID`, `userName`, and `liveID` can only contain numbers, letters, and underlines (_). 
+- Using the same `liveID` will enter the same live streaming.
+</div>
+
+
+<Warning title="Warning">
+
+With the same `liveID`, only one user can enter the live stream as host. Other users need to enter the live stream as the audience.
+</Warning>
+
+
+```dart
+class LivePage extends StatelessWidget {
+  final String liveID;
+  final bool isHost;
+
+  const LivePage({Key? key, required this.liveID, this.isHost = false}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: yourAppID, // Fill in the appID that you get from ZEGOCLOUD Admin Console.
+        appSign: yourAppSign, // Fill in the appSign that you get from ZEGOCLOUD Admin Console.
+        userID: 'user_id',
+        userName: 'user_name',
+        liveID: liveID,
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host(
+                plugins: [ZegoUIKitSignalingPlugin()],
+              )
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+                plugins: [ZegoUIKitSignalingPlugin()],
+              ),
+      ),
+    );
+  }
+}
+```
+
+Then, you can start a live stream. And the audience can watch the live stream by entering the `liveID`.
+
+
+
+
+## Config your project
+
+### Android:
+
+#### 1. modify the `compileSdkVersion`
+
+If your project is created with Flutter 2.x.x, you will need to open the `your_project/android/app/build.gradle` file, and modify the `compileSdkVersion` to **33**.
+
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
+</Frame>
+
+#### 2. And in the same file, edit the `minSdkVersion`.
+
+```
+minSdkVersion 21
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_min_sdk_21.png" />
+</Frame>
+
+#### 3. Add app permission.
+Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following:
+
+   ```xml
+   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+   <uses-permission android:name="android.permission.RECORD_AUDIO" />
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+   <uses-permission android:name="android.permission.CAMERA" />
+   <uses-permission android:name="android.permission.BLUETOOTH" />
+   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+   <uses-permission android:name="android.permission.WAKE_LOCK" />
+   ```
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_android.png" />
+</Frame>
+
+#### 4. Prevent code obfuscation.
+
+To prevent obfuscation of the SDK public class names, do the following:
+
+a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+
+```gradle
+-keep class **.zego.**  { *; }
+-keep class **.**.zego_zpns.** { *; }
+```
+
+b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+
+```gradle
+proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion_zpns.png" />
+</Frame>
+
+
+
+### iOS:
+
+#### 1. Add app permissions.
+
+<UIKITIOSPERMISSIONCONFIG/>
+
+
+#### 2. Disable the Bitcode.
+
+<UIKITIOSDISABLEBITCODE/>
+
+##  Run & Test
+
+Now you can simply click the **Run** or **Debug** button to run and test your App on the device.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/run_flutter_project.jpg" />
+</Frame>
+
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="Sample code" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter" target="_blank">
+    Click here to get the complete sample code.
+  </Card>
+  <Card title="API reference" href="https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming-library.html" target="_blank">
+    Click here for detailed explanations of all APIs.
+  </Card>
+</CardGroup>
