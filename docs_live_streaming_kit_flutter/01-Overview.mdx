@@ -1,0 +1,77 @@
+import LiveSreamingKitOverviewFeatures from "/snippets/uikit/live_streaming/LiveSreamingKit_Overview_Features-en.md";
+import LiveStreamingKitOverviewWhendoyouneed from "/snippets/uikit/live_streaming/LiveStreamingKit_Overview_Whendoyouneed-en.md";
+import LiveStreamingKitOverviewBasicDescription from "/snippets/uikit/live_streaming/LiveStreamingKit_Overview_BasicDescription-en.md";
+
+# Overview
+
+- - -
+
+
+<Video src="https://www.youtube.com/embed/yt3NkjIBoMA"/>
+
+
+
+## What is the Live Streaming Kit?
+
+<LiveStreamingKitOverviewBasicDescription/>
+
+## When do you need the Live Streaming Kit
+
+<LiveStreamingKitOverviewWhendoyouneed/>
+
+
+## Embedded features
+
+<LiveSreamingKitOverviewFeatures/>
+
+- PK battles
+- Voice changing & Reverb
+- Basic face beautification
+- Screen sharing
+
+
+## Recommended resources
+
+<CardGroup cols={2}>
+  <Card title="QUICK START (basic live)" href="/live-streaming-kit-flutter/quick-start/quick-start">
+  To implement a basic live stream swiftly, follow the steps.
+</Card>
+<Card title="QUICK START (with co-hosting)" href="/live-streaming-kit-flutter/quick-start/quick-start-(with-cohosting)">
+  To implement a live stream with co-hosting, follow the steps.
+</Card>
+<Card title="Sample Code" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter" target="_blank">
+  Click here to get the complete sample code.
+</Card>
+</CardGroup>
+
+
+## Change log
+
+<Accordion title="Click here to know more" defaultOpen="false">
+#### Version 2.2.0
+Release date: 2023.02.28
+
+**New features**:
+1. Added `screenSharingController` in `ZegoUIKitPrebuiltLiveStreaming`, use this to customize the button that is used to invoke the full-screen mode interface.
+
+#### Version 2.1.0
+Release date: 2023.02.21
+
+**New features**:
+1. [PK battles](/live-streaming-kit-flutter/enhance-the-livestream/pk-battles). 
+2. Added `onLiveStreamingStateUpdate` in `ZegoUIKitPrebuiltLiveStreamingConfig`, use this to monitor the state of the live stream.
+
+#### Version 2.0.0
+Release date: 2023.02.07
+
+**API changes**:
+
+- Modified:
+
+    Before: `Stream<List<ZegoSignalingInRoomTextMessage>> getInRoomTextMessageStream()`
+
+    After: `Stream<ZegoSignalingPluginInRoomTextMessageReceivedEvent> getInRoomTextMessageReceivedEventStream()`
+
+> You can still get the `List<ZegoSignalingInRoomTextMessage>` parameter from the new interface's class member `ZegoSignalingPluginInRoomTextMessageReceivedEvent.messages`.
+
+</Accordion>
