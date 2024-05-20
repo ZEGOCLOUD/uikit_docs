@@ -1,7 +1,5 @@
 # PK battles
 
-- - -
-
 
 ## 1. Prerequisites
 
@@ -64,7 +62,7 @@ For a detailed demo source code, click [here](https://github.com/ZEGOCLOUD/zego_
 
 ## 4. APIs
 
-**To customize your own PK battle logic and process** as needed, the [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController-class.html) contains a bunch of methods for you to do further customizations. 
+**To customize your own PK battle logic and process** as needed, the [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl-class.html) contains a bunch of methods for you to do further customizations. 
 
 Before you make your customization, check the following APIs first.
 
@@ -72,19 +70,19 @@ Before you make your customization, check the following APIs first.
 
 |func name|params|description|
 |-|-|-|
-|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/sendRequest.html)|required List targetHostIDs<br/><br/>int timeout<br/><br/>String customData<br/><br/>bool isAutoAccept|inviting hosts for a PK.<br/><br/>you will need to specify the [targetHostIDs] you want to connect with.<br/><br/>Remember the hosts you invite must has started a live stream,otherwise, an error will return via the method you called.<br/><br/>you can used [timeout] to set the timeout duration of the PK battle request you sent. After it timed out, the host who sent the request will receive a callback notification via the [ZegoUIKitPrebuiltLiveStreamingPKEvents.onOutgoingRequestTimeout].<br/><br/>if you want to customize the info that you want the host you invited to receive, you can set [customData], and the invited host will receive via [ZegoUIKitPrebuiltLiveStreamingPKEvents.onIncomingRequestReceived].<br/><br/>If you want the remote host to directly accept without a confirmation dialog before entering the PK, you can set [isAutoAccept] to true.<br/>Please note that within the same PK session, this value ONLY takes effect the FIRST time it is set (after the first acceptance of the invitation), subsequent invitations will use the value set during the first acceptance.|
-|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/cancelRequest.html)|required List targetHostIDs<br/><br/>String customData|Cancel the PK invitation to [targetHostIDs].<br/><br/>You can provide your reason by attaching [customData].<br/><br/>If the PK has already started (and any invited host has accepted), the PK invitation cannot be cancelled.|
-|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/stop.html)||Stop PK to all pk-hosts, only the PK Initiator can stop it.<br/><br/>The PK is over and all participants have exited the PK View.|
-|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
-|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
+|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/sendRequest.html)|required List targetHostIDs<br/><br/>int timeout<br/><br/>String customData<br/><br/>bool isAutoAccept|inviting hosts for a PK.<br/><br/>you will need to specify the [targetHostIDs] you want to connect with.<br/><br/>Remember the hosts you invite must has started a live stream,otherwise, an error will return via the method you called.<br/><br/>you can used [timeout] to set the timeout duration of the PK battle request you sent. After it timed out, the host who sent the request will receive a callback notification via the [ZegoUIKitPrebuiltLiveStreamingPKEvents.onOutgoingRequestTimeout].<br/><br/>if you want to customize the info that you want the host you invited to receive, you can set [customData], and the invited host will receive via [ZegoUIKitPrebuiltLiveStreamingPKEvents.onIncomingRequestReceived].<br/><br/>If you want the remote host to directly accept without a confirmation dialog before entering the PK, you can set [isAutoAccept] to true.<br/>Please note that within the same PK session, this value ONLY takes effect the FIRST time it is set (after the first acceptance of the invitation), subsequent invitations will use the value set during the first acceptance.|
+|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/cancelRequest.html)|required List targetHostIDs<br/><br/>String customData|Cancel the PK invitation to [targetHostIDs].<br/><br/>You can provide your reason by attaching [customData].<br/><br/>If the PK has already started (and any invited host has accepted), the PK invitation cannot be cancelled.|
+|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/stop.html)||Stop PK to all pk-hosts, only the PK Initiator can stop it.<br/><br/>The PK is over and all participants have exited the PK View.|
+|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
+|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
 
 ### 4.2 APIs of PK invitee:
 |func name|params|description|
 |-|-|-|
-|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/acceptRequest.html)|required String requestID<br/><br/>required ZegoUIKitPrebuiltLiveStreamingPKUser targetHost<br/><br/>int timeout<br/><br/>String customData|Accept the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If exceeds [timeout] seconds, the accept will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
-|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/rejectRequest.html)|required String requestID<br/><br/>required String targetHostID<br/><br/>int timeout<br/><br/>String customData|Rejects the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If the rejection exceeds [timeout] seconds, the rejection will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
-|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
-|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
+|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/acceptRequest.html)|required String requestID<br/><br/>required ZegoUIKitPrebuiltLiveStreamingPKUser targetHost<br/><br/>int timeout<br/><br/>String customData|Accept the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If exceeds [timeout] seconds, the accept will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
+|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/rejectRequest.html)|required String requestID<br/><br/>required String targetHostID<br/><br/>int timeout<br/><br/>String customData|Rejects the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If the rejection exceeds [timeout] seconds, the rejection will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
+|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
+|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
 
 ## 5. Events
 
@@ -102,23 +100,23 @@ During a PK lifecycle, the events thrown by both sides are as follows:
 
 |func name|description|
 |-|-|
-| [onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestAccepted.html) | The PK invitation to [event.fromHost] has been accepted.|
-| [onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestRejected.html) | The PK invitation to [event.fromHost] has been rejected.|
-|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestTimeout.html)|Your PK invitation has been timeout|
-| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
-| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
-| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
+| [onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestAccepted.html) | The PK invitation to [event.fromHost] has been accepted.|
+| [onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestRejected.html) | The PK invitation to [event.fromHost] has been rejected.|
+|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestTimeout.html)|Your PK invitation has been timeout|
+| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
+| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
+| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
 
 ### 5.2 Events of PK invitee：
 
 |func name|description|
 |-|-|
-| [onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingRequestReceived.html) |Received a PK invitation from [event.fromHost], with the ID [event.requestID].|
-| [onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingRequestCancelled.html) | The received PK invitation has been canceled by the inviting host [event.fromHost]. |
-| [onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingRequestTimeout.html) |The received PK invitation has timed out.|
-| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
-| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
-| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
+| [onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestReceived.html) |Received a PK invitation from [event.fromHost], with the ID [event.requestID].|
+| [onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestCancelled.html) | The received PK invitation has been canceled by the inviting host [event.fromHost]. |
+| [onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestTimeout.html) |The received PK invitation has timed out.|
+| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
+| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
+| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
 
 
 ## 6. Customize
@@ -235,16 +233,16 @@ If you wish to migrate from the old version of two-player PK to the new version 
 
 ### 7.1 APIs
 
-The methods in **ZegoUIKitPrebuiltLiveStreamingPKService** can be replaced with the methods in [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController-class.html).
+The methods in **ZegoUIKitPrebuiltLiveStreamingPKService** can be replaced with the methods in [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl-class.html).
 
 | ZegoUIKitPrebuiltLiveStreamingPKService |ZegoUIKitPrebuiltLiveStreamingController().pk| description |
 |-|-|-|
-|sendPKBattleRequest|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/sendRequest.html)|The requestID is the ID of the current PK session.|
-|cancelPKBattleRequest|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/cancelRequest.html)||
-|acceptIncomingPKBattleRequest|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/acceptRequest.html)|The requestID is the event.requestID that you received in the onIncomingRequestReceived event. |
-|rejectIncomingPKBattleRequest|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/rejectRequest.html)|The requestID is the same as the event.requestID that you received in the onIncomingRequestReceived event.|
-|stopPKBattle|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/stop.html)|The requestID is the result.requestID returned by the sendRequest function.|
-|muteAnotherHostAudio|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKController/muteAudios.html)||
+|sendPKBattleRequest|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/sendRequest.html)|The requestID is the ID of the current PK session.|
+|cancelPKBattleRequest|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/cancelRequest.html)||
+|acceptIncomingPKBattleRequest|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/acceptRequest.html)|The requestID is the event.requestID that you received in the onIncomingRequestReceived event. |
+|rejectIncomingPKBattleRequest|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/rejectRequest.html)|The requestID is the same as the event.requestID that you received in the onIncomingRequestReceived event.|
+|stopPKBattle|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/stop.html)|The requestID is the result.requestID returned by the sendRequest function.|
+|muteAnotherHostAudio|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)||
 |startPKBattleWith|none|After accepting the PK invitation, the interface will automatically switch to the PK screen, and no further action is required.<br/><br/>If you want the other party to directly enter the PK after the invitation is sent, you can set the isAutoAccept parameter to true in the sendRequest function.|
 
 for example, if you previously used **ZegoUIKitPrebuiltLiveStreamingService().sendPKBattleRequest(anotherHostUserID)** to send a PK invitation, now you should use **ZegoUIKitPrebuiltLiveStreamingController().pk.sendRequest([hostUserID])**.
@@ -255,13 +253,13 @@ The events in **ZegoUIKitPrebuiltLiveStreamingConfig.pkBattleEvents** can be rep
 
 | ZegoUIKitPrebuiltLiveStreamingConfig.pkBattleEvents |ZegoUIKitPrebuiltLiveStreamingEvents.pk | description |
 |-|-|-|
-|onIncomingPKBattleRequestReceived|[onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingRequestReceived.html)|The requestID parameter from the event will be required when using the acceptRequest or rejectRequest functions.|
-|onIncomingPKBattleRequestCancelled|[onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingPKBattleRequestCancelled.html)||
-|onIncomingPKBattleRequestTimeout|[onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onIncomingRequestTimeout.html)||
-|onOutgoingPKBattleRequestAccepted|[onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestAccepted.html)||
-|onOutgoingPKBattleRequestRejected|[onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestRejected.html)||
-|onOutgoingPKBattleRequestTimeout|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onOutgoingRequestTimeout.html)||
-|onPKBattleEndedByAnotherHost|[onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingPKEvents/onEnded.html)||
+|onIncomingPKBattleRequestReceived|[onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestReceived.html)|The requestID parameter from the event will be required when using the acceptRequest or rejectRequest functions.|
+|onIncomingPKBattleRequestCancelled|[onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingPKBattleRequestCancelled.html)||
+|onIncomingPKBattleRequestTimeout|[onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestTimeout.html)||
+|onOutgoingPKBattleRequestAccepted|[onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestAccepted.html)||
+|onOutgoingPKBattleRequestRejected|[onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestRejected.html)||
+|onOutgoingPKBattleRequestTimeout|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestTimeout.html)||
+|onPKBattleEndedByAnotherHost|[onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html)||
 
 
 ## 8. FAQ
