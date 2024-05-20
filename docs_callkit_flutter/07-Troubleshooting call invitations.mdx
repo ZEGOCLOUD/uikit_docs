@@ -1,6 +1,6 @@
 # Troubleshooting call invitations
 
-<Tip title="TIPS">It is possible that your issue has already been fixed in the old version. Before further troubleshooting, we strongly recommend that you upgrade [zego_uikit_prebuilt_call](https://pub.dev/packages/zego_uikit_prebuilt_call), [zego_uikit_signaling_plugin](https://pub.dev/packages/zego_uikit_signaling_plugin), and [zego_uikit](https://pub.dev/packages/zego_uikit) to the latest version for testing. If you encounter any problems during the upgrade, please refer to our [migration guide](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/topics/Migration:%20from%203.x%20to%204.0-topic.html).</Tip>
+<Tip title="TIPS">It is possible that your issue has already been fixed in the old version. Before further troubleshooting, we strongly recommend that you upgrade [zego_uikit_prebuilt_call](https://pub.dev/packages/zego_uikit_prebuilt_call), [zego_uikit_signaling_plugin](https://pub.dev/packages/zego_uikit_signaling_plugin), and [zego_uikit](https://pub.dev/packages/zego_uikit) to the latest version for testing. If you encounter any problems during the upgrade, please refer to our [migration guide](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/topics/Migration_v4.x-topic.html).</Tip>
 
 If you encounter offline call issues, ***we recommend testing and ensuring that the online call function is working properly before troubleshooting the offline problem***. This usually shortens the time it takes to troubleshoot your issue.
 
@@ -16,18 +16,18 @@ There are usually three potential issues that can occur with online calls:
 If the UI does not respond after the caller clicks the call button, please check the following:
 
 1. Make sure that the userID of the user being called is valid.
-2. Check if there is any error reported on the caller side, please refer to [Check if there is any error on the calling side.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-there-is-any-error-on-the-calling-side)
-3. Check if the callee has correctly invoked the init function, please refer to [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-init-logic-is-handled-correctly)
+2. Check if there is any error reported on the caller side, please refer to [Check if there is any error on the calling side.](#check-if-there-is-any-error-on-the-calling-side)
+3. Check if the callee has correctly invoked the init function, please refer to [Check if the init logic is handled correctly.](#check-if-the-init-logic-is-handled-correctly)
 
 ### 2 There is a ringing sound but no incoming call dialog.
 
 
-Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
 
 ### 3 First time working fine, but subsequent openings of the application cannot show invitation dialogs.
 
 
-The problem usually occurs because the "auto login" related logic in your app does not call `ZegoUIKitPrebuiltCallInvitationService().init` after the user successfully "auto login", resulting in a failure to log in to our sdk. Please refer to [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-init-logic-is-handled-correctly)
+The problem usually occurs because the "auto login" related logic in your app does not call `ZegoUIKitPrebuiltCallInvitationService().init` after the user successfully "auto login", resulting in a failure to log in to our sdk. Please refer to [Check if the init logic is handled correctly.](#check-if-the-init-logic-is-handled-correctly)
 
 ### 4 No sound during call
 
@@ -57,7 +57,7 @@ Offline call issues can be complex and tricky, particularly on Android devices. 
 
 <Warning title="Warning">
 1. Before attempting to troubleshoot offline calls, please **make sure that the online call invitation feature is working properly**.
-2. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-test-device-has-granted-the-app-related-permissions)
+2. Please [Check if the test device has granted the APP related permissions.](#check-if-the-test-device-has-granted-the-app-related-permissions)
 </Warning>
 
 
@@ -65,25 +65,25 @@ Offline call issues can be complex and tricky, particularly on Android devices. 
 ### 6 I can receive the call invitation, but after clicking accept, it jumps to the app without entering the calling page.
 
 
-1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
-2. Please [Check if the init logic is handled correctly.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-init-logic-is-handled-correctly)
+1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+2. Please [Check if the init logic is handled correctly.](#check-if-the-init-logic-is-handled-correctly)
 
 ### 7 I can receive call invitations, but only get notifications without accept and decline buttons on the invitation dialog.
 
 
-Please [Check if the ResourceID configuration is correct.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-resourceid-configuration-is-correct)
+Please [Check if the ResourceID configuration is correct.](#check-if-the-resourceid-configuration-is-correct)
 
 ### 8 I can receive the call invitation, but there is only ringing without an invitation dialog.
 
 
-1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
-2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-the-configuration-of-androidmanifestxml)
+1. Please [Check if the NavigatorKey and useSystemCallingUI are correctly configured.](#check-if-the-navigatorkey-and-usesystemcallingui-are-correctly-configured)
+2. Please [Check the configuration of AndroidManifest.xml.](#check-the-configuration-of-androidmanifestxml)
 
 ### 9 I can receive the call invitation, but after clicking accept, the application cannot be launched.
 
 
-1. Please [Check if the test device has granted the APP related permissions.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-if-the-test-device-has-granted-the-app-related-permissions)
-2. Please [Check the configuration of AndroidManifest.xml.](https://zegocloud.com/doc/callkit/Call%20Kit/main/Troubleshooting%20call%20invitations/4981e46f#check-the-configuration-of-androidmanifestxml)
+1. Please [Check if the test device has granted the APP related permissions.](#check-if-the-test-device-has-granted-the-app-related-permissions)
+2. Please [Check the configuration of AndroidManifest.xml.](#check-the-configuration-of-androidmanifestxml)
 
 
 
@@ -131,7 +131,7 @@ When debugging from your IDE (Android Studio/Xcode/VS Code), you can usually vie
 </Frame>
 
 
-If you are having trouble obtaining a valid Push ID, it may be due to issues with your certificate configuration. We recommend reviewing the [Quick start (with call invitation)](https://www.zegocloud.com/doc/callkit/Call%20Kit/main/Quick%20start%20(with%20call%20invitation)/eb1d3c42)
+If you are having trouble obtaining a valid Push ID, it may be due to issues with your certificate configuration. We recommend reviewing the [Quick start (with call invitation)](./Quick%20start%20(with%20call%20invitation).mdx)
 
 documentation again to ensure that your certificate configuration on the console is correct. Once configured correctly, you should see something similar to the following:
 
@@ -174,7 +174,7 @@ The `Manufacturer Push Servers` error may be caused by the following:
 #### Check if the latest package version is being used
 
 
-It is possible that your issue has already been fixed in the old version. Before further troubleshooting, we strongly recommend that you upgrade [zego_uikit_prebuilt_call](https://pub.dev/packages/zego_uikit_prebuilt_call), [zego_uikit_signaling_plugin](https://pub.dev/packages/zego_uikit_signaling_plugin), and [zego_uikit](https://pub.dev/packages/zego_uikit) to the latest version for testing. If you encounter any problems during the upgrade, please refer to our [migration guide](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/topics/Migration:%20from%203.x%20to%204.0-topic.html).
+It is possible that your issue has already been fixed in the old version. Before further troubleshooting, we strongly recommend that you upgrade [zego_uikit_prebuilt_call](https://pub.dev/packages/zego_uikit_prebuilt_call), [zego_uikit_signaling_plugin](https://pub.dev/packages/zego_uikit_signaling_plugin), and [zego_uikit](https://pub.dev/packages/zego_uikit) to the latest version for testing. If you encounter any problems during the upgrade, please refer to our [migration guide](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/topics/Migration_v4.x-topic.html).
 
 #### Check if there is any error on the calling side.
 

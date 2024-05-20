@@ -1,9 +1,6 @@
-import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/Reuse/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
+import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
 
 # Quick start (with call invitation)
-
-- - -
-
 
 You can refer to this document to understand the effects of the offline call invitation (system-calling UI) and complete the basic integration.
 
@@ -215,9 +212,9 @@ The prototype of init method: init(appID, appSign, userInfo, plugins, config = {
 | plugins                          | Array    | No       | Set it to [ZIM, ZPNs] if you want to use the invitation functionality                                                                                                                                                                |
 | config                           | Object   | Yes      | You can set it to empty object {} if you don't want to change any configuration                                                                                                                                                      |
 | config.ringtoneConfig            | Object   | No       | `ringtoneConfig.incomingCallFileName` and `ringtoneConfig.outgoingCallFileName` is the name of the ringtone file, which requires you a manual import. To know how to import, refer to the following chapter: Configure your project. |
-| config.requireConfig             | Function | No       | This method is called when you receive a call invitation. You can control the SDK behaviors by returning the required config based on the data parameter. For more details, see [Custom prebuilt UI](!ZEGOUIKIT_Custom_prebuilt_UI). |
+| config.requireConfig             | Function | No       | This method is called when you receive a call invitation. You can control the SDK behaviors by returning the required config based on the data parameter. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx). |
 | config.androidNotificationConfig | Object   | No       | `androidNotificationConfig.channelID` must be the same as the FCM Channel ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and the `androidNotificationConfig.channelName` can be an arbitrary value.                 |
-| config.innerText                 | Object   | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](!ZEGOUIKIT_Custom_prebuilt_UI).                                                                                                                 |
+| config.innerText                 | Object   | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                                 |
 
 </Accordion>
 
@@ -228,7 +225,7 @@ The prototype of init method: init(appID, appSign, userInfo, plugins, config = {
 Configure the "ZegoSendCallInvitationButton" to enable making calls. 
 
 <CodeGroup>
-```html title="One-on-one"
+```react title="One-on-one"
 <ZegoSendCallInvitationButton
     invitees={[{userID: varUserID, userName: varUserName'}]}
     isVideoCall={true}
@@ -236,7 +233,7 @@ Configure the "ZegoSendCallInvitationButton" to enable making calls.
 />
 ```
 
-```html title="Group call"
+```react title="Group call"
 <ZegoSendCallInvitationButton
     invitees={invitees.map((inviteeID) => {
         return { userID: inviteeID, userName: 'user_' + inviteeID };
@@ -830,13 +827,18 @@ Please ensure that the certificates on the console correspond one-to-one with th
 
 ## Related guide
 
-<Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
-  Refer this doc to make further customization.
-</Card>
+
+<CardGroup cols={2}>
+  <Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
+    Refer this doc to make further customization.
+  </Card>
+</CardGroup>
 
 
 ## Resources
 
-<Card title="Sample code" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn">
-  Click here to get the complete sample code.
-</Card>
+<CardGroup cols={2}>
+  <Card title="Sample code" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn">
+    Click here to get the complete sample code.
+  </Card>
+</CardGroup>
