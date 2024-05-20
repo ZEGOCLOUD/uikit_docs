@@ -1,0 +1,290 @@
+# Quick start
+
+This doc will guide you to integrate the In-app Chat Kit and start a chat quickly.
+
+## Prerequisites
+
+import ZIM_ZIMKIT_Prerequisites_Features from "../snippets/uikit/in_app_chat/ZIM_ZIMKIT_Prerequisites_Features-en.mdx"
+
+<ZIM_ZIMKIT_Prerequisites_Features />
+
+## Integrate the SDK
+
+### Add SDK dependencies
+
+```bash
+flutter pub add zego_zimkit
+```
+
+### Integrate In-app Chat Kit into the project
+
+1. Create an instance and log in. 
+
+import ZIM_ZIMKit_SDK_warning from "../snippets/uikit/in_app_chat/ZIM_ZIMKit_SDK_warning-en.mdx"
+
+a. Call the `init` method to initialize the In-app Chat Kit SDK.
+
+  ```dart
+  void main() {
+    ZIMKit().init(
+      appID: YourSecret.appID, // your appid
+      appSign: YourSecret.appSign, // your appSign
+    );
+    runApp(YourApp());
+  }
+  ```
+
+b. Log in by calling the `connectUser` method with your user information. And the login only succeeded when the authentication passed. 
+
+  <ZIM_ZIMKit_SDK_warning />
+
+  ```dart
+  ZIMKit().connectUser(id: id, name: name).then(_){
+      Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => const ZIMKitDemoHomePage(),
+          ),
+      );
+  }
+
+  class ZIMKitDemoHomePage extends StatelessWidget {
+    const ZIMKitDemoHomePage({Key? key}) : super(key: key);
+
+    @override
+    Widget build(BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Conversations'),
+            actions: const [HomePagePopupMenuButton()],
+          ),
+          body: ZIMKitConversationListView(
+            onPressed: (context, conversation, defaultAction) {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return ZIMKitMessageListPage(
+                    conversationID: conversation.id,
+                    conversationType: conversation.type,
+                  );
+                },
+              ));
+            },
+          ),
+        ),
+      );
+    }
+  }
+  ```
+
+## Configure your project
+
+- Android:
+
+  1. Open the `your_project/android/app/build.gradle` file, and modify the `compileSdkVersion` to 33.
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compileSdkVersion.png" />
+  </Frame>
+
+  2. And in the same file, edit the `minSdkVersion`.
+
+  ```xml
+  minSdkVersion 21
+  ```
+
+  <Frame auto="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_min_sdk_21.png" />
+  </Frame>
+
+  3. Add app permissions.
+
+  Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
+
+  ```xml
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEOS"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+  ```
+
+  <Frame auto="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_android.jpg" />
+  </Frame>
+
+  4. Prevent code obfuscation.
+
+  To prevent obfuscation of the SDK public class names, do the following:
+
+  a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+
+    ```xml
+    -keep class **.zego.** { *; }
+    ```
+
+  b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+
+    ```xml
+    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    ```
+
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
+    </Frame>
+
+- iOS:
+
+  1. To add permissions, open `your_project/ios/Runner/Info.plist`, and add the following code to the `dict` part:
+
+  ```plist
+  <key>NSCameraUsageDescription</key>
+  <string>We require camera access to connect to a call</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>We require microphone access to connect to a call</string>
+  ```
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_ios.png" />
+  </Frame>
+
+  2. To use the notifications and build your app correctly, navigate to the **Build Settings** tab, and set the following build options for your target app.
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/ios_distribution.png" />
+  </Frame>
+
+  Refer to and set the following build options:
+
+  - In the **Runner** Target:
+      
+    a. **Build Libraries for Distribution** -> `NO`
+
+    b. **Only safe API extensions** -> `NO`
+
+    c. **iOS Deployment Target** -> `11 or greater`
+
+  - In other Targets:
+          
+    a. **Build Libraries for Distribution** -> `NO`
+
+    b. **Only safe API extensions** -> `YES`
+
+Ideally, by this point, your app will look like this:
+
+<div style={{width:"300px"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/imkit_effect.PNG" />
+  </Frame>
+</div>
+
+## Start a chat
+
+In-app Chat Kit supports the following and this section shows you how to implement those respectively:
+
+import InappChatUIkit_Startasession from "../snippets/uikit/in_app_chat/InappChatUIkit_Startasession-en.mdx"
+
+<Accordion title="Start a one-on-one chat" defaultOpen="false">
+
+<InappChatUIkit_Startasession />
+
+1. Get the `userID` that is generated using your own business logic. (the `userID` here refers to the peer user you want to chat with.)
+2. Fill in the `userID` parameter and run the following code:
+
+```dart
+// 1. connect user
+ZIMKit().connectUser(id: id, name: name).then(_){
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => const ZIMKitDemoHomePage(),
+        ),
+    );
+}
+
+// 2. navigate to the MessageListPage
+Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return ZIMKitMessageListPage(
+        conversationID: userID,
+        conversationType: ZIMConversationType.peer,
+    );
+}));
+```
+
+</Accordion>
+
+<Accordion title="Start a group chat" defaultOpen="false">
+
+1. Get the `groupID` `groupName` and `inviteUserIDs` that is generated using your own business logic. (the `inviteUserIDs` here refers to the ID list of the users that you want to invite to the group chat.)
+2. Fill in the parameters and run the following code:
+
+```dart
+ZIMKit().createGroup(groupName, inviteUserIDs, id:groupID).then((String? groupID) {
+    if (groupID != null) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ZIMKitMessageListPage(
+        conversationID: groupID,
+        conversationType: ZIMConversationType.group,
+        );
+    }));
+    }
+});
+```
+
+</Accordion>
+
+<Accordion title="Join a group chat" defaultOpen="false">
+
+1. Get the `groupID` that is generated using your own business logic. (the `groupID` here refers to the group chat you want to join.)
+2. Fill in the `groupID` parameter and run the following code:
+
+```dart
+ZIMKit().joinGroup(groupID).then((int errorCode) {
+    if (errorCode == 0) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ZIMKitMessageListPage(
+        conversationID: groupID,
+        conversationType: ZIMConversationType.group,
+        );
+    }));
+    }
+});
+```
+
+</Accordion>
+
+## Update user's avatar and username
+
+You can use the `updateUserInfo` method to update the user's avatar and username.
+
+```dart
+await ZIMKit().updateUserInfo(avatarUrl: avatarUrl, name: name);
+```
+
+## More to explore
+
+<CardGroup cols={2}>
+  <Card title="Component overview" href="./03-UI components/01-Overview.mdx" target="_blank">
+    Click here to explore more UI components.
+  </Card>
+  <Card title="Run the sample code" href="https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter" target="_blank">
+    A quick guide to help you run the sample code.
+  </Card>
+</CardGroup>
+
+## Get support
+
+import ZIMKit_GetSupport from "../snippets/uikit/in_app_chat/ZIMKit_GetSupport-en.mdx"
+
+<ZIMKit_GetSupport />

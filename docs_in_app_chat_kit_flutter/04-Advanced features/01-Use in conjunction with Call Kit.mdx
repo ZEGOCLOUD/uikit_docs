@@ -1,0 +1,287 @@
+# Use in conjunction with Call Kit
+
+This doc will introduce how to use In-app Chat Kit with [Call Kit](https://docs.zegocloud.com/article/14746). 
+
+<div style={{width:"300px"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+  </Frame>
+</div>
+
+## Prerequisites
+
+Integrate the **In-app Chat Kit SDK** into your project. For more information, see <a href="../02-Quick%20start.mdx" target="_blank">Quick start</a>.
+
+## Integrate the Call Kit
+
+### Add Call Kit dependency
+
+1. Run the following code in your project root directory:
+
+```dart
+flutter pub add zego_uikit_prebuilt_call
+flutter pub add zego_uikit_signaling_plugin
+```
+
+2. Run the following code in your project root directory to install all dependencies.
+
+```dart
+flutter pub get
+```
+
+### Initialize the Call Kit 
+
+To receive the call invites from others and let the calling notification show on the top bar when receiving it, you will need to initialize the call invitation service (**ZegoUIKitPrebuiltCallInvitationService**) first.
+
+#### 1. Set up the context.
+
+To make the UI show when receiving a call invite, you will need to get the **Context**. To do so, do the following 3 steps:
+
+- 1.1 Initialize the `ZIMKit`.
+- 1.2 Define a `navigatorkey`, then set the `navigatorKey` to `ZegoUIKitPrebuiltCallInvitationService`.
+- 1.3 Register the `navigatorKey` to `MaterialApp`.
+
+```dart
+void main() {
+
+  /// 1.1 init ZIMKit
+  ZIMKit().init(
+    appID: YourSecret.appID, // your appid
+    appSign: YourSecret.appSign, // your appSign
+  );
+
+  /// 1.2 define a navigator key, then set navigator key to ZegoUIKitPrebuiltCallInvitationService
+  final navigatorKey = GlobalKey<NavigatorState>();
+  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+
+  runApp(ZIMKitDemo(navigatorKey));
+}
+```
+
+```dart
+class ZIMKitDemo extends StatelessWidget {
+  const ZIMKitDemo(this.navigatorKey, {Key? key}) : super(key: key);
+
+  final GlobalKey<NavigatorState>? navigatorKey;
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      /// 1.3: register the navigator key to MaterialApp
+      navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
+      title: 'ZIMKit Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const ZIMKitDemoLoginPage(),
+    );
+  }
+}
+```
+
+#### 2. Initialize/Deinitialize the call invitation service.
+  
+- 2.1 Initialize the service when your app users logged in successfully or re-logged in after an exit.
+
+```dart
+await ZIMKit().connectUser(id: userID.text, name: userName.text).then((errorCode) {
+  if (mounted) {
+    if (errorCode == 0) {
+      /// 2.1. initialized ZegoUIKitPrebuiltCallInvitationService
+      /// when app's user is logged in or re-logged in
+      /// We recommend calling this method as soon as the user logs in to your app.
+      ZegoUIKitPrebuiltCallInvitationService().init(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: currentUser.id,
+        userName: currentUser.name,
+        plugins: [ZegoUIKitSignalingPlugin()],
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ZIMKitDemoHomePage(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('login failed, errorCode: $errorCode'),
+        ),
+      );
+    }
+  }
+});
+```
+
+- 2.2 Deinitialize the service after your app users logged out.
+
+```dart
+/// on App's user logout
+void onUserLogout() {
+  /// 2.2. de-initialization ZegoUIKitPrebuiltCallInvitationService
+  /// when app's user is logged out
+  ZegoUIKitPrebuiltCallInvitationService().uninit();
+}
+```
+
+### Add a call button
+
+Add a call button to the `appBar` using the `appBarActions` parameter of `ZIMKitMessageListPage`:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  appBarActions: conversation.type == ZIMConversationType.peer
+      ? [
+          for (final isVideoCall in [true, false])
+            ZegoSendCallInvitationButton(
+              iconSize: const Size(40, 40),
+              buttonSize: const Size(50, 50),
+              isVideoCall: isVideoCall,
+              invitees: [ZegoUIKitUser(id: conversation.id, name: conversation.name)],
+              onPressed: (String code, String message, List<String> errorInvitees) {
+                onCallInvitationSent(context, code, message, errorInvitees);
+              },
+            ),
+        ]
+      : [],
+);
+
+void onCallInvitationSent(BuildContext context, String code, String message, List<String> errorInvitees) {
+  late String log;
+  if (errorInvitees.isNotEmpty) {
+    log = "User doesn't exist or is offline: ${errorInvitees[0]}";
+    if (code.isNotEmpty) {
+      log += ', code: $code, message:$message';
+    }
+  } else if (code.isNotEmpty) {
+    log = 'code: $code, message:$message';
+  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(log)),
+  );
+}
+```
+
+<Accordion title="After integrating Call Kit, configure the following for your app project" defaultOpen="false">
+
+## Configure your project
+
+### Android:
+
+1. If your project is created with Flutter 2.x.x, you will need to open the `your_project/android/app/build.gradle` file, and modify the `compileSdkVersion` to 33.
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
+  </Frame>
+
+2. And in the same file, edit the `minSdkVersion`.
+
+  ```xml
+  minSdkVersion 21
+  ```
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_min_sdk_21.png" />
+  </Frame>
+
+3. Add app permissions.
+
+  Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
+
+  ```xml
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  ```
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/invitation/permission_android.png" />
+  </Frame>
+
+4. Prevent code obfuscation.
+
+  To prevent obfuscation of the SDK public class names, do the following:
+
+  a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+
+  ```xml
+  -keep class **.zego.**  { *; }
+  -keep class **.**.zego_zpns.** { *; }
+  ```
+
+  b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+
+  ```xml
+  proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+  ```
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion_zpns.png" />
+  </Frame>
+
+### iOS:
+
+1. To add permissions, open `your_project/ios/Runner/Info.plist`, and add the following code to the `dict` part:
+
+  ```plist
+  <key>NSCameraUsageDescription</key>
+  <string>We require camera access to connect to a call</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>We require microphone access to connect to a call</string>
+  ```
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_ios.png" />
+  </Frame>
+
+2. To use the notifications and build your app correctly, navigate to the **Build Settings** tab, and set the following build options for your target app.
+
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/ios_distribution.png" />
+  </Frame>
+
+Refer to and set the following build options:
+
+- In the **Runner** Target:
+    
+  a. **Build Libraries for Distribution** -> `NO`
+
+  b. **Only safe API extensions** -> `NO`
+
+  c. **iOS Deployment Target** -> `11 or greater`
+
+- In other Targets:
+        
+  a. **Build Libraries for Distribution** -> `NO`
+
+  b. **Only safe API extensions** -> `YES`
+
+</Accordion>
+
+So far, you have successfully integrated Call Kit in the In-app Chat Kit. You can now run and experience it.
+
+## More resources
+
+The above content only introduces the basic configuration required for integrating Call Kit. If you need to further customize the configuration of the call, refer to the following documents:
+
+<CardGroup cols={2}>
+  
+  <Card title="Call Kit - Quick start" href="https://zegocloud.com/docs/uikit/call-kit-flutter/quick-start" target="_blank">
+    Steps in this doc helps you to make a call quickly.
+  </Card>
+
+  <Card title="Call Kit - Custom prebuilt UI" href="https://zegocloud.com/docs/uikit/call-kit-flutter/calling-config/overview" target="_blank">
+    This article guides you on how to further customize the features and UI of the call.
+  </Card>
+
+</CardGroup>
