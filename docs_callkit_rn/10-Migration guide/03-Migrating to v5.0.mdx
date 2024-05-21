@@ -1,0 +1,179 @@
+# Migrating to v5.0
+
+To provide you with a better user experience, we have released a new version: Call Kit v5.0, and recommend you upgrade to this latest version.
+
+This doc provides the steps and considerations for upgrading from v4.0 to v5.0.
+
+
+## Update dependency package
+
+Change the version of `@zegocloud/zego-uikit-rn`, `@zegocloud/zego-uikit-prebuilt-call-rn` and `zego-express-engine-reactnative`.
+
+You can change the version in your `package.json` file directory:
+
+```json
+"@zegocloud/zego-uikit-rn": "^2.9.0",
+"@zegocloud/zego-uikit-prebuilt-call-rn": "^5.0.0",
+"zego-express-engine-reactnative": "^3.14.5",
+```
+
+Or run the following command:
+
+<CodeGroup>
+
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn @zegocloud/zego-uikit-prebuilt-call-rn zego-express-engine-reactnative
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-rn @zegocloud/zego-uikit-prebuilt-call-rn zego-express-engine-reactnative
+```
+
+</CodeGroup>
+
+## Remove the dependency package
+
+Remove the dependency package of `@notifee/react-native` and `@zegocloud/react-native-callkeep`.
+
+<CodeGroup>
+
+```bash
+yarn remove @notifee/react-native @zegocloud/react-native-callkeep
+```
+
+```bash
+npm uninstall @notifee/react-native @zegocloud/react-native-callkeep
+```
+
+</CodeGroup>
+
+## Remove the permissions (Android only)
+
+Since version 5.0.0, we have declared the necessary permissions for Android in `@zegocloud/zego-uikit-prebuilt-call-rn`, so you can remove these permissions from your project.
+
+### Using the basic Call Kit
+
+Remove the following permissions:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+```
+
+### Using the CallKit with call invitation feature
+
+Remove the following permissions:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+
+<uses-permission android:name="android.permission.GET_TASKS" />
+<uses-permission android:name="android.permission.BIND_TELECOM_CONNECTION_SERVICE"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.CALL_PHONE" />
+<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+```
+
+Remove the `VoiceConnectionService`:
+
+```xml
+<application
+  android:name=".MainApplication"
+  android:label="@string/app_name"
+  android:icon="@mipmap/ic_launcher"
+  android:roundIcon="@mipmap/ic_launcher_round"
+  android:allowBackup="false"
+  android:theme="@style/AppTheme">
+
+  <service android:name="io.wazo.callkeep.VoiceConnectionService"
+      android:label="Wazo"
+      android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+      android:foregroundServiceType="camera|microphone"
+      android:exported="true"
+  >
+
+      <intent-filter>
+          <action android:name="android.telecom.ConnectionService" />
+      </intent-filter>
+  </service>
+  ...
+</application>
+```
+
+## Remove the unnecessary code (Android only)
+
+If you use the CallKit with call invitation feature, you can remove these code.
+
+```java
+public class MainActivity extends ReactActivity {
+    // ...
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // /////////////////////////
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+      setShowWhenLocked(true);
+    }
+    // /////////////////////////
+  }
+}
+```
+
+## Add necessary permission (Android only)
+
+If you use the CallKit with call invitation feature, you need guide your users to enable `Appear on top` permission.
+
+<Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/app_settings.png" /></Frame>
+
+Or you can refer to the following code to request system aler window permission after the initialization is completed.
+
+```js
+const onUserLogin = async (userID, userName, props) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID, // It can be any valid characters, but we recommend using a phone number.
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    }
+  ).then(() => {
+    // /////////////////////////
+    ZegoUIKitPrebuiltCallService.requestSystemAlertWindow({
+      message: 'We need your consent for the following permissions in order to use the offline call function properly',
+      allow: 'Allow',
+      deny: 'Deny',
+    });
+    // /////////////////////////
+  });
+}
+```
