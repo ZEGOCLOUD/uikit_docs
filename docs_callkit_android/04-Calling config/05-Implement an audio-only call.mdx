@@ -1,0 +1,95 @@
+# Implement an audio-only call
+
+
+When starting a call, the Call Kit (ZegoUIkitPrebuiltCall) turns on the camera, and microphone, and uses the speaker as the audio output device by default.
+
+To change this default configuration, for example, turn off the camera when you start a call, or don't use the speaker (If the speaker is not used, the system's default audio output device, such as ear speaker, headset, Bluetooth, etc., will be used.), you can modify the following configurations:
+
+1. `turnOnCameraWhenJoining`: Whether to turn on the camera when the call starts. true: turn on (by default). false: turn off. 
+2. `turnOnMicrophoneWhenJoining`: Whether to turn on the microphone when the call starts. true: turn on (by default). false: turn off. 
+3. `useSpeakerWhenJoining`: Whether to use the speaker when the call starts. true: use the speaker (by default). false: use the system's default audio output device, such as an ear speaker, headset, Bluetooth, etc.
+
+Here is the reference code:
+
+<CodeGroup>
+
+```java title="Basic call"
+public class CallActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_call);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+    config.turnOnCameraWhenJoining = false;
+    config.turnOnMicrophoneWhenJoining = false;
+    config.useSpeakerWhenJoining = true;
+
+    ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment
+            .newInstance(appID, appSign, callID, userID, userName, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```java title="With call invitation"
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig(),
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+                @Override
+                public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                    ZegoUIKitPrebuiltCallConfig config;
+                    boolean isVideoCall = invitationData.type == ZegoInvitationType.VIDEO_CALL.getValue();
+                    boolean isGroupCall = invitationData.invitees.size() > 1;
+                    if (isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+                    } else if (!isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+                    } else if (!isVideoCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+                    } else {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+                    }
+                    // Modify your custom calling configurations here.
+                    config.turnOnCameraWhenJoining = false;
+                    config.turnOnMicrophoneWhenJoining = false;
+                    config.useSpeakerWhenJoining = true;
+                    return config;
+                }
+        );
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,
+            callInvitationConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZegoUIKitPrebuiltCallService.logout();
+    }
+}
+```
+</CodeGroup>

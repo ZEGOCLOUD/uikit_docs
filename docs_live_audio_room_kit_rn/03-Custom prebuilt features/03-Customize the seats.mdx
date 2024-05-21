@@ -1,0 +1,256 @@
+# Customize the seats
+
+## Specify user seats
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) allows you to set specified seats for roles in the live audio room accordingly.
+
+1. `takeSeatIndexWhenJoining`: Use this to set the seat that the user sits in automatically when joining the live audio room (for the host and speakers). 
+2. `hostSeatIndexes`: Use this to set the special seat for the **host only** (speakers and the audience are not allowed to sit).
+
+## Customize the seat layout
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) generally uses rows and alignments for layout, to customize the seat layout, refer to the following:
+
+- `ZegoLiveAudioRoomLayoutConfig`:
+    1. `rowConfigs`([ZegoLiveAudioRoomLayoutRowConfig]): How many rows there are and how each row is configured.
+    2. `rowSpacing`(number): The space in each row, and it must ≥ 0.
+
+- `ZegoLiveAudioRoomLayoutRowConfig`:
+    1. `count`(number): Number of seats in each row, ranging from [1 - 4].
+    2. `seatSpacing`(number): Horizontal spacing for each seat, and it must ≥ 0 (this only takes effect when the alignment is `start`, `end`, and `center`).
+    3. `alignment`(ZegoLiveAudioRoomLayoutAlignment): The alignment set for the columns.
+    
+- `ZegoLiveAudioRoomLayoutAlignment`:
+    1. `start`: Place the seats as close to the start of the main axis as possible.
+    2. `end`: Place the seats as close to the end of the main axis as possible.
+    3. `center`: Place the seats as close to the middle of the main axis as possible.
+    4. `spaceBetween`: Place the free space evenly between the seats.
+    5. `spaceAround`: Place the free space evenly between the seats as well as half of that space before and after the first and last seat.
+    6. `spaceEvenly`: Place the free space evenly between the seats as well as before and after the first and last seat.
+    
+    The six `alignment` effects are as follows: 
+
+<div style={{width:"100%",display:"flex",gap:"10px"}}>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_2.jpeg" />
+        </Frame>
+    </div>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_1.jpeg" />
+        </Frame>
+    </div>
+</div>
+
+The reference code below implements the following custom settings, with the following effect:
+
+1. The only seat in the first row is set to the host's special seat.
+2. The number of seats in the second and third rows is 4, and the alignment is `spaceAround`.
+
+<div style={{width:"30%"}}>
+    <Frame width="auto%" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_layout.jpeg" />
+    </Frame>
+</div>
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    layoutConfig: {
+                        rowConfigs = [
+                            {
+                                count: 1,
+                                alignment: ZegoLiveAudioRoomLayoutAlignment.center,
+                            },
+                            {
+                                count: 4,
+                                alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround,
+                            },
+                            {
+                                count: 4,
+                                alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround,
+                            },
+                        ],
+                    },
+                    takeSeatIndexWhenJoining = 0,
+                    hostSeatIndexes = [0],
+                }}
+            />
+        </View>
+    );
+}
+```
+
+## Customize the seat's UI
+
+By default, the seat's UI displays the sound waves around the user's avatar.
+
+If you are not satisfied with the sound wave style, or you want to customize the background view, use the configurations in the `seatConfig` accordingly.
+
+### Hide the sound waves
+
+The sound waves are displayed by default, to hide it, use the `showSoundWaveInAudioMode` config.
+
+`showSoundWaveInAudioMode`: Use this to decide whether to display the sound waves around the user avatar or not. Displayed by default.
+
+Here is the reference code:
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    seatConfig: {
+                        showSoundWaveInAudioMode: false,
+                    },
+                }}
+            />
+        </View>
+    );
+}
+```
+
+### Customize the foreground/background view of the seat
+
+To customize the user seat's view, use the following in the `seatConfig` as needed.
+
+- `foregroundBuilder`: Use this to customize components/add some custom components at the top level of the view, for example, to display the user-level icons.
+- `backgroundColor`: Use this to customize the background color.
+- `backgroundImage`: Use this to customize the background image.
+- `rowBackgroundBuilder`: Use this to customize the background of per row.
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_bg_fg.gif" />
+    </Frame>
+</div>
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text, Image } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+const foregroundBuilder = ({ userInfo }) => {
+    return (
+        <View style={styles.builder}>
+            <View style={styles.avatarBox}>
+                {
+                    userInfo.inRoomAttributes?.role ? (
+                        <Image
+                            style={styles.hostIcon}
+                            source={require('./resources/host-icon.png')}
+                        />
+                    ) : null
+                }
+            </View>
+            <Text style={styles.name}>{userInfo.userName}</Text>
+        </View>
+    );
+};
+
+const rowBackgroundBuilder = ({rowIndex}) => {
+  return rowIndex == 0 ? (
+    <View style={{flex: 1, width: '100%', height: '100%', backgroundColor: 'skyblue', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
+      <View style={{backgroundColor: 'red', width: 30, height: 30}}></View>
+      <View style={{backgroundColor: 'red', width: 30, height: 30}}></View>
+    </View>
+  ) : null;
+}
+
+// Fill in the URL of the background image. 
+const image = {uri: ''};
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    seatConfig: {
+                        foregroundBuilder, 
+                        backgroundColor,
+                        backgroundImage: image.uri,
+                        rowBackgroundBuilder,                  
+                    },
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    builder: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatarBox: {
+        alignItems: 'center',
+        width: 54,
+        height: 54,
+    },
+    name: {
+        position: 'absolute',
+        bottom: 0,
+        lineHeight: 14,
+        fontSize: 10,
+        color: '#000',
+        zIndex: 3,
+    },
+    hostIcon: {
+        position: 'absolute',
+        bottom: 0,
+        width: 47,
+        height: 12,
+        zIndex: 3,
+    },
+})
+```

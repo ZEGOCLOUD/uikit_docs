@@ -1,0 +1,159 @@
+# Migrating to v4.0
+
+ 
+To provide you with a better user experience, we have released a new version: Call Kit v4.0, and recommend you upgrade to this latest version. 
+
+This doc provides the steps and considerations for upgrading from v1.0 to v4.0.
+
+
+## Using the basic Call Kit
+
+If you are using the basic call feature, there are two steps you need to complete:
+
+### Step 1 Change the version
+
+Change the version of @zegocloud/zego-uikit-rn and @zegocloud/zego-uikit-prebuilt-call-rn.
+
+You can change the version in your `package.json` file directory or run the following command:
+
+<CodeGroup>
+```bash title="yarn"
+yarn add @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-call-rn@4.0.0
+```
+```bash title="npm"
+npm install @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-call-rn@4.0.0
+```
+</CodeGroup>
+
+### Step 2 Change the way you import the ZegoUIKitPrebuiltCall
+
+Since the `ZegoUIKitPrebuiltCall` component is not imported by default, you need to import it as shown below:
+
+```js
+import {ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn'
+```
+
+For more details, see [Quick start](../02-Quick%20start.mdx).
+
+
+## Using the Call Kit with call invitation feature
+
+If you're using the Call Kit with the call invitation feature, there are 4 steps you need to complete:
+
+### Step 1 Change the version
+
+Change the version of @zegocloud/zego-uikit-rn and @zegocloud/zego-uikit-prebuilt-call-rn.
+
+You can change the version on your `package.json` file directory or run the following command:
+
+<CodeGroup>
+```bash title="yarn"
+yarn add @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-call-rn@4.0.0
+```
+```bash title="npm"
+npm install @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-call-rn@4.0.0
+```
+</CodeGroup>
+
+### Step 2 Remove the ZegoUIKitPrebuiltCallWithInvitation
+
+In version `1.x`, we required you to wrap your app within the `ZegoUIKitPrebuiltCallWithInvitation` component, which had to be the root component of your app. Now, you can remove it from your app.
+
+### Step 3 Remove dependency package
+
+Remove the dependency package of @zegocloud/zego-uikit-signaling-plugin-rn that is no longer maintained.
+
+<CodeGroup>
+```bash title="yarn"
+yarn remove @zegocloud/zego-uikit-signaling-plugin-rn
+```
+```bash title="npm"
+npm uninstall @zegocloud/zego-uikit-signaling-plugin-rn
+```
+</CodeGroup>
+
+### Step 4 Change the way you import the components
+
+```js
+import ZegoUIKitPrebuiltCallService, {
+  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, ZegoSendCallInvitationButton,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+```
+
+### Step 5 Set up your own NavigationContainer
+
+In version 4.0, we no longer provide the `NavigationContainer` by default. Therefore, you will need to set up your own `NavigationContainer` and put your own `Navigator` inside it. Follow these steps to do so:
+
+- Place the `ZegoCallInvitationDialog` component at the top level of the `NavigationContainer`.
+- Add two routes (`ZegoUIKitPrebuiltCallWaitingScreen` and `ZegoUIKitPrebuiltCallInCallScreen`) to your stack navigator.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/config_react_navigation.jpg" /></Frame>
+
+Now, you can manage all your screen navigation yourself.
+
+### Step 6 Call the ZegoUIKitPrebuiltCallService.init method 
+
+```js
+// index.js
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+// The original import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// import ZegoUIKitSignalingPlugin from '@zegocloud/zego-uikit-signaling-plugin-rn';
+
+// The new import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+// The original use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// ZegoUIKitPrebuiltCallService.useSystemCallingUI([ZegoUIKitSignalingPlugin]);
+
+// The new use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+ZegoUIKitPrebuiltCallService.useSystemCallingUI([ZIM, ZPNs]);
+
+AppRegistry.registerComponent(appName, () => App);
+```
+```js
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+// The original import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// import ZegoUIKitSignalingPlugin from '@zegocloud/zego-uikit-signaling-plugin-rn';
+
+// The new import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+
+ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID,
+    userName,
+    // The original use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+    // [ZegoUIKitSignalingPlugin]
+
+    // The new use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: false,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    }).then(() => {
+        // Jump to your home screen after the user logs in and the prebuilt call services have been initialized.
+        navigation.navigate('HomeScreen');
+    });
+```
+
+The init method's prototype is `init(appID, appSign, userInfo, plugins, config = {})`. 
+Most of the parameters are the same as the properties of the `ZegoUIKitPrebuiltCallWithInvitation` component. All you have to do is copy the values from the `ZegoUIKitPrebuiltCallWithInvitation` component's properties and put them as the parameters of the `ZegoUIKitPrebuiltCallService.init` method.
+
+For more details, see [Quick start (with call invitation)](../03-Quick%20start%20(with%20call%20invitation).mdx).

@@ -1,0 +1,143 @@
+# Add custom components to the call
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `ZegoUIKitPrebuiltCallVCDelegate.getForegroundView` protocol.
+The `getForegroundView` requires you (the developer) to return a custom view that will be placed at the top of the view.
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        config.turnOnCameraWhenjoining = false;
+        config.audioVideoViewConfig.showCameraStateOnView = false;
+        config.bottomMenuBarConfig.buttons = [.toggleMicrophoneButton,.hangUpButton,.swtichAudioOutputButton]
+
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        
+        callVC.delegate = self
+
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+    
+    func getForegroundView(_ userInfo: ZegoUIKitUser?) -> UIView? {
+        return YourCustomView()
+    }
+```
+
+```swift title="With call invitation"
+// Not supported yet
+```
+
+</CodeGroup>
+
+## Customize the audio view
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `largeViewBackgroundImage`, `smallViewBackgroundImage`, `largeViewBackgroundColor`, `smallViewBackgroundColor` in `ZegoLayoutPictureInPictureConfig`.
+
+> These configurations are only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on).
+
+Here is the reference code:
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        let layout: ZegoLayout = ZegoLayout()
+        layout.mode = .pictureInPicture
+        let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
+        pipConfig.largeViewBackgroundColor = UIColor.darkGray
+        pipConfig.smallViewBackgroundColor = UIColor.lightGray
+        layout.config = pipConfig
+        config.layout = layout
+
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // Modify your custom configurations here.
+        if data.invitees?.count ?? 0 <= 1 {
+            let layout: ZegoLayout = ZegoLayout()
+            layout.mode = .pictureInPicture
+            let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
+            pipConfig.largeViewBackgroundColor = UIColor.darkGray
+            pipConfig.smallViewBackgroundColor = UIColor.lightGray
+            layout.config = pipConfig
+            config.layout = layout
+        }
+        return config
+    }
+}
+```
+</CodeGroup>

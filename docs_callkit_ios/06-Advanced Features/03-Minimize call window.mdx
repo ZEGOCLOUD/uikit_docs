@@ -1,0 +1,90 @@
+# Minimize video call window
+
+With only two simple steps, you can achieve the effect of minimizing the video call window within the application.
+
+Ideally, the final effect will look like this:
+
+<Frame width="300" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/ios_minimize.gif" /></Frame>
+
+## Integrate the minimize function into the app
+
+### Prepare the environment
+- iOS 15.0 or higher version and iOS devices that support audio and video.
+
+### Display the minimize button
+
+To display the minimize button, configure the `ZegoUIKitPrebuiltCallConfig`'s `topMenuBarConfig` or `bottomMenuBarConfig`, and add the `ZegoMenuBarButtonName.minimizingButton` to  `bottomMenuBarConfig.buttons` or `topMenuBarConfig.buttons` to show a minimize button.
+
+Here is the sample code:
+<CodeGroup>
+
+```swift title="With call invitation"
+//....
+ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+//...
+func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        }
+    }
+}
+// ...
+
+```
+
+```swift title="Basic call"
+not support yet
+//! Since the ViewController is managed by yourself, you need to implement the minimizing logic of the ViewController yourself.
+```
+</CodeGroup>
+
+After completing the above steps, you can now minimize the video call window.
+
+
+## FAQ
+
+<Accordion title="When will the mini video be displayed" defaultOpen="false">
+When the `minimizingButton` is added and the iOS system version is higher than 15, the mini video will be displayed when the mini video button is clicked again or when switching to the home screen. When the mini video is clicked, it will return to the call page. If your system version is less than 15, the mini video will not be displayed.
+
+</Accordion>
+
+<Accordion title="Why doesn't support opening camera when the app is in the background?" defaultOpen="false">
+
+<Warning title="Warning">
+
+Apple restricts background camera access to protect user privacy and manage device resources. The permission to access the camera in the background cannot be obtained through any form of application. **When an app goes into the background, iOS automatically revokes camera access to prevent unintended or malicious data collection.**
+
+</Warning>
+
+
+
+Apple's strong commitment to user privacy means no form of application can grant background camera access. When an app is in the background, iOS pauses or stops camera access. We must pause camera-related functions when an app is in the background and resume them in the foreground.
+
+Bypassing these protective measures can lead to your app's rejection or removal from the App Store.
+
+Apple's guide on background execution discusses the behavior of iOS apps in the background, but doesn't include background camera access due to privacy concerns. Here's the guide: [BackgroundExecution](https://developer.apple.com/documentation/uikit/app_and_environment/scenes/preparing_your_ui_to_run_in_the_background).
+
+Ensure your app respects user privacy and follows all of Apple's guidelines and policies.
+</Accordion>
+

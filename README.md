@@ -1,6 +1,6 @@
 # Website
 
-This website is built using [Docuo](https://app.spreading.ai/home), a modern static website generator.
+This website is built using [Docuo](https://docuo.spreading.io), a modern static website generator.
 
 ## Development
 

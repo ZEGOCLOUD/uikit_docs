@@ -1,0 +1,121 @@
+# Customize the menu bar
+
+- - -
+
+
+## Customize the menu bar button list
+
+The Video Conference Kit (ZegoUIKitPrebuiltVideoConference) allows you to configure the buttons of the top/bottom menu bar. 
+To remove the default buttons or add custom ones to the bottom menu bar, you can configure the `bottomMenuBarConfig`: 
+
+(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBarConfig`.)
+
+- `buttons`: Built-in buttons placed in the menu bar. By default, all buttons are displayed. If you need to hide some buttons, use this to configure them. For details, see [Implement an audio-only conference](14898#2_1). 
+- `maxCount`: Maximum number of buttons that can be displayed by the menu bar. Value range [1 - 5], the default value is 5.
+- `extendButtons`: Use this configuration to add your own custom buttons to the menu bar.
+
+If the total number of built-in buttons and custom buttons does not exceed 5, all buttons will be displayed.
+Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up a bottom sheet to display the remaining buttons. 
+
+The effect will be like this:
+
+<Frame width="200" height="auto" >
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/conference/menuBar.gif" />
+</Frame>
+
+Here is the reference code:
+
+```dart {28-51}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    List<IconData> customIcons = [
+      Icons.phone,
+      Icons.cookie,
+      Icons.speaker,
+      Icons.air,
+      Icons.blender,
+      Icons.file_copy,
+      Icons.place,
+      Icons.phone_android,
+      Icons.phone_iphone,
+    ];
+
+    return SafeArea(
+      child: ZegoUIKitPrebuiltVideoConference(
+        appID: YourAppID,
+        appSign: YourAppSign,
+        userID: userID,
+        userName: userID,
+        conferenceID: conferenceID,
+
+        // Modify your custom configurations here.
+        config: ZegoUIKitPrebuiltVideoConferenceConfig(
+          bottomMenuBarConfig: ZegoBottomMenuBarConfig(
+            maxCount: 5,
+            extendButtons: [
+              for (int i = 0; i < customIcons.length; i++)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(60, 60),
+                    shape: const CircleBorder(),
+                    primary: const Color(0xff2C2F3E).withOpacity(0.6),
+                  ),
+                  onPressed: () {},
+                  child: Icon(customIcons[i]),
+                ),
+            ],
+            buttons: [
+              ZegoMenuBarButtonName.toggleCameraButton,
+              ZegoMenuBarButtonName.toggleMicrophoneButton,
+              ZegoMenuBarButtonName.switchAudioOutputButton,
+              ZegoMenuBarButtonName.leaveButton,
+              ZegoMenuBarButtonName.switchCameraButton,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+
+
+## Customize the hidden behavior of the menu bar
+
+The Video Conference Kit (ZegoUIKitPrebuiltVideoConference) supports automatic or manual hiding of the menu bar. You can control this by using the following two configurations in the `bottomMenuBarConfig` and `topMenuBarConfig`:
+
+- `hideByClick`: Whether the menu bar can be hidden by clicking on the unresponsive area, enabled by default.
+- `hideAutomatically`: Whether the menu bar is automatically hidden after 5 seconds of user inactivity, enabled by default.
+
+## Customize the background color of the menu bar
+The Video Conference Kit (ZegoUIKitPrebuiltVideoConference) supports customize the background color of the menu bar. You can set color by using the following two configurations in the `bottomMenuBarConfig` and `topMenuBarConfig`:
+
+Here is the reference code:
+
+```dart {14-16}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltVideoConference(
+        appID: YourAppID,
+        appSign: YourAppSign,
+        userID: userID,
+        userName: userID,
+        conferenceID: conferenceID,
+        config: ZegoUIKitPrebuiltVideoConferenceConfig()
+          ..topMenuBarConfig = (ZegoTopMenuBarConfig()..backgroundColor = Colors.red)
+          ..bottomMenuBarConfig = (ZegoBottomMenuBarConfig()..backgroundColor = Colors.red),
+      ),
+    );
+  }
+}
+```

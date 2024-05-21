@@ -1,0 +1,37 @@
+# Add custom components to user view
+
+
+If you want to add some custom components at the top level of the view, such as you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `ZegoUIKitPrebuiltLiveStreamingVCDelegate.getForegroundView` protocol.
+The `getForegroundView` requires you (the developer) to return a custom view that will be placed at the top of the view.
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        config.turnOnCameraWhenjoining = false;
+        config.bottomMenuBarButtons = [.toggleMicrophoneButton,.hangUpButton,.swtichAudioOutputButton]
+
+        let liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        liveVC.delegate = self
+
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+    
+    func getForegroundView(_ userInfo: ZegoUIkitUser?) -> UIView? {
+        return YourCustomView()
+    }
+}
+```

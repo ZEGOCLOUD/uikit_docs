@@ -1,0 +1,196 @@
+# Minimize call window
+
+With only three simple steps, you can achieve the effect of minimizing the call window within the application. 
+
+Ideally, the final effect will look like this:
+
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/call/call_mini.gif" />
+</Frame>
+
+## 1 Display the minimize button
+
+Call Kit provides a configuration option for the minimize button, which can be placed in the top toolbar. The following code demonstrates an example of placing the minimize button in the top toolbar, specifically in the upper-right corner:
+
+<CodeGroup>
+```js title="With call invitation"
+import React from 'react';
+import ZegoUIKitPrebuiltCallService, { ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    yourAppID,
+    yourAppSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        requireConfig: (data) => {
+            return {
+                onHangUp: () => {
+                        props.navigation.navigate('HomeScreen');
+                },
+                // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                topMenuBarConfig: {
+                    buttons: [
+                        ZegoMenuBarButtonName.minimizingButton,
+                    ],
+                },
+                // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+    },
+)
+```
+```js title="Basic call"
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function VideoCallScreen(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {
+                        props.navigation.navigate('HomeScreen');
+                    },
+                    onHangUp: () => {
+                        props.navigation.navigate('HomeScreen');
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    bottomMenuBarConfig: {
+                        buttons: [
+                            ZegoMenuBarButtonName.minimizingButton,
+                        ],
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+## 2 Configure the floating minimized window
+
+Place the `ZegoUIKitPrebuiltCallFloatingMinimizedView` component at the bottom level of the `NavigationContainer`:
+
+
+```js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigation from './AppNavigation';
+import {
+    ZegoUIKitPrebuiltCallFloatingMinimizedView,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function App() {
+    return (
+        <NavigationContainer>
+            <AppNavigation />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <ZegoUIKitPrebuiltCallFloatingMinimizedView />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        </NavigationContainer>
+    );
+}
+```
+
+## 3 Handle operations after minimizing and maximizing
+
+To handle operations after minimizing and maximizing, you will need to listen to the callbacks provided by the Call Kit and execute the corresponding logic to restore the previous state.
+
+Here is the sample code:
+
+<CodeGroup>
+```js title="With call invitation"
+import React from 'react';
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    yourAppID,
+    yourAppSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        requireConfig: (data) => {
+            return {
+                onHangUp: () => {
+                    props.navigation.navigate('HomeScreen');
+                },
+                // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                onWindowMinimized: () => {
+                    props.navigation.navigate('HomeScreen');
+                },
+                onWindowMaximized: () => {
+                    // Navigate to the ZegoUIKitPrebuiltCallInCallScreen, but be sure to cannot include any parameters of the page.
+                    props.navigation.navigate('ZegoUIKitPrebuiltCallInCallScreen');
+                },
+                // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+    },
+)
+```
+```js title="Basic call"
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function VideoCallScreen(props) {
+    const { route } = props;
+    const { params } = route;
+    const { userID, userName, callID } = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {
+                        props.navigation.navigate('HomeScreen');
+                    },
+                    onHangUp: () => {
+                        props.navigation.navigate('HomeScreen');
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    onWindowMinimized: () => {
+                        props.navigation.navigate('HomeScreen');
+                    },
+                    onWindowMaximized: () => {
+                        // Navigate to the current page, but be sure to include the original parameters of the page. If the current page has no parameters, they can be ignored
+                        props.navigation.navigate('VideoCallScreen', {
+                          userID: userID,
+                          userName: userName,
+                          callID: callID,
+                        });
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+
+
+After completing the above three steps, you can now minimize the call window within the application.

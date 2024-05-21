@@ -1,0 +1,344 @@
+# Customize the seats
+
+## Specify user seats
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) allows you to set specified seats for roles in the live audio room accordingly.
+
+1. `takeSeatIndexWhenJoining`: Use this to set the seat that the user sits in automatically when joining the live audio room (for the host and speakers). 
+2. `hostSeatIndexes`: Use this to set the special seat for the **host only** (speakers and the audience are not allowed to sit).
+
+## Customize the seat layout
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) generally uses rows and alignments for layout, to customize the seat layout, refer to the following:
+
+- `ZegoLiveAudioRoomLayoutConfig`:
+    1. `rowConfigs`(List< ZegoLiveAudioRoomLayoutRowConfig >): How many rows there are and how each row is configured.
+    2. `rowSpacing`(int): The space in each row, and it must ≥ 0.
+    
+- `ZegoLiveAudioRoomLayoutRowConfig`:
+    1. `count`(int): Number of seats in each row, ranging from [1 - 4].
+    2. `seatSpacing`(int): Horizontal spacing for each seat, and it must ≥ 0 (this only takes effect when the alignment is `start`, `end`, and `center`).
+    3. `alignment`(ZegoLiveAudioRoomLayoutAlignment): The alignment set for the columns.
+- `ZegoLiveAudioRoomLayoutAlignment`:
+    1. `start`: Place the seats as close to the start of the main axis as possible.
+    2. `end`: Place the seats as close to the end of the main axis as possible.
+    3. `center`: Place the seats as close to the middle of the main axis as possible.
+    4. `spaceBetween`: Place the free space evenly between the seats.
+    5. `spaceAround`: Place the free space evenly between the seats as well as half of that space before and after the first and last seat.
+    6. `spaceEvenly`: Place the free space evenly between the seats as well as before and after the first and last seat.
+    
+    The six `alignment` effects are as follows:
+
+<div style={{width:"100%",display:"flex",gap:"10px"}}>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_2.jpeg" />
+        </Frame>
+    </div>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_1.jpeg" />
+        </Frame>
+    </div>
+</div>
+
+The reference code below implements the following custom settings, with the following effect:
+
+1. The only seat in the first row is set to the host's special seat.
+2. The number of seats in the second and third rows is 4, and the alignment is `spaceAround`.
+
+<div style={{width:"30%"}}>
+    <Frame width="auto%" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_layout.jpeg" />
+    </Frame>
+</div>
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID /*input your AppID*/,
+        appSign: YourSecret.appSign /*input your AppSign*/,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        roomID: roomID,
+        config: (isHost
+            ? (ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+              ..seat.takeIndexWhenJoining = 0)
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+          ..seat.hostIndexes = [0]
+          ..seat.layout.rowConfigs = [
+            ZegoLiveAudioRoomLayoutRowConfig(count: 1, alignment: ZegoLiveAudioRoomLayoutAlignment.center),
+            ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+            ZegoLiveAudioRoomLayoutRowConfig(count: 4, alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+          ],
+      ),
+    );
+  }
+}
+```
+
+## Customize the seat's UI
+
+By default, the seat's UI displays the user's avatar and sound waves.
+
+If you are not satisfied with the user avatars or sound wave style, or you want to customize the foreground and background, use the following configurations in `seatConfig`:
+
+1. `showSoundWaveInAudioMode`: Use this to decide whether to display the sound waves around the user avatar or not. Displayed by default.
+2. `avatarBuilder`: Use this to customize the avatar, and replace the default avatar with it. See [Set avatar for users](./02-Set%20avatar%20for%20users.mdx).
+3. `foregroundBuilder`: Use this to customize the foreground view of the seat, and the `ZegoUIKitPrebuiltLiveAudioRoom` returns the current user on the seat and the corresponding seat index.
+4. `backgroundBuilder`: Use this to customize the background view of the seat, and the `ZegoUIKitPrebuiltLiveAudioRoom` returns the current user on the seat and the corresponding seat index.
+
+### Hide the sound waves
+
+The sound waves are displayed by default, to hide it, use the `showSoundWaveInAudioMode` config.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        roomID: roomID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+          : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+          ..seat.showSoundWaveInAudioMode = false,
+      ),
+    );
+  }
+}
+```
+
+### Customize the foreground/background view of the seat
+
+To customize the user seat's view, use the following in the `seatConfig` as needed.
+
+- `foregroundBuilder`: Use this to customize components/add some custom components at the top level of the view, for example, to display the user-level icons.
+- `backgroundBuilder`: Use this to customize the background view, for example, set the background image. 
+
+
+These configs, similar to other Flutter’s Builder callbacks, require you (the developer) to return a custom Widget that will be placed in the view.
+
+> The position of the Widget can be specified by using the Flutter `Positioned`. 
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_bg_fg.gif" />
+    </Frame>
+</div>
+
+```dart
+
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        roomID: roomID,
+
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+            ..seatConfig = (ZegoLiveAudioRoomSeatConfig()
+            ..backgroundBuilder = backgroundBuilder
+            ..foregroundBuilder = foregroundBuilder),
+      ),
+    );
+  }
+
+  bool isAttributeHost(Map<String, String>? userInRoomAttributes) {
+    return (userInRoomAttributes?[attributeKeyRole] ?? "") ==
+        ZegoLiveAudioRoomRole.host.index.toString();
+  }
+
+  Widget backgroundBuilder(
+      BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+    if (!isAttributeHost(user?.inRoomAttributes)) {
+      return Container();
+    }
+
+    return Positioned(
+      top: -8,
+      left: 0,
+      child: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+          image: YourSeatBackgroundImage(),
+        ),
+      ),
+    );
+  }
+
+  Widget foregroundBuilder(
+      BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+    var userName = user?.name.isEmpty ?? true
+        ? Container()
+        : Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Text(
+              user?.name ?? "",
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                backgroundColor: Colors.black.withOpacity(0.1),
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.none,
+              ),
+            ),
+          );
+
+    if (!isAttributeHost(user?.inRoomAttributes)) {
+      return userName;
+    }
+
+    var hostIconSize = Size(size.width / 3, size.height / 3);
+    var hostIcon = Positioned(
+      bottom: 3,
+      right: 0,
+      child: Container(
+        width: hostIconSize.width,
+        height: hostIconSize.height,
+        decoration: BoxDecoration(
+          image: YourHostFlagIcon(),
+        ),
+      ),
+    );
+
+    return Stack(children: [userName, hostIcon]);
+  }
+}
+```
+
+## Customize the menu item of the clicked seat
+
+<Note title="Note">
+Your custom logic will override Live Audio Room Kit's prebuilt logic, meaning that when you customize these events, the prebuilt events are no longer executed.
+</Note>
+
+If the default menu item of the clicked seat can't meet your needs, you can listen to the `onSeatClicked` callback of `ZegoUIKitPrebuiltLiveAudioRoomConfig` to customize the menu item as needed, this callback will be triggered when the seat is clicked.
+
+- The `index` in the `onSeatClicked` callback corresponds to the index of the seats, the initial value of the index is 0.
+
+- The `user` in the `onSeatClicked` callback corresponds to the user in the seat. You can get the info of the user, save it and you can choose to show the user info when the menu shows or do other logic as you want.
+
+The following code shows how to customize the menu item:
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/seat_click_custom.gif" />
+    </Frame>
+</div>
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: userID,
+        userName: 'user_$userID',
+        roomID: roomID,
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+          /// WARNING: will override prebuilt logic
+          ..onSeatClicked = (int index, ZegoUIKitUser? user) {
+            showDemoBottomSheet(context);
+          },
+      ),
+    );
+  }
+
+  void showDemoBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: const Color(0xff111014),
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32.0),
+          topRight: Radius.circular(32.0),
+        ),
+      ),
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 50),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: 3,
+              itemBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  height: 40,
+                  child: Center(
+                    child: Text(
+                      'Menu $index',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+```

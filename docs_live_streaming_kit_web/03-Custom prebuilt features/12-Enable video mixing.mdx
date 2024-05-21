@@ -1,0 +1,54 @@
+# Enable video mixing
+
+## Introduction
+
+
+During live streaming, it is common for the audience to need to see multiple video streams, which places high demands on the audience's device and can result in higher data usage costs. To optimize this, we provide a video mixing solution, and this doc will introduce how to implement it.
+
+
+## When to use
+
+We recommend you enable video mixing in the following scenarios:
+
+- Multi-host scenarios
+- Scenarios where a single host interacts with multiple co-hosts in audio and video
+- When `liveStreamingMode` is `LiveStreaming` and the majority of the audience is watching using an iOS mobile browser (iOS mobile browsers can only play one video at a time)
+
+
+
+## Prerequisites
+
+### Activate the Streaming Mixing service
+
+  - If your `liveStreamingMode` is `InteractiveLiveStreaming` or `RealTimeLive`: Contact ZEGOCLOUD Technical Support to activate the **Stream Mixing** service. 
+
+  - If your `liveStreamingMode` is `LiveStreaming`: Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com/) to activate the **Live Streaming** service first, then open the **Stream Mixing** service as shown in the figure below:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/stream_mixing.png" />
+</Frame>
+
+
+## Configure parameters
+
+```js
+zp.joinRoom({
+    //... other params
+    scenario: {
+        mode: ZegoUIKitPrebuilt.LiveStreaming,
+        config: {
+          role: ZegoUIKitPrebuilt.Host,
+          liveStreamingMode: ZegoUIKitPrebuilt.LiveStreamingMode.LiveStreaming,
+          enableVideoMixing: true, // Whether to enable the video mixing. 
+          videoMixingOutputResolution: ZegoUIKitPrebuilt.VideoMixinOutputResolution._540P,// Video mixing output resolution. 
+        },
+    },
+})
+```
+
+
+#### Important notes
+
+- `enableVideoMixing`: this config needs to be consistent between the host and the audience.
+- `videoMixingOutputResolution`: parameter values include "180p", "360p", "540p", "720p", and "1080p".
+- By default, **up to 9** audio and video streams (including screen-sharing streams) can be mixed. If more audio and video streams are required, contact Technical Support for adjustment.

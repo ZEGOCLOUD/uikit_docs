@@ -1,0 +1,61 @@
+# Adaptive mobile rotation
+
+## Add dependencies.
+
+1. Need to upgrade `ZegoUIKit` to version 2.7.0 or above.
+
+```bash
+"@zegocloud/zego-uikit-rn": "^2.7.0",
+```
+
+2. Run the following code in your project root directory, to install `react-native-orientation-locker`.
+
+<CodeGroup>
+```bash title="yarn"
+yarn add react-native-orientation-locker
+```
+```bash title="npm"
+npm install react-native-orientation-locker
+```
+</CodeGroup>
+
+## Sample code
+
+Here is the [sample code](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn/blob/screen_rotation/call_with_offline_invitation/App.js).
+
+```js
+import ZegoUIKit from '@zegocloud/zego-uikit-rn'
+import Orientation from 'react-native-orientation-locker';
+
+  useEffect(() => {
+    
+    // Add screen orientation listener, and set the app Orientation to UIKit.
+    // App Orientation:
+    // 0 - PORTRAIT
+    // 1 - LANDSCAPE-LEFT
+    // 2 - PORTRAIT-UPSIDEDOWN
+    // 3 - LANDSCAPE-RIGHT
+    Orientation.addOrientationListener((orientation) => {
+      var orientationValue = 0;
+      if (orientation === 'PORTRAIT') {
+        orientationValue = 0;
+      } else if (orientation === 'LANDSCAPE-LEFT') {
+        orientationValue = 1;
+      } else if (orientation === 'LANDSCAPE-RIGHT') {
+        orientationValue = 3;
+      }
+      console.log('+++++++Orientation+++++++', orientation, orientationValue);
+      ZegoUIKit.setAppOrientation(orientationValue);
+    });
+
+  }, [])
+```
+
+## Effects
+
+
+
+
+| Local Portrait - Remote Portrait                                                                                                                       | Local Portrait - Remote Landscape                                                                                                                       | Local Landscape - Remote Portrait                                                                                                                       | Local Landscape - Remote Landscape                                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="280" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/portrait_portrait.PNG" /></Frame> | <Frame width="105" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/landscape_portrait.PNG" /></Frame> | <Frame width="700" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/portrait_landscape.PNG" /></Frame> | <Frame width="700" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/landscape_landscape.PNG" /></Frame> |

@@ -1,0 +1,16 @@
+User avatars are generally stored on the server. Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) uses the first letter of the username to draw the user avatars by default. While we allow you to customize the user avatars as needed.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_avatar.gif" />
+</Frame>
+
+Here are two options for you to customize the user avatar:
+
+1. If you need to display a user's avatar, set the avatar image URL (PNG, JGP, JGEP, BMP, GIF, and WEBP are supported) to <code>{props.avatarKey}</code> in `ZegoUIKitPrebuiltLiveAudioRoomConfig`. This way, Live Audio Room Kit will render the avatar for you based on the URL, rather than using the default letters.
+
+2. If you need to display a more complex avatar component, such as you need to render some decorations on the avatar, etc., you can use `avatarBuilder` to achieve more flexible customization.
+
+<Note title="Note">
+- The {props.avatarKey} must be within 64 bytes. If exceeds, the default background is displayed.
+- Even when using `avatarBuilder`, you can still set the avatar URL to <code>{props.avatarKey}</code>. After setting this, Live Audio Room Kit will synchronize each user's <code>{props.avatarKey}</code> in the room for you, and provide this parameter in `avatarBuilder`. This way, you can directly render each user's avatar in `avatarBuilder`.
+</Note>

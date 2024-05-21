@@ -1,0 +1,138 @@
+# Screen sharing
+
+## What's screen sharing?
+
+Screen sharing refers to the process of broadcasting the contents of one screen to another device or multiple devices in a video call or interactive video scene.
+
+
+
+| Starts screen sharing                                                                                                                                      | Screen shared by mobile apps                                                                                                                               | Screen shared by web apps                                                                                                                                     | Landscape mode                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/UIkit_ScreenShare/conference_watch_screen_share.png" /></Frame> | <Frame width="150" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/UIkit_ScreenShare/conference_watch_screen_share.png" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/UIkit_ScreenShare/conference_watch_web_screenshare.png" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/UIkit_ScreenShare/fullScreenShare.png" /></Frame> |
+
+
+## Implementation
+
+### Share the screen
+
+Screen sharing is only supported in the gallery layout. To share your screen, you will need to set the `layout` inside the `ZegoUIKitPrebuiltCallConfig` to `Gallery` first.
+
+To decide whether to use the full-screen mode by default during screen sharing, you will need to configure the `showNewScreenSharingViewInFullscreenMode` inside the `ZegoLayoutGalleryConfig`. Set it to `true`, meaning that the shared screen will automatically be in full screen when the screen sharing starts.
+
+
+Meanwhile, the full-screen mode button is customizable, you can decide the way how it shows. To set it, configure the `showScreenSharingFullscreenModeToggleButtonRules` inside the `ZegoLayoutGalleryConfig`:
+- `SHOW_WHEN_SCREEN_PRESSED`: show the full-screen mode button when clicking the shared screen. 
+- `ALWAYS_SHOW`: always shows the full-screen mode button.
+- `ALWAYS_HIDE`: always hides the full-screen mode button.
+
+
+To start the screen sharing, add the `ZegoMenuBarButtonName.SCREEN_SHARING_TOGGLE_BUTTON` config to the `bottomMenuBarConfig` or `topMenuBarConfig` to let the screen sharing button show.
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+```java Java
+public class CallActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_call);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "callID";
+
+    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+
+    config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,
+            ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,
+            ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SCREEN_SHARING_TOGGLE_BUTTON);
+
+
+    ZegoLayoutGalleryConfig galleryConfig = new ZegoLayoutGalleryConfig();
+    galleryConfig.removeViewWhenAudioVideoUnavailable = true;
+    galleryConfig.showNewScreenSharingViewInFullscreenMode = true;
+    galleryConfig.showScreenSharingFullscreenModeToggleButtonRules  = ZegoShowFullscreenModeToggleButtonRules.SHOW_WHEN_SCREEN_PRESSED;
+    config.zegoLayout = new ZegoLayout(ZegoLayoutMode.GALLERY, galleryConfig);
+    
+    ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(appID,appSign, userID, userName, callID, config);
+    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+```
+
+```kotlin Kotlin
+class CallActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_call)
+        val appID: Long = YourAppID
+        val appSign: String = YourAppSign
+        val userID = "userID"
+        val userName = "userName"
+        val callID = "callID"
+
+        config.bottomMenuBarConfig.buttons = Arrays.asList<ZegoMenuBarButtonName>(
+            ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,
+            ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON,
+            ZegoMenuBarButtonName.HANG_UP_BUTTON,
+            ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,
+            ZegoMenuBarButtonName.SCREEN_SHARING_TOGGLE_BUTTON
+        )
+        val galleryConfig = ZegoLayoutGalleryConfig()
+        galleryConfig.removeViewWhenAudioVideoUnavailable = true
+        galleryConfig.showNewScreenSharingViewInFullscreenMode = true
+        galleryConfig.showScreenSharingFullscreenModeToggleButtonRules =
+            ZegoShowFullscreenModeToggleButtonRules.SHOW_WHEN_SCREEN_PRESSED
+        config.zegoLayout = ZegoLayout(ZegoLayoutMode.GALLERY, galleryConfig)
+        
+        val fragment: ZegoUIKitPrebuiltCallFragment =
+            ZegoUIKitPrebuiltCallFragment.newInstance(
+                appID,appSign, userID, userName, conferenceID, config
+            )
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+
+You can set `galleryLayout` in `ZegoUIKitPrebuiltCallInvitationConfig` for call-invitation:
+
+```java
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+callInvitationConfig.notifyWhenAppRunningInBackgroundOrQuit = false;
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+    @Override
+    public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+        ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+        config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SCREEN_SHARING_TOGGLE_BUTTON);
+        ZegoLayoutGalleryConfig galleryConfig = new ZegoLayoutGalleryConfig();
+        galleryConfig.removeViewWhenAudioVideoUnavailable = true;
+        galleryConfig.showNewScreenSharingViewInFullscreenMode = true;
+        galleryConfig.showScreenSharingFullscreenModeToggleButtonRules = ZegoShowFullscreenModeToggleButtonRules.SHOW_WHEN_SCREEN_PRESSED;
+        config.layout = new ZegoLayout(ZegoLayoutMode.GALLERY, galleryConfig);
+        return config;
+    }
+};
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName, callInvitationConfig);
+```
+
+
+## Screen rotation
+
+To support screen rotation, do the following:
+
+1. Turn off the rotation lock function in the phone settings.
+
+2. Add the `android:configChanges="locale|keyboardHidden|fontScale|orientation|screenSize|screenLayout|layoutDirection|density|uiMode"` attribute to the `manifest` file configuration of the `Activity` that adds the fragment. Taking `CallActivity` as an example:
+
+```xml
+  <activity
+      android:name=".CallActivity"
+      android:configChanges="locale|keyboardHidden|fontScale|orientation|screenSize|screenLayout|layoutDirection|density|uiMode"
+      android:exported="false" />
+```

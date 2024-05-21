@@ -1,0 +1,37 @@
+# Modify user interface text
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom)'s UI text provided by the internal components is editable, to modify those, use the `innerText` config.
+
+Here is the reference code:
+
+```javascript
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+  ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    innerText: { 
+                        memberListTitle: 'Members',
+                    },
+                }}
+            />
+        </View>
+    );
+}
+```

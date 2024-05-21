@@ -1,0 +1,37 @@
+# Customize the text message UI
+
+To customize the message list item, you can set up the `ZegoUIKitPrebuiltLiveAudioRoomConfig.inRoomMessageViewConfig.itemBuilder`. The `itemBuilter` method returns a view, and when the list is drawn, it calls back the `itemBuilder` function you set to get the view for rendering.
+
+You can get and read the `message` from the `itemBuilder` parameter.
+
+```js
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    inRoomMessageViewConfig: {
+                        itemBuilder: ({message}) => <View> <Text>MessageID: {message.messageID}, Sender: {message.sender.userName}, Message: {message.message}, SendTime: {message.sendTime}</Text> </View>
+                    },
+                   
+                }}
+            />
+        </View>
+    );
+}
+```

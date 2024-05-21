@@ -1,0 +1,50 @@
+# Set avatar for users
+
+
+User avatars are generally stored in the server. LiveStreaming Kit (ZegoUIKitPrebuiltLiveStreaming) does not know the real profile picture of each user, so it uses the first letter of the username to draw the user avatars by default:
+
+
+
+
+To configure the custom user avatars, you can use the `avatarViewProvider ` in `ZegoUIKitPrebuiltLiveStreamingConfig`to set a custom view.
+
+<Warning title="Warning">
+
+Please note that here you need to return different avatars for different users based on the user parameter in the callback parameters. 
+
+If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+
+</Warning>
+
+Here is the reference code:
+
+
+```java
+long appID = yourAppID;
+String appSign = yourAppSign;
+String userID = yourUserID;
+String userName = yourUserName;
+String LiveID = ;
+
+ZegoUIKitPrebuiltLiveStreamingConfig config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
+
+config.avatarViewProvider = new ZegoAvatarViewProvider() {
+    @Override
+    public View onUserIDUpdated(ViewGroup parent, ZegoUIKitUser uiKitUser) {
+        ImageView imageView = new ImageView(parent.getContext());
+        String avatarUrl = getAvatarByUserID(uiKitUser.userID);
+        if (!TextUtils.isEmpty(avatarUrl)) {
+            RequestOptions requestOptions = new RequestOptions().circleCrop();
+            Glide.with(parent.getContext()).load(avatarUrl).apply(requestOptions).into(imageView);
+        }
+        return imageView;
+    }
+};
+
+ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(appID,appSign, userID, userName, liveID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+
+```
+
+
+When complete, the Call Kit (ZegoUIKitPrebuiltCall) displays the custom user avatar that you set.

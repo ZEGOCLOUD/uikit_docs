@@ -1,0 +1,45 @@
+import Part1 from "/snippets/uikit/WebUsingHTMLScriptPart1.mdx"
+import Part2 from "/snippets/uikit/WebUsingHTMLScriptPart2.mdx"
+
+<Part1 />
+
+```html {13,15-33}
+<html>
+<head>
+    <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+<script>
+    const roomID = ;
+    const userID = Math.floor(Math.random() * 10000) + "";
+    const userName = "userName" + userID;
+    const appID = ;
+    const serverSecret = "";
+    // Generate a Kit Token by calling a method.
+    const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+
+    const zp = ZegoUIKitPrebuilt.create(TOKEN);
+    zp.joinRoom({
+        container: document.querySelector("#root"),
+        sharedLinks: [{
+            url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID,
+        }],
+        scenario: {
+            mode: ZegoUIKitPrebuilt.VideoConference,
+        },
+
+    });
+</script>
+
+</html>
+```
+
+<Part2/>

@@ -1,0 +1,102 @@
+# Migrating to v2.0
+
+To provide you with a better user experience, we have released a new version: Live Streaming Kit v2.0, and recommend you upgrade to this latest version. 
+
+This doc provides the steps and considerations for upgrading from v1.0 to v2.0.
+
+## Using the basic Live Streaming Kit
+
+If you are using the basic live streaming feature, there are one step you need to complete:
+
+### Change the version
+
+Change the version of @zegocloud/zego-uikit-rn and @zegocloud/zego-uikit-prebuilt-live-streaming-rn.
+
+You can change the version on your `package.json` file directory or run the following command:
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-streaming-rn@2.0.0
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-streaming-rn@2.0.0
+```
+</CodeGroup>
+
+## Using the Live Streaming Kit with cohosting feature
+
+If you're using the Live Streaming Kit with cohosting feature, there are three steps you need to complete:
+
+### Step 1 Change the version
+
+Change the version of @zegocloud/zego-uikit-rn and @zegocloud/zego-uikit-prebuilt-live-streaming-rn.
+
+You can change the version on your `package.json` file directory or run the following command:
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-streaming-rn@2.0.0
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-rn@2.0.0 @zegocloud/zego-uikit-prebuilt-live-streaming-rn@2.0.0
+```
+</CodeGroup>
+
+
+### Step 2 Remove dependency package
+
+Remove the dependency package of @zegocloud/zego-uikit-signaling-plugin-rn that are no longer maintained.
+
+<CodeGroup>
+```bash yarn
+yarn remove @zegocloud/zego-uikit-signaling-plugin-rn
+```
+
+```bash npm
+npm uninstall @zegocloud/zego-uikit-signaling-plugin-rn
+```
+</CodeGroup>
+
+
+### Step 3 Change how you import and use packages
+
+Change the way you import and use the dependency packages.
+
+```js
+// HostPage.js
+import React from 'react';
+import { View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+
+// The original import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// import ZegoUIKitSignalingPlugin from '@zegocloud/zego-uikit-signaling-plugin-rn';
+
+// The new import methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeaveLiveStreaming: () => { props.navigation.navigate('HomePage') }
+                }}
+                // The original use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                // plugins={[ZegoUIKitSignalingPlugin]}
+
+                // The new use methods \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+```

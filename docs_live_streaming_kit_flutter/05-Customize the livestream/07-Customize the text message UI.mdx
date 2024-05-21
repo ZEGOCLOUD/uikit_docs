@@ -1,0 +1,527 @@
+# Customize the text message UI
+
+## Styles
+
+> In addition, you can also customize some styles, refer to the following:
+>
+> - Widget? **background**: The background of chat message list view.
+> - bool **visible**: Display chat message list view or not.
+> - bool **showName**: Display user name in message list view or not.
+> - bool **showAvatar**: Display user avatar in message list view or not.
+> - double? **width**: The width of chat message list view.
+> - double? **height**: The height of chat message list view.
+> - Offset? **bottomLeft**: The offset of chat message list view bottom-left position.
+> - double **opacity**: The opacity of the background color for chat message list items. The default value is 0.5. If you set the **backgroundColor**, the **opacity** setting will be overridden.
+> - Color? **backgroundColor**: The background color of chat message list items. If you set the **backgroundColor**, the **opacity** setting will be overridden. You can use `backgroundColor.withOpacity(0.5)` to set the opacity of the background color.
+> - int? **maxLines**: The maximum number of lines of chat message list item. The default value is 3.
+> - TextStyle? **nameTextStyle**: The text style for the name in the chat message list items.
+> - TextStyle? **messageTextStyle**: The text style for the message  in the chat message list items.
+> - BorderRadiusGeometry? **borderRadius**: The border radius of chat message list items.
+> - EdgeInsetsGeometry? **paddings**: The paddings of chat message list items.
+> - Widget? **resendIcon**: The icon of re-send button.
+
+
+## Events
+
+>
+> In addition, you can also customize click events refer to the following:
+>
+> - void Function(ZegoInRoomMessage message)? **onClicked**: Triggered when has click on the message item.
+>
+> - void Function(ZegoInRoomMessage message)? **onLocalSend**: Local message sending callback, This callback method is called when a message is sent successfully or fails to send.
+>
+> - void Function(ZegoInRoomMessage message)? **onLongPress**: Triggered when a pointer has remained in contact with the message item at the same location for a long period of time.
+
+<Accordion title="Example" defaultOpen="false">
+
+```dart
+class LivePage extends StatefulWidget {
+  final String liveID;
+  final bool isHost;
+
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: widget.liveID,
+        events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          inRoomMessage: ZegoLiveStreamingInRoomMessageEvents(
+            onClicked: (message){
+              
+            },
+            onLocalSend: (message) {
+              
+            },
+            onLongPress: (message) {
+              
+            },
+          )
+        ),
+        config: (widget.isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience()),
+      ),
+    );
+  }
+}
+```
+</Accordion>
+
+## Items
+
+### attributes
+
+>
+>  - Map\<String, String> Function()? attributes: 
+> 
+> message attributes of local user, which will be appended to the message body. 
+> 
+> if set, **attributes** will be sent along with the message body.
+
+> 
+> If you want to display some of your own data on the message, you can use **attributes** to bring your data out through this chat message.
+> 
+> in the params of builder in inRoomMessageConfig, the **attributes** of **ZegoInRoomMessage** will bring the data just now, you can customize it through the builder.
+
+<Accordion title="Example" defaultOpen="false">
+
+ ``` dart
+  inRoomMessage.attributes = {'k':'v'};
+  inRoomMessage.itemBuilder = (
+    BuildContext context,
+    ZegoInRoomMessage message,
+    Map<String, dynamic> extraInfo,
+  ) {
+   final attributes = message.attributes;
+   return YouCustomMessageItem();
+  }
+ ```
+</Accordion>
+
+### leading/tailing builder
+
+>
+> in order to make it easier to add custom controls to the original message (original message display widget = avatar + name + text), we have added a smaller scope builder.
+> there are corresponding builders before and after avatar/name/text, which are empty by default.
+> please note that if you use **itemBuilder**, this builder will be ignored.
+>
+> - ZegoInRoomMessageItemBuilder? avatarLeadingBuilder;
+> - ZegoInRoomMessageItemBuilder? avatarTailingBuilder;
+> - ZegoInRoomMessageItemBuilder? nameLeadingBuilder;
+> - ZegoInRoomMessageItemBuilder? nameTailingBuilder;
+> - ZegoInRoomMessageItemBuilder? textLeadingBuilder;
+> - ZegoInRoomMessageItemBuilder? textTailingBuilder;
+
+Below, we use **attributes** to carry user level data, and display the user level in front of avatar as an example:
+
+<Accordion title="Example" defaultOpen="false">
+
+ ```dart
+ 
+ class LivePage extends StatefulWidget {
+   final String liveID;
+   final bool isHost;
+ 
+   const LivePage({
+     Key? key,
+     required this.liveID,
+     this.isHost = false,
+   }) : super(key: key);
+ 
+   @override
+   State<StatefulWidget> createState() => LivePageState();
+ }
+ 
+ class LivePageState extends State<LivePage> { 
+   @override
+   Widget build(BuildContext context) {
+     return SafeArea(
+       child: ZegoUIKitPrebuiltLiveStreaming(
+         appID: YourSecret.appID,
+         appSign: YourSecret.appSign,
+         userID: 'userID',
+         userName: 'userName',
+         liveID: widget.liveID,
+         config: (widget.isHost
+             ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+             : ZegoUIKitPrebuiltLiveStreamingConfig.audience())
+           /// message attributes example
+           ..inRoomMessage.attributes = userLevelsAttributes
+           ..inRoomMessage.avatarLeadingBuilder = userLevelBuilder,
+       ),
+     );
+   }
+
+   Map<String, String> userLevelsAttributes() {
+     return {
+       'lv': '2',
+     };
+   }
+
+   Widget userLevelBuilder(
+       BuildContext context,
+       ZegoInRoomMessage message,
+       Map<String, dynamic> extraInfo,
+       ) {
+     return Container(
+       alignment: Alignment.center,
+       height: 15,
+       width: 30,
+       padding: const EdgeInsets.all(2),
+       decoration: BoxDecoration(
+         gradient: LinearGradient(
+           begin: Alignment.topCenter,
+           end: Alignment.bottomCenter,
+           colors: [Colors.purple.shade300, Colors.purple.shade400],
+         ),
+         borderRadius: const BorderRadius.all(Radius.circular(10)),
+       ),
+       child: Text(
+         "LV ${message.attributes['lv']}",
+         textAlign: TextAlign.center,
+         style: const TextStyle(
+           fontSize: 10,
+         ),
+       ),
+     );
+   }
+ }
+ ```
+</Accordion>
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_msg_level.jpeg" />
+</Frame>
+
+### user join/leave notify
+
+> if you want to display user join/leave in message view, you can set notifyUserJoin/notifyUserLeave be true
+>
+> - bool notifyUserJoin: Whether to display user join messages, default is not displayed
+> - bool notifyUserLeave: Whether to display user leave messages, default is not displayed
+
+Here the reference code shows how to customize a message view:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_user_enter_leave.jpeg" />
+</Frame>
+
+<Accordion title="Example" defaultOpen="false">
+
+ ```dart
+ class LivePage extends StatelessWidget {
+   const LivePage({Key? key, required this.roomID, this.isHost = false})
+       : super(key: key);
+ 
+   final String roomID;
+   final bool isHost;
+ 
+   @override
+   Widget build(BuildContext context) {
+     return ZegoUIKitPrebuiltLiveStreaming(
+       appID: YourSecret.appID,
+       appSign: YourSecret.appSign,
+       userID: userID,
+       userName: 'user_$userID',
+       liveID: liveID,
+ 
+       // Modify your custom configurations here.
+       config: isHost
+           ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+           : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+         ..inRoomMessage.notifyUserJoin = true
+         ..inRoomMessage.notifyUserLeave = true
+         ..innerText.userEnter = 'enter'
+         ..innerText.userLeave = 'left',
+     );
+   }
+ }
+ ```
+</Accordion>
+
+
+### itemBuilder
+
+>
+> To customize the message list item, you can set up the `inRoomMessageView.itemBuilder`. The `itemBuilter` method returns a `Widget`, and when the list is drawn, it calls back the `itemBuilder` function you set to get the `Widget` for rendering.
+>
+> You can get and read the `message` from the `itemBuilder` paramete> r. The message is of type `ZegoInRoomMessage` and has the following > structure:
+
+
+<Accordion title="Defines" defaultOpen="false">
+
+ ```dart
+ class ZegoInRoomMessage {
+   int messageID;
+   ZegoUIKitUser user; // message sender.
+   String message; // message content.
+   int timestamp; // The timestamp at which the message was sent
+   var state =
+       ValueNotifier<ZegoInRoomMessageState>(ZegoInRoomMessageState.> success); // message sending state.
+ }
+ ```
+</Accordion>
+
+> Besides, you can decide the effect when the message sent failed or successfully, and also set up the logic for sending the message again when the message failed to be sent.
+
+Here the reference code shows how to customize a message view:
+
+<Accordion title="Example" defaultOpen="false">
+
+ ```dart
+ class LivePage extends StatelessWidget {
+   const LivePage({Key? key, required this.roomID, this.isHost = false})
+       : super(key: key);
+ 
+   final String roomID;
+   final bool isHost;
+ 
+   @override
+   Widget build(BuildContext context) {
+     return ZegoUIKitPrebuiltLiveStreaming(
+       appID: YourSecret.appID,
+       appSign: YourSecret.appSign,
+       userID: userID,
+       userName: 'user_$userID',
+       liveID: liveID,
+ 
+       // Modify your custom configurations here.
+       config: isHost
+           ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+           : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+         ..inRoomMessage = ZegoInRoomMessageConfig(
+           itemBuilder: (
+               BuildContext context,
+               ZegoInRoomMessage message,
+               Map<String, dynamic> extraInfo,
+               ) {
+             /// how to use itemBuilder to custom message view
+             return Text('${message.user.name} : ${message.message}');
+           },
+         ),
+     );
+   }
+ }
+ ```
+</Accordion>
+
+## View
+
+> If you want to fully customize the chat list and dynamically update chat messages, you can achieve this by listening to **ZegoUIKitPrebuiltLiveStreamingController.message.stream**.
+
+Here the reference code shows how to customize the message view:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_custom_chat_view.jpg" />
+</Frame>
+
+<Accordion title="Example" defaultOpen="false">
+
+```dart
+class LivePage extends StatefulWidget {
+  final String liveID;
+  final bool isHost;
+  final String localUserID;
+
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    required this.localUserID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  final liveStateNotifier =
+  ValueNotifier<ZegoLiveStreamingState>(ZegoLiveStreamingState.idle);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ZegoUIKitPrebuiltLiveStreaming(
+            appID: YourSecret.appID,
+            appSign: YourSecret.appSign,
+            userID: userID,
+            userName: 'user_$userID',
+            liveID: widget.liveID,
+            events: ZegoUIKitPrebuiltLiveStreamingEvents(
+              onStateUpdate : (ZegoLiveStreamingState state) {
+                liveStateNotifier.value = state;
+              },
+            ),
+            // Modify your custom configurations here.
+            config: widget.isHost
+                ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+                : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+              ..inRoomMessage.visible = false
+              ..foreground = foreground(constraints));
+      },
+    );
+  }
+
+  Widget foreground(BoxConstraints constraints) {
+    const shortMessageHeight = 20.0;
+    const padding = 10.0;
+
+    return ValueListenableBuilder<ZegoLiveStreamingState>(
+      valueListenable: liveStateNotifier,
+      builder: (context, liveState, _) {
+        return ZegoLiveStreamingState.idle == liveState
+            ? Container()
+            : Positioned(
+          left: padding,
+          bottom: shortMessageHeight + 40 + 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              messageView(),
+              const SizedBox(
+                height: padding,
+              ),
+              SizedBox(
+                width: constraints.maxWidth - padding * 3,
+                height: shortMessageHeight,
+                child: shortMessageListView(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget shortMessageListView() {
+    final shortMessages = <String>[
+      'Hi! 🖐🏻',
+      'Namastey 🙏🏻',
+      'Hello ❤️',
+      'Hey 🔥',
+      'Buy 👋🏻',
+      'Morning ☀️',
+      'Night 🌛'
+    ];
+
+    return ListView.separated(
+      itemCount: shortMessages.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white38),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: GestureDetector(
+            onTap: () {
+              ZegoUIKitPrebuiltLiveStreamingController().message.send(shortMessages[index]);
+            },
+            child: Text(
+              shortMessages[index],
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(width: 5);
+      },
+    );
+  }
+
+  Widget messageView() {
+    return StreamBuilder<List<ZegoInRoomMessage>>(
+      stream: ZegoUIKitPrebuiltLiveStreamingController().message.stream(),
+      builder: (context, snapshot) {
+        final messages = snapshot.data ?? <ZegoInRoomMessage>[];
+
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return messageItem(messages[index]);
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget messageItem(ZegoInRoomMessage message) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        vertical: 2,
+        horizontal: 2,
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: 2,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: SizedBox(
+                width: 12 + 4,
+                child: ZegoAvatar(
+                  user: message.user,
+                  avatarSize: const Size(12 + 4, 12 + 4),
+                ),
+              ),
+            ),
+            const WidgetSpan(child: SizedBox(width: 2)),
+            TextSpan(
+              text: '${message.user.name}: ',
+              style: const TextStyle(
+                color: Colors.blueAccent,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: message.message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+</Accordion>

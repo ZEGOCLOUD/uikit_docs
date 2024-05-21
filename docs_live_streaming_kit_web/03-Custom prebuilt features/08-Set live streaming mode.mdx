@@ -1,0 +1,50 @@
+# Set live streaming mode
+
+## Introduction
+
+In the Live Streaming Kit, we provide 3 audience modes for live streaming:
+
+- **Real-time Live**: A real-time live streaming service that enables **millions of audiences** to watch live streaming simultaneously at a latency of less than **300 ms**.
+
+    Best for scenarios where: Require stable and smooth voice and video experience even under weak network conditions. And the host, co-host, and audience need to interact frequently, that is, achieving a high level of high-quality and highly interactive live streaming.
+
+
+- **Interactive Live Streaming**: An interactive low-latency live streaming service that keeps **millions of audiences** engaged simultaneously at low latency (**600 ms - 1 s**). 
+    
+    Best for scenarios where: The host and audience need to interact during a live stream, that is, achieving a certain level of interactivity while maintaining cost efficiency.
+
+
+- **Live Streaming**: A high-concurrency live streaming service that allows **tens of millions of audiences** to enjoy live streaming at a low latency (**1 s - 3 s**). 
+    
+    Best for scenarios where: The app scenarios don't require high interactions, such as single-hosting live streaming, live sports streaming, and TV channels live streaming.
+
+
+<Note title="Note">
+
+- Real-Time Live is activated by default. 
+- Live Streaming and Interactive Live Streaming require you a manual activation on [Admin Console](https://console.zegocloud.com/project).
+</Note>
+
+
+
+## How do I set live streaming mode?
+
+- To set the Real-Time Live mode: Set the `liveStreamingMode` to `ZegoUIKitPrebuilt.LiveStreamingMode.RealTimeLive`.
+- To set the Live Streaming mode: Set the `liveStreamingMode` to `ZegoUIKitPrebuilt.LiveStreamingMode.LiveStreaming`.
+- To set the Interactive Live Streaming mode: Set the `liveStreamingMode` to `ZegoUIKitPrebuilt.LiveStreamingMode.InteractiveLiveStreaming`. 
+
+
+
+```js
+zp.joinRoom({
+  // ...,
+  scenario:{
+    mode: ZegoUIKitPrebuilt.LiveStreaming,
+    config:{
+        role: ZegoUIKitPrebuilt.Audience,
+        liveStreamingMode: ZegoUIKitPrebuilt.LiveStreamingMode.LiveStreaming 
+    }
+  },
+  // ...
+});
+```

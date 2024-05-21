@@ -1,0 +1,120 @@
+# Minimize livestream window
+
+With only three simple steps, you can achieve the effect of minimizing the livestream window within the application. 
+
+Ideally, the final effect will look like this:
+
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_mini.gif" />
+</Frame>
+
+
+## 1 Display the minimize button
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) provides a configuration option for the minimize button, which can be placed in the top or bottom toolbar. The following code demonstrates an example of placing the minimize button in the top toolbar, specifically in the upper-right corner:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, {
+    HOST_DEFAULT_CONFIG,
+    ZegoMenuBarButtonName,
+} from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    topMenuBarConfig: {
+                        buttons: [
+                            ZegoMenuBarButtonName.minimizingButton
+                        ],
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                }}
+            />
+        </View>
+    );
+}
+```
+
+## 2 Configure the floating minimized window
+
+Place the `ZegoUIKitPrebuiltLiveStreamingFloatingMinimizedView` component at the bottom level of the `NavigationContainer`:
+
+
+```js
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import AppNavigation from './AppNavigation';
+import {
+    ZegoUIKitPrebuiltLiveStreamingFloatingMinimizedView,
+} from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+
+export default function App() {
+    return (
+        <NavigationContainer>
+            <AppNavigation />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <ZegoUIKitPrebuiltLiveStreamingFloatingMinimizedView />
+            // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        </NavigationContainer>
+    );
+}
+```
+
+## 3 Handle operations after minimizing and maximizing
+
+To handle operations after minimizing and maximizing, you will need to listen to the callbacks provided by the Live Streaming Kit and execute the corresponding logic to restore the previous state.
+
+Here is the sample code:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, {
+    HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+
+export default function HostPage(props) {
+    const { route } = props;
+    const { params } = route;
+    const { userID, userName, liveID } = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    onWindowMinimized: () => {
+                        // Navigate to a specific page, such as the homepage
+                        props.navigation.navigate('HomePage');
+                    },
+                    onWindowMaximized: () => {
+                        // Navigate to the current page, but be sure to include the original parameters of the page. If the current page has no parameters, they can be ignored
+                        props.navigation.navigate('HostPage', { userID, userName, liveID });
+                    },
+                    // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                }}
+            />
+        </View>
+    );
+}
+```
+
+After completing the above three steps, you can now minimize the livestream window within the application.

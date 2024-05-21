@@ -1,0 +1,116 @@
+# Customize the menu bar button list
+
+## Customize the menu bar button list
+
+Call Kit (ZegoUIKitPrebuiltCall) allows you to configure the buttons of the menu bar. To remove the default buttons or add custom ones to the bottom menu bar, you can configure the `bottomMenuBarConfig`: 
+
+(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBarConfig`.)
+
+1. `buttons`: Built-in buttons placed in the menu bar. By default, all buttons are displayed. If you need to hide some buttons, use this to configure them.
+2. `maxCount`: Maximum number of buttons that can be displayed by the menu bar. Value range [1 - 5], the default value is 5.
+3. `extendButtons`: Use this configuration to add your own custom buttons to menu bar.
+
+If the total number of built-in buttons and custom buttons does not exceed 5, all buttons will be displayed.
+Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up the bottom sheet to display the remaining buttons. 
+
+The effect will be like this:
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/menuBarLimit.gif" />
+</Frame>
+
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    let appID: UInt32 = 
+    let appSign: String = 
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    @IBAction func startVideoCall(_ sender: Any) {
+        let config: ZegoUIkitPrebuiltCallConfig = ZegoUIkitPrebuiltCallConfig()
+        let callVC: ZegoUIKitPrebuiltCallVC = ZegoUIKitPrebuiltCallVC.init(appID, appSign: appSign, userID: userID, userName: userName, callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+
+    @IBAction func startVoiceCall(_ sender: Any) {
+        let config: ZegoUIkitPrebuiltCallConfig = ZegoUIkitPrebuiltCallConfig()
+        config.turnOnCameraWhenjoining = false
+        let menuBarConfig = ZegoBottomMenuBarConfig()
+        menuBarConfig.buttons = [.toggleMicrophoneButton,.hangUpButton,.swtichAudioOutputButton]
+        config.bottomMenuBarConfig = menuBarConfig
+        let callVC: ZegoUIKitPrebuiltCallVC = ZegoUIKitPrebuiltCallVC.init(appID, appSign: appSign, userID: userID, userName: userName, callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+
+}
+```
+
+```swift title="With call invitation"
+class ViewController: UIViewController {
+    let appID: UInt32 = 
+    let appSign: String = 
+    String userID = "userID"
+    String userName = "userName"
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: userID, userName: userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+                return config
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+                return config
+            }
+        }
+    }
+
+}
+```
+</CodeGroup>
+
+
+
+## Customize the hidden behavior of the menu bar
+
+The Call Kit (ZegoUIKitPrebuiltCall) supports automatic or manual hiding of the menu bar. You can control this by using the following two configurations in the `ZegoBottomMenuBarConfig`:
+
+1. `hideByClick`: Whether the menu bar can be hidden by clicking on the unresponsive area, enabled by default.
+2. `hideAutomatically`: Whether the menu bar is automatically hidden after 5 seconds of user inactivity, enabled by default.
+
+
+## Add chat button to the menu bar.
+
+You can modify `config.bottomMenuBarConfig.buttons` to add a chat button to the menubar.
+
+Here is the reference code:
+
+```swift
+config.bottomMenuBarConfig.buttons = [.toggleCameraButton,.switchCameraButton,.hangUpButton,.toggleMicrophoneButton,.swtichAudioOutputButton, .chatButton]
+```

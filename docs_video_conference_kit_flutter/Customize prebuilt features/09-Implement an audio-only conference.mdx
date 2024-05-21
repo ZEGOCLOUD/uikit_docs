@@ -1,0 +1,50 @@
+# Implement an audio-only conference
+
+- - -
+
+Video Conference Kit (ZegoUIKitPrebuiltVideoConference) defaults to video conference mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only conference.
+
+Camera-related logic is not required for audio-only conferences, so you can:
+
+- `bottomMenuBarConfig`: Configure this to delete the camera-related button.
+- `topMenuBarConfig`: Configure this to delete the camera-related button.
+- `turnOnCameraWhenJoining`: Configure this to only use the microphone when a conference starts.
+- `audioVideoViewConfig`: Configure this to delete the camera status icon on the view.
+
+Here is the reference code:
+
+```dart {16-29}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltVideoConference (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userID,
+      conferenceID: conferenceID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltVideoConferenceConfig(
+        turnOnCameraWhenJoining: false,
+        audioVideoViewConfig: ZegoPrebuiltAudioVideoViewConfig(showCameraStateOnView: false),
+        topMenuBarConfig: ZegoTopMenuBarConfig(
+          buttons: [
+            ZegoMenuBarButtonName.showMemberListButton
+          ],
+        ),
+        bottomMenuBarConfig: ZegoBottomMenuBarConfig(
+          buttons: [
+            ZegoMenuBarButtonName.toggleMicrophoneButton,
+            ZegoMenuBarButtonName.leaveButton,
+            ZegoMenuBarButtonName.switchAudioOutputButton,
+          ],
+        ),
+      ),
+    );
+  }
+}
+```

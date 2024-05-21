@@ -1,0 +1,418 @@
+# PK battles
+
+
+## 1. Prerequisites
+
+
+<Warning title="Warning">
+
+Before you begin, make sure you complete the following:
+
+- Follow the integration steps by referring to the [Quick start with co-hosting](../02-Quick%20start/02-Quick%20start%20(with%20cohosting).mdx).
+
+- Please contact technical support to activate the **Stream Mixing** service.
+
+
+</Warning>
+
+## 2. What’s PK battles?
+
+A multi-player PK is a friendly competition where audiences can witness the engaged interactions among multiple hosts in two or more live streams.
+
+> The buttons on the video view are completely customizable. The example buttons added in the demo are shown in the image below.
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_m_normal.jpg" />
+</Frame>
+
+## 3. Quick Start
+
+Hosts can send a PK battle request to the host they want to connect with after they started their own live streams. And both live streams will be connected upon the PK battle request being accepted.
+
+### 3.1 send PK battle request
+``` dart
+ZegoUIKitPrebuiltLiveStreamingController().pk.sendRequest(
+    targetHostIDs: [anotherHostUserID],
+);
+```
+
+### 3.2 agree the PK battle request
+``` dart
+  ZegoUIKitPrebuiltLiveStreamingEvents(
+    pk: ZegoLiveStreamingPKEvents(
+      onIncomingRequestReceived: (event, defaultAction) {
+        ZegoUIKitPrebuiltLiveStreamingController().pk.acceptRequest(
+          requestID: event.requestID,
+          targetHost: ZegoUIKitPrebuiltLiveStreamingPKUser(
+            userInfo: event.fromHost,
+            liveID: event.fromLiveID,
+          ),
+        );
+      },
+    ),
+  );
+```
+
+### 3.3 quit pk battle
+``` dart
+ZegoUIKitPrebuiltLiveStreamingController().pk.quit();
+```
+
+For a detailed demo source code, click [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/tree/master/live_streaming_with_pkbattles).
+
+## 4. APIs
+
+**To customize your own PK battle logic and process** as needed, the [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl-class.html) contains a bunch of methods for you to do further customizations. 
+
+Before you make your customization, check the following APIs first.
+
+### 4.1 APIs of PK inviter:
+
+|func name|params|description|
+|-|-|-|
+|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/sendRequest.html)|required List targetHostIDs<br/><br/>int timeout<br/><br/>String customData<br/><br/>bool isAutoAccept|inviting hosts for a PK.<br/><br/>you will need to specify the [targetHostIDs] you want to connect with.<br/><br/>Remember the hosts you invite must has started a live stream,otherwise, an error will return via the method you called.<br/><br/>you can used [timeout] to set the timeout duration of the PK battle request you sent. After it timed out, the host who sent the request will receive a callback notification via the [ZegoUIKitPrebuiltLiveStreamingPKEvents.onOutgoingRequestTimeout].<br/><br/>if you want to customize the info that you want the host you invited to receive, you can set [customData], and the invited host will receive via [ZegoUIKitPrebuiltLiveStreamingPKEvents.onIncomingRequestReceived].<br/><br/>If you want the remote host to directly accept without a confirmation dialog before entering the PK, you can set [isAutoAccept] to true.<br/>Please note that within the same PK session, this value ONLY takes effect the FIRST time it is set (after the first acceptance of the invitation), subsequent invitations will use the value set during the first acceptance.|
+|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/cancelRequest.html)|required List targetHostIDs<br/><br/>String customData|Cancel the PK invitation to [targetHostIDs].<br/><br/>You can provide your reason by attaching [customData].<br/><br/>If the PK has already started (and any invited host has accepted), the PK invitation cannot be cancelled.|
+|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/stop.html)||Stop PK to all pk-hosts, only the PK Initiator can stop it.<br/><br/>The PK is over and all participants have exited the PK View.|
+|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
+|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
+
+### 4.2 APIs of PK invitee:
+|func name|params|description|
+|-|-|-|
+|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/acceptRequest.html)|required String requestID<br/><br/>required ZegoUIKitPrebuiltLiveStreamingPKUser targetHost<br/><br/>int timeout<br/><br/>String customData|Accept the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If exceeds [timeout] seconds, the accept will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
+|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/rejectRequest.html)|required String requestID<br/><br/>required String targetHostID<br/><br/>int timeout<br/><br/>String customData|Rejects the PK invitation from the [targetHost], which invitation ID is [requestID].<br/><br/>If the rejection exceeds [timeout] seconds, the rejection will be considered timed out.<br/><br/>You can provide your reason by attaching [customData].|
+|[quit](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/quit.html)||Quit PK on your own.<br/><br/>only pop the PK View on your own end, other PK participants decide on their own.|
+|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)|required List targetHostIDs<br/><br/>required bool isMute|Silence the [targetHostIDs] in PK, local host and audience in the live streaming won't hear the muted host's voice.<br/><br/>If you want to cancel mute, set [isMute] to false.|
+
+## 5. Events
+
+<Note title="Note">
+Each event has its own event and defaultAction. The defaultAction refers to the default popup behavior within the event. 
+
+You can invoke defaultAction.call() to execute the default behavior internally.
+
+
+</Note>
+
+During a PK lifecycle, the events thrown by both sides are as follows:
+
+### 5.1 Events of PK inviter：
+
+|func name|description|
+|-|-|
+| [onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestAccepted.html) | The PK invitation to [event.fromHost] has been accepted.|
+| [onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestRejected.html) | The PK invitation to [event.fromHost] has been rejected.|
+|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestTimeout.html)|Your PK invitation has been timeout|
+| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
+| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
+| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
+
+### 5.2 Events of PK invitee：
+
+|func name|description|
+|-|-|
+| [onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestReceived.html) |Received a PK invitation from [event.fromHost], with the ID [event.requestID].|
+| [onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestCancelled.html) | The received PK invitation has been canceled by the inviting host [event.fromHost]. |
+| [onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestTimeout.html) |The received PK invitation has timed out.|
+| [onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html) |PK invitation had been ended by [event.fromHost]|
+| [onUserOffline](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserOffline.html) |PK host offline|
+| [onUserQuited](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onUserQuited.html) |PK host quit|
+
+
+## 6. Customize
+
+### 6.1 UI
+
+If you want to customize the PK interface, we currently provide the following options:
+
+- pKBattleViewTopPadding: 
+    You can use this to set the top padding for the toolbar in the PK interface.
+- hostReconnectingBuilder: 
+This allows you to set the UI effect for when a PK user temporarily goes offline.
+- pkBattleViewForegroundBuilder: 
+You can use this to add additional custom views or controls to the foreground of the PK interface.
+- pkBattleViewTopBuilder: 
+This allows you to add custom views or controls to the top of the PK interface.
+- pkBattleViewBottomBuilder: 
+You can use this to add custom views or controls to the bottom of the PK interface.
+
+These options provide flexibility for customizing various aspects of the PK interface according to your requirements.
+
+
+<Accordion title="Details" defaultOpen="false">
+
+Among these, the definition of the `ZegoLiveStreamingPKBattleHostReconnectingBuilder` and the `ZegoLiveStreamingPKBattleViewBuilder` are as follows:
+
+```dart
+typedef ZegoLiveStreamingPKBattleHostReconnectingBuilder = Widget Function(
+  BuildContext context,
+  ZegoUIKitUser? host,
+  Map<String, dynamic> extraInfo,
+);
+
+typedef ZegoLiveStreamingPKBattleViewBuilder = Widget Function(
+  BuildContext context,
+  List<ZegoUIKitUser?> hosts,
+  Map<String, dynamic> extraInfo,
+);
+```
+
+To be specific, if you want to place custom views above, below, and on top of PKView, you can check the following sample code as a reference:
+
+```dart
+// ZegoUIKitPrebuiltLiveStreamingConfig
+config.pkBattleConfig.pkBattleViewBottomBuilder = (
+  BuildContext context,
+  List<ZegoUIKitUser?> hosts,
+  Map<String, dynamic> extraInfo,
+) {
+  return Container(
+    color: Colors.red,
+    child: const Center(
+      child: Text('pkBattleViewBottomBuilder'),
+    ),
+  );
+};
+
+// ZegoUIKitPrebuiltLiveStreamingConfig
+config.pkBattleConfig.pkBattleViewTopBuilder = (
+  BuildContext context,
+  List<ZegoUIKitUser?> hosts,
+  Map<String, dynamic> extraInfo,
+) {
+  return Container(
+    color: Colors.red,
+    child: const Center(
+      child: Text('pkBattleViewTopBuilder'),
+    ),
+  );
+};
+
+// ZegoUIKitPrebuiltLiveStreamingConfig
+config.pkBattleConfig.pkBattleViewForegroundBuilder = (
+  BuildContext context,
+  List<ZegoUIKitUser?> hosts,
+  Map<String, dynamic> extraInfo,
+) {
+  return Positioned(
+    bottom: 80,
+    left: 0,
+    right: 0,
+    child: Container(
+      color: Colors.red,
+      child: const Center(
+        child: Text('pkBattleViewForegroundBuilder'),
+      ),
+    ),
+  );
+};
+```
+
+The effect will be like this:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_m_builder.jpg" />
+</Frame>
+
+</Accordion>
+
+
+### 6.2 configs
+
+- userReconnectingSecond:
+If the connection with a PK user is lost for a `userReconnectingSecond` period of time, it will trigger `hostReconnectingBuilder`, which waits for the user to reconnect. 
+
+- userDisconnectedSecond:
+When a PK user loses connection for more than `userDisconnectedSecond`, they will be automatically kicked out of the PK.
+
+## 7. Migration Guide
+
+Starting from version **v2.23**, we have introduced support for multiplayer PK(Certainly, the old version of two-player PK is still compatible). 
+
+If you wish to migrate from the old version of two-player PK to the new version of multiplayer PK, please refer to the following:
+
+### 7.1 APIs
+
+The methods in **ZegoUIKitPrebuiltLiveStreamingPKService** can be replaced with the methods in [`ZegoUIKitPrebuiltLiveStreamingController().pk`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl-class.html).
+
+| ZegoUIKitPrebuiltLiveStreamingPKService |ZegoUIKitPrebuiltLiveStreamingController().pk| description |
+|-|-|-|
+|sendPKBattleRequest|[sendRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/sendRequest.html)|The requestID is the ID of the current PK session.|
+|cancelPKBattleRequest|[cancelRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/cancelRequest.html)||
+|acceptIncomingPKBattleRequest|[acceptRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/acceptRequest.html)|The requestID is the event.requestID that you received in the onIncomingRequestReceived event. |
+|rejectIncomingPKBattleRequest|[rejectRequest](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/rejectRequest.html)|The requestID is the same as the event.requestID that you received in the onIncomingRequestReceived event.|
+|stopPKBattle|[stop](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/stop.html)|The requestID is the result.requestID returned by the sendRequest function.|
+|muteAnotherHostAudio|[muteAudios](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerPKImpl/muteAudios.html)||
+|startPKBattleWith|none|After accepting the PK invitation, the interface will automatically switch to the PK screen, and no further action is required.<br/><br/>If you want the other party to directly enter the PK after the invitation is sent, you can set the isAutoAccept parameter to true in the sendRequest function.|
+
+for example, if you previously used **ZegoUIKitPrebuiltLiveStreamingService().sendPKBattleRequest(anotherHostUserID)** to send a PK invitation, now you should use **ZegoUIKitPrebuiltLiveStreamingController().pk.sendRequest([hostUserID])**.
+
+### 7.2 Events
+
+The events in **ZegoUIKitPrebuiltLiveStreamingConfig.pkBattleEvents** can be replaced with the events in **ZegoUIKitPrebuiltLiveStreamingEvents.pk**.
+
+| ZegoUIKitPrebuiltLiveStreamingConfig.pkBattleEvents |ZegoUIKitPrebuiltLiveStreamingEvents.pk | description |
+|-|-|-|
+|onIncomingPKBattleRequestReceived|[onIncomingRequestReceived](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestReceived.html)|The requestID parameter from the event will be required when using the acceptRequest or rejectRequest functions.|
+|onIncomingPKBattleRequestCancelled|[onIncomingRequestCancelled](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingPKBattleRequestCancelled.html)||
+|onIncomingPKBattleRequestTimeout|[onIncomingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onIncomingRequestTimeout.html)||
+|onOutgoingPKBattleRequestAccepted|[onOutgoingRequestAccepted](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestAccepted.html)||
+|onOutgoingPKBattleRequestRejected|[onOutgoingRequestRejected](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestRejected.html)||
+|onOutgoingPKBattleRequestTimeout|[onOutgoingRequestTimeout](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onOutgoingRequestTimeout.html)||
+|onPKBattleEndedByAnotherHost|[onEnded](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPKEvents/onEnded.html)||
+
+
+## 8. FAQ
+
+
+### 8.1 Server Matching
+
+<Accordion title="If you want users to automatically enter a PK after server matching, you can do the following" defaultOpen="false">
+
+Let's say you have matched three users with IDs 1001, 1002, and 1003 for the PK. 
+
+You should select one of the users, for example, 1001, and call `ZegoUIKitPrebuiltLiveStreamingController().pk.sendRequest` as follows:
+
+```dart
+ZegoUIKitPrebuiltLiveStreamingController().pk.sendRequest(
+    targetHostIDs: ["1002", "1003"],
+    isAutoAccept: true,
+);
+```
+
+In this case, when users 1002 and 1003 receive the PK invitation, they will automatically enter the PK without the need for manual acceptance.
+
+</Accordion>
+
+### 8.2 Custom Layout
+
+
+<Accordion title="The default layouts for different numbers of participants are as follows" defaultOpen="false">
+
+- When there are two PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_2.jpeg" />
+</Frame>
+
+- When there are three PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_3.jpeg" />
+</Frame>
+
+- When there are four PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_4.jpeg" />
+</Frame>
+
+- When there are five PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_5.jpeg" />
+</Frame>
+
+- When there are six PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_6.jpeg" />
+</Frame>
+
+- When there are more than six PK users:
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/pk_d_layout_789.jpeg" />
+</Frame>
+
+</Accordion>
+
+
+
+
+<Accordion title="How to customize the pk layout?" defaultOpen="false">
+
+If you want to customize the layout for PK, you just need to inherit from [`ZegoPKMixerLayout`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoPKMixerLayout-class.html) and override two methods: `getResolution` and `getRectList`.
+
+- getResolution: should return the width and height of the entire canvas for the streams.
+- getRectList: should return the coordinates of the hostCount users on the canvas.
+
+Here's an example using a simple 1x2, 2x2, 3x3 grid layout:
+
+``` dart
+
+/// two:
+/// ┌───┬────┐
+/// │😄 │ 😄 │
+/// └───┴────┘
+/// four:
+/// ┌───┬───┐
+/// │😄 │😄 │
+/// ├───┼───┤
+/// │😄 │   │
+/// └───┴───┘
+/// nine:
+/// ┌───┬───┬───┐
+/// │😄 │😄 │😄 │
+/// ├───┼───┼───┤
+/// │😄 │😄 │😄 │
+/// ├───┼───┼───┤
+/// │😄 │😄 │   │
+/// └───┴───┴───┘
+class PKGridLayout extends ZegoPKMixerLayout {
+  @override
+  Size getResolution() => const Size(1080, 960);
+
+  @override
+  List<Rect> getRectList(
+    int hostCount, {
+    double scale = 1.0,
+  }) {
+    final resolution = getResolution();
+    final rowCount = getRowCount(hostCount);
+    final columnCount = getColumnCount(hostCount);
+    final itemWidth = resolution.width / columnCount;
+    final itemHeight = resolution.height / rowCount;
+
+    final rectList = <Rect>[];
+    var hostRowIndex = 0;
+    var hostColumnIndex = 0;
+    for (var hostIndex = 0; hostIndex < hostCount; ++hostIndex) {
+      if (hostColumnIndex == columnCount) {
+        hostColumnIndex = 0;
+        hostRowIndex++;
+      }
+
+      rectList.add(
+        Rect.fromLTWH(
+          itemWidth * hostColumnIndex * scale,
+          itemHeight * hostRowIndex * scale,
+          itemWidth * scale,
+          itemHeight * scale,
+        ),
+      );
+
+      ++hostColumnIndex;
+    }
+
+    return rectList;
+  }
+
+  int getRowCount(int hostCount) {
+    if (hostCount > 6) {
+      return 3;
+    }
+    if (hostCount > 2) {
+      return 2;
+    }
+    return 1;
+  }
+
+  int getColumnCount(int hostCount) {
+    if (hostCount > 4) {
+      return 3;
+    }
+    return 2;
+  }
+}
+
+```
+</Accordion>
+
+## 9. Demo
+
+For a detailed demo source code, click [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/tree/master/live_streaming_with_pkbattles).

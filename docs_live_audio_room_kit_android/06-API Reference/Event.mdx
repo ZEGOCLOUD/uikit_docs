@@ -1,0 +1,272 @@
+# Event
+
+- [ZegoTurnOnYourMicrophoneRequestListener](./Event.mdx#ZegoTurnOnYourMicrophoneRequestListener)
+    - [onTurnOnYourMicrophoneRequest](./Event.mdx#onTurnOnYourMicrophoneRequest)
+- [ZegoUserCountOrPropertyChangedListener](./Event.mdx#ZegoUserCountOrPropertyChangedListener)
+    - [onUserCountOrPropertyChanged](./Event.mdx#onUserCountOrPropertyChanged)
+- [ZegoSeatTakingRequestAudienceListener](./Event.mdx#ZegoSeatTakingRequestAudienceListener)
+    - [onSeatTakingRequestRejected](./Event.mdx#onSeatTakingRequestRejected)
+    - [onHostSeatTakingInviteSent](./Event.mdx#onHostSeatTakingInviteSent)
+- [ZegoSeatTakingRequestHostListener](./Event.mdx#ZegoSeatTakingRequestHostListener)
+    - [onSeatTakingRequested](./Event.mdx#onSeatTakingRequested)
+    - [onSeatTakingRequestCancelled](./Event.mdx#onSeatTakingRequestCancelled)
+    - [onSeatTakingInviteRejected](./Event.mdx#onSeatTakingInviteRejected)
+- [ZegoSeatsChangedListener](./Event.mdx#ZegoSeatsChangedListener)
+    - [onSeatsChanged](./Event.mdx#onSeatsChanged)
+- [ZegoSeatsClosedListener](./Event.mdx#ZegoSeatsClosedListener)
+    - [onSeatsClosed](./Event.mdx#onSeatsClosed)
+    - [onSeatsOpened](./Event.mdx#onSeatsOpened)
+
+---
+
+<a id="ZegoTurnOnYourMicrophoneRequestListener"></a>
+
+# ZegoTurnOnYourMicrophoneRequestListener
+
+<a id="onTurnOnYourMicrophoneRequest"></a>
+
+## onTurnOnYourMicrophoneRequest
+
+>
+> This callback will be triggered when other user try to open your microphone.
+>
+>- function prototype:
+>```java
+> void onTurnOnYourMicrophoneRequest(ZegoUIKitUser fromUser)
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setTurnOnYourMicrophoneRequestListener(new ZegoTurnOnYourMicrophoneRequestListener() {
+>     @Override
+>     public void onTurnOnYourMicrophoneRequest(ZegoUIKitUser fromUser) {
+>         
+>     }
+> });
+>```
+
+<a id="ZegoUserCountOrPropertyChangedListener"></a>
+
+# ZegoUserCountOrPropertyChangedListener
+
+<a id="onUserCountOrPropertyChanged"></a>
+
+## onUserCountOrPropertyChanged
+
+>
+> This callback will be triggered when room user count changed or property changed.
+>
+>- function prototype:
+>```java
+> void onUserCountOrPropertyChanged(List<ZegoUIKitUser> userList)
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setUserCountOrPropertyChangedListener(new ZegoUserCountOrPropertyChangedListener() {
+>     @Override
+>     public void onUserCountOrPropertyChanged(List<ZegoUIKitUser> userList) {
+>         
+>     }
+> });
+>```
+
+<a id="ZegoSeatTakingRequestAudienceListener"></a>
+
+# ZegoSeatTakingRequestAudienceListener
+
+<a id="onSeatTakingRequestRejected"></a>
+
+## onSeatTakingRequestRejected
+
+>
+> This callback will be triggered to audience when room user request take seat and is rejected by room host.
+>
+>- function prototype:
+>```java
+> void onSeatTakingRequestRejected()
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatTakingRequestAudienceListener(new ZegoSeatTakingRequestAudienceListener() {
+>     @Override
+>     public void onSeatTakingRequestRejected() {
+>         
+>     }
+> });
+>```
+
+<a id="onHostSeatTakingInviteSent"></a>
+
+## onHostSeatTakingInviteSent
+
+>
+> This callback will be triggered to audience when room host invite users to be a speaker.
+>
+>- function prototype:
+>```java
+> void onHostSeatTakingInviteSent()
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatTakingRequestAudienceListener(new ZegoSeatTakingRequestAudienceListener() {
+>     @Override
+>     public void onHostSeatTakingInviteSent() {
+>         
+>     }
+> });
+>```
+
+<a id="ZegoSeatTakingRequestHostListener"></a>
+
+# ZegoSeatTakingRequestHostListener
+
+<a id="onSeatTakingRequested"></a>
+
+## onSeatTakingRequested
+
+>
+> This callback will be triggered to host when room host receive user's request to be a speaker.
+>
+>- function prototype:
+>```java
+> onSeatTakingRequested(ZegoUIKitUser audience)
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatTakingRequestHostListener(new setSeatTakingRequestHostListener() {
+>     @Override
+>     public void onSeatTakingRequested(ZegoUIKitUser audience) {
+>         
+>     }
+> });
+>```
+
+<a id="onSeatTakingRequestCancelled"></a>
+
+## onSeatTakingRequestCancelled
+>
+> This callback will be triggered to host when room host receive audience's request to be a speaker and then canceled the request.
+>
+>- function prototype:
+>```java
+>  onSeatTakingRequestCancelled(ZegoUIKitUser audience)
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatTakingRequestHostListener(new setSeatTakingRequestHostListener() {
+>     @Override
+>     public void onSeatTakingRequestCancelled(ZegoUIKitUser audience) {
+>         
+>     }
+> });
+>```
+
+<a id="onSeatTakingInviteRejected"></a>
+
+## onSeatTakingInviteRejected
+>
+> This callback will be triggered to host when room host invite audience to be speaker and is rejected by audience.
+>
+>- function prototype:
+>```java
+> onSeatTakingInviteRejected()
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatTakingRequestHostListener(new setSeatTakingRequestHostListener() {
+>     @Override
+>     public void onSeatTakingInviteRejected() {
+>         
+>     }
+> });
+>```
+
+<a id="ZegoSeatsChangedListener"></a>
+
+# ZegoSeatsChangedListener
+
+<a id="onSeatsChanged"></a>
+
+## onSeatsChanged
+
+>
+> This callback will be triggered when room speaker changed.
+>
+>- function prototype:
+>```java
+> void onSeatsChanged(Map<Integer, ZegoUIKitUser> takenSeats, List<Integer> untakenSeats)
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatsChangedListener(new ZegoSeatsChangedListener() {
+>     @Override
+>     public void onSeatsChanged(Map<Integer, ZegoUIKitUser> takenSeats, List<Integer> untakenSeats) {
+>         
+>     }
+> });
+>```
+
+<a id="ZegoSeatsClosedListener"></a>
+
+# ZegoSeatsClosedListener
+
+<a id="onSeatsClosed"></a>
+
+## onSeatsClosed
+
+>
+> This callback will be triggered when room host close all seats
+>
+>- function prototype:
+>```java
+> void onSeatsClosed()
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatsClosedListener(new ZegoSeatsClosedListener() {
+>     @Override
+>     public void onSeatsClosed() {
+>         
+>     }
+> });
+>```
+
+<a id="onSeatsOpened"></a>
+
+## onSeatsOpened
+
+>
+>  This callback will be triggered when room host open all seats.
+>
+>- function prototype:
+>```java
+> void onSeatsOpened()
+>```
+>- example:
+>```java
+> ZegoUIKitPrebuiltLiveAudioRoomFragment fragment ;
+> // ...
+> fragment.setSeatsClosedListener(new ZegoSeatsClosedListener() {
+>     @Override
+>     public void onSeatsOpened() {
+>         
+>     }
+> });
+>```

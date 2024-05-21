@@ -1,0 +1,53 @@
+# Calculate live duration
+
+This doc describes how to calculate the livestream duration through configuration.
+
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_duration.jpeg" />
+</Frame> 
+
+To calculate the livestream duration, do the following:
+
+1. Set the `isVisible` property of `durationConfig` to display the current timer. (It is displayed by default)
+
+
+2. Assuming that the livestream duration is 5 minutes, the livestream will automatically end when the time is up (refer to the following code). You will be notified of the end of the livestream duration through `durationConfig.onDurationUpdate`. To end the livestream, you can call the `leave` method of `ZegoUIKitPrebuiltLiveStreaming` ref.
+
+
+```js
+import React, { useRef } from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+    const prebuiltRef = useRef();
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                ref={prebuiltRef}
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeaveLiveStreaming: () => { props.navigation.navigate('HomePage') },
+                    durationConfig: {
+                        isVisible: true,
+                        onDurationUpdate: (duration) => {
+                            if (duration === 5 * 60) {
+                                prebuiltRef.current.leave();
+                            }
+                        }
+                    }
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+```

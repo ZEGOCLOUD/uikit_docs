@@ -1,0 +1,436 @@
+# Tutorial navigator
+
+
+## Make an interactive livestream
+
+Check the following to make your livestream even more interactive:
+
+1. [Participate in PK battles with other hosts](./04-Enhance%20the%20livestream/01-PK%20battles.mdx)
+2. [Share your screen during live streaming](./04-Enhance%20the%20livestream/02-Screen%20sharing.mdx)
+3. [Send virtual gifts](./04-Enhance%20the%20livestream/05-Send%20virtual%20gifts.mdx)
+4. [Add advanced beauty effects like filters, face shaping, and makeup](./04-Enhance%20the%20livestream/03-Advanced%20beauty%20effects.mdx)
+
+## FAQs
+
+Here are answers to some frequently asked questions.
+
+[1. How to ensure uninterrupted audio when the app is sent to the background?](./06-FAQs.mdx)
+
+[2. How to make the audience leave the room automatically after ending the live stream?](./06-FAQs.mdx)
+
+## Debugging
+
+Let's explore some common debugging scenarios:
+
+[1. Why does the app work fine in debug mode but crash in release mode?](./06-FAQs.mdx)
+
+[2. How to enable logging for UIKit?](./06-FAQs.mdx)
+
+
+## Feature map
+
+The Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) offers default behaviors and styles, but we also provide the flexibility to further customize or add your own business logic if the defaults don't fully meet your needs.
+
+The numbers shown in the diagram correspond to the categories in the specific feature list.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/feature_map_v1.jpeg" />
+</Frame>
+
+
+<table>
+  <colgroup>
+    <col width="15%"/>
+    <col width="40%"/>
+    <col width="45%"/>
+  </colgroup>
+<tbody><tr>
+<th>Category</th>
+<th>&nbsp;Feature</th>
+<th>&nbsp;Description</th>
+</tr>
+<tr>
+<th rowSpan="10">1 Top View</th>
+<td>[Set user avatar](./05-Customize%20the%20livestream/01-Set%20avatar%20for%20users.mdx)</td>
+<td>Set the user's avatar and make it effective in the TopMenuBar, AudioVideoView, and member list.</td>
+</tr>
+<tr>
+<td>[Set user avatar onClick callback](./05-Customize%20the%20livestream/16-Host%20Avatar.mdx)</td>
+<td>Perform customized operations such as displaying user details through the callback.</td>
+</tr>
+<tr>
+<td>[Add minimize button](./04-Enhance%20the%20livestream/04-Minimize%20livestream%20window.mdx)</td>
+<td>Minimize the livestream window within the app.</td>
+</tr>
+<tr>
+<td>[Exit Livestream confirmation callback](./05-Customize%20the%20livestream/04-Set%20a%20leave%20confirmation%20dialog.mdx)</td>
+<td>Add a customized confirmation popup when the user exits the livestream</td>
+</tr>
+<tr>
+<td>[Customize exit livestream confirmation popup text](./05-Customize%20the%20livestream/04-Set%20a%20leave%20confirmation%20dialog.mdx)</td>
+<td>Customize the text displayed on the popup confirmation when the user exits the livestream.</td>
+</tr>
+<tr>
+<td>[Calculate livestream duration](./05-Customize%20the%20livestream/17-Calculate%20live%20duration.mdx)</td>
+<td>Configure whether or not to display the duration of the livestream and to set a callback for the duration.</td>
+</tr>
+<tr>
+<td>[Set TopMenuBar padding](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingTopMenuBarConfig/padding.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set TopMenuBar margin](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingTopMenuBarConfig/margin.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set TopMenuBar backgroundColor](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingTopMenuBarConfig/backgroundColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set TopMenuBar height](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingTopMenuBarConfig/height.html)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="8">2 AudioVideoView</th>
+<td>[Set user avatar](./05-Customize%20the%20livestream/01-Set%20avatar%20for%20users.mdx)</td>
+<td>Set the user's avatar, which will then be displayed in the TopMenuBar, AudioVideoView, and Member List.</td>
+</tr>
+<tr>
+<td>[Set Video Mirror](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingAudioVideoViewConfig/isVideoMirror.html)</td>
+<td>Set the video mirror effect, but only for the user's own video.</td>
+</tr>
+<tr>
+<td>[Show username on view](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingAudioVideoViewConfig/showUserNameOnView.html)</td>
+<td>Display the user name in the bottom right corner of the video view.</td>
+</tr>
+<tr>
+<td>[Show user avatar](./05-Customize%20the%20livestream/02-Hide%20components.mdx)</td>
+<td>Display the user avatar, but only in audio mode.</td>
+</tr>
+<tr>
+<td>[Show sound wave](./05-Customize%20the%20livestream/02-Hide%20components.mdx)</td>
+<td>Display the sound wave, but only in audio mode.</td>
+</tr>
+<tr>
+<td>[Use video view aspect fill](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingAudioVideoViewConfig/useVideoViewAspectFill.html)</td>
+<td>Set whether the video rendering should be filled, which means the video will not have black bars, but it may be cropped or scaled.</td>
+</tr>
+<tr>
+<td>[Customize foreground view](./05-Customize%20the%20livestream/06-Add%20custom%20UI%20components.mdx)</td>
+<td>Set a custom foreground view for the AudioVideoView.</td>
+</tr>
+<tr>
+<td>[Customize background view](./05-Customize%20the%20livestream/05-Customize%20the%20background.mdx)</td>
+<td>Set a custom background view for the AudioVideoView.</td>
+</tr>
+<tr>
+<th rowSpan="11">3 InRoomMessageView</th>
+<td>[Set InRoomMessageView width](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView height](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView Opacity](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView maximum number of lines](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize InRoomMessageView username text style](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize InRoomMessageView message text style](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView background color](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView border radius](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set InRoomMessageView padding](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize InRoomMessageView message item](./05-Customize%20the%20livestream/07-Customize%20the%20text%20message%20UI.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Message send status callback](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingInRoomMessageEvents/onLocalSend.html)</td>
+<td>This callback will be triggered when the message is successfully sent or failed.</td>
+</tr>
+<tr>
+<th rowSpan="14">4 Bottom Menu Bar</th>
+<td>[Customize host buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "host".</td>
+</tr>
+<tr>
+<td>[Customize co-host buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "co-host".</td>
+</tr>
+<tr>
+<td>[Customize audience buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "audience".</td>
+</tr>
+<tr>
+<td>[Add host extend buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "host".</td>
+</tr>
+<tr>
+<td>[Add co-host extend buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "co-host".</td>
+</tr>
+<tr>
+<td>[Add audience extend buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td>Only applicable when the user's role is "audience".</td>
+</tr>
+<tr>
+<td>[Set whether to show message button](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Limit the maximum number of bottom buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the style of built-in buttons](./05-Customize%20the%20livestream/10-Customize%20the%20menu%20bar.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Built-in button list](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoMenuBarButtonName.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set BottomMenuBar padding](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingBottomMenuBarConfig/html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set BottomMenuBar margin](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingBottomMenuBarConfig/margin.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set BottomMenuBar backgroundColor](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingBottomMenuBarConfig/backgroundColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set BottomMenuBar height](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingBottomMenuBarConfig/height.html)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="2">5 Member List</th>
+<td>[Customize member item](./05-Customize%20the%20livestream/08-Customize%20the%20member%20list%20view.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Item onClick callback](./05-Customize%20the%20livestream/08-Customize%20the%20member%20list%20view.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="19">6 Effects</th>
+<td>[Customize beauty effects](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/beautyEffects.html)</td>
+<td>Add or remove beauty effect items.</td>
+</tr>
+<tr>
+<td>[Customize voice change effects](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/voiceChangeEffect.html)</td>
+<td>Add or remove voice change effect items.</td>
+</tr>
+<tr>
+<td>[Customize reverb effects](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/reverbEffect.html)</td>
+<td>Add or remove reverb effect items.</td>
+</tr>
+<tr>
+<td>[Customize background color](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/backgroundColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize header title text style](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/headerTitleTextStyle.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize back icon](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/backIcon.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize reset icon](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/resetIcon.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize icon border color in selected state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/selectedIconBorderColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize icon border color in normal state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/normalIconBorderColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize icon color in selected state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/selectedIconColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize icon color in normal state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/normalIconColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize text style in selected state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/selectedTextStyle.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize text style in normal state](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/normalTextStyle.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider text style](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderTextStyle.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider text background color](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderTextBackgroundColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider active track color](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderActiveTrackColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider inactive track color](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderInactiveTrackColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider thumb color](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderThumbColor.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize slider thumb radius](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingEffectConfig/sliderThumbRadius.html)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="5">7 Customization before starting the live stream</th>
+<td>[Customize whether to skip the preview interface](./05-Customize%20the%20livestream/03-Customize%20the%20preview%20page.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the back button](./05-Customize%20the%20livestream/03-Customize%20the%20preview%20page.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the beauty effect button](./05-Customize%20the%20livestream/03-Customize%20the%20preview%20page.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the switch camera button](./05-Customize%20the%20livestream/03-Customize%20the%20preview%20page.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the "start live" button](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingStartLiveButtonBuilder.html)</td>
+<td></td>
+</tr>
+<tr>
+<th>8 Advanced beauty effects</th>
+<td>[Achieve advanced beauty  effects](./04-Enhance%20the%20livestream/03-Advanced%20beauty%20effects.mdx)</td>
+<td>Implement advanced beauty features such as filters, face shapes, and makeup.</td>
+</tr>
+<tr>
+<th>9 Screen sharing</th>
+<td>[Achieve screen sharing live streaming](./04-Enhance%20the%20livestream/02-Screen%20sharing.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<th>10 PK battles</th>
+<td>[Participate in PK battles with other hosts](./04-Enhance%20the%20livestream/01-PK%20battles.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="7">11 Live stream callback</th>
+<td>[Callback - user is removed from the livestream room](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingEvents/onEnded.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Callback - Audience leaves the live stream room](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingEvents/onEnded.html)</td>
+<td>After implementing the callback, it is necessary to pop back to the previous page.</td>
+</tr>
+<tr>
+<td>[Live stream end callback](./05-Customize%20the%20livestream/12-Forcefully%20end%20a%20livestream%20room.mdx)</td>
+<td>After implementing the callback, it is necessary to pop back to the previous page.</td>
+</tr>
+<tr>
+<td>[Callback - live stream state is updated](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingEvents/onStateUpdated.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Callback for confirming camera opening by others](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingAudioVideoEvents/onCameraTurnOnByOthersConfirmation.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Callback for confirming microphone opening by others](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingAudioVideoEvents/onMicrophoneTurnOnByOthersConfirmation.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Callback for when the maximum number of co-hosts is reached](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingCoHostEvents/onMaxCountReached.html)</td>
+<td></td>
+</tr>
+<tr>
+<th rowSpan="14">12 Other</th>
+<td>[Customize layouts](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/layout.html)</td>
+<td>Supports PictureInPicture and Gallery layout</td>
+</tr>
+<tr>
+<td>[Set whether the host's camera is turned on by default](./05-Customize%20the%20livestream/11-Implement%20an%20audio-only%20live.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set whether the host's microphone is turned on by default](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/turnOnMicrophoneWhenJoining.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set whether the speaker is turned on by default when joining the livestream](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/useSpeakerWhenJoining.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set whether the camera is turned on by default after the audience joins the livestream](./05-Customize%20the%20livestream/13-Turn%20off%20camera%20during%20co-hosting.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set whether to stop co-hosting when both the microphone and camera are turned off](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/stopCoHostingWhenMicCameraOff.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Set up video configuration for livestream](./05-Customize%20the%20livestream/14-Set%20video%20resolution.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize UI text in the Livestream](./05-Customize%20the%20livestream/09-Modify%20User%20Interface%20text.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the foreground view in the live stream](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/foreground.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Customize the background view in the live stream](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingConfig/background.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Limit the Maximum Number of co-hosts](./05-Customize%20the%20livestream/15-Limit%20the%20maximum%20number%20of%20co-hosts.mdx)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Actively leave the live stream room](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoUIKitPrebuiltLiveStreamingController/leave.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Remove a co-host from the live stream room](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerCoHostImpl/removeCoHost.html)</td>
+<td></td>
+</tr>
+<tr>
+<td>[Invite an audience to become a co-host](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingControllerCoHostImpl/hostSendCoHostInvitationToAudience.html)</td>
+<td></td>
+</tr>
+</tbody></table>

@@ -1,0 +1,88 @@
+# Hide components
+
+By default, the Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) displays the user's avatar and sound waves when the camera is turned off.
+If you are not satisfied with the user avatars and sound wave style, you can hide them using the `showSoundWavesInAudioMode` configuration.
+
+- showSoundWavesInAudioMode: in audio mode, whether to display the sound waves around the user avatar in audio mode. Displayed by default.
+
+```js
+<ZegoUIKitPrebuiltLiveStreaming
+    ref={prebuiltRef}
+    appID={KeyCenter.appID}
+    appSign={KeyCenter.appSign}
+    userID={userID}
+    userName={userName}
+    liveID={liveID}
+
+    config={{
+        ...HOST_DEFAULT_CONFIG,
+        audioVideoViewConfig: {
+          showSoundWavesInAudioMode: true,
+        },
+    }}
+/>
+```
+
+
+## Top Menu Bar
+
+
+### close button
+For the top exit button, it is displayed by default, its default behavior is to prompt the user with a confirmation dialog to confirm exiting the live streaming. 
+
+Additionally, for the host, exiting the live room means ending the live streaming.
+
+If you have a custom exit button or any other exit behavior, you can hide the default exit button.
+
+After hiding it, you can call the `leave` method to perform the exit operation.
+
+```js
+<ZegoUIKitPrebuiltLiveStreaming
+    ref={prebuiltRef}
+    appID={KeyCenter.appID}
+    appSign={KeyCenter.appSign}
+    userID={userID}
+    userName={userName}
+    liveID={liveID}
+
+    config={{
+        ...HOST_DEFAULT_CONFIG,
+        audioVideoViewConfig: {
+          showSoundWavesInAudioMode: true,
+        },
+        topMenuBarConfig: {
+            buttons: [],
+        },
+    }}
+/>
+
+// leave the room.
+prebuiltRef.current.leave();
+```
+
+### Host Label & Member List button
+ 
+If you want to hide the host label and member list button, you also can set `showMemberListButton` and `showHostLabel` to `false`.
+
+```
+<ZegoUIKitPrebuiltLiveStreaming
+    ref={prebuiltRef}
+    appID={KeyCenter.appID}
+    appSign={KeyCenter.appSign}
+    userID={userID}
+    userName={userName}
+    liveID={liveID}
+
+    config={{
+        ...HOST_DEFAULT_CONFIG,
+        audioVideoViewConfig: {
+          showSoundWavesInAudioMode: true,
+        },
+        topMenuBarConfig: {
+            buttons: [],
+            showMemberListButton: false,
+            showHostLabel: true,
+        },
+    }}
+/>
+```

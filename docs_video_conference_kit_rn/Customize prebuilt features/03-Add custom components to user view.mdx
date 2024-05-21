@@ -1,0 +1,37 @@
+# Add custom components to user view
+
+- - -
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `foregroundBuilder` in `audioVideoViewConfig`.
+This callback, similar to other React Native’s Builder callbacks, requires you (the developer) to return a custom Component that will be placed at the top of the view.
+
+
+Here is the reference code:
+
+```js {16-18}
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltVideoConference from '@zegocloud/zego-uikit-prebuilt-video-conference-rn';
+
+export default function VideoConferencePage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltVideoConference
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                conferenceID={conferenceID}
+                
+                config={{
+                    onLeave: () => {props.navigation.navigate('HomePage')},
+                    audioVideoViewConfig:{
+                        foregroundBuilder=({ userInfo }) => <MyForegroundView userInfo={userInfo} />
+                    },
+                }}
+            />
+        </View>
+    );
+}
+```

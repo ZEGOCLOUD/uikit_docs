@@ -1,0 +1,358 @@
+# message notifications
+
+## Android Offline Message Push Notifications
+
+To support offline message notifications, you need to configure Android Firebase and Apple Push certificates first.
+
+### 1. Firebase Console and ZEGO Console Configuration
+
+- step1. In the Firebase console: Create a project. (Resource may help: [Firebase Console](https://console.firebase.google.com/))
+
+<Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>
+
+- step2. In the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/): Upload your FCM certificate
+
+<Note title="Note">
+- If you are ready with the Apple APNS certificate at this point, you can upload it together.
+- iOS **need Apple Push Services certificates**, not VoIP certificates. This is different from the CallKit project.
+</Note> 
+
+<Frame auto="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/console/upload_zimkit_certificate.png" />
+</Frame>
+
+- step3. In the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/): create a `resourceID` for zimkit.
+
+<Warning title="Warning">
+
+1. You must use these options for zimkit, **APNs: Normal, FCM: Data Messages**. (Note that it's different from CallKit)
+2. In the picture, `zego_message.caf` is the notification sound ringtone attached to iOS offline message push, apple only supports audio files in caf format, **you need to use your own caf file name here**. (If you don't need to customize the ringtone, you can leave the sound field empty.)
+3. If you haven't configured the Android or iOS certificate at this point, the ResourceID will not include the options for that platform. as mentioned earlier, **We recommend that you also upload the Android and iOS certificate at this time together**, **then configure the resourceID for both iOS and Android together.**
+> **If you haven't configured android and ios together**, when you need to configure another platform in the future, you **will need to delete and recreate the resourceID** to complete the configuration for android and ios. 
+
+</Warning>
+
+<Frame auto="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/console/zimkit_resource_id.png"/>
+</Frame>
+
+- step4. In the Firebase console: Create an Android application and modify your project;
+
+<Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
+
+### 2. Modify the initialization code
+
+You need to add the `notificationConfig` as follows:
+
+<Warning title="Warning">
+1. The `resourceID` here should use the `resourceID` created in the previous step in the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).
+2. If you have other functions in your application that also use channelID, please use a different channelID here.
+</Warning> 
+
+```dart
+void main() async {
+  ...
+
+  /// init ZIMKit
+  await ZIMKit().init(
+    appID: yourAppID /*input your AppID*/,
+    appSign: yourAppSign /*input your AppSign*/,
+    notificationConfig: ZegoZIMKitNotificationConfig(
+      resourceID: yourResourceID,
+      androidNotificationConfig: ZegoZIMKitAndroidNotificationConfig(
+        channelID: yourChannelID,  //  'ZIM Message'
+        channelName: yourChannelName,  //  'Message'
+        sound: yourSoundFileName,  //  'message'
+        icon: yourIconFileName,  //  'notification_icon'
+      ),
+    ),
+  );
+
+  ...
+}
+```
+
+### 3. specify a custom notification sound and icon
+
+1. If you need to specify a custom notification icon, you can specify the icon file name id of notification by `androidNotificationConfig.icon`, Additionally, you must place your icon file in the following path: **\$&lcub;project_root&rcub;/android/app/src/main/res/drawable/\$&lcub;icon&rcub;.png**
+2. If you need to specify a custom notification sound, you can specify the sound file name id of notification by `androidNotificationConfig.sound`, Additionally, you must place your audio file in the following path: **\$&lcub;project_root&rcub;/android/app/src/main/res/raw/\$&lcub;sound&rcub;.mp3**
+
+And the resources should be placed in the following locations:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_offline_files.jpeg" />
+</Frame>
+
+<Warning title="Warning">
+
+If your project integrates **Call Kit** in addition to **ZIMKit**
+
+<Accordion title="please add additional configuration:" defaultOpen="false">
+
+When calling `ZegoUIKitPrebuiltCallInvitationService().init`, you need to add additional config for message notification.
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: yourAppID /*input your AppID*/,
+  appSign: yourAppSign /*input your AppSign*/,
+  userID: id,
+  userName: name,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  androidNotificationConfig: ZegoCallAndroidNotificationConfig(
+    /// call notification
+    channelID: 'ZegoUIKit',
+    channelName: 'Call Notifications',
+    sound: 'call',
+    icon: 'call',
+
+    /// message notification
+    messageChannelID: 'Message',
+    messageChannelName: 'Message',
+    messageSound: 'message',
+    messageIcon: 'message',
+  ),
+);
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_callkit_offline_files.jpeg" />
+</Frame>
+
+> Please refer to our [demo](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter/blob/master/basic_demo/lib/main.dart) for the complete code.
+
+</Accordion>
+
+</Warning>
+
+### 4. Add firebase-messaging dependency
+
+Add this line to your project's `your_project/android/app/build.gradle` file as instructed.
+
+```
+implementation 'com.google.firebase:firebase-messaging:21.1.0'
+```
+
+### 5. Configure notification permissions for your app.
+
+Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEOS"/>
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+<!--for bring app to foreground from background in Android 10 -->
+<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_permission.png" />
+</Frame>
+
+### 6. Guide your users to set app permissions (Android only)
+
+Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a offline message (such as Xiaomi). Therefore, you need to guide your app users to enable the necessary app permissions to make the offline message effective.
+
+- battery settings: Unrestricted.
+- notification settings: Switch all to enable.
+
+|notification settings| battery settings|
+|--|--|
+|<Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/oss/setting_notifications.gif" /></Frame>|<Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/oss/setting_battery.gif" /></Frame>|
+
+Here are the permissions that an app needs on Xiaomi devices for reference:
+
+- Show on locked screen: Switch to Enable
+- Display pop-up windows while running in the background: Switch to Enable
+- Display pop-up window: Switch to Enable
+
+| | | |
+|--|--|--|
+|<Frame width="auto" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame>|<Frame width="auto" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame>|<Frame width="auto" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame>|
+
+## iOS Offline Message Push Notifications
+
+### 1. Apple Developer Center and ZEGOCLOUD Console Configuration
+
+- step1. You need to Create a Apple Push Services Certificate, and export a .p12 file on your Mac.
+
+  <Video src="https://www.youtube.com/embed/gVi6gN30g8E"/>
+
+- step2. In the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/): Upload your APNs certificate
+
+  <Note title="Note">
+  - iOS **need Apple Push Services certificates**, not VoIP certificates. This is different from the CallKit project.
+  </Note> 
+
+  <Frame auto="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/console/upload_zimkit_certificate.png" />
+  </Frame>
+
+- step3. In the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/): create a `resourceID` for zimkit.
+
+  <Warning title="Warning">
+
+  1. You must use these options for zimkit, **APNs: Normal, FCM: Data Messages**. (Note that it's different from CallKit)
+  2. In the picture, `zego_message.caf` is the notification sound ringtone attached to iOS offline message push, apple only supports audio files in caf format, **you need to use your own caf file name here**. (If you don't need to customize the ringtone, you can leave the sound field empty.)
+  3. If you haven't configured the Android or iOS certificate at this point, the ResourceID will not include the options for that platform. as mentioned earlier, **We recommend that you also upload the Android and iOS certificate at this time together**, **then configure the resourceID for both iOS and Android together.**
+
+  > **If you haven't configured android and ios together**, when you need to configure another platform in the future, you **will need to delete and recreate the resourceID** to complete the configuration for android and ios. 
+
+  </Warning> 
+
+  <Frame auto="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/console/zimkit_resource_id.png" />
+  </Frame>
+
+### 2. Modify the initialization code
+
+<Accordion title="In the integration steps of Android, there is already the same step. If you haven't completed Android, please click here to view and continue." defaultOpen="false">
+
+You can put any content in here.
+
+You need to add the `notificationConfig` as follows:
+
+<Warning title="Warning">
+1. The `resourceID` here should use the `resourceID` created in the previous step in the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).
+2. If you have other functions in your application that also use channelID, please use a different channelID here.
+</Warning> 
+
+```dart
+void main() async {
+  ...
+
+  /// init ZIMKit
+  await ZIMKit().init(
+    appID: yourAppID /*input your AppID*/,
+    appSign: yourAppSign /*input your AppSign*/,
+    notificationConfig: ZegoZIMKitNotificationConfig(
+      resourceID: yourResourceID,
+      androidNotificationConfig: ZegoZIMKitAndroidNotificationConfig(
+        channelID: yourChannelID,  //  'ZIM Message'
+        channelName: yourChannelName,  //  'Message'
+        sound: yourSoundFileName,  //  'message'
+        icon: yourIconFileName,  //  'notification_icon'
+      ),
+    ),
+  );
+
+  ...
+}
+```
+
+</Accordion>
+
+### 3. Add Push Notifications configuration
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
+</Frame>
+
+And double-click on `Push Notifications` to add this feature.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push.jpeg" />
+</Frame>
+
+### 4. Add the Background Modes capability.
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page again.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
+</Frame>
+
+And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`. 
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/capability_background.png" />
+</Frame>
+
+### 5. Check and Make sure the following features are enabled
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_ios_xcodepush.png" />
+</Frame>
+
+### 6. Import the PushKit libraries.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_ios_pushkit.png" />
+</Frame>
+
+### 7. Configure offline messages notification sound
+
+In the previous steps, when configuring the resourceID, we also set up the notification sound for iOS. I believe you have completed this step. The sound file we use in our documentation is `zego_message.caf`.
+
+Now, we need to import the notification sound file into the Xcode project.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_ios_add_files_to_runner.png" />
+</Frame>
+
+And the resources should be placed in the following locations:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_ios_zego_message_caf.png" />
+</Frame>
+
+## Online Message Notifications
+
+Online notification is much simpler. In general,
+
+1. Integrate `flutter_local_notifications` to display any desired notifications.
+
+```bash
+flutter pub add flutter_local_notifications
+```
+
+2. Listen for new messages using `ZIMKit().getOnMessageReceivedNotifier()`, and display a notification when a new message is received.
+
+```dart
+ZIMKit().getOnMessageReceivedNotifier().addListener(_onMessageArrived);
+```
+
+3. Control app page navigation by handling the click callback of the notification.
+
+```dart
+static void onNotificationTappedBackground(NotificationResponse response) {
+  //...
+  try {
+    final Map payload = jsonDecode(response.payload!);
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (context) {
+          return demoMessageListPageID(
+            navigatorKey.currentContext!,
+            id: payload['id'],
+            type: ZIMConversationType.values[payload['typeIndex']],
+          );
+        },
+      ),
+    );
+  } catch (e) {
+    // ...
+  }
+}
+```
+
+All of these functionalities are already provided in the [demo](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter). You can refer to the specific implementation in the [demo](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter).

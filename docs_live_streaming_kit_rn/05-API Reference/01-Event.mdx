@@ -1,0 +1,83 @@
+# Event
+
+- <a href="#onLeaveLiveStreaming">onLeaveLiveStreaming</a>
+- <a href="#onLiveStreamingEnded">onLiveStreamingEnded</a>
+- <a href="#onStartLiveButtonPressed">onStartLiveButtonPressed</a>
+
+
+<a id="onLeaveLiveStreaming"></a>
+
+## onLeaveLiveStreaming
+
+>
+> This callback will be triggered when user click exit button.
+>- function prototype:
+>```js
+>onLeaveLiveStreaming(duration)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveStreaming
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    liveID={liveID}
+>    config={{
+>        onLeaveLiveStreaming: (duration) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onLiveStreamingEnded"></a>
+
+## onLiveStreamingEnded
+
+>
+> This callback will be triggered to audience in livestreaming room when the live is end by host.
+>- function prototype:
+>```js
+>onLiveStreamingEnded(duration)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveStreaming
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    liveID={liveID}
+>    config={{
+>        onLiveStreamingEnded: () => {
+>            //...
+>        },
+>    }}
+>/>
+
+<a id="onStartLiveButtonPressed"></a>
+
+## onStartLiveButtonPressed
+
+>
+> This callback will be triggered when host click start live button.
+>- function prototype:
+>```js
+>onStartLiveButtonPressed()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveStreaming
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    liveID={liveID}
+>    config={{
+>        onStartLiveButtonPressed: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```

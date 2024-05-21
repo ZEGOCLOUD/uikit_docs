@@ -1,0 +1,277 @@
+# Add custom components to the call
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, you can use `foregroundBuilder` of `requireConfig`.
+This callback, similar to other React Native's Builder callbacks, requires you (the developer) to return a custom Component that will be placed at the top of the view.
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return {
+                ...callConfig,
+                //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                foregroundBuilder: () => {
+                    return (<MyForegroundView />);
+                },
+                ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+```js title="Basic call"
+import React, { Component } from 'react';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function CallPage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {props.navigation.navigate('HomePage')},
+                    onHangUp: () => {props.navigation.navigate('HomePage')},
+                    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    foregroundBuilder: () => {
+                        return (<MyForegroundView />);
+                    },
+                    ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+
+## Customize the foreground view of audio video view.
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `foregroundBuilder` in `audioVideoViewConfig`.
+This callback, similar to other React Native's Builder callbacks, requires you (the developer) to return a custom Component that will be placed at the top of the view.
+
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return {
+                ...callConfig,
+                //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                audioVideoViewConfig:{
+                    foregroundBuilder:({ userInfo }) => <MyForegroundView userInfo={userInfo} />
+                },
+                ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+```js title="Basic call"
+import React, { Component } from 'react';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function CallPage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {props.navigation.navigate('HomePage')},
+                    onHangUp: () => {props.navigation.navigate('HomePage')},
+                    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    audioVideoViewConfig:{
+                        foregroundBuilder:({ userInfo }) => <MyForegroundView userInfo={userInfo} />
+                    },
+                    ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+
+The effect after modification is as follows:
+
+| When the camera is on                                                                                                                    | When the camera is off                                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/foreground1.jpg" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/foreground3.jpg" /></Frame> |
+
+
+## Customize the audio view
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `largeViewBackgroundImage`, `smallViewBackgroundImage`, `largeViewBackgroundColor`, `smallViewBackgroundColor` in `layout.config`.
+
+> These configurations are only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on).
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import { ZegoLayoutMode } from '@zegocloud/zego-uikit-rn'
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return {
+                ...callConfig,
+                //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                layout:{
+                    mode: ZegoLayoutMode.pictureInPicture,
+                    config: {
+                        smallViewBackgroundColor: "#333437",
+                        largeViewBackgroundColor: "#4A4B4D",
+                        smallViewBackgroundImage: "your_server_image_url",
+                        largeViewBackgroundImage: "your_server_image_url",
+                    }
+                }
+                ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+```js title="Basic call"
+import React, { Component } from 'react';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import { ZegoLayoutMode } from '@zegocloud/zego-uikit-rn'
+
+export default function CallPage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {props.navigation.navigate('HomePage')},
+                    onHangUp: () => {props.navigation.navigate('HomePage')},
+                    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    layout:{
+                        mode: ZegoLayoutMode.pictureInPicture,
+                        config: {
+                            smallViewBackgroundColor: "#333437",
+                            largeViewBackgroundColor: "#4A4B4D",
+                            smallViewBackgroundImage: "your_server_image_url",
+                            largeViewBackgroundImage: "your_server_image_url",
+                        }
+                    }
+                    ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>

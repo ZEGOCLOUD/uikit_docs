@@ -1,0 +1,246 @@
+# Customize the menu bar button list
+
+
+## Customize the menu bar button list
+
+Call Kit (ZegoUIKitPrebuiltCall) allows you to configure the buttons of the menu bar. To remove the default buttons or add custom ones to the bottom menu bar, you can configure the `bottomMenuBarConfig`: 
+
+(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBarConfig`.)
+
+1. `buttons`: Built-in buttons placed in the menu bar. By default, all buttons are displayed. If you need to hide some buttons, use this to configure them.
+2. `maxCount`: Maximum number of buttons that can be displayed by the menu bar. Value range [1 - 5], the default value is 5.
+3. `extendButtons`: Use this configuration to add your own custom buttons to the menu bar.
+
+
+If the total number of built-in buttons and custom buttons does not exceed 5, all buttons will be displayed.
+Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up the bottom sheet to display the remaining buttons. The effect is as follows:
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/menuBarLimit.gif" />
+</Frame>
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return {
+                ...callConfig,
+                //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                bottomMenuBarConfig: {
+                    maxCount: 5,
+                    buttons: [
+                        ZegoMenuBarButtonName.toggleCameraButton,
+                        ZegoMenuBarButtonName.toggleMicrophoneButton,
+                        ZegoMenuBarButtonName.switchAudioOutputButton,
+                        ZegoMenuBarButtonName.hangUpButton,
+                        ZegoMenuBarButtonName.switchCameraButton,
+                    ],
+                    extendButtons: [
+                        <MyIconButton icon={Icons.phone} />,
+                        <MyIconButton icon={Icons.cookie} />,
+                        <MyIconButton icon={Icons.speaker} />,
+                        <MyIconButton icon={Icons.air} />,
+                        <MyIconButton icon={Icons.blender} />,
+                        <MyIconButton icon={Icons.file_copy} />,
+                        <MyIconButton icon={Icons.place} />,
+                        <MyIconButton icon={Icons.phone_android} />,
+                        <MyIconButton icon={Icons.phone_iphone} />,
+                    ]
+                }
+                ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+```js title="Basic call"
+import React, { Component } from 'react';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function CallPage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {props.navigation.navigate('HomePage')},
+                    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                    bottomMenuBarConfig: {
+                        maxCount: 5,
+                        buttons: [
+                            ZegoMenuBarButtonName.toggleCameraButton,
+                            ZegoMenuBarButtonName.toggleMicrophoneButton,
+                            ZegoMenuBarButtonName.switchAudioOutputButton,
+                            ZegoMenuBarButtonName.hangUpButton,
+                            ZegoMenuBarButtonName.switchCameraButton,
+                        ],
+                        extendButtons: [
+                            <MyIconButton icon={Icons.phone} />,
+                            <MyIconButton icon={Icons.cookie} />,
+                            <MyIconButton icon={Icons.speaker} />,
+                            <MyIconButton icon={Icons.air} />,
+                            <MyIconButton icon={Icons.blender} />,
+                            <MyIconButton icon={Icons.file_copy} />,
+                            <MyIconButton icon={Icons.place} />,
+                            <MyIconButton icon={Icons.phone_android} />,
+                            <MyIconButton icon={Icons.phone_iphone} />,
+                        ]
+                    }
+                    ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+## Add chat button to the menu bar
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return {
+                ...callConfig,
+                //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                topMenuBarConfig: {
+                    maxCount: 5,
+                    buttons: [
+                        ZegoMenuBarButtonName.messageButton,
+                    ],
+                },
+                bottomMenuBarConfig: {
+                    maxCount: 5,
+                    buttons: [
+                        ZegoMenuBarButtonName.messageButton,
+                        ZegoMenuBarButtonName.toggleCameraButton,
+                        ZegoMenuBarButtonName.toggleMicrophoneButton,
+                        ZegoMenuBarButtonName.switchAudioOutputButton,
+                        ZegoMenuBarButtonName.hangUpButton,
+                        ZegoMenuBarButtonName.switchCameraButton,
+                    ],
+                },
+                ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+            };
+        },
+    },
+)
+```
+```js title="Basic call"
+import React, { Component } from 'react';
+import { ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+export default function CallPage(props) {
+    return (
+        <View >
+            <ZegoUIKitPrebuiltCall
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                callID={callID}
+                
+                config={{
+                    ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+                    onOnlySelfInRoom: () => {props.navigation.navigate('HomePage')},
+                    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+                topMenuBarConfig: {
+                    maxCount: 5,
+                    buttons: [
+                        ZegoMenuBarButtonName.messageButton,
+                    ],
+                },
+                bottomMenuBarConfig: {
+                    maxCount: 5,
+                    buttons: [
+                        ZegoMenuBarButtonName.messageButton,
+                        ZegoMenuBarButtonName.toggleCameraButton,
+                        ZegoMenuBarButtonName.toggleMicrophoneButton,
+                        ZegoMenuBarButtonName.switchAudioOutputButton,
+                        ZegoMenuBarButtonName.hangUpButton,
+                        ZegoMenuBarButtonName.switchCameraButton,
+                    ],
+                },
+                    ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+                }}
+            />
+        </View>
+    );
+}
+```
+</CodeGroup>
+
+
+Chat effect:
+
+<Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/call_chat_message.PNG" /></Frame>
+
+## Customize the hidden behavior of the menu bar
+
+Call Kit (ZegoUIkitPrebuiltCall) supports automatic or manual hiding of the menu bar. You can control this by using the following two configurations in the `bottomMenuBarConfig` or `topMenuBarConfig`:
+
+1. `hideByClick`: Whether the menu bar can be hidden by clicking on the unresponsive area, enabled by default.
+2. `hideAutomatically`: Whether the menu bar is automatically hidden after 5 seconds of user inactivity, enabled by default.

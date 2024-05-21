@@ -1,0 +1,33 @@
+# Add custom components to user view
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, adding user-level icons, etc., then you can use `foregroundBuilder`. This callback requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+Here is the reference code:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeaveLiveStreaming: () => { props.navigation.navigate('HomePage') },
+                    foregroundBuilder: ({ userInfo }) => <YourView userInfo={userInfo}/> // Modify your custom configurations here.
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+```

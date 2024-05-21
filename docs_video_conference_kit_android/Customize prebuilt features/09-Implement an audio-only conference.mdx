@@ -1,0 +1,51 @@
+# Implement an audio-only conference
+
+- - -
+
+Video Conference Kit (ZegoUIKitPrebuiltVideoConference) defaults to video conference mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only conference.
+
+Camera-related logic is not required for audio-only conferences, so you can:
+
+- `bottomMenuBarConfig`: Configure this to delete the camera-related button.
+- `topMenuBarConfig`: Configure this to delete the camera-related button.
+- `turnOnCameraWhenJoining`: Configure this to only use the microphone when a conference starts.
+- `audioVideoViewConfig`: Configure this to delete the camera status icon on the view.
+
+Here is the reference code:
+
+```java {15-24}
+public class ConferenceActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_video_conference);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = userID;
+    String userName = userID;
+    String conferenceID = "testConferenceID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltVideoConferenceConfig config = new ZegoUIKitPrebuiltVideoConferenceConfig();
+    config.turnOnCameraWhenJoining = false;
+    config.audioVideoViewConfig.showCameraStateOnView = false;
+    config.topMenuBarConfig.buttons = Arrays.asList(
+        ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON,
+    );
+    config.bottomMenuBarConfig.buttons = Arrays.asList(
+        ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,
+        ZegoMenuBarButtonName.LEAVE_BUTTON,
+        ZegoMenuBarButtonName.SWITCH_AUDIO_OUTPUT_BUTTON
+    );
+
+    ZegoUIKitPrebuiltVideoConferenceFragment fragment = ZegoUIKitPrebuiltVideoConferenceFragment
+            .newInstance(appID, appSign, userID, userName, conferenceID, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```

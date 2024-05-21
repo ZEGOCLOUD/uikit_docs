@@ -1,0 +1,608 @@
+# PK battles
+
+
+## Prerequisites
+
+
+
+<Warning title="Warning">
+
+Before you begin, make sure you complete the following:
+
+- Follow the integration steps by referring to the [Quick start with co-hosting](../02-Quick%20start/02-Quick%20start%20(with%20cohosting).mdx).
+
+- Please contact technical support to activate the **Stream Mixing** service.
+
+</Warning>
+
+## What’s PK battles?
+
+PK battle is a friendly competition between two live streams where audiences can see the engaged interactions between both hosts.
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/pkbatlte/pk.jpeg" />
+</Frame>
+
+
+
+## Quick start
+
+Hosts can send a PK battle request to the host they want to connect with after they started their own live streams. And both live streams will be connected upon the PK battle request being accepted.
+
+### Start the PK battle
+
+To start a PK battle, you will need to call the `ZegoLiveStreamingManager.shared.sendPKBattleRequest(anotherHostUserID);` method to send a PK battle request first. Once the host accepts your request, the PK battle starts.
+
+```swift
+ZegoLiveStreamingManager.shared.sendPKBattleRequest(anotherHostUserID: userID, callback: { errorCode, requestID in
+    if errorCode != 0 {
+        sender.setTitle("PK", for: .normal)
+    }
+})
+```
+
+
+### Stop the PK battle
+
+To stop the PK battle, call the `ZegoLiveStreamingManager.shared.stopPKBattle()` method.
+
+### Listen to PK battle Events
+
+To listen to PK battle events,call the `ZegoLiveStreamingManager.shared.addLiveManagerDelegate(...)` method.In general, when you receive a PK request, you can display a pop-up window for the user to choose whether to accept or reject.if accept,call `ZegoLiveStreamingManager.shared.acceptIncomingPKBattleRequest()`,if reject, call `ZegoLiveStreamingManager.getInstance().rejectPKBattleStartRequest()`,You can also customize your own business logic to handle the corresponding PK event.
+
+```swift
+func onIncomingPKRequestReceived(requestID: String, anotherHostUser: ZegoUIKitUser, anotherHostLiveID: String, customData: String?) {
+    let alterView = UIAlertController(title: "receive pk request", message: "", preferredStyle: .alert)
+    self.pkAlterView = alterView
+    let acceptButton: UIAlertAction = UIAlertAction(title: "accept", style: .default) { [weak self] action in
+        self?.liveStreamingVC?.liveManager.acceptIncomingPKBattleRequest(requestID, anotherHostLiveID: anotherHostLiveID, anotherHostUser: anotherHostUser)
+    }
+    let rejectButton: UIAlertAction = UIAlertAction(title: "reject", style: .cancel) { [weak self] action in
+        self?.liveStreamingVC?.liveManager.rejectPKBattleStartRequest(requestID)
+    }
+    alterView.addAction(acceptButton)
+    alterView.addAction(rejectButton)
+    liveStreamingVC?.present(alterView, animated: true)
+}
+```
+
+
+### Demo source code
+
+For a detailed demo source code, click [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_ios/tree/master/live_streaming_with_pkbattle).
+
+
+**To customize your own PK battle logic and process** as needed, the `ZegoLiveStreamingManager` contains a bunch of methods for you to do further customizations. Before you make your customization, check the **method intro** part first.
+
+
+## Method intro
+
+### Send a PK battle request
+
+```swift
+public func sendPKBattleRequest(anotherHostUserID: String, timeout: UInt32 = 10, customData: String, callback: UserRequestCallback?)
+```
+
+- `anotherHostUserID`: to send a PK battle request, you will need to specify the user ID of the host you want to connect with. Remember the host you invite must has started a live stream, otherwise, an error will return via the method you called. For the error info and cause, check it in the `callback`.
+
+- `timeout`: this can be used to set the timeout duration of the PK battle request you sent. After it timed out, the host who sent the request will receive a callback notification via the `onOutgoingPKRequestTimeout`.
+
+
+- `customData`: this can be used to customize the info that you want the host you invited to receive, and the invited host will receive the info you set via `onIncomingPKRequestReceived`.
+
+**Sample code:**
+
+```swift
+ZegoLiveStreamingManager.shared.sendPKBattleRequest(anotherHostUserID: userID, callback: { errorCode, requestID in
+    if errorCode != 0 {
+        sender.setTitle("PK", for: .normal)
+    }
+})
+```
+
+### Cancel the PK battle request
+
+```swift
+public func cancelPKBattleRequest(customData: String?, callback: UserRequestCallback?)
+```
+
+The PK battle request can be canceled by calling this method when the request is not timed out and the request didn't get any responses. After it has been canceled, the invited host will receive a callback notification via the `onIncomingPKRequestCancelled`.
+
+
+**Sample code:**
+
+```swift
+ZegoLiveStreamingManager.shared.cancelPKBattleRequest(customData: nil) { errorCode, requestID in
+    sender.setTitle("PK", for: .normal)
+}
+```
+
+### Respond to the PK battle request
+
+To receive a PK battle request, you can [listen to](#listen-to-received-pk-battle-request) and set up the `onIncomingPKRequestReceived`.
+
+
+<h4 id="Accept_the_PK_battle_request">Accept the PK battle request</h4>
+
+To accept the PK battle request, call the `acceptIncomingPKBattleRequest` method. And the peer host will receive notification via the `onOutgoingPKRequestAccepted`, more details can be checked in [PK request is accepted](#receives-a-pk-battle-request).
+
+```swift
+ZegoLiveStreamingManager.shared.acceptIncomingPKBattleRequest(requestID, anotherHostLiveID: anotherHostLiveID, anotherHostUser: anotherHostUser)
+```
+
+
+<h4 id="Reject_the_PK_battle_request">Reject the PK battle request</h4>
+
+To reject the PK battle request, call the `rejectPKBattleStartRequest` method. And the peer host will receive notification via the `onOutgoingPKRequestRejected`, and can tell why the request was rejected through the `rejectCode`.
+More details can be checked in [PK request is rejected](#pk-battle-request-is-rejected).
+
+```swift
+ZegoLiveStreamingManager.shared.rejectPKBattleStartRequest(requestID)
+```
+
+#### Sample code for responding to the PK request
+
+```swift
+func onIncomingPKRequestReceived(requestID: String, anotherHostUser: ZegoUIKitUser, anotherHostLiveID: String, customData: String?) {
+    let alterView = UIAlertController(title: "receive pk request", message: "", preferredStyle: .alert)
+    self.pkAlterView = alterView
+    let acceptButton: UIAlertAction = UIAlertAction(title: "accept", style: .default) { [weak self] action in
+        self?.liveStreamingVC?.liveManager.acceptIncomingPKBattleRequest(requestID, anotherHostLiveID: anotherHostLiveID, anotherHostUser: anotherHostUser)
+    }
+    let rejectButton: UIAlertAction = UIAlertAction(title: "reject", style: .cancel) { [weak self] action in
+        self?.liveStreamingVC?.liveManager.rejectPKBattleStartRequest(requestID)
+    }
+    alterView.addAction(acceptButton)
+    alterView.addAction(rejectButton)
+    liveStreamingVC?.present(alterView, animated: true)
+}
+```
+
+
+### Listen to the sent PK battle request
+
+#### PK battle request is accepted
+
+
+When the sent PK battle request is accepted,  you can receive callback notifications or customize your business logic by listening to or setting up the `onOutgoingPKRequestAccepted`.
+
+
+```swift
+func onOutgoingPKRequestAccepted() {
+    //...
+}
+```
+
+
+#### PK battle request is rejected
+
+
+When the sent PK battle request is rejected, You can receive callback notifications or customize your business logic by listening to or setting up the `onOutgoingPKRequestRejected`.
+
+<Note title="Note">
+
+The PK battle request will be rejected automatically when the invited host is in a **busy state**.
+**Busy state**: the host has not initiated his live stream yet, the host is in a PK battle with others, the host is being invited, and the host is sending a PK battle request to others.
+</Note>
+
+
+```swift
+func onOutgoingPKRequestRejected(reason: Int, anotherHostUser: ZegoUIKitUser) {
+    if reason == ZegoLiveStreamingPKBattleRejectCode.host_reject.rawValue {
+        uikitLiveVC?.view.makeToast("another host busy",position: .center)
+    } else {
+        uikitLiveVC?.view.makeToast("pk is rejected",position: .center)
+    }
+    pkButton?.setTitle("PK", for: .normal)
+}
+```
+
+Among which, the `ZegoLiveStreamingPKBattleRejectCode` can use to declare why the invited host rejected your request, the definition is as follows:
+
+```swift
+@objc public enum ZegoLiveStreamingPKBattleRejectCode: Int {
+    case host_reject
+    case use_not_host
+    case in_pk
+    case live_not_started
+    case already_send
+    case already_received
+}
+```
+
+
+#### PK battle request is time out
+
+If the invited host didn't respond after the timeout duration, the PK battle request timed out by default. While the Live Streaming Kit updates the internal state while won't trigger any default behaviors. 
+You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onOutgoingPKBattleRequestTimeout`.
+
+**Sample code:**
+
+```swift
+func onOutgoingPKRequestTimeout(requestID: String, anotherHost: ZegoUIKitUser) {
+    pkButton?.setTitle("PK", for: .normal)
+    uikitLiveVC?.view.makeToast("send pk timeout", position: .center)
+}
+```
+
+#### PK battle request failed to be sent
+
+In some cases, PK battle requests can't be sent successfully, for example, the host's app is not started. 
+And the `sendPKBattleRequest` returns an error when the PK battle request failed to be sent, you can tell and handle these errors by the value returned by the `sendPKBattleRequest`.
+
+
+**Sample code:**
+
+```swift
+ZegoLiveStreamingManager.shared.sendPKBattleRequest(anotherHostUserID: userID, callback: { errorCode, requestID in
+    if errorCode != 0 {
+        self?.uikitLiveVC?.view.makeToast("send pkBattle fail:\(errorCode)",duration: 1.0, position: .center)
+        //...update UI
+        sender.setTitle("PK", for: .normal)
+    }
+})
+```
+
+### Listen to received PK battle request
+
+#### Receives a PK battle request
+
+When receiving a PK battle request, You can receive callback notifications or customize your business logic by listening to or setting up the `onIncomingPKRequestReceived`.
+
+**Sample code:**
+
+```swift
+func onIncomingPKRequestReceived(requestID: String, anotherHostUser: ZegoUIKitUser, anotherHostLiveID: String, customData: String?) {
+    let alterView = UIAlertController(title: "receive pk request", message: "", preferredStyle: .alert)
+    self.pkAlterView = alterView
+    let acceptButton: UIAlertAction = UIAlertAction(title: "accept", style: .default) { [weak self] action in
+        //...
+    }
+    let rejectButton: UIAlertAction = UIAlertAction(title: "reject", style: .cancel) { [weak self] action in
+        //...
+    }
+    alterView.addAction(acceptButton)
+    alterView.addAction(rejectButton)
+    liveStreamingVC?.present(alterView, animated: true)
+}
+```
+
+
+#### Received PK battle request has been canceled
+
+You can receive callback notifications or customize your business logic by listening to or setting up the `onIncomingPKBattleRequestCancelled` when the PK battle request has been canceled.
+
+```swift
+func onIncomingPKRequestCancelled(anotherHostLiveID: String, anotherHostUser: ZegoUIKitUser, customData: String?) {
+    self.pkAlterView?.dismiss(animated: true)
+}
+```
+
+#### Received PK battle request is timed out
+
+You can receive callback notifications or customize your business logic by listening to or setting up the `onIncomingPKRequestTimeout` when the received PK battle request has timed out.
+
+**Sample code:**
+
+```swift
+func onIncomingPKRequestTimeout(requestID: String, anotherHostUser: ZegoUIKitUser) {
+    self.pkAlterView?.dismiss(animated: true)
+}
+```
+
+
+### Mute the peer host during the PK battle
+
+When a PK battle starts, both hosts can mute the connected host during the battle as needed. And after the peer host has been muted, the audience can't hear the voice from the muted livestream.
+
+```swift
+public func muteAnotherHostAudio(_ mute: Bool, callback: ZegoUIKitCallBack?) 
+```
+
+And you can also get the mute state of the peer host via the `ZegoLiveStreamingManager.shared.isAnotherHostMuted`.
+
+**Sample code:**
+
+```swift
+@objc func muteButtonClick(_ sender: UIButton) {
+    let pkUserMuted: Bool = ZegoLiveStreamingManager.shared.isAnotherHostMuted
+    ZegoLiveStreamingManager.shared.muteAnotherHostAudio(!pkUserMuted, callback: nil)
+}
+```
+
+
+## Custom prebuilt UI
+
+### Customizable methods unique to the PK battle feature
+
+In addition to the above-mentioned methods used for customization, the `ZegoUIKitPrebuiltLiveStreamingVCDelegate` in `ZegoUIKitPrebuiltLiveStreamingVC` is provided for customizing some UI and features that are unique to the PK battle feature.
+
+```swift
+@objc public protocol ZegoUIKitPrebuiltLiveStreamingVCDelegate: AnyObject {
+    //...
+    @objc optional func getPKBattleForegroundView(_ parentView: UIView, userInfo: ZegoUIKitUser) -> UIView?
+    @objc optional func getPKBattleTopView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView?
+    @objc optional func getPKBattleBottomView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView?
+}
+```
+
+To be specific, if you want to place custom views above, below, and on top of PKView, you can check the following sample code as a reference:
+
+```swift
+class ViewController: UIViewController {
+
+    var userID: String?
+    var userName: String?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //... 
+    }
+
+    @IBAction func startLive(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(enableCoHosting: true)
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(self.appID, appSign: self.appSign, userID: self.userID ?? "", userName: self.userName ?? "", liveID: self.roomIDTextField.text ?? "", config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        liveVC.delegate = self // set listener
+        //...
+        self.present(liveVC, animated: true, completion: nil)
+    }
+
+    @IBAction func watchLive(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(enableCoHosting: true)
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(self.appID, appSign: self.appSign, userID: self.userID ?? "", userName: self.userName ?? "", liveID: self.roomIDTextField.text ?? "", config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        liveVC.delegate = self // set listener
+        //...
+        self.present(liveVC, animated: true, completion: nil)
+    }
+}
+
+extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+
+    func getPKBattleForegroundView(_ parentView: UIView, userInfo: ZegoUIKitUser) -> UIView? {
+        let view = UIView()
+        let button: UIButton = UIButton()
+        button.frame = CGRect(x: 30, y: 30, width: 80, height: 40)
+        view.addSubview(button)
+        return view
+    }
+    
+    func getPKBattleTopView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.red
+        return view
+    }
+    
+    func getPKBattleBottomView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.blue
+        return view
+    }
+}
+
+
+```
+
+The effect will be like this:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/pkbatlte/custom_pk_view.jpeg" />
+</Frame> 
+
+
+## Demo source code
+
+<Accordion title="Click here to check the demo source code." defaultOpen="false">
+```swift
+// ViewController.swift
+class ViewController: UIViewController {
+    
+    let appID: UInt32 = 
+    let appSign: String = ""
+    let liveManager = ZegoLiveStreamingManager.shared
+    var pkButton: PKButton?
+    
+    @IBOutlet weak var roomIDTextField: UITextField! {
+        didSet {
+            let roomID: UInt32 = arc4random() % 999999
+            roomIDTextField.text = String(format: "%d", roomID)
+        }
+    }
+    
+    var userID: String?
+    var userName: String?
+    
+    weak var uikitLiveVC: ZegoUIKitPrebuiltLiveStreamingVC?
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if let localUserID = UserDefaults.standard.string(forKey: "localUserID") {
+            userID = localUserID
+        } else {
+            userID = String(format: "%d", arc4random() % 999999)
+            UserDefaults.standard.set(userID, forKey: "localUserID")
+        }
+        self.userName = String(format: "n_%@", self.userID!)
+        liveManager.addLiveManagerDelegate(self)
+        // Do any additional setup after loading the view.
+    }
+    
+    @IBAction func startLive(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(enableCoHosting: true)
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(self.appID, appSign: self.appSign, userID: self.userID ?? "", userName: self.userName ?? "", liveID: self.roomIDTextField.text ?? "", config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        liveVC.delegate = self
+        liveVC.addButtonToBottomMenuBar(createRequestPKButton(), role: .host)
+        uikitLiveVC = liveVC
+        self.present(liveVC, animated: true, completion: nil)
+    }
+    
+    func createRequestPKButton() -> UIButton {
+        pkButton = PKButton(type: .custom)
+        pkButton!.controller = self
+        pkButton!.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        pkButton!.titleLabel?.textColor = UIColor.white
+        pkButton!.layer.masksToBounds = true
+        pkButton!.layer.cornerRadius = 18
+        pkButton!.bounds = CGRect(x: 0, y: 0, width: 100, height: 40)
+        pkButton!.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        return pkButton!
+    }
+    
+    
+    @IBAction func watchLive(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(enableCoHosting: true)
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(self.appID, appSign: self.appSign, userID: self.userID ?? "", userName: self.userName ?? "", liveID: self.roomIDTextField.text ?? "", config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        liveVC.delegate = self
+        self.present(liveVC, animated: true, completion: nil)
+    }
+
+}
+
+extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate, ZegoLiveStreamingManagerDelegate {
+    
+    func onMixerStreamTaskFail(errorCode: Int) {
+        self.view.makeToast("mixer stream fail:\(errorCode)", position: .center)
+    }
+    
+    func onOutgoingPKRequestTimeout(requestID: String, anotherHost: ZegoUIKitUser) {
+        uikitLiveVC?.view.makeToast("send pk timeout", position: .center)
+    }
+    
+    
+    func onOutgoingPKRequestRejected(reason: Int, anotherHostUser: ZegoUIKitUser) {
+        uikitLiveVC?.view.makeToast("send pk is rejected",position: .center)
+    }
+    
+    func getPKBattleForegroundView(_ parentView: UIView, userInfo: ZegoUIKitUser) -> UIView? {
+        let view = UIView()
+        let button: MutePKUserButton = MutePKUserButton()
+        button.frame = CGRect(x: 30, y: 30, width: 80, height: 40)
+        view.addSubview(button)
+        return view
+    }
+    
+    func getPKBattleTopView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.red
+        return view
+    }
+    
+    func getPKBattleBottomView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.blue
+        return view
+    }
+}
+
+
+// MutePKUserButton.swift
+class MutePKUserButton: UIButton, ZegoLiveStreamingManagerDelegate {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        ZegoLiveStreamingManager.shared.addLiveManagerDelegate(self)
+        self.setTitle("mute", for: .normal)
+        self.setTitle("unMute", for: .selected)
+        self.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func buttonClick() {
+        let pkUserMuted: Bool = ZegoLiveStreamingManager.shared.isAnotherHostMuted
+        ZegoLiveStreamingManager.shared.muteAnotherHostAudio(!pkUserMuted, callback: nil)
+    }
+    
+    func onOtherHostMuted(userID: String, mute: Bool) {
+        self.isSelected = mute
+    }
+}
+
+
+// PKButton.swift
+class PKButton: UIButton {
+    
+    weak var controller: UIViewController?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        ZegoLiveStreamingManager.shared.addLiveManagerDelegate(self)
+        self.setTitle("PK", for: .normal)
+        self.addTarget(self, action: #selector(pkButtonClick), for: .touchUpInside)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func pkButtonClick(_ sender: UIButton) {
+        switch ZegoLiveStreamingManager.shared.pkState {
+        case .isNoPK:
+            sender.setTitle("Cancel", for: .normal)
+            var userIDTextField:UITextField = UITextField()
+            let pkAlterView: UIAlertController = UIAlertController(title: "request pk", message: nil, preferredStyle: .alert)
+            let sureAction: UIAlertAction = UIAlertAction(title: "sure", style: .default) { [weak self] action in
+                guard let userID = userIDTextField.text else {
+                    return
+                }
+                ZegoLiveStreamingManager.shared.sendPKBattleRequest(anotherHostUserID: userID, callback: { errorCode, requestID in
+                    if errorCode != 0 {
+                        sender.setTitle("PK", for: .normal)
+                        self?.controller?.view.makeToast("send pkBattle fail:\(errorCode)",duration: 1.0, position: .center)
+                    }
+                })
+            }
+            let cancelAction: UIAlertAction = UIAlertAction(title: "cancel ", style: .cancel) { action in
+                sender.setTitle("PK", for: .normal)
+            }
+            pkAlterView.addTextField { textField in
+                userIDTextField = textField
+                userIDTextField.placeholder = "userID"
+            }
+            pkAlterView.addAction(sureAction)
+            pkAlterView.addAction(cancelAction)
+            controller?.present(pkAlterView, animated: true)
+        case .isRequestPK:
+            ZegoLiveStreamingManager.shared.cancelPKBattleRequest(customData: nil) { errorCode, requestID in
+                sender.setTitle("PK", for: .normal)
+            }
+        case .isStartPK:
+            ZegoLiveStreamingManager.shared.stopPKBattle()
+            sender.setTitle("PK", for: .normal)
+        }
+    }
+
+}
+
+extension PKButton: ZegoLiveStreamingManagerDelegate {
+    func onPKStarted(roomID: String, userID: String) {
+        self.setTitle("End", for: .normal)
+    }
+    
+    func onPKEnded() {
+        self.setTitle("PK", for: .normal)
+    }
+    
+    func onMixerStreamTaskFail(errorCode: Int) {
+        if ZegoLiveStreamingManager.shared.pkState == .isStartPK {
+            self.pkButtonClick(self)
+        }
+    }
+    
+    func onOutgoingPKRequestTimeout(requestID: String, anotherHost: ZegoUIKitUser) {
+        self.setTitle("PK", for: .normal)
+    }
+    
+    
+    func onOutgoingPKRequestRejected(reason: Int, anotherHostUser: ZegoUIKitUser) {
+        self.setTitle("PK", for: .normal)
+    }
+}
+```
+</Accordion>

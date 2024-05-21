@@ -1,0 +1,43 @@
+# Implement an audio-only live
+
+Live Streaming Kit (ZegoUIkitPrebuiltLiveStreaming) defaults to Video Live Streaming mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only live.
+
+Camera-related logic is not required for audio-only live streams, so you can:
+
+1. `bottomMenuBarConfig`: Configure this to delete the camera-related button.
+2. `turnOnCameraWhenJoining`: Configure this to only use the microphone when a live starts.
+
+Here is the reference code:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG, ZegoMenuBarButtonName } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeaveLiveStreaming: () => { props.navigation.navigate('HomePage') },
+                    bottomMenuBarConfig: {
+                        hostButtons: [ZegoMenuBarButtonName.toggleMicrophoneButton],
+                        coHostButtons: [ZegoMenuBarButtonName.toggleMicrophoneButton, ZegoMenuBarButtonName.coHostControlButton],
+                        audienceButtons: [ZegoMenuBarButtonName.coHostControlButton],
+                    }, // Modify your custom configurations here.
+                    turnOnCameraWhenJoining: false, // Modify your custom configurations here.
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+```

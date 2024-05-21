@@ -1,0 +1,38 @@
+# Modify User Interface text
+
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming)'s UI text provided by the internal components is editable, to modify those, use the `translationText` config.
+
+Here is the reference code:
+
+```js
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeaveLiveStreaming: () => { props.navigation.navigate('HomePage') },
+                    translationText: {
+                        startLiveStreamingButton: 'Start Live',
+                        noHostOnline: "No host online",
+                        // Other translation text
+                    }, // Modify your custom configurations here.
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+```

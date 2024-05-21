@@ -1,0 +1,114 @@
+# Customize the seat-taking logic
+
+## Customize your own business logic
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) enables you to customize your own business logic via the `ref` attribute of the component provided.
+
+The following are supported by the `function call`:
+
+<Note title="Note">
+All these methods are asynchronous and will return a `Promise` object.
+</Note>
+
+- `takeSeat`: Take a speaker seat,
+- `leaveSeat`: Voluntarily leave a seat.
+- `removeSpeakerFromSeat`(userID: string): Remove the speaker from the seat.
+- `closeSeats`: Close an open speaker seat, once it is closed, the audience can only take the seat by inviting by the host or sending a seat-taking request.
+- `openSeats`: Open a closed seat, once it is opened, the audience can take the seat by clicking it.
+- `applyToTakeSeat`(seatIndex: number): The audience applies to take a speaker seat.
+- `cancelSeatTakingRequest`: The audience cancels his seat-taking request.
+- `acceptSeatTakingRequest`(audienceUserID: string): The host accepts the audience's seat-taking request.
+- `rejectSeatTakingRequest`(audienceUserID: string): The host rejects the audience's seat-taking request.
+- `inviteAudienceToTakeSeat`(userID:string): The host invites the audience to take a speaker seat.
+- `acceptHostTakeSeatInvitation`: The audience accepts the seat-taking invite from the host.
+- `turnMicrophoneOn`: Turn on the user's microphone.
+
+The following are supported by the `event callbacks`:
+
+<Note title="Note">
+The `onSeatClicked` and `onMemberListMoreButtonPressed` overrides Live Audio Room Kit's prebuilt logic, meaning that when you customize these events, the prebuilt events are no longer executed.
+</Note>
+
+- `onMemberListMoreButtonPressed`(user: ZegoUIKitUser): This callback will be triggered when the more button in the member list is pressed. 
+- `onSeatClicked`(index: number, user: ZegoUIKitUser): This callback will be triggered when a seat is clicked. 
+- `onSeatsClosed`: This callback will be triggered when a speaker seat is closed. 
+- `onSeatsOpened`: This callback will be triggered when a closed speaker seat is opened. 
+- `onSeatsChanged`(takenSeats: &lcub; index: number; user: ZegoUIKitUser &rcub;[], untakenSeats: number[]): This callback will be triggered when someone gets on/gets off/switches seat. 
+- `onSeatTakingRequested`(audience: ZegoUIKitUser): The host will receive a notification via this callback when the audience applies to take a seat.
+
+- `onSeatTakingRequestCanceled`(audience: ZegoUIKitUser): The host will receive a notification via this callback when the audience cancels his seat-taking request.
+- `onSeatTakingInviteRejected`: The host will receive a notification via this callback when the audience rejects the seat-taking invite.  
+- `onSeatTakingRequestRejected`: The audience will receive a notification via this callback when his seat-taking request is rejected by the host.
+- `onHostSeatTakingInviteSent`: The audience will receive a notification via this callback when the host invites them to take a seat.
+
+## Customize the audience's seat-taking logic
+
+The reference code below implements the following:
+
+1. Decide whether to show the "apply to take a seat" button.
+
+- Listen to the `onSeatsClosed` and `onSeatsOpened`, you can tell whether the seat is open or closed. If open, the button shows. If closed, the button shall be hidden.
+
+2. How to know whether a seat-taking request is sent?
+
+- Listen to the `onSeatTakingRequestFailed` and `onSeatTakingRequestRejected` callbacks, and you can tell when the request is sent successfully via these callbacks.
+- Listen to the `takenSeats`in the callback `onSeatsChanged`, you can tell when the audience takes a seat successfully.
+
+
+3. How to **apply to take a seat** and **cancel the seat-taking request**?
+
+- To send a seat-taking request, use the `applyToTakeSeat` method in the `ref` attribute of `ZegoUIKitPrebuiltLiveAudioRoom`.
+- To cancel the seat-taking request after applying, use the `cancelSeatTakingRequest` method in the `ref` attribute of `ZegoUIKitPrebuiltLiveAudioRoom`.
+- And sure, these methods will return a result, you can do further logic customization based on the returned results.
+
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/connect_custom.gif" />
+    </Frame> 
+</div>
+
+```javascript
+import React, { useRef, useEffect, useState } from 'react';
+import {StyleSheet, View} from 'react-native';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+    HOST_DEFAULT_CONFIG,
+    ZegoLiveAudioRoomLayoutAlignment,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    const prebuiltRef = useRef();
+    
+    // The host invites the audience to take a speaker seat.
+    const inviteAudienceToTakeSeat = () => {
+        prebuiltRef.current.inviteAudienceToTakeSeat(audienceUserID);
+};
+    
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                ref={prebuiltRef}
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onSeatTakingRequested: (audience: ZegoUIKitUser) => {},
+                    onSeatTakingRequestCanceled: (audience: ZegoUIKitUser) => {},
+                    onSeatTakingInviteRejected: () => {},
+                    onMemberListMoreButtonPressed: (user: ZegoUIKitUser) => {},
+                    onSeatsChanged: (takenSeats: { index: number; user: ZegoUIKitUser }[], untakenSeats: number[]) => {},
+                    onSeatsClosed: () => {},
+                    onSeatsOpened: () => {},
+                    onTurnOnYourMicrophoneRequest: (fromUser: ZegoUIKitUser) => {},
+                    onSeatClicked: (index: number, user: ZegoUIKitUser) => {},
+                }}
+            />
+        </View>
+    );
+}
+```

@@ -1,0 +1,255 @@
+# Add custom components to the call
+
+
+## Customize the foreground view
+
+If you want to add some custom components at the top level of the view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `setForegroundViewProvider` method.
+The `setForegroundViewProvider` requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+Here is the reference code:
+
+<CodeGroup>
+
+```java title="Basic call"
+// sample for custom Widget at the top of the view
+public class YourCustomView extends ZegoBaseAudioVideoForegroundView {
+
+    public YourCustomView(@NonNull Context context, String userID) {
+        super(context, userID);
+    }
+
+    public YourCustomView(@NonNull Context context, @Nullable AttributeSet attrs,
+        String userID) {
+        super(context, attrs, userID);
+    }
+
+    protected void onForegroundViewCreated(ZegoUIKitUser uiKitUser) {
+        // init your custom view
+    }
+
+    protected void onCameraStateChanged(boolean isCameraOn) {
+        // will be called when camera changed
+    }
+
+    protected void onMicrophoneStateChanged(boolean isMicrophoneOn) {
+        // will be called when microphone changed
+    }
+
+    protected void onInRoomAttributesUpdated(HashMap<String, String> inRoomAttributes) {
+        // will be called when inRoomAttributes changed
+    }
+}
+
+public class CallActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_call);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+    config.audioVideoViewConfig.videoViewForegroundViewProvider = new ZegoForegroundViewProvider() {
+        @Override
+        public ZegoBaseAudioVideoForegroundView getForegroundView(ViewGroup parent, ZegoUIKitUser uiKitUser) {
+            YourCustomView foregroundView = new YourCustomView(parent.getContext(),uiKitUser.userID);
+            return foregroundView;
+        }
+    };
+
+    ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(appID, appSign, callID, userID, userName, config);
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```java title="With call invitation"
+
+// sample for custom Widget at the top of the view
+public class YourCustomView extends ZegoBaseAudioVideoForegroundView {
+
+    public YourCustomView(@NonNull Context context, String userID) {
+        super(context, userID);
+    }
+
+    public YourCustomView(@NonNull Context context, @Nullable AttributeSet attrs,
+        String userID) {
+        super(context, attrs, userID);
+    }
+
+    protected void onForegroundViewCreated(ZegoUIKitUser uiKitUser) {
+        // init your custom view
+    }
+
+    protected void onCameraStateChanged(boolean isCameraOn) {
+        // will be called when camera changed
+    }
+
+    protected void onMicrophoneStateChanged(boolean isMicrophoneOn) {
+        // will be called when microphone changed
+    }
+
+    protected void onInRoomAttributesUpdated(HashMap<String, String> inRoomAttributes) {
+        // will be called when inRoomAttributes changed
+    }
+}
+
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+                @Override
+                public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                    ZegoUIKitPrebuiltCallConfig config;
+                    boolean isVideoCall = invitationData.type == ZegoInvitationType.VIDEO_CALL.getValue();
+                    boolean isGroupCall = invitationData.invitees.size() > 1;
+                    if (isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+                    } else if (!isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+                    } else if (!isVideoCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+                    } else {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+                    }
+                    // Modify your custom calling configurations here.
+                    config.audioVideoViewConfig.videoViewForegroundViewProvider = new ZegoForegroundViewProvider() {
+        @Override
+        public ZegoBaseAudioVideoForegroundView getForegroundView(ViewGroup parent, ZegoUIKitUser uiKitUser) {
+            YourCustomView foregroundView = new YourCustomView(parent.getContext(),uiKitUser.userID);
+            return foregroundView;
+        }
+    };
+                    return config;
+                }
+        );
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,
+            callInvitationConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZegoUIKitPrebuiltCallService.logout();
+    }
+}
+```
+
+</CodeGroup>
+
+
+## Customize the audio view
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `largeViewBackgroundImage`, `smallViewBackgroundImage`, `largeViewBackgroundColor`, `smallViewBackgroundColor` in `ZegoLayoutPictureInPictureConfig`.
+
+> These configurations are only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on).
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```java title="Basic call"
+public class CallActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_call);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+    ZegoLayoutPictureInPictureConfig pipConfig =  new ZegoLayoutPictureInPictureConfig();
+    pipConfig.smallViewBackgroundColor = Color.parseColor("#333437");
+    pipConfig.largeViewBackgroundColor = Color.parseColor("#4A4B4D");
+    config.layout.config = pipConfig;
+
+    ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment
+            .newInstance(appID, appSign, callID, userID, userName, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```java title="With call invitation"
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+                @Override
+                public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                    ZegoUIKitPrebuiltCallConfig config;
+                    boolean isVideoCall = invitationData.type == ZegoInvitationType.VIDEO_CALL.getValue();
+                    boolean isGroupCall = invitationData.invitees.size() > 1;
+                    if (isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+                    } else if (!isVideoCall && isGroupCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+                    } else if (!isVideoCall) {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+                    } else {
+                        config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+                    }
+                    // Modify your custom calling configurations here.
+                    if(!isGroupCall){
+                        ZegoLayoutPictureInPictureConfig pipConfig =  new ZegoLayoutPictureInPictureConfig();
+                        pipConfig.smallViewBackgroundColor = Color.parseColor("#333437");
+                        pipConfig.largeViewBackgroundColor = Color.parseColor("#4A4B4D");
+                        config.layout.config = pipConfig;
+                    }
+                    return config;
+                }
+        );
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,
+            callInvitationConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZegoUIKitPrebuiltCallService.logout();
+    }
+}
+```
+</CodeGroup>

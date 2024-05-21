@@ -1,0 +1,39 @@
+# Turn off cam and mic when joining meeting
+
+- - -
+
+
+When starting a conference, the Video Conference Kit (ZegoUIKitPrebuiltVideoConference) turns on the camera, and microphone, and uses the speaker as the audio output device by default.
+
+To change this default configuration, for example, turn off the camera when you start a conference or don't use the speaker (If the speaker is not used, the system's default audio output device, such as ear speaker, headset, Bluetooth, etc., will be used.), you can modify the following configurations:
+
+- `turnOnCameraWhenJoining`: Whether to turn on the camera when the conference starts. true: turn on (by default). false: turn off. 
+- `turnOnMicrophoneWhenJoining`: Whether to turn on the camera when the conference starts. true: turn on (by default). false: turn off. 
+- `useSpeakerWhenJoining`: Whether to use the speaker when the conference starts. true: use the speaker (by default). false: use the system's default audio output device, such as an ear speaker, headset, Bluetooth, etc.
+
+Here is the reference code:
+
+```dart {16-18}
+class VideoConferencePage extends StatelessWidget {
+  const VideoConferencePage({Key? key, required this.conferenceID}) : super(key: key);
+  final String conferenceID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltVideoConference (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userID,
+      conferenceID: conferenceID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltVideoConferenceConfig(
+        turnOnCameraWhenJoining: false,
+        turnOnMicrophoneWhenJoining:false,
+        useSpeakerWhenJoining: true,
+      ),
+    );
+  }
+}
+```

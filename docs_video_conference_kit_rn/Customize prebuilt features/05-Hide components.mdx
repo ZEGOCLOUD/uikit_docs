@@ -1,0 +1,23 @@
+# Hide Components
+
+----
+
+## Hide the components on the user view
+
+
+By default, the Video Conference Kit (ZegoUIKitPrebuiltVideoConference) displays `UserNameLabel` and `MicrophoneStateIcon` floating above the view. If these components are not needed, you can hide them using the following three configurations in `audioVideoViewConfig`.
+
+- `showMicrophoneStateOnView`: whether to display the microphone state on the view. Displayed by default.
+- `showCameraStateOnView`: Whether to display the camera state on the view. Not displayed by default.
+- `showUserNameOnView`: Indicates whether to display the username on the view. Displayed by default. 
+
+**Hide sound waves**
+
+As shown in the rendering, the Video Conference Kit (ZegoUIkitPrebuiltVideoConference) displays the user's avatar and sound waves when the camera is turned off.
+If you are not satisfied with the user avatars and sound wave style, you can hide them using the `showSoundWavesInAudioMode` configurations in `audioVideoViewConfig`.
+
+- ShowSoundWavesInAudioMode: in audio mode, whether to display the sound waves around the user avatar in audio mode. Displayed by default.
+
+## Hide the device state on the member list
+
+By default, the camera state and microphone state are displayed by default on the member list. To hide them, use the `showMicrophoneState` and `showCameraState` in the `memberListConfig`.
