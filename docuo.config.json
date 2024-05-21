@@ -43,12 +43,6 @@
   },
   "instances": [
     {
-      "id": "callkit_flutter",
-      "label": "Call Kit(Flutter)",
-      "path": "docs_callkit_flutter",
-      "routeBasePath": "callkit-flutter"
-    },
-    {
       "id": "callkit_android",
       "label": "Call Kit(Android)",
       "path": "docs_callkit_android",
@@ -59,6 +53,12 @@
       "label": "Call Kit(iOS)",
       "path": "docs_callkit_ios",
       "routeBasePath": "callkit-ios"
+    },
+    {
+      "id": "callkit_flutter",
+      "label": "Call Kit(Flutter)",
+      "path": "docs_callkit_flutter",
+      "routeBasePath": "callkit-flutter"
     },
     {
       "id": "callkit_rn",
@@ -73,52 +73,22 @@
       "routeBasePath": "callkit-web"
     },
     {
-      "id": "video_conference_kit_flutter",
-      "label": "Video Conference Kit(Flutter)",
-      "path": "docs_video_conference_kit_flutter",
-      "routeBasePath": "video-conference-kit-flutter"
-    },
-    {
-      "id": "video_conference_kit_android",
-      "label": "Video Conference Kit(Android)",
-      "path": "docs_video_conference_kit_android",
-      "routeBasePath": "video-conference-kit-android"
-    },
-    {
-      "id": "video_conference_kit_rn",
-      "label": "Video Conference Kit(RN)",
-      "path": "docs_video_conference_kit_rn",
-      "routeBasePath": "video-conference-kit-rn"
-    },
-    {
-      "id": "video_conference_kit_ios",
-      "label": "Video Conference Kit(iOS)",
-      "path": "docs_video_conference_kit_ios",
-      "routeBasePath": "video-conference-kit-ios"
-    },
-    {
-      "id": "video_conference_kit_web",
-      "label": "Video Conference Kit(Web)",
-      "path": "docs_video_conference_kit_web",
-      "routeBasePath": "video-conference-kit-web"
-    },
-    {
       "id": "live_streaming_kit_android",
       "label": "Live Streaming Kit(Android)",
       "path": "docs_live_streaming_kit_android",
       "routeBasePath": "live-streaming-kit-android"
     },
     {
-      "id": "live_streaming_kit_flutter",
-      "label": "Live Streaming Kit(Flutter)",
-      "path": "docs_live_streaming_kit_flutter",
-      "routeBasePath": "live-streaming-kit-flutter"
-    },
-    {
       "id": "live_streaming_kit_ios",
       "label": "Live Streaming Kit(iOS)",
       "path": "docs_live_streaming_kit_ios",
       "routeBasePath": "live-streaming-kit-ios"
+    },
+    {
+      "id": "live_streaming_kit_flutter",
+      "label": "Live Streaming Kit(Flutter)",
+      "path": "docs_live_streaming_kit_flutter",
+      "routeBasePath": "live-streaming-kit-flutter"
     },
     {
       "id": "live_streaming_kit_rn",
@@ -139,16 +109,16 @@
       "routeBasePath": "live-audio-room-kit-android"
     },
     {
-      "id": "live_audio_room_kit_flutter",
-      "label": "Live Audio Room Kit(Flutter)",
-      "path": "docs_live_audio_room_kit_flutter",
-      "routeBasePath": "live-audio-room-kit-flutter"
-    },
-    {
       "id": "live_audio_room_kit_ios",
       "label": "Live Audio Room Kit(iOS)",
       "path": "docs_live_audio_room_kit_ios",
       "routeBasePath": "live-audio-room-kit-ios"
+    },
+    {
+      "id": "live_audio_room_kit_flutter",
+      "label": "Live Audio Room Kit(Flutter)",
+      "path": "docs_live_audio_room_kit_flutter",
+      "routeBasePath": "live-audio-room-kit-flutter"
     },
     {
       "id": "live_audio_room_kit_rn",
@@ -163,22 +133,52 @@
       "routeBasePath": "in-app-chat-kit-android"
     },
     {
-      "id": "in_app_chat_kit_flutter",
-      "label": "In-app Chat Kit(Flutter)",
-      "path": "docs_in_app_chat_kit_flutter",
-      "routeBasePath": "in-app-chat-kit-flutter"
-    },
-    {
       "id": "in_app_chat_kit_ios",
       "label": "In-app Chat Kit(iOS)",
       "path": "docs_in_app_chat_kit_ios",
       "routeBasePath": "in-app-chat-kit-ios"
     },
     {
+      "id": "in_app_chat_kit_flutter",
+      "label": "In-app Chat Kit(Flutter)",
+      "path": "docs_in_app_chat_kit_flutter",
+      "routeBasePath": "in-app-chat-kit-flutter"
+    },
+    {
       "id": "in_app_chat_kit_rn",
       "label": "In-app Chat Kit(RN)",
       "path": "docs_in_app_chat_kit_rn",
       "routeBasePath": "in-app-chat-kit-rn"
+    },
+    {
+      "id": "video_conference_kit_android",
+      "label": "Video Conference Kit(Android)",
+      "path": "docs_video_conference_kit_android",
+      "routeBasePath": "video-conference-kit-android"
+    },
+    {
+      "id": "video_conference_kit_ios",
+      "label": "Video Conference Kit(iOS)",
+      "path": "docs_video_conference_kit_ios",
+      "routeBasePath": "video-conference-kit-ios"
+    },
+    {
+      "id": "video_conference_kit_flutter",
+      "label": "Video Conference Kit(Flutter)",
+      "path": "docs_video_conference_kit_flutter",
+      "routeBasePath": "video-conference-kit-flutter"
+    },
+    {
+      "id": "video_conference_kit_rn",
+      "label": "Video Conference Kit(RN)",
+      "path": "docs_video_conference_kit_rn",
+      "routeBasePath": "video-conference-kit-rn"
+    },
+    {
+      "id": "video_conference_kit_web",
+      "label": "Video Conference Kit(Web)",
+      "path": "docs_video_conference_kit_web",
+      "routeBasePath": "video-conference-kit-web"
     }
   ]
 }
