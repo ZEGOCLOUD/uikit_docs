@@ -1,0 +1,129 @@
+# Quick start
+
+- - -
+
+<Video src="https://resource.zegocloud.com/prebuilt/call_invitation_pro.mp4"/>
+
+
+## Prerequisites
+
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com) to create a UIKit project.
+- Get the **AppID** and **ServerSecret** of the project.
+
+
+
+## Integrate the SDK
+
+### Import the SDK
+
+Choose either of the following to import the Call Kit:
+
+#### Using the NPM
+
+1. Install the plug-in.
+    ```js
+     npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.5.0 --save 
+    ```
+
+2. Import the Call Kit in your project's `js` or `ts` file:
+
+    ```js
+    import { ZIM } from "zego-zim-web";
+    import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+    ```
+
+#### Using the HTML Script Tag 
+
+- Import the following script code in the `HTML` page:
+(**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
+    ```html
+   <script src="https://unpkg.com/zego-zim-web@2.5.0/index.js"></script>
+   <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    ```
+
+
+### Initialize the Call Kit with call invitation feature
+
+Initialize the Call Kit, and add the call invitation plug-in:
+- Generate a [Kit Token](../04-Authentication%20and%20Kit%20Token.mdx)
+- Fill in the required parameters in the following code.
+
+```javascript
+// Generate a Token by calling a method.
+// @param 1: appID
+// @param 2: serverSecret
+// @param 3: Room ID
+// @param 4: User ID
+// @param 5: Username
+const userID = ""; 
+const userName = "userName" + userID;
+const appID = 0;
+const serverSecret = "";
+const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret,null, userID, userName);
+
+const zp = ZegoUIKitPrebuilt.create(TOKEN);
+zp.addPlugins({ ZIM });
+```
+
+
+### Set a button-trigger event
+
+Set up a button and add a button-click event for making call invitations.
+
+You can customize the position of the button you set for making call invitations accordingly, passing in the ID of the user you want to call.
+
+
+```html
+  <button onclick="invite()">invite</button>
+```
+
+```javascript
+function invite() {
+   const targetUser = {
+        userID:'',
+        userName:''
+    };
+   zp.sendCallInvitation({
+    callees: [targetUser],
+    callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+    timeout: 60, // Timeout duration (second). 60s by default, range from [1-600s].
+   }).then((res) => {
+    console.warn(res);
+   })
+   .catch((err) => {
+   console.warn(err);
+   });
+}
+```
+
+## Run & Test
+
+So far, you have finished all the steps!
+
+Now you can start up and run the project in a browser using a server you're familiar with.
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="Realtime Coding" href="https://stackblitz.com/edit/zegocloud-prebuilt-call-invitation?file=index.js">
+  Click here to code online and check it in action.
+</Card>
+<Card title="Live Demo" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/call_invitation">
+  Click here to try a live demo.
+</Card>
+</CardGroup>
+
+## Related guides
+
+
+<CardGroup cols={2}>
+    <Card title="Customize the UI for call invitation" href="./02-Customize the UI for call invitation.mdx">
+    </Card>
+    <Card title="Customize call invitation config"  href="./04-Customize call invitation config.mdx">
+    </Card>
+    <Card title="Customize ringtones"  href="./03-Customize ringtones.mdx">
+    </Card>
+    <Card title="Customize event callbacks"  href="./05-Customize event callbacks.mdx">
+    </Card>
+</CardGroup>

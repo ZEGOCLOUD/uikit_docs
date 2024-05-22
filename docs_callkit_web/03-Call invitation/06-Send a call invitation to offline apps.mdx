@@ -1,0 +1,63 @@
+# Send a call invitation to offline apps
+
+
+## Introduction
+
+
+Call Kit allows your Web app to send an offline call invitation to native apps when the native app is running in the backend or quit. It only supports Web apps to native apps only for now.
+
+This doc describes the implementation:
+
+
+## Enable the offline call invitation
+
+To send a call invitation to offline apps, you must run the following to enable the offline call invitation feature first:
+
+```js
+    const zp = ZegoUIKitPrebuilt.create(token);
+    zp.addPlugins({ ZIM });
+    
+    zp.setCallInvitationConfig({
+        enableNotifyWhenAppRunningInBackgroundOrQuit: true,
+    })
+```
+
+## How do I customize the notification dialog?
+
+You can customize the UI of the notification dialog when your Web apps send a call invitation to offline apps. To do so, refer to the following:
+
+```typescript
+    sendCallInvitation(params: {
+        callees: ZegoUser[];
+        callType: ZegoInvitationType;
+        timeout?: number;
+        data?: string;
+        notificationConfig?: ZegoSignalingPluginNotificationConfig;
+    })
+
+    interface ZegoSignalingPluginNotificationConfig {
+      resourcesID?: string;
+      title?: string;
+      message?: string;
+    }
+
+
+    //for example 
+    zp.sendCallInvitation({
+        callees: [{userID:'123',userName:'U_123'}],
+        callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+        notificationConfig?: {
+            resourcesID:'zegouikit_call',
+            title:'Call invitation', 
+            message:'Incoming video call...'
+        }
+    })
+```
+
+#### Parameters of ZegoSignalingPluginNotificationConfig
+| Parameter   | Type   | Required | Description                                                                                                                                                                                                                                                                                           |
+| ----------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| resourcesID | string | No       | The `resourcesID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). This only takes effect when the `enableNotifyWhenAppRunningInBackgroundOrQuit` is true. |
+| title       | string | No       | Title of the offline call. It uses the sender's username by default.                                                                                                                                                                                                                                  |
+| message     | string | No       | Content of the offline call notification.                                                                                                                                                                                                                                                             |
+

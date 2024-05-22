@@ -1,0 +1,74 @@
+# Customize the UI for call invitation
+
+- - -
+
+## Introduction
+
+
+After sending a call invitation, a caller or callee will see different calling pages, which can be customized as needed.
+
+This waiting page will show after you send a call invitation, which can be customized.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/waitingPage.png" />
+</Frame>
+
+This pop-up will show when you receive a call invitation, which can also be customized as needed.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/calledDialog.png" />
+</Frame>
+
+## How do I customize the waiting page?
+
+```javascript
+zp.setCallInvitationConfig({
+    enableCustomCallInvitationWaitingPage: true,
+   // The following is the callback for showing the waiting page after a call invitation is sent. To cancel the call invitation, set it to [cancel].
+   onWaitingPageWhenSending: (callType,callees,cancel) =>{
+     // Add your custom logic here. 
+     // The following shows an example, the waitingPageDom is the DOM object that is used to represent the page element, here the page indicates the waiting page when sending a call invitation.
+      waitingPageDom.style.display = 'block';
+     // The method used to set the cancel call invitation operation.
+     cancelButton.onclick = () => {
+        cancel();
+     }
+   },
+   onSetRoomConfigBeforeJoining:(callType) => {
+       // The callback for set room config before joining the room, at which point you can hide the waiting page before joining the room.
+        waitingPageDom.style.display = 'none';
+    },
+    onCallInvitationEnded:(reason) => { 
+       // You will need to hide your custom waiting page when your call invitation is not connected successfully.
+        waitingPageDom.style.display = 'none';
+    }
+    
+})
+```
+
+## How do I customize the call invitation dialog?
+
+```javascript
+zp.setCallInvitationConfig({
+    enableCustomCallInvitationDialog: true,
+   // The following is the callback for showing the call invitation pop-up dialog when receiving a call invitation, this callback returns [accept] and [refuse] for you to set the corresponding UI.
+   onConfirmDialogWhenReceiving: (callType,caller,refuse,accept,data) =>{
+     // Add your custom logic here.
+     // The following shows an example, the confirmDialogDom is the DOM dialog object that you used to represent the dialog element. here the dialog indicates your custom call invitation dialog. 
+        confirmDialogDom.style.display = 'block';
+     // The method used to set refuse and accept operations.
+        refuseButton.onclick = () => { 
+              refuse();          
+              confirmDialogDom.style.display = 'none';
+        }
+        acceptButton.onclick = () => { 
+              accept();          
+              confirmDialogDom.style.display = 'none';
+        }
+   },
+   onCallInvitationEnded:(reason)=> {
+        // You will need to hide your customized call invitation dialog when the call invitation timed out or is canceled.
+          confirmDialogDom.style.display = 'none';
+    }
+})
+```
