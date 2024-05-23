@@ -1,0 +1,2 @@
+- The development computer with Windows or macOS is connected to the Internet.
+- A browser that meets the compatibility requirements of ZEGO Express Web SDK (To check browser compatibility, please refer to [Web SDK compatibility](https://www.zegocloud.com/docs/video-call/browser-compatibility?platform=web&language=javascript).), it is recommended to use the latest version of Google Chrome.
