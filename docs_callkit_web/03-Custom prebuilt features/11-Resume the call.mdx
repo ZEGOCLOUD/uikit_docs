@@ -5,7 +5,7 @@
 During a call, if the user refreshes the browser, the call will be terminated. To resume the call after refreshing the browser, please refer to this document.
 
 ## How do I resume the call after refreshing the browser?
-### 1 Get the Room ID
+### 1. Get the Room ID
 
 The process of obtaining the Room ID varies depending on the type of call.
 
@@ -57,7 +57,7 @@ zp.setCallInvitationConfig({
 After the user ends the call, the application should delete the `roomID` stored in `sessionStorage`.
 </Note>
 
-### 2 Rejoin the Room
+### 2. Rejoin the Room
 
 After the user refreshes the browser, the application should retrieve the `roomID` from `sessionStorage` and call the `joinRoom` method to rejoin the room, and set `showPreJoinView` to false to disable the pre-join check page for a better user experience.
 
