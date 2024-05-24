@@ -31,20 +31,12 @@ Run the following command to install other dependencies for making sure the `@ze
 
 <CodeGroup>
 ```bash yarn
-yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound @notifee/react-native@5.3.0 zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.7.1 zego-zpns-react-native@2.3.5 react-native-callkeep
+yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
 ```
 ```bash npm
-npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound @notifee/react-native@5.3.0 zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.7.1 zego-zpns-react-native@2.3.5 react-native-callkeep
+npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
 ```
 </CodeGroup>
-
-3. Config the `react-native-callkeep` package.
-
-If your react-native version is below 0.60, you need to run the following command in your project root directory to ensure that the `react-native-callkeep` package can work properly.
-
-```bash
-react-native link react-native-callkeep
-```
 
 <Accordion title={`Check here if you encounter the issue "undefined is not an object (evaluating 'RNSound.IsAndroid')"`} defaultOpen="false">
 
