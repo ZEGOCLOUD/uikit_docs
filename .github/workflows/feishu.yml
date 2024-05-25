@@ -60,7 +60,7 @@ jobs:
     name: Webhook
     runs-on: ubuntu-latest
     steps:
-      - uses: peaceiris/actions-gh-pages@v4.0.0
+      - uses: junka/feishu-bot-webhook-action@main
         with:
           webhook: ${{ secrets.FEISHU_BOT_WEBHOOK }}
           signkey: ${{ secrets.FEISHU_BOT_SIGNKEY }}
