@@ -7,9 +7,9 @@ You can refer to this document to understand the effects of the offline call inv
 
 <Note title="Note">
 
-1. If your project needs Firebase integration or customization of features like ringtone and UI, complete the basic integration first and then refer to **Customize the call** and **Enhance the call** for further configuration.
+- If your project needs Firebase integration or customization of features like ringtone and UI, complete the basic integration first and then refer to **Customize the call** and **Enhance the call** for further configuration.
 
-2. Offline call invitation configuration is complex. If you only require online call invitations, please skip the steps related to firebase console.
+- Offline call invitation configuration is complex. If you only require online call invitations, please skip the steps related to firebase console.
 
 </Note>
 
@@ -27,9 +27,10 @@ Recorded on Xiaomi , the outcome may differ on different devices.
 
 ## Integrate the SDK with the call invitation feature
 
-### Add ZegoUIKitPrebuiltCall as dependencies
+<Steps>
+<Step title="Add ZegoUIKitPrebuiltCall as dependencies">
 
-1. Add the `jitpack` configuration.
+- **Add the `jitpack` configuration**
 
 <Accordion title="Android Gradle Plugin is 7.1.0 or later" defaultOpen="true">
 
@@ -71,48 +72,51 @@ allprojects {
 ```
 </Accordion>
 
-2. Modify your app-level `build.gradle` file:
-  ```groovy build.gradle {3}
-  dependencies {
-      ...
-      implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // Add this line to your module-level build.gradle file's dependencies, usually named [app].
-  }
-  ```
+- **Modify your app-level `build.gradle` file**
 
-### Related permissions 
+```groovy build.gradle {3}
+dependencies {
+    ...
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // Add this line to your module-level build.gradle file's dependencies, usually named [app].
+}
+```
+</Step>
+<Step title="Set up relevant permissions">
 
-1. notification :
-   if your targetSdk in project is 33 or after, please dynamic request notification permissions.Without this permission,we can't send notifications.Please refer to [Notification runtime permission](https://developer.android.com/develop/ui/views/notifications/notification-permission?hl=en) for more details.
+- **notification**
    
-2. Appear on top / Display pop-up window:
-   we need 'Appear on top ' or 'Display pop-up window' permission on some phones such as 'Xiaomi',without this permission,we can't show offline invitation calls.You can request this permission as follows:
+If your targetSdk in project is 33 or after, please dynamic request notification permissions.Without this permission,we can't send notifications.Please refer to [Notification runtime permission](https://developer.android.com/develop/ui/views/notifications/notification-permission?hl=en) for more details.
+   
+- **Appear on top / Display pop-up window**
 
-   ```java
-    // need a activityContext.
-   PermissionX.init(activityContext).permissions(permission.SYSTEM_ALERT_WINDOW)
-      .onExplainRequestReason(new ExplainReasonCallback() {
-          @Override
-          public void onExplainReason(@NonNull ExplainScope scope, @NonNull List<String> deniedList) {
-              String message = "We need your consent for the following permissions in order to use the offline call function properly";
-              scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny");
-          }
-      }).request(new RequestCallback() {
-          @Override
-          public void onResult(boolean allGranted, @NonNull List<String> grantedList,
-              @NonNull List<String> deniedList) {
-          }
-      });
-   ```
+We need 'Appear on top ' or 'Display pop-up window' permission on some phones such as 'Xiaomi',without this permission,we can't show offline invitation calls.You can request this permission as follows
+```java
+ // need a activityContext.
+PermissionX.init(activityContext).permissions(permission.SYSTEM_ALERT_WINDOW)
+   .onExplainRequestReason(new ExplainReasonCallback() {
+       @Override
+       public void onExplainReason(@NonNull ExplainScope scope, @NonNull List<String> deniedList) {
+           String message = "We need your consent for the following permissions in order to use the offline call function properly";
+           scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny");
+       }
+   }).request(new RequestCallback() {
+       @Override
+       public void onResult(boolean allGranted, @NonNull List<String> grantedList,
+           @NonNull List<String> deniedList) {
+       }
+   });
+```
 
-3. Autostart: 
-   Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a offline push message (such as Xiaomi). Therefore, you need to guide your app users to enable autostart permissions to make the feature work.
+- **Autostart** 
+   
+Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a offline push message (such as Xiaomi). Therefore, you need to guide your app users to enable autostart permissions to make the feature work.
 
 |                                                                                                                                           |                                                                                                                                           |
 | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/permission_1.png" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/permission_2.png" /></Frame> |
 
-
-### Initialize the call invitation service
+</Step>
+<Step title="Initialize the call invitation service">
 
 Call the `init` method After the user logs in, and specify the `userID` and `userName` for connecting the Call Kit service. 
 
@@ -120,11 +124,11 @@ Call the `init` method After the user logs in, and specify the `userID` and `use
 
 We recommend calling this method immediately after the user logs into your app.
 
-1. After the user logs in, it is necessary to Initialize the ZegoUIKitPrebuiltCallService to receive call invitations.
-2. When the user logs out,it is nessary to uninit to clear the previous login records,preventing any impact on the next login
+- After the user logs in, it is necessary to Initialize the ZegoUIKitPrebuiltCallService to receive call invitations.
+- When the user logs out,it is nessary to uninit to clear the previous login records,preventing any impact on the next login
    
 
-<Frame width="512" height="auto" caption="">
+<Frame width="256" height="auto" caption="">
   <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/mermaid-diagram-2023-10-19-170946.png" />
 </Frame>
 
@@ -143,17 +147,18 @@ ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebui
 ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
 ```
 
-#### Props of ZegoUIKitPrebuiltCallService component
+**Props of ZegoUIKitPrebuiltCallService component**
+
 |          |        |     |                                                                                                                                                     |
 | :------- | :----- | :-- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| appID    | String | Yes | The App ID you get from [ZEGOCLOUD Admin Console](https://console.zegocloud.com).                                                                   |
-| appSign  | String | Yes | The App Sign you get from [ZEGOCLOUD Admin Console](https://console.zegocloud.com).                                                                 |
+| appID    | long   | Yes | The App ID you get from [ZEGOCLOUD Console](https://console.zegocloud.com).                                                                         |
+| appSign  | String | Yes | The App Sign you get from [ZEGOCLOUD Console](https://console.zegocloud.com).                                                                       |
 | userID   | String | Yes | `userID` can be something like a phone number or the user ID on your own user system. userID can only contain numbers, letters, and underlines (_). |
 | userName | String | Yes | `userName` can be any character or the user name on your own user system.                                                                           |
 
 
-
-### Add the button for making call invitations
+</Step>
+<Step title="Add the button for making call invitations">
 
 You can customize the position of the `ZegoSendCallInvitationButton` accordingly, pass in the ID of the user you want to call.
 
@@ -168,7 +173,8 @@ button.setResourceID("zego_uikit_call"); // Please fill in the resource ID name 
 button.setInvitees(Collections.singletonList(new ZegoUIKitUser(targetUserID,targetUserName)));
 ```
 
-#### Props of ZegoSendCallInvitationButton
+**Props of ZegoSendCallInvitationButton**
+
 |             |         |     |                                                                                                                                                                                                          |
 | :---------- | :------ | :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | invitees    | Array   | Yes | The information of the callee. userID and userName are required. For example: [\{ userID: inviteeID, userName: inviteeName \}]                                                                           |
@@ -186,20 +192,32 @@ Now, you can make call invitations by simply clicking on this button.
 [github demo ](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation/app/src/main/java/com/zegocloud/uikit/callwithofflineinvitation/MainActivity.java)
 
 </Accordion>
+</Step>
+</Steps>
 
 
 
 ## Configure Offline invitaion(FCM) 
 
-### 1. Firebase Console and ZEGO Console Configuration
 
-- step1. In the Firebase console: Create a project. (Resource may help: [Firebase Console](https://console.firebase.google.com/))
+### Make necessary configurations in Firebase Console and ZEGO Console
+
+<Steps>
+
+<Step title="Create a project in Firebase Console">
+
+<Card title="Firebase Console" href="https://console.firebase.google.com/" target="_blank"></Card>
+
 
 <Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>
+</Step>
 
-- step2. In the ZegoCloud console: Add FCM certificate, create a resource ID;
+<Step title="Add FCM certificate and create a resource ID in ZEGOCLOUD Console">
 
-> In the create resource ID popup dialog, switch to Data messages for FCM.
+<Card title="ZEGOCLOUD Console" href="https://console.zegocloud.com" target="_blank"></Card>
+
+
+<Note title="Note">In the create resource ID popup dialog, switch to Data messages for FCM.</Note>
 
 <Video src="https://www.youtube.com/embed/K3kRWyafRIY"/>
 
@@ -208,27 +226,29 @@ When you have completed the configuration, you will obtain the `resourceID`. You
 <Frame width="512" height="auto" caption="">
   <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_resource_id.png" />
 </Frame>
-
 <Warning title="Warning">
 
 After the above is completed, the `resourceID` property value of `ZegoSendCallInvitationButton` needs to be replaced with the resource ID you get.
 </Warning>
 
+</Step>
 
-- step3. In the Firebase console: Create an Android application and modify your code;
-
+<Step title="Create an Android application in Firebase Console and modify your code accordingly">
 <Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
+</Step>
+
+</Steps>
 
 
-### 2. Check whether the local config is set up properly.
+### Check whether the local config is set up properly.
 
-- Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
+Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
 
 ```bash
 python3 zego_check_android_offline_notification.py
 ```
 
-- You will see the following if everything goes well: 
+You will see the following if everything goes well: 
 
 ```
 ✅ The google-service.json is in the right location.
@@ -238,7 +258,7 @@ python3 zego_check_android_offline_notification.py
 ✅ Firebase dependencies config in the app-level gradle file is correct.
 ```
 
-### 3. Debugging using the sample code.
+### Debugging using the sample code.
 
 Considering the complicated steps of configuring the offline call invitation, we recommend you download the [Sample code](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation) for debugging during your integration.
 
