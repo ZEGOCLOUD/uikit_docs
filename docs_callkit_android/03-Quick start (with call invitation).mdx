@@ -179,7 +179,7 @@ button.setInvitees(Collections.singletonList(new ZegoUIKitUser(targetUserID,targ
 | :---------- | :------ | :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | invitees    | Array   | Yes | The information of the callee. userID and userName are required. For example: [\{ userID: inviteeID, userName: inviteeName \}]                                                                           |
 | isVideoCall | Boolean | Yes | If true, a video call is made when the button is pressed. Otherwise, a voice call is made.                                                                                                               |
-| resourceID  | Boolean | No  | `resourceID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). |
+| resourceID  | String | No  | `resourceID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). |
 | timeout     | Number  | No  | The timeout duration. It's 60 seconds by default.                                                                                                                                                        |
 
 
