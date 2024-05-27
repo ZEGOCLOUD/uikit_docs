@@ -60,19 +60,18 @@ Run the following command to install other dependencies for making sure the `@ze
 
 <CodeGroup>
 ```bash yarn
-yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound @notifee/react-native@5.3.0 react-native-encrypted-storage zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha @zegocloud/react-native-callkeep react-native-keep-awake@4.0.0
+yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
 ```
 
 ```bash npm
-npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound @notifee/react-native@5.3.0 react-native-encrypted-storage zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha @zegocloud/react-native-callkeep react-native-keep-awake@4.0.0
+npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
 ```
 </CodeGroup>
 
 <Accordion title="When your React Native version is below 0.60, please follow these steps" defaultOpen="false">
 
-If your react-native version is below 0.60, you need to run the following command in your project root directory to ensure that `@zegocloud/react-native-callkeep` and `react-native-encrypted-storage` can work properly.
+If your react-native version is below 0.60, you need to run the following command in your project root directory to ensure that `react-native-encrypted-storage` can work properly.
 ```bash
-react-native link @zegocloud/react-native-callkeep
 react-native link react-native-encrypted-storage
 ```
 </Accordion>
@@ -538,56 +537,42 @@ After the above is completed, the `resourceID` property value of `ZegoSendCallIn
 
 
 
-#### 2. Add app permissions
+#### 2. Guide your users to set app permissions (Android only)
 
-1. Open the `my_project/android/app/src/main/AndroidManifest.xml` file and add the following:
+- To guide your users to enable `Appear on top` permission:
 
-<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/android_config.gif" /></Frame>
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/app_settings.png" /></Frame>
 
-```xml
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.VIBRATE"/>
+- Or you can refer to the following code to request system aler window permission after the initialization is completed.
 
-<uses-permission android:name="android.permission.GET_TASKS" />
-<uses-permission android:name="android.permission.BIND_TELECOM_CONNECTION_SERVICE"/>
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-<uses-permission android:name="android.permission.CALL_PHONE" />
-<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-```
-
-2. Add a `service` tag with the property `android:name="io.wazo.callkeep.VoiceConnectionService` inside the `application` tag and add the following permissions.
-
-```xml
-<application
-  android:name=".MainApplication"
-  android:label="@string/app_name"
-  android:icon="@mipmap/ic_launcher"
-  android:roundIcon="@mipmap/ic_launcher_round"
-  android:allowBackup="false"
-  android:theme="@style/AppTheme">
-
-  <service android:name="io.wazo.callkeep.VoiceConnectionService"
-      android:label="Wazo"
-      android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-      android:foregroundServiceType="camera|microphone"
-      android:exported="true"
-  >
-      
-      <intent-filter>
-          <action android:name="android.telecom.ConnectionService" />
-      </intent-filter>
-  </service>
-  ...
-</application>
+```js
+const onUserLogin = async (userID, userName, props) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID, // It can be any valid characters, but we recommend using a phone number.
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    }
+  ).then(() => {
+    // /////////////////////////
+    ZegoUIKitPrebuiltCallService.requestSystemAlertWindow({
+      message: 'We need your consent for the following permissions in order to use the offline call function properly',
+      allow: 'Allow',
+      deny: 'Deny',
+    });
+    // /////////////////////////
+  });
+}
 ```
 
 #### 3. Prevent code obfuscation
@@ -609,35 +594,7 @@ Add this line to your project's `my_project/android/app/build.gradle` file as in
 implementation 'com.google.firebase:firebase-messaging:21.1.0'
 ```
 
-#### 5. Set show when locked
-
-To enable your app to be shown on the locked screen, call the `setShowWhenLocked(true)` in `MainActivity.java`:
-
-```java
-// //////////////////////////
-import android.os.Bundle;
-import android.os.Build;
-// //////////////////////////
-...
-
-public class MainActivity extends ReactActivity {
-    // ...
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    // /////////////////////////
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-      setShowWhenLocked(true);
-    }
-    // /////////////////////////
-  }
-}
-```
-
-
-#### 6. Check whether the local config is set up properly.
+#### 5. Check whether the local config is set up properly.
 
 - Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
 
@@ -654,30 +611,6 @@ python3 zego_check_android_offline_notification.py
 ✅ Firebase dependencies config in the app-level gradle file is correct.
 ✅ Firebase-Messaging dependencies config in the app-level gradle file is correct.
 ```
-
-#### 7. Guide your users to set app permissions (Android only)
-
-Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a phone call (such as Xiaomi). Therefore, you need to guide your app users to enable the necessary app permissions to make the system-calling UI effective.
-
-Here are the permissions that an app needs on Xiaomi devices for reference:
-
-- Make phone calls: Select the **Always allow** option
-
-- Show on locked screen: Switch to Enable
-
-- Display pop-up windows while running in the background: Switch to Enable
-
-- Display pop-up window: Switch to Enable
-
-
-|                                                                                                                                                                         |                                                                                                                                                                         |                                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame> |
-
-
-</Accordion>
-
-<Accordion title="iOS" defaultOpen="false">
 
 ### iOS
 #### 1. Apple Developer Center and ZEGOCLOUD Console Configuration
