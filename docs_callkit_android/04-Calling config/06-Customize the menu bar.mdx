@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initCallInviteService() {
-        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig(),
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
         callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
                 @Override
                 public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
@@ -74,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SWITCH_AUDIO_OUTPUT_BUTTON);
                     return config;
                 }
-        );
-        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,
-            callInvitationConfig);
+        };
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName, callInvitationConfig);
     }
 
     @Override
