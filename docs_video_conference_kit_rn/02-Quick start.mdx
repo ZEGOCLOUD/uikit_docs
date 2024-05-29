@@ -26,11 +26,11 @@
 
     <CodeGroup>
     ```bash yarn
-    yarn add @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.2.0
+    yarn add @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.14.5
     ```
 
     ```bash npm
-    npm install @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.2.0
+    npm install @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.14.5
     ```
     </CodeGroup>
 
@@ -45,9 +45,10 @@
     - Using the same `conferenceID` will enter the same video conference. 
     </Note>
 
-    ```js App.js {7-17}
+    ```js App.js {2,8-18}
     import React, { Component } from 'react';
     import ZegoUIKitPrebuiltVideoConference from '@zegocloud/zego-uikit-prebuilt-video-conference-rn'
+    import { StyleSheet, View } from 'react-native';
 
     export default function VideoConferencePage(props) {
         return (
@@ -66,6 +67,14 @@
             </View>
         );
     }
+
+    const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start'
+    },
+    });
     ```
 
 
