@@ -27,11 +27,11 @@ Run the following command to install other dependencies for making sure the `@ze
 
 <CodeGroup>
 ```bash yarn
-yarn add react-delegate-component zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.7.1 @zegocloud/zego-uikit-rn
+yarn add react-delegate-component zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 @zegocloud/zego-uikit-rn
 ```
 
 ```bash npm
-npm install react-delegate-component zego-express-engine-reactnative@3.2.0 zego-zim-react-native@2.7.1 @zegocloud/zego-uikit-rn
+npm install react-delegate-component zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 @zegocloud/zego-uikit-rn
 ```
 </CodeGroup>
 
@@ -41,10 +41,9 @@ import LiveAudioRoomKit_QuickStart_Using_En from "../snippets/uikit/live_audio_r
 
 <LiveAudioRoomKit_QuickStart_Using_En />
 
-```javascript
-// App.js
+```javascript App.js {3,8-18}
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import ZegoUIKitPrebuiltLiveAudioRoom, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn'
 
 export default function LiveAudioRoomPage(props) {
@@ -64,6 +63,16 @@ export default function LiveAudioRoomPage(props) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 0,
+  },
+});
+
 ```
 
 ## Configure your project

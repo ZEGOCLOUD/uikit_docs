@@ -48,8 +48,7 @@ import ZIM_ZIMKit_SDK_warning from "../snippets/uikit/in_app_chat/ZIM_ZIMKit_SDK
 
 <ZIM_ZIMKit_SDK_warning />
 
-```javascript
-// LoginPage.js
+```javascript LoginPage.js {3,13-22}
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ZIMKit } from '@zegocloud/zimkit-rn';
@@ -78,8 +77,7 @@ export default function LoginPage() {
 
 2. Use **React Navigation** to import and page routing the `MessageListPage` page.
 
-```javascript
-// AppNavigation.js
+```javascript AppNavigation.js {2}
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MessageListPage } from '@zegocloud/zimkit-rn';
 import LoginPage from './LoginPage.js'; // Import the login page you created.
@@ -102,7 +100,9 @@ export default function AppNavigation() {
             name="MessageListPage"  // Specify a page route for the message list page.
             component={MessageListPage}  // Fill in the imported message list component.
         />
-        ...  // Other page info.
+        
+        {/* Other page info. */}
+
     </Stack.Navigator>
   );
 }
@@ -110,8 +110,7 @@ export default function AppNavigation() {
 
 3. Display the In-app Chat Kit components.
 
-```javascript
-// HomePage.js
+```javascript HomePage.js {4}
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView, Button } from 'react-native';
