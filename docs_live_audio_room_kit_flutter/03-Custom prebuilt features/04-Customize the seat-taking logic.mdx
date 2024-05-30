@@ -2,30 +2,86 @@
 
 ## Customize your own business logic
 
-Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) enables you to customize your own business logic via the `ZegoUIKitPrebuiltLiveAudioRoomController().seat` provided.
+### API
 
-The following are supported by the `function call`:
+<Note title="Note"> 
+The following APIs are all called from `ZegoUIKitPrebuiltLiveAudioRoomController().seat`.
+</Note>
 
-- `speaker.leave`(&lcub;bool showDialog = true&rcub;): Voluntarily leave a seat. A pop-up confirmation prompt will show when the `showDialog` is `true`.
-- `host.removeSpeaker`(String userID): Remove the speaker from the seat.
-- `host.close({int targetIndex = -1})`: 
-    
+- speaker
+  - `speaker.leave`(\{bool showDialog = true\}): 
+
+    Voluntarily leave a seat. 
+
+    A pop-up confirmation prompt will show when the `showDialog` is `true`.
+
+- host
+  - `host.removeSpeaker`(String userID)`: Remove the speaker from the seat.
+  - `host.close`(\{int targetIndex = -1\}): 
+
     Close(lock) the seat, allows you to close all seats or only close specific seat by `targetIndex`. 
-    
-    once all seats are closed, the audience can only take the seat by inviting by the host or sending a seat-taking request.
-- `host.open({int targetIndex = -1})`: 
-    
-    Open(unlock) the seat, allows you to open all seats or only open specific seat by `targetIndex`. 
-    
-    once it is opened, the audience can take the seat by clicking it.
-- `audience.applyToTake`: The audience applies to take a speaker seat.
-- `audience.cancelTakingRequest`: The audience cancels his seat-taking request.
-- `host.acceptTakingRequest`(String audienceUserID): The host accepts the audience's seat-taking request.
-- `host.rejectTakingRequest`(String audienceUserID): The host rejects the audience's seat-taking request.
-- `host.inviteToTake`(String userID): The host invites the audience to take a speaker seat.
-- `audience.acceptTakingInvitation`: The audience accepts the seat-taking invite from the host.
 
-The following are supported by the `event callbacks`:
+    once all seats are closed, the audience can only take the seat by inviting by the host or sending a seat-taking request.
+  - `host.open`(\{int targetIndex = -1\}): 
+
+    Open(unlock) the seat, allows you to open all seats or only open specific seat by `targetIndex`.
+
+    once it is opened, the audience can take the seat by clicking it.
+  - `host.acceptTakingRequest`(String audienceUserID): The host accepts the audience's seat-taking request.
+  - `host.rejectTakingRequest`(String audienceUserID): The host rejects the audience's seat-taking request.
+  - `host.inviteToTake`(String userID): The host invites the audience to take a speaker seat.
+  - `host.mute`(\{int targetIndex = -1, bool muted = true,\}): 
+
+    Mute the user at the `targetIndex` seat.
+
+    After mute, if you want to un-mute, you can set `muted` to false.
+
+    And on side of the user at the `targetIndex` seat, return true/false in the callback of `ZegoLiveAudioRoomAudioVideoEvents.onMicrophoneTurnOnByOthersConfirmation` to open microphone or not.
+  - `host.muteByUserID`(String targetUserID, \{bool muted = true, \}):
+
+    Mute the seat by `targetUserID`.
+
+    After mute, if you want to un-mute, you can set `muted` to false.
+
+    And on side of the user at the `targetIndex` seat, return true/false in the callback of `ZegoLiveAudioRoomAudioVideoEvents.onMicrophoneTurnOnByOthersConfirmation` to open microphone or not.
+- audience 
+  - `audience.applyToTake`: The audience applies to take a speaker seat.
+  - `audience.cancelTakingRequest`: The audience cancels his seat-taking request.
+  - `audience.acceptTakingInvitation`: The audience accepts the seat-taking invite from the host.
+
+### config
+
+- [ZegoLiveAudioRoomLayoutConfig](./03-Customize%20the%20seats.mdx#customize-the-seat-layout) `layout`:
+
+  The default layout of the audio chat room supports free layout with multiple rows and columns of seats.
+
+  You can use this parameter to control the specific style of each row and column.
+
+- int `takeIndexWhenJoining`:
+
+  Specifies the seat to occupy when joining the live audio room.
+
+  This is only valid when the role is set to host or speaker.
+
+- int Function(ZegoUIKitUser user)? `takeIndexWhenAudienceRequesting`:
+
+  When the audience take on seat, do you want specify a seat? If so, return to the seat you want to specify
+
+- bool `closeWhenJoining`:
+
+  Specifies whether to lock the seat automatically after entering the room.
+
+  It only takes effect when set by the host, the default value is `true`.
+
+- List\<int\> `hostIndexes`:
+
+  Specifies the list of seats occupied by the host.
+
+  Once specified, these seats can only be used by the host and cannot be occupied by speakers or audience members.
+
+  The default value is `[0]`.
+
+### event callbacks
 
 <Note title="Note">
 The `ZegoLiveAudioRoomSeatEvents.onClicked` and `ZegoLiveAudioRoomMemberListEvents.onMoreButtonPressed` overrides Live Audio Room Kit's prebuilt logic, meaning that when you customize these events, the prebuilt events are no longer executed.
