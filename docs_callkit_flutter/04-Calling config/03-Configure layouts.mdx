@@ -147,7 +147,7 @@ class CallPage extends StatelessWidget {
 If the layout we provide does not meet your needs, you can redefine the entire layout through `containerRect` and `containerBuilder` in `ZegoUIKitPrebuiltCallConfig.audioVideoView`.
 
 The code prototype is as follows:
-``` dart
+```dart
 typedef ZegoCallAudioVideoContainerBuilder = Widget? Function(
   BuildContext context,
   List<ZegoUIKitUser> allUsers,
@@ -173,7 +173,7 @@ Here are three examples:
     <Frame width="30%" height="auto" caption="">
       <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/conner_layout.jpg" />
     </Frame> 
-    ``` dart
+    ```dart
     ZegoUIKitPrebuiltCallConfig()
       ..audioVideoView.useVideoViewAspectFill = true
       ..audioVideoView.showUserNameOnView = false

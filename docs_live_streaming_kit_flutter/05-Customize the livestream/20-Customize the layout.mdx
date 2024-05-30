@@ -1,8 +1,8 @@
 # Customize the layout
 
-We support PIP (Picture-in-Picture) and Gallery layouts. You can achieve your desired layout by setting the `config.layout` parameter.
+We support PIP (picture-in-picture), gallery and magic layouts. You can achieve your desired layout by setting the `config.layout` parameter.
 
-## 1. Picture In Picture
+## Picture In Picture
 
 By setting `layout = ZegoLayout.pictureInPicture()`, you can configure the layout as PIP (Picture-in-Picture), and we also provide some parameters for customization.
 
@@ -84,7 +84,7 @@ class LivePageState extends State<LivePage> {
 
 - ZegoShowFullscreenModeToggleButtonRules `showScreenSharingFullscreenModeToggleButtonRules`: display rule of full screen button, default is ZegoShowFullscreenModeToggleButtonRules.showWhenScreenPressed.
 
-## 2. Gallery
+## Gallery
 
 By setting `layout = ZegoLayout.gallery()`, you can set the layout to Gallery and we also provide some parameters for customization.
 
@@ -165,7 +165,7 @@ enum ZegoShowFullscreenModeToggleButtonRules {
 ```
 
 
-## 3. Magic Layout
+## Magic Layout
 
 If the layout we provide does not meet your needs, you can redefine the entire layout through `containerRect` and `containerBuilder` in `ZegoUIKitPrebuiltLiveStreamingConfig.audioVideoView`.
 
