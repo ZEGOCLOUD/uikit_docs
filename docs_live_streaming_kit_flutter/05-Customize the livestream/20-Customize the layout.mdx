@@ -189,125 +189,123 @@ Rect Function()? containerRect;
 
 Here are three examples:
 
-- Four players are in the four corners of the game
-
-``` dart
-ZegoUIKitPrebuiltLiveStreamingConfig()
-  ..audioVideoView.useVideoViewAspectFill = true
-  ..audioVideoView.showUserNameOnView = false
-  ..audioVideoView.containerBuilder = (
-    context,
-    allUsers,
-    audioVideoUsers,
-    audioVideoViewCreator,
-  ) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Stack(
-        children: List.generate(audioVideoUsers.length, (index) {
-          if (index > 3) {
-            return const SizedBox.shrink();
-          }
-          const itemWidth = 90.0;
-          return Positioned(
-            left: (0 == index || 2 == index) ? 10 : null,
-            top: (0 == index || 1 == index) ? 80 : null,
-            right: (1 == index || 3 == index) ? 10 : null,
-            bottom: (2 == index || 3 == index) ? 50 : null,
-            child: Stack(
-              children: [
-                ClipOval(
-                  child: SizedBox(
-                    width: itemWidth,
-                    height: itemWidth,
-                    child: audioVideoViewCreator(audioVideoUsers[index]),
-                  ),
+<Tabs>
+  <Tab title="Four corners">
+    <Frame width="30%" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/conner_layout.jpg" />
+    </Frame>   
+    ``` dart
+    ZegoUIKitPrebuiltLiveStreamingConfig()
+      ..audioVideoView.useVideoViewAspectFill = true
+      ..audioVideoView.showUserNameOnView = false
+      ..audioVideoView.containerBuilder = (
+        context,
+        allUsers,
+        audioVideoUsers,
+        audioVideoViewCreator,
+      ) {
+        return LayoutBuilder(builder: (context, constraints) {
+          return Stack(
+            children: List.generate(audioVideoUsers.length, (index) {
+              if (index > 3) {
+                return const SizedBox.shrink();
+              }
+              const itemWidth = 90.0;
+              return Positioned(
+                left: (0 == index || 2 == index) ? 10 : null,
+                top: (0 == index || 1 == index) ? 80 : null,
+                right: (1 == index || 3 == index) ? 10 : null,
+                bottom: (2 == index || 3 == index) ? 50 : null,
+                child: Stack(
+                  children: [
+                    ClipOval(
+                      child: SizedBox(
+                        width: itemWidth,
+                        height: itemWidth,
+                        child: audioVideoViewCreator(audioVideoUsers[index]),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            }),
           );
-        }),
-      );
-    }); // LayoutBuilder
-  };
-```
-<Frame width="30%" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/conner_layout.jpg" />
-</Frame> 
-
-- players are arranged vertically in the upper left corner
-
-``` dart
-ZegoUIKitPrebuiltLiveStreamingConfig()
-  ..background = yourGameWidget()
-  ..audioVideoView.useVideoViewAspectFill = false
-  ..audioVideoView.showUserNameOnView = false
-  ..audioVideoView.containerRect = () {
-    final size = MediaQuery.of(context).size;
-    return Rect.fromLTWH(5, 80, 60 + 5, size.height);
-  }
-  ..audioVideoView.containerBuilder = (
-      context,
-      allUsers,
-      audioVideoUsers,
-      audioVideoViewCreator,
-      ) {
-    return Column(
-      children: audioVideoUsers
-          .map((user) => ClipOval(
-        child: SizedBox(
-          width: 60,
-          height: 60,
-          child: audioVideoViewCreator(user),
-        ),
-      ))
-          .toList(),
-    );
-  };
-```
-
-<Frame width="30%" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/left_layout.jpg" />
-</Frame>
-
-- Players are arranged horizontally at the top
-
-``` dart
-ZegoUIKitPrebuiltLiveStreamingConfig()
-  ..background = LayoutBuilder(builder: (context, constraints) {
-    return Container(
-      color: Colors.black,
-      padding: EdgeInsets.fromLTRB(
-          0, constraints.maxWidth / 2 + 10 + 2, 0, 0),
-      child: yourGameWidget(),
-    );
-  })
-  ..audioVideoView.useVideoViewAspectFill = true
-  ..audioVideoView.showUserNameOnView = false
-  ..audioVideoView.containerRect = () {
-    final size = MediaQuery.of(context).size;
-    return Rect.fromLTWH(0, 10, size.width, size.width / 2);
-  }
-  ..audioVideoView.containerBuilder = (
-      context,
-      allUsers,
-      audioVideoUsers,
-      audioVideoViewCreator,
-      ) {
-    final size = MediaQuery.of(context).size;
-    final itemWidth = size.width / audioVideoUsers.length;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: audioVideoUsers
-          .map((user) => SizedBox(
-        width: itemWidth,
-        height: itemWidth,
-        child: audioVideoViewCreator(user),
-      ))
-          .toList(),
-    );
-  };
-```
-
-<Frame width="30%" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/top_layout.jpg" />
-</Frame>
+        }); // LayoutBuilder
+      };
+    ```
+  </Tab>
+  <Tab title="Vertically on left corner">
+    <Frame width="30%" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/left_layout.jpg" />
+    </Frame> 
+    ``` dart
+    ZegoUIKitPrebuiltLiveStreamingConfig()
+      ..background = yourGameWidget()
+      ..audioVideoView.useVideoViewAspectFill = false
+      ..audioVideoView.showUserNameOnView = false
+      ..audioVideoView.containerRect = () {
+        final size = MediaQuery.of(context).size;
+        return Rect.fromLTWH(5, 80, 60 + 5, size.height);
+      }
+      ..audioVideoView.containerBuilder = (
+          context,
+          allUsers,
+          audioVideoUsers,
+          audioVideoViewCreator,
+          ) {
+        return Column(
+          children: audioVideoUsers
+              .map((user) => ClipOval(
+            child: SizedBox(
+              width: 60,
+              height: 60,
+              child: audioVideoViewCreator(user),
+            ),
+          ))
+              .toList(),
+        );
+      };
+    ``` 
+  </Tab>
+  <Tab title="Horizontally on top">
+    <Frame width="30%" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/top_layout.jpg" />
+    </Frame>
+    ``` dart
+    ZegoUIKitPrebuiltLiveStreamingConfig()
+      ..background = LayoutBuilder(builder: (context, constraints) {
+        return Container(
+          color: Colors.black,
+          padding: EdgeInsets.fromLTRB(
+              0, constraints.maxWidth / 2 + 10 + 2, 0, 0),
+          child: yourGameWidget(),
+        );
+      })
+      ..audioVideoView.useVideoViewAspectFill = true
+      ..audioVideoView.showUserNameOnView = false
+      ..audioVideoView.containerRect = () {
+        final size = MediaQuery.of(context).size;
+        return Rect.fromLTWH(0, 10, size.width, size.width / 2);
+      }
+      ..audioVideoView.containerBuilder = (
+          context,
+          allUsers,
+          audioVideoUsers,
+          audioVideoViewCreator,
+          ) {
+        final size = MediaQuery.of(context).size;
+        final itemWidth = size.width / audioVideoUsers.length;
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: audioVideoUsers
+              .map((user) => SizedBox(
+            width: itemWidth,
+            height: itemWidth,
+            child: audioVideoViewCreator(user),
+          ))
+              .toList(),
+        );
+      };
+    ```
+  </Tab>
+</Tabs>
