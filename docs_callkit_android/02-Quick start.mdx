@@ -102,7 +102,7 @@ public class CallActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
 
         ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
-            appID, appSign, callID, userID, userName,config);
+            appID, appSign, userID, userName, callID, config);
 
         getSupportFragmentManager().beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -129,7 +129,7 @@ class CallActivity : AppCompatActivity() {
         // You can also use GroupVideo/GroupVoice/OneOnOneVoice to make more types of calls.
         val config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
         val fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
-            appID, appSign, callID, userID, userName, config
+            appID, appSign, userID, userName, callID, config
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
