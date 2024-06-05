@@ -537,7 +537,7 @@ After the above is completed, the `resourceID` property value of `ZegoSendCallIn
 
 
 
-#### 2. Guide your users to set app permissions (Android only)
+#### 2. Guide your users to set app permissions
 
 - To guide your users to enable `Appear on top` permission:
 
@@ -761,20 +761,58 @@ Please ensure that the certificates on the console correspond one-to-one with th
 </Accordion>
 
 
-## Related guide
+<Accordion title="2. How to resolve the 'permission is null' error?" defaultOpen="false">
+
+For Call Kit's offline push, system notification permission is required. Starting from Android 13, you need to actively apply for notification permission. However, if the React Native version is lower than 0.71.0, applying for permission will result in a `permission is null` error. 
+Here are two solutions:
+
+- **Solution A: Upgrade React Native Version**
+
+  To upgrade React Native version to 0.71.0 and above, please refer to this [link](https://react-native-community.github.io/upgrade-helper).
+
+- **Solution B: Manual Editing of React Native Source Code**
+
+  1. Locate the `PermissionAndroid.js` file at the following path:
+
+      ```bash
+      ../node_modules/react-native/Libraries/PermissionsAndroid/PermissionAndroid.js
+      ```
+
+  2. Open `PermissionAndroid.js` file, and add the following code to `Permissions = Object.freeze({})`
+
+      ```js PermissionAndroid.js
+      POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS',
+      ```
+
+  3. Add the following code to the `PermissionsAndroid` class.
+
+      ```js PermissionAndroid.js
+      POST_NOTIFICATIONS: string,
+      ```
+
+  4. Now go to build.gradle in android folder and change compileSDK and targetSDK version to 33.
+
+      ```groovy build.gradle
+      compileSdkVersion = 33
+      targetSdkVersion = 33
+      ```
+
+</Accordion>
+
+  ## Related guide
 
 
-<CardGroup cols={2}>
-  <Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
-    Refer this doc to make further customization.
-  </Card>
-</CardGroup>
+  <CardGroup cols={2}>
+    <Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
+      Refer this doc to make further customization.
+    </Card>
+  </CardGroup>
 
 
-## Resources
+  ## Resources
 
-<CardGroup cols={2}>
-  <Card title="Sample code" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn">
-    Click here to get the complete sample code.
-  </Card>
-</CardGroup>
+  <CardGroup cols={2}>
+    <Card title="Sample code" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn">
+      Click here to get the complete sample code.
+    </Card>
+  </CardGroup>
