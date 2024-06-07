@@ -2,9 +2,9 @@
 
 <Warning title="Incompatible with older versions">
 
-If you use this feature(when **canInvitingInCalling** is true.), the invitation feature will no longer be compatible with versions before v4.12.0, that is mean, invitations will not be received between each other.
+If you use this feature(when **canInvitingInCalling** is true.), the invitation feature will no longer be compatible with versions before v4.12.0. This means that invitations sent by users of versions before v4.12.0 will not be received by users of version 4.12.0 or later, and vice versa.
 
-so when you release the App, please use Force Upgrade to prompt your App clients to upgrade to the latest version you released, otherwise there will be a problem of not receiving calls.
+Therefore, when releasing the app, it is important to implement a force upgrade for users to avoid issues with call reception.
 
 Of course, if this feature is not used (that is, when **canInvitingInCalling** is set to false), the above problem will not exist.
 </Warning>
@@ -18,38 +18,33 @@ Of course, if this feature is not used (that is, when **canInvitingInCalling** i
 
 - ZegoCallInvitationConfig
 
- -  bool `canInvitingInCalling`:
-    
-    >  whether to allow invitations in calling.
-    >  Default value is false.
-    >  Please note that if allowed, it will be incompatible with versions before v4.12.0, which means mutual invitations cannot be made.
+  -  bool `canInvitingInCalling`:
+      
+      >  Whether to allow invitations in calling.   
+      >  Default value: false.   
+      >  Please note that if allowed, it will be incompatible with versions before v4.12.0, which means mutual invitations cannot be made.
 
-  - bool `onlyInitiatorCanInvite`:
+    - bool `onlyInitiatorCanInvite`:
 
-    >  whether only the call initiator has the permission to invite others to
-    >  join the call.
-    >  Default value is false.
-    > 
-    >  If set to false, all participants in the call can invite others.
+      >  whether only the call initiator has the permission to invite others to join the call.   
+      >  Default value is false.   
+      >  If set to false, all participants in the call can invite others.
 
-  - bool `endCallWhenInitiatorLeave`:
+    - bool `endCallWhenInitiatorLeave`:
 
-    >  whether the entire call should end when the initiator leaves the call(will causing other participants to leave together).
-    >  Default value is false.
-    > 
-    >  If set to false, the call can continue even after the initiator leaves.
+      >  whether the entire call should end when the initiator leaves the call(will causing other participants to leave together).
+      >  Default value is false.
+      >  If set to false, the call can continue even after the initiator leaves.
 
 - ZegoCallAudioVideoViewConfig:
 
   - bool `showWaitingCallAcceptAudioVideoView`:
-
     > When inviting in calling, the invited user window will appear on the invitation side, if you want to hide this view, set it to false.
-    > you can cancel the invitation for this user in this view.
+    > you can cancel the invitation in this view.
 
-  - ZegoAudioVideoViewForegroundBuilder? `waitingCallAcceptForegroundBuilder`:
+  - [ZegoAudioVideoViewForegroundBuilder](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoAudioVideoViewForegroundBuilder.html)?`waitingCallAcceptForegroundBuilder`:
 
-    > When inviting in calling, the invited user window will appear on the invitation side,
-    > and you can customize the foreground at this time.
+    > When inviting in calling, the invited user window will appear on the invitation side, and you can customize the foreground at this time.
 
 ## Demo
 
@@ -65,7 +60,7 @@ Here, we only display the key code, the complete example can be found on [GitHub
 
 - Active by config
 
-```dart 
+  ```dart 
   ZegoUIKitPrebuiltCallInvitationService().init(
     ...
     plugins: [ZegoUIKitSignalingPlugin()],
@@ -75,48 +70,48 @@ Here, we only display the key code, the complete example can be found on [GitHub
     ),
     ...
   );
-```
+  ```
 
 - Set up the **ZegoSendCallingInvitationButton** button.
 
-```dart 
-  /// During the call, the invite button allows us to instantly access current group members who have not yet joined the call, and display them for selection in the list.
+  ```dart 
+  // During the call, the invite button allows us to instantly access current group members who have not yet joined the call, and display them for selection in the list.
   final sendCallingInvitationButton = StreamBuilder(
-      stream: ZegoUIKit().getUserListStream(),
-      builder: (context, snapshot) {
-        return ValueListenableBuilder(
-            /// Get current group members
-            valueListenable:ZIMKit().queryGroupMemberList('#${ZegoUIKit().getRoom().id}'),
-            builder: (context, List<ZIMGroupMemberInfo> members, _) {
-              final memberIDsInCall =
-                  ZegoUIKit().getRemoteUsers().map((user) => user.id).toList();
-              final membersNotInCall = members.where((member) {
-                if (member.userID == ZIMKit().currentUser()!.baseInfo.userID) {
-                  return false;
-                }
+    stream: ZegoUIKit().getUserListStream(),
+    builder: (context, snapshot) {
+      return ValueListenableBuilder(
+        // Get current group members
+        valueListenable:ZIMKit().queryGroupMemberList('#${ZegoUIKit().getRoom().id}'),
+        builder: (context, List<ZIMGroupMemberInfo> members, _) {
+          final memberIDsInCall =
+              ZegoUIKit().getRemoteUsers().map((user) => user.id).toList();
+          final membersNotInCall = members.where((member) {
+            if (member.userID == ZIMKit().currentUser()!.baseInfo.userID) {
+              return false;
+            }
 
-                return !memberIDsInCall.contains(member.userID);
-              }).toList();
-              return ZegoSendCallingInvitationButton(
-                avatarBuilder: customAvatarBuilder,
-                /// Members already in the call, here we let him in display mode.
-                selectedUsers: ZegoUIKit()
-                    .getRemoteUsers()
-                    .map((e) => ZegoCallUser(
-                          e.id,
-                          e.name,
-                        ))
-                    .toList(),
-                /// Members who have not yet joined the call will be kept in an optional state. 
-                /// If they are already in inviting, we will handle it internally.
-                waitingSelectUsers: membersNotInCall
-                    .map((member) => ZegoCallUser(
-                          member.userID,
-                          member.userName,
-                        ))
-                    .toList(),
-              );
-            });
+            return !memberIDsInCall.contains(member.userID);
+          }).toList();
+          return ZegoSendCallingInvitationButton(
+            avatarBuilder: customAvatarBuilder,
+            // Members already in the call, here we let him in display mode.
+            selectedUsers: ZegoUIKit()
+              .getRemoteUsers()
+              .map((e) => ZegoCallUser(
+                    e.id,
+                    e.name,
+              ))
+              .toList(),
+            // Members who have not yet joined the call will be kept in an optional state. 
+            // If they are already in inviting, we will handle it internally.
+            waitingSelectUsers: membersNotInCall
+              .map((member) => ZegoCallUser(
+                    member.userID,
+                    member.userName,
+                  ))
+              .toList(),
+          );
+        });
       },
     );
     
@@ -129,7 +124,7 @@ Here, we only display the key code, the complete example can be found on [GitHub
 
       ... 
 
-      ///  Display the button on the top toolbar.
+      //  Display the button on the top toolbar.
       config.topMenuBar.extendButtons = [
         sendCallingInvitationButton,
       ];
@@ -138,4 +133,4 @@ Here, we only display the key code, the complete example can be found on [GitHub
     },
     ...
   );
-```
+  ```
