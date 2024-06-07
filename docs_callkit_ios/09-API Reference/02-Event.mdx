@@ -19,7 +19,7 @@
   -  [getMemberListviewForHeaderInSection](#getmemberlistviewforheaderinsection)
   -  [getMemberListItemHeight](#getmemberlistitemheight)
   -  [getMemberListHeaderHeight](#getmemberlistheaderheight)
-  -  [onHangUp](#onhangup)
+  -  [onCallEnd](#oncallend)
   -  [onToggleMicButtonClick](#ontogglemicbuttonclick)
   -  [onToggleCameraButtonClick](#ontogglecamerabuttonclick)
   -  [onSwitchCameraButtonClick](#onswitchcamerabuttonclick)
@@ -440,25 +440,21 @@ ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
 > }
 > ```
 
-
-
-
-
-## onHangUp
+## onCallEnd
 
 > - function prototype:
 >
 > ```swift
-> func onHangUp(_ isHandup: Bool)
+> func onCallEnd(_ endEvent: ZegoCallEndEvent)
 > ```
 >
 > - example:
 >
 > ```swift
 > extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
->   func onHangUp(_ isHandup: Bool) {
->     //...
->   }
+>     func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+>         print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
+>     }
 > }
 > ```
 
