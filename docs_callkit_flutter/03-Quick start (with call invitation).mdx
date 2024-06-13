@@ -267,339 +267,315 @@ See \<Firebase Console and ZEGO Console Configuration> and \<Apple Developer Cen
 
 > ​Please refer to the [API reference](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoSendCallInvitationButton-class.html) for complete parameters.
 
-### Configure your project (Android)
+### Configure your project
+
+<Tabs>
+
+  <Tab title="Android">
+  Please refer to the following steps to configure your Android project. 
+  
+  If you want to experience the functionality before integration, we have provided [sample code ](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/tree/master/call_with_offline_invitation)that includes steps 2 through 6 so you can quickly test it.
+
+  <Accordion title="1. Firebase Console and ZEGO Console Configuration" defaultOpen="false">
+
+    * **step1.** In the Firebase console: Create a project. (Resource may help: [Firebase Console](https://console.firebase.google.com/))
+
+    <Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>					
+
+    * **step2.** In the ZegoCloud console: Add FCM certificate, create a resource ID;
+
+    > In the create resource ID popup dialog, you should switch to the **VoIP** option for **APNs**, and switch to **Data messages** for **FCM**.
+
+    <Video src="https://www.youtube.com/embed/K3kRWyafRIY"/>
+
+      When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
+
+    <Frame width="400"   height="auto" caption="">
+      <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_resource_id.png" />
+    </Frame>
+
+    * **step3.** In the Firebase console: Create an Android application and modify your code;
+
+    <Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
+
+  </Accordion>
 
 
-Please refer to the following steps to configure your Android project. If you want to experience the functionality before integration, we have provided [sample code ](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/tree/master/call_with_offline_invitation)that includes steps 2 through 6 so you can quickly test it.
+  <Accordion title="2. Modify the compileSdkVersion and minSdkVersion" defaultOpen="false">
 
-#### 1. Firebase Console and ZEGO Console Configuration
+    * **step1.** Modify the `compileSdkVersion` to 33 in the `your_project/android/app/build.gradle` file.
 
+    <Frame width="400"   height="auto" caption="">
+      <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/compile_sdk_version.png" />
+    </Frame>
 
-* **step1.** In the Firebase console: Create a project. (Resource may help: [Firebase Console](https://console.firebase.google.com/))
+    * **step2.** Modify the `minSdkVersion` in the same file
 
-<Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>					
+    ```plaintext
+    minSdkVersion 21
+    ```
+  </Accordion>
 
-* **step2.** In the ZegoCloud console: Add FCM certificate, create a resource ID;
+  <Accordion title="3. Set the Kotlin & Gradle versions" defaultOpen="false">
 
-> In the create resource ID popup dialog, you should switch to the **VoIP** option for **APNs**, and switch to **Data messages** for **FCM**.
+    * **step1.** Modify the `kotlin` version to >= 1.8.0 and the `gradle classpath` version to 7.3.0 in the `your_project/android/app/build.gradle` file:
 
-<Video src="https://www.youtube.com/embed/K3kRWyafRIY"/>
+    ```xml {2,9}
+    buildscript {
+        ext.kotlin_version = '1.8.0'
+        repositories {
+            google()
+            mavenCentral()
+        }
 
-  When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
+        dependencies {
+            classpath 'com.android.tools.build:gradle:7.3.0'
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_resource_id.png" />
-</Frame>
-
-* **step3.** In the Firebase console: Create an Android application and modify your code;
-
-<Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
-
-
-#### 2. Modify the compileSdkVersion and minSdkVersion
-
-
-* **step1.** Modify the `compileSdkVersion` to 33 in the `your_project/android/app/build.gradle` file.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/compile_sdk_version.png" />
-</Frame>
-
-* **step2.** Modify the `minSdkVersion` in the same file
-
-```plaintext
-minSdkVersion 21
-```
-
-#### 3. Set the Kotlin & Gradle versions
-
-
-* **step1.** Modify the `kotlin` version to >= 1.8.0 and the `gradle classpath` version to 7.3.0 in the `your_project/android/app/build.gradle` file:
-
-```xml {2,9}
-buildscript {
-    ext.kotlin_version = '1.8.0'
-    repositories {
-        google()
-        mavenCentral()
+            // support notification
+            classpath 'com.google.gms:google-services:4.3.14'
+        }
     }
+    ```
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    * **step2.** Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, modify the `distributionUrl` to [`https://services.gradle.org/distributions/gradle-7.4-all.zip`.](https://services.gradle.org/distributions/gradle-7.4-all.zip.)
 
-        // support notification
-        classpath 'com.google.gms:google-services:4.3.14'
-    }
-}
-```
+    ```xml
+    distributionUrl=https://services.gradle.org/distributions/gradle-7.4-all.zip
+    ```
+  </Accordion>
 
-* **step2.** Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, modify the `distributionUrl` to [`https://services.gradle.org/distributions/gradle-7.4-all.zip`.](https://services.gradle.org/distributions/gradle-7.4-all.zip.)
+  <Accordion title="4. Add firebase-messaging dependency" defaultOpen="false">
+    Add this line to your project's `your_project/android/app/build.gradle` file as instructed.
 
-```xml
-distributionUrl=https://services.gradle.org/distributions/gradle-7.4-all.zip
-```
+    ```plaintext
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+    ```
+  </Accordion>
 
-#### 4. Add firebase-messaging dependency
+  <Accordion title="5. Add app permissions" defaultOpen="false">
 
+    Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
 
-Add this line to your project's `your_project/android/app/build.gradle` file as instructed.
+    ```html AndroidManifest.xml
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!--for bring app to foreground from background in Android 10 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    ```
 
-```plaintext
-implementation 'com.google.firebase:firebase-messaging:21.1.0'
-```
+    <Frame width="400"   height="auto" caption="">
+      <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_permission.png" />
+    </Frame>
 
-#### 5. Add app permissions
+  </Accordion>
 
+  <Accordion title="6. Prevent code obfuscation" defaultOpen="false">
+    To prevent obfuscation of the SDK public class names, do the following:
 
-Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
+    * **step1.** In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
 
-```html AndroidManifest.xml
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.VIBRATE"/>
-<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-<!--for bring app to foreground from background in Android 10 -->
-<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-```
+    <Tip title="TIPS">
+    Please copy the following content directly instead of typing it manually
+    </Tip>
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_permission.png" />
-</Frame>
+    ```xml
+    -keep class **.zego.**  { *; }
+    -keep class **.**.zego_zpns.** { *; }
+    ```
 
+    * **step2.** Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
 
-#### 6. Prevent code obfuscation
+    ```xml
+    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    ```
+  </Accordion>
 
+  <Accordion title="7. Check whether the local config is set up properly" defaultOpen="false">
 
-To prevent obfuscation of the SDK public class names, do the following:
+    Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
 
-* **step1.** In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+    ```bash
+    python3 zego_check_android_offline_notification.py
+    ```
 
-<Tip title="TIPS">
-Please copy the following content directly instead of typing it manually
-</Tip>
+    You will see the following if everything goes well:
 
-```xml
--keep class **.zego.**  { *; }
--keep class **.**.zego_zpns.** { *; }
-```
+    ```plaintext
+    ✅ The google-service.json is in the right location.
+    ✅ The package name matches google-service.json.
+    ✅ The project level gradle file is ready.
+    ✅ The plugin config in the app-level gradle file is correct.
+    ✅ Firebase dependencies config in the app-level gradle file is correct.
+    ✅ Firebase-Messaging dependencies config in the app-level gradle file is correct.
+    ```
+  </Accordion>
 
-* **step2.** Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+  <Accordion title="8. Guide your users to set app permissions (Android only)" defaultOpen="false">
 
-```xml
-proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-```
+    Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a phone call (such as Xiaomi). Therefore, you need to guide your app users to enable the necessary app permissions to make the system-calling UI effective.
 
-#### 7. Check whether the local config is set up properly
+    Here are the permissions that an app needs on Xiaomi devices for reference:
 
+    * Show on locked screen: Switch to **Enable**
+    * Display pop-up windows while running in the background: Switch to **Enable**
+    * Display pop-up window: Switch to **Enable**
 
-Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
 
-```bash
-python3 zego_check_android_offline_notification.py
-```
+    |                                                                                                                                                                                               |                                                                                                                                                                                               |                                                                                                                                                                                               |
+    | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+    | <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame> | <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame> | <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame> |
 
-You will see the following if everything goes well:
+    > ​Due to the complexity of Android models and systems, regarding how to set app permissions, you can refer to [this article](https://dontkillmyapp.com/).
 
-```plaintext
-✅ The google-service.json is in the right location.
-✅ The package name matches google-service.json.
-✅ The project level gradle file is ready.
-✅ The plugin config in the app-level gradle file is correct.
-✅ Firebase dependencies config in the app-level gradle file is correct.
-✅ Firebase-Messaging dependencies config in the app-level gradle file is correct.
-```
+  </Accordion>
+  </Tab>
 
-#### 8. Guide your users to set app permissions (Android only)
+  <Tab title="iOS">
 
+    Please refer to the following steps to configure your iOS project. 
+    
+    If you want to experience the functionality before integration, we have provided [sample code ](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/tree/master/call_with_offline_invitation)that includes steps 2 through 6 so you can quickly test it.
 
-Some devices require special permissions to be enabled in order for your app to automatically display in the foreground when receiving a phone call (such as Xiaomi). Therefore, you need to guide your app users to enable the necessary app permissions to make the system-calling UI effective.
+    <Accordion title="1. Apple Developer Center and ZEGOCLOUD Console Configuration" defaultOpen="false">
+      * **step1.** You need to refer to [Create VoIP services certificates](https://developer.apple.com/help/account/create-certificates/create-voip-services-certificates/) to create the VoIP service certificate, and ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​export a .p12 file on your Mac.
 
-Here are the permissions that an app needs on Xiaomi devices for reference:
+      <Video src="https://www.youtube.com/embed/UK9AUXcTGCE"/>					
 
-* Show on locked screen: Switch to **Enable**
-* Display pop-up windows while running in the background: Switch to **Enable**
-* Display pop-up window: Switch to **Enable**
+      * **step2.** Add the voip service certificate .p12 file. Then, create a resource ID;
 
+      > ​In the create resource ID popup dialog, you should switch to the **VoIP** option for **APNs**, and switch to **Data messages** for **FCM**.
 
-|                                                                                                                                                                                               |                                                                                                                                                                                               |                                                                                                                                                                                               |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame> | <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame> | <Frame width="300" height="auto" ><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame> |
+      <Video src="https://www.youtube.com/embed/sYFeq7sZFEA"/>					
 
-> ​Due to the complexity of Android models and systems, regarding how to set app permissions, you can refer to [this article](https://dontkillmyapp.com/).
 
-#### 9. Run & Test
+      When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
 
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_resource_id.png" />
+      </Frame>
+    </Accordion>
 
-Now you have finished all the **Android** steps!
+    <Accordion title="2. Add app permissions" defaultOpen="false">
+      * **step1.** Open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
 
-You can simply click the **Run** or **Debug** to run and test your App on your device.
+      ```xml
+      # Start of the permission_handler configuration
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+          '$(inherited)',
+          'PERMISSION_CAMERA=1',
+          'PERMISSION_MICROPHONE=1',
+        ]
+      end
+      # End of the permission_handler configuration
+      ```
 
-<Warning title="Warning">
-Please use real device testing, as the simulator does not support offline call invitation.
-</Warning>
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_podfile.png" />
+      </Frame>
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/run_flutter_project.jpg" />
-</Frame>
+      * **step2.** Open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
 
+      ```html Info.plist
+      <key>NSCameraUsageDescription</key>
+      <string>We require camera access to connect</string>
+      <key>NSMicrophoneUsageDescription</key>
+      <string>We require microphone access to connect</string>
+      ```
 
-### Configure your project (iOS)
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_ios.png" />
+      </Frame>
+    </Accordion>
 
+    <Accordion title="3. Disable the Bitcode" defaultOpen="false">
+      <Tip title="TIPS">
+      The following SDKs need to have Bitcode disabled:
 
-Please refer to the following steps to configure your iOS project. If you want to experience the functionality before integration, we have provided [sample code ](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_flutter/tree/master/call_with_offline_invitation)that includes steps 2 through 6 so you can quickly test it.
+      1. zego_zim
+      2. zego_zpns
+      3. zego_express_engine
+      </Tip>
 
-#### 1. Apple Developer Center and ZEGOCLOUD Console Configuration
+      * **step1.** Open the `your_project > iOS > Runner.xcworkspace` file.
+      * **step2.** Select your target project, and follow the notes on the following two images to disable the Bitcode respectively.
 
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/bitcode_1.png" />
+      </Frame>
 
-* **step1.** You need to refer to [Create VoIP services certificates](https://developer.apple.com/help/account/create-certificates/create-voip-services-certificates/) to create the VoIP service certificate, and ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​export a .p12 file on your Mac.
 
-<Video src="https://www.youtube.com/embed/UK9AUXcTGCE"/>					
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/bitcode_2.png" />
+      </Frame>
+    </Accordion>
 
-* **step2.** Add the voip service certificate .p12 file. Then, create a resource ID;
+    <Accordion title="4. Disable Build Libraries for Distribution" defaultOpen="false">
+      Open the `your_project > iOS > Runner.xcworkspace` file. Select your target project, and follow the notes on the following image to disable the `Build Libraries for Distribution`.
 
-> ​In the create resource ID popup dialog, you should switch to the **VoIP** option for **APNs**, and switch to **Data messages** for **FCM**.
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_disable_build_libraries_for_distribution.png" />
+      </Frame>
+    </Accordion>
 
-<Video src="https://www.youtube.com/embed/sYFeq7sZFEA"/>					
+    <Accordion title="5. Add Push Notifications configuration" defaultOpen="false">
+      Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
 
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
+      </Frame>
 
-When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_resource_id.png" />
-</Frame>
+      Double-click on `Push Notifications` to add this feature.
 
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push.jpeg" />
+      </Frame>
+    </Accordion>
 
-#### 2. Add app permissions
+    <Accordion title="6. Add the Background Modes capability" defaultOpen="false">
+      Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page again.
 
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
+      </Frame>
 
-* **step1.** Open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
 
-```xml
-# Start of the permission_handler configuration
-target.build_configurations.each do |config|
-  config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-    '$(inherited)',
-    'PERMISSION_CAMERA=1',
-    'PERMISSION_MICROPHONE=1',
-  ]
-end
-# End of the permission_handler configuration
-```
+      And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`.
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_podfile.png" />
-</Frame>
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capability_window.jpeg" />
+      </Frame>
+    </Accordion>
 
-* **step2.** Open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
+    <Accordion title="7. Check and Make sure the following features are enabled" defaultOpen="false">
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push2.png" />
+      </Frame>
+    </Accordion>
 
-```html Info.plist
-<key>NSCameraUsageDescription</key>
-<string>We require camera access to connect</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>We require microphone access to connect</string>
-```
+    <Accordion title="8. Import the PushKit and CallKit libraries" defaultOpen="false">
+      <Frame width="400"   height="auto" caption="">
+        <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios-callkit-framework.png" />
+      </Frame>
+    </Accordion>
+  </Tab>
 
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_ios.png" />
-</Frame>
+</Tabs>
 
-
-#### 3. Disable the Bitcode
-
-
-<Tip title="TIPS">
-The following SDKs need to have Bitcode disabled:
-
-1. zego_zim
-2. zego_zpns
-3. zego_express_engine
-</Tip>
-
-* **step1.** Open the `your_project > iOS > Runner.xcworkspace` file.
-* **step2.** Select your target project, and follow the notes on the following two images to disable the Bitcode respectively.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/bitcode_1.png" />
-</Frame>
-
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/bitcode_2.png" />
-</Frame>
-
-
-#### 4. Disable Build Libraries for Distribution
-
-
-Open the `your_project > iOS > Runner.xcworkspace` file. Select your target project, and follow the notes on the following image to disable the `Build Libraries for Distribution`.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_disable_build_libraries_for_distribution.png" />
-</Frame>
-
-
-#### 5. Add Push Notifications configuration
-
-
-Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
-</Frame>
-
-
-Double-click on `Push Notifications` to add this feature.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push.jpeg" />
-</Frame>
-
-
-#### 6. Add the Background Modes capability
-
-
-Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page again.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" />
-</Frame>
-
-
-And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`.
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capability_window.jpeg" />
-</Frame>
-
-
-#### 7. Check and Make sure the following features are enabled
-
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push2.png" />
-</Frame>
-
-
-#### 8. Import the PushKit and CallKit libraries
-
-
-<Frame width="400"   height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios-callkit-framework.png" />
-</Frame>
-
-
-#### 9. Run & Test
-
+### Run & Test
 
 Now you have finished all the steps!
 
@@ -625,5 +601,3 @@ Please use real device testing, as the simulator does not support offline call i
   </Card>
   <Card title="Troubleshooting call invitations" href="./07-Troubleshooting call invitations.mdx" />
 </CardGroup>
-
-

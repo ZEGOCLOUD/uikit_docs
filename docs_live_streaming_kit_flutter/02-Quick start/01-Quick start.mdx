@@ -74,91 +74,129 @@ Then, you can start a live stream. And the audience can watch the live stream by
 
 ## Config your project
 
-- Android:
+<Tabs>
 
-1. If your project is created with Flutter 2.x.x, you will need to open the `your_project/android/app/build.gradle` file, and modify the `compileSdkVersion` to **33**.
+  <Tab title="Android">
+    <Tabs>
+      <Tab title="android/app/build.gradle">
+        Open the file `android/app/build.gradle`, and add the following:
+
+        ```gradle
+        dependencies {
+          implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        }
+        ```
+        <Frame width="800" height="auto" caption="">
+          <img src="../images/android-config-appbuildgradle.jpeg" />
+        </Frame>
+
+        <Tip title="created with Flutter 2.x.x">
+          > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
+          
+          <Frame width="800" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
+          </Frame>
+        </Tip>
+      </Tab>
+
+      <Tab title="android/build.gradle">
+        Open the file `android/build.gradle`, and add the following:
+
+        ```gradle
+        buildscript {
+          ext.kotlin_version = '1.8.0'
+        }
+        ```
+        <Frame width="800" height="auto" caption="">
+          <img src="../images/android-config-buildgradle.jpeg" />
+        </Frame>
+      </Tab>
+
+      <Tab title="Permissions">
+        Add app permissions.
+
+        Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following:
+
+        ```xml
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.BLUETOOTH" />
+        <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+            ```
+        <Frame width="800" height="auto" caption="">
+          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_android.png" />
+        </Frame>
+      </Tab>
+
+      <Tab title="Prevent code obfuscation">
+        To prevent obfuscation of the SDK public class names, do the following:
+
+        1. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+
+        ```gradle
+        -keep class **.zego.** { *; }
+        ```
+
+        2. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+
+        ```gradle
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        ```
+
+        <Frame width="auto" height="auto" caption="">
+          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
+        </Frame>
+      </Tab>
+    </Tabs>
+  </Tab>
+  
+  <Tab title="iOS">
+    <Tabs>
+
+      <Tab title="Add app permissions">
+        1. open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
+
+        ```plist
+        # Start of the permission_handler configuration
+        target.build_configurations.each do |config|
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+            '$(inherited)',
+            'PERMISSION_CAMERA=1',
+            'PERMISSION_MICROPHONE=1',
+          ]
+        end
+        # End of the permission_handler configuration
+        ```
+
+        <Frame width="800" height="auto" caption="">
+          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_podfile.png" />
+        </Frame>
+
+        2. open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
+
+        ```plist
+            <key>NSCameraUsageDescription</key>
+            <string>We require camera access to connect to a live</string>
+            <key>NSMicrophoneUsageDescription</key>
+            <string>We require microphone access to connect to a live</string>
+        ```
+
+        <Frame width="800" height="auto" caption="">
+          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_ios.png" />
+        </Frame>
+      </Tab>
+
+    </Tabs>
+  </Tab>
+</Tabs>
 
 
-<Frame width="auto" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
-</Frame>
-
-2. Add app permissions.
-Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following:
-
-```xml
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-    ```
-<Frame width="800" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_android.png" />
-</Frame>
-
-3. Prevent code obfuscation.
-
-To prevent obfuscation of the SDK public class names, do the following:
-
-a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
-
-```gradle
--keep class **.zego.** { *; }
-```
-
-b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
-
-
-```gradle
-proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-```
-
-<Frame width="auto" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
-</Frame>
-
-
-
-- iOS:
-
-1. Add app permissions.
-
-a. open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
-
-```plist
-# Start of the permission_handler configuration
-target.build_configurations.each do |config|
-  config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-    '$(inherited)',
-    'PERMISSION_CAMERA=1',
-    'PERMISSION_MICROPHONE=1',
-  ]
-end
-# End of the permission_handler configuration
-```
-
-<Frame width="800" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_podfile.png" />
-</Frame>
-
-b. open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
-
-```plist
-    <key>NSCameraUsageDescription</key>
-    <string>We require camera access to connect to a live</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>We require microphone access to connect to a live</string>
-```
-
-<Frame width="800" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_ios.png" />
-</Frame>
 
 
 

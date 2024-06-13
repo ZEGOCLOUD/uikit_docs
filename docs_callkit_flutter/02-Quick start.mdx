@@ -58,141 +58,164 @@ Now, you can make a new call by navigating to this `CallPage`.
 
 ## Configure your project
 
+<Tabs>
+  <Tab title="Android">
+    <Tabs>
+      <Tab title="android/app/build.gradle">
+        Open the file `android/app/build.gradle`
+        
+        1. add the following:
 
-### Android
+        ```gradle
+        dependencies {
+          implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        }
+        ```
+        <Frame width="800" height="auto" caption="">
+          <img src="images/android-config-appbuildgradle.jpeg" />
+        </Frame>
 
-
-1. Modify the `compileSdkVersion` to 33 in the `your_project/android/app/build.gradle` file.
-
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/compile_sdk_version.png" />
-</Frame>
-
-2. Modify the `minSdkVersion` in the same file:
-
-```gradle build.gradle
-minSdkVersion 21
-```
-
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_min_sdk_21.png" />
-</Frame>
-
-3. Modify the `kotlin` version to >= 1.8.0 and the `gradle classpath` version to 7.3.0 in the `your_project/android/app/build.gradle` file:
-
-```gradle build.gradle
-buildscript {
-    ext.kotlin_version = '1.8.0'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // support notification
-        classpath 'com.google.gms:google-services:4.3.14'
-    }
-}
-```
-
-4. Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, modify the `distributionUrl` to `https://services.gradle.org/distributions/gradle-7.4-all.zip`.
-
-```xml gradle-wrapper.properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-all.zip
-```
-
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/kotlin180.jpg" />
-</Frame>
-
-5. Add app permissions.
-
-Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
-
-```html AndroidManifest.xml
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.BLUETOOTH" />
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.VIBRATE"/>
-<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-<!--for bring app to foreground from background in Android 10 -->
-<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-```
-
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_android.png" />
-</Frame>
-
-6. Prevent code obfuscation.
-
-In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
-
-```plaintext
--keep class **.zego.** { *; }
-```
-
-   Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
-
-```plaintext
-proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-```
-
-### iOS
+        2. Modify the `minSdkVersion`.
+        ```xml
+        minSdkVersion 21
+        ```
+        <Frame width="auto" height="auto" caption="">
+          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_min_sdk_21.png" />
+        </Frame>
 
 
-1. Add app permissions.
+        3. Modify the `compileSdkVersion` to 33.
 
-Open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/compile_sdk_version.png" />
+        </Frame>
 
-```plaintext
-# Start of the permission_handler configuration
-target.build_configurations.each do |config|
-  config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
-    '$(inherited)',
-    'PERMISSION_CAMERA=1',
-    'PERMISSION_MICROPHONE=1',
-  ]
-end
-# End of the permission_handler configuration
-```
+        <Tip title="created with Flutter 2.x.x">
+          > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
+          
+          <Frame width="800" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
+          </Frame>
+        </Tip>
+      </Tab>
 
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_podfile.png" />
-</Frame>
+      <Tab title="android/build.gradle">
+        Open the file `android/build.gradle`, and add the following:
 
-2. Open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
+        ```gradle
+        buildscript {
+          ext.kotlin_version = '1.8.0'
+        }
+        ```
+        <Frame width="800" height="auto" caption="">
+          <img src="images/android-config-buildgradle.jpeg" />
+        </Frame>
+      </Tab>
 
-```xml
-<key>NSCameraUsageDescription</key>
-<string>We require camera access to connect</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>We require microphone access to connect</string>
-```
+      <Tab title="gradle-wrapper.properties">
+        Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, modify the `distributionUrl` to `https://services.gradle.org/distributions/gradle-7.4-all.zip`.
 
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_ios.jpg" />
-</Frame>
+        ```xml gradle-wrapper.properties
+        distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-all.zip
+        ```
 
-3. Disable `Build Libraries for Distribution`
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/kotlin180.jpg" />
+        </Frame>
+      </Tab>
 
-Open the your_project > iOS > Runner.xcworkspace file.
+      <Tab title="Permissions">
+        Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
 
-Select your target project, and follow the notes on the following image to disable the `Build Libraries for Distribution`.
+        ```html AndroidManifest.xml
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.BLUETOOTH" />
+        <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.VIBRATE"/>
+        <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+        <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+        <!--for bring app to foreground from background in Android 10 -->
+        <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+        ```
 
-<Frame width="400"  height="auto" caption="">
-  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_disable_build_libraries_for_distribution.png" />
-</Frame>
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_android.png" />
+        </Frame>
+      </Tab>
+
+      <Tab title="Prevent code obfuscation">
+        In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
+
+        ```plaintext
+        -keep class **.zego.** { *; }
+        ```
+
+          Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
+
+        ```plaintext
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+  
+  <Tab title="iOS">
+    <Tabs>
+      <Tab title="Permissions">
+        1. Add app permissions.
+
+        Open the `your_project/ios/Podfile` file, and add the following to the `post_install do |installer|` part:
+
+        ```plaintext
+        # Start of the permission_handler configuration
+        target.build_configurations.each do |config|
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+            '$(inherited)',
+            'PERMISSION_CAMERA=1',
+            'PERMISSION_MICROPHONE=1',
+          ]
+        end
+        # End of the permission_handler configuration
+        ```
+
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_podfile.png" />
+        </Frame>
+
+        2. Open the `your_project/ios/Runner/Info.plist` file, and add the following to the `dict` part:
+
+        ```xml
+        <key>NSCameraUsageDescription</key>
+        <string>We require camera access to connect</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>We require microphone access to connect</string>
+        ```
+
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/permission_ios.jpg" />
+        </Frame>
+
+      </Tab>
+      <Tab title="Disable `Build Libraries for Distribution`">
+        Open the your_project > iOS > Runner.xcworkspace file.
+
+        Select your target project, and follow the notes on the following image to disable the `Build Libraries for Distribution`.
+
+        <Frame width="400"  height="auto" caption="">
+          <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_disable_build_libraries_for_distribution.png" />
+        </Frame>
+      </Tab>
+    </Tabs>
+  </Tab>
+</Tabs>
+
 
 
 ## Run & Test
