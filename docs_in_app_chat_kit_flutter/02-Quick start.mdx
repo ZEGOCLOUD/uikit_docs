@@ -1,3 +1,5 @@
+import UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION from "/snippets/uikit/UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION-en.mdx";
+
 # Quick start
 
 This doc will guide you to integrate the In-app Chat Kit and start a chat quickly.
@@ -127,24 +129,7 @@ b. Log in by calling the `connectUser` method with your user information. And th
   </Frame>
 
   4. Prevent code obfuscation.
-
-  To prevent obfuscation of the SDK public class names, do the following:
-
-  a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
-
-    ```xml
-    -keep class **.zego.** { *; }
-    ```
-
-  b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
-
-    ```xml
-    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    ```
-
-    <Frame width="auto" height="auto" caption="">
-      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
-    </Frame>
+<UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
 </Accordion>
 
 <Accordion title="iOS" defaultOpen="false">

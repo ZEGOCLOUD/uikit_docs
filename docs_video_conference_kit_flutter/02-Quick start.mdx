@@ -1,4 +1,7 @@
 import PermissionConfig from "/snippets/uikit/UIKIT_IOS_PERMISSION_CONFIG-en.mdx"
+import UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION from "/snippets/uikit/UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION-en.mdx";
+import UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG from "/snippets/uikit/UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG-en.mdx";
+import UIKIT_FLUTTER_ANDROID_APP_GRADLE_CONFIG from "/snippets/uikit/UIKIT_FLUTTER_ANDROID_APP_GRADLE_CONFIG-en.mdx";
 
 # Quick start
 
@@ -72,86 +75,39 @@ Now, you can start a video conference by navigating to this `VideoConferencePage
 
 <Tabs>
   <Tab title="Android">
-    <Tabs>
-      <Tab title="android/app/build.gradle">
-        Open the file `android/app/build.gradle`, and add the following:
-
-        ```gradle
-        dependencies {
-          implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-        }
+    <Accordion title="Edit `android/app/build.gradle`">
+<UIKIT_FLUTTER_ANDROID_APP_GRADLE_CONFIG />
+    </Accordion>
+    <Accordion title="Edit `android/build.gradle`">
+<UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG />
+    </Accordion>
+    <Accordion title="Modify Permissions">
+      Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
+        ```xml AndroidManifest.xml
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.BLUETOOTH" />
+        <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
         ```
-        <Frame width="800" height="auto" caption="">
-          <img src="images/android-config-appbuildgradle.jpeg" />
-        </Frame>
-
-        <Tip title="created with Flutter 2.x.x">
-          > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
-          
-          <Frame width="800" height="auto" caption="">
-            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
-          </Frame>
-        </Tip>
-      </Tab>
-
-      <Tab title="android/build.gradle">
-        Open the file `android/build.gradle`, and add the following:
-
-        ```gradle
-        buildscript {
-          ext.kotlin_version = '1.8.0'
-        }
-        ```
-        <Frame width="800" height="auto" caption="">
-          <img src="images/android-config-buildgradle.jpeg" />
-        </Frame>
-      </Tab>
-      <Tab title="Permissions">
-        Open the file `your_project/app/src/main/AndroidManifest.xml`, and add the following code:
-          ```xml AndroidManifest.xml
-          <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-          <uses-permission android:name="android.permission.RECORD_AUDIO" />
-          <uses-permission android:name="android.permission.INTERNET" />
-          <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-          <uses-permission android:name="android.permission.CAMERA" />
-          <uses-permission android:name="android.permission.BLUETOOTH" />
-          <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-          <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-          <uses-permission android:name="android.permission.WAKE_LOCK" />
-          ```
-        <Frame width="512" height="auto" caption="">
-          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_android.png" />
-        </Frame>
-      </Tab>
-      <Tab title="Prevent code obfuscation">
-        To prevent obfuscation of the SDK public class names, do the following:
-
-        a. In your project's `your_project > android > app` folder, create a `proguard-rules.pro` file with the following content as shown below:
-
-        ```xml proguard-rules.pro
-        -keep class **.zego.** { *; }
-        ```
-
-        b. Add the following config code to the `release` part of the `your_project/android/app/build.gradle` file.
-
-        ```xml build.gradle
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        ``` 
-
-        <Frame width="512" height="auto" caption="">
-          <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
-        </Frame>
-      </Tab>
-    </Tabs>
+      <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_android.png" />
+      </Frame>
+    </Accordion>
+    <Accordion title="Prevent code obfuscation">
+<UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
+    </Accordion>
   </Tab>
 
   <Tab title="iOS">
-    <Tabs>
-      <Tab title="Permissions">
+    <Accordion title="Permissions">
 <PermissionConfig/>
-      </Tab>
-    </Tabs>
+    </Accordion>
   </Tab>
 </Tabs>
 
