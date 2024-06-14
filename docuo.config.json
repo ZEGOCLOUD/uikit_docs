@@ -180,5 +180,10 @@
       "path": "docs_video_conference_kit_web",
       "routeBasePath": "video-conference-kit-web"
     }
-  ]
+  ],
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-PKWFYY4JH2"
+    }
+  }
 }
