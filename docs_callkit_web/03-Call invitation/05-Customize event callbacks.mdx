@@ -29,6 +29,12 @@ zp.setCallInvitationConfig({
   onIncomingCallTimeout: (callID, caller) => {},
   
   // The caller will receive the notification through this callback when the call invitation timed out.
-  onOutgoingCallTimeout: (callID, callees) => {}
+  onOutgoingCallTimeout: (callID, callees) => {},
+
+  // When the callee user clicks the accept button on the call invitation popup, the callee will receive this callback.
+  onIncomingCallAcceptButtonPressed: () => {},
+
+  // When the callee user clicks the decline button on the call invitation popup, the callee will receive this callback.
+  onIncomingCallDeclineButtonPressed: () => {}
 })
 ```
