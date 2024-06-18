@@ -19,28 +19,31 @@
 
 Choose either of the following to import the Call Kit:
 
-#### Using the NPM
-
-1. Install the plug-in.
-    ```js
-     npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.9.0 --save 
-    ```
-
-2. Import the Call Kit in your project's `js` or `ts` file:
-
-    ```js
-    import { ZIM } from "zego-zim-web";
-    import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-    ```
-
-#### Using the HTML Script Tag 
-
-- Import the following script code in the `HTML` page:
-(**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
+<Tabs>
+  <Tab title="Using the NPM">
+    <Steps>
+      <Step title="Install the plug-in">
+      ```js
+      npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.9.0 --save 
+      ```
+      </Step>
+      <Step title="Import the Call Kit in your project's js or ts file">
+        ```js
+        import { ZIM } from "zego-zim-web";
+        import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Using the HTML Script Tag">
+    Import the following script code in the `HTML` page:
+    (**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
     ```html
-   <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
-   <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
     ```
+  </Tab>
+</Tabs>
 
 
 ### Initialize the Call Kit with call invitation feature
