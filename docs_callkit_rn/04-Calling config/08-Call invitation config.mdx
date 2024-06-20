@@ -352,6 +352,55 @@ ZegoUIKitPrebuiltCallService.init(
 ```
 </CodeGroup>
 
+## Call End Event
+If you want to receive relevant callbacks when a call ends, you use `onCallEnd` to listen for the callback when the call ends.
+
+- `onCallEnd`(callID, reason, duration)
+
+The reason for call end:
+
+0 - the call ended due to a local hang-up
+
+1 - the call ended when the remote user hung up, leaving only one local user in the call
+
+2 - the call ended due to being kicked out or room ended.
+
+
+Here is the reference code:
+
+```js title="With call invitation"
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            onCallEnd: (callID, reason, duration) => {
+                console.log('########CallWithInvitation onCallEnd', callID, reason, duration);
+                props.navigation.navigate('HomeScreen');
+            },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
 
 ## Customize the call waiting page view
 
