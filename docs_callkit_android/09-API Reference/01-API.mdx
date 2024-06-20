@@ -4,6 +4,7 @@
 - [ZegoUIKitPrebuiltCallFragment](#zegouikitprebuiltcallfragment)
 - [ZegoUIKitPrebuiltCallService](#zegouikitprebuiltcallservice)
     - [init](#init)
+    - [initWithToken](#initwithtoken)
     - [uninit](#uninit)
     - [endCall](#endcall)
     - [minimizeCall](#minimizecall)
@@ -13,7 +14,8 @@
     - [openMicrophone](#openmicrophone)
     - [isMicrophoneOn](#ismicrophoneon)
     - [isCameraOn](#iscameraon)
-
+    - [setAudioOutputToSpeaker](#setaudiooutputtoSpeaker)
+    - [getAudioRouteType](#getaudioroutetype)
 
 
 ## ZegoUIKitPrebuiltCallFragment
@@ -55,8 +57,7 @@
 
 ### init
 
-
- you must call this method as soon as the user login(or re-login, auto-login) to your app.
+ You can use this method to initialize `ZegoUIKitPrebuiltCallService` with appSign. You must call this method as soon as the user login(or re-login, auto-login) to your app.
 
  If you need to set `ZegoUIKitPrebuiltCallConfig`, you can do so through `ZegoUIKitPrebuiltCallInvitationConfig.provider`.
  Each time the `ZegoUIKitPrebuiltCallFragment` starts, it will request this callback to obtain the current call's config.
@@ -70,9 +71,25 @@
  public static void init(Application application, long appID, String appSign, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
  ```
 
+### initWithToken
+
+ You can use this method to initialize `ZegoUIKitPrebuiltCallService` with token. You must call this method as soon as the user login(or re-login, auto-login) to your app.
+
+ If you need to set `ZegoUIKitPrebuiltCallConfig`, you can do so through `ZegoUIKitPrebuiltCallInvitationConfig.provider`.
+ Each time the `ZegoUIKitPrebuiltCallFragment` starts, it will request this callback to obtain the current call's config.
+
+ Additionally, you can customize the call ringtone through `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallRingtone` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallRingtone`, and configure notifications through `notificationConfig`.
+ You can also customize the invitation interface with `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallBackground` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallBackground`. If you want to modify the related text on the interface, you can set `innerText`.
+ If you want to listen for events and perform custom logics, you can use `addInvitationCallListener` to obtain related invitation events.
+
+
+```java title="function prototype"
+public static void initWithToken(Application application, long appID, String token, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
+```
+
 ### uninit
 
- must call this method as soon as the user logout from  app
+You must call this method as soon as the user logout from  app.
 
 
 ```java title="function prototype"
@@ -81,35 +98,34 @@
 
 ### endCall
 
- End and leave current call.Current activity will be finished.
+ End and leave current call. Current activity will be finished.
 
 
 
 ```java  title="function prototype"
-  public static void endCall()
- ```
+public static void endCall()
+```
 
 ### minimizeCall
 
- This function is used to minimize the current call.usually it can be used with backpressed Listener to miminimize call when press back button.To make it work,you should have Overlays 
- permission and has ZegoMenuBarButtonName.MINIMIZING_BUTTON and use ZEGO call invite service.
+ This function is used to minimize the current call.usually it can be used with backpressed Listener to miminimize call when press back button.To make it work,you should have Overlays permission and has `ZegoMenuBarButtonName.MINIMIZING_BUTTON` and use ZEGO call invite service.
 
 
 
 ```java  title="function prototype"
-  public static void minimizeCall()
- ```
+public static void minimizeCall()
+```
 
 
 ### getPrebuiltCallFragment
 
- This function can be used to get `ZegoUIKitPrebuiltCallFragment` when in a call.If not in a call,and null will be returned.
+ This function can be used to get `ZegoUIKitPrebuiltCallFragment` when in a call. If not in a call, and null will be returned.
 
 
 
 ```java  title="function prototype"
-  public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
- ```
+public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
+```
 
 ### sendInvitationWithUIChange
 
@@ -118,15 +134,15 @@
 
 
 ```java  title="function prototype"
-   public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
-        ZegoInvitationType type, PluginCallbackListener callbackListener);
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, PluginCallbackListener callbackListener);
 
-   public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
-        ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
 
-   public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
-        ZegoInvitationType type, String customData, String callID,
-        ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String customData, String callID,
+    ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
  ```
 
 
@@ -137,36 +153,46 @@
 
 
 ```java  title="function prototype"
-  public static void openCamera(boolean enable);
- ```
+public static void openCamera(boolean enable);
+```
 
 
 ### openMicrophone
 
  Open or close you microphone
 
-
-
 ```java  title="function prototype"
-  public static void openMicrophone(boolean enable);
- ```
+public static void openMicrophone(boolean enable);
+```
 
 
 ### isMicrophoneOn
 
-
-
-
 ```java  title="function prototype"
-  public static boolean isMicrophoneOn();
- ```
+public static boolean isMicrophoneOn();
+```
 
 
 ### isCameraOn
 
+```java  title="function prototype"
+public static boolean isCameraOn() ;
+```
 
+### setAudioOutputToSpeaker
 
+Set the audio output device to the speaker.
+When `outputToSpeaker` is `false`: Call Kit will select the audio output device with the highest priority according to the system scheduling, common audio routes include: receiver, headphones, Bluetooth devices, etc.
+When `outputToSpeaker` is `true` and the original output device is the receiver: Call Kit will play sound using the built-in speaker.
+When `outputToSpeaker` is `true` and the original output device is headphones or Bluetooth devices: this method is invalid, and the original device is used to output audio.
 
 ```java  title="function prototype"
-  public static boolean isCameraOn() ;
- ```
+public static void setAudioOutputToSpeaker(boolean outputToSpeaker);
+```
+
+### getAudioRouteType
+Get the current audio route. Audio route refers to the audio output device used by the app when playing audio, common audio routes include: speaker, receiver, headphones, Bluetooth devices, etc.
+
+```java  title="function prototype"
+public static ZegoAudioOutputDevice getAudioRouteType();
+```
