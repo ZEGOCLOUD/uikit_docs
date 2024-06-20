@@ -5,7 +5,8 @@
     - [onBackPressed](#onbackpressed)
     - [onOnlySelfInRoom](#ononlyselfinroom)
     - [onCallEnd](#oncallend)
-    - [ZegoMenuBarButtonClickListener](#zegomenubarbuttonclicklistener)
+    - [onAudioOutputDeviceChanged](#onaudiooutputdevicechanged)
+    - [onClick](#onclick)
 - [InvitationEvents](#invitationevents)
     - [onIncomingCallDeclineButtonPressed](#onincomingcalldeclinebuttonpressed)
     - [onIncomingCallAcceptButtonPressed](#onincomingcallacceptbuttonpressed)
@@ -26,11 +27,10 @@
  You can set this handler to listen to all express SDK event,like room update,user enter or left,stream update,etc.
 
 ```java example
- ZegoUIKitPrebuiltCallService.events.callEvents.setExpressEngineEventHandler(new IExpressEngineEventHandler() {
-           
- });
+ZegoUIKitPrebuiltCallService.events.callEvents.setExpressEngineEventHandler(new IExpressEngineEventHandler() {
+          
+});
 ```
-
 
 ### onBackPressed
  this callback will be invoked when back button of android is pressed.if returned false,UIKit
@@ -39,7 +39,7 @@
 
 <CodeGroup>
 ```java title="function prototype"
-  boolean onBackPressed();
+boolean onBackPressed();
 ```
 
 ```java example
@@ -60,16 +60,16 @@ ZegoUIKitPrebuiltCallService.events.callEvents.setBackPressEvent(new BackPressEv
 
 <CodeGroup>
 ```java title="function prototype"
-  void onOnlySelfInRoom();
+void onOnlySelfInRoom();
 ```
 
 ```java example
 ZegoUIKitPrebuiltCallService.events.callEvents.setOnlySelfInRoomListener(new ZegoOnlySelfInRoomListener() {
-      @Override
-      public void onOnlySelfInRoom() {
-          
-      }
-  });
+    @Override
+    public void onOnlySelfInRoom() {
+        
+    }
+});
 ```
 </CodeGroup>
 
@@ -83,7 +83,7 @@ ZegoUIKitPrebuiltCallService.events.callEvents.setOnlySelfInRoomListener(new Zeg
  
 <CodeGroup>
 ```java title="function prototype"
-  void onCallEnd(ZegoCallEndReason callEndReason, String jsonObject) ;
+void onCallEnd(ZegoCallEndReason callEndReason, String jsonObject) ;
 ```
 
 ```java example
@@ -96,23 +96,40 @@ ZegoUIKitPrebuiltCallService.events.callEvents.setCallEndListener(new CallEndLis
 ```
 </CodeGroup>
 
+### onAudioOutputDeviceChanged
 
-### ZegoMenuBarButtonClickListener
+Audio device routing change notification. This callback is triggered when there is a change in audio routing, such as headphone insertion or removal, speaker and earpiece switching, etc.
+
+<CodeGroup>
+```java function prototype
+void onAudioOutputDeviceChanged(ZegoAudioOutputDevice audioOutput);
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.addAudioOutputDeviceChangedListener(new ZegoAudioOutputDeviceChangedListener() {
+    @Override
+    public void onAudioOutputDeviceChanged(ZegoAudioOutputDevice audioOutput) {
+    }
+});
+```
+</CodeGroup>
+
+### onClick
 
  The click event of the button corresponding to the enumeration class ZegoMenuBarButtonName
  
 <CodeGroup>
 ```java title="function prototype"
-  void onClick(ZegoMenuBarButtonName name, View view);
+void onClick(ZegoMenuBarButtonName name, View view);
 ```
 
 ```java example
- ZegoUIKitPrebuiltCallService.events.callEvents.setButtonClickListener(new ZegoMenuBarButtonClickListener() {
-        @Override
-        public void onClick(ZegoMenuBarButtonName name, View view) {
-            
-        }
-    });
+ZegoUIKitPrebuiltCallService.events.callEvents.setButtonClickListener(new ZegoMenuBarButtonClickListener() {
+    @Override
+    public void onClick(ZegoMenuBarButtonName name, View view) {
+        
+    }
+});
 ```
 </CodeGroup>
 
@@ -120,11 +137,9 @@ ZegoUIKitPrebuiltCallService.events.callEvents.setCallEndListener(new CallEndLis
 
 ## InvitationEvents
 
-
 ### onIncomingCallDeclineButtonPressed
 
-
- This callback will be triggered to **callee** when callee click decline button in incoming call
+This callback will be triggered to **callee** when callee click decline button in incoming call
 
 <CodeGroup>
 ```java title="function prototype"
@@ -133,20 +148,18 @@ void onIncomingCallDeclineButtonPressed();
 
 ```java example
 ZegoUIKitPrebuiltCallService.events.invitationEvents.setIncomingCallButtonListener(new IncomingCallButtonListener() {
-   @Override
-   public void onIncomingCallDeclineButtonPressed() {
-         //...
-   }
-   //...
+    @Override
+    public void onIncomingCallDeclineButtonPressed() {
+        //...
+    }
+    //...
 });
 ```
 </CodeGroup>
 
-
 ### onIncomingCallAcceptButtonPressed
 
-
- This callback will be triggered to **callee** when callee click accept button in incoming call
+This callback will be triggered to **callee** when callee click accept button in incoming call
 
 <CodeGroup>
 ```java title="function prototype"
@@ -155,45 +168,41 @@ void onIncomingCallAcceptButtonPressed();
 
 ```java example
 ZegoUIKitPrebuiltCallService.events.invitationEvents.setIncomingCallButtonListener(new IncomingCallButtonListener() {
-   @Override
-   public void onIncomingCallAcceptButtonPressed() {
-       //...  
-   }
-   //...
+    @Override
+    public void onIncomingCallAcceptButtonPressed() {
+        //...  
+    }
+    //...
 });
 ```
 </CodeGroup>
 
 ### onOutgoingCallCancelButtonPressed
 
-
- This callback will be triggered to **caller** when caller cancels the call invitation by click the cancel button
+This callback will be triggered to **caller** when caller cancels the call invitation by click the cancel button
 
 <CodeGroup>
 ```java title="function prototype"
- void onOutgoingCallCancelButtonPressed();
+void onOutgoingCallCancelButtonPressed();
 ```
 
 ```java example
 ZegoUIKitPrebuiltCallService.events.invitationEvents.setOutgoingCallButtonListener(new OutgoingCallButtonListener() {
-   @Override
-   public void onOutgoingCallCancelButtonPressed() {
-         //...
-   }
+    @Override
+    public void onOutgoingCallCancelButtonPressed() {
+        //...
+    }
 });
 ```
 </CodeGroup>
 
-
 ### onIncomingCallReceived
 
-
- This callback will be triggered to **callee** when callee receive a call
+This callback will be triggered to **callee** when callee receive a call
 
 <CodeGroup>
 ```java title="function prototype"
-   void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees);
-
+void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees);
 ```
 
 ```java example
@@ -202,19 +211,18 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     public void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType,
         List<ZegoCallUser> callees) {
         //...
-      }
- });
+    }
+});
 ```
 </CodeGroup>
 
 ### onIncomingCallCanceled
 
-
- This callback will be triggered to **callee** when the caller cancels the call invitation.
+This callback will be triggered to **callee** when the caller cancels the call invitation.
 
 <CodeGroup>
 ```java title="function prototype"
-  public void onIncomingCallCanceled(String callID, ZegoCallUser caller) 
+public void onIncomingCallCanceled(String callID, ZegoCallUser caller) 
 ```
 
 ```java example
@@ -222,15 +230,14 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onIncomingCallCanceled(String callID, ZegoCallUser caller)  {
         //...
-      }
+    }
  });
 ```
 </CodeGroup>
 
 ### onIncomingCallTimeout
 
-
- The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
 
 <CodeGroup>
 ```java title="function prototype"
@@ -242,15 +249,14 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onIncomingCallTimeout(String callID, ZegoCallUser caller)  {
         //...
-      }
+    }
  });
 ```
 </CodeGroup>
 
 ### onOutgoingCallAccepted
 
-
- The **caller** will receive a notification through this callback when the callee accepts the call invitation.
+The **caller** will receive a notification through this callback when the callee accepts the call invitation.
 
 <CodeGroup>
 ```java title="function prototype"
@@ -261,19 +267,18 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onOutgoingCallAccepted(String callID, ZegoCallUser callee)  {
         //...
-      }
+    }
  });
 ```
 </CodeGroup>
 
 ### onOutgoingCallRejectedCauseBusy
 
-
- The **caller** will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+The **caller** will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
 
 <CodeGroup>
 ```java title="function prototype"
-  public void onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)
+public void onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)
 ```
 
 ```java example
@@ -281,19 +286,18 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)  {
         //...
-      }
- });
+    }
+});
 ```
 </CodeGroup>
 
 ### onOutgoingCallDeclined
 
-
- The **caller** will receive a notification through this callback when the callee declines the call invitation actively.
+The **caller** will receive a notification through this callback when the callee declines the call invitation actively.
 
 <CodeGroup>
 ```java title="function prototype"
- public void onOutgoingCallDeclined(String callID, ZegoCallUser callee) 
+public void onOutgoingCallDeclined(String callID, ZegoCallUser callee) 
 ```
 
 ```java example
@@ -301,19 +305,18 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onOutgoingCallDeclined(String callID, ZegoCallUser callee)  {
         //...
-      }
- });
+    }
+});
 ```
 </CodeGroup>
 
 ### onOutgoingCallTimeout
 
-
- The **caller** will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+The **caller** will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
 
 <CodeGroup>
 ```java title="function prototype"
-  public void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees) 
+public void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees) 
 ```
 
 ```java example
@@ -321,7 +324,7 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
     @Override
     public onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees)  {
         //...
-      }
+    }
  });
 ```
 </CodeGroup>
@@ -329,12 +332,11 @@ ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new Z
 
 ## onError
 
- this callback will be invoked when SDK error.For example.if SDK init error,INIT_PARAM_ERROR will be
- throwed .
+This callback will be invoked when SDK error. For example, if SDK init error, `INIT_PARAM_ERROR` will be throwed .
 
 <CodeGroup>
 ```java title="function prototype"
-  void onError(int errorCode, String message);
+void onError(int errorCode, String message);
 ```
 
 ```java example
