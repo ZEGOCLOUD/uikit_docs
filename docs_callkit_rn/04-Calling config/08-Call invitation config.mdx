@@ -353,18 +353,14 @@ ZegoUIKitPrebuiltCallService.init(
 </CodeGroup>
 
 ## Call End Event
-If you want to receive relevant callbacks when a call ends, you use `onCallEnd` to listen for the callback when the call ends.
+If you want to receive relevant callbacks when a call ends, you can use `onCallEnd`.
 
 - `onCallEnd`(callID, reason, duration)
 
 The reason for call end:
-
-0 - the call ended due to a local hang-up
-
-1 - the call ended when the remote user hung up, leaving only one local user in the call
-
-2 - the call ended due to being kicked out or room ended.
-
+- 0: the call ends due to a local hang-up.
+- 1: the call ends when the remote user hung up, leaving only one local user in the call.
+- 2: the call ends because the local user is kicked out or the room is ended.
 
 Here is the reference code:
 
