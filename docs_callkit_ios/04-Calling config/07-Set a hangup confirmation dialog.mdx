@@ -102,8 +102,8 @@ Here is the sample code:
 ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
 
 extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
-    func onHangUp(_ isHandup: Bool) {
-        print("")
+    func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+        print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
     }
 }
 ```

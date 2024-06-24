@@ -21,10 +21,13 @@ This pop-up will show when you receive a call invitation, which can also be cust
 
 ## How do I customize the waiting page?
 
-```javascript
+You can customize the waiting page by calling the `setCallInvitationConfig` interface to set the `enableCustomCallInvitationWaitingPage` parameter and listen for the `onWaitingPageWhenSending` callback.
+
+<CodeGroup>
+```js JavaScript
 zp.setCallInvitationConfig({
     enableCustomCallInvitationWaitingPage: true,
-   // The following is the callback for showing the waiting page after a call invitation is sent. To cancel the call invitation, set it to [cancel].
+   // The following is the callback for showing the waiting page after a call invitation is sent. This callback function returns [cancel] for you to set the corresponding user interface.
    onWaitingPageWhenSending: (callType,callees,cancel) =>{
      // Add your custom logic here. 
      // The following shows an example, the waitingPageDom is the DOM object that is used to represent the page element, here the page indicates the waiting page when sending a call invitation.
@@ -46,9 +49,21 @@ zp.setCallInvitationConfig({
 })
 ```
 
+```html HTML
+<div id="waitingPage" style="display: none">
+    // Customize your UI
+    // To display information about the callee, you can obtain the callees parameter through the onWaitingPageWhenSending callback
+    // To cancel the call, you can call the cancel method of the onWaitingPageWhenSending callback
+</div>
+```
+</CodeGroup>
+
 ## How do I customize the call invitation dialog?
 
-```javascript
+You can customize the call invitation dialog by setting the `enableCustomCallInvitationDialog` parameter and listening to the `onConfirmDialogWhenReceiving` callback through the `setCallInvitationConfig` interface.
+
+<CodeGroup>
+```javascript JavaScript
 zp.setCallInvitationConfig({
     enableCustomCallInvitationDialog: true,
    // The following is the callback for showing the call invitation pop-up dialog when receiving a call invitation, this callback returns [accept] and [refuse] for you to set the corresponding UI.
@@ -72,3 +87,328 @@ zp.setCallInvitationConfig({
     }
 })
 ```
+
+```html HTML
+<div id="confirmDialog" style="display: none">
+    // Customize your UI
+    // To display information about the caller, you can access the caller parameter through the onConfirmDialogWhenReceiving callback
+    // To accept a call, you can call the accept method in the onConfirmDialogWhenReceiving callback
+    // To reject a call, you can call the refuse method in the onConfirmDialogWhenReceiving callback
+</div>
+```
+</CodeGroup>
+
+## Reference
+<Accordion title="onWaitingPageWhenSending" defaultOpen="false">
+
+- **Description**
+
+  Callback for the call invitation waiting page.
+
+- **Function prototype**
+
+  ```typescript
+  onWaitingPageWhenSending?: (
+      callType: ZegoInvitationType,
+      callees: ZegoUser[],
+      cancel: CancelCallInvitationFunc
+  ) => void;
+  ```
+
+- **Parameter Description**
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col width="" />
+      <col width="15%" />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Parameter</th>
+  <th>Category</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>callType</td>
+  <td>ZegoInvitationType</td>
+  <td>The type of call. </td>
+  </tr>
+  <tr data-row-level="3">
+  <td>callees</td>
+  <td>ZegoUser[]</td>
+  <td>The callee list, including no more than 9 users.</td>
+  </tr>
+  <tr data-row-level="4">
+  <td>cancel</td>
+  <td>CancelCallInvitationFunc = (data?: string) => void</td>
+  <td>The function to cancel invitation.</td>
+  </tr>
+  </tbody></table>
+</Accordion>
+
+<Accordion title="onSetRoomConfigBeforeJoining" defaultOpen="false">
+
+- **Description**
+
+  The callback of setting a room before joining.
+
+- **Function Prototype**
+
+  ```typescript
+  onSetRoomConfigBeforeJoining?: (
+      callType: ZegoInvitationType
+  ) => ZegoCloudRoomConfig;
+  ```
+
+- **参数说明：**
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col width="" />
+      <col width="15%" />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Parameter</th>
+  <th>Category</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>callType</td>
+  <td>ZegoInvitationType</td>
+  <td>The type of call.</td>
+  </tr>
+  </tbody></table>
+
+- **Return Value**
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col width="" />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Return Value</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>ZegoCloudRoomConfig</td>
+  <td>Room Configuration.</td>
+  </tr>
+  </tbody></table>
+</Accordion>
+
+<Accordion title="onCallInvitationEnded" defaultOpen="false">
+
+- **Description**
+
+  The callback for the call invitation termination.
+
+- **Function prototype**
+
+  ```typescript
+  onCallInvitationEnded?: (
+      reason: CallInvitationEndReason, 
+      data: string
+  ) => void;
+  ```
+
+- **Parameter Description**
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col width="" />
+      <col width="15%" />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Parameter</th>
+  <th>Category</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>reason</td>
+  <td>CallInvitationEndReason</td>
+  <td>Reasons for ending a call invitation.</td>
+  </tr>
+  <tr data-row-level="3">
+  <td>data</td>
+  <td>string</td>
+  <td>Extra data.</td>
+  </tr>
+  </tbody></table>
+
+</Accordion>
+
+<Accordion title="ZegoInvitationType" defaultOpen="false">
+
+- Description: Enum class for call invitation type.
+- Enum Description:
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col />
+    </colgroup>
+  <tbody><tr>
+    <th>Enumeration</th>
+    <th>Enum Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+  <td>VoiceCall</td>
+  <td>0</td>
+  <td>Voice Call.</td>
+  </tr>
+  <tr>
+  <td>VideoCall</td>
+  <td>1</td>
+  <td>Video Call.</td>
+  </tr>
+  </tbody></table>
+
+</Accordion>
+
+<Accordion title="ZegoUser" defaultOpen="false">
+
+- Type Description: User Information Class.
+- Parameter Description:
+  <table>
+    <colgroup>
+      <col width="20%" / >
+      <col />
+      <col width="15%" />
+      <col />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Attributes/Methods</th>
+  <th>Type</th>
+  <th>Required</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>userID</td>
+  <td>string</td>
+  <td>Required</td>
+  <td>User's unique identifier, defined by the developer, with a maximum length of 32 bytes. It only supports numbers, English characters, and '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '&lt', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'.</td>
+  </tr>
+  <tr data-row-level="3">
+  <td>userName</td>
+  <td>string</td>
+  <td>Optional</td>
+  <td>User's name. It has a maximum length of 256 bytes.</td>
+  </tr>
+  <tr data-row-level="4">
+  <td>setUserAvatar</td>
+  <td>(avatar: string) =&gt; void</td>
+  <td>Optional</td>
+  <td>Method to set the user's avatar by passing in the image resource address.</td>
+  </tr>
+  </tbody></table>
+
+</Accordion>
+
+<Accordion title="CallInvitationEndReason" defaultOpen="false">
+
+- Type Description: Enum class for call ending reasons.
+- Enum Descriptions:
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col />
+    </colgroup>
+  <tbody>
+      <tr>
+        <th>Enumeration</th>
+        <th>Value</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+          <td>Declined</td>
+          <td>Declined</td>
+          <td>Decline the invitation.</td>
+      </tr>
+      <tr>
+          <td>Timeout</td>
+          <td>Timeout</td>
+          <td>The Call invitation timed out.</td>
+      </tr>
+      <tr>
+          <td>Canceled</td>
+          <td>Canceled</td>
+          <td>The call invitation is cancelled</td>
+      </tr>
+      <tr>
+          <td>Busy</td>
+          <td>Busy</td>
+          <td>The callee is busy。</td>
+      </tr>
+      <tr>
+          <td>LeaveRoom</td>
+          <td>LeaveRoom</td>
+          <td>The caller has left the room.</td>
+      </tr>
+  </tbody>
+  </table>
+</Accordion>
+
+<Accordion title="onConfirmDialogWhenReceiving" defaultOpen="false">
+
+- **Description**
+
+  The callback for confirmation when receiving a call invitation.
+
+- **Function Prototype**
+
+  ```typescript
+  onConfirmDialogWhenReceiving?: (
+      callType: ZegoInvitationType,
+      caller: ZegoUser,
+      refuse: RefuseCallInvitationFunc,
+      accept: AcceptCallInvitationFunc,
+      data: string
+  ) => void;
+  ```
+
+- **Parameter Description**
+
+  <table>
+    <colgroup>
+      <col width="20%" />
+      <col width="" />
+      <col width="15%" />
+    </colgroup>
+  <tbody><tr data-row-level="1">
+  <th>Parameter</th>
+  <th>Type</th>
+  <th>Description</th>
+  </tr>
+  <tr data-row-level="2">
+  <td>callType</td>
+  <td>ZegoInvitationType</td>
+  <td>The type of call.</td>
+  </tr>
+  <tr data-row-level="3">
+  <td>caller</td>
+  <td>ZegoUser</td>
+  <td>The user information of the caller.</td>
+  </tr>
+  <tr data-row-level="4">
+  <td>refuse</td>
+  <td>RefuseCallInvitationFunc = (data?: string) => void</td>
+  <td>The function to reject the invitation.</td>
+  </tr>
+  <tr data-row-level="5">
+  <td>accept</td>
+  <td>AcceptCallInvitationFunc = (data?: string) => void</td>
+  <td>The function to accept the invitation.</td>
+  </tr>
+  <tr data-row-level="6">
+  <td>data</td>
+  <td>string</td>
+  <td>Extra data.</td>
+  </tr>
+  </tbody></table>
+
+</Accordion>
