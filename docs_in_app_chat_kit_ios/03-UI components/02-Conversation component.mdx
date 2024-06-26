@@ -16,27 +16,12 @@ import ZIM_ZIMKIt_component_Prefix_info_New from "../../snippets/uikit/in_app_ch
 
 <ZIM_ZIMKIt_component_Prefix_info_New />
 
-### Add the conversation component
+### Show the conversation component
 
-1. Import the In-app Chat Kit module. 
-
-```swift
+```swift ViewController.swift {1,2,13-18}
 import UIKit
 import ZIMKit
 
-/// your ViewController.swift
-class ViewController: UIViewController {
-
-}
-```
-
-2. Display the chat list component.
-
-```swift
-import UIKit
-import ZIMKit
-
-/// your ViewController.swift
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -44,7 +29,7 @@ class ViewController: UIViewController {
         
     }
     
-    /// Call the following method to display the chat list after login succeeded.
+    // Call this method anywhere you need it after a successful login.
     func showConversationListVC(_ sender: Any) {
         let conversationVC = ZIMKitConversationListVC()
         let nav = UINavigationController(rootViewController: conversationVC)
@@ -58,11 +43,11 @@ class ViewController: UIViewController {
 
 If the default conversation-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
 
-<Accordion title="Custom click event" defaultOpen="false">
+<Accordion title="Customizing click events" defaultOpen="false">
 
 To customize click event logic, you can listen to the callback on a `Conversation` clicked by implementing the delegate `ZIMKitConversationListVCDelegate`.
 
-```swift
+```swift ViewController.swift {22-24}
 import UIKit
 import ZIMKit
 
@@ -86,8 +71,23 @@ extension ViewController: ZIMKitConversationListVCDelegate {
     ///   - defaultAction: Clicking will jump to the message page by default.
     func conversationList(_ conversationListVC: ZIMKitConversationListVC, didSelectWith conversation: ZIMKitConversation, defaultAction: () -> ()) {
         // You can add your event handling logic here.
+        defaultAction()
     }
 }
 ```
 
+</Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitConversationListVCDelegate" defaultOpen="false">
+```swift Definition
+@objc public protocol ZIMKitConversationListVCDelegate: AnyObject {
+    @objc optional
+    func conversationList(_ conversationListVC: ZIMKitConversationListVC,
+                          didSelectWith conversation: ZIMKitConversation,
+                          defaultAction: ()-> ())
+}
+```
 </Accordion>

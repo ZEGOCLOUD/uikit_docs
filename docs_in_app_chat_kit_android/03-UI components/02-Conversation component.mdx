@@ -18,11 +18,14 @@ import ZIM_ZIMKIt_component_Prefix_info_New from "../../snippets/uikit/in_app_ch
 
 ### Add the conversation component
 
-To integrate the conversation component into your Activity, you can load it by using `FragmentManager` in the Java code or state it in the `XML` file based on your actual app requirements. 
+You can add the conversation component to the activity's view hierarchy either by defining the fragment in your activity's layout file or by defining a fragment container in your activity's layout file and then programmatically adding the fragment from within your activity. 
 
-- **Method 1**: Using the FragmentManager in Java code
+<Tabs>
+<Tab title="Add the fragment programmatically">
 
-```java
+The layout of the `ConversationActivity` is specified in  `activity_conversation.xml`:
+<CodeGroup>
+```java ConversationActivity.java {11-13}
 public class ConversationActivity extends AppCompatActivity {
 
     @Override
@@ -32,19 +35,18 @@ public class ConversationActivity extends AppCompatActivity {
         addConversationFragment();
     }
 
-    private void addConversationFragment(){
+    private void addConversationFragment() {
         ZIMKitConversationFragment fragment = new ZIMKitConversationFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation refers to the ID of FrameLayout that is defined in the XML.
+        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation refers to the ID of FrameLayout
+                                                              // that is defined in the XML.
         transaction.commit();
     }
 
 }
 ```
 
-The layout of the `ConversationActivity` is `activity_conversation.xml`:
-
-```java
+```xml activity_conversation.xml
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -61,10 +63,11 @@ The layout of the `ConversationActivity` is `activity_conversation.xml`:
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
+</CodeGroup>
+</Tab>
+<Tab title="Add the fragment via XML">
 
-- **Method 2**: State it in the XML file
-
-```java
+```xml {7}
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -79,17 +82,19 @@ The layout of the `ConversationActivity` is `activity_conversation.xml`:
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
+</Tab>
+</Tabs>
+
 
 ## Customize features
 
 If the default conversation-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
 
-<Accordion title="1. Custom click event" defaultOpen="false">
+<Accordion title="Customizing click events" defaultOpen="false">
 
 To customize click event logic, you can listen to the callback on a `Conversation` clicked by implementing the `registerConversationListListener`.
 
-```java
-
+```java {3-6}
 ZIMKit.registerConversationListListener(new ZIMKitConversationListListener() {
     @Override
     public void onConversationListClick(ZIMKitConversationFragment conversationFragment, ZIMKitConversation conversation, DefaultAction defaultAction) {
