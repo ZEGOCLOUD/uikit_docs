@@ -62,17 +62,19 @@ To ensure the reliability of the token, you can make the following modifications
 1. The validity period of the token should be set as long as possible, for example, 3 days.
 2. Listen to `onTokenWillExpire` callback and call `renewToken` to update new token. 
 
-  ```java
-  ZIMKit.registerZIMKitDelegate(new ZIMKitDelegate() {
-      @Override
-      public void onTokenWillExpire(int second) {
-          ZIMKit.renewToken(token,callback);
-      }
-  });
-  ```
+```java
+ZIMKit.registerZIMKitDelegate(new ZIMKitDelegate() {
+    @Override
+    public void onTokenWillExpire(int second) {
+        // Please obtain the token from your app server.
+        ZIMKit.renewToken(token,callback);
+    }
+});
+```
+
 3. Renew the token at the appropriate time, such as when the application enters the foreground.
    
-  ```java
-  // ...
-  ZIMKit.renewToken(token,callback);
-  ```
+```java
+// Please obtain the token from your app server.
+ZIMKit.renewToken(token,callback);
+```

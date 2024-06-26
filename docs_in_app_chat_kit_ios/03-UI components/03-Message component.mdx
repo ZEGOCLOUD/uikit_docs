@@ -16,23 +16,9 @@ import ZIM_ZIMKIt_component_Prefix_info_New from "../../snippets/uikit/in_app_ch
 
 <ZIM_ZIMKIt_component_Prefix_info_New />
 
-###  Add the message component
+###  Show the message component
 
-1. Import the In-app Chat Kit module.
-
-```swift
-import UIKit
-import ZIMKit
-
-/// your ViewController.swift
-class ViewController: UIViewController {
-
-}
-```
-
-2. Display the message component.
-
-```swift
+```swift ViewController.swift {1,2,13-18}
 import UIKit
 import ZIMKit
 
@@ -54,17 +40,18 @@ class ViewController: UIViewController {
 }
 ```
 
+
 ## Customize features
 
 If the default message-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
 
-<Accordion title="Custom header bar" defaultOpen="false">
+<Accordion title="Customizing header bar" defaultOpen="false">
 
 To customize buttons on the `NavigationBar`, you can implement the delegate `ZIMKitMessagesListVCDelegate`.
 
-For example, when you want to add a "Start a call" button on the upper right of the message list (`ZIMKitMessageActivity`). To learn more details, see <a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">Use with the Call Kit</a>.
+For example, when you want to add a "Start a call" button on the upper right of the message list. To learn more details, see <a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">Use with the Call Kit</a>.
 
-```swift
+```swift ViewController.swift {48,49}
 import UIKit
 import ZIMKit
 
@@ -94,11 +81,27 @@ extension ViewController: ZIMKitMessagesListVCDelegate {
         // Get the conversation name via the messageListVC.conversationName 
         // Get the conversation type (one-on-one or group chat) via themessageListVC.conversationType 
 
-        let customBarButtonItem = UIBarButtonItem(title: "Custom", style: .plain, target: self, action: #selector(customButtonTapped))
+        if messageListVC.conversationType != .peer { return nil }
         
-        let headerBar = ZIMKitHeaderBar()
-        headerBar.rightItems = [customBarButtonItem]
-        headerBar.titleView = UIView()
+        let conversationID = messageListVC.conversationID
+        let conversationName = messageListVC.conversationName
+        
+        // Create voice call button and set the user to be called as ZegoUIKitUser
+        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create video call button and set the user to be called as ZegoUIKitUser
+        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create UIBarButtonItem using the above buttons
+        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
+        let videoItem = UIBarButtonItem(customView: videoCallButton)
+        
+        // Create HeaderBar and set voice and video to `rightItems`
+        let header = ZIMKitHeaderBar()
+        header.rightItems = [videoItem, voiceItem]
+
         
         return headerBar
     }
@@ -109,7 +112,7 @@ extension ViewController: ZIMKitMessagesListVCDelegate {
 
 <Accordion title="Custom input bar" defaultOpen="false">
 
-To customize buttons on the input bar, configure the `InputConfig`:
+To customize the buttons on the input bar, you can configure them using `InputConfig`:
 
 - `showVoiceButton`: Whether to display the voice button
 - `showEmojiButton`: Whether to display the Emoji button
@@ -130,3 +133,16 @@ let messageListVC = ZIMKitMessagesListVC(conversationID: conversation.id,
 ```
 
 </Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitMessagesListVCDelegate" defaultOpen="false">
+```swift
+@objc public protocol ZIMKitMessagesListVCDelegate: AnyObject {
+    @objc optional
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar?
+}
+```
+</Accordion>
+

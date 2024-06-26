@@ -16,95 +16,63 @@ import ZIM_ZIMKIT_Prerequisites_Features from "../snippets/uikit/in_app_chat/ZIM
 
 ## Integrate the SDK
 
-### Check your Android gradle plugin version
+<Steps>
+<Step title="Add com.github.ZEGOCLOUD:zego_inapp_chat_uikit_android as dependencies">
+- **Add the `jitpack` configuration**
 
-Check the version of the `Android gradle plugin` of the `build.gradle` file under your project's root directory, and run the code accordingly:
 
-- Scene 1: If the version of your Android gradle plugin is **7.0 or later**: 
-Then you will need to add the following code to the `setting.gradle`:
+<Accordion title="Android Gradle Plugin is 7.1.0 or later" defaultOpen="true">
 
-    ```java
-    pluginManagement {
-        repositories {
-            ...
-            jcenter() // Add this line.
-            maven { url 'https://www.jitpack.io' } //Add this line.
-        }
-    }
+Enter your project's root directory, open the `settings.gradle` file to add the jitpack to `dependencyResolutionManagement` > `repositories` like this:
 
-    dependencyResolutionManagement {
-        ...
-        repositories {
-            ...
-            jcenter() // Add this line. 
-            maven { url 'https://www.jitpack.io' } //Add this line. 
-        }
-    }
-    ```
-
-- Scene 2: If the version of your Android gradle plugin is lower than **7.0**, such as version 4.1.2:
-
-    ```java
-    buildscript {
-        repositories {
-            ...
-        }
-        dependencies {
-            classpath "com.android.tools.build:gradle:4.1.2"
-        }
-    }
-    ```
-
-Then you will need to add the following code to your project's `build.gradle`:
-
-```java
-buildscript {
-    repositories {
-        maven { url 'https://www.jitpack.io' } //Add this line.
-        ....
-    }
+``` groovy settings.gradle {6-7}
+dependencyResolutionManagement {
+   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+   repositories {
+      google()
+      mavenCentral()
+      maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+      maven { url 'https://www.jitpack.io' } // <- Add this line.
+   }
 }
+```
 
+<Warning title="Warning">
+
+If you can't find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0. 
+
+For more details, see [Android Gradle Plugin Release Note v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle).
+</Warning>
+</Accordion>
+
+<Accordion title="Android Gradle Plugin is earlier than 7.1.0" defaultOpen="false">
+
+Enter your project's root directory, open the `build.gradle` file to add the jitpack to `allprojects`->`repositories` like this: 
+
+```groovy build.gradle {5-6}
 allprojects {
     repositories {
-        maven { url 'https://www.jitpack.io' }//Add this line.
-        ...
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+        maven { url "https://jitpack.io" }  // <- Add this line.
     }
 }
 ```
+</Accordion>
 
-Check your project root directory's `gradle.properties` file, and add the following configuration to the file if it's missing:
+- **Modify your app-level `build.gradle` file**
 
-```java
-// Indicates AndroidX is enabled for the current project.
-android.useAndroidX=true
-// Migrates the dependency to AndroidX, converting the support library from third-party libraries used in the project to an AndroidX library.
-android.enableJetifier=true
-```
 
-### Add SDK dependencies (using Jitpack)
-
-Enter the `app` directory, open the `build.gradle` file, and add the following code:
-
-```java
-android {
-   ...
-   buildFeatures {
-        dataBinding true
-    }
-}
-
+```groovy {3}
 dependencies {
     ...
     implementation 'com.github.ZEGOCLOUD:zego_inapp_chat_uikit_android:+'    // add this line in your module-level build.gradle file's dependencies, usually named [app].
 }
-```
-
-### Integrate In-app Chat Kit into the project
-
-1. Call the `init` method to initialize the In-app Chat Kit.
-
-```java
+```  
+</Step>
+<Step title="Call the init method to initialize the In-app Chat Kit">
+```java MyApplication.java {15}
 
 import android.app.Application;
 
@@ -125,14 +93,14 @@ public class MyApplication extends Application {
     }
 }
 ```
-
-2. After initializing the In-app Kit SDK, on your login page, call the `connectUser` method with your user info to log in to In-app Chat Kit.
+</Step>
+<Step title="Call the connectUser method on the login page to log in to the In-app Chat Kit.">
 
 import ZIM_ZIMKit_SDK_warning from "../snippets/uikit/in_app_chat/ZIM_ZIMKit_SDK_warning-en.mdx"
 
 <ZIM_ZIMKit_SDK_warning />
 
-```java
+```java MyZIMKitActivity.java {27-34}
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -177,10 +145,14 @@ public class MyZIMKitActivity extends AppCompatActivity {
     }
 }
 ```
+</Step>
+<Step title="Display the conversation component of the In-app Chat Kit">
 
-3. Display the conversation component of the In-app Chat Kit.
+The layout of the `ConversationActivity` is specified in  `activity_conversation.xml`:
 
-```java
+<CodeGroup>
+
+```java ConversationActivity.java {6}
    public class ConversationActivity extends AppCompatActivity {
 
     @Override
@@ -192,9 +164,8 @@ public class MyZIMKitActivity extends AppCompatActivity {
 }
 ```
 
-The layout of the `ConversationActivity` is `activity_conversation.xml`:
 
-```java
+```xml activity_conversation.xml {9}
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -213,76 +184,85 @@ The layout of the `ConversationActivity` is `activity_conversation.xml`:
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
+</CodeGroup>
+
 Ideally, by this point, your app will look like this:
 
 <Frame width="200" height="auto" caption="">
     <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_conversation_en_new.jpeg" />
 </Frame>
+</Step>
+</Steps>
+
 
 ## Start a chat
 
-In-app Chat Kit supports the following and this section shows you how to implement those respectively:
+The In-app Chat Kit supports the following features:
 
 import InappChatUIkit_Startasession from "../snippets/uikit/in_app_chat/InappChatUIkit_Startasession-en.mdx"
 
-<Accordion title="1. Start a one-on-one chat" defaultOpen="false">
+<Accordion title="Start a one-on-one chat" defaultOpen="false">
 
 <InappChatUIkit_Startasession />
 
 1. Get the `userId` that is generated using your own business logic. (the `userId` here refers to the peer user you want to chat with.)
 2. Fill in the `userId` parameter and run the following code:
 
-```java
-    private void startSingleChat(String userId){
-        ZIMKitRouter.toMessageActivity(this, userId,ZIMKitConversationType.ZIMKitConversationTypePeer);
-    }
+```java {2}
+private void startSingleChat(String userId) {
+    ZIMKitRouter.toMessageActivity(this, userId, ZIMKitConversationType.ZIMKitConversationTypePeer);
+}
 ```
 
 </Accordion>
 
-<Accordion title="2. Start a group chat" defaultOpen="false">
+<Accordion title="Start a group chat" defaultOpen="false">
 
-1. Get the user `ids` and `groupName` that is generated using your own business logic. (the `ids` here refers to the ID list of the users that you want to invite to the group chat.)
+1. Get the `ids` and `groupName` that is generated using your own business logic. (the `ids` here refers to the ID list of the users that you want to invite to the group chat.)
 2. Fill in the `ids` and `groupName` parameters and run the following code:
 
-```java
+```java {5-19}
 public void createGroupChat(List<String> ids, String groupName) {
-        if (ids == null || ids.isEmpty()) {
-            return;
-        }
-        ZIMKit.createGroup(groupName, ids, (groupInfo, inviteUserErrors, errorInfo) -> {
-            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
-                if (!inviteUserErrors.isEmpty()) {
-                   // Implement the logic for the prompt window based on your business logic when there is a non-existing user ID in the group.
-                } else {
-                    // Directly enter the chat page when the group chat is created successfully.
-                    ZIMKitRouter.toMessageActivity(this, groupInfo.getId(),ZIMKitConversationType.ZIMKitConversationTypeGroup);
-                }
-            } else {
-                // Implement the logic for the prompt window based on the returned error info when failing to create a group chat. 
-            }
-        });
+    if (ids == null || ids.isEmpty()) {
+        return;
     }
+    ZIMKit.createGroup(groupName, ids, (groupInfo, inviteUserErrors, errorInfo) -> {
+        if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+            if (!inviteUserErrors.isEmpty()) {
+                // Implement the logic for the prompt window based on your business logic when
+                // there is a non-existing user ID in the group.
+            } else {
+                // Directly enter the chat page when the group chat is created successfully.
+                ZIMKitRouter.toMessageActivity(this, groupInfo.getId(),
+                        ZIMKitConversationType.ZIMKitConversationTypeGroup);
+            }
+        } else {
+            // Implement the logic for the prompt window based on the returned error info
+            // when failing to create a group chat.
+        }
+    });
+}
 ```
 
 </Accordion>
 
-<Accordion title="3. Join a group chat" defaultOpen="false">
+<Accordion title="Join a group chat" defaultOpen="false">
 
 1. Get the `groupId` that is generated using your own business logic. (the `groupID` here refers to the group chat you want to join.)
 2. Fill in the `groupId` parameter and run the following code:
 
-```java
+```java {2-10}
 public void joinGroupChat(String groupId) {
-        ZIMKit.joinGroup(groupId, (groupInfo, errorInfo) -> {
-            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
-                // Enter the group chat page after joining the group chat successfully.
-                ZIMKitRouter.toMessageActivity(this, groupInfo.getId(),ZIMKitConversationType.ZIMKitConversationTypeGroup);
-            } else {
-                // Implement the logic for the prompt window based on the returned error info when failing to join the group chat. 
-            }
-        });
-    }
+    ZIMKit.joinGroup(groupId, (groupInfo, errorInfo) -> {
+        if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Enter the group chat page after joining the group chat successfully.
+            ZIMKitRouter.toMessageActivity(this, groupInfo.getId(), ZIMKitConversationType.ZIMKitConversationTypeGroup);
+        } else {
+            // Implement the logic for the prompt window based on the returned error info
+            // when failing to join the group chat.
+        }
+    });
+}
 ```
 
 </Accordion>
