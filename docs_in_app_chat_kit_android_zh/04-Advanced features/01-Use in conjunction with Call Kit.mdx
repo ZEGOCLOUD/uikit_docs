@@ -1,45 +1,46 @@
-# Use in conjunction with Call Kit
+# 与 音视频通话 UIKit 一起使用
 
-This doc will introduce how to use In-app Chat Kit with [Call Kit](/callkit-android/overview). 
+这份文档将介绍如何配合使用 IMKit 和 [音视频通话 UIKit](https://doc-zh.zego.im/article/20192)。
 
 <Frame width="200" height="auto" caption="">
     <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
 </Frame>
 
-## Implementation Process
+## 实现流程
 
 <Steps>
-<Step title="Integrate In-app Chat Kit">
-Please refer to [Quick start](../02-Quick%20start.mdx) to integrate the In-app Chat Kit. If it has already been integrated, you can ignore this step.
+<Step title="集成 IMKit">
+请参考[快速开始](../02-Quick%20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
 </Step>
-<Step title="Integrate Call Kit">
-Please refer to the [Call Kit Quick start](/callkit-android/quick-start-(with-call-invitation)) to integrate the Call Kit.
+<Step title="集成 音视频通话 UIKit">
+请参考[音视频通话 UIKit 快速开始](/callkit-android/quick-start-(with-call-invitation))来集成 音视频通话 UIKit 。
 </Step>
-<Step title="Initialize Call Kit">
-After successfully logging in to the In-app Chat Kit, add the following code to initialize Call Kit:
+<Step title="初始化 音视频通话 UIKit">
+
+成功登录 IMKit 后，添加以下代码以初始化 音视频通话 UIKit ：
 
 ```java
-Application application = ; // Android's application context
-long appID = ;   // yourAppID
-String appSign =;  // yourAppSign
-String userID =; // yourUserID, userID should only contain numbers, English characters, and '_'. 
-String userName =;   // yourUserName
+Application application = ; // Android的应用程序上下文
+long appID = ;   // 您的AppID
+String appSign =;  // 您的AppSign
+String userID =; // 您的用户ID，用户ID只能包含数字、英文字母和下划线（_）。
+String userName =;   // 您的用户名
 
 ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
 ZegoUIKitPrebuiltCallInvitationService.init(application, appID, appSign, userID, userName,callInvitationConfig);
 ```
-<Warning title="Warning">
-You need to call the `unInit` method after logging out of the app.
+<Warning title="警告">
+在登出应用程序后，您需要调用`unInit`方法。
 
 ```java
 ZegoUIKitPrebuiltCallInvitationService.unInit();
 ```
 </Warning>
 </Step>
-<Step title="Add Send call invitation buttons">
-You can return a header bar through the `getMessageListHeaderBar` method of `ZIMKitMessagesListListener`. You can define a `ZegoSendCallButtonFragment` and place a button on it to initiate a Voice Call, and then place another button to initiate a Video Call. Finally, you can add the `ZegoSendCallButtonFragment` to the top right corner of the header bar using the `ZIMKitHeaderBar.setRightView` method.
+<Step title="添加发送呼叫邀请按钮">
+您可以通过`ZIMKitMessagesListListener`的`getMessageListHeaderBar`方法返回一个标题栏。您可以定义一个`ZegoSendCallButtonFragment`并在其中放置一个按钮来发起语音通话，然后再放置另一个按钮来发起视频通话。最后，您可以使用`ZIMKitHeaderBar.setRightView`方法将`ZegoSendCallButtonFragment`添加到标题栏的右上角。
 
-The layout of the `ZegoSendCallButtonFragment` is specified in  `send_call_buttons_layout.xml`:
+`ZegoSendCallButtonFragment`的布局在`send_call_buttons_layout.xml`中指定：
 <CodeGroup>
 
 ```java ZegoSendCallButtonFragment.java {36,44-49,53-58}
@@ -133,19 +134,19 @@ public class ZegoSendCallButtonFragment extends FrameLayout {
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 ```
-```java title="Add ZegoSendCallButtonFragment to header bar" {11-14}
+```java title="将ZegoSendCallButtonFragment添加到标题栏中" {11-14}
 ZIMKit.registerMessageListListener(new ZIMKitMessagesListListener() {
             @Override
             public ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment) {
                 if (fragment != null) {
-                    // Need to add a custom header bar in one-to-one chat
+                    // 在一对一聊天中添加自定义标题栏
                     if (fragment.getConversationType() == ZIMConversationType.PEER) {
-                        // Get conversationID and conversationName from the fragment
+                        // 从片段中获取conversationID和conversationName。
                         String conversationID = fragment.getConversationID(); //The ID of the user you want to call.
                         String conversationName = fragment.getConversationName(); //The username of the user you want to call.
-                        // Create a call buttons
+                        // 创建呼叫按钮
                         ZegoSendCallButtonFragment sendCallButtonFragment = new ZegoSendCallButtonFragment(YourActivity.this, fconversationID, conversationName);
-                        // Create a header bar and set the sendCallButton to the 'rightView'
+                        // 创建一个标题栏，并将sendCallButton设置到'rightView'。
                         ZIMKitHeaderBar headerBar = new ZIMKitHeaderBar();
                         headerBar.setRightView(sendCallButtonFragment);
 
@@ -162,20 +163,20 @@ ZIMKit.registerMessageListListener(new ZIMKitMessagesListListener() {
 
 
 
-So far, you have successfully integrated Call Kit in the In-app Chat Kit. You can now run and experience it.
+到目前为止，您已成功将 音视频通话 UIKit 集成到 IMKit 中。现在您可以运行并体验它了。
 
-## More resources
+## 更多资源
 
-The above content only introduces the basic configuration required for integrating Call Kit. If you need to further customize the configuration of the call, refer to the following documents:
+以上内容仅介绍了集成 音视频通话 UIKit 所需的基本配置。如果您需要进一步自定义呼叫的配置，请参考以下文档：
 
 <CardGroup cols={2}>
   
-  <Card title="Call Kit - Quick start" href="/callkit-android/quick-start" target="_blank">
-    Steps in this doc helps you to make a call quickly.
+  <Card title="音视频通话 UIKit - 快速开始" href="https://doc-zh.zego.im/article/20209" target="_blank">
+    本文档中的步骤帮助您快速发起通话。
   </Card>
 
-  <Card title="Call Kit - Custom prebuilt UI" href="/callkit-android/calling-config/overview" target="_blank">
-    This article guides you on how to further customize the features and UI of the call.
+  <Card title="音视频通话 UIKit - 自定义 UI" href="https://doc-zh.zego.im/article/20216" target="_blank">
+    本文介绍了如何进一步自定义通话的功能和界面。
   </Card>
 
 </CardGroup>
