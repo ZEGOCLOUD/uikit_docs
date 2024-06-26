@@ -105,3 +105,16 @@ ZIMKit.registerConversationListListener(new ZIMKitConversationListListener() {
 
 ```
 </Accordion>
+
+
+## API
+
+
+<Accordion title="ZIMKitConversationListListener" defaultOpen="false">
+```java Definition
+public interface ZIMKitConversationListListener {
+    default void onConversationListClick(ZIMKitConversationFragment conversationFragment,
+        ZIMKitConversation conversation, DefaultAction defaultAction) {}
+}
+```
+</Accordion>
