@@ -1,0 +1,46 @@
+{
+  "mySidebar": [
+    {
+      "type": "doc",
+      "label": "概述",
+      "id": "overview"
+    },
+    {
+      "type": "doc",
+      "label": "快速开始",
+      "id": "quick-start"
+    },
+    {
+      "type": "category",
+      "label": "UI 组件",
+      "items": [
+        {
+          "type": "doc",
+          "label": "概述",
+          "id": "ui-components/overview"
+        },
+        {
+          "type": "doc",
+          "label": "会话组件",
+          "id": "ui-components/conversation-component"
+        },
+        {
+          "type": "doc",
+          "label": "消息组件",
+          "id": "ui-components/message-component"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "高级功能",
+      "items": [
+        {
+          "type": "doc",
+          "label": "与 音视频通话 UIKit 一起使用",
+          "id": "advanced-features/use-in-conjunction-with-call-kit"
+        }
+      ]
+    }
+  ]
+}

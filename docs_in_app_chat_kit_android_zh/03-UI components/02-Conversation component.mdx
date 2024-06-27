@@ -38,8 +38,7 @@ public class ConversationActivity extends AppCompatActivity {
     private void addConversationFragment() {
         ZIMKitConversationFragment fragment = new ZIMKitConversationFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation refers to the ID of FrameLayout
-                                                              // that is defined in the XML.
+        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation 是指在 XML 中定义的 FrameLayout 的 ID。
         transaction.commit();
     }
 
@@ -111,7 +110,7 @@ ZIMKit.registerConversationListListener(new ZIMKitConversationListListener() {
 
 
 <Accordion title="ZIMKitConversationListListener" defaultOpen="false">
-```java Definition
+```java 定义
 public interface ZIMKitConversationListListener {
     default void onConversationListClick(ZIMKitConversationFragment conversationFragment,
         ZIMKitConversation conversation, DefaultAction defaultAction) {}
