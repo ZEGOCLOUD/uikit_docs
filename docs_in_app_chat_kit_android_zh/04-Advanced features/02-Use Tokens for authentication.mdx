@@ -28,7 +28,7 @@ ZEGO 在 GitHub/Gitee 提供了一个开源的 [Token generator](https://github.
 
 | 语言    | 支持的版本                  | 关键函数         | 代码库地址                                                                                                                                 | 用户身份 Token（示例代码）                                                                                                                                                                         | 用户权限 Token（示例代码）                                                                                                                                                                               |
 | ------- | --------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Go      | Go 1.14.15 or later         | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample.go">GitHub</a></li></ul>                                                    | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul>                                              |
+| Go      | Go 1.14.15 or later         | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-base.go">GitHub</a></li></ul>                                               | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul>                                              |
 | C++     | C++ 11 or later             | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B">GitHub</a></li></ul>        | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/sample/demo/main.cc">GitHub</a></li></ul>                                            |                                                                                                                                                                                                          |
 | Java    | Java 1.8 or later           | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04">GitHub</a></li></ul>   | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleBase.java">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleForRtcRoom.java">GitHub</a></li></ul> |
 | Python  | Python 3.6.8 or later       | generate_token04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/base_sample.py">GitHub</a></li></ul>                                     | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/rtcroom_sample.py">GitHub</a></li></ul>                                        |
@@ -43,7 +43,7 @@ ZEGO 在 GitHub/Gitee 提供了一个开源的 [Token generator](https://github.
 
 ## 使用 Token 
 
-如果你需要使用 Token 而不是 Appsign，您可以调用`initWith`而不带上`appsign`来完成初始化。
+如果你需要使用 Token 而不是 Appsign，您可以调用`initWith`而不带上`appsign`参数来完成初始化。
 
 ```java
 ZIMKit.initWith(application, appID);
@@ -53,26 +53,26 @@ ZIMKit.initWith(application, appID);
 
 ## 更新 Token
 
-在大多数情况下，上述提到的令牌获取方法应该可以正常工作。然而，在某些极端情况下，它可能不可靠。
+在大多数情况下，上述提到的Token 获取方法应该可以正常工作。然而，在某些极端情况下，它可能不可靠。
 
-为了确保令牌的可靠性，您可以进行以下修改：
+为了确保 Token 的可靠性，您可以进行以下修改：
 
-1. 令牌的有效期应尽可能设置得长，例如3天。
-2. 监听`onTokenWillExpire`回调，并调用`renewToken`来更新新的令牌。
+1.  Token 的有效期应尽可能设置得长，例如3天。
+2. 监听`onTokenWillExpire`回调，并调用`renewToken`来更新新的 Token。
 
 ```java
 ZIMKit.registerZIMKitDelegate(new ZIMKitDelegate() {
     @Override
     public void onTokenWillExpire(int second) {
-        // 请从您的应用服务器获取令牌。
+        // 请从您的应用服务器获取 Token。
         ZIMKit.renewToken(token,callback);
     }
 });
 ```
 
-3. 在适当的时候更新令牌，比如当应用程序进入前台时。
+3. 在适当的时候更新 Token，比如当应用程序进入前台时。
    
 ```java
-// 请从您的应用服务器获取令牌。
+// 请从您的应用服务器获取 Token。
 ZIMKit.renewToken(token,callback);
 ```

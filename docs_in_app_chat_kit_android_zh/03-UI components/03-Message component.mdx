@@ -1,4 +1,4 @@
-# Message component
+# 消息组件
 
 
 import ZIMKitMessageInfo from "../../snippets/uikit/in_app_chat/ZIMKitMessageInfo.mdx";
@@ -45,8 +45,8 @@ public class MyZIMKitActivity extends AppCompatActivity {
     }
 
     public void buttonClick() {
-        String id = ; // userId or groupId or conversationId.
-        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup or ZIMKitConversationType.ZIMKitConversationTypePeer
+        String id = ; // 用户ID或群组ID或会话ID。
+        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup 或 ZIMKitConversationType.ZIMKitConversationTypePeer
         toMessageActivity(id,type);
     }
     
@@ -212,7 +212,7 @@ ZIMKit.setInputConfig(inputConfig);
 
 
 <Accordion title="ZIMKitMessagesListListener" defaultOpen="false">
-```java Definition
+```java 定义
 public interface ZIMKitMessagesListListener {
     ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment);
 }

@@ -1,0 +1,104 @@
+# 与 音视频通话 UIKit 一起使用
+
+这份文档将介绍如何配合使用 IMKit 和 [音视频通话 UIKit](https://doc-zh.zego.im/article/20192)。
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+</Frame>
+
+## 实现流程
+
+<Steps>
+<Step title="集成 IMKit">
+请参考[快速开始](../02-Quick%20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
+</Step>
+<Step title="集成 音视频通话 UIKit">
+请参考[音视频通话 UIKit 快速开始](https://doc-zh.zego.im/article/20192)来集成 音视频通话 UIKit 。
+</Step>
+<Step title="初始化 音视频通话 UIKit">
+
+成功登录 IMKit 后，添加以下代码以初始化 音视频通话 UIKit ：
+
+```swift {7,8}
+let appID: UInt32 = YOUR_APPID
+let appSign: String = YOUR_APP_SIGN
+let userID: String = YOUR_USER_ID
+let userName: String = YOUR_USER_NAME
+ZIMKit.connectUser(userID: userID, userName: userName) { error in
+    if error.code == .success {
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(appID, appSign: appSign, userID: userID, userName: userName, config: config)
+    }
+}
+```
+
+</Step>
+<Step title="添加发起呼叫邀请按钮">
+您可以使用`ZIMKitMessagesListVCDelegate`的`getMessageListHeaderBar`方法返回一个标题栏。然后，您可以使用`ZIMKitHeaderBar.rightItems`属性将语音通话按钮和视频通话按钮添加到标题栏的右上角。
+
+```swift {27,28}
+import ZIMKit
+import ZegoUIKitPrebuiltCall
+
+extension ViewController: ZIMKitMessagesListVCDelegate {
+    
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+        
+        if messageListVC.conversationType != .peer { return nil }
+        
+        // 从messageListVC获取conversationID和conversationName。
+        let conversationID = messageListVC.conversationID
+        let conversationName = messageListVC.conversationName
+        
+        // 创建语音通话按钮，并将被呼叫的用户设置为ZegoUIKitUser。
+        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // 创建视频通话按钮，并将要呼叫的用户设置为 ZegoUIKitUser。
+        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // 使用上述按钮创建UIBarButtonItem
+        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
+        let videoItem = UIBarButtonItem(customView: videoCallButton)
+        
+        // 创建HeaderBar并将语音和视频设置为`rightItems`
+        let header = ZIMKitHeaderBar()
+        header.rightItems = [videoItem, voiceItem]
+        
+        return header
+    }
+}
+```
+无论您是集成会话组件还是消息组件，都需要设置ZIMKitMessagesListVCDelegate代理。以下是两种集成方法设置代理的方式：
+<CodeGroup>
+```swift title="集成会话组件" {2}
+let conversationVC = ZIMKitConversationListVC()
+conversationVC.messageDelegate = self
+```
+
+```swift title="集成消息组件" {2}
+let messageVC = ZIMKitMessagesListVC(conversationID: "conversationID", type: .peer)
+messageVC.delegate = self
+```
+</CodeGroup>
+</Step>
+</Steps>
+
+到目前为止，您已成功将 音视频通话 UIKit 集成到 IMKit 中。现在您可以运行并体验它了。
+
+## 更多资源
+
+以上内容仅介绍了集成 音视频通话 UIKit 所需的基本配置。如果您需要进一步自定义呼叫的配置，请参考以下文档：
+
+<CardGroup cols={2}>
+  
+  <Card title="音视频通话 UIKit - 快速开始" href="https://doc-zh.zego.im/article/20209" target="_blank">
+    本文档中的步骤帮助您快速发起通话。
+  </Card>
+
+  <Card title="音视频通话 UIKit - 自定义 UI" href="https://doc-zh.zego.im/article/20216" target="_blank">
+    本文介绍了如何进一步自定义通话的功能和界面。
+  </Card>
+
+</CardGroup>
