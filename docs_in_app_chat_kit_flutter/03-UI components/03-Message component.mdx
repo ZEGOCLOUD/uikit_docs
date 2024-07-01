@@ -364,6 +364,48 @@ ZIMKitMessageListPage(
 
 </Accordion>
 
+<Accordion title="8. Custom voice message" defaultOpen="false">
+
+- Locking and sliding features
+  <Frame width="800" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_lock_slider_cancel.gif" />
+  </Frame>
+- End countdown and send feature
+  <Frame width="800" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_count_down.gif" />
+  </Frame>
+  
+If you don't want this feature, you can set `showRecordButton` to false.
+```dart
+ZIMKitMessageListPage(
+  showRecordButton: false,
+);
+```
+
+In addition, some callbacks have been provided as follows.:
+
+- void Function(int errorCode)? onFailed: Failed to send
+
+- void Function(int remainingSecond)? onCountdownTick: Countdown ended, will automatically send when countdown reaches 0
+
+```dart
+ZIMKitMessageListPage(
+  events: ZIMKitMessageListPageEvents(
+    audioRecord: ZIMKitAudioRecordEvents(
+      onFailed: (int errorCode) {
+        /// audio message's error list:  https://doc-preview-zh.zego.im/article/20148
+        debugPrint('onRecordFailed: $errorCode');
+      },
+      onCountdownTick: (int remainingSecond) {
+        debugPrint('onCountdownTick: $remainingSecond');
+      },
+    ),
+  ),
+);
+```
+
+</Accordion>
+
 <Accordion title="Click to view the full interface list" defaultOpen="false">
 
 1. `messageListErrorBuilder`: this can be used to customize the UI when error loading the message list.
