@@ -11,7 +11,7 @@
   - [onOutgoingCallRejectedCauseBusy](#onoutgoingcallrejectedcausebusy)
   - [onOutgoingCallDeclined](#onoutgoingcalldeclined)
   - [onOutgoingCallTimeout](#onoutgoingcalltimeout)
-  - [onHangUp](#onhangup)
+  - [onCallEnd](#onCallEnd)
 
 
 - - -
@@ -298,13 +298,19 @@
 
 
 
-## onHangUp
+## onCallEnd
 
-> user will receive this callback when all other persons leaves call.usually you can end call in this callback.
+> user will receive this callback at the end of the call.usually you can end call in this callback.
 >
 >- function prototype:
 >```js
->onHangUp(duration)
+>onCallEnd(callID, reason, duration)
+>```
+>- reason:
+>```js
+>0 - the call ended due to a local hang-up
+>1 - the call ended when the remote user hung up, leaving only one local user in the call
+>2 - the call ended due to being kicked out
 >```
 >- example:
 >```js
@@ -317,7 +323,7 @@
 >  {
 >    requireConfig: (data) => {
 >      return {
->        onHangUp: (duration) => {
+>        onCallEnd: (callID, reason, duration) => {
 >          //...
 >          props.navigation.navigate('HomeScreen');
 >        }
