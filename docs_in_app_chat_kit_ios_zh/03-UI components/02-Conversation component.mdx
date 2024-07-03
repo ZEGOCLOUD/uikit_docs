@@ -1,22 +1,22 @@
-# Conversation component
+# 会话组件
 
-import ZIM_ZIMKit_chat_info from "../../snippets/uikit/in_app_chat/ZIM_ZIMKit_chat_info-en.mdx";
+import ZIMKitChatInfo from "../../snippets/uikit/in_app_chat/ZIMKitChatInfo.mdx";
 
-<ZIM_ZIMKit_chat_info />
+<ZIMKitChatInfo />
 
 <Frame width="200" height="auto" caption="">
     <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/conversation_demo.gif" />
 </Frame>
 
-## Integrate the conversation component into your project
+## 将会话组件集成到您的项目中
 
-### Prerequisites
+### 前提条件
 
-import ZIM_ZIMKIt_component_Prefix_info_New from "../../snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+import ZIMKItComponentPrefixInfoNew from "../../snippets/uikit/in_app_chat/ZIMKItComponentPrefixInfoNew.mdx";
 
-<ZIM_ZIMKIt_component_Prefix_info_New />
+<ZIMKItComponentPrefixInfoNew />
 
-### Show the conversation component
+### 显示会话组件
 
 ```swift ViewController.swift {1,2,13-16}
 import UIKit
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         
     }
     
-    // Call this method anywhere you need it after a successful login.
+    // 在成功登录后，您可以在任何需要的地方调用此方法。
     func showConversationListVC(_ sender: Any) {
         let conversationVC = ZIMKitConversationListVC()
         let nav = UINavigationController(rootViewController: conversationVC)
@@ -39,13 +39,13 @@ class ViewController: UIViewController {
 }
 ```
 
-## Customize features
+## 定制功能
 
-If the default conversation-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
+如果默认的与会话相关的功能和行为不能完全满足您的需求，您可以通过我们在本节中提到的配置进行灵活的定制。
 
-<Accordion title="Customizing click events" defaultOpen="false">
+<Accordion title="自定义点击事件" defaultOpen="false">
 
-To customize click event logic, you can listen to the callback on a `Conversation` clicked by implementing the delegate `ZIMKitConversationListVCDelegate`.
+要自定义点击事件逻辑，您可以通过实现`ZIMKitConversationListVCDelegate`来监听`Conversation`的回调点击。
 
 ```swift ViewController.swift {22-24}
 import UIKit
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        // 在加载视图后进行其他额外的设置。
 
         let conversationVC = ZIMKitConversationListVC()
         conversationVC.delegate = self
@@ -64,13 +64,13 @@ class ViewController: UIViewController {
 
 extension ViewController: ZIMKitConversationListVCDelegate {
     
-    /// Callback on a conversation clicked.
-    /// - Parameters:
-    ///   - conversationListVC: ZIMKitConversationListVC
-    ///   - conversation: conversation model
-    ///   - defaultAction: Clicking will jump to the message page by default.
+    /// 当点击对话时的回调函数。
+    /// - 参数：
+    ///   - conversationListVC：ZIMKitConversationListVC
+    ///   - conversation：对话模型
+    ///   - defaultAction：默认情况下，点击将跳转到消息页面。
     func conversationList(_ conversationListVC: ZIMKitConversationListVC, didSelectWith conversation: ZIMKitConversation, defaultAction: () -> ()) {
-        // You can add your event handling logic here.
+        // 您可以在这里添加事件处理逻辑。
         defaultAction()
     }
 }
@@ -82,7 +82,7 @@ extension ViewController: ZIMKitConversationListVCDelegate {
 
 
 <Accordion title="ZIMKitConversationListVCDelegate" defaultOpen="false">
-```swift Definition
+```swift 定义
 @objc public protocol ZIMKitConversationListVCDelegate: AnyObject {
     @objc optional
     func conversationList(_ conversationListVC: ZIMKitConversationListVC,
