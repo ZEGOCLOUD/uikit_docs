@@ -300,17 +300,15 @@
 
 ## onCallEnd
 
-> user will receive this callback at the end of the call.
+> user will receive this callback at the end of the call. 
+>>Possible reasons that may trigger this callback include:
+>>- the call ended due to a local hang-up
+>>- the call ended when the remote user hung up, leaving only one local user in the call
+>>- the call ended due to being kicked out
 >
 >- function prototype:
 >```js
 >onCallEnd(callID, reason, duration)
->```
->- reason:
->```js
->0 - the call ended due to a local hang-up
->1 - the call ended when the remote user hung up, leaving only one local user in the call
->2 - the call ended due to being kicked out
 >```
 >- example:
 >```js
