@@ -1,0 +1,243 @@
+import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
+import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
+
+# Quick start (with call invitation)
+
+<Frame width="300" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/call/invitation_calls.gif" />
+</Frame>
+
+
+
+## Prerequisites
+
+<UIKitInvitationPrerequisitesZIMSignaling/>
+
+## Prepare the environment
+
+<Content/>
+
+## Add ZegoUIKitPrebuiltCall as dependencies
+
+- Open Terminal, navigate to your project's root directory, and run the following to create a `podfile`: 
+    ```
+    pod init
+    ```
+- Edit the `Podfile` file to add the basic dependencies:
+    ```
+    pod 'ZegoUIKitPrebuiltCall'
+    pod 'ZegoUIKitSignalingPlugin'
+    pod 'ZegoUIKitAppleCallKitPlugin' 
+    ```
+- In Terminal, run the following to download all required dependencies and SDK with Cocoapods:
+    ```
+    pod install
+    ```
+
+## Integrate the SDK with the call invitation feature
+
+### Initialize the call invitation service
+
+
+Call the `init` method on the App startup, and specify the `userID` and `userName` for connecting the Call Kit service. 
+
+```swift
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Get your AppID and AppSign from ZEGOCLOUD's Console
+        // userID can only contain numbers, letters, and '_'. 
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(YOUR_APPID, appSign: YOUR_APP_SIGN, userID:YOUR_USER_ID, userName:YOUR_USER_NAME, config: config)
+    }
+}
+```
+
+#### Parameters of ZegoUIKitPrebuiltCallInvitationConfig class
+| Parameter                              | Type          | Required | Description                                                                                                                                                                                                               |
+| :------------------------------------- | :------------ | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| incomingCallRingtone                   | String        | No       | This parameter has been deprecated.                                                                                                                                                                                       |
+| outgoingCallRingtone                   | String        | No       | If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `incomingCallRingtone` and `outgoingCallRingtone`.                                     |
+| notifyWhenAppRunningInBackgroundOrQuit | Bool          | No       | Change `notifyWhenAppRunningInBackgroundOrQuit` to false if you don't need to receive a call invitation notification while your app running in the background or quit.                                                    |
+| isSandboxEnvironment                   | Bool          | No       | To publish your app to TestFlight or App Store, set the `isSandboxEnvironment` to false before starting building. To debug locally, set it to true. Ignore this when the notifyWhenAppRunningInBackgroundOrQuit is false. |
+| certificateIndex                       | Enum          | No       | To configure different certificates for different bunldle ID applications. The `certificateIndex` can be set as `firstCertificate` or `secondCertificate`, defaults to `firstCertificate`.                                |
+| showDeclineButton                      | Bool          | No       | This parameter has been deprecated.                                                                                                                                                                                       |
+| innerText                              | ZegoInnerText | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                      |
+
+
+#### Parameters of ZegoUIKitPrebuiltCallInvitationService class
+| Parameter | Type                                  | Required | Description                                                                                                                                         |
+| :-------- | :------------------------------------ | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| appID     | String                                | Yes      | The App ID you get from [ZEGOCLOUD Admin Console](https://console.zegocloud.com).                                                                   |
+| appSign   | String                                | Yes      | The App Sign you get from [ZEGOCLOUD Admin Console](https://console.zegocloud.com).                                                                 |
+| userID    | String                                | Yes      | `userID` can be something like a phone number or the user ID on your own user system. userID can only contain numbers, letters, and underlines (_). |
+| userName  | String                                | Yes      | `userName` can be any character or the user name on your own user system.                                                                           |
+| config    | ZegoUIKitPrebuiltCallInvitationConfig | Yes      | This can be used to set up call invitation related configurations.                                                                                  |
+
+
+### Add the button for making call invitations
+
+You can customize the position of the `ZegoSendCallInvitationButton` accordingly, pass in the ID of the user you want to call.
+
+1. Set up a button for making a voice call.
+
+```swift
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    
+        // Create Voice Call invitation Button
+        let callTargetUser: ZegoUIKitUser = ZegoUIKitUser.init("TargetUserID", "TargetUserName")
+        let sendVoiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        sendVoiceCallButton.text = "voice"
+        sendVoiceCallButton.setTitleColor(UIColor.blue, for: .normal)
+        sendVoiceCallButton.inviteeList.append(callTargetUser)
+        sendVoiceCallButton.resourceID = "zegouikit_call" // For offline call notification
+        sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+        // Add the button to your view
+        self.view.addSubview(sendVoiceCallButton)
+    }
+}
+```
+
+2. Set up a button for making a video call.
+
+```swift
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+ 
+        // Create Video Call invitation Button
+        let callTargetUser: ZegoUIKitUser = ZegoUIKitUser.init("TargetUserID", "TargetUserName")
+        let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        sendVideoCallButton.text = "Video"
+        sendVideoCallButton.setTitleColor(UIColor.blue, for: .normal)
+        sendVideoCallButton.inviteeList.append(callTargetUser)
+        sendVideoCallButton.resourceID = "zegouikit_call" // For offline call notification
+        sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+        // Add the button to your view.
+        self.view.addSubview(sendVideoCallButton)
+    }
+}
+```
+
+#### Parameters of ZegoSendCallInvitationButton class
+| Parameter   | Type   | Required | Description                                                                                                                                                                                                                                                                                |
+| :---------- | :----- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| inviteeList | Array  | Yes      | The information of the callee. userID and userName are required. For example: [\{ userID: inviteeID, userName: inviteeName \}]                                                                                                                                                             |
+| type        | int    | Yes      | If the `type` is set to `ZegoInvitationType.videoCall.rawValue`, a video call is made when the button is pressed. If the `type` is set to other values, a voice call is made.                                                                                                              |
+| resourceID  | String | No       | `resourceID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). This only takes effect when the `notifyWhenAppRunningInBackgroundOrQuit` is true. |
+| timeout     | UInt32 | No       | The timeout duration. It's 60 seconds by default.                                                                                                                                                                                                                                          |
+
+
+For more parameters, go to [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).
+
+Now, you can make call invitations by simply clicking on the buttons you set.
+
+
+## Configure your project
+
+### 1. Apple Developer Center and ZEGOCLOUD Console Configuration
+
+- step1. You need to refer to [Create VoIP services certificates](https://developer.apple.com/help/account/create-certificates/create-voip-services-certificates/) to create the VoIP service certificate, and ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​export a .p12 file on your Mac.
+
+<Video src="https://www.youtube.com/embed/UK9AUXcTGCE"/>
+
+- step2. Add the voip service certificate .p12 file. Then, create a resource ID;
+
+> In the create resource ID popup dialog, you should switch to the VoIP option for APNs, and switch to Data messages for FCM.
+
+<Video src="https://www.youtube.com/embed/sYFeq7sZFEA"/>
+
+When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_resource_id.png" /></Frame>
+
+### 2. Add app permissions
+
+Open the `Info.plist` file and add the following:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/ios_config2.gif" /></Frame>
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>We need to use the camera</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need to use the microphone</string>
+```
+
+### 3. Get the APNs device token
+
+- step1. In the `AppDelegate.swift` file, implement Apple's register callback for receiving the `deviceToken`:
+
+```swift
+func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data){
+
+}
+```
+
+- step2. In the `didRegisterForRemoteNotificationsWithDeviceToken` callback, call the `setRemoteNotificationsDeviceToken` method to get the `deviceToken`:
+
+```swift
+import ZegoUIKitPrebuiltCall
+
+func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+/// Required - Set the device token
+  ZegoUIKitPrebuiltCallInvitationService.setRemoteNotificationsDeviceToken(deviceToken)
+}
+```
+
+
+### 4. Add Push Notifications configuration
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" /></Frame>
+
+
+And double-click on `Push Notifications` to add this feature.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push.jpeg" /></Frame>
+
+### 5. Add the Background Modes capability.
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page again.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" /></Frame>
+
+
+And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`. 
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capability_window.jpeg" /></Frame>
+
+### 6. Check and Make sure the following features are enabled
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push2.png" /></Frame>
+
+### 7. Import the PushKit and CallKit libraries.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios-callkit-framework.png" /></Frame>
+
+## Run & Test
+
+Now you have finished all the steps!
+
+You can simply click the **Run** in XCode to run and test your App on your device.
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
+    Content of the Card.
+  </Card>
+  <Card title="How to implement call duration statistics function" target="_blank" href="https://www.zegocloud.com/blog/call-duration" />
+  <Card title="How to upgrade UIKits with a plugin to V2.0.0" target="_blank"  href="https://docs.zegocloud.com/faq/UIKit_Plugin2.0_upgrade?product=UIKits_CallKit&platform=ios" />
+</CardGroup>
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="Sample Code" target="_blank"  href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_ios">
+    Click here to get the complete sample code.
+  </Card>
+</CardGroup>

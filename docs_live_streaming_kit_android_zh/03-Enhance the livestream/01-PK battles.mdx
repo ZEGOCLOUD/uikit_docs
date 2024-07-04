@@ -1,0 +1,786 @@
+# PK battles
+
+
+## Prerequisites
+
+
+<Warning title="Warning">
+
+Before you begin, make sure you complete the following:
+
+- Follow the integration steps by referring to the [Quick start with co-hosting](../02-Quick%20start/02-Quick%20start%20(with%20cohosting).mdx).
+
+- Please contact technical support to activate the **Stream Mixing** service.
+
+
+</Warning>
+
+## What’s PK battles?
+
+PK battle is a friendly competition between two live streams where audiences can see the engaged interactions between both hosts.
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/pkbatlte/pk.jpeg" />
+</Frame>
+
+
+
+## Quick start
+
+Hosts can send a PK battle request to the host they want to connect with after they started their own live streams. And both live streams will be connected upon the PK battle request being accepted.
+
+### Start the PK battle
+
+To start a PK battle, you will need to call the `ZegoLiveStreamingManager.getInstance().sendPKBattleRequest(anotherHostUserID);` method to send a PK battle request first. Once the host accepts your request, the PK battle starts.
+
+```java
+ZegoLiveStreamingManager.getInstance().sendPKBattleRequest(targetUserID, new UserRequestCallback() {
+  @Override
+  public void onUserRequestSend(int errorCode, String requestID) {
+      if (errorCode != 0) {
+        showTopTips(getContext().getString(R.string.livestreaming_send_pk_error, errorCode),false);
+      }
+      updateUI();
+  }
+});
+```
+
+
+### Stop the PK battle
+
+To stop the PK battle, call the `ZegoLiveStreamingManager.getInstance().stopPKBattle()` method.
+
+### Listen to PK battle Events
+
+To listen to PK battle events,call the `ZegoLiveStreamingManager.getInstance().addLiveStreamingListener()` method.In general, when you receive a PK request, you can display a pop-up window for the user to choose whether to accept or reject.if accept,call `ZegoLiveStreamingManager.getInstance().acceptIncomingPKBattleRequest()`,if reject, call `ZegoLiveStreamingManager.getInstance().rejectPKBattleStartRequest()`,You can also customize your own business logic to handle the corresponding PK event.
+
+```java
+ZegoLiveStreamingManager.getInstance().addLiveStreamingListener(new ZegoLiveStreamingListener() {
+  @Override
+  public void onIncomingPKBattleRequestReceived(String requestID, ZegoUIKitUser anotherHostUser, String anotherHostLiveID,String customData) {
+        if (startPKDialog != null && startPKDialog.isShowing()) {
+            return;
+        }
+        AlertDialog.Builder startPKBuilder = new AlertDialog.Builder(LiveActivity.this);
+        //...
+        startPKDialog = startPKBuilder.create();
+        startPKDialog.setCanceledOnTouchOutside(false);
+        startPKDialog.show();
+  }
+});
+```
+
+
+### Demo source code
+
+For a detailed demo source code, click [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_android/tree/master/live_streaming_with_cohosting_pkbattle).
+
+
+**To customize your own PK battle logic and process** as needed, the `ZegoLiveStreamingManager` contains a bunch of methods for you to do further customizations. Before you make your customization, check the **method intro** part first.
+
+
+## Method intro
+
+### Send a PK battle request
+
+```java
+public void sendPKBattleRequest(String anotherHostUserID,int timeout,String customData, UserRequestCallback callback) 
+```
+
+- `anotherHostUserID`: to send a PK battle request, you will need to specify the user ID of the host you want to connect with. Remember the host you invite must has started a live stream, otherwise, an error will return via the method you called. For the error info and cause, check it in the `callback`.
+
+- `timeout`: this can be used to set the timeout duration of the PK battle request you sent. After it timed out, the host who sent the request will receive a callback notification via the `ZegoLiveStreamingListener.onOutgoingPKBattleRequestTimeout`.
+
+
+- `customData`: this can be used to customize the info that you want the host you invited to receive, and the invited host will receive the info you set via `ZegoLiveStreamingListener.onIncomingPKBattleRequestReceived`.
+
+**Sample code:**
+
+```java
+ZegoLiveStreamingManager.getInstance().sendPKBattleRequest(targetUserID, new UserRequestCallback() {
+  @Override
+  public void onUserRequestSend(int errorCode, String requestID) {
+      if (errorCode != 0) {
+        showTopTips(getContext().getString(R.string.livestreaming_send_pk_error, errorCode),false);
+      }
+      updateUI();
+  }
+});
+```
+
+### Cancel the PK battle request
+
+```java
+ZegoLiveStreamingManager.getInstance().cancelPKBattleRequest(String customData,UserRequestCallback callback);
+```
+
+The PK battle request can be canceled by calling this method when the request is not timed out and the request didn't get any responses. After it has been canceled, the invited host will receive a callback notification via the `ZegoLiveStreamingListener.onIncomingPKBattleRequestCancelled`.
+
+
+**Sample code:**
+
+```java
+ZegoLiveStreamingManager.getInstance().cancelPKBattleRequest(new UserRequestCallback() {
+  @Override
+  public void onUserRequestSend(int errorCode, String requestID) {
+      updateUI();
+  }
+});
+```
+
+### Respond to the PK battle request
+
+To receive a PK battle request, you can [listen to](#listen-to-received-pk-battle-request) and set up the `ZegoLiveStreamingListener.onIncomingPKBattleRequestReceived`.
+
+
+<h4 id="Accept_the_PK_battle_request">Accept the PK battle request</h4>
+
+To accept the PK battle request, call the `acceptIncomingPKBattleRequest` method. And the peer host will receive notification via the `onOutgoingPKBattleRequestAccepted`, more details can be checked in [PK request is accepted](#receives-a-pk-battle-request).
+
+```java
+ZegoLiveStreamingManager.getInstance().acceptIncomingPKBattleRequest(requestID, anotherHostLiveID, anotherHostUser);
+```
+
+
+<h4 id="Reject_the_PK_battle_request">Reject the PK battle request</h4>
+
+To reject the PK battle request, call the `rejectIncomingPKBattleRequest` method. And the peer host will receive notification via the `onOutgoingPKBattleRequestRejected`, and can tell why the request was rejected through the `rejectCode`.
+More details can be checked in [PK request is rejected](#pk-battle-request-is-rejected).
+
+```java
+ZegoLiveStreamingManager.getInstance().rejectPKBattleStartRequest(requestID);
+```
+
+#### Sample code for responding to the PK request
+
+```java
+@Override
+public void onIncomingPKBattleRequestReceived(String requestID, ZegoUIKitUser anotherHostUser,
+    String anotherHostLiveID, String customData) {
+    if (startPKDialog != null && startPKDialog.isShowing()) {
+        return;
+    }
+    AlertDialog.Builder startPKBuilder = new AlertDialog.Builder(LiveActivity.this);
+    startPKBuilder.setTitle(
+        getString(com.zegocloud.uikit.prebuilt.livestreaming.R.string.livestreaming_invite_pk_title,
+            anotherHostUser.userName));
+    startPKBuilder.setPositiveButton(com.zegocloud.uikit.prebuilt.livestreaming.R.string.livestreaming_ok,
+        new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                ZegoLiveStreamingManager.getInstance()
+                    .acceptIncomingPKBattleRequest(requestID, anotherHostLiveID, anotherHostUser);
+            }
+        });
+    startPKBuilder.setNegativeButton(
+        com.zegocloud.uikit.prebuilt.livestreaming.R.string.livestreaming_disagree, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                ZegoLiveStreamingManager.getInstance().rejectPKBattleStartRequest(requestID);
+            }
+        });
+    startPKDialog = startPKBuilder.create();
+    startPKDialog.setCanceledOnTouchOutside(false);
+    startPKDialog.show();
+}
+```
+
+
+### Listen to the sent PK battle request
+
+#### PK battle request is accepted
+
+
+When the sent PK battle request is accepted,  you can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onOutgoingPKBattleRequestAccepted`.
+
+
+```java
+  @Override
+  public void onOutgoingPKBattleRequestAccepted(String anotherHostLiveID, ZegoUIKitUser anotherHostUser) {
+    ZegoLiveStreamingManager.getInstance().startPKBattleWith(anotherHostLiveID, anotherHostUser.userID, anotherHostUser.userName);
+  }
+```
+
+#### PK battle request is rejected
+
+
+When the sent PK battle request is rejected, You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onOutgoingPKBattleRequestRejected`.
+
+<Note title="Note">
+
+The PK battle request will be rejected automatically when the invited host is in a **busy state**.
+**Busy state**: the host has not initiated his live stream yet, the host is in a PK battle with others, the host is being invited, and the host is sending a PK battle request to others.
+</Note>
+
+
+```java
+@Override
+public void onOutgoingPKBattleRequestRejected(int reason,ZegoUIKitUser anotherHostUser) {
+    updateUI();
+    if (reason == ZegoLiveStreamingPKBattleRejectCode.HOST_REJECT.ordinal()) {
+        ZegoLiveStreamingManager.getInstance()
+            .showTopTips(getContext().getString(R.string.livestreaming_send_pk_rejected), false);
+    }else {
+        ZegoLiveStreamingManager.getInstance()
+            .showTopTips(getContext().getString(R.string.livestreaming_send_pk_busy), false);
+    }
+}
+```
+
+
+Among which, the `ZegoLiveStreamingPKBattleRejectCode` can use to declare why the invited host rejected your request, the definition is as follows:
+
+```java
+public enum ZegoLiveStreamingPKBattleRejectCode {
+    HOST_REJECT, USER_NOT_HOST, IN_PK, LIVE_NOT_STARTED, ALREADY_SEND, ALREADY_RECEIVED
+}
+
+```
+
+
+#### PK battle request is time out
+
+If the invited host didn't respond after the timeout duration, the PK battle request timed out by default. While the Live Streaming Kit updates the internal state while won't trigger any default behaviors. 
+You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onOutgoingPKBattleRequestTimeout`.
+
+**Sample code:**
+
+```java
+@Override
+public void onOutgoingPKBattleRequestTimeout(String requestID, ZegoUIKitUser anotherHost) {
+    updateUI();
+    ZegoLiveStreamingManager.getInstance()
+        .showTopTips(getContext().getString(R.string.livestreaming_send_pk_no_reply), false);
+}
+```
+
+#### PK battle request failed to be sent
+
+In some cases, PK battle requests can't be sent successfully, for example, the host's app is not started. 
+And the `sendPKBattleRequest` returns an error when the PK battle request failed to be sent, you can tell and handle these errors by the value returned by the `sendPKBattleRequest`.
+
+
+**Sample code:**
+
+```java
+ZegoLiveStreamingManager.getInstance().sendPKBattleRequest(editText.getText().toString(), new UserRequestCallback() {
+  @Override
+  public void onUserRequestSend(int errorCode, String requestID) {
+      if (errorCode != 0) {
+          ZegoLiveStreamingManager.getInstance().showTopTips(
+              getContext().getString(R.string.livestreaming_send_pk_error, errorCode),
+              false);
+      }
+      updateUI();
+  }
+});
+```
+
+### Listen to received PK battle request
+
+#### Receives a PK battle request
+
+When receiving a PK battle request, You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onIncomingPKBattleRequestReceived`.
+
+**Sample code:**
+
+```java
+ ZegoLiveStreamingManager.getInstance().addLiveStreamingListener(new ZegoLiveStreamingListener() {
+  @Override
+  public void onIncomingPKBattleRequestReceived(String requestID, ZegoUIKitUser anotherHostUser, String anotherHostLiveID,String customData) {
+        if (startPKDialog != null && startPKDialog.isShowing()) {
+            return;
+        }
+        AlertDialog.Builder startPKBuilder = new AlertDialog.Builder(LiveActivity.this);
+        //...
+        startPKDialog = startPKBuilder.create();
+        startPKDialog.setCanceledOnTouchOutside(false);
+        startPKDialog.show();
+  }
+});
+
+```
+
+
+#### Received PK battle request has been canceled
+
+You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onIncomingPKBattleRequestCancelled` when the PK battle request has been canceled.
+
+```java
+@Override
+public void onIncomingPKBattleRequestCancelled(String requestID, ZegoUIKitUser anotherHostUser, String customData) {
+    if (startPKDialog != null && startPKDialog.isShowing()) {
+        startPKDialog.dismiss();
+    }
+}
+```
+
+#### Received PK battle request is timed out
+
+You can receive callback notifications or customize your business logic by listening to or setting up the `ZegoLiveStreamingListener.onIncomingPKBattleRequestTimeout` when the received PK battle request has timed out.
+
+**Sample code:**
+
+```java
+@Override
+public void onIncomingPKBattleRequestTimeout(String requestID, ZegoUIKitUser anotherHost) {
+    if (startPKDialog != null && startPKDialog.isShowing()) {
+        startPKDialog.dismiss();
+    }
+}
+```
+
+
+### Mute the peer host during the PK battle
+
+When a PK battle starts, both hosts can mute the connected host during the battle as needed. And after the peer host has been muted, the audience can't hear the voice from the muted livestream.
+
+```java
+ZegoLiveStreamingManager.getInstance().muteAnotherHostAudio(boolean mute,ZegoUIKitCallback callback)
+```
+
+And you can also get the mute state of the peer host via the `ZegoLiveStreamingManager().getInstance().isAnotherHostMuted()`.
+
+**Sample code:**
+
+```java
+boolean pkUserMuted = ZegoLiveStreamingManager.getInstance().isAnotherHostMuted();
+ZegoLiveStreamingManager.getInstance().muteAnotherHostAudio(!pkUserMuted, new ZegoUIKitCallback() {
+    @Override
+    public void onResult(int errorCode) {
+        updateButton();
+    }
+});
+```
+
+
+## Custom prebuilt UI
+
+### Customizable methods unique to the PK battle feature
+
+In addition to the above-mentioned methods used for customization, the `ZegoLiveStreamingPKBattleConfig` in `ZegoUIKitPrebuiltLiveStreamingConfig` is provided for customizing some UI and features that are unique to the PK battle feature.
+
+```java
+class ZegoLiveStreamingPKBattleConfig {
+
+  /// When the connected host gets offline due to exceptions, SDK defaults to show "Host is reconnecting".
+  /// To customize the content that displays when the connected host gets offline, use the [hostReconnectingProvider].
+  public ZegoLiveStreamingPKBattleViewProvider2 hostReconnectingProvider;
+
+  /// To overlay custom components on the PKBattleView, use the [pkBattleViewForegroundProvider].  
+   public ZegoLiveStreamingPKBattleViewProvider pkBattleViewForegroundProvider;
+
+  /// To add custom components on the top of the PKBattleView, use the [pkBattleViewTopProvider]. 
+  public ZegoLiveStreamingPKBattleViewProvider pkBattleViewTopProvider;
+
+  /// To add custom components on the bottom of the PKBattleView, use the [pkBattleViewBottomProvider]. 
+  public ZegoLiveStreamingPKBattleViewProvider pkBattleViewBottomProvider;
+}
+```
+
+Among these, the definition of the `ZegoLiveStreamingPKBattleViewProvider` and the `ZegoLiveStreamingPKBattleViewBuilder` are as follows:
+
+```java
+public interface ZegoLiveStreamingPKBattleViewProvider {
+
+    View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers);
+}
+
+public interface ZegoLiveStreamingPKBattleViewProvider2 {
+
+    View getView(ViewGroup parent, ZegoUIKitUser uiKitUsers);
+}
+```
+
+To be specific, if you want to place custom views above, below, and on top of PKView, you can check the following sample code as a reference:
+
+```java
+// ZegoUIKitPrebuiltLiveStreamingConfig
+  config.pkBattleConfig.pkBattleViewBottomProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+      @Override
+      public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+          View view = new View(parent.getContext());
+          view.setBackgroundColor(Color.RED);
+          DisplayMetrics displayMetrics = parent.getContext().getResources().getDisplayMetrics();
+          view.setLayoutParams(new FrameLayout.LayoutParams(-1, Utils.dp2px(24, displayMetrics)));
+          return view;
+      }
+  };
+  config.pkBattleConfig.pkBattleViewTopProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+      @Override
+      public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+          View view = new View(parent.getContext());
+          view.setBackgroundColor(Color.RED);
+          DisplayMetrics displayMetrics = parent.getContext().getResources().getDisplayMetrics();
+          view.setLayoutParams(new FrameLayout.LayoutParams(-1, Utils.dp2px(24, displayMetrics)));
+          return view;
+      }
+  };
+  config.pkBattleConfig.pkBattleViewForegroundProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+      @Override
+      public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+          View view = new View(parent.getContext());
+          view.setBackgroundColor(Color.RED);
+          DisplayMetrics displayMetrics = parent.getContext().getResources().getDisplayMetrics();
+          FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(-1, Utils.dp2px(24, displayMetrics));
+          params.topMargin = parent.getHeight() / 2;
+          view.setLayoutParams(params);
+          return view;
+      }
+  };
+  config.pkBattleConfig.hostReconnectingProvider = new ZegoLiveStreamingPKBattleViewProvider2() {
+      @Override
+      public View getView(ViewGroup parent, ZegoUIKitUser uiKitUsers) {
+          TextView textView = new TextView(LiveActivity.this);
+          textView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+          textView.setBackgroundColor(ContextCompat.getColor(LiveActivity.this,
+              com.zegocloud.uikit.prebuilt.livestreaming.R.color.gray_444));
+          textView.setGravity(Gravity.CENTER);
+          textView.setTextColor(Color.WHITE);
+          textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+          textView.setText("uiKitUsers:" + uiKitUsers.userName + " disconnected");
+          return textView;
+      }
+  };
+```
+
+The effect will be like this:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/pkbatlte/custom_pk_view.jpeg" />
+</Frame> 
+
+
+## Demo source code
+
+<Accordion title="Click here to check the demo source code." defaultOpen="false">
+
+```java
+// LiveActivity.java
+private void addFragment() {
+    long appID = ;
+    String appSign = ;
+    String userID = ;
+    String userName = ;
+
+    boolean isHost = ;
+    String liveID = ;
+
+    ZegoUIKitPrebuiltLiveStreamingConfig config;
+    if (isHost) {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
+    } else {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(true);
+    }
+
+    customPKView(config);
+
+    ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(appID,
+        appSign, userID, userName, liveID, config);
+    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+
+    addPKButton(fragment);
+
+    addPKDialog();
+}
+
+ private void customPKView(ZegoUIKitPrebuiltLiveStreamingConfig config) {
+    config.pkBattleConfig.pkBattleViewBottomProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+        @Override
+        public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+            View view = new View(parent.getContext());
+            view.setBackgroundColor(Color.MAGENTA);
+            DisplayMetrics displayMetrics = parent.getContext().getResources().getDisplayMetrics();
+            view.setLayoutParams(new FrameLayout.LayoutParams(-1, Utils.dp2px(32, displayMetrics)));
+            return view;
+        }
+    };
+    config.pkBattleConfig.pkBattleViewTopProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+        @Override
+        public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+            View view = new View(parent.getContext());
+            view.setBackgroundColor(Color.TRANSPARENT);
+            DisplayMetrics displayMetrics = parent.getContext().getResources().getDisplayMetrics();
+            view.setLayoutParams(new FrameLayout.LayoutParams(-1, Utils.dp2px(48, displayMetrics)));
+            return view;
+        }
+    };
+    config.pkBattleConfig.pkBattleViewForegroundProvider = new ZegoLiveStreamingPKBattleViewProvider() {
+        @Override
+        public View getView(ViewGroup parent, List<ZegoUIKitUser> uiKitUsers) {
+            MutePKUserButton mutePKUserButton = new MutePKUserButton(parent.getContext());
+            int size = Utils.dp2px(36f, getResources().getDisplayMetrics());
+            int marginTop = Utils.dp2px(10f, getResources().getDisplayMetrics());
+            int marginBottom = Utils.dp2px(16f, getResources().getDisplayMetrics());
+            int marginEnd = Utils.dp2px(8, getResources().getDisplayMetrics());
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT, size);
+            layoutParams.leftMargin = parent.getWidth() / 2;
+            layoutParams.topMargin = marginTop;
+            layoutParams.bottomMargin = marginBottom;
+            layoutParams.rightMargin = marginEnd;
+            mutePKUserButton.setLayoutParams(layoutParams);
+            return mutePKUserButton;
+        }
+    };
+
+    config.pkBattleConfig.hostReconnectingProvider = new ZegoLiveStreamingPKBattleViewProvider2() {
+        @Override
+        public View getView(ViewGroup parent, ZegoUIKitUser uiKitUsers) {
+            TextView textView = new TextView(LiveActivity.this);
+            textView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            textView.setBackgroundColor(ContextCompat.getColor(LiveActivity.this,
+                com.zegocloud.uikit.prebuilt.livestreaming.R.color.gray_444));
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextColor(Color.WHITE);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setText("uiKitUsers:" + uiKitUsers.userName + " disconnected");
+            return textView;
+        }
+    };
+}
+
+private void addPKDialog() {
+    ZegoLiveStreamingManager.getInstance().addLiveStreamingListener(new ZegoLiveStreamingListener() {
+        @Override
+        public void onIncomingPKBattleRequestReceived(String requestID, ZegoUIKitUser anotherHostUser,
+            String anotherHostLiveID, String customData) {
+            if (startPKDialog != null && startPKDialog.isShowing()) {
+                return;
+            }
+            AlertDialog.Builder startPKBuilder = new AlertDialog.Builder(LiveActivity.this);
+            startPKBuilder.setTitle(
+                getString(R.string.livestreaming_invite_pk_title,
+                    anotherHostUser.userName));
+            startPKBuilder.setPositiveButton(com.zegocloud.uikit.prebuilt.livestreaming.R.string.livestreaming_ok,
+                new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ZegoLiveStreamingManager.getInstance()
+                            .acceptIncomingPKBattleRequest(requestID, anotherHostLiveID, anotherHostUser);
+                    }
+                });
+            startPKBuilder.setNegativeButton(
+                com.zegocloud.uikit.prebuilt.livestreaming.R.string.livestreaming_disagree, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ZegoLiveStreamingManager.getInstance().rejectPKBattleStartRequest(requestID);
+                    }
+                });
+            startPKDialog = startPKBuilder.create();
+            startPKDialog.setCanceledOnTouchOutside(false);
+            startPKDialog.show();
+        }
+
+        @Override
+        public void onIncomingPKBattleRequestTimeout(String requestID, ZegoUIKitUser anotherHostUser) {
+            if (startPKDialog != null && startPKDialog.isShowing()) {
+                startPKDialog.dismiss();
+            }
+        }
+
+        @Override
+        public void onIncomingPKBattleRequestCanceled(String requestID, ZegoUIKitUser anotherHostUser,
+            String customData) {
+            if (startPKDialog != null && startPKDialog.isShowing()) {
+                startPKDialog.dismiss();
+            }
+        }
+    });
+}
+
+public void addPKButton(ZegoUIKitPrebuiltLiveStreamingFragment fragment) {
+    PKButton pkButton = new PKButton(this);
+    int size = Utils.dp2px(36f, getResources().getDisplayMetrics());
+    int marginTop = Utils.dp2px(10f, getResources().getDisplayMetrics());
+    int marginBottom = Utils.dp2px(16f, getResources().getDisplayMetrics());
+    int marginEnd = Utils.dp2px(8, getResources().getDisplayMetrics());
+    LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, size);
+    layoutParams.topMargin = marginTop;
+    layoutParams.bottomMargin = marginBottom;
+    layoutParams.rightMargin = marginEnd;
+    pkButton.setLayoutParams(layoutParams);
+    fragment.addButtonToBottomMenuBar(Collections.singletonList(pkButton), ZegoLiveStreamingRole.HOST);
+}
+
+
+
+// MutePKUserButton.java
+public class MutePKUserButton extends ZTextButton {
+
+    public MutePKUserButton(@NonNull Context context) {
+        super(context);
+    }
+
+    public MutePKUserButton(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public MutePKUserButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        setBackgroundResource(R.drawable.livestreaming_bg_cohost_btn);
+        setGravity(Gravity.CENTER);
+        setTextColor(Color.parseColor("#cccccc"));
+        setMinWidth(Utils.dp2px(36, getResources().getDisplayMetrics()));
+        int padding = Utils.dp2px(8, getResources().getDisplayMetrics());
+        setPadding(padding, 0, padding, 0);
+        updateButton();
+        ZegoLiveStreamingManager.getInstance().addLiveStreamingListener(new ZegoLiveStreamingListener() {
+            @Override
+            public void onOtherHostMuted(String userID, boolean muted) {
+                updateButton();
+            }
+        });
+    }
+
+    @Override
+    protected void afterClick() {
+        boolean pkUserMuted = ZegoLiveStreamingManager.getInstance().isAnotherHostMuted();
+        ZegoLiveStreamingManager.getInstance().muteAnotherHostAudio(!pkUserMuted, null);
+    }
+
+    private void updateButton() {
+        boolean pkUserMuted = ZegoLiveStreamingManager.getInstance().isAnotherHostMuted();
+        if (pkUserMuted) {
+            setText("Unmute user");
+        } else {
+            setText("Mute user");
+        }
+    }
+}
+
+
+// PKButton.java
+public class PKButton extends ZTextButton {
+
+    public PKButton(@NonNull Context context) {
+        super(context);
+    }
+
+    public PKButton(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public PKButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        setText("PK");
+        setBackgroundResource(R.drawable.livestreaming_bg_cohost_btn);
+        setGravity(Gravity.CENTER);
+        setTextColor(Color.parseColor("#cccccc"));
+        setMinWidth(Utils.dp2px(36, getResources().getDisplayMetrics()));
+        int padding = Utils.dp2px(8, getResources().getDisplayMetrics());
+        setPadding(padding, 0, padding, 0);
+
+        ZegoLiveStreamingManager.getInstance().addLiveStreamingListener(new ZegoLiveStreamingListener() {
+            @Override
+            public void onPKStarted() {
+                updateUI();
+            }
+
+            @Override
+            public void onPKEnded() {
+                updateUI();
+            }
+
+            @Override
+            public void onOutgoingPKBattleRequestTimeout(String requestID, ZegoUIKitUser anotherHost) {
+                updateUI();
+                ZegoLiveStreamingManager.getInstance()
+                    .showTopTips(getContext().getString(R.string.livestreaming_send_pk_no_reply), false);
+            }
+
+            @Override
+            public void onOutgoingPKBattleRequestRejected(int reason, ZegoUIKitUser anotherHostUser) {
+                updateUI();
+                if (reason == ZegoLiveStreamingPKBattleRejectCode.HOST_REJECT.ordinal()) {
+                    ZegoLiveStreamingManager.getInstance()
+                        .showTopTips(getContext().getString(R.string.livestreaming_send_pk_rejected), false);
+                } else {
+                    ZegoLiveStreamingManager.getInstance()
+                        .showTopTips(getContext().getString(R.string.livestreaming_send_pk_busy), false);
+                }
+            }
+
+            @Override
+            public void onOutgoingPKBattleRequestAccepted(String anotherHostLiveID, ZegoUIKitUser anotherHostUser) {
+                ZegoLiveStreamingManager.getInstance()
+                    .startPKBattleWith(anotherHostLiveID, anotherHostUser.userID, anotherHostUser.userName);
+            }
+        });
+    }
+
+    @Override
+    protected void afterClick() {
+        super.afterClick();
+        PKRequest pkRequest = ZegoLiveStreamingManager.getInstance().getSendPKStartRequest();
+        if (pkRequest == null) {
+            if (ZegoLiveStreamingManager.getInstance().getPKInfo() == null) {
+                Builder builder = new Builder(getContext());
+                View layout = LayoutInflater.from(getContext())
+                    .inflate(R.layout.livestreaming_dialog_pkinput, null, false);
+                TextInputLayout inputLayout = layout.findViewById(R.id.dialog_pk_edittext);
+                Button button = layout.findViewById(R.id.dialog_pk_button);
+                builder.setView(layout);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                button.setOnClickListener(view -> {
+                    EditText editText = inputLayout.getEditText();
+                    if (!TextUtils.isEmpty(editText.getText())) {
+                        ZegoLiveStreamingManager.getInstance()
+                            .sendPKBattleRequest(editText.getText().toString(), new UserRequestCallback() {
+                                @Override
+                                public void onUserRequestSend(int errorCode, String requestID) {
+                                    if (errorCode != 0) {
+                                        ZegoLiveStreamingManager.getInstance().showTopTips(
+                                            getContext().getString(R.string.livestreaming_send_pk_error, errorCode),
+                                            false);
+                                    }
+                                    updateUI();
+                                }
+                            });
+                        alertDialog.dismiss();
+                    }
+                });
+            } else {
+                ZegoLiveStreamingManager.getInstance().stopPKBattle();
+            }
+        } else {
+            ZegoLiveStreamingManager.getInstance().cancelPKBattleRequest(new UserRequestCallback() {
+                @Override
+                public void onUserRequestSend(int errorCode, String requestID) {
+                    updateUI();
+                }
+            });
+        }
+    }
+
+    public void updateUI() {
+        PKInfo pkInfo = ZegoLiveStreamingManager.getInstance().getPKInfo();
+        if (pkInfo != null) {
+            setText("End PK");
+        } else {
+            PKRequest sendPKStartRequest = ZegoLiveStreamingManager.getInstance().getSendPKStartRequest();
+            if (sendPKStartRequest == null) {
+                setText("PK");
+            } else {
+                setText("Cancel PK");
+            }
+        }
+    }
+}
+```
+</Accordion>

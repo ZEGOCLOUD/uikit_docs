@@ -1,0 +1,121 @@
+# In-room messages
+
+## Introduction
+
+Our latest version of the SDK supports customizing common chat messages and also supports gifting virtual gifts, not just basic chat functionality like before. 
+This document will guide you on how to integrate these two new features.
+
+
+## How do I customize the display of in-room messages?
+
+
+When the chat window on the right side of the screen is closed, the bottom left of the screen will display the chat messages and in-room member joining/leaving messages in real-time. 
+You can customize the display by turning off the dynamic display of left side messages and setting up and listening to callbacks on in-room messages.
+
+
+```typescript 
+// example
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.joinRoom({
+    lowerLeftNotification:{
+        showUserJoinAndLeave: false,// Hide the user joining/leaving notification on the lower left.
+        showTextChat: false,// Hide the text chat on the lower left.
+    },
+    onInRoomMessageReceived: (messageInfo: InRoomMessageInfo) => {
+        console.warn("onInRoomMessageReceived", messageInfo);
+        // Wrap the received in-room messages with appropriate elements and display them in the desired location.
+     },
+    // To customize the way how the user joining/leaving notification shows, you can set up and implement the [onUserJoin] and [onUserLeave] callbacks.
+    onUserJoin:(user) => {
+    },
+    onUserLeave:(user) => {
+    }
+})
+
+// interface
+interface InRoomMessageInfo {
+  fromUser: ZegoUser;
+  message: string;
+  sendTime: number;
+  messageID: number;
+}
+```
+
+
+## Using the ZIM enhances messaging capabilities.
+
+### 1. Install ZIM
+
+Zego Prebuilt internally supports the use of ZIM extension message capability. Before using it, you need to import ZIM.
+
+1. Choose either of the following to import the ZIM SDK:
+
+<Accordion title="Using the NPM" defaultOpen="false">
+1. Install the plug-in.
+```js
+ npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.5.0 --save 
+```
+
+2. Import the Call Kit in your project's `js` or `ts` file:
+
+```js
+import { ZIM } from "zego-zim-web";
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+```
+</Accordion>
+
+
+<Accordion title="HTML Script Tag" defaultOpen="false">
+
+- Import the following script code in the `HTML` page:
+(**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
+```html
+<script src="https://unpkg.com/zego-zim-web@2.5.0/index.js"></script>
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+```
+</Accordion>
+
+
+2. After obtaining the Prebuilt instance using the Create method, you need to install ZIM into the instance.
+
+
+```js
+const zp = ZegoUIKitPrebuilt.create(TOKEN);
+zp.addPlugins({ ZIM });
+```
+
+### 2. How to send custom command messages?
+
+1. You can use this [server-side API](https://docs.zegocloud.com/article/14010) to send command messages with MessageType=2.
+
+2. Apart from server-side, our Prebuilt also provides an interface on the client-side for you to send custom command messages.
+
+```typescript
+//example
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.addPlugins({ ZIM });
+zp.sendInRoomCustomCommand({msg:'1123'}).then(res => console.log(res)).catch(err=> console.error(err))
+```
+
+### 3. How to receive custom command messages?
+
+```typescript
+//example
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.addPlugins({ ZIM });
+zp.joinRoom({
+  onInRoomCustomCommandReceived(messages:ZegoSignalingInRoomCommandMessage[]) {
+    console.warn("onInRoomCustomCommandReceived", messages);
+  },
+});
+```
+
+
+### 4. Using custom command messages to implement gift signaling
+
+1. send gift: You can use this [server-side API](https://docs.zegocloud.com/article/14010) to send command messages with MessageType=2.  And encode the command message to represent different gifts.
+2. receive gift: Use the onInRoomCustomCommandReceived callback mentioned above to receive gift messages sent from the server.
+
+
+
+For the complete implementation of the virtual gifting feature, we suggest that you refer to this doc [How to Implement the Virtual Gifts Function](https://www.zegocloud.com/blog/virtual-gifts).

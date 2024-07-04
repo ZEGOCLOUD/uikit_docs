@@ -1,0 +1,30 @@
+# Set user avatar
+
+### Introduction
+
+
+In ZEGOCLOUD UIKits, the user avatar uses the first letter of the username. While you can also set the user avatar as needed by referring to this guide.
+
+After a customized user avatar is set:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/setAvatar.png" />
+</Frame>
+
+## How do I set the user avatar? 
+
+We provide an event listener `onUserAvatarSetter`, which returns an array of users: (Array\<ZegoUser\>), and each `    ZegoUser` contains a `setUserAvatar` method. 
+To set the user avatar, call the `setUserAvatar` method and pass the user avatar URL.
+
+```js
+// ....
+zp.joinRoom({
+     // ...,
+    onUserAvatarSetter:(userList) => {
+        userList.forEach(user => {
+            user.setUserAvatar("https://xxx.xxx.xx/xx.png")
+        })
+    }, 
+     // ...
+});
+```

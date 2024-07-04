@@ -1,0 +1,45 @@
+# Customize user attributes
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) supports customizing the user attributes. The user attribute (userInRoomAttributes) is in the format of key-value pairs, which are used to implement customized functions, such as setting the user level and sharing it with in-room participants. 
+
+After you customized successfully (or in-room participants complete the customization), you (or in-room participants) will receive a notification through the `onUserCountOrPropertyChanged` callback, and the user attributes you customized will return in this callback.
+
+<Note title="Note">
+- For a single user, the sum of all Key-Value pairs must be within 100 bytes and a maximum of 20 pairs can be configured.
+- Each Key must be within 8 bytes.
+- Each Value must be within 64 bytes.
+</Note>
+
+Here is the reference code:
+
+<CodeGroup>
+
+```java Java
+ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+if (isHost) {
+   config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+} else {
+   config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+}
+HashMap<String, String> userInRoomAttributes = new HashMap<>();
+config.userInRoomAttributes = userInRoomAttributes;
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,appSign, userID, userName, roomID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+```
+
+```kotlin Kotlin
+val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+} else {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+}
+val userInRoomAttributes: HashMap<String, String> = HashMap()
+config.userInRoomAttributes = userInRoomAttributes
+
+val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+```
+
+</CodeGroup>

@@ -1,0 +1,87 @@
+# Implement an audio-only live
+
+
+Live Streaming Kit (ZegoUIkitPrebuiltLiveStreaming) defaults to Video Live Streaming mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only live.
+
+Camera-related logic is not required for audio-only live streams, so you can:
+
+1. `bottomMenuBarConfig`: Configure this to delete the camera-related button.
+2. `turnOnCameraWhenJoining`: Configure this to only use the microphone when a live starts.
+
+Here is the reference code:
+
+<CodeGroup>
+```java Java
+public class LiveActivity extends AppCompatActivity {
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_live);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String liveID = "testLiveID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltLiveStreamingConfig config;
+    if (isHost) {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
+    } else {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience();
+    }
+    config.turnOnCameraWhenJoining = false;
+    config.bottomMenuBarConfig.hostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON);
+    config.bottomMenuBarConfig.coHostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON);
+    config.bottomMenuBarConfig.audienceButtons = Arrays.asList(ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON);
+
+    ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName,liveID, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+}
+}
+```
+
+```kotlin Kotlin
+class LiveActivity : AppCompatActivity() {
+    private var isHost = false
+    private var mLiveID: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = "userID"
+        val userName = "userName"
+        val liveID = "testLiveID"
+
+        val config: ZegoUIKitPrebuiltLiveStreamingConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveStreamingConfig.host().also {
+                it.turnOnCameraWhenJoining = false;
+        } else {
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        }
+        config.bottomMenuBarConfig.hostButtons = Arrays.asList<Any>(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON)
+        config.bottomMenuBarConfig.coHostButtons = Arrays.asList<Any>(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON)
+        config.bottomMenuBarConfig.audienceButtons =
+            Arrays.asList<Any>(ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON)
+
+        val fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(
+            appID, appSign, userID, userName, liveID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>

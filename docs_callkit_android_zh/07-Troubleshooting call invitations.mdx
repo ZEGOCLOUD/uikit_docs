@@ -1,0 +1,216 @@
+# Troubleshooting call invitations
+
+<Warning title="Warning">
+
+1. It is possible that your issue in the old version has already been fixed. Before further troubleshooting, we strongly recommend that you upgrade to the latest version for testing. Please check the versions of [zego_uikit_prebuilt_call_android](https://jitpack.io/#ZEGOCLOUD/zego_uikit_prebuilt_call_android) and [zego_uikit_signaling_plugin_android](https://jitpack.io/#ZEGOCLOUD/zego_uikit_signaling_plugin_android) on jitpack.
+2. If your project has already integrated Firebase Cloud Messaging, you will need additional steps to handle compatibility between Firebase and our Call Kit. Please refer to the [FAQ](./08-FAQ.mdx) for compatibility issues with Firebase.
+
+</Warning>
+
+
+If you encounter offline call issues, **we recommend testing and ensuring that the online call function is working properly before troubleshooting the offline problem**. This usually shortens the time it takes to troubleshoot your issue.
+
+Below are common combinations of integration issues and phenomena. **You can quickly try to self-diagnose and locate the cause of the problem using this list.**
+
+
+## Troubleshooting online calls
+
+
+###  Callee's UI not responding after caller's call button clicked
+
+If the UI does not respond after the caller clicks the call button, please check the following:
+
+1. Make sure that both side has init success and connected,please refer to [Check if there is any init error](#check-if-there-is-any-init-error)
+
+2. Check if there is any error reported on the caller side, please refer to [Check if there is any error on the calling side](#check-if-there-is-any-error-on-the-calling-side)
+
+
+
+## Troubleshooting offline calls
+
+Offline call issues can be complex and tricky, particularly on Android devices. To help you, we have listed some common situations and their corresponding solutions below.
+
+<Warning title="Warning">
+
+Before attempting to troubleshoot offline calls, please **make sure that the online call invitation feature is working properly**.
+
+Please [Check if the test device has granted the APP related permissions](#check-if-the-test-device-has-granted-the-app-related-permissions).
+
+</Warning>
+
+
+### I can receive call invitations, but only get notifications without accept and decline buttons on the invitation dialog.
+
+Please [Check if the ResourceID configuration is correct](#check-if-the-resourceid-configuration-is-correct).
+
+
+### I can receive the call invitation, but after clicking accept, the application cannot be launched.
+
+Please [Check if the test device has granted the APP related permissions](#check-if-the-test-device-has-granted-the-app-related-permissions).
+
+
+### Users can still receive offline notifications after logging out of the app.
+
+After the user logs out of the APP, you should call `ZegoUIKitPrebuiltCallService().uninit()`.
+
+```java
+/// on App's user logout
+void onUserLogout() {
+  /// when app's user is logged out
+  ZegoUIKitPrebuiltCallService().uninit();
+}
+```
+
+### Callee does not receive call invitation notification when offline
+
+
+#### Step 1: Ensure that the latest version is being used
+
+Click on the terminal of the project, enter `./gradlew build --refresh-dependencies` for forced synchronization. After the synchronization is complete, click the sync button again to synchronize.
+
+
+#### Step 2: Check if the app has necessary permissions enabled
+
+After installation, some Android devices may block the app from displaying notifications by default. We recommend opening your app settings and checking if notification permissions have been granted to your app, ensuring that your app is allowed to display notifications
+
+#### Step 3: Check if the callee has obtained the Push ID correctly
+
+When debugging from your IDE (Android Studio), you can usually view ​​​​​​​​important information such as `push id` or `pushID` in your app's console logs. Make sure to check that the callee has obtained the Push ID correctly.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/2.jpeg" />
+</Frame>
+
+If you are having trouble obtaining a valid Push ID, it may be due to issues with your certificate configuration. We recommend reviewing the [Quick start \(with call invitation\)](./03-Quick%20start%20%28with%20call%20invitation%29.mdx)
+
+documentation again to ensure that your certificate configuration on the console is correct. Once configured correctly, you should see something similar to the following:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/console.png" />
+</Frame>
+
+If you are still unable to obtain a Push ID after configuring your certificate on [ZEGOCLOUD's Admin Console](https://console.zegocloud.com/), please double-check the `package_name` in the `google-service.json` file on Android to ensure that they match the package name of your project.
+
+Once you have confirmed that, you should be able to obtain the Push ID correctly.
+
+#### Step 4: Check if you can receive debug messages from the ZEGOCLOUD Console
+
+To check if you can receive debug messages from the ZEGOCLOUD console, please log in to [ZEGOCLOUD's Admin Console](https://console.zegocloud.com/)
+
+and navigate to **Projects Management > Your Project > Service Management > In-app Chat** page. Here, you will find a `Push Debug` button. Click on this button and fill in the example information provided in the popup window. Once the information is filled in, click the **Test** button to complete the process.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/234791990-76dd72d1-2655-41fc-909f-96236ad182e4.png" />
+</Frame>
+
+If you encounter errors related to `Manufacturer Push Servers` when clicking the **Test** button, click on `View details` to see more information. This can help you identify the root cause of the issue.
+
+The `Manufacturer Push Servers` error may be caused by the following:
+
+1. The callee is not registered or logged in, which can cause the test to fail. Ensure that the callee's app has not been uninstalled or the callee has not logged out of the app.
+
+2. Your Firebase project may have been modified or deleted, causing the information to be mismatched. Confirm this by logging in to the Firebase console.
+
+
+## Check List
+
+
+### Check if there is any init error
+
+Check whether ZEGO SDK is init success and the signalPlugin is Connected.You should call `ZegoUIKitPrebuiltCallService.init` to init and sign in zego signal plugin. Check the connect state by following code:
+
+```java
+
+ZegoUIKitPrebuiltCallService.events.setErrorEventsListener(new ErrorEventsListener() {
+    @Override
+    public void onError(int errorCode, String message) {
+        //if there is any error throw 
+    }
+});
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setPluginConnectListener(
+    new SignalPluginConnectListener() {
+    @Override
+    public void onSignalPluginConnectionStateChanged(ZIMConnectionState state, ZIMConnectionEvent event,
+        JSONObject extendedData) {
+        //SignalPlugin is used to send call invitations,if your ZIMConnectionState is DISCONNECTED,you can't send or
+    // receive call invitations'.
+    }
+});
+```
+
+### Check if there is any error on the calling side
+
+1. If you use [ZegoSendCallInvitationButton] to start a call,you can check the error code like this:
+
+    ```java
+    newVideoCall.setOnClickListener(new ClickListener() {
+        @Override
+        public void onClick(int errorCode, String errorMessage, List<ZegoCallUser> errorInvitees) {
+            
+        }
+    });
+    ```
+
+2. if you use `ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange()`,just check the callback of the method.
+    ```java
+    ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange(activity,invitees,type,new PluginCallbackListener(){
+
+          @Override
+          public void callback(Map<String, Object> result) {
+            int code = (int) result.get("code");
+            String message = (String) result.get("message");
+            List<ZegoUIKitUser> errorInvitees = (List<ZegoUIKitUser>) result.get("errorInvitees");
+          }
+      });
+    ```
+
+Please check the error code and message, and check if the `errorInvitees` list is empty.
+
+Please refer to [this link](https://docs.zegocloud.com/article/13792) for error codes' details.
+
+
+
+<Note title="Note">
+
+In addition, if you use the customData parameter when sending a call invitation, please note that this parameter cannot exceed 1024 bytes.
+
+</Note>
+
+
+### Check if the test device has granted the APP related permissions.
+
+Pease make sure that the app has been granted relevant permissions in the phone settings. Also please check if the phone is in Do Not Disturb mode.
+
+Here are the permissions that an Offline Push APP needs on Xiaomi devices for reference:
+
+
+|                                                                                                                                                                         |                                                                                                                                                                         |                                                                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="200" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame> |
+
+
+
+The permissions that usually need to be checked are:
+
+- Notification: Switch to Enable
+
+- Display pop-up window: Switch to Enable
+
+- Battery saver: No restrictions
+
+You can find the relevant permission setting methods for your phone brand [here](https://dontkillmyapp.com/).
+
+
+### Check if the ResourceID configuration is correct.
+
+
+Please check that the resourceID configuration in the console is of the following types:
+
+FCM Data messages: Enabled
+
+Please check that the resourceID configured in the console is exactly the same as the resourceID used in the code by `ZegoSendCallInvitationButton`.
+
+```java
+ZegoSendCallInvitationButton button;
+button.setResourceID(String resourceID);
+```

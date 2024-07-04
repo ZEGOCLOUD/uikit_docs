@@ -1,0 +1,40 @@
+# Customize event callbacks
+
+- - -
+
+## Introduction
+
+If the [Customize the UI for call invitation](./02-Customize%20the%20UI%20for%20call%20invitation.mdx) and [Customize logic hooks](./04-Customize%20call%20invitation%20config.mdx) documents can't meet your needs to do further customization, we also provide some event callbacks for you.
+
+The event callbacks we provided:
+
+```javascript
+zp.setCallInvitationConfig({
+  // The callee will receive the notification through this callback when receiving a call invitation.
+  onIncomingCallReceived: (callID, caller, callType, callees) => {},
+
+  // The callee will receive the notification through this callback when the caller canceled the call invitation.  
+  onIncomingCallCanceled: (callID, caller) => {},
+
+  // The caller will receive the notification through this callback when the callee accepts the call invitation. 
+  onOutgoingCallAccepted: (callID, callee) => {},
+
+  // The caller will receive the notification through this callback when the callee is on a call.
+  onOutgoingCallRejected: (callID, callee) => {},
+
+  // The caller will receive the notification through this callback when the callee declines the call invitation. 
+  onOutgoingCallDeclined: (callID, callee) => {},
+
+  // The callee will receive the notification through this callback when he didn't respond to the call invitation. 
+  onIncomingCallTimeout: (callID, caller) => {},
+  
+  // The caller will receive the notification through this callback when the call invitation timed out.
+  onOutgoingCallTimeout: (callID, callees) => {},
+
+  // When the callee user clicks the accept button on the call invitation popup, the callee will receive this callback.
+  onIncomingCallAcceptButtonPressed: () => {},
+
+  // When the callee user clicks the decline button on the call invitation popup, the callee will receive this callback.
+  onIncomingCallDeclineButtonPressed: () => {}
+})
+```

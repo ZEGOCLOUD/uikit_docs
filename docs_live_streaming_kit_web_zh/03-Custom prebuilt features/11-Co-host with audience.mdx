@@ -1,0 +1,50 @@
+# Co-host with audience
+
+
+## Introduction
+
+During live streaming, in order to increase interactivity, the host and audience can interact with each other in real time through audio and video by connecting via "co-hosting". The host can actively invite the audience to become co-hosts, or let the audience apply to become co-hosts on their own. 
+
+This doc will introduce how to configure this feature.
+
+## Implementation steps
+
+### Import the ZIM plugin
+
+- **Using the NPM:**
+
+1. Install the plug-in.
+    ```js
+    npm i @zegocloud/zego-uikit-prebuilt zego-zim-web --save 
+    ```
+
+2. Import the Live Streaming Kit in your project's `js` or `ts` file:
+
+    ```js
+    import { ZIM } from "zego-zim-web";
+    import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+    ```
+
+- **Using the HTML Script Tag:**
+
+    Import the following script code in the `HTML` page.
+
+    (**A more recommended way**: Download and save it on your app server, and import it to the corresponding path.
+    ```html
+    <script src="https://unpkg.com/zego-zim-web/index.js"></script>
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    ```
+
+
+### Configure parameters
+
+```js
+const zp = ZegoUIKitPrebuilt.create(TOKEN);
+zp.addPlugins({ ZIM });
+zp.joinRoom({
+    //...other params
+    showMakeCohostButton: true, // Whether to show the button that is used to invite the audience to co-host on the host end. 
+    showRemoveCohostButton: true, // Whether to show the button that is used to remove the audience on the host end.
+    showRequestToCohostButton: true, // Whether to show the button that is used to request to co-host on the audience end.
+})
+```

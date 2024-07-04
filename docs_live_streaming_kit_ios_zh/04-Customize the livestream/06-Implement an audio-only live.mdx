@@ -1,0 +1,35 @@
+# Implement an audio-only live
+
+Live Streaming Kit (ZegoUIkitPrebuiltLiveStreaming) defaults to Video Live Streaming mode. While it allows users to tap the camera button to turn off the camera, converting to an audio-only live.
+
+
+Camera-related logic is not required for audio-only live streams, so you can:
+
+1. `bottomMenuBarConfig`: Configure this to remove the camera-related button.
+2. `turnOnCameraWhenJoining`: Configure this to only use the microphone when a live starts.
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        config.turnOnCameraWhenjoining = false;
+        config.bottomMenuBarButtons = [.toggleMicrophoneButton]
+
+        let liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+}
+```

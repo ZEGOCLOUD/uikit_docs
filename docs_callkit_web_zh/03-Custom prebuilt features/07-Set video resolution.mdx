@@ -1,0 +1,38 @@
+# Set video resolution
+
+## Introduction
+
+
+In ZEGOCLOUD UIKits, the default resolution for videos is 360p. If you want to reduce the cost by lowering the resolution or improve the user experience by increasing the resolution, follow this guide to set the video resolution.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/set_video_resolution.png" />
+</Frame>
+
+## How do I set video resolution?
+
+To set the video resolution, use this config: `videoResolutionList`
+
+
+To set a default video resolution, use this config: `videoResolutionDefault`
+
+And remember to notice the following:
+
+- We only support the 4 resolutions for now: `180P`, `360pP`,`480P`, and `720P`
+
+- We use `360P` as the default video resolution if the `videoResolutionList` and `videoResolutionDefault` are not set.
+
+```js
+// ....
+zp.joinRoom({
+     // ...,
+     videoResolutionList: [
+          ZegoUIKitPrebuilt.VideoResolution_360P,
+          ZegoUIKitPrebuilt.VideoResolution_180P,
+          ZegoUIKitPrebuilt.VideoResolution_480P,
+          ZegoUIKitPrebuilt.VideoResolution_720P,
+        ],
+     videoResolutionDefault: ZegoUIKitPrebuilt.VideoResolution_360P, 
+     // ...
+});
+```

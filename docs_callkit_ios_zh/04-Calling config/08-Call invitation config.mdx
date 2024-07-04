@@ -1,0 +1,280 @@
+# Call invitation config
+
+
+## Customize the call ringtone
+
+### Ringtone for call invitation
+
+If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `incomingCallRingtone` and `outgoingCallRingtone` config in the `ZegoUIKitPrebuiltCallInvitationService`.
+
+
+Here is the reference code:
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        config.incomingCallRingtone = NSBundle.mainBundle().pathForResource("incomingCallRingtone", ofType: "mp3")
+        config.outgoingCallRingtone = NSBundle.mainBundle().pathForResource("outgoingCallRingtone", ofType: "mp3")
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        return config
+    }
+}
+```
+
+### Ringtone for offline call invitation
+
+To specify a ringtone for offline call invitations:
+1. Follow the steps in [Quick start](../03-Quick%20start%20(with%20call%20invitation).mdx) to enable and complete the congirations.
+2. Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com/) to configure a `Push Resource ID`.
+3. Replace the `resourceID` parameter in the `ZegoSendCallInvitationButton` method with the `Push Resource ID` you get.
+
+After the completion, the ringtone corresponding to the ID you set will be played when others receive offline call invitations.
+
+Here is the reference code:
+
+```swift title="With call invitation"
+
+let callTargetUser: ZegoUIkitUser = ZegoUIkitUser.init("TargetUserID", "TargetUserName")
+let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+sendVideoCallButton.inviteeList.append(callTargetUser)
+sendVideoCallButton.resourceID = "zegouikit_call" // For offline call notification
+```
+
+
+## Hide the decline button
+
+To hide the Decline button when receiving incoming call invitations, set the `showDeclineButton` to `false`.
+
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.showDeclineButton = false
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+ func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            return config
+        }
+    }
+  }
+}
+```
+
+
+## Modify User Interface text
+
+Call Kit (ZegoUIKitPrebuiltCallWithInvitation)'s UI text provided by the internal components is editable, to modify those, use the `innerText` config.
+
+Here is the reference code:
+
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.innerText.incomingCallPageAcceptButton = "Accept"
+        config.innerText.incomingCallPageDeclineButton = "Decline"
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+ func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            return config
+        }
+    }
+  }
+}
+```
+
+## Listen for call invitation event callbacks
+
+You can implement further business logic by listening for event callbacks related to the call invitation.
+
+
+The following are supported event callbacks:
+
+- func `onIncomingCallDeclineButtonPressed`(): This callback will be triggered when the Decline button is pressed (the callee declines the call invitation). 
+
+- func `onIncomingCallAcceptButtonPressed`(): This callback will be triggered when the Accept button is pressed (the callee accepts the call invitation). 
+
+- func `onIncomingCallReceived`(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?): This callback will be triggered when receiving call invitations.
+
+- func `onIncomingCallCanceled`(_ callID: String, caller: ZegoCallUser): This callback will be triggered when the caller cancels the call invitation.
+
+- func `onIncomingCallTimeout`(_ callID: String,  caller: ZegoCallUser): The callee will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+
+- func `onOutgoingCallCancelButtonPressed`(): This callback will be triggered when the Cancel button is pressed (the caller cancels the call invitation).
+
+- func `onOutgoingCallAccepted`(_ callID: String, callee: ZegoCallUser): The caller will receive a notification through this callback when the callee accepts the call invitation.
+
+- func `onOutgoingCallRejectedCauseBusy`(_ callID: String, callee: ZegoCallUser): The caller will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+
+- func `onOutgoingCallDeclined`(_ callID: String, callee: ZegoCallUser): The caller will receive a notification through this callback when the callee declines the call invitation actively.
+
+- func `onOutgoingCallTimeout`(_ callID: String, callees: [ZegoCallUser]): The caller will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+
+
+
+<Accordion title="Here is the reference code:" defaultOpen="false">
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.innerText.incomingCallPageAcceptButton = "Accept"
+        config.innerText.incomingCallPageDeclineButton = "Decline"
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+ func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            return config
+        }
+    }
+  }
+
+  func onIncomingCallDeclineButtonPressed() {
+        
+  }
+  func onIncomingCallAcceptButtonPressed() {
+        
+  }
+  func onOutgoingCallCancelButtonPressed() {
+        
+  }
+    
+  func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?) {
+        
+  }
+  func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onIncomingCallTimeout(_ callID: String,  caller: ZegoCallUser){
+        
+  }
+  func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser]) {
+        
+  }
+}
+```
+</Accordion>

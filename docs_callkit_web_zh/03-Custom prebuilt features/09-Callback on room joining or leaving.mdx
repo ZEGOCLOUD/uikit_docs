@@ -1,0 +1,37 @@
+import CompleteParameter from "/snippets/uikit/Web_UIKits_Complete_parameter_examples-en.md"
+
+# Callbacks on room joining or leaving
+
+## Introduction
+
+ZEGOCLOUD UIKits allows you to set up and configure some function parameters for UIKits to trigger various events according to lifetime.
+
+For example, you might want the timer to start when the room host joins the room and end when the host leaves.
+
+
+**How do I listen for the callbacks on room joining/leaving?**
+
+
+- To listen for the callback for room joining, set up the `onJoinRoom` to be a function that takes all the users in the room (an array) as a parameter.
+- To listen for the callback for room leaving, set up the `onLeaveRoom` to be a function that takes all the users in the room (an array) as a parameter.
+
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     onJoinRoom: () => {
+        // Add your custom logic
+     },
+     onLeaveRoom: () => {
+       // Add your custom logic
+     }
+     // ...
+});
+```
+
+For more callbacks, check the complete parameter examples as needed:
+
+<Accordion title="Complete parameter examples" defaultOpen="false">
+<CompleteParameter/>
+</Accordion>

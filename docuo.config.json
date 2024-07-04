@@ -181,16 +181,74 @@
       "routeBasePath": "video-conference-kit-web"
     },
     {
+      "id": "callkit_android_zh",
+      "label": "音视频通话 UIKit (Android)",
+      "path": "https://doc-preview-zh.zego.im/article/20193",
+      "routeBasePath": "zh/callkit-android",
+      "locale": "zh"
+    },
+    {
+      "id": "callkit_ios_zh",
+      "label": "音视频通话 UIKit (iOS)",
+      "path": "https://doc-preview-zh.zego.im/article/20192",
+      "routeBasePath": "zh/callkit-ios",
+      "locale": "zh"
+    },
+    {
+      "id": "callkit_web_zh",
+      "label": "音视频通话 UIKit (Web)",
+      "path": "https://doc-preview-zh.zego.im/article/20194",
+      "routeBasePath": "zh/callkit-web",
+      "locale": "zh"
+    },
+    {
+      "id": "live_streaming_kit_android_zh",
+      "label": "互动直播 UIKit (Android)",
+      "path": "https://doc-preview-zh.zego.im/article/20314",
+      "routeBasePath": "zh/live-streaming-kit-android",
+      "locale": "zh"
+    },
+    {
+      "id": "live_streaming_kit_ios_zh",
+      "label": "互动直播 UIKit (iOS)",
+      "path": "https://doc-preview-zh.zego.im/article/20313",
+      "routeBasePath": "zh/live-streaming-kit-ios",
+      "locale": "zh"
+    },
+    {
+      "id": "live_streaming_kit_web_zh",
+      "label": "互动直播 UIKit (Web)",
+      "path": "https://doc-preview-zh.zego.im/article/20316",
+      "routeBasePath": "zh/live-streaming-kit-web",
+      "locale": "zh"
+    },
+    {
+      "id": "live_audio_room_kit_android_zh",
+      "label": "语聊房 UIKit (Android)",
+      "path": "https://doc-preview-zh.zego.im/article/20402",
+      "routeBasePath": "zh/live-audio-room-kit-android",
+      "locale": "zh"
+    },
+    {
+      "id": "live_audio_room_kit_ios_zh",
+      "label": "语聊房 UIKit (iOS)",
+      "path": "https://doc-preview-zh.zego.im/article/20399",
+      "routeBasePath": "zh/live-audio-room-kit-ios",
+      "locale": "zh"
+    },
+    {
       "id": "in_app_chat_kit_android_zh",
-      "label": "docs_in_app_chat_kit_android_zh",
+      "label": "IMKit (Android)",
       "path": "docs_in_app_chat_kit_android_zh",
-      "routeBasePath": "zh/in-app-chat-kit-android"
+      "routeBasePath": "zh/in-app-chat-kit-android",
+      "locale": "zh"
     },
     {
       "id": "in_app_chat_kit_ios_zh",
-      "label": "docs_in_app_chat_kit_ios_zh",
+      "label": "IMKit (iOS)",
       "path": "docs_in_app_chat_kit_ios_zh",
-      "routeBasePath": "zh/in-app-chat-kit-ios"
+      "routeBasePath": "zh/in-app-chat-kit-ios",
+      "locale": "zh"
     }
   ],
   "analytics": {
