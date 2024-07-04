@@ -26,12 +26,11 @@ public class LiveActivity extends AppCompatActivity {
     String liveID = "testLiveID";
 
     // Modify your custom configurations here.
-    List<IZegoUIKitPlugin> plugins = Collections.singletonList(ZegoSignalingPlugin.getInstance());
     ZegoUIKitPrebuiltLiveStreamingConfig config;
     if (isHost) {
-        config = ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins);
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
     } else {
-        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins);
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience();
     }
     config.bottomMenuBarConfig.hostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON);
     config.bottomMenuBarConfig.coHostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON);
@@ -59,11 +58,10 @@ class LiveActivity : AppCompatActivity() {
         val liveID = "testLiveID"
 
         // Modify your custom configurations here.
-        val plugins: List<IZegoUIKitPlugin> = listOf(ZegoSignalingPlugin.getInstance())
         val config: ZegoUIKitPrebuiltLiveStreamingConfig = if (isHost) {
-            ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins)
+            ZegoUIKitPrebuiltLiveStreamingConfig.host()
         } else {
-            ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins)
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience()
         }
         config.bottomMenuBarConfig.hostButtons = Arrays.asList<Any>(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON)
         config.bottomMenuBarConfig.coHostButtons = Arrays.asList<Any>(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON, ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON)
