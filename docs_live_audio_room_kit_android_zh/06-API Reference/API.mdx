@@ -1,0 +1,242 @@
+# API
+
+- [ZegoUIKitPrebuiltLiveAudioRoomFragment](./API.mdx#ZegoUIKitPrebuiltLiveAudioRoomFragment)
+  - [addButtonToBottomMenuBar](./API.mdx#addButtonToBottomMenuBar)
+  - [setBackgroundView](./API.mdx#setBackgroundView)
+  - [turnMicrophoneOn](./API.mdx#turnMicrophoneOn)
+  - [removeSpeakerFromSeat](./API.mdx#removeSpeakerFromSeat)
+  - [applyToTakeSeat](./API.mdx#applyToTakeSeat)
+  - [cancelSeatTakingRequest](./API.mdx#cancelSeatTakingRequest)
+  - [takeSeat](./API.mdx#takeSeat)
+  - [leaveSeat](./API.mdx#leaveSeat)
+  - [acceptSeatTakingRequest](./API.mdx#acceptSeatTakingRequest)
+  - [rejectSeatTakingRequest](./API.mdx#rejectSeatTakingRequest)
+  - [inviteAudienceToTakeSeat](./API.mdx#inviteAudienceToTakeSeat)
+  - [acceptHostTakeSeatInvitation](./API.mdx#acceptHostTakeSeatInvitation)
+  - [openSeats](./API.mdx#openSeats)
+  - [closeSeats](./API.mdx#closeSeats)
+
+---
+
+<a id="ZegoUIKitPrebuiltLiveAudioRoomFragment"></a>
+
+## ZegoUIKitPrebuiltLiveAudioRoomFragment
+
+
+>
+> AudioRoom Widget.
+>
+> You can add this Fragment into any Activity of your project to integrate the functionality of a call.
+>
+> - function prototype:
+>
+>```java
+>  /// You can create a project and obtain an appID from the [ZEGOCLOUD Admin >Console](https://console.zegocloud.com).
+>  final long appID;
+>
+>  /// You can create a project and obtain an appSign from the [ZEGOCLOUD >Admin Console](https://console.zegocloud.com).
+>  final String appSign;
+>
+>  /// The ID of the currently logged-in user.
+>  /// It can be any valid string.
+>  /// Typically, you would use the ID from your own user system, such as >Firebase.
+>  final String userID;
+>
+>  /// The name of the currently logged-in user.
+>  /// It can be any valid string.
+>  /// Typically, you would use the name from your own user system, such as >Firebase.
+>  final String userName;
+>
+>  /// The ID of the call.
+>  /// This ID is a unique identifier for the current call, so you need to >ensure its uniqueness.
+>  /// It can be any valid string.
+>  /// Users who provide the same roomID will be logged into the same room >for the call.
+>  final String roomID;
+>
+>  /// Initialize the configuration for the liveaudioroom.
+>  final ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+>
+>  public static ZegoUIKitPrebuiltCallFragment newInstance(long appID, @NonNull String appSign, @NonNull String userID, @NonNull String userName, @NonNull String callID, @NonNull ZegoUIKitPrebuiltCallConfig config) 
+>```
+
+<a id="addButtonToBottomMenuBar"></a>
+
+<a id="addButtonToBottomMenuBar"></a>
+
+### addButtonToBottomMenuBar
+
+>
+> add your custom buttons to bottom menubar.It will show when user role equals to `role`
+>
+>```java
+>  public void addButtonToBottomMenuBar(List<View> viewList, ZegoLiveAudioRoomRole role)
+>```
+
+<a id="setBackgroundView"></a>
+
+<a id="setBackgroundView"></a>
+
+### setBackgroundView
+
+>
+> set your custom views as background to the live audio room.You can also add room title view and show it in top of audio room by this method.
+>
+>```java
+>  public void setBackgroundView(View view)
+>```
+
+<a id="turnMicrophoneOn"></a>
+
+<a id="turnMicrophoneOn"></a>
+
+### turnMicrophoneOn
+
+>
+>  open the microphone of specific user,if the target is not your userID,then the target will receive a onTurnOnYourMicrophoneRequest callback.
+>
+>```java
+>  public void turnMicrophoneOn(String userID, boolean isOn)
+>```
+
+<a id="removeSpeakerFromSeat"></a>
+
+<a id="removeSpeakerFromSeat"></a>
+
+### removeSpeakerFromSeat
+
+>
+> remove user from speaker
+>
+>```java
+>  public void removeSpeakerFromSeat(String userID)
+>```
+
+<a id="applyToTakeSeat"></a>
+
+<a id="applyToTakeSeat"></a>
+
+### applyToTakeSeat
+
+>
+> request take seat to be a speaker.First avaliable seat will be used.
+>
+>```java
+>  public void applyToTakeSeat(ZegoUIKitPluginCallback callback)
+>```
+
+<a id="cancelSeatTakingRequest"></a>
+
+<a id="cancelSeatTakingRequest"></a>
+
+### cancelSeatTakingRequest
+
+>
+> cancel take seat request.
+>
+>```java
+>  public void cancelSeatTakingRequest()
+>```
+
+<a id="takeSeat"></a>
+
+<a id="takeSeat"></a>
+
+### takeSeat
+
+>
+>  try to take seat in position `index`
+>
+>```java
+>  public void takeSeat(int index)
+>```
+
+<a id="leaveSeat"></a>
+
+<a id="leaveSeat"></a>
+
+### leaveSeat
+
+>
+> leave seat.If your are not speaker,nothing will happen.
+>
+>```java
+>  public void leaveSeat()
+>```
+
+<a id="acceptSeatTakingRequest"></a>
+
+<a id="acceptSeatTakingRequest"></a>
+
+### acceptSeatTakingRequest
+
+>
+> accept room user's take seat request.
+>
+>```java
+>  public void acceptSeatTakingRequest(String audienceUserID)
+>```
+
+<a id="rejectSeatTakingRequest"></a>
+
+<a id="rejectSeatTakingRequest"></a>
+
+### rejectSeatTakingRequest
+
+>
+> reject room user's take seat request.
+>
+>```java
+>  public void rejectSeatTakingRequest(String audienceUserID) 
+>```
+
+<a id="inviteAudienceToTakeSeat"></a>
+
+<a id="inviteAudienceToTakeSeat"></a>
+
+### inviteAudienceToTakeSeat
+
+>
+> invite room user to take seat.
+>
+>```java
+>  public void inviteAudienceToTakeSeat(String audienceUserID) 
+>```
+
+<a id="acceptHostTakeSeatInvitation"></a>
+
+<a id="acceptHostTakeSeatInvitation"></a>
+
+### acceptHostTakeSeatInvitation
+
+>
+> accept the take seat invitation from others.
+>
+>```java
+>  public void acceptHostTakeSeatInvitation() 
+>```
+
+<a id="openSeats"></a>
+
+<a id="openSeats"></a>
+
+### openSeats
+
+>
+> make all seats avaiable.Room users can take empty seat directly.
+>
+>```java
+>  public void openSeats() 
+>```
+
+<a id="closeSeats"></a>
+
+<a id="closeSeats"></a>
+
+### closeSeats
+
+>
+>  make all seats locked.Room users should request to take empty seat.
+>
+>```java
+>  public void closeSeats() 
+>```

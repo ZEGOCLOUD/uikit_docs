@@ -1,0 +1,104 @@
+# Custom message UI
+
+## Introduction
+
+In the face of increasingly diverse user scenarios, the simple message list provided by uikits can no longer meet the requirements. Therefore, we have provided a way to customize the display of messages.
+
+## Additional properties for room messages
+
+When sending room messages, you can attach custom content to the messages, such as the sender's level.
+ 
+```javascript
+zp.joinRoom({
+    //...
+    addInRoomMessageAttributes: () => {
+        // return the additional properties that need to be sent
+       return { lv: "9" }
+    },
+})
+```
+
+## Custom display of messages
+How should the additional content be displayed after receiving a message? 
+
+The existing message list only displays the message body content and does not show the additional content. To better display message content, we provide a way to customize the display of messages as follows:
+1. return a custom Element in the customMessageUI
+ ```javascript
+zp.joinRoom({
+    //...
+    customMessageUI: (msg) => {
+      // You need to return an Element, and we will render this Element in the message list.
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('custom-message-wrapper');
+      if (userID === msg.fromUser.userID) {
+        wrapper.classList.add('send-message');
+      }
+      wrapper.innerHTML = `<div class="custom-message-header">
+              ${
+                msg?.attrs
+                  ? `<span class="level">LV.${msg?.attrs?.lv}</span>`
+                  : ''
+              }
+              <span class="name">${msg.fromUser.userName}</span>
+              <span class="sendTime">${new Date(
+                msg.sendTime
+              ).toLocaleTimeString()}
+              </span>
+            </div>
+            <p
+              class="custom-message-content ${
+                msg.status === 'SENDING' && 'loading'
+              } ${msg.status === 'FAILED' && 'error'}">${msg.message}</p>`;
+      return wrapper;
+    },
+})
+```
+
+2. Add css styles to the custom Element you have set for you.
+
+```CSS
+/* custom message style */
+.custom-message-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.custom-message-header {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 17px;
+  margin-bottom: 4px;
+}
+.custom-message-header .level {
+  background-color: coral;
+  color: black;
+  border-radius: 8px;
+  padding: 2px 4px;
+  margin-right: 10px;
+  text-align: center;
+}
+.custom-message-header .name {
+  max-width: 198px;
+  color: #a4a4a4;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.custom-message-header .sendTime {
+  color: rgba(164, 164, 164, 0.6);
+  margin: 0 10px;
+}
+
+.send-message {
+  align-items: flex-end;
+}
+
+.send-message .custom-message-header {
+  flex-direction: row-reverse;
+}
+
+.send-message .custom-message-content {
+  background-color: #e1cbe7;
+}
+```

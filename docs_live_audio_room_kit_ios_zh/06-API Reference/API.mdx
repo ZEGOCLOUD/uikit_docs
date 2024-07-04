@@ -1,0 +1,76 @@
+# API
+
+- [ZegoUIKitPrebuiltLiveAudioRoomVC](./API.mdx#ZegoUIKitPrebuiltLiveAudioRoomVC)
+    - [init](./API.mdx#init)
+    - [addButtonToMenuBar](./API.mdx#addButtonToMenuBar)
+    - [clearBottomBarExtendButtons](./API.mdx#clearBottomBarExtendButtons)
+    - [setBackgroundView](./API.mdx#setBackgroundView)
+
+- - -
+
+<a id="ZegoUIKitPrebuiltLiveAudioRoomVC"></a>
+
+## ZegoUIKitPrebuiltLiveAudioRoomVC
+
+<a id="init"></a>
+
+### init
+
+> Before entering the voice chat room, you must call this interface to initialize the voice chat room.
+>
+> function prototype:
+>
+> ```swift
+> /// Initialization of chat room
+> /// - Parameters:
+> ///   - appID: Your appID
+> ///   - appSign: Your appSign
+> ///   - userID: User unique identification
+> ///   - userName: userName
+> ///   - roomID: Chat room ID
+> ///   - config: Personalized configuration
+> public init(_ appID: UInt32, 
+>             appSign: String,
+>             userID: String, 
+>             userName: String, 
+>             roomID: String, 
+>             config: ZegoUIKitPrebuiltLiveAudioRoomConfig)
+> ```
+
+<a id="addButtonToMenuBar"></a>
+
+### addButtonToMenuBar
+
+> You can add custom buttons to the bottom bar by calling this interface
+>
+> You can control the identity scene displayed by the button by setting the `role` parameter
+>
+> function prototype:
+>
+> ```swift
+> public func addButtonToMenuBar(_ button: UIButton, role: ZegoLiveAudioRoomRole)
+> ```
+
+<a id="clearBottomBarExtendButtons"></a>
+
+### clearBottomBarExtendButtons
+
+> You can call this interface to empty the button added by `addButtonToBottomMenuBar`
+>
+> function prototype:
+>
+> ```swift
+> public func clearBottomBarExtendButtons(_ role: ZegoLiveAudioRoomRole)
+> ```
+
+<a id="setBackgroundView"></a>
+
+### setBackgroundView
+
+> You can call this interface to customize the background view of the live page
+>
+> function prototype:
+>
+> ```swift
+> public func setBackgroundView(_ view: UIView)
+> ```

@@ -1,0 +1,75 @@
+# Event
+
+- [ZegoUIKitPrebuiltLiveAudioRoomVCDelegate](./Event.mdx#ZegoUIKitPrebuiltLiveAudioRoomVCDelegate)
+    - [getSeatForegroundView](./Event.mdx#getSeatForegroundView)
+    - [onLeaveLiveAudioRoom](./Event.mdx#onLeaveLiveAudioRoom)
+    - [onUserCountOrPropertyChanged](./Event.mdx#onUserCountOrPropertyChanged)
+
+- - -
+
+<a id="ZegoUIKitPrebuiltLiveAudioRoomVCDelegate"></a>
+
+## ZegoUIKitPrebuiltLiveAudioRoomVCDelegate
+
+<a id="getSeatForegroundView"></a>
+
+### getSeatForegroundView
+
+> - function prototype:
+>
+> ```swift
+> func getSeatForegroundView(_ userInfo: ZegoUIKitUser?, seatIndex: Int) -> ZegoBaseAudioVideoForegroundView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate {
+>   func getSeatForegroundView(_ userInfo: ZegoUIKitUser?, seatIndex: Int) -> ZegoBaseAudioVideoForegroundView? {
+>     let view = ZegoBaseAudioVideoForegroundView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), userID: userInfo?.userID, delegate: nil)
+>     //...
+>     return view
+>   }
+> }
+> ```
+
+<a id="onLeaveLiveAudioRoom"></a>
+
+### onLeaveLiveAudioRoom
+
+> - function prototype:
+>
+> ```swift
+> func onLeaveLiveAudio()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate {
+>   func onLeaveLiveAudio() {
+>     print("is leave live audio room")
+>     //....
+>   }
+> }
+> ```
+
+<a id="onUserCountOrPropertyChanged"></a>
+
+### onUserCountOrPropertyChanged
+
+> - function prototype:
+>
+> ```swift
+> func onUserCountOrPropertyChanged(_ users: [ZegoUIKitUser]?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveAudioRoomVCDelegate {
+>   func onUserCountOrPropertyChanged(_ users: [ZegoUIKitUser]?) {
+>     //....
+>   }
+> }
+> ```

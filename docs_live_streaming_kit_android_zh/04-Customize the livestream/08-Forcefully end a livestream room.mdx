@@ -1,0 +1,76 @@
+# Forcefully end a livestream room
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) allows to forcefully end a livestream room and dismiss all audience automatically when the host ends the livestream.
+To implement this, use the `onLiveStreamingEnded` callback. This callback will be triggered when the host ends the livestream, and all audience will automatically exit the livestream room.
+
+
+Here is the reference code:
+
+<CodeGroup>
+```java Java
+public class LiveActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_live);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String liveID = "testLiveID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltLiveStreamingConfig config;
+    if (isHost) {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
+    } else {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(false);
+    }
+    config.liveStreamingEndedListener = new LiveStreamingEndedListener() {
+        @Override
+        public void onLiveStreamingEnded() {
+            finish();// automatically exits the livestream room
+        }
+    };
+    ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName, liveID, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```kotlin Kotlin
+class LiveActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        val appID: Long = YourAppID
+        val appSign: String = YourAppSign
+        val userID = "userID"
+        val userName = "userName"
+        val liveID = "testLiveID"
+
+        // Modify your custom configurations here.
+        val config: ZegoUIKitPrebuiltLiveStreamingConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience(false)
+        }
+        config.liveStreamingEndedListener = LiveStreamingEndedListener {
+            finish()// automatically exits the livestream room
+        }
+        val fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName, liveID, config)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>

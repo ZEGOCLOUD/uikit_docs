@@ -1,0 +1,25 @@
+# Set a direct join session
+
+## Introduction
+
+In ZEGOCLOUD UIKits, a prejoin view is used for detecting the device's usability and setting page interactions to bypass the limitations of the [autoplay policy](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes).
+
+While you can set a direct join session by hiding the prejoin view (the view below) if you've checked the device usability and made page interactions before initializing the UIKit.
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/preview.png" />
+</Frame>
+
+## How do I set a direct join session?
+
+To skip the prejoin view to join a session directly, set the `showPreJoinView` to `false`. 
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     showPreJoinView: false;
+     // ...
+});
+```

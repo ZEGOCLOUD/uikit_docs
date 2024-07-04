@@ -1,0 +1,416 @@
+# Customize the seats
+
+## Specify user seats
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) allows you to set specified seats for roles in the live audio room accordingly.
+
+1. `takeSeatIndexWhenJoining`: Use this to set the seat that the user sits in automatically when joining the live audio room (for the host and speakers). 
+2. `hostSeatIndexes`: Use this to set the special seat for the **host only** (speakers and the audience are not allowed to sit).
+
+## Customize the seat layout
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) generally uses rows and alignments for layout, to customize the seat layout, refer to the following:
+
+- `ZegoLiveAudioRoomLayoutConfig`:
+    1. `rowConfigs`(List< ZegoLiveAudioRoomLayoutRowConfig >): How many rows there are and how each row is configured.
+    2. `rowSpacing`(int): The space in each row, and it must ≥ 0.
+  
+- `ZegoLiveAudioRoomLayoutRowConfig`:
+    1. `count`(int): Number of seats in each row, ranging from [1 - 4].
+    2. `seatSpacing`(int): Horizontal spacing for each seat, and it must ≥ 0 (this only takes effect when the alignment is `start`, `end`, and `center`).
+    3. `alignment`(ZegoLiveAudioRoomLayoutAlignment): The alignment set for the columns.
+
+- `ZegoLiveAudioRoomLayoutAlignment`:
+    1. `FLEX_START`: Place the seats as close to the start of the main axis as possible.
+    2. `FLEX_END`: Place the seats as close to the end of the main axis as possible.
+    3. `CENTER`: Place the seats as close to the middle of the main axis as possible.
+    4. `SPACE_BETWEEN`: Place the free space evenly between the seats.
+    5. `SPACE_AROUND`: Place the free space evenly between the seats as well as half of that space before and after the first and last seat.
+    6. `SPACE_EVENLY`: Place the free space evenly between the seats as well as before and after the first and last seat.
+    
+    The six `alignment` effects are as follows: 
+
+<div style={{width:"100%",display:"flex",gap:"10px"}}>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_2.jpeg" />
+        </Frame>
+    </div>
+    <div style={{width:"30%"}}>
+        <Frame width="auto" height="auto" caption="">
+            <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/alignment_1.jpeg" />
+        </Frame>
+    </div>
+</div>
+
+The reference code below implements the following custom settings, with the following effect:
+
+1. The only seat in the first row is set to the host's special seat.
+2. The number of seats in the second and third rows is 4, and the alignment is `SPACE_AROUND`.
+
+<div style={{width:"30%"}}>
+    <Frame width="auto%" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_layout.jpeg" />
+    </Frame>
+</div>
+
+<CodeGroup>
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+            config.takeSeatIndexWhenJoining = 0;
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+
+        config.hostSeatIndexes = Collections.singletonList(0);
+        config.layoutConfig.rowConfigs = Arrays.asList(
+                new ZegoLiveAudioRoomLayoutRowConfig(1, ZegoLiveAudioRoomLayoutAlignment.CENTER),
+                new ZegoLiveAudioRoomLayoutRowConfig(4, ZegoLiveAudioRoomLayoutAlignment.SPACE_AROUND),
+                new ZegoLiveAudioRoomLayoutRowConfig(4, ZegoLiveAudioRoomLayoutAlignment.SPACE_AROUND));
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            config.takeSeatIndexWhenJoining = 0
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+        config.hostSeatIndexes = listOf(0)
+        config.layoutConfig.rowConfigs = Arrays.asList<Any>(
+            ZegoLiveAudioRoomLayoutRowConfig(1, ZegoLiveAudioRoomLayoutAlignment.CENTER),
+            ZegoLiveAudioRoomLayoutRowConfig(4, ZegoLiveAudioRoomLayoutAlignment.SPACE_AROUND),
+            ZegoLiveAudioRoomLayoutRowConfig(4, ZegoLiveAudioRoomLayoutAlignment.SPACE_AROUND)
+        )
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName, roomID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+## Customize the seat's UI
+
+By default, the seat's UI displays the sound waves around the user's avatar.
+
+If you are not satisfied with the sound wave style, or you want to customize the foreground and background view, use the configurations in the `seatConfig` accordingly.
+
+### Hide the sound waves
+
+The sound waves are displayed by default, to hide it, use the `showSoundWaveInAudioMode` config.
+
+`showSoundWaveInAudioMode`: Use this to decide whether to display the sound waves around the user avatar or not. Displayed by default.
+
+Here is the reference code:
+
+<CodeGroup>
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+
+        config.seatConfig.showSoundWaveInAudioMode = false;
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+
+        config.seatConfig.showSoundWaveInAudioMode = false
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName, roomID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+### Customize the foreground/background view of the seat
+
+To customize the user seat's view, use the following in the `seatConfig` as needed.
+
+- `foregroundViewProvider`: Use this to customize components/add some custom components at the top level of the view, for example, to display the user-level icons.
+- `backgroundColor`: Use this to customize the background color.
+- `backgroundImage`: Use this to customize the background image.
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+    <Frame width="auto" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/custom_bg_fg.gif" />
+    </Frame>
+</div>
+
+<CodeGroup>
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+        config.seatConfig.backgroundColor = 0xffcccccc;
+        config.seatConfig.foregroundViewProvider = new ZegoLiveAudioRoomSeatForegroundViewProvider() {
+            @Override
+            public ZegoBaseAudioVideoForegroundView getForegroundView(ViewGroup parent, ZegoUIKitUser uiKitUser, int seatIndex) {
+                return new YourCustomAudioForegroundView(parent.getContext(), uiKitUser,seatIndex);
+            }
+        };
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+
+      config.seatConfig.backgroundColor = 0xffcccccc
+      config.seatConfig.foregroundViewProvider = object : ZegoLiveAudioRoomSeatForegroundViewProvider() {
+            fun getForegroundView(parent:ViewGroup,uiKitUser: ZegoUIKitUser?,seatIndex: int): ZegoBaseAudioVideoForegroundView {
+                return YourCustomAudioForegroundView(parent.context, uiKitUser, seatIndex)
+            }
+        }
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+### Customize the open/close icon of seat
+
+To customize the open/close icon of the seat, use the following in the `seatConfig` as needed.
+
+- `openIcon`: Use this to customize the seat's openIcon, usually it is displayed as the seat's default icon.
+- `closeIcon`: Use this to customize the seat's closeIcon, it is displayed when the seat is closed by the host.
+
+The following shows the reference code: 
+
+<CodeGroup>
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+        config.seatConfig.openIcon = yourOpenDrawable;
+        config.seatConfig.closeIcon = yourCloseDrawable;       
+     
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+
+      config.seatConfig.openIcon = yourOpenDrawable;
+      config.seatConfig.closeIcon = yourCloseDrawable;       
+     
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>

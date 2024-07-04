@@ -1,0 +1,212 @@
+# Configure layouts
+
+
+Call Kit (ZegoUIKitPrebuiltCall) currently supports picture-in-picture layout and gallery layout, each layout has its own configurations. 
+To select and configure the layout you want, use the `layout` parameter in the `ZegoUIKitPrebuiltCallConfig`:
+
+## Picture-in-picture layout
+
+The configurations supported by the picture-in-picture layout are:
+
+1. `isSmallViewDraggable`: Whether the position of the small view in the picture-in-picture layout can be changed by dragging. It’s allowed by default.
+2. `switchLargeOrSmallViewByClick`: Whether to allow users to click on the small view for switching between large view and small view. It’s allowed by default.
+
+The effect is as follows:
+
+| Display my view when my camera is off                                                                                                          | Hide my view when my camera is off                                                                                                             | Dragging                                                                                                                                      | Switching                                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/layout_show_self1.gif" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/layout_show_self0.gif" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/layout_draggable.gif" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/layout_switch.gif" /></Frame> |
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        let layout: ZegoLayout = ZegoLayout()
+        layout.mode = .pictureInPicture
+        let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
+        pipConfig.isSmallViewDraggable = true;
+        pipConfig.switchLargeOrSmallViewByClick = true;
+        layout.config = pipConfig
+        config.layout = layout
+
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // Modify your custom configurations here.
+        let layout: ZegoLayout = ZegoLayout()
+        if data.invitees?.count ?? 0 > 1 {
+            layout.mode = .gallery
+            let layoutConfig: ZegoLayoutGalleryConfig = ZegoLayoutGalleryConfig()
+            layoutConfig.addBorderRadiusAndSpacingBetweenView = false;
+            layout.config = layoutConfig
+        } else {
+            layout.mode = .pictureInPicture
+            let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
+            pipConfig.isSmallViewDraggable = true;
+            pipConfig.switchLargeOrSmallViewByClick = true;
+            layout.config = pipConfig
+        }
+        config.layout = layout
+        return config
+    }
+}
+```
+</CodeGroup>
+
+## Gallery layout
+
+The configuration supported by the gallery layout is:
+
+`addBorderRadiusAndSpacingBetweenView`: In gallery layout, this can be used to add border radius and spacing between speaker views. true: enabled (by default). false: disabled. 
+
+
+The effect is as follows:
+
+| Adding border radius and spacing                                                                                                  | Without border radius and spacing                                                                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/conference/6.png" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/conference/6_false.png" /></Frame> |
+
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+
+        let layout: ZegoLayout = ZegoLayout()
+        layout.mode = .gallery
+        let layoutConfig: ZegoLayoutGalleryConfig = ZegoLayoutGalleryConfig()
+        layoutConfig.addBorderRadiusAndSpacingBetweenView = false;
+        layout.config = layoutConfig
+        config.layout = layout
+
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig(.groupVoiceCall)
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // Modify your custom configurations here.
+        let layout: ZegoLayout = ZegoLayout()
+        if data.invitees?.count ?? 0 > 1 {
+            layout.mode = .gallery
+            let layoutConfig: ZegoLayoutGalleryConfig = ZegoLayoutGalleryConfig()
+            layoutConfig.addBorderRadiusAndSpacingBetweenView = false;
+            layout.config = layoutConfig
+        } else {
+            layout.mode = .pictureInPicture
+            let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
+            pipConfig.isSmallViewDraggable = true;
+            pipConfig.switchLargeOrSmallViewByClick = true;
+            layout.config = pipConfig
+        }
+        config.layout = layout
+        return config
+    }
+}
+```
+</CodeGroup>

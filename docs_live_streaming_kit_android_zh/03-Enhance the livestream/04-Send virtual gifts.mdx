@@ -1,0 +1,161 @@
+# Send virtual gifts
+
+The virtual gifting function is a novel feature found in social apps that allows users to send virtual gifts to a host. These gifts can take the form of a variety of items, ranging from a cup of coffee to a car.
+
+The aim of this function is to enhance interactivity and liveliness within social apps. By sending virtual gifts, viewers can connect with the host during live shows.
+
+This document will explain how to implement virtual gifting.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/send_virtual_gift.gif" />
+</Frame>
+
+## Prerequisites
+
+Before you begin, make sure you complete the integration by referring to the [Quick start with co-hosting](../02-Quick%20start/02-Quick%20start%20(with%20cohosting).mdx).
+
+## Implementation
+
+### Create a virtual-gifting entrance
+
+Create an entrance for sending virtual gifts, which is a button that can be clicked to send virtual gifts. To do so, add a button by configuring the `ZegoUIKitPrebuiltLiveAudioRoomFragment.addButtonToBottomMenuBar`.
+
+```dart
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,
+    appSign, userID, userName, roomID, config);
+
+// add a gift button to liveAudioRoom audience
+GiftHelper giftHelper = new GiftHelper(findViewById(R.id.layout), userID, userName);
+View giftButton = giftHelper.getGiftButton(this, appID, serverSecret, roomID);
+fragment.addButtonToBottomMenuBar(Collections.singletonList(giftButton), ZegoLiveAudioRoomRole.AUDIENCE);
+```
+
+### Implement the gift-sending logic
+
+When the viewers click the gift sending button, it triggers the corresponding API of your business server. The request parameters can be like this:
+
+```json
+{
+    "room_id": "room888",   // The livestream room ID
+    "user_id": "user987",   // The user ID of the gift sender
+    "user_name": "James",   // The user name of the gift sender
+    "gift_type": 1001,      // Gift type
+    "gift_count": 2,         // Number of gifts
+    "access_token": "fasd2r34dfasd...fasdf",    // The Token used for authentication
+    "timestamp": 1670814533,    // Request timestamp
+}
+```
+
+You have the flexibility to modify request parameters based on your business requirements. Once a viewer requests to send a gift, your server will perform the following actions:
+
+- Verify if the user's account balance meets the required amount based on the parameters.
+- Deduct the fees from the user's account balance.
+- Increase the gift amount for the host.
+
+The viewer receives a corresponding status code after processing. A message queue is then created to notify the host and other viewers about the gift.
+
+
+The demo employs `Next.js` to showcase how ZEGOCLOUD Server API is called. You may download the [source code](https://github.com/ZEGOCLOUD/zego_virtual_gift/blob/main/server_nextjs/pages/api/send_gift.js) for reference.
+
+
+### Notify the host and viewers to display gift animation
+
+
+To display gift animations to the host and viewers, send a notification using the [send in-room messages](https://docs.zegocloud.com/article/14568) API with `MessageType: 2`. 
+
+We recommend combining multiple gifts into a single message to avoid exceeding the rate limit of 10 requests per second per app ID. For example:
+
+<Note title="Note">
+
+While this signaling ensures delivery under normal network conditions, it may be lost in rare cases, such as when the gift receiver experiences network issues and fails to receive the signal.
+</Note>
+
+
+```json
+{
+    "FromUserId": "serverID",
+    "RoomId": "room888",
+    "MessageType": 2,
+    "Priority": 1,
+    "MessageBody": {
+        "Message": [
+            {
+                "user_id": "user987",
+                "user_name": "James",
+                "gift_type": 1001, 
+                "gift_cout": 2,
+                "timestamp": 1670814533,
+            },
+            ...
+        ],
+        "ExtendedData":"",
+    }
+}
+```
+
+
+### Listen to gift messages and display gift animation
+
+To display the gift animation, simply monitor the gift message on the client. Once a new gift message arrives, play the animation. Different roles require different gift message callbacks.
+
+For cool animation effects, use animation libraries such as Lottie or SVGA to display the file on the screen.
+
+
+#### Gift sender
+
+After sending a gift, the gift sender can confirm its successful delivery by checking the status code of the gift-sending API. If the API returns a success code, the gift animation will display.
+
+```dart
+imageView.setOnClickListener(v -> {
+    // !In the demo, gifts are sent directly by sending commands. However, 
+    // !when you integrate, you need to forward the commands through your business server 
+    // !in order to handle settlement-related logic.
+    // !like this:
+    final String path = "https://zego-example-server-nextjs.vercel.app/api/send_gift";
+    JSONObject jsonObject = new JSONObject();
+    try {
+        jsonObject.put("app_id", appID);
+        jsonObject.put("server_secret", serverSecret);
+        jsonObject.put("room_id", roomID);
+        jsonObject.put("user_id", userID);
+        jsonObject.put("user_name", userName);
+        jsonObject.put("gift_type", 1001);
+        jsonObject.put("gift_count", 1);
+        jsonObject.put("timestamp", System.currentTimeMillis());
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+    String jsonString = jsonObject.toString();
+    new Thread() {
+        public void run() {
+            httpPost(path, jsonString, () -> showAnimation());
+        }
+    }.start();
+});
+```
+
+#### Host and rest of the viewers
+
+Suppose the server uses an unreliable signaling channel to broadcast messages. In that case, it needs to monitor the notification callback method `onInRoomCommandReceived` of unreliable messages to determine whether someone has sent a gift. When a new gift notification is received, it displays the gift effect.
+
+If the server uses an unreliable signaling channel to broadcast messages, it can monitor the `onInRoomCommandReceived` notification callback method for unreliable messages. This allows it to detect when a gift has been sent. Upon receiving a new gift notification, the gift effect will display.
+
+
+```dart
+// when someone send gift in room,everyone will receive InRoomCommand
+ZegoUIKit.getSignalingPlugin().addInRoomCommandMessageListener(new ZegoUIKitSignalingPluginInRoomCommandMessageListener() {
+    @Override
+    public void onInRoomCommandMessageReceived(List<ZegoSignalingInRoomCommandMessage> messages,
+        String roomID) {
+        for (ZegoSignalingInRoomCommandMessage message : messages) {
+            if (!message.senderUserID.equals(userID) && message.text.contains("gift_type")) {
+                showAnimation();
+            }
+        }
+    }
+});
+```
+
+## Run a demo
+
+To access the sample code for this feature, download it from [here](https://github.com/ZEGOCLOUD/zego_virtual_gift/blob/main/samples/android/live_streaming/app/src/main/java/com/zegocloud/uikit/livestreaming/LiveActivity.java).

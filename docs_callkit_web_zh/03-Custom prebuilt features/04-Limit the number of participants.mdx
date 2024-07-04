@@ -1,0 +1,25 @@
+# Limit the number of participants
+
+## Introduction
+
+In ZEGOCLOUD UIKits, you can limit the number of in-room participants by configuring the maximum number of people in a session (a session corresponding to a unique room ID). 
+
+
+After setting, the following effect will occur when the number of people in the room exceeds the limit:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/joinRoom_maxUsers.jpg" />
+</Frame>
+
+## How do I limit the number of participants?
+
+To set the maximum number of participants in a room, set the `maxUsers` to the value of the maximum number of participants you want to set, the value must be > 1. 
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     maxUsers: 100,
+     // ...
+});
+```

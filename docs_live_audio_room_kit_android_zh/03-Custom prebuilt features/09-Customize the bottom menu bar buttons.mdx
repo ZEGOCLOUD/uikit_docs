@@ -1,0 +1,121 @@
+# Customize the bottom menu bar buttons
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) allows you to configure the buttons of the menu bar. You can remove the default buttons or add custom ones. If necessary, you can configure the `bottomMenuBarConfig`:
+
+1. `hostButtons`: Use this to set the prebuilt-in buttons for a host to use. 
+2. `speakerButtons`: Use this to set the prebuilt-in buttons for a speaker to use.
+3. `audienceButtons`: Use this to set the prebuilt-in buttons for an audience to use.
+4. `menuBarButtonsMaxCount`: Maximum number of buttons that can be displayed by the menu bar. Value range [1 - 5], the default value is 5.
+5. `showInRoomMessageButton`: Whether to display the message button, displayed by default.
+
+If the total number of built-in buttons and custom buttons does not exceed `menuBarButtonsMaxCount`, all buttons will be displayed.
+Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up the bottom sheet to display the remaining buttons. The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/bottom_bar.gif" />
+  </Frame>
+</div>
+
+<CodeGroup>
+ 
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+
+        config.bottomMenuBarConfig.hostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON);
+        config.bottomMenuBarConfig.speakerButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON);
+        config.bottomMenuBarConfig.audienceButtons = Arrays.asList(ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON);
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+
+        config.bottomMenuBarConfig.hostButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON)
+        config.bottomMenuBarConfig.speakerButtons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON)
+        config.bottomMenuBarConfig.audienceButtons = Arrays.asList(ZegoMenuBarButtonName.SHOW_MEMBER_LIST_BUTTON)
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+
+</CodeGroup>
+
+In addition, you can also achieve the same effect with these two methods: `addButtonToMenuBar`and `clearBottomBarExtendButtons`.
+
+<CodeGroup>
+
+```java Java
+class ZegoUIKitPrebuiltLiveAudioRoomFragment{
+    //...
+    void addButtonToMenuBar(List<View> widgets, ZegoLiveAudioRoomRole role)；
+    void clearBottomBarExtendButtons(ZegoLiveAudioRoomRole role)；
+    //...
+}
+```
+
+```kotlin Kotlin
+class ZegoUIKitPrebuiltLiveAudioRoomFragment{
+    //...
+    fun addButtonToMenuBar(widgets:List<View>?, role:ZegoLiveAudioRoomRole?)
+    fun clearBottomBarExtendButtons(role:ZegoLiveAudioRoomRole?)
+    //...
+}
+```
+
+</CodeGroup>

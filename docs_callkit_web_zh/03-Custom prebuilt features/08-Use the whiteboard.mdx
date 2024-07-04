@@ -1,0 +1,39 @@
+# Use the whiteboard
+
+## Introduction
+
+In ZEGOCLOUD UIKits, adding a whiteboard allows you to express, and exchange ideas with others by drawing, and adding images on the whiteboard.
+
+The whiteboard now is compatible with Call Kit and Video Conference Kit, and with this feature configured, the page looks like this:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/icon_joinRoom_whiteboard_react2.png" />
+</Frame>
+
+## How do I enable the whiteboard?
+
+1. Download the Whiteboard plugin.
+
+    - Method 1: Directly import in HTML
+
+    ```html
+    <!--add whiteboard plugins before UIKits SDK -->
+    <script src="https://unpkg.com/zego-superboard-web@2.15.3/index.js"></script>
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    ```
+    - Method 2: Using NPM
+
+    ```shell
+    # install plugin
+    npm i zego-superboard-web@2.15.3 --save
+    ```
+    ```js
+    // import plugin
+     import { ZegoSuperBoardManager } from "zego-superboard-web";
+    ```
+
+2. Configure the plugin in the `joinRoom` method.
+
+    ```js
+     zp.addPlugins({ZegoSuperBoardManager});
+    ```

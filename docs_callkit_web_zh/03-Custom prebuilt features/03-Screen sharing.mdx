@@ -1,0 +1,75 @@
+# Screen sharing
+
+## Introduction
+
+In ZEGOCLOUD UIKits, for non-participant roles in a call, video conference, and live streaming scenario, screen sharing is enabled by default.
+
+<Warning title="Warning">
+Screen sharing feature uses the resolution of the screen itself by default, which may result in **high costs**. If you need to disable the screen sharing feature or config the resolution, please refer to the instructions below.
+</Warning>
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/joinRoom_screenShare.jpg" />
+</Frame>
+
+
+While you can disable the screen sharing feature as needed, and once it's disabled, the marked button in the following image will be hidden:
+
+
+## How do I disable screen sharing?
+
+To disable the screen sharing feature, set the `showScreenSharingButton` to `false`. 
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     showScreenSharingButton: false,
+     // ...
+});
+```
+
+## Configure the resolution of the screen sharing
+
+- **Use the default configuration provided by the SDK**
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     screenSharingConfig: {
+        resolution: ZegoUIKitPrebuilt.ScreenSharingResolution_720P
+    }
+     // ...
+});
+```
+`resolution` provides the following default configuration:
+
+|                                                 | width*height                                                    | frameRate | bitrate (kbps) |
+| ----------------------------------------------- | --------------------------------------------------------------- | --------- | -------------- |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_360P  | 640 * 360                                                       | 15        | 400            |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_480P  | 640 * 480                                                       | 15        | 500            |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_720P  | 1280 * 720                                                      | 15        | 1130           |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_1080P | 1920 * 1080                                                     | 15        | 1500           |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_2K    | 2560 * 1440                                                     | 15        | 6000           |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_4K    | 3840 * 2160                                                     | 15        | 10000          |
+| ZegoUIKitPrebuilt.ScreenSharingResolution_Auto  | The resolution is the actual size of the selected sharing area. | 15        | auto           |
+
+- **Custom resolution**
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     screenSharingConfig: {
+        resolution: ZegoUIKitPrebuilt.ScreenSharingResolution_Custom,
+        width: 1280, 
+        height: 720,
+        frameRate: 10,
+        maxBitRate: 1130, // Unit is kbps
+    }
+     // ...
+});
+```
+
+When `resolution` is `ZegoUIKitPrebuilt.ScreenSharingResolution_Custom`, `width`,`height`, `frameRate`,`maxBitRate` are required.

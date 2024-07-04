@@ -1,0 +1,29 @@
+# Modify User Interface text
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming)'s UI text provided by the internal components is editable, to modify those, use the `ZegoTranslationText` config.
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        config.translationText.startLiveStreamingButton = 'Start Live'
+        config.translationText.noHostOnline = 'No host online'
+
+        let liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+}
+```

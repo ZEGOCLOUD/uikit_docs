@@ -1,0 +1,179 @@
+import Content from "/snippets/uikit/AndroidEnviromentRequirementEn.md"
+
+# Quick start
+
+<Video src="https://www.youtube.com/embed/RowFWxNfQhc"/>
+
+## Prepare the environment
+
+<Content/>
+
+## Integrate the SDK
+
+<Steps>
+<Step title="Add ZegoUIKitPrebuiltCall as dependencies">
+- **Add the `jitpack` configuration**
+
+
+<Accordion title="Android Gradle Plugin is 7.1.0 or later" defaultOpen="true">
+
+Enter your project's root directory, open the `settings.gradle` file to add the jitpack to `dependencyResolutionManagement` > `repositories` like this:
+
+``` groovy settings.gradle {6-7}
+dependencyResolutionManagement {
+   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+   repositories {
+      google()
+      mavenCentral()
+      maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+      maven { url 'https://www.jitpack.io' } // <- Add this line.
+   }
+}
+```
+
+<Warning title="Warning">
+
+If you can't find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0. 
+
+For more details, see [Android Gradle Plugin Release Note v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle).
+</Warning>
+</Accordion>
+
+<Accordion title="Android Gradle Plugin is earlier than 7.1.0" defaultOpen="false">
+
+Enter your project's root directory, open the `build.gradle` file to add the jitpack to `allprojects`->`repositories` like this: 
+
+```groovy build.gradle {5-6}
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+        maven { url "https://jitpack.io" }  // <- Add this line.
+    }
+}
+```
+</Accordion>
+
+- **Modify your app-level `build.gradle` file**
+
+
+```groovy
+dependencies {
+    ...
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // add this line in your module-level build.gradle file's dependencies, usually named [app].
+}
+```  
+</Step>
+
+<Step title="Using the ZegoUIKitPrebuiltCallFragment in your project">
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com/), get the `appID` and `appSign` of your project.
+- Specify the `userID` and `userName` for connecting the Call Kit service. 
+- Create a `callID` that represents the call you want to make. 
+
+<Note title="Note">
+- `userID` and `callID` can only contain numbers, letters, and underlines (_). 
+- Users that join the call with the same `callID` can talk to each other. 
+</Note>
+
+<CodeGroup>
+
+```java Java
+public class CallActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addCallFragment();
+    }
+
+    public void addCallFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+
+        String callID = callID;
+        String userID = userID;
+        String userName = userName;
+
+        // You can also use GroupVideo/GroupVoice/OneOnOneVoice to make more types of calls.
+        ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+
+        ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
+            appID, appSign, userID, userName, callID, config);
+
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class CallActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_call)
+        addCallFragment()
+    }
+
+    private fun addCallFragment() {
+        val appID: Long = yourAppID
+        val appSign: String = yourAppSign
+        val callID: String = callID
+        val userID: String = userID
+        val userName: String = userName
+
+        // You can also use GroupVideo/GroupVoice/OneOnOneVoice to make more types of calls.
+        val config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        val fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
+            appID, appSign, userID, userName, callID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+Modify the auto-created `activity_call.xml` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/fragment_container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+Now, you can make a new call by starting your `CallActivity`.
+</Step>
+</Steps>
+
+
+## Run & Test
+
+Now you have finished all the steps!
+
+You can simply click the **Run** on Android Studio to run and test your App on your device.
+
+
+## Related guide
+
+<CardGroup cols={2}>
+  <Card title="Custom prebuilt UI" href="./04-Calling%20config/01-Overview.mdx" />
+</CardGroup>
+
+
+## Resources
+
+<CardGroup cols={2}>
+    <Card title="Sample Code" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android" target="_blank">
+        Click here to get the complete sample code.
+    </Card>
+</CardGroup>

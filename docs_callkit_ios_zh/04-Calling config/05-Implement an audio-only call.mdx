@@ -1,0 +1,87 @@
+# Implement an audio-only call
+
+
+When starting a call, the Call Kit (ZegoUIKitPrebuiltCall) turns on the camera, and microphone, and uses the speaker as the audio output device by default.
+
+To change this default configuration, for example, turn off the camera when you start a call, or don't use the speaker (If the speaker is not used, the system's default audio output device, such as ear speaker, headset, Bluetooth, etc., will be used.), you can modify the following configurations:
+
+1. `turnOnCameraWhenJoining`: Whether to turn on the camera when the call starts. true: turn on (by default). false: turn off. 
+2. `turnOnMicrophoneWhenJoining`: Whether to turn on the microphone when the call starts. true: turn on (by default). false: turn off. 
+3. `useSpeakerWhenJoining`: Whether to use the speaker when the call starts. true: use the speaker (by default). false: use the system's default audio output device, such as an ear speaker, headset, Bluetooth, etc.
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        config.turnOnCameraWhenJoining = false;
+        config.turnOnMicrophoneWhenJoining = false;
+        config.useSpeakerWhenJoining = true;
+
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // Modify your custom configurations here.
+        config.turnOnCameraWhenJoining = false;
+        config.turnOnMicrophoneWhenJoining = false;
+        config.useSpeakerWhenJoining = true;
+        return config
+    }
+}
+```
+</CodeGroup>

@@ -1,0 +1,41 @@
+# Forcefully end a livestream room
+
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) allows to forcefully end a livestream room and dismiss all audience automatically when the host ends the livestream.
+To implement this, use the `onLiveStreamingEnded` callback. This callback will be triggered when the host ends the livestream, and all audience will automatically exit the livestream room.
+
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    var liveVC: ZegoUIKitPrebuiltLiveStreamingVC?
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        config.turnOnCameraWhenjoining = false;
+        config.bottomMenuBarButtons = [.toggleMicrophoneButton]
+
+        self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        self.liveVC!.modalPresentationStyle = .fullScreen
+        self.liveVC!.delegate = self
+        self.present(self.liveVC!, animated: true, completion: nil)
+    }
+
+    func onLiveStreamingEnd() {
+        self.liveVC?.dismiss(animated: true, completion: {
+            self.liveVC = nil
+        })
+    }
+}
+```
