@@ -1,2 +1,5 @@
-将 IMKit SDK 集成到您的项目中（需要完成初始化和登录）。
-更多信息，请参见<a href="../02-Quick start.mdx">快速开始</a>。
+export function QuickStartLink (props) {
+    return <a href={props.quickStart} target="_blank">快速开始</a>
+}
+
+将 IMKit SDK 集成到您的项目中（需要完成初始化和登录）。更多信息，请参考<QuickStartLink quickStart={props.quickStart} />。
