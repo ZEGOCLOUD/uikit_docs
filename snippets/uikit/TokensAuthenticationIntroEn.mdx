@@ -38,11 +38,18 @@ ZEGOCLOUD provides an open-source [Token generator](https://github.com/ZEGOCLOUD
 
 Currently, the Token generator we provided supports generating the following two types of Tokens:
 
-- **User identity Token**: To check user identity, you can pass null to the payload field.
-- **User privilege Token**: To check user privileges by validating the room ID and the ID of the published stream, the payload field needs to be generated based on the following validation rules:
-  - Validate room login privilege only: to check users' privilege to log in to a room, but not to check their privilege to publish streams in a room.
-  - Validate stream publishing privilege only: to check users' privilege to publish streams in a room, but not to check their privilege to log in to a room.
-  - Validate both room login and stream publishing privileges: to check users' privilege to log in to a room and also their privilege to publish streams in a room.
+| Token type          | Description                                                                                   | Use Cases                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User identity Token | Developers must include the Token parameter when logging into a room to verify the user's legitimacy. | The user identity Token is used for simple permission verification in most business scenarios. In most cases, generating this Token is sufficient.                                                                                                                                                                                                                                 |
+| User privilege Token | To further enhance security, room ID and stream ID privileges are opened to verify the logged-in room ID and stream ID. | The general use cases for room ID and stream ID privileges are as follows:<br/>- Distinguishing between regular rooms and member rooms, and controlling non-member users from logging into member rooms.<br/>- In voice chat rooms or live streaming scenarios, ensuring consistency between streaming users and users on the microphone to prevent "ghost microphone" phenomenon, where non-microphone users' voices are heard in the room.<br/>- In games like Werewolf, preventing hackers from using other user IDs to log into the same room after cracking the application, obtaining game information, and cheating, which affects the gaming experience of normal users. |
+
+When generating two types of tokens, the `payload` requirements are as follows:
+
+- **User identity Token**: To check the user's identity, you can pass null to the `payload` field.
+- **User privilege Token**: To check the user's permissions based on the room ID and the streamed ID, you need to generate a valid payload field according to the following validation rules:
+  - Validate room login permission only: Add the enable room validation configuration and disable stream publishing permission configuration to the `privilege` field of the `payload`. Set `room_id` to a valid room ID.
+  - Validate stream publishing permission only: Add the disable room validation configuration and enable stream publishing permission configuration to the `privilege` field of the `payload`. Set `stream_id_list` to a valid list of stream IDs.
+  - Validate both room login and stream publishing permissions: Add the enable room validation configuration and enable stream publishing permission configuration to the `privilege` field of the `payload`. Set `room_id` to a valid room ID and `stream_id_list` to a valid list of stream IDs.
 
 
 <Warning title="Warning">
