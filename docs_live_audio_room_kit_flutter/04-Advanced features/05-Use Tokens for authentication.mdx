@@ -1,49 +1,10 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
 # Use Tokens for authentication
 
-## Introduction
+<TokensAuthenticationIntro/>
 
-<Video src="https://www.youtube.com/embed/CuRq8wucobU"/>
-
-To avoid unauthorized service access or operations, ZEGOCLOUD uses digital Tokens to verify user identity, control and validate user privileges. You will need to pass a Token when you log in to a room. 
-
-## Understand the process
-
-import Token_implementation_process_en from "../../snippets/uikit/Token_implementation_process-en.mdx";
-
-<Token_implementation_process_en />
-
-import Token_usage_steps_en from "../../snippets/uikit/Token_usage_steps-en.mdx"
-
-<Token_usage_steps_en />
-
-## Generate a Token on your app server
-
-After getting your AppID and ServerSecret, you can define the validation rules on your app server or client based on your business requirements. 
-
-Upon request from your app clients, your app server generates Tokens and sends the Tokens to the corresponding app clients. 
-
-ZEGOCLOUD provides an open-source [Token generator](https://github.com/ZEGOCLOUD/zego_server_assistant) plug-in on GitHub, which you can use to generate Tokens on your app server using different programming languages such as Go, C++, Java, Python, PHP,.NET, and Node.js.
-
-<Warning title="Warning">
-For business security, you must generate Tokens on your app server; Otherwise, there is a risk of ServerSecret being stolen.
-</Warning>
-
-| Language | Supported version | Core function | Code base | User identity Token(Sample code) | User privilege Token(Sample code) |
-| -- | -- | -- | -- | -- | -- |
-| Go | Go 1.14.15 or later | GenerateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-base.go">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul> |
-| C++ | C++ 11&nbsp; or later | GenerateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/sample/demo/main.cc">GitHub</a></li></ul> |
-| Java | Java 1.8&nbsp; or later | generateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleBase.java">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleForRtcRoom.java">GitHub</a></li></ul> |
-| Python | Python 3.6.8&nbsp; or later | generate_token04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/base_sample.py">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/rtcroom_sample.py">GitHub</a></li></ul> |
-| PHP | PHP 7.0&nbsp; or later | generateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/test.php">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/testForRtcRoom.php">GitHub</a></li></ul> |
-| .NET | .NET Framework 3.5&nbsp; or later | GenerateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net/demo/WindowsFormsApp1/Form1.cs">GitHub</a></li></ul> |
-| Node.js | Node.js 8&nbsp; or later | generateToken04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-base.js">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-rtc-room.js">GitHub</a></li></ul> |
-
-
-## How to get a temporary Token
-
-To make it easier for you to try and test the user authentication feature, [ZEGOCLOUD Admin Console](https://console.zegocloud.com) provides a tool for generating temporary Tokens, which you can use directly in a testing environment. In production, you must generate Tokens on your app server.
-
-## Use Token
+## Use a Token
 ```dart {3,4,7-10}
     ZegoUIKitPrebuiltLiveAudioRoom(
       appID: yourAppID /*input your AppID*/,

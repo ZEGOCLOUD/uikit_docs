@@ -230,13 +230,13 @@ ZIMKitMessageListPage(
 
 2. Also support these commonly used TextFiled parameters:
 
-|Config|Default value|
-|--|--|
-|messageInputKeyboardType|TextInputType.multiline|
-|messageInputMaxLines|3|
-|messageInputMinLines|1|
-|messageInputTextInputAction|TextInputAction.newline|
-|messageInputTextCapitalization|TextCapitalization.sentences|
+| Config                         | Default value                |
+| ------------------------------ | ---------------------------- |
+| messageInputKeyboardType       | TextInputType.multiline      |
+| messageInputMaxLines           | 3                            |
+| messageInputMinLines           | 1                            |
+| messageInputTextInputAction    | TextInputAction.newline      |
+| messageInputTextCapitalization | TextCapitalization.sentences |
 
 3. In addition, `TextField` is wrapped by a container, and you can also configure the container additionally. Here are the supported configurations and their default values.
 
@@ -364,18 +364,19 @@ ZIMKitMessageListPage(
 
 </Accordion>
 
-<Accordion title="8. Custom voice message" defaultOpen="false">
+<Accordion title="8. Custom voice messaging" defaultOpen="false">
 
-- Locking and sliding features
-  <Frame width="800" height="auto" caption="">
-    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_lock_slider_cancel.gif" />
-  </Frame>
-- End countdown and send feature
-  <Frame width="800" height="auto" caption="">
-    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_count_down.gif" />
-  </Frame>
+Support for the following features when sending voice messages:
+- Swipe left to cancel sending voice messages
+- Long press and swipe up to lock and continue recording after releasing the finger
+- Display countdown for voice recording
+
+|                                                                                                                                                    |                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| <Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_lock_slider_cancel.gif" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_count_down.gif" /></Frame> |
+
   
-If you don't want this feature, you can set `showRecordButton` to false.
+You can set `showRecordButton` to false if you don't need the voice messaging feature.
 ```dart
 ZIMKitMessageListPage(
   showRecordButton: false,
@@ -384,11 +385,11 @@ ZIMKitMessageListPage(
 
 In addition, some callbacks have been provided as follows.:
 
-- void Function(int errorCode)? onFailed: Failed to send
+- `void Function(int errorCode)? onFailed`: This callback will be triggered when the message fails to send.
 
-- void Function(int remainingSecond)? onCountdownTick: Countdown ended, will automatically send when countdown reaches 0
+- `void Function(int remainingSecond)? onCountdownTick`: The callback will be triggered every second after starting the countdown. When the countdown reaches zero, it will automatically send the voice message.
 
-```dart
+```dart example {4,8}
 ZIMKitMessageListPage(
   events: ZIMKitMessageListPageEvents(
     audioRecord: ZIMKitAudioRecordEvents(
