@@ -20,151 +20,164 @@ Ideally, the final effect will look like this:
 
 ## 1. Integrate the minimize function into the app
 
-### 1.1 Support minimize
+<Steps> 
 
-There are two ways to minimize the live streaming window. 
+  <Step title="Support minimize">
 
-One way is to use the encapsulated `ZegoMenuBarButtonName.minimizingButton`. 
+    There are two ways to minimize the live streaming window. 
 
-Another way is to customize a button, and when the button is clicked, invoke `ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()` method.
+    One way is to use the encapsulated `ZegoMenuBarButtonName.minimizingButton`. 
 
+    Another way is to customize a button, and when the button is clicked, invoke `ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()` method.
 
-#### 1.1.1 Display the minimize button
+    <Steps>
 
-To display the minimize button, configure the `topMenuBar` of `ZegoUIKitPrebuiltLiveStreamingConfig`, and add the `ZegoMenuBarButtonName.minimizingButton` button to the top menu bar.
+      <Step title="Display the minimize button">
 
-Here is the sample code:
+        To display the minimize button, configure the `topMenuBar` of `ZegoUIKitPrebuiltLiveStreamingConfig`, and add the `ZegoMenuBarButtonName.minimizingButton` button to the top menu bar.
 
-<Accordion title="Details" defaultOpen="false">
+        Here is the sample code:
 
-```dart
-class LivePage extends StatefulWidget {
-  final String liveID;
-  final bool isHost;
+        <Accordion title="Details" defaultOpen="false">
 
-  const LivePage({
-    Key? key,
-    required this.liveID,
-    this.isHost = false,
-  }) : super(key: key);
+        ```dart {33}
+        class LivePage extends StatefulWidget {
+          final String liveID;
+          final bool isHost;
 
-  @override
-  State<StatefulWidget> createState() => LivePageState();
-}
+          const LivePage({
+            Key? key,
+            required this.liveID,
+            this.isHost = false,
+          }) : super(key: key);
 
-class LivePageState extends State<LivePage> {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: ZegoUIKitPrebuiltLiveStreaming(
-        appID: yourAppID /*input your AppID*/,
-        appSign: yourAppSign /*input your AppSign*/,
-        userID: 'userID',
-        userName: 'userName',
-        liveID: widget.liveID,
-        config: (widget.isHost
-            ? ZegoUIKitPrebuiltLiveStreamingConfig.host(
-          plugins: [ZegoUIKitSignalingPlugin()],
+          @override
+          State<StatefulWidget> createState() => LivePageState();
+        }
+
+        class LivePageState extends State<LivePage> {
+          @override
+          Widget build(BuildContext context) {
+            return SafeArea(
+              child: ZegoUIKitPrebuiltLiveStreaming(
+                appID: yourAppID /*input your AppID*/,
+                appSign: yourAppSign /*input your AppSign*/,
+                userID: 'userID',
+                userName: 'userName',
+                liveID: widget.liveID,
+                config: (widget.isHost
+                    ? ZegoUIKitPrebuiltLiveStreamingConfig.host(
+                  plugins: [ZegoUIKitSignalingPlugin()],
+                )
+                    : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+                  plugins: [ZegoUIKitSignalingPlugin()],
+                ))
+                  ..topMenuBar.buttons = [
+                    ZegoMenuBarButtonName.minimizingButton
+                  ],
+              ),
+            );
+          }
+        }
+        ```
+        </Accordion>
+
+      </Step>
+      
+      <Step title="Use ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()">
+
+        ``` dart {3}
+        ElevatedButton(
+            onPressed: () {
+                ZegoUIKitPrebuiltLiveStreamingController().minimize.toMinimize();
+            },
+            child: const Text('Mini'),
         )
-            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
-          plugins: [ZegoUIKitSignalingPlugin()],
-        ))
-          ..topMenuBar.buttons = [
-            ZegoMenuBarButtonName.minimizingButton
-          ],
-      ),
-    );
-  }
-}
-```
-</Accordion>
+        ```
+      </Step>
 
-#### 1.1.2 Use ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()
+    </Steps>
 
-``` dart
-ElevatedButton(
-    onPressed: () {
-        ZegoUIKitPrebuiltLiveStreamingController().minimize.toMinimize();
-    },
-    child: const Text('Mini'),
-)
-```
+  </Step>
 
+  <Step title="Configure the Overlay">
+    To achieve the effect of minimizing the window, you need to use the `ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage` component and insert it into the `Overlay` of the app.
 
-### 1.2 Configure the Overlay
+    Here is the sample code:
 
-To achieve the effect of minimizing the window, you need to use the `ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage` component and insert it into the `Overlay` of the app.
+    <Accordion title="Details" defaultOpen="false">
 
-Here is the sample code:
+    ```dart {1-2,17-19,21,27-31}
+    ///  Step 1/3: Declare a NavigatorState
+    final navigatorKey = GlobalKey<NavigatorState>();
 
-<Accordion title="Details" defaultOpen="false">
+    void main() async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-```dart
-///  Step 1/3: Declare a NavigatorState
-final navigatorKey = GlobalKey<NavigatorState>();
+      ZegoUIKit().initLog().then((value) {
+        runApp(const MyApp());
+      });
+    }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  ZegoUIKit().initLog().then((value) {
-    runApp(const MyApp());
-  });
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      /// Step 2/3: Assign the NavigatorState to MaterialApp
-      navigatorKey: navigatorKey,
-      builder: (BuildContext context, Widget? child) {
-        return Stack(
-          children: [
-            child!,
-            ///  Step 3/3: Insert ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage into Overlay, and return the context of NavigatorState in contextQuery.
-            ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage(
-              contextQuery: () {
-                return navigatorKey.currentState!.context;
-              },
-            ),
-          ],
+    class MyApp extends StatelessWidget {
+      const MyApp({Key? key}) : super(key: key);
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          home: ZegoUIKitPrebuiltLiveStreamingMiniPopScope(
+            child: YourHomePage(),
+          ),
+          /// Step 2/3: Assign the NavigatorState to MaterialApp
+          navigatorKey: navigatorKey,
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              children: [
+                child!,
+                ///  Step 3/3: Insert ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage into Overlay, and return the context of NavigatorState in contextQuery.
+                ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage(
+                  contextQuery: () {
+                    return navigatorKey.currentState!.context;
+                  },
+                ),
+              ],
+            );
+          },
         );
-      },
-    );
-  }
-}
-```
-</Accordion>
+      }
+    }
+    ```
+    </Accordion>
 
-### 1.3 Prevent building multiple ZegoUIKitPrebuiltLiveStreaming
+</Step>
+
+<Step title="Prevent building multiple ZegoUIKitPrebuiltLiveStreaming">
 
 When you minimize the livestream interface, clicking the enter button again will lead to re-entering the livestream room if the button is not restricted. To avoid this situation, it is necessary to restrict the button.
 
 Therefore, in the click event of the button, if it is currently in a minimized state, the page jump operation should not be carried out.
 
 
-``` dart
+``` dart {3-7}
 ElevatedButton(
-  onPressed: () {
-    if (ZegoUIKitPrebuiltLiveStreamingController().minimize.isMinimizing) {
-        /// when the application is minimized (in a minimized state),
-        /// disable button clicks to prevent multiple PrebuiltLiveStreaming components from being created.
-        return;
-    }
+    onPressed: () {
+      if (ZegoUIKitPrebuiltLiveStreamingController().minimize.isMinimizing) {
+          /// when the application is minimized (in a minimized state),
+          /// disable button clicks to prevent multiple PrebuiltLiveStreaming components from being created.
+          return;
+      }
 
-    /// The code you used to initialize or navigate ZegoUIKitPrebuiltLiveStreaming previously
-    Navigator.pushNamed(
-      context,
-      ZegoUIKitPrebuiltLiveStreaming(...),
-    );
-  },
-  child: const Text('join'),
-);
-```
-
-After completing the above two steps, you can now minimize the livestream window within the application.
-
+      /// The code you used to initialize or navigate ZegoUIKitPrebuiltLiveStreaming previously
+      Navigator.pushNamed(
+        context,
+        ZegoUIKitPrebuiltLiveStreaming(...),
+      );
+    },
+    child: const Text('join'),
+  );
+  ```
+  </Step>
+  After completing the above two steps, you can now minimize the livestream window within the application.
+</Steps>
 
 
 ## 2. How to correctly nest widgets within the livestream window
@@ -173,7 +186,7 @@ If you need to nest some widgets in `ZegoUIKitPrebuiltLiveStreaming`, please use
 
 Here is an example code:
 
-```dart
+```dart {33-37}
 
 class LivePage extends StatefulWidget {
   final String liveID;
