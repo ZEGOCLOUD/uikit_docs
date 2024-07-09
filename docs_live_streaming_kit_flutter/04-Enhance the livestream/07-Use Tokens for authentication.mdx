@@ -22,3 +22,19 @@ import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntro
       ...
     )；
 ```
+
+### Beauty
+
+For how to obtain the license file and the implementation steps of online authentication, you can refer to this [article](https://docs.zegocloud.com/article/12291).
+
+```dart {4-8}
+  ZegoUIKitPrebuiltLiveStreaming(
+    ...
+    config: ZegoUIKitPrebuiltLiveStreamingConfig()
+      ..beauty = ZegoBeautyPluginConfig(
+        license: () {
+          return $your_license;
+        },
+      ),
+  )
+```
