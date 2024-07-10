@@ -388,7 +388,7 @@
 ## playAudioConfig
 
 >
-> This callback will be triggered when play the audio.
+> If there is an audience in the audio room and they take a seat become speakers, this callback will be triggered. If you return false in this callback, you will not hear the voice of the speaker.
 >- function prototype:
 >```js
 >playAudioConfig(localUserID, localRole, speaker)
@@ -404,8 +404,8 @@
 >    config={{
 >        playAudioConfig: (localUserID, localRole, speaker) => {
 >            //...
->            // Return true means play audio of speaker.
->            // Return false means mute audio of speaker.
+>            // Returning true means to play the audio from the speaker.
+>            // Returning false means to mute the speaker.
 >            return true;
 >        },
 >    }}
