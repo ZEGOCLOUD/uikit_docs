@@ -1,0 +1,226 @@
+# Screen sharing
+
+## What's screen sharing?
+
+
+Screen sharing refers to the process of broadcasting the contents of one screen to another device or multiple devices in a video call or interactive video scene.
+
+|                                                                                Starts screen sharing                                                                                 |                                                                             Screen shared by mobile apps                                                                             |                                                                                Screen shared by web apps                                                                                |                                                                             Landscape mode                                                                             |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <Frame width="400" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/conference_start_screen_share.png" /></Frame> | <Frame width="400" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/conference_watch_screen_share.png" /></Frame> | <Frame width="400" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/conference_watch_web_screenshare.png" /></Frame> | <Frame width="400" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/fullScreenShare.png" /></Frame> |
+
+
+## Implementation
+
+
+### Use the screen sharing
+
+
+Screen sharing is only supported in the gallery layout. To share your screen, you will need to set the `layout` inside the `ZegoUIKitPrebuiltCallConfig` to `Gallery` first.
+
+To decide whether to use the full-screen mode by default during screen sharing, you will need to configure the `showNewScreenSharingViewInFullscreenMode` inside the `ZegoLayoutGalleryConfig`. Set it to `true` (default setting), meaning that the shared screen will automatically be in full screen when the screen sharing starts.
+
+Meanwhile, the full-screen mode button is customizable, you can decide the way how it shows. To set it, configure the `showScreenSharingFullscreenModeToggleButtonRules` inside the `ZegoLayoutGalleryConfig`:
+
+* `showWhenScreenPressed`: (default setting) shows the full-screen mode button when clicking the shared screen.
+* `alwaysShow`: always shows the full-screen mode button.
+* `alwaysHide`: always hides the full-screen mode button.
+
+### Add/customize the buttons
+
+
+To start the screen sharing, add the `ZegoMenuBarButtonName.toggleScreenSharingButton` config to the `bottomMenuBarConfig` to let the screen sharing button show.
+
+```dart
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltCall(
+          appID: yourAppID /*input your AppID*/,
+          appSign: yourAppSign /*input your AppSign*/,
+          userID: userID,
+          userName: userName,
+          callID: callID,
+          config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            ..layout = ZegoLayout.gallery(
+                showScreenSharingFullscreenModeToggleButtonRules:
+                    ZegoShowFullscreenModeToggleButtonRules.alwaysShow,
+                showNewScreenSharingViewInFullscreenMode:
+                    false) // Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
+            ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(buttons: [
+              ZegoMenuBarButtonName.toggleCameraButton,
+              ZegoMenuBarButtonName.toggleMicrophoneButton,
+              ZegoMenuBarButtonName.hangUpButton,
+              ZegoMenuBarButtonName.toggleScreenSharingButton
+            ]) // Add a screen sharing toggle button.
+          ),
+    );
+  }
+}
+```
+
+To customize the UI of the full-screen mode button, configure the `foregroundBuilder`. To decide whether to show the shared screen in full-screen mode, use the `controller.showScreenSharingViewInFullscreenMode` inside the custom `foregroundBuilder`.
+
+```dart
+class CallPage extends StatefulWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  State createState() => _CallPageState();
+}
+
+class _CallPageState extends State {
+  // this indicates whether the current state is full screen.
+  bool isFullscreen = true; 
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltCall(
+        appID: yourAppID /*input your AppID*/,
+        appSign: YourAppSign /*input your AppSign*/,
+        userID: userID,
+        userName: userName,
+        callID: widget.callID,
+        controller: controller,
+        config: ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+          ..audioVideoViewConfig.foregroundBuilder =
+              (context, size, user, extraInfo) {
+            // Here is the full-screen mode button.
+            return Container(
+              child: OutlinedButton(
+                  onPressed: () {
+                    isFullscreen = !isFullscreen;
+                    ZegoUIKitPrebuiltCallController().screenSharing.showViewInFullscreenMode(
+                        user?.id ?? '',
+                        isFullscreen,
+                    ); // Call this to decide whether to show the shared screen in full-screen mode.
+                  },
+                  child: const Text('full screen')),
+            );
+          },
+      ),
+    );
+  }
+}
+```
+
+### Create a Broadcast Upload Extension (for iOS only)
+
+
+<Tip title="Tip">
+The memory limit of the Broadcast Upload Extension is 50 MB, make sure the memory usage of the Extension for screen sharing does not exceed 50 MB.
+</Tip>
+
+1. Open your project in Xcode, and select **File > New > Target**.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/share_screen_create_extension_ios1.png" />
+</Frame>
+
+2. In the following window, select the **Broadcast Upload Extension**, and click **Next**.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/share_screen_create_extension_ios.png" />
+</Frame>
+
+3. Fill in items or choose options for your new target, such as fill in the **Product Name** as **ScreenShare**, and choose options for the **Team**, **Language**, and other required information, and then click **Finish**.
+
+<Warning title="Warning">Don't need to check the **Include UI Extension** option.</Warning>
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/createScreenTarget.png" />
+</Frame>
+
+
+4. Set screen sharing target minimum support version. The minimum support version needs to be greater than or equal to 12. If your phone's system version is lower than this minimum support version, screen sharing function will not be available.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/screen_share_target_set.jpg" />
+</Frame>
+
+5. After you created the Broadcast Upload Extension, you will see a folder for this Extension in your project with a structure similar to the following. This folder is used to store the implementation codes for the screen sharing feature:
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/screen_floder.png" />
+</Frame>
+
+6. Add the `ZegoExpressEngine.xcframework` dependency.
+
+* Run the `cd` command in the Terminal to navigate to your iOS project directory, and run the `pod install` to install the `ZegoExpressEngine` library.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/flutter_ios_floder.png" />
+</Frame>
+
+* Click the **+** button as shown in the following figure.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/cliick_add_button.png" />
+</Frame>
+
+* Select and add the `ZegoExpressEngine.xcframework`.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/add_download_express.png" />
+</Frame>
+
+* Set Embed to `Do Not Embed`.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/add_express.png" />
+</Frame>
+
+
+7. Replace the code in the `SampleHandler` file with the following code:
+
+```swift
+​​import ReplayKit
+​​import ZegoExpressEngine
+
+class SampleHandler: RPBroadcastSampleHandler, ZegoReplayKitExtHandler {
+
+    override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
+        // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
+        ZegoReplayKitExt.sharedInstance().setup(withDelegate: self)
+    }
+    
+    override func broadcastPaused() {
+        // User has requested to pause the broadcast. Samples will stop being delivered.
+    }
+    
+    override func broadcastResumed() {
+        // User has requested to resume the broadcast. Samples delivery will resume.
+    }
+    
+    override func broadcastFinished() {
+        // User has requested to finish the broadcast.
+        ZegoReplayKitExt.sharedInstance().finished()
+    }
+    
+    override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
+        
+        ZegoReplayKitExt.sharedInstance().send(sampleBuffer, with: sampleBufferType)
+        
+        switch sampleBufferType {
+        case RPSampleBufferType.video:
+            // Handle video sample buffer
+            break
+        case RPSampleBufferType.audioApp:
+            // Handle audio sample buffer for app audio
+            break
+        case RPSampleBufferType.audioMic:
+            // Handle audio sample buffer for mic audio
+            break
+        @unknown default:
+            // Handle other sample buffer types
+            fatalError("Unknown type of sample buffer")
+        }
+    }
+}
+```

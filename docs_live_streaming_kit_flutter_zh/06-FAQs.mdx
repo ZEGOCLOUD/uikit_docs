@@ -1,0 +1,216 @@
+import UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION from "/snippets/uikit/UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION-en.mdx";
+
+# FAQs
+
+<br/>
+
+<Accordion title="1. How to ensure uninterrupted audio when the app is sent to the background?" defaultOpen="false">
+
+### iOS
+
+1. Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
+
+    <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/add_capability.jpeg" />
+    </Frame>
+
+    And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`. 
+
+    <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/capability_window.jpeg" />
+    </Frame>
+
+2. Check the `Audio, AirPlay, and Picture in Picture` option in the `Background Modes` configuration.
+
+    <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/ios_background_modes.png" />
+    </Frame>
+
+
+### Android
+
+In Android, when an app goes to the background or the screen is locked, the application service may be reclaimed by the system, causing interruptions in camera and microphone access. However, you can implement a `Foreground Service` to keep the app alive in the background. For detailed implementation, you can refer to [Foreground Service](https://developer.android.com/guide/components/foreground-services).
+
+</Accordion>
+
+
+<Accordion title="2. How to make the audience leave the room automatically after ending the live stream?" defaultOpen="false">
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) allows to forcefully end a livestream room and dismiss all audience automatically when the host ends the livestream.
+To implement this, use the `onEnded` callback. This callback will be triggered when the host ends the livestream, and all audience will automatically exit the livestream room.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: liveID,
+        events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          onEnded: (
+            ZegoLiveStreamingEndEvent event,
+            VoidCallback defaultAction,
+          ) {
+            if (ZegoLiveStreamingEndReason.hostEnd == event.reason) {
+              if (event.isFromMinimizing) {
+                ZegoUIKitPrebuiltLiveStreamingController().minimize.hide();
+              } else {
+                Navigator.pop(context);
+              }
+            } else {
+              defaultAction.call();
+            }
+          },
+        ),
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(),
+      ),
+    );
+  }
+}
+```
+</Accordion>
+
+<Accordion title="3. How can the audience on the live stream side be aware of changes in the host? " defaultOpen="false">
+
+If you are on the audience side and want to know about the host's changes, such as when the host enters or leaves the live streaming room, you can listen to **ZegoUIKitPrebuiltLiveStreamingController.connect.hostNotifier**. 
+
+This is a **ValueNotifier\<ZegoUIKitUser?>** object that provides real-time notifications when the host changes.
+
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatefulWidget {
+  final String liveID;
+  final bool isHost;
+
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .hostNotifier
+        .addListener(onHostUpdated);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    ZegoUIKitPrebuiltLiveStreamingController()
+        .coHost
+        .hostNotifier
+        .removeListener(onHostUpdated);
+  }
+
+  void onHostUpdated() {
+    debugPrint(
+        'host update:${ZegoUIKitPrebuiltLiveStreamingController().coHost.hostNotifier.value}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: widget.liveID,
+        config: (widget.isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience()),
+      ),
+    );
+  }
+}
+```
+</Accordion>
+
+<Accordion title="4. Why does the app work fine in debug mode but crash in release mode?" defaultOpen="false">
+
+In Android, when running in debug mode, the application works fine. However, in release mode, it crashes due to code obfuscation.
+
+<UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
+
+</Accordion>
+
+
+<Accordion title="5. How to enable logging for UIKit?" defaultOpen="false">
+
+### Enable UIKit Logging
+
+You can refer to the following code to enable logging in UIKit:
+
+
+```dart
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  ZegoUIKit().initLog().then((value) {
+    runApp(MyApp(
+      navigatorKey: navigatorKey,
+    ));
+  });
+}
+```
+
+### Retrieve the UIKit logs
+
+#### Android
+
+The UIKit logs on Android can be found in the following directory: 
+`/sdcard/Android/data/[YOUR_APP_PACKAGE]/files/ZegoPrebuilt/Logs/`.
+
+
+#### iOS
+
+1. Export Container
+
+    a. Open Xcode and select Window -> Devices and Simulators.
+    <Frame width="30%" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/uikit_log_01.png" />
+    </Frame>
+
+    b. Container Select the device and the app, then download the corresponding container.
+    <Frame width="30%" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/uikit_log_02.png" />
+    </Frame>
+
+2. The UIKit logs on iOS can be found in the following directory within the container:
+
+    ` [YOUR_APP_CONTAINER]/AppData/Library/Application Support/Logs`
+
+</Accordion>

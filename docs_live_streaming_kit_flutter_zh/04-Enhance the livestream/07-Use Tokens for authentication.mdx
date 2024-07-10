@@ -1,0 +1,24 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Use Tokens for authentication
+
+<TokensAuthenticationIntro/>
+
+## Use a Token 
+
+```dart {3-4,7-9}
+    ZegoUIKitPrebuiltLiveStreaming(
+      appID: yourAppID /*input your AppID*/,
+      /// appSign: 'do not assign app sign',
+      token: $yourToken,
+      events:ZegoUIKitPrebuiltLiveStreamingEvents(
+        room: ZegoLiveStreamingRoomEvents(
+            onTokenExpired: (remainedSeconds) {
+              /// when your token is notified to expired, please renew it.
+              ZegoUIKitPrebuiltLiveStreamingController().room.renewToken('token');
+            }
+        ),
+      ),
+      ...
+    )；
+```

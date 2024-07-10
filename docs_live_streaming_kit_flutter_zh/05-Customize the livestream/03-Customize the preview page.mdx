@@ -1,0 +1,73 @@
+# Customize the preview page
+
+## Skip the preview page and enter the livestream directly
+
+If you don't need to display the preview page, you can modify [`showPreviewForHost`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPreviewConfig/showPreviewForHost.html) under `ZegoLiveStreamingPreviewConfig` to `false`.
+
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..preview.showPreviewForHost = false,
+      ),
+    );
+  }
+}
+```
+
+## Customize the icons
+
+If you want to replace the icons on the preview page, you can directly modify `pageBackIcon`, `beautyEffectIcon`, and `switchCameraIcon` under [`ZegoLiveStreamingPreviewConfig`](https://pub.dev/documentation/zego_uikit_prebuilt_live_streaming/latest/zego_uikit_prebuilt_live_streaming/ZegoLiveStreamingPreviewConfig-class.html) and return the icons you want to set.
+
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..preview.beautyEffectIcon = const Icon(Icons.favorite),
+      ),
+    );
+  }
+}
+```

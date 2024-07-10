@@ -1,0 +1,33 @@
+# FAQ
+
+## 1. How to configure offline push certificates two APPs
+
+
+I have two different apps that need to support offline calling with each other. How should I configure them?
+
+1. First, you need to configure the **index 2** certificate for the second app in the [ZEGOCLOUD admin console](https://console.zegocloud.com/).
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/index2_ios.png" />
+</Frame>
+
+
+Then, you need to set the `certificateIndex` of the **second app** to `secondCertificate` in the place where you initialize the `ZegoUIKitPrebuiltCallInvitationService` on the client side.
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: yourAppID /*input your AppID*/,
+  appSign: yourAppSign /*input your AppSign*/,
+  userID: currentUser.id,
+  userName: currentUser.name,
+  //...
+  notificationConfig: ZegoCallInvitationNotificationConfig(
+    iOSNotificationConfig: ZegoIOSNotificationConfig(
+      certificateIndex: ZegoSignalingPluginMultiCertificate.secondCertificate,
+    ),
+  ),
+  // ...
+)
+```
+
+<Warning title="Warning">Please ensure that the certificates on the console correspond one-to-one with the certificateIndex in your code.</Warning>

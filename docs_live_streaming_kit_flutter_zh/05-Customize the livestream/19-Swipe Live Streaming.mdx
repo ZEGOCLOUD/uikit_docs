@@ -1,0 +1,78 @@
+# Swipe Live Streaming
+
+
+ZegoUIKitPrebuiltLiveStreaming supports Swiping to switch live rooms.
+
+You need to configure the `swiping`, and it has the following parameters:
+
+1. `requirePreviousLiveID`: Triggered when swiping up, you need to return the `liveID` of the previous `liveID` in this callback.
+
+2. `requireNextLiveID`: Triggered when swiping down, you need to return the `liveID` of the next `liveID` in this callback.   
+
+3. `loadingBuilder`: Triggered when loading a room, you can return any widget in this callback to optimize the loading effect during swiping.
+ 
+
+> When using this feature, we also recommend setting `ZegoUIKitPrebuiltLiveStreamingConfig.showBackgroundTips` to false so that the 'no host in room' indicator will not be displayed during the loading process.
+
+```dart
+class LivePageState extends State<LivePage> {
+  var currentPageIndex = 0;
+
+  // demo live roomID list
+  final liveIDs = ["11", "22", "33"]; // You must use real liveIDs.
+
+  @override
+  Widget build(BuildContext context) {
+    final hostConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(
+      plugins: [ZegoUIKitSignalingPlugin()],
+    );
+
+    final audienceConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+      plugins: [ZegoUIKitSignalingPlugin()],
+    );
+
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveIDs.first,
+        config: (widget.isHost ? hostConfig : audienceConfig)
+          ..showBackgroundTips = false
+          ..swiping = ZegoLiveStreamingSwipingConfig(
+            requirePreviousLiveID: () {
+
+              currentPageIndex = currentPageIndex - 1;
+              if (currentPageIndex < 0) {
+                // currentPageIndex = 0;  No page loop, at the top.
+                currentPageIndex = liveIDs.length - 1; //  Cycle through the pages to get back to the bottom
+              }
+              //! You must return a real live ID.
+              return liveIDs[currentPageIndex];
+            },
+            requireNextLiveID: () {
+                
+              currentPageIndex = currentPageIndex + 1;
+              if (currentPageIndex > liveIDs.length - 1) {
+                //currentPageIndex = liveIDs.length - 1;   No page rotation. It's over.
+                currentPageIndex = 0; //  Cycle through the pages to get back to the top
+              }
+              
+              //! You must return a real live ID.
+              return liveIDs[currentPageIndex];
+            },
+          ) 
+      ),
+    );
+  }
+}
+```
+
+In addition，you can call `ZegoUIKitPrebuiltLiveStreamingController().swiping` to switch live streaming.
+
+For example, you can switch periodically or switch by clicking on a specific live streaming room interface, and so on.
+
+- previous: swiping to previous live streaming which query from `ZegoLiveStreamingSwipingConfig.requirePreviousLiveID`
+- next: swiping to next live streaming which query from `ZegoLiveStreamingSwipingConfig.requireNextLiveID`
+- jumpTo(String targetLiveID): swiping to live streaming of `targetLiveID`

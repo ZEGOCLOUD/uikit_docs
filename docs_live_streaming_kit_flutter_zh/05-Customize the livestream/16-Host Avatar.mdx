@@ -1,0 +1,77 @@
+# Host Avatar
+
+## Listen to host avatar onClick event
+
+We provide `onHostAvatarClicked` in `ZegoLiveStreamingTopMenuBarEvents`. When the host's avatar in the upper left corner is clicked, a click callback will be thrown. You can do the desired logical processing in the callback, such as popping up a dialog box to display the current host's information.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+        events: ZegoUIKitPrebuiltLiveStreamingEvents(
+            topMenuBar: ZegoLiveStreamingTopMenuBarEvents(
+          onHostAvatarClicked: (ZegoUIKitUser host) {
+            showHostInfomation(host);
+          },
+        )),
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(),
+      ),
+    );
+  }
+}
+```
+
+## Customize host avatar
+
+We provide `hostAvatarBuilder` in `ZegoLiveStreamingTopMenuBarConfig`. You can fully use to customize and display some cool host avatars.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..topMenuBar.hostAvatarBuilder = (ZegoUIKitUser host) {
+            return Text(host.name);
+          },
+      ),
+    );
+  }
+}
+```

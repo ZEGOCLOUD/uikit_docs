@@ -1,0 +1,318 @@
+# Sharing Media
+
+You can share local or network music and videos in the audio chat room through the media API or media player we provide.
+
+If you want to call the media-related APIs, you can do so by using `ZegoUIKitPrebuiltLiveAudioRoomController().media`.
+
+The media APIs we provide are as follows:
+
+- **play(&lcub;required String filePathOrURL, bool enableRepeat = false&rcub;)**
+
+  Play local or network media by setting `filePathOrURL`. If you want to play it repeatedly, you can set the `enableRepeat` parameter to true.
+
+- **stop** 
+
+  Stop playing the current media file.
+
+- **pause** 
+
+  Pause playing the current media file.
+
+- **resume** 
+
+  Resume playing the current media file.
+
+- **seekTo** 
+
+  Set the current playback progress.
+
+- **setVolume** 
+
+  Set the volume.
+
+- **volume** 
+
+  Get the volume.
+
+- **muteLocal** 
+
+  mute local volume.
+
+- **totalDuration** 
+
+  Get the total duration of the media file.
+
+- **currentProgress**  
+
+  Get the current playback progress.
+
+- **type**
+
+  Get the current media type, which can be either `pure audio` or `video`. The media types are defined as follows:
+
+  ``` dart
+  enum ZegoUIKitMediaType {
+    PureAudio,
+    Video,
+    Unknown,
+  }
+  ```
+
+- **pickPureAudioFile** 
+
+  Select a local pure audio file.
+
+- **pickVideoFile** 
+
+  Select a local video file.
+
+- **pickFile** 
+ 
+  Select a local media file.
+
+- MediaInfo **getMediaInfo** 
+ 
+  Get the media information of the current playing media, which is defined as follows:
+
+  ``` dart
+  /// Media Infomration of media file.
+  ///
+  /// Meida information such as video resolution of media file.
+  class ZegoUIKitMediaInfo {
+    /// Video resolution width.
+    int width;
+
+    /// Video resolution height.
+    int height;
+
+    /// Video frame rate.
+    int frameRate;
+  }
+  ```
+
+We describe the media APIs we provide through three scenarios below.
+
+## Sharing background music
+
+While chatting with others, having background music can make the conversation more interesting. 
+Or if your App requires specific background music to create an atmosphere, you can use the following code to meet your needs.
+
+### Auto-play(Without UI)
+
+If you want to automatically play background music when entering the voice chat room, you can set`config.backgroundMedia.path`：
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: userID,
+        userName: 'user_$userID',
+        roomID: roomID,
+
+        // Modify your custom configurations here.
+        config: (isHost
+            ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+          ..backgroundMedia.path =
+              isHost ? 'https://xxx.com/xxx.mp3' : '',
+      ),
+    );
+  }
+}
+```
+
+### Using UI to control playback status
+
+If you want to control the playback status yourself, you can add some simple buttons and call relevant APIs to achieve it.
+
+1. Use `ZegoUIKitPrebuiltLiveAudioRoomController().media.pickFile` to let the user choose a local media file or use `ZegoUIKitPrebuiltLiveAudioRoomController().play` to play a network media file directly.
+2. Use `ZegoUIKitPrebuiltLiveAudioRoomController().play/pause/resume/stop` and other APIs to control the playback status.
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/media_api_ui.jpeg" />
+  </Frame>
+</div>
+
+```dart
+class LivePage extends StatefulWidget {
+  final String roomID;
+  final bool isHost;
+
+  const LivePage({
+    Key? key,
+    required this.roomID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: userID,
+        userName: 'user_$userID',
+        roomID: roomID,
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+          ..foreground = simpleMediaPlayer(
+            canControl: widget.isHost,
+          ),
+      ),
+    );
+  }
+
+  Widget simpleMediaPlayer({
+    required bool canControl,
+  }) {
+    return canControl
+        ? Positioned(
+            bottom: 60,
+            right: 10,
+            child: ValueListenableBuilder<MediaPlayState>(
+              valueListenable: ZegoUIKit().getMediaPlayStateNotifier(),
+              builder: (context, playState, _) {
+                return Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        if (MediaPlayState.Playing == playState) {
+                          ZegoUIKitPrebuiltLiveAudioRoomController().media.pause();
+                        } else if (MediaPlayState.Pausing == playState) {
+                          ZegoUIKitPrebuiltLiveAudioRoomController().media.resume();
+                        } else {
+                          ZegoUIKitPrebuiltLiveAudioRoomController().media.pickFile().then((files) {
+                            if (files.isEmpty) {
+                              debugPrint('files is empty');
+                            } else {
+                              final mediaFile = files.first;
+                              var targetPathOrURL = mediaFile.path ?? '';
+                              ZegoUIKitPrebuiltLiveAudioRoomController().media.play(
+                                filePathOrURL: targetPathOrURL,
+                              );
+                            }
+                          });
+
+                          // ZegoUIKitPrebuiltLiveAudioRoomController().media.play(filePathOrURL:'https://xxx.com/xxx.mp3');
+                        }
+                      },
+                      child: Icon(
+                        MediaPlayState.Playing == playState
+                            ? Icons.pause_circle
+                            : Icons.play_circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        ZegoUIKitPrebuiltLiveAudioRoomController().media.stop();
+                      },
+                      child: const Icon(
+                        Icons.stop_circle,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          )
+        : Container();
+  }
+}
+```
+
+## Sharing videos
+
+### Media player
+
+Of course, we also provide an encapsulated media player for your convenience.
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/media_video.gif" />
+  </Frame>
+</div>
+
+Below is an example of watching movies together, demonstrating how to use the media player.:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return ZegoUIKitPrebuiltLiveAudioRoom(
+            appID: YourSecret.appID,
+            appSign: YourSecret.appSign,
+            userID: userID,
+            userName: 'user_$userID',
+            roomID: roomID,
+
+            // Modify your custom configurations here.
+            config: (isHost
+                ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+                : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+              ..foreground = advanceMediaPlayer(
+                constraints: constraints,
+                canControl: isHost,
+              ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget advanceMediaPlayer({
+    required BoxConstraints constraints,
+    required bool canControl,
+  }) {
+    const padding = 20;
+    final playerSize =
+        Size(constraints.maxWidth - padding * 2, constraints.maxWidth * 9 / 16);
+    return ZegoMediaPlayer(
+      size: playerSize,
+      enableRepeat: true,
+      canControl: canControl,
+      showSurface: true,
+      initPosition: Offset(
+        constraints.maxWidth - playerSize.width - padding,
+        constraints.maxHeight - playerSize.height - padding - 40,
+      ),
+    );
+  }
+}
+```
+
+If the media player is playing pure audio, the effect will be as follows:
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/audio_wave.gif" />
+  </Frame>
+</div>

@@ -1,0 +1,163 @@
+# Set a leave confirmation dialog
+
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) ends a live by default when the user clicks the End Live button or the Android’s Back button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to leave a live, you can use the `confirmDialogInfo` config:
+
+
+1. `confirmDialogInfo`: After configuring the confirmDialogInfo parameter, ZegoUIKitPrebuiltLiveStreaming  will pop up a confirmation dialog box with the default style before ending the live, showing the confirmation info you set.
+
+The effect will be like this:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/live_confirm.gif" />
+</Frame> 
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltLiveStreaming(
+      appID: YourSecret.appID,
+      appSign: YourSecret.appSign,
+      userID: userID,
+      userName: 'user_$userID',
+      liveID: liveID,
+
+      // Modify your custom configurations here.
+      config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        ..confirmDialogInfo = ZegoLiveStreamingDialogInfo(
+          title: "Leave confirm",
+          message: "Do you want to end?",
+          cancelButtonName: "Cancel",
+          confirmButtonName: "Confirm",
+        ),
+    );
+  }
+}
+```
+
+If the default dialog style can’t meet your needs, or you want to pop up a more complex dialog, then you can use the `onLeaveConfirmation` parameter of `ZegoUIKitPrebuiltLiveStreamingEvents`.
+
+The `onLeaveConfirmation` is a callback that can be used together with the `showDialog` of Flutter. 
+
+And sure, you can also implement the logic that decides whether to end the live or not, or any other business logic in this callback as wanted.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltLiveStreaming(
+      appID: YourSecret.appID,
+      appSign: YourSecret.appSign,
+      userID: userID,
+      userName: 'user_$userID',
+      liveID: liveID,
+      events: ZegoUIKitPrebuiltLiveStreamingEvents(
+        onLeaveConfirmation: (
+          ZegoLiveStreamingLeaveConfirmationEvent event,
+
+          /// defaultAction to return to the previous page
+          Future<bool> Function() defaultAction,
+        ) async {
+          return await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Colors.blue[900]!.withOpacity(0.9),
+                title: const Text("This is your custom dialog",
+                    style: TextStyle(color: Colors.white70)),
+                content: const Text("You can customize this dialog as you like",
+                    style: TextStyle(color: Colors.white70)),
+                actions: [
+                  ElevatedButton(
+                    child: const Text("Cancel",
+                        style: TextStyle(color: Colors.white70)),
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                  ElevatedButton(
+                    child: const Text("Exit"),
+                    onPressed: () => Navigator.of(context).pop(true),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+      // Modify your custom configurations here.
+      config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        ..audioVideoView.foregroundBuilder = foregroundBuilder,
+    );
+  }
+}
+```
+
+The effect of a custom dialog will be like this: 
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/live_custom_confirm.gif" />
+</Frame> 
+
+If you want to listen for local leave, end by remote or kicked out events, ZegoUIKitPrebuiltLiveStreaming provides an `onEnded(ZegoLiveStreamingEndEvent event, VoidCallback defaultAction)` callback that will be triggered when the live ends. 
+
+```dart
+class ZegoLiveStreamingEndEvent {
+  /// the user ID of who kick you out
+  String? kickerUserID;
+
+  /// end reason
+  ZegoLiveStreamingEndReason reason;
+
+  /// The [isFromMinimizing] it means that the user left the live streaming
+  /// while it was in a minimized state.
+  ///
+  /// You **can not** return to the previous page while it was **in a minimized state**!!!
+  /// just hide the minimize page by [ZegoUIKitPrebuiltLiveStreamingController().minimize.hide()]
+  ///
+  /// On the other hand, if the value of the parameter is false, it means
+  /// that the user left the live streaming while it was not minimized.
+  bool isFromMinimizing;
+}
+
+/// The default behavior is to return to the previous page.
+///
+/// If you override this callback, you must perform the page navigation
+/// yourself to return to the previous page!!!
+/// otherwise the user will remain on the current call page !!!!!
+enum ZegoLiveStreamingEndReason {
+  /// the call ended due to a local hang-up
+  hostEnd,
+
+  /// the call ended when the remote user hung up, leaving only one local user in the call
+  localLeave,
+
+  /// the call ended due to being kicked out
+  kickOut,
+}
+```
+
+But remember to notice that if `isFromMinimizing` in `ZegoLiveStreamingEndEvent` is `true`, it means the user left the live stream directly from the minimizing state. 
+At this time, you cannot use Navigator to go back to the previous page, just use `ZegoUIKitPrebuiltLiveStreamingController().minimize.hide()` to hide the minimize page. Or you can call `defaultAction.call()` to do that.

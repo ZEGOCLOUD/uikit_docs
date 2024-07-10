@@ -1,0 +1,50 @@
+# Turn off camera during co-hosting
+
+
+Occasionally, users may value their privacy and prefer their camera to not automatically turn on during co-hosting. In this case, users can manually activate the camera by clicking the camera button at a later time. 
+You can meet this requirement by configuring the `turnOnCameraWhenCohosted` parameter.
+
+
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatefulWidget {
+  final String liveID;
+  final bool isHost;
+
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: widget.liveID,
+        config: (widget.isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host(
+                plugins: [ZegoUIKitSignalingPlugin()],
+              )
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+                plugins: [ZegoUIKitSignalingPlugin()],
+              ))
+          ..turnOnCameraWhenCohosted = (){
+            return false;
+          },
+      ),
+    );
+  }
+}
+```

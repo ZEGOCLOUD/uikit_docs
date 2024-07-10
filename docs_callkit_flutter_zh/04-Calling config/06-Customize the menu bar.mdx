@@ -1,0 +1,300 @@
+# Customize the menu bar
+
+## Customize the menu bar button list
+
+
+The Call Kit (ZegoUIKitPrebuiltCall) allows you to configure the buttons of the menu bar. To remove the default buttons or add custom ones to the bottom menu bar, you can configure the `bottomMenuBarConfig`:
+
+(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBarConfig`.)
+
+1. `buttons`: Built-in buttons placed in the menu bar. By default, all buttons are displayed. If you need to hide some buttons, use this to configure them.
+
+2. `maxCount`: Maximum number of buttons that can be displayed by the menu bar. Value range [1 - 5], the default value is 5.
+
+3. `extendButtons`: Use this configuration to add your own custom buttons to menuBar.
+
+
+If the total number of built-in buttons and custom buttons does not exceed 5, all buttons will be displayed. Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up the bottom sheet to display the remaining buttons.
+
+The effect will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/menuBarLimit.gif" />
+</Frame>
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    List customIcons = [
+      Icons.phone,
+      Icons.cookie,
+      Icons.speaker,
+      Icons.air,
+      Icons.blender,
+      Icons.file_copy,
+      Icons.place,
+      Icons.phone_android,
+      Icons.phone_iphone,
+    ];
+    config.bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+      maxCount: 5,
+      extendButtons: [
+        for (int i = 0; i < customIcons.length; i++)
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              fixedSize: const Size(60, 60),
+              shape: const CircleBorder(),
+              primary: controlBarButtonCheckedBackgroundColor,
+            ),
+            onPressed: () {},
+            child: Icon(customIcons[i]),
+          ),
+      ],
+      buttons: [
+        ZegoMenuBarButtonName.toggleCameraButton,
+        ZegoMenuBarButtonName.toggleMicrophoneButton,
+        ZegoMenuBarButtonName.switchAudioOutputButton,
+        ZegoMenuBarButtonName.hangUpButton,
+        ZegoMenuBarButtonName.switchCameraButton,
+      ],
+    );
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    List customIcons = [
+      Icons.phone,
+      Icons.cookie,
+      Icons.speaker,
+      Icons.air,
+      Icons.blender,
+      Icons.file_copy,
+      Icons.place,
+      Icons.phone_android,
+      Icons.phone_iphone,
+    ];
+
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(
+          maxCount: 5,
+          extendButtons: [
+            for (int i = 0; i < customIcons.length; i++)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(60, 60),
+                  shape: const CircleBorder(),
+                  primary: controlBarButtonCheckedBackgroundColor,
+                ),
+                onPressed: () {},
+                child: Icon(customIcons[i]),
+              ),
+          ],
+          buttons: [
+            ZegoMenuBarButtonName.toggleCameraButton,
+            ZegoMenuBarButtonName.toggleMicrophoneButton,
+            ZegoMenuBarButtonName.switchAudioOutputButton,
+            ZegoMenuBarButtonName.hangUpButton,
+            ZegoMenuBarButtonName.switchCameraButton,
+          ],
+        ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+## Add chat button to the menu bar
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+    );
+    config.bottomMenuBarConfig.buttons.add(ZegoMenuBarButtonName.chatButton);
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..bottomMenuBarConfig.buttons.add(ZegoMenuBarButtonName.chatButton)
+    );
+  }
+}
+```
+
+
+</CodeGroup>
+
+## Customize the hidden behavior of the menu bar
+
+
+The Call Kit (ZegoUIKitPrebuiltCall) supports automatic or manual hiding of the menu bar. You can control this by using the following two configurations in the `ZegoBottomMenuBarConfig`:
+
+1. `hideByClick`: Whether the menu bar can be hidden by clicking on the unresponsive area, enabled by default.
+
+2. `hideAutomatically`: Whether the menu bar is automatically hidden after 5 seconds of user inactivity, enabled by default.
+
+
+## Customize menubar's styles
+
+
+In addition, we also support customizing some styles, like the following:
+
+1. `padding`: padding for the top/bottom menu bar.
+
+2. `margin`: margin for the top/bottom menu bar.
+
+3. `backgroundColor`: background color for the top/bottom menu bar.
+
+4. `height`: height for the top/bottom menu bar, height = border + padding + content.
+
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/live_menubar_style1.jpg" />
+</Frame>
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+    );
+    config..topMenuBarConfig.height = 100
+      ..topMenuBarConfig.padding = const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 0,
+      )
+      ..topMenuBarConfig.margin = const EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: 0,
+      )
+      ..topMenuBarConfig.backgroundColor = Colors.red.withOpacity(0.2),
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..topMenuBarConfig.height = 100
+        ..topMenuBarConfig.padding = const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 0,
+        )
+        ..topMenuBarConfig.margin = const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: 0,
+        )
+        ..topMenuBarConfig.backgroundColor = Colors.red.withOpacity(0.2),
+    );
+  }
+}
+```
+
+
+
+</CodeGroup>
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_menubar_style_sc.png" />
+</Frame>
+
