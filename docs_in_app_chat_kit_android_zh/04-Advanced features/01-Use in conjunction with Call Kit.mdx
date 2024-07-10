@@ -27,13 +27,13 @@ String userID =; // 您的用户ID，用户ID只能包含数字、英文字母�
 String userName =;   // 您的用户名
 
 ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-ZegoUIKitPrebuiltCallInvitationService.init(application, appID, appSign, userID, userName,callInvitationConfig);
+ZegoUIKitPrebuiltCallService.init(application, appID, appSign, userID, userName,callInvitationConfig);
 ```
 <Warning title="警告">
-在登出应用程序后，您需要调用`unInit`方法。
+在登出应用程序后，您需要调用`logoutUser`方法。
 
 ```java
-ZegoUIKitPrebuiltCallInvitationService.unInit();
+ZegoUIKitPrebuiltCallService.logoutUser();
 ```
 </Warning>
 </Step>
