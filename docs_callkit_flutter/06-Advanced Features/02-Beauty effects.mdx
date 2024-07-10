@@ -41,13 +41,13 @@ Now in your Dart code, ​​​​​​​​​​&#8203;import the plugin.
 
 #### Add the initialization code
 
+On top of the initialization code added in Quick Start, you need to set `ZegoUIKitBeautyPlugin` to the `plugins` parameter. Then, add the `beautyEffectButton` to the bottom menu bar. Additionally, please refer to [Online authentication](https://docs.zegocloud.com/article/12291) to obtain the license and set it to the `beauty` parameter of `ZegoUIKitPrebuiltCallConfig`.
 
-As the initialization code has been added during Quick Start, you only need to add the beauty plugin and beauty effect button on top of it.
 
 <CodeGroup>
 
 
-```dart title="With call invitation"
+```dart title="With call invitation" {6,19,23-25}
 ZegoUIKitPrebuiltCallInvitationService().init(
   appID: yourAppID /*input your AppID*/,
   appSign: yourAppSign /*input your AppSign*/,
@@ -63,27 +63,40 @@ ZegoUIKitPrebuiltCallInvitationService().init(
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
 
-    /// add beauty effect button.
+    /// Add beauty effect button.
     config.bottomMenuBarConfig.buttons = [
       ZegoMenuBarButtonName.beautyEffectButton,
       ...config.bottomMenuBarConfig.buttons,
     ];
+    /// Set up the license obtained from ZEGOCLOUD.
+    config.beauty = ZegoBeautyPluginConfig(
+      license: () {
+        return $your_license;
+      },
+    );
 
     return config;
   },
 );
 ```
 
-```dart title="Basic call"
+```dart title="Basic call" {9,13-15,27}
 final callController = ZegoUIKitPrebuiltCallController();
 
 @override
 Widget build(BuildContext context) {
   final config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+  /// Add beauty effect button.
   config.bottomMenuBarConfig.buttons = [
     ZegoMenuBarButtonName.beautyEffectButton,
     ...config.bottomMenuBarConfig.buttons,
   ];
+  /// Set up the license obtained from ZEGOCLOUD.
+  config.beauty = ZegoBeautyPluginConfig(
+    license: () {
+      return $your_license;
+    },
+  );
 
   return SafeArea(
     child: ZegoUIKitPrebuiltCall(

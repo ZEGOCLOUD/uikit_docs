@@ -37,10 +37,10 @@ import 'package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart';
 
 #### Add the initialization code
 
-As the initialization code has been added during Quick Start, you only need to add the beauty plugin on top of it. 
+On top of the initialization code added in Quick Start, you need to set `ZegoUIKitBeautyPlugin` to the `plugins` parameter. Additionally, please refer to [Online authentication](https://docs.zegocloud.com/article/12291) to obtain the license and set it to the `beauty` parameter of `ZegoUIKitPrebuiltLiveStreamingConfig`.
 If you have already integrated the Co-Hosting feature and don't need advanced beauty effects, you can remove the `ZegoUIKitBeautyPlugin` plugin from the audience's config.
 
-```dart
+```dart {18,21,25-27}
 class LivePage extends StatelessWidget {
   final String liveID;
   final bool isHost;
@@ -62,6 +62,12 @@ class LivePage extends StatelessWidget {
               )
             : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
                 plugins: [ZegoUIKitSignalingPlugin(), ZegoUIKitBeautyPlugin()],
+              )
+              /// Set up the license obtained from ZEGOCLOUD.
+              ..beauty = ZegoBeautyPluginConfig(
+                license: () {
+                  return $your_license;
+                },
               ),
       ),
     );
