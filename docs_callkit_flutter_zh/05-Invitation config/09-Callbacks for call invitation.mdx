@@ -1,0 +1,91 @@
+# Callbacks for call invitation
+
+You can implement further business logic by listening for event callbacks related to the call invitation.
+
+The following are supported event callbacks:
+
+* `onIncomingCallReceived`: This callback will be triggered when receiving call invitations.
+* `onIncomingCallCanceled`: This callback will be triggered when the caller cancels the call invitation.
+* `onIncomingCallTimeout`: The callee will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+* `onIncomingCallDeclineButtonPressed`: This callback will be triggered when the Decline button is pressed (the callee declines the call invitation).
+* `onIncomingCallAcceptButtonPressed`: This callback will be triggered when the Accept button is pressed (the callee accepts the call invitation).
+* `onOutgoingCallCancelButtonPressed`: This callback will be triggered when the Cancel button is pressed (the caller cancels the call invitation).
+* `onOutgoingCallAccepted`: The caller will receive a notification through this callback when the callee accepts the call invitation.
+* `onOutgoingCallDeclined`: The caller will receive a notification through this callback when the callee declines the call invitation actively.
+* `onOutgoingCallRejectedCauseBusy`: The caller will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+* `onOutgoingCallTimeout`: The caller will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+* `onInvitationUserStateChanged`: This callback will be triggered to **caller** or **callee** in current calling inviting when the other calling member accepts, rejects, or exits, or the response times out. If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
+
+Here is the reference code:
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+    appID: YourAppID,
+    appSign: YourAppSign,
+    userID: userID,
+    userName: userName,
+    plugins: [
+      ZegoUIKitSignalingPlugin(),
+    ],
+    invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
+      onInvitationUserStateChanged: (List) {
+        ///  Add your custom logic here.
+      },
+      onIncomingCallDeclineButtonPressed: () {
+        ///  Add your custom logic here.
+      },
+      onIncomingCallAcceptButtonPressed: () {
+        ///  Add your custom logic here.
+      },
+      onIncomingCallReceived: (
+        String callID,
+        ZegoCallUser caller,
+        ZegoCallType callType,
+        List callees,
+        String customData,
+      ) {
+        ///  Add your custom logic here.
+      },
+      onIncomingCallCanceled: (
+        String callID,
+        ZegoCallUser caller,
+        String customData,
+      ) {
+        ///  Add your custom logic here.
+      },
+      onIncomingCallTimeout: (String callID, ZegoCallUser caller) {
+        ///  Add your custom logic here.
+      },
+      onOutgoingCallCancelButtonPressed: () {
+        ///  Add your custom logic here.
+      },
+      onOutgoingCallAccepted: (String callID, ZegoCallUser callee) {
+        ///  Add your custom logic here.
+      },
+      onOutgoingCallRejectedCauseBusy: (
+        String callID,
+        ZegoCallUser callee,
+        String customData,
+      ) {
+        ///  Add your custom logic here.
+      },
+      onOutgoingCallDeclined: (
+        String callID,
+        ZegoCallUser callee,
+        String customData,
+      ) {
+        ///  Add your custom logic here.
+      },
+      onOutgoingCallTimeout: (
+        String callID,
+        List<ZegoCallUser> callees,
+        bool isVideoCall,
+      ) {
+        ///  Add your custom logic here.
+      },
+    ),
+  );
+```
+
+> ​Please refer to the [API reference](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoUIKitPrebuiltCallInvitationEvents-class.html) for complete parameters.
+

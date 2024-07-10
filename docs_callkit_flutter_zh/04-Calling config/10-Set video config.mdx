@@ -1,0 +1,56 @@
+# Set video config
+
+If you want configure streaming video, we allowing to select appropriate parameters such as video encoding format, bitrate, resolution, and frame rate based on your needs.
+
+By using **ZegoUIKitPrebuiltCallConfig.videoConfig**, it becomes easy to configure.
+
+Here is an example:
+
+<CodeGroup>
+
+```dart title="Call" 
+ZegoUIKitPrebuiltCall(
+    ...
+    config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+      ..videoConfig = ZegoUIKitVideoConfig.preset1080P(),
+    ...
+)
+```
+
+```dart title="Invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    requireConfig: (ZegoCallInvitationData data) {
+        final config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+        ...
+        config.videoConfig = ZegoUIKitVideoConfig.preset1080P();
+        ...
+        return config;
+    },
+);
+```
+
+</CodeGroup>
+
+And, we have compiled a set of common preset configurations for these parameters. You can use these common configurations or customize the specific parameters yourself.
+
+| ZegoVideoConfigPreset | Capture resolution<br/> (Width × Height) | Encoder resolution<br/> (Width × Height) | Frame rate<br/> (fps) |
+| :-------------------- | :----------------------------------- | :----------------------------------- | :---------------- |
+| Preset180P            | 180 × 320                            | 180 × 320                            | 15                |
+| Preset270P            | 270 × 480                            | 270 × 480                            | 15                |
+| Preset360P            | 360 × 640                            | 360 × 640                            | 15                |
+| Preset540P            | 540 × 960                            | 540 × 960                            | 15                |
+| Preset720P            | 720 × 1280                           | 720 × 1280                           | 15                |
+| Preset1080P           | 1080 × 1920                          | 1080 × 1920                          | 15                |
+| Preset2K              | 1440 × 2560                          | 1440 × 2560                          | 15                |
+| Preset4K              | 2160 × 3840                          | 2160 × 3840                          | 15                |
+
+Additionally, implemented a **traffic control** mechanism that automatically adjusts the video configuration based on real-time network traffic conditions, ensuring a smooth viewing experience even in poor network conditions.
+
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+# Set avatar for users
+
+User avatars are generally stored in the server. Call Kit (ZegoUIKitPrebuiltCall) does not know the real profile picture of each user, so it uses the first letter of the username to draw the user avatars by default, as shown below:
+
+| When a user in silence   |  When a user speaks  |
+| :-: | :-: |
+|<Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/_default_avatar.jpg" /></Frame>|<Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/_default_avatar_nowave.jpg" /></Frame>|
+
+To configure the custom user avatars, you can use the `avatarBuilder `to set a custom builder method.
+
+Here is the reference code:
+
+<CodeGroup>
+
+
+```dart title="Invitation Call"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    config.avatarBuilder = (BuildContext context, Size size,
+        ZegoUIKitUser? user, Map extraInfo) {
+      return user != null
+          ? Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(
+                    'https://your_server/app/avatar/${user.id}.png',
+                  ),
+                ),
+              ),
+            )
+          : const SizedBox();
+    };
+    return config;
+  },
+);
+```
+
+```dart title="Basic Call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+  
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..avatarBuilder = (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://your_server/app/avatar/${user.id}.png',
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+When complete, the Call Kit (ZegoUIKitPrebuiltCall) displays the custom user avatar that you set.

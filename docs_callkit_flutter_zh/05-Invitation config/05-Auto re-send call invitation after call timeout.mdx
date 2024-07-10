@@ -1,0 +1,46 @@
+# Auto re-send call invitation after call timeout
+
+To automatically re-send a call invite after the call times out, do the following:
+
+1. Listen to the `onOutgoingCallTimeout` callback of `ZegoUIKitPrebuiltCallInvitationEvents`. This callback will be triggered when the call times out.
+2. Call the `sendCallInvitation` method of `ZegoUIKitPrebuiltCallController` to call send a call invite.
+
+```dart
+///    Declare variables that you need to use, and make sure to manage their lifecycles
+  const maxRetryCount = 2;
+  final Map calleesRetryCount = {};
+
+  ///    Listen to the onOutgoingCallTimeout during initialization.
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    appID: YourAppID,
+    appSign: YourAppSign,
+    userID: userID,
+    userName: userName,
+    plugins: [ZegoUIKitSignalingPlugin()],
+    invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
+      onOutgoingCallTimeout: (
+          String callID,
+          List callees,
+          bool isVideoCall,
+          ) async {
+        ///  Set the maximum retry count. If it exceeds, no more call invitations will be sent.
+        final retryCount = calleesRetryCount[callID] ?? 0;
+        if (retryCount >= maxRetryCount) {
+          calleesRetryCount.remove(callID);
+          return;
+        }
+
+        calleesRetryCount[callID] = retryCount + 1;
+
+        ///  Re-send call invitation
+        await ZegoUIKitPrebuiltCallController().invitation.send(
+          callID: callID,
+          invitees: callees
+              .map((callee) => ZegoCallUser(callee.id, 'user_${callee.id}'))
+              .toList(),
+          isVideoCall: isVideoCall,
+        );
+      },
+    ),
+  );
+```

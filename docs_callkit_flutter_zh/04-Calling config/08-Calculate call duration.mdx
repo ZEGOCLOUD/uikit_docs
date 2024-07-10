@@ -1,0 +1,87 @@
+# Calculate call duration
+
+This doc describes how to calculate the call duration through configuration.
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_duration.jpeg" />
+</Frame>
+
+
+To calculate call duration, do the following:
+
+1. Set the `isVisible` property of `ZegoCallDurationConfig` to display the current call timer. (It is displayed by default)
+2. Assuming that the call duration is 5 minutes, the call will automatically end when the time is up (refer to the following code). You will be notified of the end of the call duration through `durationConfig.onDurationUpdate`. To end the call, you can call the `hangUp` method of `ZegoUIKitPrebuiltCallController`.
+
+<CodeGroup>
+
+```dart title="With call invitation"
+final navigatorKey = GlobalKey<NavigatorState>();
+
+void main() {
+  ...
+  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+
+  ...
+}
+
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.duration.isVisible = true;
+    config.duration.onDurationUpdate = (Duration duration) {
+      if (duration.inSeconds == 5 * 60) {
+        ZegoUIKitPrebuiltCallController().hangUp(navigatorKey.currentState!.context);
+      }
+    };
+
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatefulWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  State createState() => CallPageState();
+}
+
+class CallPageState extends State {
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall (
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..duration.isVisible = true
+        ..duration.onDurationUpdate = (Duration duration) {
+          if (duration.inSeconds == 5 * 60) {
+            ZegoUIKitPrebuiltCallController().hangUp(context);
+          }
+        },
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+

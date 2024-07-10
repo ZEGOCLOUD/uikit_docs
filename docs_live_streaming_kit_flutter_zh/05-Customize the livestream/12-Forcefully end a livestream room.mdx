@@ -1,0 +1,54 @@
+# Forcefully end a livestream room
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) allows to forcefully end a livestream room and dismiss all audience automatically when the host ends the livestream.
+To implement this, use the `onLiveStreamingEnded` callback. This callback will be triggered when the host ends the livestream, and all audience will automatically exit the livestream room.
+
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: liveID,
+        events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          onEnded: (
+            ZegoLiveStreamingEndEvent event,
+            VoidCallback defaultAction,
+          ) {
+            if (ZegoLiveStreamingEndReason.hostEnd == event.reason) {
+              if (event.isFromMinimizing) {
+                /// now is minimizing state, not need to navigate, just switch to idle
+                ZegoUIKitPrebuiltLiveStreamingController().minimize.hide();
+              } else {
+                Navigator.pop(context);
+              }
+            } else {
+              defaultAction.call();
+            }
+          },
+        ),
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(),
+      ),
+    );
+  }
+}
+```

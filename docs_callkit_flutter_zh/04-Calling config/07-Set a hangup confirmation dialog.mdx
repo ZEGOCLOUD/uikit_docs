@@ -1,0 +1,200 @@
+# Set a hangup confirmation dialog
+
+Call Kit (ZegoUIKitPrebuilt) ends a call by default when the user clicks the End Call button or the Android’s Back button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to hang up a call, you can use the `hangup` config:
+
+1. `hangUpConfirmInfo`: After configuring the hangUpConfirmInfo parameter, ZegoUIKitPrebuilt will pop up a confirmation dialog box with the default style before ending the call, showing the confirmation info you set.
+
+The effect will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/hangup_confirm.gif" />
+</Frame>
+
+
+Here is the reference code:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.hangUpConfirmDialogInfo = ZegoHangUpConfirmDialogInfo(
+      title: "Hangup confirm",
+      message: "Do you want to hangup?",
+      cancelButtonName: "Cancel",
+      confirmButtonName: "Confirm",
+    );
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..hangUpConfirmDialogInfo = ZegoHangUpConfirmDialogInfo(
+          title: "Hangup confirm",
+          message: "Do you want to hangup?",
+          cancelButtonName: "Cancel",
+          confirmButtonName: "Confirm",
+        ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+If the default dialog style can’t meet your needs, or you want to pop up a more complex dialog, then you can use the `onHangUpConfirmation` parameter. The `onHangUpConfirmation` is a callback that can be used together with the `showDialog` of Flutter. And sure, you can also implement the logic that decides whether to end the call or not, or any other business logic in this callback as wanted.
+
+Here is the reference code:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  events: ZegoUIKitPrebuiltCallEvents(
+    // Modify your custom configurations here.
+    onHangUpConfirmation: (ZegoCallHangUpConfirmationEvent event,
+      /// defaultAction to return to the previous page
+      Future<bool> Function() defaultAction,
+    ) async {
+      return await showDialog(
+        context: event.context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.blue[900]!.withOpacity(0.9),
+            title: const Text("This is your custom dialog",
+                style: TextStyle(color: Colors.white70)),
+            content: const Text(
+                "You can customize this dialog however you like",
+                style: TextStyle(color: Colors.white70)),
+            actions: [
+              ElevatedButton(
+                child: const Text("Cancel",
+                    style: TextStyle(color: Colors.white70)),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              ElevatedButton(
+                child: const Text("Exit"),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  ),
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+      events: ZegoUIKitPrebuiltCallEvents(
+        // Modify your custom configurations here.
+        onHangUpConfirmation: (ZegoCallHangUpConfirmationEvent event,
+          /// defaultAction to return to the previous page
+          Future<bool> Function() defaultAction,
+        ) async {
+          return await showDialog(
+            context: event.context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Colors.blue[900]!.withOpacity(0.9),
+                title: const Text("This is your custom dialog",
+                    style: TextStyle(color: Colors.white70)),
+                content: const Text(
+                    "You can customize this dialog however you like",
+                    style: TextStyle(color: Colors.white70)),
+                actions: [
+                  ElevatedButton(
+                    child: const Text("Cancel",
+                        style: TextStyle(color: Colors.white70)),
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                  ElevatedButton(
+                    child: const Text("Exit"),
+                    onPressed: () => Navigator.of(context).pop(true),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect of a custom dialog will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/hangup_custom.gif" />
+</Frame>
+
+
+If you want to listen for hang-up events, for example, to save the call recording when ending the call, ZegoUIKitPrebuiltCall provides an `onHangUp` callback that will be triggered when the call ends. And sure, you can also implement custom business logic in the `onHangUp`.

@@ -1,0 +1,531 @@
+# Add custom components
+
+## Customize the foreground of view
+
+
+If you want to add some custom components at the top level of view, such as, you want to display advertisements, etc., then you can use `foreground` in `ZegoUIKitPrebuiltCallConfig`. This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+> ​The position of the Widget can be specified by using the Flutter `Positioned`.
+
+Here shows &#91;How to add a advertisement&#93;:
+
+<CodeGroup>
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config..foreground = const Positioned(
+       top: 100,
+       right: 20,
+       child: FloatingAd(),
+    );
+    return config;
+  },
+);
+
+class FloatingAd extends StatelessWidget {
+  const FloatingAd({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 150,
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.yellow,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack(
+        children: [
+          const Center(
+            child: Text(
+              'Advertisement',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                print('Ad closed');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+        config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+          ..foreground = const Positioned(
+            top: 100,
+            right: 20,
+            child: FloatingAd(),
+          ),
+    );
+  }
+}
+
+class FloatingAd extends StatelessWidget {
+  const FloatingAd({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 150,
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.yellow,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack(
+        children: [
+          const Center(
+            child: Text(
+              'Advertisement',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                print('Ad closed');
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_foreground.jpeg" />
+</Frame>
+
+
+## Customize the background of view
+
+
+If you need to customize the view in audio mode, for example, setting the background image, you can use `background` in `audioVideoViewConfig`. This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed in the view in audio mode.
+
+> ​This config is only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on). The position of the Widget can be specified by using the Flutter `Positioned`.
+
+Here shows &#91;How to add a background&#93;:
+
+<CodeGroup>
+
+
+```dart title="With call invitation" {17}
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+        ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+        : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+        ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.background = YourBackgroundImage();
+    return config;
+  },
+);
+```
+
+```dart title="Basic call" {16}
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+        appID: YourAppID,
+        appSign: YourAppSign,
+        userID: userID,
+        userName: userName,
+        callID: callID,
+
+        // Modify your custom configurations here.
+        config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+      ..background = YourBackgroundImage();
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_background.jpeg" />
+</Frame>
+
+
+## Customize the foreground of user's view
+
+
+If you want to add some custom components at the top level of the user's view, such as, you want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `foregroundBuilder` in `audioVideoViewConfig`. This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+> ​The position of the Widget can be specified by using the Flutter `Positioned`.
+
+Here shows &#91;How to add a user avatar to the lower left corner during a video call&#93;:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+      foregroundBuilder: (BuildContext context, Size size,
+          ZegoUIKitUser? user, Map extraInfo) {
+        return user != null
+            ? Positioned(
+                bottom: 5,
+                left: 5,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        'https://your_server/app/avatar/${user.id}.png',
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox();
+      },
+    );
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+          foregroundBuilder: (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://your_server/app/avatar/${user.id}.png',
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect is as follows:
+
+
+|                                                                       When the camera is on                                                                        |                                                                       When the camera is off                                                                       |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/foreground1.jpg" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/foreground2.jpg" /></Frame> |
+
+
+As you can see, the custom component is displayed at the top regardless of whether the camera is on or off. If you want to display custom widgets only when the camera is on, you'll need to build different views depending on the user's camera status. As it happens, the Call Kit provides an out-of-box `ValueNotifier`, including the `CameraStateNotifier` which can be used to monitor the user's camera status.
+
+Try to customize the reference code with Flutter's `ValueListenableBuilder`:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+      foregroundBuilder: (BuildContext context, Size size,
+          ZegoUIKitUser? user, Map extraInfo) {
+        return user != null
+            ? ValueListenableBuilder(
+                valueListenable: ZegoUIKit().getCameraStateNotifier(user.id),
+                builder: (context, isCameraOn, child) {
+                  return isCameraOn ? child! : const SizedBox();
+                },
+                child: Positioned(
+                  bottom: 5,
+                  left: 5,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://your_server/app/avatar/${user.id}.png',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox();
+      },
+    );
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+          foregroundBuilder: (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? ValueListenableBuilder(
+                    valueListenable:
+                        ZegoUIKit().getCameraStateNotifier(user.id),
+                    builder: (context, isCameraOn, child) {
+                      return isCameraOn ? child! : const SizedBox();
+                    },
+                    child: Positioned(
+                      bottom: 5,
+                      left: 5,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              'https://your_server/app/avatar/${user.id}.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect after modification is as follows:
+
+|                                                                       When the camera is on                                                                        |                                                                       When the camera is off                                                                       |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/foreground1.jpg" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/foreground3.jpg" /></Frame> |
+
+## Customize the background of user's view
+
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `backgroundBuilder` in `audioVideoViewConfig`. This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed in the view in audio mode.
+
+> ​This config is only valid when the user turns off the camera (because the video view will be displayed automatically when the camera is on). The position of the Widget can be specified by using the Flutter `Positioned`.
+
+Here shows &#91;How to use a Gaussian Blur user image as the background image in audio mode&#93;:
+
+<CodeGroup>
+
+
+```dart title="With call invitation"
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    // Modify your custom configurations here.
+    config.audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+      backgroundBuilder: (BuildContext context, Size size,
+          ZegoUIKitUser? user, Map extraInfo) {
+        return user != null
+            ? ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Image(
+                  image: NetworkImage(
+                    'https://your_server/app/user_image/${user.id}.png',
+                  ),
+                ),
+              )
+            : const SizedBox();
+      },
+    );
+    return config;
+  },
+);
+```
+
+```dart title="Basic call"
+class CallPage extends StatelessWidget {
+  const CallPage({Key? key, required this.callID}) : super(key: key);
+  final String callID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      callID: callID,
+
+      // Modify your custom configurations here.
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..audioVideoViewConfig = ZegoPrebuiltAudioVideoViewConfig(
+          backgroundBuilder: (BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return user != null
+                ? ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Image(
+                      image: NetworkImage(
+                        'https://your_server/app/user_image/${user.id}.png',
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
+    );
+  }
+}
+```
+
+</CodeGroup>
+
+The effect will be like this:
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/blur.gif" />
+</Frame>
+

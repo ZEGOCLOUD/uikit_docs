@@ -1,0 +1,82 @@
+# Customize the background
+
+## Customize the livestream background
+
+If you need to customize the Live Streaming backgroud, for example, setting the background image, you can use `background` in `config`.
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltLiveStreaming(
+      appID: YourSecret.appID,
+      appSign: YourSecret.appSign,
+      userID: userID,
+      userName: 'user_$userID',
+      liveID: liveID,
+
+      // Modify your custom configurations here.
+      config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        ..background = YourBackgroundWidget(),
+    );
+  }
+}
+```
+
+## Customize the background for audio and video
+
+If you need to customize the user's view in audio mode, for example, setting the background image, you can use `backgroundBuilder` in `audioVideoView`.
+This callback, similar to other Flutter’s Builder callbacks, requires you (the developer) to return a custom Widget that will be placed in the view in audio mode.
+
+> This config is only valid when the user turns off the camera (because the video view will be displayed automaticity when the camera is on).
+> The position of the Widget can be specified by using the Flutter `Positioned`. 
+
+Here shows **How to use a Gaussian Blur user image as the background image in audio mode**:
+
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltLiveStreaming(
+      appID: YourSecret.appID,
+      appSign: YourSecret.appSign,
+      userID: userID,
+      userName: 'user_$userID',
+      liveID: liveID,
+
+      // Modify your custom configurations here.
+      config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        ..audioVideoView.backgroundBuilder = (BuildContext context,
+            Size size, ZegoUIKitUser? user, Map extraInfo) {
+          return user != null
+              ? ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Image(
+                    image: NetworkImage(
+                      'https://your_server/app/user_image/${user.id}.png',
+                    ),
+                  ),
+                )
+              : const SizedBox();
+        },
+    );
+  }
+}
+```

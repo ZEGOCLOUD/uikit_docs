@@ -1,0 +1,136 @@
+# Invite member in calling
+
+<Warning title="Incompatible with older versions">
+
+If you use this feature(when **canInvitingInCalling** is true.), the invitation feature will no longer be compatible with versions before v4.12.0. This means that invitations sent by users of versions before v4.12.0 will not be received by users of version 4.12.0 or later, and vice versa.
+
+Therefore, when releasing the app, it is important to implement a force upgrade for users to avoid issues with call reception.
+
+Of course, if this feature is not used (that is, when **canInvitingInCalling** is set to false), the above problem will not exist.
+</Warning>
+
+## When to use
+    
+    - When you are already in a call and want to invite others to join the discussion
+    - you can invite group members to join the discussion at any time
+
+## Parameters and Configurations
+
+- ZegoCallInvitationConfig
+
+  -  bool `canInvitingInCalling`:
+      
+      >  Whether to allow invitations in calling.   
+      >  Default value is false.   
+      >  Please note that if allowed, it will be incompatible with versions before v4.12.0, which means mutual invitations cannot be made.
+
+    - bool `onlyInitiatorCanInvite`:
+
+      >  whether only the call initiator has the permission to invite others to join the call.   
+      >  Default value is false.   
+      >  If set to false, all participants in the call can invite others.
+
+    - bool `endCallWhenInitiatorLeave`:
+
+      >  whether the entire call should end when the initiator leaves the call(will causing other participants to leave together).
+      >  Default value is false.
+      >  If set to false, the call can continue even after the initiator leaves.
+
+- ZegoCallAudioVideoViewConfig:
+
+  - bool `showWaitingCallAcceptAudioVideoView`:
+    > When inviting in calling, the invited user window will appear on the invitation side, if you want to hide this view, set it to false.
+    > you can cancel the invitation in this view.
+
+  - [ZegoAudioVideoViewForegroundBuilder](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoAudioVideoViewForegroundBuilder.html)?`waitingCallAcceptForegroundBuilder`:
+
+    > When inviting in calling, the invited user window will appear on the invitation side, and you can customize the foreground at this time.
+
+## Demo
+
+Below, we will demonstrate how to invite someone in calling through an example of a chat group conversation.
+
+Here, we only display the key code, the complete example can be found on [GitHub demo](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter/tree/master/basic_demo).
+
+<Frame width="480" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/call/group_chat_call_example.gif" />
+</Frame>
+
+<Check title="Check">Please make sure to set **canInvitingInCalling** to **true** when `ZegoUIKitPrebuiltCallInvitationService.init`</Check>
+
+- Active by config
+
+  ```dart 
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    plugins: [ZegoUIKitSignalingPlugin()],
+    config: ZegoCallInvitationConfig(
+      /// Remember to set this to true here.
+      canInvitingInCalling: true,
+    ),
+    ...
+  );
+  ```
+
+- Set up the **ZegoSendCallingInvitationButton** button.
+
+  ```dart 
+  // During the call, the invite button allows us to instantly access current group members who have not yet joined the call, and display them for selection in the list.
+  final sendCallingInvitationButton = StreamBuilder(
+    stream: ZegoUIKit().getUserListStream(),
+    builder: (context, snapshot) {
+      return ValueListenableBuilder(
+        // Get current group members
+        valueListenable:ZIMKit().queryGroupMemberList('#${ZegoUIKit().getRoom().id}'),
+        builder: (context, List<ZIMGroupMemberInfo> members, _) {
+          final memberIDsInCall =
+              ZegoUIKit().getRemoteUsers().map((user) => user.id).toList();
+          final membersNotInCall = members.where((member) {
+            if (member.userID == ZIMKit().currentUser()!.baseInfo.userID) {
+              return false;
+            }
+
+            return !memberIDsInCall.contains(member.userID);
+          }).toList();
+          return ZegoSendCallingInvitationButton(
+            avatarBuilder: customAvatarBuilder,
+            // Members already in the call, here we let him in display mode.
+            selectedUsers: ZegoUIKit()
+              .getRemoteUsers()
+              .map((e) => ZegoCallUser(
+                    e.id,
+                    e.name,
+              ))
+              .toList(),
+            // Members who have not yet joined the call will be kept in an optional state. 
+            // If they are already in inviting, we will handle it internally.
+            waitingSelectUsers: membersNotInCall
+              .map((member) => ZegoCallUser(
+                    member.userID,
+                    member.userName,
+                  ))
+              .toList(),
+          );
+        });
+      },
+    );
+    
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    requireConfig: (ZegoCallInvitationData data) {
+      final config = ZegoCallInvitationType.videoCall == data.type
+          ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+          : ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+
+      ... 
+
+      //  Display the button on the top toolbar.
+      config.topMenuBar.extendButtons = [
+        sendCallingInvitationButton,
+      ];
+
+      return config;
+    },
+    ...
+  );
+  ```

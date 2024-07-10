@@ -1,0 +1,61 @@
+# API for call invitation
+
+> you can call invitation series API by ZegoUIKitPrebuiltCallInvitationService().function()
+
+## send
+
+```dart
+Future<bool> send({
+    required List<ZegoCallUser> invitees,
+    required bool isVideoCall,
+    String customData = '',
+    String? callID,
+    String? resourceID,
+    String? notificationTitle,
+    String? notificationMessage,
+    int timeoutSeconds = 60,
+  });
+```
+
+This function is used to send call invitations to invitees.
+
+- `invitees`: You can provide a list of target users invitees and specify whether it is a video call isVideoCall. If it is not a video call, it defaults to an audio call.
+- `customData`: You can also pass additional custom data customData to the invitees.
+- `callID`: you can specify the call ID callID. If not provided, the system will generate one automatically based on certain rules.
+- `resourceID`: If you want to set a ringtone for offline call invitations, set resourceID to a value that matches the push resource ID in the ZEGOCLOUD management console.
+- `timeoutSeconds`: If the call times out, the call will automatically hang up after the specified timeout duration(in seconds).
+- `notificationTitle`&`notificationMessage`:You can set the notification title and message.
+
+Note that this function behaves the same as `ZegoSendCallInvitationButton`.
+
+## cancel
+
+
+```dart
+Future<bool> cancel({
+    required List<ZegoCallUser> callees,
+    String customData = '',
+  })
+```
+
+This function is used to cancel call invitations that have already been sent out to `callees`. And you can pass the reason to the `callees` by additional custom data `customData`.
+
+## reject
+
+```dart
+Future<bool> reject({
+    String customData = '',
+  }) async
+```
+
+This function is used to reject current call invitations, and you can pass the reason to the `caller` by additional custom data `customData`.
+
+## accept
+
+```dart
+Future<bool> accept({
+    String customData = '',
+  })
+```
+
+This function is used to accept current call invitations, and you can pass the reason to the `caller` by additional custom data `customData`.

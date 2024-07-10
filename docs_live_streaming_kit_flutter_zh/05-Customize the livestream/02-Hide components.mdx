@@ -1,0 +1,81 @@
+# Hide components
+
+## Audio Video View
+
+By default, the Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) displays the user's avatar and sound waves when the camera is turned off.
+
+If you are not satisfied with the user avatars and sound wave style, you can hide them using the following two configurations in `audioVideoView`:
+
+1. `showAvatarInAudioMode`: Whether to display the user avatars in audio mode. Displayed by default.
+2. `showSoundWavesInAudioMode`: in audio mode, whether to display the sound waves around the user avatar in audio mode. Displayed by default.
+
+Here is the reference code:
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..audioVideoView.showAvatarInAudioMode = true
+          ..audioVideoView.showSoundWavesInAudioMode = false,
+      ),
+    );
+  }
+}
+```
+
+## Top Menu Bar
+### close button
+For the top exit button, it is displayed by default, its default behavior is to prompt the user with a confirmation dialog to confirm exiting the live streaming. 
+
+Additionally, for the host, exiting the live room means ending the live streaming.
+
+If you have a custom exit widget or any other exit behavior, you can hide the default exit button through **ZegoLiveStreamingTopMenuBarConfig.showCloseButton**. 
+
+After hiding it, you can call the `ZegoUIKitPrebuiltLiveStreamingController().leave` method to perform the exit operation.
+
+```dart
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.liveID, this.isHost = false})
+      : super(key: key);
+
+  final String liveID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        liveID: liveID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+          : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+          ..topMenuBar.showCloseButton = false,
+      ),
+    );
+  }
+}
+```

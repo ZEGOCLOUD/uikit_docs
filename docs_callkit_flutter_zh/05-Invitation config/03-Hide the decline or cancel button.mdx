@@ -1,0 +1,41 @@
+# Hide the decline/cancel button
+
+## Hide the decline button
+
+
+To hide the Decline button when receiving incoming call invitations, set the `showDeclineButton` to `false`.
+
+```dart {8}
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  uiConfig: ZegoCallInvitationUIConfig(
+    showDeclineButton: false,
+  ),
+);
+```
+
+## Hide the cancel button
+
+
+To hide the Cancel button set the `showCancelInvitationButton` to `false`.
+
+```dart {8}
+ZegoUIKitPrebuiltCallInvitationService().init(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  plugins: [ZegoUIKitSignalingPlugin()],
+  uiConfig: ZegoCallInvitationUIConfig(
+    showCancelInvitationButton: false,
+  ),
+);
+```
+
+
+
+
