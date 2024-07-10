@@ -7,13 +7,13 @@ Ideally, the final effect will look like this:
 
 - Normal livestream scene:
 
-<Frame width="auto" height="auto" caption="">
+<Frame width="512" height="auto" caption="">
   <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_mini.gif" />
 </Frame>
 
 - PK battle scene:
 
-<Frame width="auto" height="auto" caption="">
+<Frame width="512" height="auto" caption="">
   <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_pk_mini.gif" />
 </Frame>
 
@@ -30,15 +30,12 @@ Ideally, the final effect will look like this:
 
     Another way is to customize a button, and when the button is clicked, invoke `ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()` method.
 
-    <Steps>
-
-      <Step title="Display the minimize button">
-
+    <Tabs>
+      <Tab title="Display the minimize button">
+        
         To display the minimize button, configure the `topMenuBar` of `ZegoUIKitPrebuiltLiveStreamingConfig`, and add the `ZegoMenuBarButtonName.minimizingButton` button to the top menu bar.
 
-        Here is the sample code:
-
-        <Accordion title="Details" defaultOpen="false">
+        <Accordion title="Sample code" defaultOpen="false">
 
         ```dart {33}
         class LivePage extends StatefulWidget {
@@ -81,12 +78,9 @@ Ideally, the final effect will look like this:
         }
         ```
         </Accordion>
-
-      </Step>
-      
-      <Step title="Use ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()">
-
-        ``` dart {3}
+      </Tab>
+      <Tab title="Use ZegoUIKitPrebuiltLiveStreamingController's minimize.toMinimize()">
+                ``` dart {3}
         ElevatedButton(
             onPressed: () {
                 ZegoUIKitPrebuiltLiveStreamingController().minimize.toMinimize();
@@ -94,18 +88,15 @@ Ideally, the final effect will look like this:
             child: const Text('Mini'),
         )
         ```
-      </Step>
-
-    </Steps>
+      </Tab>
+    </Tabs>
 
   </Step>
 
   <Step title="Configure the Overlay">
     To achieve the effect of minimizing the window, you need to use the `ZegoUIKitPrebuiltLiveStreamingMiniOverlayPage` component and insert it into the `Overlay` of the app.
 
-    Here is the sample code:
-
-    <Accordion title="Details" defaultOpen="false">
+    <Accordion title="Sample code" defaultOpen="false">
 
     ```dart {1-2,17-19,21,27-31}
     ///  Step 1/3: Declare a NavigatorState

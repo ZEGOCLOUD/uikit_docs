@@ -49,35 +49,3 @@ import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntro
   ```
   </Tab>
 </Tabs>
-
-
-### Beauty
-
-For how to obtain the license file and the implementation steps of online authentication, you can refer to this [article](https://docs.zegocloud.com/article/12291).
-
-<CodeGroup>
-  ```dart title="Basic call" {4-8}
-    ZegoUIKitPrebuiltCall(
-      ...
-      config: ZegoUIKitPrebuiltCallConfig()
-        ..beauty = ZegoBeautyPluginConfig(
-          license: () {
-            return $your_license;
-          },
-        ),
-    )
-  ```
-  ```dart title="Call with invitation"  {5-9}
-    ZegoUIKitPrebuiltCallInvitationService().init(
-      ...
-      requireConfig: (ZegoCallInvitationData data) {
-        return ZegoUIKitPrebuiltCallConfig()
-          ..beauty = ZegoBeautyPluginConfig(
-            license: () {
-              return $your_license;
-            },
-        );
-      },
-    );
-  ```
-</CodeGroup>
