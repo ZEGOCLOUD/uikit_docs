@@ -26,13 +26,13 @@ String userID =; // yourUserID, userID should only contain numbers, English char
 String userName =;   // yourUserName
 
 ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-ZegoUIKitPrebuiltCallInvitationService.init(application, appID, appSign, userID, userName,callInvitationConfig);
+ZegoUIKitPrebuiltCallService.init(application, appID, appSign, userID, userName,callInvitationConfig);
 ```
 <Warning title="Warning">
-You need to call the `unInit` method after logging out of the app.
+After logging out of the application, you need to call the `logoutUser` method.
 
 ```java
-ZegoUIKitPrebuiltCallInvitationService.unInit();
+ZegoUIKitPrebuiltCallService.logoutUser();
 ```
 </Warning>
 </Step>

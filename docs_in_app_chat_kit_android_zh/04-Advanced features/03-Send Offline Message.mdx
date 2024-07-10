@@ -1,8 +1,4 @@
-import TokensAuthenticationIntroEnZh from "/snippets/uikit/TokensAuthenticationIntroEnZh.mdx"
-
 # 向离线应用发送消息
-
-- - -
 
 ## 功能简介
 
@@ -14,18 +10,17 @@ IMKit 支持向离线应用（即在后台被冻结或遭系统或用户杀掉�
 
 ## 实现流程
 
-### 1 接入第三方厂商离线推送通道
-
-集成所需的第三方厂商离线推送 SDK，接入各厂商的离线推送通道，详情请参考：
-- [集成 Google FCM \|_blank](#20506)
-- [集成小米推送 \|_blank](#20607)
-- [集成华为推送 \|_blank](#20609)
-- [集成 OPPO 推送 \|_blank](#20611)
-- [集成 vivo 推送 \|_blank](#20611)
-
-### 2 初始化传入 resourceID
-使用离线推送，你需要使用 `ZIMKitConfig` 来进行初始化并且传入您在上一步中在ZEGO 控制台中配置的resourceID。
-```java
+<Steps>
+<Step title="接入第三方厂商离线推送">
+集成所需的第三方厂商离线推送 SDK，接入各厂商的离线推送，详情请参考：
+- [集成小米推送](https://doc-zh.zego.im/article/20607)
+- [集成华为推送](https://doc-zh.zego.im/article/20609)
+- [集成 OPPO 推送](https://doc-zh.zego.im/article/20611)
+- [集成 vivo 推送](https://doc-zh.zego.im/article/20613)
+</Step>
+<Step title="初始化传入 resourceID">
+使用离线推送，你需要使用 `ZIMKitConfig` 来进行初始化并且传入您在上一步中在 ZEGO 控制台中配置的 resourceID 。
+```java {6}
 long appID;
 String appSign;
 String resourceID;
@@ -34,12 +29,11 @@ ZIMKitConfig zimKitConfig = new ZIMKitConfig();
 zimKitConfig.resourceID = resourceID;
 ZIMKit.initWith(this, appID, appSign,zimKitConfig);
 ```
-
-### 3 配置第三方推送通道
-
+</Step>
+<Step title="配置第三方推送通道">
 在调用 ZIMKit.connectUser() 登录之前或者在登录的回调中调用 `enableHWPush`/`enableMiPush`/`enableVivoPush`/`enableOppoPush` 启用所需的第三方推送。
 
-```java
+```java {7,10,13,16}
 long appID = ; // 您的 ZEGO 项目 appID
 String appSign = ; // 您的 ZEGO 项目 appSign
 String userID = ; // 由您定义的用户 ID
@@ -58,3 +52,5 @@ ZIMKit.enableVivoPush({vivoAppID}, {vivoAppKey});
 ZIMKit.enableOppoPush({oppoAppID},{oppoAppKey},{oppoAppSecret}); 
 
 ```
+</Step>
+</Steps>

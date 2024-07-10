@@ -44,6 +44,11 @@
           "type": "doc",
           "label": "使用 Token 鉴权",
           "id": "advanced-features/use-tokens-for-authentication"
+        },
+        {
+          "type": "doc",
+          "label": "向离线应用发送消息",
+          "id": "advanced-features/send-offline-message"
         }
       ]
     }
