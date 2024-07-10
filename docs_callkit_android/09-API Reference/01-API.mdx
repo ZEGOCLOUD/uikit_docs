@@ -16,6 +16,7 @@
     - [isCameraOn](#iscameraon)
     - [setAudioOutputToSpeaker](#setaudiooutputtoSpeaker)
     - [getAudioRouteType](#getaudioroutetype)
+    - [resetAllBeautiesToDefault](#resetallbeautiestodefault)
 
 
 ## ZegoUIKitPrebuiltCallFragment
@@ -195,4 +196,14 @@ Get the current audio route. Audio route refers to the audio output device used 
 
 ```java  title="function prototype"
 public static ZegoAudioOutputDevice getAudioRouteType();
+```
+
+
+### resetAllBeautiesToDefault
+
+重置所有的美颜效果和选中状态,在下次进入通话页面生效。
+
+函数原型：
+```java
+public static void resetAllBeautiesToDefault() ;
 ```

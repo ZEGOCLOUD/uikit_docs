@@ -338,6 +338,17 @@ config.beautyConfig.uiConfig.backIcon = getDrawable(R.drawable.custom_back_icon)
 
 ```
 
+#### Save the last used beauty parameters.
+To save the last used beauty parameters, please set `ZegoUIKitPrebuiltCallConfig.beautyConfig.saveLastBeautyParam` to true.
+
+```java
+ZegoUIKitPrebuiltCallConfig config;
+// ...
+config.beautyConfig.saveLastBeautyParam = true;
+```
+
+If you need to reset the beauty effects, please use `ZegoUIKitPrebuiltCallService.resetAllBeautiesToDefault()`.
+
 
 ### Resource management
 
