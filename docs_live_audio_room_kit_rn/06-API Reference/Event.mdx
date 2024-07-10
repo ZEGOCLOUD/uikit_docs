@@ -14,6 +14,7 @@
 - [onTurnOnYourMicrophoneRequest](./Event.mdx#onTurnOnYourMicrophoneRequest)
 - [onSeatClicked](./Event.mdx#onSeatClicked)
 - [onUserCountOrPropertyChanged](./Event.mdx#onUserCountOrPropertyChanged)
+- [playAudioConfig](./Event.mdx#playAudioConfig)
 
 - - -
 
@@ -377,6 +378,35 @@
 >    config={{
 >        onUserCountOrPropertyChanged: (userList) => {
 >            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="playAudioConfig"></a>
+
+## playAudioConfig
+
+>
+> This callback will be triggered when play the audio.
+>- function prototype:
+>```js
+>playAudioConfig(localUserID, localRole, speaker)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        playAudioConfig: (localUserID, localRole, speaker) => {
+>            //...
+>            // Return true means play audio of speaker.
+>            // Return false means mute audio of speaker.
+>            return true;
 >        },
 >    }}
 >/>
