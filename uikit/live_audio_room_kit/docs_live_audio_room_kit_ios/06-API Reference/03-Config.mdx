@@ -1,0 +1,121 @@
+# Config
+
+## ZegoUIKitPrebuiltLiveAudioRoomConfig
+
+Initialization related configuration
+
+| Property                    | Description                                                                                                                                                                                                 | Type                                                            |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| role                        | Defines the role of the user in the live audio room. The default value is .audience.                                                                                                                        | [ZegoLiveAudioRoomRole](#zegoliveaudioroomrole)                 |
+| takeSeatIndexWhenJoining    | The seat position when joining, only valid when the user's role is host or speaker. The default value is -1, indicating no specified seat position.                                                         | Int                                                             |
+| hostSeatIndexes             | The seat positions that only the host can take. No default setting.                                                                                                                                         | [Int]                                                           |
+| turnOnMicrophoneWhenJoining | Whether to automatically turn on the microphone when joining the live audio room. The default value is false.                                                                                               | Bool                                                            |
+| useSpeakerWhenJoining       | Whether to use the speaker when joining the live audio room. The default value is true.                                                                                                                     | Bool                                                            |
+| userAvatarUrl               | The URL of the user's avatar. Only supports links with the http or https protocol.                                                                                                                          | String                                                          |
+| userInRoomAttributes        | The attributes of the user in the room, which can control the display of UI elements or logical judgments according to business needs.                                                                      | [String : String]                                               |
+| bottomMenuBarConfig         | Configuration of the bottom menu bar. Please refer to [Customize the bottom menu bar buttons](../03-Custom%20prebuilt%20features/09-Customize%20the%20bottom%20menu%20bar%20buttons.mdx).                   | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)             |
+| confirmDialogInfo           | The confirmation dialog information displayed when the exit button is clicked, providing default UI. If you need to customize it, you can set it through this parameter.                                    | [ZegoLeaveConfirmDialogInfo](#zegoleaveconfirmdialoginfo)       |
+| translationText             | Supports switching the language environment of UIKit and modifying specific text. Please refer to [Modify user interface text](../03-Custom%20prebuilt%20features/08-Modify%20user%20interface%20text.mdx). | [ZegoTranslationText](#zegotranslationtext)                     |
+| layoutConfig                | Layout configuration. Please refer to [Customize the seats](../03-Custom%20prebuilt%20features/03-Customize%20the%20seats.mdx).                                                                             | [ZegoLiveAudioRoomLayoutConfig](#zegoliveaudioroomlayoutconfig) |
+| seatConfig                  | Seat configuration, including background icons, etc.                                                                                                                                                        | [ZegoLiveAudioRoomSeatConfig](#zegoliveaudioroomseatconfig)     |
+
+## ZegoBottomMenuBarConfig
+
+Bottom menu bar configuration
+
+| Property                | Description                                                                               | Type                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| hostButtons             | List of menu bar buttons for the host.                                                    | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+| speakerButtons          | List of menu bar buttons for the speaker.                                                 | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+| audienceButtons         | List of menu bar buttons for the audience.                                                | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+| maxCount                | Maximum number of menu bar buttons. Default value is 5.                                   | Int                                               |
+| showInRoomMessageButton | Whether to show the in-room message button in the bottom menu bar. Default value is true. | Bool                                              |
+
+## ZegoLiveAudioRoomLayoutConfig
+
+Seat layout configuration
+
+| Property   | Description                                                                                                                                                                                                                                          | Type                                                                    |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| rowConfigs | A list of row configurations that specify how each row of seats is arranged and how elements are aligned. The default value is a list of two ZegoLiveAudioRoomLayoutRowConfig objects, each configured with 4 elements and aligned with .spaceAround | [[ZegoLiveAudioRoomLayoutRowConfig](#zegoliveaudioroomlayoutrowconfig)] |
+| rowSpecing | The spacing between each seat in a row. The default value is 0.                                                                                                                                                                                      | Int                                                                     |
+
+## ZegoLiveAudioRoomLayoutRowConfig
+
+Configuration for each row of seat layout.
+
+| Property    | Description                                 | Type                             |
+| ----------- | ------------------------------------------- | -------------------------------- |
+| seatSpacing | The spacing between seats.                  | Int                              |
+| alignment   | The alignment of seats. Default is .center. | ZegoLiveAudioRoomLayoutAlignment |
+
+## ZegoLiveAudioRoomSeatConfig
+
+Single seat configuration
+
+| Property                 | Description                                                               | Type    |
+| ------------------------ | ------------------------------------------------------------------------- | ------- |
+| showSoundWaveInAudioMode | Whether to display sound waves around the user's avatar. Default is true. | Bool    |
+| backgroudColor           | Seat background color.                                                    | UIColor |
+| backgroundImage          | Seat background image.                                                    | UIImage |
+
+
+## ZegoLeaveConfirmDialogInfo
+
+Information for the leave live audio room confirmation dialog
+
+| Property          | Description                                                                                                                                       | Type             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| title             | Title text.                                                                                                                                       | String           |
+| message           | Confirmation message text.                                                                                                                        | String           |
+| cancelButtonName  | Cancel button text.                                                                                                                               | String           |
+| confirmButtonName | Confirm button text.                                                                                                                              | String           |
+| dialogPresentVC   | The view controller where the leave live audio room confirmation dialog is displayed. By default, it is displayed in the current live audio room. | UIViewController |
+
+## ZegoLiveAudioRoomRole
+
+Role enumeration
+
+| Enumeration | Description |
+| ----------- | ----------- |
+| host        | Host.       |
+| speaker     | Speaker.    |
+| audience    | Audience.   |
+
+
+## ZegoMenuBarButtonName
+
+Menu bar button name enumeration
+
+| Enumeration            | Description                    |
+| ---------------------- | ------------------------------ |
+| leaveButton            | Leave live audio room button.  |
+| toggleMicrophoneButton | Toggle microphone button.      |
+| showMemberListButton   | Show member list button.       |
+| showSpeakerButton      | Show speaker button.           |
+| closeSeatButton        | Show lock/unlock seat button.  |
+| applyTakeSeatButton    | Show apply for co-host button. |
+
+
+## ZegoUIKitLanguage
+
+UI language enumeration
+
+| Enumeration | Description                |
+| ----------- | -------------------------- |
+| ENGLISH     | UIKit displays in English. |
+| CHS         | UIKit displays in Chinese. |
+
+
+## ZegoLiveAudioRoomLayoutAlignment
+
+Layout alignment enumeration
+
+| Enumeration  | Description                                                                  |
+| ------------ | ---------------------------------------------------------------------------- |
+| spaceAround  | Distribute items evenly with space around them, leaving space on both sides. |
+| spaceBetween | Distribute items evenly with space between them.                             |
+| spaceEvenly  | Distribute items evenly with equal space between them.                       |
+| start        | Align items to the start.                                                    |
+| end          | Align items to the end.                                                      |
+| center       | Align items to the center.                                                   |

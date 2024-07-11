@@ -1,0 +1,80 @@
+# Config
+
+## ZegoUIKitPrebuiltLiveAudioRoomConfig
+Initialization related configuration class.
+
+| Property                    | Description                                                                                                                                                                                                                                                                                                            | Type                                                            |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| role                        | Defines the role of the user in the live audio room. The default value is ZegoLiveAudioRoomRole.AUDIENCE.                                                                                                                                                                                                              | ZegoLiveAudioRoomRole                                           |
+| takeSeatIndexWhenJoining    | The seat position when joining the room, only valid when the user's role is host or speaker. The default value is -1, indicating no specified seat position.                                                                                                                                                           | int                                                             |
+| closeSeatsWhenJoin          | Whether to close all seats when joining the live audio room. Only effective when the role is host. The default value is true.                                                                                                                                                                                          | boolean                                                         |
+| hostSeatIndexes             | The positions where only the host can take a seat. There is no default setting.                                                                                                                                                                                                                                        | List\<Integer>                                                  |
+| turnOnMicrophoneWhenJoining | Whether to automatically turn on the microphone when joining the live audio room. The default value is false.                                                                                                                                                                                                          | boolean                                                         |
+| useSpeakerWhenJoining       | Whether to use the speaker when joining the live audio room. The default value is true.                                                                                                                                                                                                                                | boolean                                                         |
+| userAvatarUrl               | The URL of the user's avatar. Only supports links with the http or https protocol.                                                                                                                                                                                                                                     | String                                                          |
+| userInRoomAttributes        | User attributes in the room, which can control the display of UI elements or logical judgments according to business needs. Please refer to [Customize User attributes](../03-Custom%20prebuilt%20features/06-Customize%20user%20attributes.mdx)                                                                       | Map\<String, String>                                            |
+| bottomMenuBarConfig         | Configuration of the bottom menu bar. Please refer to [Customize the bottom menu bar buttons](../03-Custom%20prebuilt%20features/09-Customize%20the%20bottom%20menu%20bar%20buttons.mdx).                                                                                                                              | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)             |
+| confirmDialogInfo           | If `confirmDialogInfo` is not empty, a confirmation dialog will be displayed when the host stops the live audio room, clicks the exit button, or presses the back key. The properties in confirmDialogInfo have been deprecated. Please use ZegoTranslationText .leaveRoomConfirmDialogInfo to modify the dialog text. | ZegoDialogInfo                                                  |
+| translationText             | Please refer to [Modify user interface text](../03-Custom%20prebuilt%20features/08-Modify%20user%20interface%20text.mdx).                                                                                                                                                                                              | ZegoTranslationText                                             |
+| layoutConfig                | Configuration of the live audio room layout. Please refer to [Customize the seats](../03-Custom%20prebuilt%20features/03-Customize%20the%20seats.mdx).                                                                                                                                                                 | [ZegoLiveAudioRoomLayoutConfig](#zegoliveaudioroomlayoutconfig) |
+| seatConfig                  | Seat configuration, including background icons, etc.                                                                                                                                                                                                                                                                   | [ZegoLiveAudioRoomSeatConfig](#zegoliveaudioroomseatconfig)     |
+| inRoomMessageViewConfig     | Configuration of the in-room message view in the live audio room.                                                                                                                                                                                                                                                      | [ZegoInRoomMessageViewConfig](#zegoinroommessageviewconfig)     |
+| removedFromRoomListener     | Triggered when the user is removed from the room.                                                                                                                                                                                                                                                                      | ZegoMeRemovedFromRoomListener                                   |
+
+
+
+## ZegoBottomMenuBarConfig
+
+Bottom menu bar configuration class.
+
+| Property                | Description                                                                  | Type                         |
+| ----------------------- | ---------------------------------------------------------------------------- | ---------------------------- |
+| hostButtons             | List of menu bar buttons for the host.                                       | List\<ZegoMenuBarButtonName> |
+| speakerButtons          | List of menu bar buttons for the speaker.                                    | List\<ZegoMenuBarButtonName> |
+| audienceButtons         | List of menu bar buttons for the audience.                                   | List\<ZegoMenuBarButtonName> |
+| menuBarButtonsMaxCount  | Maximum number of menu bar buttons. Default is 5.                            | int                          |
+| showInRoomMessageButton | Whether to show the in-room message button in the menu bar. Default is true. | boolean                      |
+| memberListConfig        | Configuration for the member list.                                           | ZegoMemberListConfig         |
+
+## ZegoLiveAudioRoomLayoutConfig
+
+Seat layout configuration class.
+
+| Property   | Description                                                                                                                                                                                                                                                                             | Type                                    |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| rowConfigs | List of row configurations, specifying how each row of seats is arranged and how elements are aligned. The default value is a list of two [ZegoLiveAudioRoomLayoutRowConfig](#zegoliveaudioroomlayoutrowconfig) objects, each configured with 4 elements and aligned with SPACE_AROUND. | List\<ZegoLiveAudioRoomLayoutRowConfig> |
+| rowSpecing | The spacing between each seat in a row. The default value is 0.                                                                                                                                                                                                                         | int                                     |
+
+## ZegoLiveAudioRoomLayoutRowConfig
+
+Class for configuring seat layout in each row.
+
+| Property    | Description                   | Type                             |
+| ----------- | ----------------------------- | -------------------------------- |
+| seatSpacing | Spacing between seats         | int                              |
+| alignment   | Alignment of seats            | ZegoLiveAudioRoomLayoutAlignment |
+| count       | Number of columns in each row | int                              |
+
+
+## ZegoLiveAudioRoomSeatConfig
+
+Class for seat configuration
+
+| Property                 | Description                                                               | Type                                        |
+| ------------------------ | ------------------------------------------------------------------------- | ------------------------------------------- |
+| showSoundWaveInAudioMode | Whether to show sound wave.                                               | boolean                                     |
+| foregroundViewProvider   | Foreground view provider for customizing the foreground view of the seat. | ZegoLiveAudioRoomSeatForegroundViewProvider |
+| backgroundColor          | Background color of the seat.                                             | @ColorInt int                               |
+| backgroundImage          | Background image of the seat.                                             | Drawable                                    |
+| openIcon                 | Icon for unlocked seat.                                                   | Drawable                                    |
+| closeIcon                | Icon for locked seat.                                                     | Drawable                                    |
+| seatClickedListener      | Triggered when the seat is clicked.                                       | ZegoSeatClickedListener                     |
+
+## ZegoInRoomMessageViewConfig
+
+Class for message view configuration
+
+| Property                      | Description                                                           | Type                              |
+| ----------------------------- | --------------------------------------------------------------------- | --------------------------------- |
+| visible                       | Whether the message view is visible.                                  | boolean                           |
+| inRoomMessageItemViewProvider | Message item view provider for customizing the view of room messages. | ZegoInRoomMessageItemViewProvider |

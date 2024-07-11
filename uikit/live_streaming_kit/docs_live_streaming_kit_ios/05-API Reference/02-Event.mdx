@@ -1,60 +1,10 @@
 # Event
 
-- <a href="#ZegoUIKitPrebuiltLiveStreamingVCDelegate">ZegoUIKitPrebuiltLiveStreamingVCDelegate</a>
-    - <a href="#getForegroundView">getForegroundView</a>
-    - <a href="#onLeaveLiveStreaming">onLeaveLiveStreaming</a>
-    - <a href="#onLiveStreamingEnded">onLiveStreamingEnded</a>
-    - <a href="#onStartLiveButtonPressed">onStartLiveButtonPressed</a>
-    - <a href="#getPKBattleTopView">getPKBattleTopView</a>
-    - <a href="#getPKBattleForegroundView">getPKBattleForegroundView</a>
-    - <a href="#getPKBattleBottomView">getPKBattleBottomView</a>
-    - <a href="#onInRoomMessageClick">onInRoomMessageClick</a>
-- <a href="#ZegoLiveStreamingManagerDelegate">ZegoLiveStreamingManagerDelegate</a>
-    - <a href="#onIncomingCohostRequest">onIncomingCohostRequest</a>
-    - <a href="#onIncomingInviteToCohostRequest">onIncomingInviteToCohostRequest</a>
-    - <a href="#onIncomingRemoveCohostRequest">onIncomingRemoveCohostRequest</a>
-    - <a href="#onIncomingAcceptCohostRequest">onIncomingAcceptCohostRequest</a>
-    - <a href="#onIncomingCancelCohostRequest">onIncomingCancelCohostRequest</a>
-    - <a href="#onIncomingCancelCohostInvite">onIncomingCancelCohostInvite</a>
-    - <a href="#onIncomingRefuseCohostRequest">onIncomingRefuseCohostRequest</a>
-    - <a href="#onIncomingRefuseCohostInvite">onIncomingRefuseCohostInvite</a>
-    - <a href="#onIncomingCohostRequestTimeOut">onIncomingCohostRequestTimeOut</a>
-    - <a href="#onIncomingCohostInviteTimeOut">onIncomingCohostInviteTimeOut</a>
-    - <a href="#onIncomingCohostInviteResponseTimeOut">onIncomingCohostInviteResponseTimeOut</a>
-    - <a href="#onIncomingCohostRequestResponseTimeOut">onIncomingCohostRequestResponseTimeOut</a>
-    - <a href="#onIncomingPKRequestReceived">onIncomingPKRequestReceived</a>
-    - <a href="#onIncomingResumePKRequestReceived">onIncomingResumePKRequestReceived</a>
-    - <a href="#onIncomingPKRequestCancelled">onIncomingPKRequestCancelled</a>
-    - <a href="#onOutgoingPKRequestAccepted">onOutgoingPKRequestAccepted</a>
-    - <a href="#onOutgoingPKRequestRejected">onOutgoingPKRequestRejected</a>
-    - <a href="#onIncomingPKRequestTimeout">onIncomingPKRequestTimeout</a>
-    - <a href="#onOutgoingPKRequestTimeout">onOutgoingPKRequestTimeout</a>
-    - <a href="#onPKStarted">onPKStarted</a>
-    - <a href="#onPKEnded">onPKEnded</a>
-    - <a href="#onPKViewAvaliable">onPKViewAvaliable</a>
-    - <a href="#onLocalHostCameraStatus">onLocalHostCameraStatus</a>
-    - <a href="#onAnotherHostCameraStatus">onAnotherHostCameraStatus</a>
-    - <a href="#onAnotherHostIsReconnecting">onAnotherHostIsReconnecting</a>
-    - <a href="#onAnotherHostIsConnected">onAnotherHostIsConnected</a>
-    - <a href="#onHostIsReconnecting">onHostIsReconnecting</a>
-    - <a href="#onHostIsConnected">onHostIsConnected</a>
-    - <a href="#onMixerStreamTaskFail">onMixerStreamTaskFail</a>
-    - <a href="#onStartPlayMixerStream">onStartPlayMixerStream</a>
-    - <a href="#onStopPlayMixerStream">onStopPlayMixerStream</a>
-    - <a href="#onOtherHostMuted">onOtherHostMuted</a>
-
-
-- - -
+## ZegoUIKitPrebuiltLiveStreamingVCDelegate
 
 
 
-<a id="ZegoUIKitPrebuiltLiveStreamingVCDelegate"></a>
-
-### ZegoUIKitPrebuiltLiveStreamingVCDelegate
-
-<a id="getForegroundView"></a>
-
-#### getForegroundView
+### getForegroundView
 
 > - function prototype:
 >
@@ -76,9 +26,9 @@
 
 
 
-<a id="onLeaveLiveStreaming"></a>
 
-#### onLeaveLiveStreaming
+
+### onLeaveLiveStreaming
 
 > - function prototype:
 >
@@ -99,9 +49,9 @@
 
 
 
-<a id="onLiveStreamingEnded"></a>
 
-#### onLiveStreamingEnded
+
+### onLiveStreamingEnded
 
 > - function prototype:
 >
@@ -122,9 +72,9 @@
 
 
 
-<a id="onStartLiveButtonPressed"></a>
 
-#### onStartLiveButtonPressed
+
+### onStartLiveButtonPressed
 
 > - function prototype:
 >
@@ -145,9 +95,9 @@
 
 
 
-<a id="getPKBattleTopView"></a>
 
-#### getPKBattleTopView
+
+### getPKBattleTopView
 
 > - function prototype:
 >
@@ -169,7 +119,7 @@
 >
 > 
 
-####  getPKBattleForegroundView
+###  getPKBattleForegroundView
 
 > - function prototype:
 >
@@ -191,9 +141,9 @@
 > }
 > ```
 
-<a id="getPKBattleBottomView"></a>
 
-#### getPKBattleBottomView
+
+### getPKBattleBottomView
 
 > - function prototype:
 >
@@ -213,9 +163,9 @@
 > }
 > ```
 
-<a id="onInRoomMessageClick"></a>
 
-#### onInRoomMessageClick
+
+### onInRoomMessageClick
 
 > - function prototype:
 >
@@ -239,13 +189,35 @@
 > ```
 
 
-<a id="ZegoLiveStreamingManagerDelegate"></a>
+### onIMRecvBarrageMessage
 
-### ZegoLiveStreamingManagerDelegate
+- function prototype:
 
-<a id="onIncomingCohostRequest"></a>
+    ```swift
+    func onIMRecvBarrageMessage(_ roomID: String, messageList: [ZegoUIKitBarrageMessageInfo])
+    ```
 
-#### onIncomingCohostRequest
+- example:
+
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+        func func onIMRecvBarrageMessage(_ roomID: String, messageList: [ZegoUIKitBarrageMessageInfo]) {
+        // ...
+        // ZegoInRoomMessage has the following properties:
+        // public var message: String?
+        // public var messageID: String?
+        // public var sendTime: CUnsignedLongLong = 0
+        // public var user: ZegoUIKitUser?
+        }
+    }
+    ```
+
+
+## ZegoLiveStreamingManagerDelegate
+
+
+
+### onIncomingCohostRequest
 
 > - function prototype:
 >
@@ -265,9 +237,9 @@
 
 
 
-<a id="onIncomingInviteToCohostRequest"></a>
 
-#### onIncomingInviteToCohostRequest
+
+### onIncomingInviteToCohostRequest
 
 > - function prototype:
 >
@@ -287,9 +259,9 @@
 
 
 
-<a id="onIncomingRemoveCohostRequest"></a>
 
-#### onIncomingRemoveCohostRequest
+
+### onIncomingRemoveCohostRequest
 
 > - function prototype:
 >
@@ -309,9 +281,9 @@
 
 
 
-<a id="onIncomingAcceptCohostRequest"></a>
 
-#### onIncomingAcceptCohostRequest
+
+### onIncomingAcceptCohostRequest
 
 > - function prototype:
 >
@@ -331,9 +303,9 @@
 
 
 
-<a id="onIncomingCancelCohostRequest"></a>
 
-#### onIncomingCancelCohostRequest
+
+### onIncomingCancelCohostRequest
 
 > - function prototype:
 >
@@ -353,9 +325,9 @@
 
 
 
-<a id="onIncomingCancelCohostInvite"></a>
 
-#### onIncomingCancelCohostInvite
+
+### onIncomingCancelCohostInvite
 
 > - function prototype:
 >
@@ -375,9 +347,9 @@
 
 
 
-<a id="onIncomingRefuseCohostRequest"></a>
 
-#### onIncomingRefuseCohostRequest
+
+### onIncomingRefuseCohostRequest
 
 > - function prototype:
 >
@@ -397,9 +369,9 @@
 
 
 
-<a id="onIncomingRefuseCohostInvite"></a>
 
-#### onIncomingRefuseCohostInvite
+
+### onIncomingRefuseCohostInvite
 
 > - function prototype:
 >
@@ -419,9 +391,9 @@
 
 
 
-<a id="onIncomingCohostRequestTimeOut"></a>
 
-#### onIncomingCohostRequestTimeOut
+
+### onIncomingCohostRequestTimeOut
 
 > - function prototype:
 >
@@ -441,9 +413,9 @@
 
 
 
-<a id="onIncomingCohostInviteTimeOut"></a>
 
-#### onIncomingCohostInviteTimeOut
+
+### onIncomingCohostInviteTimeOut
 
 > - function prototype:
 >
@@ -463,31 +435,9 @@
 
 
 
-<a id="onIncomingCohostInviteResponseTimeOut"></a>
-
-#### onIncomingCohostInviteResponseTimeOut
-
-> - function prototype:
->
-> ```swift
-> func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?)
-> ```
->
-> - example:
->
-> ```swift
-> extension ViewController: ZegoLiveStreamingManagerDelegate {
->   func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?) {
->     //...
->   }
-> }
-> ```
 
 
-
-<a id="onIncomingCohostRequestResponseTimeOut"></a>
-
-#### onIncomingCohostRequestResponseTimeOut
+### onIncomingCohostInviteResponseTimeOut
 
 > - function prototype:
 >
@@ -507,9 +457,31 @@
 
 
 
-<a id="onIncomingPKRequestReceived"></a>
 
-#### onIncomingPKRequestReceived
+
+### onIncomingCohostRequestResponseTimeOut
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingPKRequestReceived
 
 > - function prototype:
 >
@@ -535,9 +507,9 @@
 
 
 
-<a id="onIncomingResumePKRequestReceived"></a>
 
-#### onIncomingResumePKRequestReceived
+
+### onIncomingResumePKRequestReceived
 
 > - function prototype:
 >
@@ -557,9 +529,9 @@
 
 
 
-<a id="onIncomingPKRequestCancelled"></a>
 
-#### onIncomingPKRequestCancelled
+
+### onIncomingPKRequestCancelled
 
 > - function prototype:
 >
@@ -583,9 +555,9 @@
 
 
 
-<a id="onOutgoingPKRequestAccepted"></a>
 
-#### onOutgoingPKRequestAccepted
+
+### onOutgoingPKRequestAccepted
 
 > - function prototype:
 >
@@ -609,9 +581,9 @@
 
 
 
-<a id="onOutgoingPKRequestRejected"></a>
 
-#### onOutgoingPKRequestRejected
+
+### onOutgoingPKRequestRejected
 
 > - function prototype:
 >
@@ -631,9 +603,9 @@
 
 
 
-<a id="onIncomingPKRequestTimeout"></a>
 
-#### onIncomingPKRequestTimeout
+
+### onIncomingPKRequestTimeout
 
 > - function prototype:
 >
@@ -653,9 +625,9 @@
 
 
 
-<a id="onOutgoingPKRequestTimeout"></a>
 
-#### onOutgoingPKRequestTimeout
+
+### onOutgoingPKRequestTimeout
 
 > - function prototype:
 >
@@ -675,9 +647,9 @@
 
 
 
-<a id="onPKStarted"></a>
 
-#### onPKStarted
+
+### onPKStarted
 
 > - function prototype:
 >
@@ -697,9 +669,9 @@
 
 
 
-<a id="onPKEnded"></a>
 
-#### onPKEnded
+
+### onPKEnded
 
 > - function prototype:
 >
@@ -719,9 +691,9 @@
 
 
 
-<a id="onPKViewAvaliable"></a>
 
-#### onPKViewAvaliable
+
+### onPKViewAvaliable
 
 > - function prototype:
 >
@@ -741,9 +713,9 @@
 
 
 
-<a id="onLocalHostCameraStatus"></a>
 
-#### onLocalHostCameraStatus
+
+### onLocalHostCameraStatus
 
 > - function prototype:
 >
@@ -763,9 +735,9 @@
 
 
 
-<a id="onAnotherHostCameraStatus"></a>
 
-#### onAnotherHostCameraStatus
+
+### onAnotherHostCameraStatus
 
 > - function prototype:
 >
@@ -785,9 +757,9 @@
 
 
 
-<a id="onAnotherHostIsReconnecting"></a>
 
-#### onAnotherHostIsReconnecting
+
+### onAnotherHostIsReconnecting
 
 > - function prototype:
 >
@@ -807,9 +779,9 @@
 
 
 
-<a id="onAnotherHostIsConnected"></a>
 
-#### onAnotherHostIsConnected
+
+### onAnotherHostIsConnected
 
 > - function prototype:
 >
@@ -829,9 +801,9 @@
 
 
 
-<a id="onHostIsReconnecting"></a>
 
-#### onHostIsReconnecting
+
+### onHostIsReconnecting
 
 > - function prototype:
 >
@@ -851,9 +823,9 @@
 
 
 
-<a id="onHostIsConnected"></a>
 
-#### onHostIsConnected
+
+### onHostIsConnected
 
 > - function prototype:
 >
@@ -873,9 +845,9 @@
 
 
 
-<a id="onMixerStreamTaskFail"></a>
 
-#### onMixerStreamTaskFail
+
+### onMixerStreamTaskFail
 
 > - function prototype:
 >
@@ -895,9 +867,9 @@
 
 
 
-<a id="onStartPlayMixerStream"></a>
 
-#### onStartPlayMixerStream
+
+### onStartPlayMixerStream
 
 > - function prototype:
 >
@@ -917,9 +889,9 @@
 
 
 
-<a id="onStopPlayMixerStream"></a>
 
-#### onStopPlayMixerStream
+
+### onStopPlayMixerStream
 
 > - function prototype:
 >
@@ -939,9 +911,9 @@
 
 
 
-<a id="onOtherHostMuted"></a>
 
-#### onOtherHostMuted
+
+### onOtherHostMuted
 
 > - function prototype:
 >

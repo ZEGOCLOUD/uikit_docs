@@ -39,6 +39,20 @@ class ViewController: UIViewController {
 
 Moreover, you can also use the `addButtonToBottomMenuBar` and `clearBottomMenuBarExtendButtons` methods to add or clear your customized buttons to the menu bar. 
 
+You can specify the position where the button is added by using the `position` parameter when adding a button. By default, the button is added on the left side.
+
+
+<CodeGroup>
+```js Prototype
+func addButtonToBottomMenuBar(_ button: UIButton, role: ZegoLiveStreamingRole, position:ZegoBottomMenuBarPosition = .left)
+```
+```swift Example
+liveVC.addButtonToBottomMenuBar(button, role: .host, position: .left)
+liveVC.addButtonToBottomMenuBar(button, role: .host, position: .right)
+```
+</CodeGroup>
+
+
 If the total number of built-in buttons and custom buttons does not exceed 5, all buttons will be displayed.
 Otherwise, other buttons that cannot be displayed will be hidden in the three dots (⋮) button. Clicking this button will pop up the bottom sheet to display the remaining buttons. The effect is as follows:
 
