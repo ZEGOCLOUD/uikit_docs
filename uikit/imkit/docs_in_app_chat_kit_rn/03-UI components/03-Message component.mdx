@@ -1,0 +1,86 @@
+# Message component
+
+import ZIM_ZIMKit_message_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_message_info-en.mdx";
+
+<ZIM_ZIMKit_message_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/message_demo.gif" />
+</Frame>
+
+##  Integrate the message component into your project
+
+###  Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+###  Add the MessageList component
+
+In the file that needs to use the `MessageList` component, import the `MessageList` component.
+(The `MessageListPage` component consists of the top bar, `MessageList` component, and the `MessageInput` component.)
+
+```javascript
+import { View } from 'react-native';
+import { MessageList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    const conversation = {
+        conversationID: '', // The ID of the conversation you want to send messages to.
+        type: 0 // 0: One-on-one chat. 2: Group chat.
+    }
+    return (
+        <View style={{flex: 1}}>
+             <MessageList
+                 conversationID={conversation.conversationID}
+                 conversationType={conversation.type}
+             ></MessageList>
+        </View>
+    );
+}
+```
+
+## Customize features/UI
+
+If the default message-relevant features, behaviors or UI don't fully meet your needs, we allow you to flexibly customize those through the parameters provided by the `MessageList` and `MessageInput` mentioned in this section.
+
+> `MessageListPage` has all the parameters of `MessageList` and `MessageInput`, so you can pass any parameters to `MessageList` and `MessageInput` through `MessageListPage`.
+
+The usage of commonly used parameters is as follows:
+
+<Accordion title="Custom message UI" defaultOpen="false">
+
+The UI of each message can be customized, to do so, you can use the `messageItemBuilder`:
+
+```javascript
+import { View } from 'react-native';
+import { MessageList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    const conversation = {
+        conversationID: '', // The ID of the conversation you want to send messages to.
+        type: 0 // 0: One-on-one chat. 2: Group chat.
+    };
+    const itemBuilder = ({item}) => {
+        return (
+            <View style={style.messageItem}>
+                <Text>{item.message}</Text>
+            </View>
+        );
+    };
+    return (
+        <View style={{flex: 1}}>
+             <MessageList
+                 conversationID={conversation.conversationID}
+                 conversationType={conversation.type}
+                 itemBuilder={itemBuilder}
+             ></MessageList>
+        </View>
+    );
+}
+```
+
+</Accordion>

@@ -1,0 +1,329 @@
+# Quick start
+
+This doc will guide you to integrate the In-app Chat Kit and start a chat quickly.
+
+## Prerequisites
+
+import ZIM_ZIMKIT_Prerequisites_Features from "/snippets/uikit/in_app_chat/ZIM_ZIMKIT_Prerequisites_Features-en.mdx"
+
+<ZIM_ZIMKIT_Prerequisites_Features />
+
+## Integrate the SDK
+
+### Add SDK dependencies (using yarn or npm)
+
+1. Add @zegocloud/zimkit-rn as dependencies.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zimkit-rn
+```
+```bash npm
+npm install @zegocloud/zimkit-rn
+```
+</CodeGroup>
+
+2. Add other dependencies.
+
+Run the following command to install other dependencies for making sure the `@zegocloud/zimkit-rn` can work properly:
+
+<CodeGroup>
+```bash yarn
+yarn add zego-zim-react-native@2.12.1 react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
+```
+```bash npm
+npm install zego-zim-react-native@2.12.1 react-delegate-component react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
+```
+</CodeGroup>
+
+### Integrate In-app Chat Kit into the project
+
+1. Create an instance and log in. 
+
+    a. Call the `init` method to initialize the In-app Chat Kit SDK.
+
+    b. Log in by calling the `connectUser` method with your user information. And the login only succeeded when the authentication passed. 
+
+import ZIM_ZIMKit_SDK_warning from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_SDK_warning-en.mdx"
+
+<ZIM_ZIMKit_SDK_warning />
+
+```javascript LoginPage.js {3,13-22}
+import { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { ZIMKit } from '@zegocloud/zimkit-rn';
+
+export default function LoginPage() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.  
+    const appConfig = {
+        appID: 0, // The AppID you get from ZEGOCLOUD Admin Console.
+        appSign: '', // The AppSign you get from ZEGOCLOUD Admin Console.
+    };
+
+    useEffect(() => {
+        ZIMKit.init(appConfig.appID, appConfig.appSign);
+        ZIMKit.connectUser({
+            userID: '', // Your ID as a user.  
+            userName: '' // Your name as a user.
+        }, '')
+        .then(() => {
+            // Implement your event handling logic after logging in successfully. 
+            // Navigate to the In-app Chat Kit page.
+            navigation.navigate('HomePage');
+        });
+    }, []);
+}
+```
+
+2. Use **React Navigation** to import and page routing the `MessageListPage` page.
+
+```javascript AppNavigation.js {2}
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { MessageListPage } from '@zegocloud/zimkit-rn';
+import LoginPage from './LoginPage.js'; // Import the login page you created.
+import HomePage from './HomePage.js'; // Import the In-app Chat home page you created.
+
+const Stack = createNativeStackNavigator();
+
+export default function AppNavigation() {
+  return (
+    <Stack.Navigator initialRouteName="LoginPage">
+        <Stack.Screen
+            name="LoginPage"  // Specify a page route for the login page.
+            component={LoginPage}  // Fill in the imported login page.
+        />
+        <Stack.Screen
+            name="HomePage"  // Specify a page route for the In-app Chat home page.
+            component={HomePage}  // Fill in the imported In-app Chat home page.
+        />
+        <Stack.Screen
+            name="MessageListPage"  // Specify a page route for the message list page.
+            component={MessageListPage}  // Fill in the imported message list component.
+        />
+        
+        {/* Other page info. */}
+
+    </Stack.Navigator>
+  );
+}
+```
+
+3. Display the In-app Chat Kit components.
+
+```javascript HomePage.js {4}
+import { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView, Button } from 'react-native';
+import { ConversationList } from '@zegocloud/zimkit-rn';
+
+export default function HomePage() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.
+    const goToMessageListPage = props => {
+        // Rount to the message list page via the React Navigation.  For more, refer to: https://reactnavigation.org/
+        navigation.navigate('MessageListPage', {
+            ...props,
+            // The callback method for the top button on the message list page.
+            appBarActions: [
+                {
+                    icon: 'goBack',
+                    onPressed: () => {
+                        navigation.goBack();
+                    },
+                },
+            ],
+        });
+    };
+    const onPressed = (props) => {
+        goToMessageListPage(props);
+    };
+    const createGroupChat = () => {
+        const groupName = 'test group'; // The name of the group you created.
+        const userIDs = []; // The ID list of the users that you want to invite to the group chat
+        const optional = { groupID: 'group1' };
+        ZIMKit.createGroup(groupName, userIDs, optional).then(data => {
+            if (!data.code) {
+                const {groupInfo, errorUserList} = data;
+                const {baseInfo} = groupInfo;
+                const props = {
+                    conversationID: baseInfo.groupID,
+                    conversationName: baseInfo.groupName,
+                    conversationType: 2,
+                };
+                goToMessageListPage(props);
+            } else {
+                // Implement your event handling logic when failing to create a group chat.
+            }
+        });
+    };
+    const joinGroupChat = () => {
+        const groupID = 'group1'; // You can get the groupID via the [createGroup] method (the method used to start a group chat).
+        ZIMKit.joinGroup(groupID).then(data => {
+            if (!data.code) {
+                const props = {
+                    conversationID: data.groupInfo.baseInfo.groupID,
+                    conversationName: data.groupInfo.baseInfo.groupName,
+                    conversationType: 2,
+                };
+                goToMessageListPage(props);
+            } else {
+                // Implement your event handling logic when failing to join a group chat.
+            }
+        });
+    };
+
+    return (
+        <SafeAreaView style={{flex: 1}}>
+            <ConversationList onPressed={onPressed}></ConversationList>
+            <Button title="create Group Chat" onPress={createGroupChat}></Button>
+            <Button title="join Group Chat" onPress={joinGroupChat}></Button>
+        </SafeAreaView>
+    );
+}
+```
+
+## Configure your project
+
+- Android: 
+
+Open the `my_project/android/app/src/main/AndroidManifest.xml` file and add the following:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+
+<Frame width="auto" height="auto" caption="">
+<img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/RN/Android_permission.jpeg" />
+</Frame>
+
+Ideally, by this point, your app will look like this:
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/imkit_effect.PNG" />
+</Frame>
+
+## Start a chat
+
+In-app Chat Kit supports the following and this section shows you how to implement those respectively:
+
+import InappChatUIkit_Startasession from "/snippets/uikit/in_app_chat/InappChatUIkit_Startasession-en.mdx"
+
+<Accordion title="1. Start a one-on-one chat" defaultOpen="false">
+
+<InappChatUIkit_Startasession />
+
+1. Get the `userID` that is generated using your own business logic. (the `userID` here refers to the peer user you want to chat with.)
+2. Fill in the `userID` parameter and run the following code:
+
+```javascript
+const createChat = () => {
+    const userID = ''; // The ID of the user you want to talk to.
+    navigation.navigate('MessageListPage', {
+        conversationID: userID,
+        conversationName: userID,
+        conversationType: 0,
+        appBarActions: [
+            {
+                icon: 'goBack',
+                onPressed: () => {
+                    navigation.goBack();
+                },
+            },
+        ],
+    });
+};
+```
+
+</Accordion>
+
+<Accordion title="2. Start a group chat" defaultOpen="false">
+
+1. Get the `userIDs` and `groupName` that is generated using your own business logic. (the `userIDs` here refers to the ID list of the users that you want to invite to the group chat.)
+2. Fill in the `userIDs` and `groupName` parameters and run the following code:
+
+```javascript
+const createGroupChat = () => {
+    const groupName = 'test group';  // The name of the group you created.
+    const userIDs = []; // The ID list of the users that you want to invite to the group chat.
+    const optional = { groupID: 'group1' }; // Optional, you can set it as needed. 
+    ZIMKit.createGroup(groupName, userIDs, optional)
+        .then(data => {
+            if (!data.code) {
+                const { groupInfo, errorUserList } = data;
+                const { baseInfo } = groupInfo;  // You can get the groupID from baseInfo.groupID, which can be used for other users to get into the group chat.
+                // Enter the chat page when the group chat is created successfully.
+                navigation.navigate('MessageListPage', {
+                    conversationID: baseInfo.groupID,
+                    conversationName: baseInfo.groupName,
+                    conversationType: 2,
+                    appBarActions: [
+                        {
+                            icon: 'goBack',
+                            onPressed: () => {
+                                navigation.goBack();
+                            },
+                        },
+                    ],
+                });
+                if (errorUserList.length) {
+                    // Implement the logic for the prompt window based on your business logic when there is a non-existing user ID in the group.
+                }  
+            } else {
+                // Implement your event handling logic when failing to create a group chat.
+            }
+        });
+};
+```
+
+</Accordion>
+
+<Accordion title="3. Join a group chat" defaultOpen="false">
+
+1. Get the `groupID` that is generated using your own business logic. (the `groupID` here refers to the group chat you want to join.)
+2. Fill in the `groupID` parameter and run the following code:
+
+```javascript
+const joinGroupChat = () => {
+    const groupID = 'group1'; // You can get the groupID via the [createGroup] method (the method used to start a group chat).
+    ZIMKit.joinGroup(groupID)
+        .then(data => {
+            if (!data.code) {
+                navigation.navigate('MessageListPage', {
+                    conversationID: data.groupInfo.baseInfo.groupID,
+                    conversationName: data.groupInfo.baseInfo.groupName,
+                    conversationType: 2,
+                    appBarActions: [
+                        {
+                            icon: 'goBack',
+                            onPressed: () => {
+                                navigation.goBack();
+                            },
+                        },
+                    ],
+                });
+            } else {
+                // Implement your event handling logic when failing to join a group chat.
+            }
+        });
+};
+```
+
+</Accordion>
+
+## More to explore
+
+<CardGroup cols={2}>
+    <Card title="Component overview" href="./03-UI components/01-Overview.mdx">
+        Click here to explore more UI components.
+    </Card>
+    <Card title="Run the sample code" href="https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_rn" target="_blank">
+        A quick guide to help you run the sample code.
+    </Card>
+</CardGroup>
+
+## Get support
+
+import ZIMKit_GetSupport from "/snippets/uikit/in_app_chat/ZIMKit_GetSupport-en.mdx"
+
+<ZIMKit_GetSupport />

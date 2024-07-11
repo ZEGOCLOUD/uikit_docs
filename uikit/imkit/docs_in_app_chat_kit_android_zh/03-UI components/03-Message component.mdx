@@ -1,0 +1,220 @@
+# 消息组件
+
+
+import ZIMKitMessageInfo from "/snippets/uikit/in_app_chat/ZIMKitMessageInfo.mdx";
+
+<ZIMKitMessageInfo />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_message_en_new.gif" />
+</Frame>
+
+## 将消息组件集成到您的项目中
+
+### 前提条件
+
+import ZIMKItComponentPrefixInfoNew from "/snippets/uikit/in_app_chat/ZIMKItComponentPrefixInfoNew.mdx";
+
+<ZIMKItComponentPrefixInfoNew/>
+
+### 显示消息组件
+
+IMKit 允许您将消息组件集成到您的 Activity 中，可以作为 Activity 或 Fragment。
+
+<Warning title="Warning">
+- 对于 Activity 模式，标题栏和右上角的重定向到群组管理页面的按钮是根据类型包含的。对于 Fragment 模式，只包含与消息相关的内容。
+- 要重定向到群组管理页面，需要引入ZIMKitGroup模块。否则，会报错因为找不到相应的 Activity 。如果群组功能可用，但不需要重定向到群组管理页面，则需要修改源代码以隐藏右上角的按钮。
+</Warning>
+
+#### 直接重定向到 Activity
+
+```java MyZIMKitActivity.java
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import im.zego.zimkitcommon.enums.ZIMKitConversationType;
+import im.zego.zimkitcommon.ZIMKitRouter;
+
+public class MyZIMKitActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    public void buttonClick() {
+        String id = ; // 用户ID或群组ID或会话ID。
+        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup 或 ZIMKitConversationType.ZIMKitConversationTypePeer
+        toMessageActivity(id,type);
+    }
+    
+    private void toMessageActivity(String id,ZIMKitConversationType type){
+        // 您可以通过 Kit 层的路由器将页面重定向到相应的页面。
+        ZIMKitRouter.toMessageActivity(this, id, type);
+    }
+}
+```
+
+#### 将消息页面集成到您的 Activity 中作为一个 Fragment
+
+您可以通过两种方式将消息组件添加到 activity 的视图层次结构中：一种是在 activity 的布局文件中定义 fragment，另一种是在 activity 的布局文件中定义一个 fragment 容器，然后在 activity 中以编程方式添加 fragment。 
+
+
+<Tabs>
+<Tab title="以编程方式添加 Fragment">
+
+`MyZIMKitMessageActivity`的布局在`activity_message.xml`中指定：
+
+<CodeGroup>
+
+```java MyZIMKitMessageActivity.java {16-18,30-33}
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+import im.zego.zimkitcommon.enums.ZIMKitConversationType;
+import im.zego.zimkitcommon.ZIMKitConstant;
+import im.zego.zimkitmessages.fragment.ZIMKitMessageFragment;
+
+public class MyZIMKitMessageActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String id = ; // 用户ID或群组ID或会话ID。
+        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup or ZIMKitConversationType.ZIMKitConversationTypePeer
+        showMessageFragment(id, type);
+    }
+
+    private void showMessageFragment(String id,ZIMKitConversationType type) {
+        Bundle data = new Bundle();
+        if (type == ZIMKitConversationType.ZIMKitConversationTypeGroup) { // 对于一个群聊，请输入 TYPE_GROUP_MESSAGE 类型。
+            data.putString(ZIMKitConstant.MessagePageConstant.KEY_TYPE, ZIMKitConstant.MessagePageConstant.TYPE_GROUP_MESSAGE);
+        } else if (type == ZIMKitConversationType.ZIMKitConversationTypePeer) { // 对于一对一的聊天，请输入 TYPE_SINGLE_MESSAGE 类型。
+            data.putString(ZIMKitConstant.MessagePageConstant.KEY_TYPE, ZIMKitConstant.MessagePageConstant.TYPE_SINGLE_MESSAGE);
+        }
+        // 对于群聊，ID 是群组的 ID。对于一对一聊天，ID 是用户的 ID。
+        data.putString(ZIMKitConstant.MessagePageConstant.KEY_ID, id);
+        ZIMKitMessageFragment fragment = new ZIMKitMessageFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        fragment.setArguments(data); //  该捆绑包必须包含类型和ID参数。
+        transaction.replace(R.id.fra_message, fragment); // R.id.fra_message 是在 XML 文件中定义的 FrameLayout 的 ID。
+        transaction.commit();
+    }
+}
+```
+
+```xml activity_message.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/fra_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</CodeGroup>
+</Tab>
+<Tab title="通过 XML 添加 Fragment">
+
+```xml {7}
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/frag_conversation_list"
+        android:name="im.zego.zimkitconversation.ui.ZIMKitMessageFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</Tab>
+</Tabs>
+
+
+## 定制功能
+
+如果默认的与消息相关的特性和行为不能完全满足您的需求，您可以通过我们在本节中提到的配置进行灵活的定制。
+
+<Accordion title="自定义标题栏" defaultOpen="false">
+
+要在标题栏上自定义按钮，您可以实现`registerMessageListListener`。
+
+例如，当您想在消息列表的右上方添加一个“开始通话”按钮时。要了解更多详细信息，请参阅<a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">与 Call Kit 一起使用</a>。
+
+```java MyZIMKitMessageActivity.java {1,3,11-20}
+ZIMKit.registerMessageListListener(new ZIMKitMessagesListListener() {
+    @Override
+    public ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment) {
+        // 通过 fragment.getConversationID() 获取对话 ID
+        // 通过 fragment.getConversationName() 获取对话名称
+        // 通过 fragment.getConversationType() 获取对话类型。ZIMConversationType.PEER：一对一聊天，ZIMConversationType.GROUP：群聊
+        if (fragment != null) {
+            // 为一对一聊天添加自定义标题栏。
+            if (fragment.getConversationType() == ZIMConversationType.PEER) {
+               // 自定义标题栏的左侧视图。如果未添加，则显示默认视图。
+                CustomLeftView customLeftView = new CustomLeftView();
+               // 自定义标题栏的中心视图。如果未添加，则显示默认视图。
+                CustomTitleView customTitleView = new CustomTitleView();
+               // 正确的自定义标题栏视图。如果未添加，则显示默认视图。
+                CustomRighteView customRighteView = new CustomRighteView();
+                ZIMKitHeaderBar headerBar = new ZIMKitHeaderBar();
+                headerBar.setLeftView(customLeftView);
+                headerBar.setTitleView(customTitleView);
+                headerBar.setRightView(customRighteView);
+                return headerBar;
+            }
+        }
+        return null;
+    }
+});
+```
+
+</Accordion>
+
+<Accordion title="自定义输入栏" defaultOpen="false">
+
+要自定义输入栏上的按钮，您可以使用`InputConfig`进行配置：
+
+- `showVoiceButton`: 是否显示语音按钮。
+- `showEmojiButton`: 是否显示表情按钮。
+- `showAddButton`: 是否显示添加按钮。
+
+以下是参考代码：
+
+```java
+InputConfig inputConfig = new InputConfig();
+inputConfig.showVoiceButton = true;
+inputConfig.showEmojiButton = true;
+inputConfig.showAddButton = false;
+ZIMKit.setInputConfig(inputConfig);
+```
+
+</Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitMessagesListListener" defaultOpen="false">
+```java 定义
+public interface ZIMKitMessagesListListener {
+    ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment);
+}
+```
+</Accordion>

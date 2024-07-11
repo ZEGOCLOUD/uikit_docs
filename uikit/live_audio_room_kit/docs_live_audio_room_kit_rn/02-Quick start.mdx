@@ -1,0 +1,175 @@
+import LiveAudioRoomKit_QuickStart_Prerequisites_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_QuickStart_Prerequisites-en.mdx";
+
+# Quick start
+
+## Prerequisites
+
+<LiveAudioRoomKit_QuickStart_Prerequisites_En />
+
+## Integrate the SDK
+
+### Import the SDK
+
+1. Add @zegocloud/zego-uikit-prebuilt-live-audio-room-rn as dependencies.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-prebuilt-live-audio-room-rn
+```
+```bash npm
+npm install @zegocloud/zego-uikit-prebuilt-live-audio-room-rn 
+```
+</CodeGroup>
+
+2. Add other dependencies.
+
+Run the following command to install other dependencies for making sure the `@zegocloud/zego-uikit-prebuilt-live-audio-room-rn` can work properly:
+
+<CodeGroup>
+```bash yarn
+yarn add react-delegate-component zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 @zegocloud/zego-uikit-rn
+```
+
+```bash npm
+npm install react-delegate-component zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 @zegocloud/zego-uikit-rn
+```
+</CodeGroup>
+
+## Using the Live Audio Room Kit
+
+import LiveAudioRoomKit_QuickStart_Using_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_QuickStart_Using-en.mdx";
+
+<LiveAudioRoomKit_QuickStart_Using_En />
+
+```javascript App.js {3,8-18}
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveAudioRoom, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn'
+
+export default function LiveAudioRoomPage(props) {
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID} // userID can be something like a phone number or the user id on your own user system. 
+                userName={userName}
+                roomID={roomID} // roomID can be any unique string. 
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onLeave: () => { props.navigation.navigate('HomePage') },
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 0,
+  },
+});
+
+```
+
+## Configure your project
+
+- Android: 
+
+1. Open the `my_project/android/app/src/main/AndroidManifest.xml` file and add the following:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+```
+
+2. Open the `my_project/android/app/proguard-rules.pro` file and add the following:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/proguard_rules_config.jpg" />
+</Frame>
+
+```xml
+-keep class **.zego.**  { *; }
+```
+
+- iOS:
+
+1. Open the `my_project/ios/my_project/Info.plist` file and add the following:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/ios_config2.gif" />
+</Frame>
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>We need to use the camera</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need to use the microphone</string>
+```
+
+2. Disable the Bitcode.
+
+a. Open the `your_project > ios > [your_project_name].xcworkspace` file.
+
+b. Select your target project, and follow the notes on the following two images to disable the Bitcode respectively.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/liveAudioRoomBitcode_1.png" />
+</Frame>
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/liveAudioRoomBitcode_2.png" />
+</Frame>
+
+## Run & Test
+
+<Note title="Note">
+If your device is not performing well or you found a UI stuttering, run in **Release mode** for a smoother experience.
+</Note>
+
+- Run on an iOS device:
+
+<CodeGroup>
+```bash yarn
+yarn ios
+```
+```bash npm
+npm run ios
+```
+</CodeGroup>
+
+- Run on an Android device:
+
+<CodeGroup>
+```bash yarn
+yarn android
+```
+```bash npm
+npm run android
+```
+</CodeGroup>
+
+## Related guide
+
+[Custom prebuilt UI](./03-Custom%20prebuilt%20features/01-Overview.mdx)
+
+## Resources
+
+<CardGroup cols={1}>
+  <Card title="Sample code" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_example_rn" target="_blank">
+    Click here to get the complete sample code.
+  </Card>
+</CardGroup>

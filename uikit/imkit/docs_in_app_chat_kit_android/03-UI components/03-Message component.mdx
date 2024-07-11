@@ -1,0 +1,220 @@
+# Message component
+
+import ZIM_ZIMKit_message_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_message_info-en.mdx";
+
+<ZIM_ZIMKit_message_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_message_en_new.gif" />
+</Frame>
+
+## Integrate the message component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+###  Show the message component
+
+In-app Chat Kit allows you to integrate the message component into your Activity as an Activity or a Fragment.
+
+<Warning title="Warning">
+- For the Activity mode, the title bar and the button for redirecting to the group management page in the upper right corner based on the type are included. For the Fragment mode, only message-related content is included.
+- To redirect to the group management page, introduce the ZIMKitGroup module. Otherwise, an error is reported because the corresponding Activity cannot be found. If the group feature is available while you do not need to redirect to the group management page, modify the source code to hide the button in the upper right corner.
+</Warning>
+
+#### Directly redirect to Activity
+
+```java MyZIMKitActivity.java
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import im.zego.zimkitcommon.enums.ZIMKitConversationType;
+import im.zego.zimkitcommon.ZIMKitRouter;
+
+public class MyZIMKitActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    public void buttonClick() {
+        String id = ; // userId or groupId or conversationId.
+        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup or ZIMKitConversationType.ZIMKitConversationTypePeer
+        toMessageActivity(id,type);
+    }
+    
+    private void toMessageActivity(String id,ZIMKitConversationType type){
+        // You can redirect to the corresponding page through the Router at the kit layer.
+        ZIMKitRouter.toMessageActivity(this, id, type);
+    }
+}
+```
+
+#### Integrate the message page into your Activity as a Fragment
+
+You can add the message component to the activity's view hierarchy either by defining the fragment in your activity's layout file or by defining a fragment container in your activity's layout file and then programmatically adding the fragment from within your activity. 
+
+
+<Tabs>
+<Tab title="Add the fragment programmatically">
+
+The layout of the `MyZIMKitMessageActivity` is specified in  `activity_message.xml`:
+
+<CodeGroup>
+
+```java MyZIMKitMessageActivity.java {16-18,30-33}
+
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+import im.zego.zimkitcommon.enums.ZIMKitConversationType;
+import im.zego.zimkitcommon.ZIMKitConstant;
+import im.zego.zimkitmessages.fragment.ZIMKitMessageFragment;
+
+public class MyZIMKitMessageActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String id = ; // userId or groupId or conversationId.
+        ZIMKitConversationType type = ; // ZIMKitConversationType.ZIMKitConversationTypeGroup or ZIMKitConversationType.ZIMKitConversationTypePeer
+        showMessageFragment(id, type);
+    }
+
+    private void showMessageFragment(String id,ZIMKitConversationType type) {
+        Bundle data = new Bundle();
+        if (type == ZIMKitConversationType.ZIMKitConversationTypeGroup) { // For a group chat, enter the GROUP type. 
+            data.putString(ZIMKitConstant.MessagePageConstant.KEY_TYPE, ZIMKitConstant.MessagePageConstant.TYPE_GROUP_MESSAGE);
+        } else if (type == ZIMKitConversationType.ZIMKitConversationTypePeer) { // For a one-to-one chat, enter the PEER type.
+            data.putString(ZIMKitConstant.MessagePageConstant.KEY_TYPE, ZIMKitConstant.MessagePageConstant.TYPE_SINGLE_MESSAGE);
+        }
+        // For a group chat, the ID is the group ID. For a one-on-one chat, the ID is the user ID.
+        data.putString(ZIMKitConstant.MessagePageConstant.KEY_ID, id);
+        ZIMKitMessageFragment fragment = new ZIMKitMessageFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        fragment.setArguments(data); //  The bundle must contain the Type and id parameters.
+        transaction.replace(R.id.fra_message, fragment); // R.id.fra_message is the ID of FrameLayout defined in the XML file.
+        transaction.commit();
+    }
+}
+```
+
+```xml activity_message.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/fra_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</CodeGroup>
+</Tab>
+<Tab title="Add the fragment via XML">
+
+```xml {7}
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/frag_conversation_list"
+        android:name="im.zego.zimkitconversation.ui.ZIMKitMessageFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</Tab>
+</Tabs>
+
+
+## Customize features
+
+If the default message-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
+
+<Accordion title="Customizing title bar" defaultOpen="false">
+
+To customize buttons on the `TitleBar`, you can implement the `registerMessageListListener`.
+
+For example, when you want to add a "Start a call" button on the upper right of the message list. To learn more details, see <a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">Use with the Call Kit</a>.
+
+```java MyZIMKitMessageActivity.java {1,3,11-20}
+ZIMKit.registerMessageListListener(new ZIMKitMessagesListListener() {
+    @Override
+    public ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment) {
+        // Get the conversation ID via the fragment.getConversationID() 
+        // Get the conversation name via the fragment.getConversationName() 
+        // Get the conversation type via the fragment.getConversationType(). ZIMConversationType.PEER: one-on-one chat, ZIMConversationType.GROUP: group chat
+        if (fragment != null) {
+         // Add a custom title bar for a one-on-one chat.
+            if (fragment.getConversationType() == ZIMConversationType.PEER) {
+               // The left view of the custom title bar. If not added, the default view is displayed.
+                CustomLeftView customLeftView = new CustomLeftView();
+               // The center view of the custom title bar. If not added, the default view is displayed.
+                CustomTitleView customTitleView = new CustomTitleView();
+               // The right view of the custom title bar. If not added, the default view is displayed.
+                CustomRighteView customRighteView = new CustomRighteView();
+                ZIMKitHeaderBar headerBar = new ZIMKitHeaderBar();
+                headerBar.setLeftView(customLeftView);
+                headerBar.setTitleView(customTitleView);
+                headerBar.setRightView(customRighteView);
+                return headerBar;
+            }
+        }
+        return null;
+    }
+});
+```
+
+</Accordion>
+
+<Accordion title="Customizing input bar" defaultOpen="false">
+
+To customize the buttons on the input bar, you can configure them using `InputConfig`:
+
+- `showVoiceButton`: Whether to display the voice button.
+- `showEmojiButton`: Whether to display the Emoji button.
+- `showAddButton`: Whether to display the Add button.
+
+
+Here's the reference code:
+
+```java
+InputConfig inputConfig = new InputConfig();
+inputConfig.showVoiceButton = true;
+inputConfig.showEmojiButton = true;
+inputConfig.showAddButton = false;
+ZIMKit.setInputConfig(inputConfig);
+```
+
+</Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitMessagesListListener" defaultOpen="false">
+```java Definition
+public interface ZIMKitMessagesListListener {
+    ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment);
+}
+```
+</Accordion>
