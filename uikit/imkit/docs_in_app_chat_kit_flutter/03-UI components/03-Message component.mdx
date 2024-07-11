@@ -407,11 +407,59 @@ ZIMKitMessageListPage(
 
 </Accordion>
 
-<Accordion title="Click to view the full interface list" defaultOpen="false">
 
-1. `messageListErrorBuilder`: this can be used to customize the UI when error loading the message list.
-2. `messageListLoadingBuilder`: this can be used to customize the UI when loading the message list.
-3. `preMessageSending`: callback for the message not sent yet.
+<Accordion title="9. Custom message-list load error" defaultOpen="false">
+
+You can customize the message-list load error using `YourCustomErrorWidget`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageListErrorBuilder: (context, defaultWidget) {
+    return YourCustomErrorWidget();
+  },
+);
+```
+
+</Accordion>
+
+
+<Accordion title="10. Custom message-list loading effect" defaultOpen="false">
+
+You can customize the message loading using `YourCustomLoadingWidget`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageListLoadingBuilder: (context, defaultWidget) {
+    return YourCustomLoadingWidget();
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="11. Custom message before sent" defaultOpen="false">
+
+You can customize the message before sent using `preMessageSending`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  preMessageSending: (ZIMKitMessage message) {
+    return message;
+  },
+);
+```
 
 </Accordion>
 
