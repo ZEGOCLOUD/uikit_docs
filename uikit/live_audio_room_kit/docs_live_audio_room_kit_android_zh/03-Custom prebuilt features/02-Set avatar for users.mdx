@@ -1,0 +1,34 @@
+import SetAvatarForUser_Basic1_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_CustomPrebuiltFeatures/SetAvatarForUser_Basic1-en.mdx";
+
+# Set avatar for users
+
+<SetAvatarForUser_Basic1_En />
+
+Here is the reference code:
+
+<CodeGroup>
+```java Java
+ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+if (isHost) {
+   config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+} else {
+   config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+}
+config.userAvatarUrl = YOUR IMAGE URL;
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,appSign, userID, userName, roomID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+```
+```kotlin Kotlin
+val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+} else {
+     ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+}
+config.userAvatarUrl = YOUR IMAGE URL
+
+val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+```
+</CodeGroup>

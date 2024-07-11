@@ -1,0 +1,73 @@
+import SetAvatarForUser_Basic2_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_CustomPrebuiltFeatures/SetAvatarForUser_Basic2-en.mdx";
+
+# Set avatar for users
+
+<SetAvatarForUser_Basic2_En avatarKey="userAvatarUrl" />
+
+Here is the reference code:
+
+<CodeGroup>
+```dart userAvatarUrl
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        roomID: roomID,
+
+        // Modify your custom configurations here.
+        config: isHost
+            ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+            : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+          ///  The userAvatarUrl must be within 64 bytes. If exceeds, the default background is displayed.
+          ..userAvatarUrl = 'your_avatar_url'
+      ),
+    );
+  }
+}
+```
+
+```dart avatarBuilder
+class LivePage extends StatelessWidget {
+  const LivePage({Key? key, required this.roomID, this.isHost = false})
+      : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+        appID: YourSecret.appID,
+        appSign: YourSecret.appSign,
+        userID: localUserID,
+        userName: 'user_$localUserID',
+        roomID: roomID,
+
+        // Modify your custom configurations here.
+        config: isHost
+          ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+          : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+          ..seat.avatarBuilder = avatarBuilder(BuildContext context, Size size, ZegoUIKitUser? user, Map extraInfo) {
+            return CircleAvatar(
+              maxRadius: size.width,
+              backgroundImage: YourAvatarImage(),
+            );
+          },
+      ),
+    );
+  }
+}
+```
+</CodeGroup>

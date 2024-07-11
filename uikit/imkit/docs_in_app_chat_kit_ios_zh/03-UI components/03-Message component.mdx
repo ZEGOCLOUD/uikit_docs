@@ -1,0 +1,146 @@
+# 消息组件
+
+
+import ZIMKitMessageInfo from "/snippets/uikit/in_app_chat/ZIMKitMessageInfo.mdx";
+
+<ZIMKitMessageInfo />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/message_demo.gif" />
+</Frame>
+
+## 将消息组件集成到您的项目中
+
+### 前提条件
+
+import ZIMKItComponentPrefixInfoNew from "/snippets/uikit/in_app_chat/ZIMKItComponentPrefixInfoNew.mdx";
+
+<ZIMKItComponentPrefixInfoNew/>
+
+### 显示消息组件
+
+```swift ViewController.swift {1,2,12-17}
+import UIKit
+import ZIMKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    /// 在登录成功后调用以下方法来显示消息组件。
+    func showMessageListVC() {
+        let conversationID = "xxx"  // 会话ID。对于一对一聊天，它指的是对方的用户ID。对于群聊，它指的是群组ID。
+        let type: ConversationType = .peer // 会话类型（一对一聊天或群聊）。
+        let messageVC = ZIMKitMessagesListVC(conversationID: conversationID, type: type)
+        navigationController?.pushViewController(messageVC, animated: true)
+    }
+}
+```
+
+
+## 定制功能
+
+如果默认的与消息相关的特性和行为不能完全满足您的需求，您可以通过我们在本节中提到的配置进行灵活的定制。
+
+<Accordion title="自定义标题栏" defaultOpen="false">
+
+要自定义`NavigationBar`上的按钮，您可以实现`ZIMKitMessagesListVCDelegate`代理。
+
+例如，当您想在消息列表的右上方添加一个“开始通话”按钮时。要了解更多详细信息，请参阅<a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">与 音视频通话 UIKit 一起使用</a>。
+
+```swift ViewController.swift {48,49}
+import UIKit
+import ZIMKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // 在加载视图后进行其他额外的设置。
+
+        let messageVC = ZIMKitMessagesListVC(conversationID: "conversationID", type: .peer)
+        messageVC.delegate = self
+        
+        // 如果您集成了ZIMKitConversationListVC，可以设置并监听messageDelegate以接收与消息相关的通知。
+        let conversationVC = ZIMKitConversationListVC()
+        conversationVC.messageDelegate = self
+    }
+}
+
+extension ViewController: ZIMKitMessagesListVCDelegate {
+    
+    /// 获取 HeaderBar 的回调函数
+    /// - Parameter messageListVC: ZIMKitMessagesListVC
+    /// - Returns: ZIMKitHeaderBar：包括左侧项、右侧项和标题视图
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+
+        // 通过messageListVC.conversationID获取对话ID
+        // 通过messageListVC.conversationName获取对话名称
+        // 通过messageListVC.conversationType获取对话类型（一对一或群聊）
+
+        if messageListVC.conversationType != .peer { return nil }
+        
+        let conversationID = messageListVC.conversationID
+        let conversationName = messageListVC.conversationName
+        
+        // 创建语音通话按钮，并将被呼叫的用户设置为ZegoUIKitUser。
+        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // 创建视频通话按钮，并将要呼叫的用户设置为 ZegoUIKitUser。
+        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // 使用上述按钮创建UIBarButtonItem
+        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
+        let videoItem = UIBarButtonItem(customView: videoCallButton)
+        
+        // 创建HeaderBar并将语音和视频设置到`rightItems`
+        let header = ZIMKitHeaderBar()
+        header.rightItems = [videoItem, voiceItem]
+
+        
+        return headerBar
+    }
+}
+```
+
+</Accordion>
+
+<Accordion title="自定义输入栏" defaultOpen="false">
+
+要自定义输入栏上的按钮，您可以使用`InputConfig`进行配置：
+
+- `showVoiceButton`: 是否显示语音按钮。
+- `showEmojiButton`: 是否显示表情按钮。
+- `showAddButton`: 是否显示添加按钮。
+
+以下是参考代码：
+
+```swift
+let inputConfig = InputConfig(showVoiceButton: true,
+                              showEmojiButton: true,
+                              showAddButton: false)
+
+let messageListVC = ZIMKitMessagesListVC(conversationID: conversation.id,
+                                         type: conversation.type,
+                                         conversationName: conversation.name,
+                                         inputConfig: inputConfig)
+```
+
+</Accordion>
+
+## API
+
+<Accordion title="ZIMKitMessagesListVCDelegate" defaultOpen="false">
+```swift 定义
+@objc public protocol ZIMKitMessagesListVCDelegate: AnyObject {
+    @objc optional
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar?
+}
+```
+</Accordion>
+

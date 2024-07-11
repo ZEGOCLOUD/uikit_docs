@@ -1,0 +1,257 @@
+# Conversation component
+
+import ZIM_ZIMKit_chat_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_chat_info-en.mdx";
+
+<ZIM_ZIMKit_chat_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/conversation_demo.gif" />
+</Frame>
+
+## Integrate the conversation component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+### Add the conversation component
+
+In the file that needs to use the conversation component, import the `ConversationList` component.
+
+```javascript
+import { View } from 'react-native';
+import { ConversationList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    return (
+        <View style={{flex: 1}}>
+            <ConversationList></ConversationList>
+        </View>
+    );
+}
+```
+
+## Customize features/UI
+
+If the default conversation-relevant features, behaviors or UI don't fully meet your needs, we allow you to flexibly customize those through the parameters provided by the `ConversationList` mentioned in this section. 
+
+The usage of commonly used parameters is as follows:
+
+<Accordion title="1. Custom press and long press events" defaultOpen="false">
+
+To customize the press and long press events for a conversation, use the `onPressed` and `onLongPress`.
+
+- `onPressed`: usually, this callback is used to jump to the `MessageListPage`, and you can also customize other business logic for this press event.
+
+```javascript
+import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { ConversationList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.
+    const goToMessageListPage = props => {
+        // Rount to the message list page via the React Navigation.  For more, refer to: https://reactnavigation.org/
+        navigation.navigate('MessageListPage', {
+            ...props,
+            // The callback method for the top button on the message list page.
+            appBarActions: [
+                {
+                    icon: 'goBack',
+                    onPressed: () => {
+                        navigation.goBack();
+                    },
+                },
+            ],
+        });
+    };
+    const onPressed = (props) => {
+        goToMessageListPage(props);
+    };
+    return (
+        <View style={{flex: 1}}>
+            <ConversationList onPressed={onPressed}></ConversationList>
+        </View>
+    );
+}
+```
+
+- `onLongPress`: use this to set the long press event for a conversation.
+
+When this callback is not set, the default behavior is to pop up a menu. You can choose to delete the conversation or exit the group (if the long-pressed conversation is a group chat). 
+
+You can refer to the following to implement a custom long-press menu:
+
+```javascript
+import { useState } from 'react';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, Modal, TouchableOpacity, Alert } from 'react-native';
+import { ZIMKit, ConversationList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [conversationID, setConversationID] = useState(null);
+    const [conversationType, setConversationType] = useState(null);
+
+    const onLongPress = (props) => {
+        const { conversationID, conversationType } = props;
+        setMenuVisible(true);
+        setConversationID(conversationID);
+        setConversationType(conversationType);
+    };
+
+    const onMenuMaskPress = () => {
+        console.log('onMenuMaskPress');
+        setMenuVisible(false);
+    };
+
+    const onDeletePress = () => {
+        console.log('onDeletePress');
+        setMenuVisible(false);
+        Alert.alert('Confirm', 'Do you want to delete this conversation?', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'OK',
+                onPress: () => {
+                    console.log('OK Pressed');
+                    ZIMKit.deleteConversation(conversationID, conversationType);
+                },
+            },
+        ]);
+    };
+
+    const onQuitPress = () => {
+        console.log('onQuitPress');
+        setMenuVisible(false);
+        Alert.alert('Confirm', 'Do you want to leave this group?', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'OK',
+                onPress: () => {
+                    console.log('OK Pressed');
+                    ZIMKit.leaveGroup(conversationID);
+                },
+            },
+    ]);
+};
+
+    const onCancelPress = () => {
+        console.log('onCancelPress');
+        setMenuVisible(false);
+    };
+
+    return (
+        <View style={{flex: 1}}>
+            <ConversationList onLongPress={onLongPress}></ConversationList>
+            <Modal transparent={true} visible={menuVisible}>
+                <TouchableWithoutFeedback onPress={onMenuMaskPress}>
+                    <View style={style.modalMask}></View>
+                </TouchableWithoutFeedback>
+                <View style={style.modalView}>
+                    <TouchableOpacity onPress={onDeletePress}>
+                        <View style={[style.modalItem, style.borderBottom]}>
+                            <Text style={style.text}>Delete</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {conversationType === 2 ? (
+                        <TouchableOpacity onPress={onQuitPress}>
+                            <View style={[style.modalItem, style.borderBottom]}>
+                                <Text style={style.text}>Quit</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ) : null}
+                    <TouchableOpacity onPress={onCancelPress}>
+                        <View style={style.modalItem}>
+                            <Text style={[style.text, { color: 'red' }]}>Cancel</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+        </View>
+    );
+}
+
+const style = StyleSheet.create({
+    modalMask: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+    },
+    modalView: {
+        zIndex: 2,
+        position: 'absolute',
+        bottom: 0,
+        justifyContent: 'center',
+        padding: 20,
+        backgroundColor: 'white',
+        width: '100%',
+        borderRadius: 20,
+    },
+    modalItem: {
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    text: {
+        padding: 10,
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    borderBottom: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#f8f8f8',
+    },
+});
+```
+
+</Accordion>
+
+<Accordion title="2. Custom conversation list UI" defaultOpen="false">
+
+The UI of each item in the conversation list can be fully customized, to do so, you can use the `itemBuilder` of `ConversationList`:
+
+```javascript
+import { View, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { ConversationList } from '@zegocloud/zimkit-rn';
+
+// your App.js
+export default function App() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.
+    
+    const itemBuilder = ({item}) => {
+        return (
+            <View style={style.conversationItem}>
+                <Text>{item.conversationName}</Text>
+            </View>
+        );
+    };
+    return (
+        <View style={{flex: 1}}>
+            <ConversationList itemBuilder={itemBuilder}></ConversationList>
+        </View>
+    );
+}
+```
+
+</Accordion>
+
+<Accordion title="Click to see the list of other interfaces" defaultOpen="false">
+
+1. `filter`: use this to set how to filter the conversations.
+2. `sorter`: use this to set how the conversation list sorts.
+3. `errorBuilder`: use this to customize the UI when error loading the message list.
+4. `emptyBuilder`: use this to customize the UI when the message list is empty.
+5. `loadingBuilder`: use this to customize the UI when loading the message list.
+6. `lastMessageBuilder`: use this to customize how the UI of the latest message of a conversation shows. 
+7. `lastMessageTimeBuilder`: use this to customize how the UI of the latest message time of a conversation shows.
+
+</Accordion>
