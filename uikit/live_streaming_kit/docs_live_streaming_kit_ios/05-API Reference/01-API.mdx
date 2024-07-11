@@ -1,37 +1,8 @@
 # API
 
-- <a href="#ZegoLiveStreamingManager">ZegoLiveStreamingManager</a>
-    - <a href="#addLiveManagerDelegate">addLiveManagerDelegate</a>
-    - <a href="#getHostID">getHostID</a>
-    - <a href="#isHost">isHost</a>
-    - <a href="#isCurrentUserHost">isCurrentUserHost</a>
-    - <a href="#isCurrentUserCoHost">isCurrentUserCoHost</a>
-    - <a href="#stopPKBattle">stopPKBattle</a>
-    - <a href="#acceptIncomingPKBattleRequest">acceptIncomingPKBattleRequest</a>
-    - <a href="#acceptIncomingPKBattleRequest">acceptIncomingPKBattleRequest</a>
-    - <a href="#rejectPKBattleStartRequest">rejectPKBattleStartRequest</a>
-    - <a href="#muteAnotherHostAudio">muteAnotherHostAudio</a>
-    - <a href="#sendPKBattleRequest">sendPKBattleRequest</a>
-    - <a href="#sendPKBattleRequest">sendPKBattleRequest</a>
-    - <a href="#cancelPKBattleRequest">cancelPKBattleRequest</a>
-    - <a href="#leaveRoom">leaveRoom</a>
-- <a href="#ZegoUIKitPrebuiltLiveStreamingVC">ZegoUIKitPrebuiltLiveStreamingVC</a>
-    - <a href="#init">init</a>
-    - <a href="#addButtonToBottomMenuBar">addButtonToBottomMenuBar</a>
-    - <a href="#setStartLiveButton">setStartLiveButton</a>
-    - <a href="#clearBottomMenuBarExtendButtons">clearBottomMenuBarExtendButtons</a>
-    - <a href="#setBackgroundView">setBackgroundView</a>
+## ZegoLiveStreamingManager
 
-
-- - -
-
-<a id="ZegoLiveStreamingManager"></a>
-
-### ZegoLiveStreamingManager
-
-<a id="addLiveManagerDelegate"></a>
-
-#### addLiveManagerDelegate
+### addLiveManagerDelegate
 
 > You can call this interface to listen to live events, such as coHost request events, PK events
 >
@@ -45,9 +16,9 @@
 
 
 
-<a id="getHostID"></a>
 
-#### getHostID
+
+### getHostID
 
 > You can call this interface to get the host ID of the current room
 >
@@ -61,9 +32,9 @@
 
 
 
-<a id="isHost"></a>
 
-#### isHost
+
+### isHost
 
 > You can call this interface to determine if the user is host
 >
@@ -78,9 +49,9 @@
 
 
 
-<a id="isCurrentUserHost"></a>
 
-#### isCurrentUserHost
+
+### isCurrentUserHost
 
 > You can call this interface to determine if you are a host
 >
@@ -94,9 +65,9 @@
 
 
 
-<a id="isCurrentUserCoHost"></a>
 
-#### isCurrentUserCoHost
+
+### isCurrentUserCoHost
 
 > You can call this interface to determine if you are a coHost
 >
@@ -110,9 +81,9 @@
 
 
 
-<a id="stopPKBattle"></a>
 
-#### stopPKBattle
+
+### stopPKBattle
 
 > You can call this interface to send a stop pk request
 >
@@ -125,9 +96,9 @@
 
 
 
-<a id="acceptIncomingPKBattleRequest"></a>
 
-#### acceptIncomingPKBattleRequest
+
+### acceptIncomingPKBattleRequest
 
 > You can call this interface to accept the received invitation PK request
 >
@@ -150,9 +121,9 @@
 
 
 
-<a id="acceptIncomingPKBattleRequest"></a>
 
-#### acceptIncomingPKBattleRequest
+
+### acceptIncomingPKBattleRequest
 
 > You can call this interface to accept the received invitation PK request
 >
@@ -171,9 +142,9 @@
 
 
 
-<a id="rejectPKBattleStartRequest"></a>
 
-#### rejectPKBattleStartRequest
+
+### rejectPKBattleStartRequest
 
 > You can call this interface to reject a pk invitation
 >
@@ -187,9 +158,9 @@
 
 
 
-<a id="muteAnotherHostAudio"></a>
 
-#### muteAnotherHostAudio
+
+### muteAnotherHostAudio
 
 > You can call this interface to block or accept the audio stream from the PK user.
 >
@@ -207,9 +178,9 @@
 
 
 
-<a id="sendPKBattleRequest"></a>
 
-#### sendPKBattleRequest
+
+### sendPKBattleRequest
 
 > You can call this interface to send a PK invitation.
 >
@@ -230,9 +201,9 @@
 
 
 
-<a id="sendPKBattleRequest"></a>
 
-#### sendPKBattleRequest
+
+### sendPKBattleRequest
 
 > You can call this interface to send a PK invitation.
 >
@@ -251,9 +222,9 @@
 
 
 
-<a id="cancelPKBattleRequest"></a>
 
-#### cancelPKBattleRequest
+
+### cancelPKBattleRequest
 
 > You can call this interface to cancel the pk request you issued.
 >
@@ -265,9 +236,9 @@
 
 
 
-<a id="leaveRoom"></a>
 
-#### leaveRoom
+
+### leaveRoom
 
 > You can call this interface to exit the live broadcast room.
 >
@@ -282,13 +253,13 @@
 
 
 
-<a id="ZegoUIKitPrebuiltLiveStreamingVC"></a>
 
-### ZegoUIKitPrebuiltLiveStreamingVC
 
-<a id="init"></a>
+## ZegoUIKitPrebuiltLiveStreamingVC
 
-#### init
+
+
+### init
 
 > You must call this interface to initialize the live page
 >
@@ -309,25 +280,26 @@
 
 
 
-<a id="addButtonToBottomMenuBar"></a>
 
-#### addButtonToBottomMenuBar
+
+### addButtonToBottomMenuBar
 
 > You can add custom buttons to the bottom bar by calling this interface
 >
 > You can control the identity scene displayed by the button by setting the `role` parameter
+> `position`: Button placement. By default, the button is added on the left side.
 >
 > function prototype:
 >
 > ```swift
->  public func addButtonToBottomMenuBar(_ button: UIButton, role: ZegoLiveStreamingRole)
+>  public func addButtonToBottomMenuBar(_ button: UIButton, role: ZegoLiveStreamingRole, position: ZegoBottomMenuBarPosition = .lef)
 > ```
 
 
 
-<a id="setStartLiveButton"></a>
 
-#### setStartLiveButton
+
+### setStartLiveButton
 
 > You can call this interface to customize the start Live button
 >
@@ -339,9 +311,9 @@
 
 
 
-<a id="clearBottomMenuBarExtendButtons"></a>
 
-#### clearBottomMenuBarExtendButtons
+
+### clearBottomMenuBarExtendButtons
 
 > You can call this interface to empty the button added by `addButtonToBottomMenuBar`
 >
@@ -353,9 +325,9 @@
 
 
 
-<a id="setBackgroundView"></a>
 
-#### setBackgroundView
+
+### setBackgroundView
 
 > You can call this interface to customize the background view of the live page
 >
@@ -364,3 +336,20 @@
 > ```swift
 > public func setBackgroundView(_ view: UIView)
 > ```
+
+
+### leaveRoom
+
+You can use this interface to exit the live streaming.
+
+```swift
+public func leaveRoom()
+```
+
+### sendBarrageMessage
+
+You can use this interface to send a barrage message.
+
+```swift
+public func sendBarrageMessage(roomID: String, message: String, callback: ((Int, String) -> Void)?) 
+```
