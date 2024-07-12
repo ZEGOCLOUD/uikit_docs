@@ -1,0 +1,209 @@
+# API
+
+
+- [ZegoUIKitPrebuiltCallFragment](#zegouikitprebuiltcallfragment)
+- [ZegoUIKitPrebuiltCallService](#zegouikitprebuiltcallservice)
+    - [init](#init)
+    - [initWithToken](#initwithtoken)
+    - [uninit](#uninit)
+    - [endCall](#endcall)
+    - [minimizeCall](#minimizecall)
+    - [getPrebuiltCallFragment](#getprebuiltcallfragment)
+    - [sendInvitationWithUIChange](#sendinvitationwithuichange)
+    - [openCamera](#opencamera)
+    - [openMicrophone](#openmicrophone)
+    - [isMicrophoneOn](#ismicrophoneon)
+    - [isCameraOn](#iscameraon)
+    - [setAudioOutputToSpeaker](#setaudiooutputtoSpeaker)
+    - [getAudioRouteType](#getaudioroutetype)
+    - [resetAllBeautiesToDefault](#resetallbeautiestodefault)
+
+
+## ZegoUIKitPrebuiltCallFragment
+
+ You can add this Fragment into any Activity of your project to integrate the functionality of a call.
+
+ If you need the function of `call invitation`, please use `ZegoUIKitPrebuiltCallService` .
+
+```java
+  /// You can create a project and obtain an appID from the [ZEGOCLOUD Admin >Console](https://console.zegocloud.com).
+  final long appID;
+
+  /// You can create a project and obtain an appSign from the [ZEGOCLOUD >Admin Console](https://console.zegocloud.com).
+  final String appSign;
+
+  /// The ID of the currently logged-in user.
+  /// It can be any valid string.
+  /// Typically, you would use the ID from your own user system, such as >Firebase.
+  final String userID;
+
+  /// The name of the currently logged-in user.
+  /// It can be any valid string.
+  /// Typically, you would use the name from your own user system, such as >Firebase.
+  final String userName;
+
+  /// The ID of the call.
+  /// This ID is a unique identifier for the current call, so you need to >ensure its uniqueness.
+  /// It can be any valid string.
+  /// Users who provide the same callID will be logged into the same room >for the call.
+  final String callID;
+
+  /// Initialize the configuration for the call.
+  final ZegoUIKitPrebuiltCallConfig config;
+
+  public static ZegoUIKitPrebuiltCallFragment newInstance(long appID, @NonNull String appSign, @NonNull String userID, @NonNull String userName, @NonNull String callID, @NonNull ZegoUIKitPrebuiltCallConfig config) 
+```
+
+## ZegoUIKitPrebuiltCallService
+
+### init
+
+ You can use this method to initialize `ZegoUIKitPrebuiltCallService` with appSign. You must call this method as soon as the user login(or re-login, auto-login) to your app.
+
+ If you need to set `ZegoUIKitPrebuiltCallConfig`, you can do so through `ZegoUIKitPrebuiltCallInvitationConfig.provider`.
+ Each time the `ZegoUIKitPrebuiltCallFragment` starts, it will request this callback to obtain the current call's config.
+
+ Additionally, you can customize the call ringtone through `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallRingtone` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallRingtone`, and configure notifications through `notificationConfig`.
+ You can also customize the invitation interface with `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallBackground` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallBackground`. If you want to modify the related text on the interface, you can set `innerText`.
+ If you want to listen for events and perform custom logics, you can use `addInvitationCallListener` to obtain related invitation events.
+
+
+```java title="function prototype"
+ public static void init(Application application, long appID, String appSign, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
+ ```
+
+### initWithToken
+
+ You can use this method to initialize `ZegoUIKitPrebuiltCallService` with token. You must call this method as soon as the user login(or re-login, auto-login) to your app.
+
+ If you need to set `ZegoUIKitPrebuiltCallConfig`, you can do so through `ZegoUIKitPrebuiltCallInvitationConfig.provider`.
+ Each time the `ZegoUIKitPrebuiltCallFragment` starts, it will request this callback to obtain the current call's config.
+
+ Additionally, you can customize the call ringtone through `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallRingtone` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallRingtone`, and configure notifications through `notificationConfig`.
+ You can also customize the invitation interface with `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallBackground` and `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallBackground`. If you want to modify the related text on the interface, you can set `innerText`.
+ If you want to listen for events and perform custom logics, you can use `addInvitationCallListener` to obtain related invitation events.
+
+
+```java title="function prototype"
+public static void initWithToken(Application application, long appID, String token, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
+```
+
+### uninit
+
+You must call this method as soon as the user logout from  app.
+
+
+```java title="function prototype"
+ public static void unInit()
+ ```
+
+### endCall
+
+ End and leave current call. Current activity will be finished.
+
+
+
+```java  title="function prototype"
+public static void endCall()
+```
+
+### minimizeCall
+
+ This function is used to minimize the current call.usually it can be used with backpressed Listener to miminimize call when press back button.To make it work,you should have Overlays permission and has `ZegoMenuBarButtonName.MINIMIZING_BUTTON` and use ZEGO call invite service.
+
+
+
+```java  title="function prototype"
+public static void minimizeCall()
+```
+
+
+### getPrebuiltCallFragment
+
+ This function can be used to get `ZegoUIKitPrebuiltCallFragment` when in a call. If not in a call, and null will be returned.
+
+
+
+```java  title="function prototype"
+public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
+```
+
+### sendInvitationWithUIChange
+
+  Use this method to sendInvitation to other users and navigate to call waiting page.
+
+
+
+```java  title="function prototype"
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, PluginCallbackListener callbackListener);
+
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
+
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String customData, String callID,
+    ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
+ ```
+
+
+### openCamera
+
+ Open or close your camera.
+
+
+
+```java  title="function prototype"
+public static void openCamera(boolean enable);
+```
+
+
+### openMicrophone
+
+ Open or close you microphone
+
+```java  title="function prototype"
+public static void openMicrophone(boolean enable);
+```
+
+
+### isMicrophoneOn
+
+```java  title="function prototype"
+public static boolean isMicrophoneOn();
+```
+
+
+### isCameraOn
+
+```java  title="function prototype"
+public static boolean isCameraOn() ;
+```
+
+### setAudioOutputToSpeaker
+
+Set the audio output device to the speaker.
+When `outputToSpeaker` is `false`: Call Kit will select the audio output device with the highest priority according to the system scheduling, common audio routes include: receiver, headphones, Bluetooth devices, etc.
+When `outputToSpeaker` is `true` and the original output device is the receiver: Call Kit will play sound using the built-in speaker.
+When `outputToSpeaker` is `true` and the original output device is headphones or Bluetooth devices: this method is invalid, and the original device is used to output audio.
+
+```java  title="function prototype"
+public static void setAudioOutputToSpeaker(boolean outputToSpeaker);
+```
+
+### getAudioRouteType
+Get the current audio route. Audio route refers to the audio output device used by the app when playing audio, common audio routes include: speaker, receiver, headphones, Bluetooth devices, etc.
+
+```java  title="function prototype"
+public static ZegoAudioOutputDevice getAudioRouteType();
+```
+
+
+### resetAllBeautiesToDefault
+
+重置所有的美颜效果和选中状态,在下次进入通话页面生效。
+
+函数原型：
+```java
+public static void resetAllBeautiesToDefault() ;
+```

@@ -1,0 +1,157 @@
+import LiveAudioRoomKit_QuickStart_Prerequisites_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_QuickStart_Prerequisites-en.mdx";
+import Content from "/snippets/uikit/AndroidEnviromentRequirementEn.md"
+
+# Quick start
+
+## Prerequisites
+
+<LiveAudioRoomKit_QuickStart_Prerequisites_En />
+
+## Prepare the environment
+
+<Content/>
+
+## Integrate the SDK
+
+### Add ZegoUIKitPrebuiltLiveAudioRoom as dependencies
+
+1. Add the `jitpack` configuration.
+
+- If your Android Gradle Plugin is **7.1.0 or later**: enter your project's root directory, open the `settings.gradle` file to add the jitpack to `dependencyResolutionManagement` > `repositories` like this:
+
+  ```groovy
+  dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+        maven { url 'https://www.jitpack.io' } // <- Add this line.
+    }
+  }
+  ```
+
+  <Warning title="Warning">
+  If you can't find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0. 
+
+  For more details, see [Android Gradle Plugin Release Note v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle).
+  </Warning>
+
+- If your Android Gradle Plugin is **earlier than 7.1.0**: enter your project's root directory, open the `build.gradle` file to add the jitpack to `allprojects`->`repositories` like this: 
+
+  ```groovy
+  allprojects {
+      repositories {
+          google()
+          mavenCentral()
+          maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+          maven { url "https://jitpack.io" }  // <- Add this line.
+      }
+  }
+  ```
+
+2. Modify your app-level `build.gradle` file:
+
+  ```groovy
+  dependencies {
+      ...
+      implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_audio_room_android:+'    // Add this line to your module-level build.gradle file's dependencies, usually named [app].
+  }
+  ```  
+
+## Using the Live Audio Room Kit
+
+import LiveAudioRoomKit_QuickStart_Using_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_QuickStart_Using-en.mdx";
+
+<LiveAudioRoomKit_QuickStart_Using_En />
+
+<CodeGroup>
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(
+            appID, appSign, userID, userName, roomID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+Then, you can create a live audio room by starting your `LiveAudioRoomActivity`.
+
+## Run & Test
+
+Now you have finished all the steps!
+
+You can simply click the **Run** on Android Studio to run and test your App on the device.
+
+## Related guide
+
+[Custom prebuilt UI](./03-Custom%20prebuilt%20features/01-Overview.mdx)
+
+## Resources
+
+<CardGroup cols={1}>
+  <Card title="Sample code" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_example_android" target="_blank">
+    Click here to get the complete sample code.
+  </Card>
+</CardGroup>

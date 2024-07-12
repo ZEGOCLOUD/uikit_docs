@@ -1,0 +1,281 @@
+# 快速开始
+
+这份文档将指导您集成 IMKit 并快速开始聊天。
+
+## 前提条件
+
+import ZIMKITPrerequisitesFeatures from "/snippets/uikit/in_app_chat/ZIMKITPrerequisitesFeatures.mdx"
+
+<ZIMKITPrerequisitesFeatures />
+
+- 准备环境：
+    - Xcode 13.0或更高版本
+    - 运行在iOS 12.0或更高版本的iOS设备
+    - 设备已连接到互联网。
+
+## 集成 SDK
+
+<Note title="注意">
+CocoaPods 版本要求是 1.10.0 或更高。
+</Note>
+
+<Steps>
+<Step title="使用CocoaPods将 ZIMKit 添加为您项目的依赖项">
+
+打开 `Podfile` 文件并添加 `pod 'ZIMKit'`
+
+```ruby Podfile {3}
+target 'MyProject' do
+  use_frameworks!
+  pod 'ZIMKit'
+end
+```
+
+执行命令 `pod repo update` 来更新本地索引，确保您可以安装最新版本的 SDK。
+```bash
+pod repo update
+```
+执行 `pod install` 命令来安装 SDK。
+
+```bash
+pod install
+``` 
+
+</Step>
+<Step title="设置相关权限">
+
+打开 `Info.plist` 文件并添加以下内容：
+
+```xml
+<key>NSMicrophoneUsageDescription</key>
+<string>We require microphone access to use zimkit.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We require photo access to use zimkit.</string>
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/quickstart_info_access.png" />
+</Frame>
+
+</Step>
+<Step title="调用 init 方法来初始化 IMKit">
+
+```swift AppDelegate.swift {11}
+import UIKit
+import ZIMKit
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        let appID: UInt32 = <#your appID#> // The AppID you get from ZEGOCLOUD Admin Console.
+        let appSign: String = <#your appSign#> // The AppSign you get from ZEGOCLOUD Admin Console.
+        ZIMKit.initWith(appID: appID, appSign: appSign)
+    }
+}
+```
+
+</Step>
+<Step title="在登录页面上调用 connectUser 方法以登录到 IMKit">
+
+import ZIMKitSDKWarning from "/snippets/uikit/in_app_chat/ZIMKitSDKWarning.mdx"
+
+<ZIMKitSDKWarning />
+
+
+```swift viewController.swift {27-32}
+import UIKit
+import ZIMKit
+
+/// your viewController.swift
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let connectUserButton = UIButton(type: .custom)
+        connectUserButton.setTitle("Connect User And Show", for: .normal)
+        connectUserButton.frame = .init(x: 100, y: 100, width: 250, height: 50)
+        connectUserButton.addTarget(self, action: #selector(connectUserAction), for: .touchUpInside)
+        connectUserButton.backgroundColor = .orange
+        view.addSubview(connectUserButton)
+
+    }
+
+    @objc func connectUserAction(_ sender: Any) {
+        // Your ID as a user.
+        let userID: String = "<#your userID#>" 
+        // Your name as a user.
+        let userName: String = "<#your userName#>" 
+        // The image you set as the user avatar must be network image. e.g., https://storage.zego.im/IMKit/avatar/avatar-0.png
+        let userAvatarUrl: String = "<#your userAvatarUrl#>" 
+
+        ZIMKit.connectUser(userID: userID, userName: userName, avatarUrl: userAvatarUrl) { error in
+            //  Display the UI views after connecting the user successfully. 
+            if error.code == .success {
+                self?.showConversationListVC()
+            }  
+        }
+    }
+}
+```
+
+</Step>
+<Step title="显示 IMKit 的会话组件">
+
+```swift viewController.swift
+/// your viewController.swift
+func showConversationListVC() {
+    let conversationVC = ZIMKitConversationListVC()
+    let nav = UINavigationController(rootViewController: conversationVC)
+    nav.modalPresentationStyle = .fullScreen
+    self.present(nav, animated: true)
+}
+```
+理想情况下，到这个时候，你的应用程序应该是这个样子的：
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/imkit_effect.PNG" />
+</Frame>
+</Step>
+</Steps>
+
+
+## 开始聊天
+
+IMKit 支持以下功能：
+
+<Accordion title="开始一对一聊天" defaultOpen="false">
+
+import ZIMKitStartAChat from "/snippets/uikit/in_app_chat/ZIMKitStartAChat.mdx"
+
+<ZIMKitStartAChat />
+
+1. 使用您自己的业务逻辑生成`userId`（这里的`userId`是指您想要与之聊天的对等用户）。
+2. 填写`userId`参数并运行以下代码：
+
+```swift ViewController.swift
+import UIKit
+import ZIMKit
+
+/// your ViewController.swift
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    // 在成功登录后，您可以在任何需要的地方调用此方法。
+    func startOneOnOneChat(userID: String) {
+        let messageVC = ZIMKitMessagesListVC(conversationID: userID, type: .peer)
+        messageVC.modalPresentationStyle = .fullScreen
+        present(messageVC, animated: true)
+
+        // 如果您已经使用 Navigation Controller，请使用以下代码替换[present]方法。
+        // navigationController?.pushViewController(messageVC, animated: true)
+    }
+}
+```
+
+</Accordion>
+
+<Accordion title="开始一个群聊" defaultOpen="false">
+
+1. 使用您自己的业务逻辑获取生成的 `ids` 和 `groupName`。（这里的 `ids` 指的是您想邀请加入群聊的用户的ID列表。）
+2. 填写 `ids` 和 `groupName` 参数，并运行以下代码：
+
+```swift ViewController.swift
+import UIKit
+import ZIMKit
+
+/// your ViewController.swift
+class ViewController1: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    // 在成功登录后，您可以在任何需要的地方调用此方法。
+    func createGroupChat(userIDs: [String], groupName: String) {
+        ZIMKit.createGroup(with: groupName, inviteUserIDs: userIDs) { [weak self] groupInfo, inviteUserErrors, error in
+            if error.code == .success {
+                if inviteUserErrors.count > 0 {
+                    // 当群组中存在一个不存在的用户ID时，根据您的业务逻辑实现提示窗口的逻辑。
+
+                } else {
+                    // 成功创建群聊后直接进入聊天页面。
+                    self?.showGroupMessageListVC(groupID: groupInfo.id)
+                }
+            } else {
+                // 根据创建群聊失败时返回的错误信息，实现提示窗口的逻辑。
+
+            }
+        }
+    }
+    
+    func showGroupMessageListVC(groupID: String) {
+        let messageVC = ZIMKitMessagesListVC(conversationID: groupID, type: .group)
+        messageVC.modalPresentationStyle = .fullScreen
+        present(messageVC, animated: true)
+
+        // 如果您已经使用 Navigation Controller，请使用以下代码替换[present]方法。
+        // navigationController?.pushViewController(messageVC, animated: true)
+    }
+}
+```
+
+</Accordion>
+
+<Accordion title="加入一个群聊" defaultOpen="false">
+
+1. 使用您自己的业务逻辑生成`groupId`（这里的`groupId`指的是您想要加入的群聊）。
+2. 填写`groupId`参数并运行以下代码：
+
+```swift ViewController.swift
+import UIKit
+import ZIMKit
+
+/// your ViewController.swift
+class ViewController1: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+
+    // 在成功登录后，您可以在任何需要的地方调用此方法。
+    func joinGroupChat(_ groupID: String) {
+        ZIMKit.joinGroup(by: groupID) { [weak self] groupInfo, error in
+            if error.code == .success {
+                // 成功加入群聊后显示群聊页面。
+                self?.showGroupMessageListVC(groupID: groupInfo.id)
+            }
+        }
+    }
+    
+    func showGroupMessageListVC(groupID: String) {
+        let messageVC = ZIMKitMessagesListVC(conversationID: groupID, type: .group)
+        messageVC.modalPresentationStyle = .fullScreen
+        present(messageVC, animated: true)
+
+        // 如果您已经使用 Navigation Controller，请使用以下代码替换[present]方法。
+        // navigationController?.pushViewController(messageVC, animated: true)
+    }
+}
+```
+
+</Accordion>
+
+## 相关指南
+
+<CardGroup cols={2}>
+    <Card title="组件概述" href="./03-UI components/01-Overview.mdx">
+        点击这里了解更多UI组件。
+    </Card>
+    <Card title="运行示例代码" href="https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_ios" target="_blank">
+        一个快速指南，帮助您运行示例代码。
+    </Card>
+</CardGroup>

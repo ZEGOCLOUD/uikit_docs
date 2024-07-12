@@ -1,0 +1,58 @@
+# Invite via a shared link
+
+## Introduction
+
+In ZEGOCLOUD UIKits, users with the same room ID will be in the same session, which allows you can to invite others to join your session by sending a URL with the roomID parameter, that is, a shared link. 
+
+The following shows the process:
+
+![/Pics/ZegoUIKit/Web/Web_sharelink_process.png](https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Web/Web_sharelink_process.png)
+
+
+The shared link displays in the two places as shown:
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/preview_share.png" />
+</Frame>
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/joinRoom_share.png" />
+</Frame>
+
+
+## How do I invite others via a shared link?
+
+As an example, the following shows how user A generates a shared link and user B joins the session:
+
+-  For user A to generate a shared link to invite user B to join: 
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+     sharedLinks: [{
+            url: window.location.protocol + '//' + window.location.host + window.location.pathname+ '?roomID=' + roomID,
+        }],
+     // ...
+});
+```
+
+- For user B to parse the room ID and generate a Token to join the session: 
+
+```javascript
+function getUrlParams(
+  url = window.location.href
+) {
+  let urlStr = url.split('?')[1];
+  return new URLSearchParams(urlStr);
+}
+// ...
+const roomID = getUrlParams().get('roomID') || randomID(5);
+const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+
+
+// Create instance object from Kit Token.
+const zp = ZegoUIKitPrebuilt.create(kitToken);
+// ...
+```

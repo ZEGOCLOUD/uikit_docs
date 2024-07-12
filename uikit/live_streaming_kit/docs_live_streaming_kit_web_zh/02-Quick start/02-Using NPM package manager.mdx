@@ -1,0 +1,381 @@
+import Web_UIKits_Complete_parameter_examples from "/snippets/uikit/Web_UIKits_Complete_parameter_examples-en.md";
+import Content from "/snippets/uikit/webEnviromentRequirementEn.md"
+
+# Using NPM package manager
+
+This doc works in Web engineering frameworks, and supports both PC and mobile browsers (including WebViews).
+You can refer to this doc if you're using React, Vue, Angular, and other frameworks.
+
+## Prepare the environment
+
+<Content/>
+
+## Install the SDK
+
+```shell
+npm i @zegocloud/zego-uikit-prebuilt --save
+```
+
+
+## Initialize the SDK
+
+
+- First, you'll need to generate a [Kit Token](../04-Authentication%20and%20Kit%20Token.mdx).
+
+    (**Note**: You can `skip this step` if you wanna speed up your integration testing. Remember to generate the Kit Token by referring to [this](https://docs.zegocloud.com/article/14741) when you plan to make your app go live officially.)
+
+- Then, replace the `appID` and `serverSecret` parameters in the following code with your project's AppID and ServerSecret that you get from [Admin Console](https://console.zegocloud.com/project). 
+
+<CodeGroup>
+```js React
+import * as React from 'react';
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+
+function randomID(len) {
+  let result = '';
+  if (result) return result;
+  var chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
+    maxPos = chars.length,
+    i;
+  len = len || 5;
+  for (i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return result;
+}
+
+export function getUrlParams(
+  url = window.location.href
+) {
+  let urlStr = url.split('?')[1];
+  return new URLSearchParams(urlStr);
+}
+
+export default function App() {
+  const roomID = getUrlParams().get('roomID') || randomID(5);
+  let role_str = getUrlParams(window.location.href).get('role') || 'Host';
+  const role =
+    role_str === 'Host'
+      ? ZegoUIKitPrebuilt.Host
+      : role_str === 'Cohost'
+      ? ZegoUIKitPrebuilt.Cohost
+      : ZegoUIKitPrebuilt.Audience;
+
+  let sharedLinks = [];
+  if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+    sharedLinks.push({
+      name: 'Join as co-host',
+      url:
+        window.location.protocol + '//' + 
+        window.location.host + window.location.pathname +
+        '?roomID=' +
+        roomID +
+        '&role=Cohost',
+    });
+  }
+  sharedLinks.push({
+    name: 'Join as audience',
+    url:
+     window.location.protocol + '//' + 
+     window.location.host + window.location.pathname +
+      '?roomID=' +
+      roomID +
+      '&role=Audience',
+  });
+ // generate Kit Token
+  const appID = ;
+  const serverSecret = "";
+  const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+
+
+  // start the call
+  let myMeeting = async (element) => {
+      // Create instance object from Kit Token.
+      const zp = ZegoUIKitPrebuilt.create(kitToken);
+      // start the call
+      zp.joinRoom({
+        container: element,
+        scenario: {
+          mode: ZegoUIKitPrebuilt.LiveStreaming,
+          config: {
+            role,
+          },
+        },
+        sharedLinks,
+      });
+  };
+
+  return (
+    <div
+      className="myCallContainer"
+      ref={myMeeting}
+      style={{ width: '100vw', height: '100vh' }}
+    ></div>
+  );
+}
+```
+```js Next.js
+// ... some other logic code
+const { ZegoUIKitPrebuilt } = await import("@zegocloud/zego-uikit-prebuilt");
+
+const roomID = getUrlParams().get('roomID') || randomID(5);
+let role_str = getUrlParams(window.location.href).get('role') || 'Host';
+const role =
+    role_str === 'Host'
+      ? ZegoUIKitPrebuilt.Host
+      : role_str === 'Cohost'
+      ? ZegoUIKitPrebuilt.Cohost
+      : ZegoUIKitPrebuilt.Audience;
+
+let sharedLinks = [];
+if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+    sharedLinks.push({
+      name: 'Join as co-host',
+      url:
+        window.location.protocol + '//' + 
+        window.location.host + window.location.pathname +
+        '?roomID=' +
+        roomID +
+        '&role=Cohost',
+    });
+}
+sharedLinks.push({
+    name: 'Join as audience',
+    url:
+     window.location.protocol + '//' + 
+     window.location.host + window.location.pathname +
+      '?roomID=' +
+      roomID +
+      '&role=Audience',
+});
+// generate Kit Token
+const appID = ;
+const serverSecret = "";
+const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+
+// Create instance object from Kit Token.
+const zp = ZegoUIKitPrebuilt.create(kitToken);
+// start the call
+zp.joinRoom({
+   container: element,
+   scenario: {
+          mode: ZegoUIKitPrebuilt.LiveStreaming,
+          config: {
+            role,
+          },
+    },
+   sharedLinks,
+}); 
+// ... some other logic code
+```
+
+```ts Angular
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+
+function randomID(len:number) {
+  let result = '';
+  if (result) return result;
+  var chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
+    maxPos = chars.length,
+    i;
+  len = len || 5;
+  for (i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return result;
+}
+
+export function getUrlParams(
+  url = window.location.href
+) {
+  let urlStr = url.split('?')[1];
+  return new URLSearchParams(urlStr);
+}
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  @ViewChild('root')
+  root!: ElementRef;
+
+  ngAfterViewInit() {
+    const roomID = getUrlParams().get('roomID') || randomID(5);
+    let role_str = getUrlParams(window.location.href).get('role') || 'Host';
+    const role =
+      role_str === 'Host'
+        ? ZegoUIKitPrebuilt.Host
+        : role_str === 'Cohost'
+        ? ZegoUIKitPrebuilt.Cohost
+        : ZegoUIKitPrebuilt.Audience;
+
+    let sharedLinks = [];
+    if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+      sharedLinks.push({
+        name: 'Join as co-host',
+        url:
+         window.location.protocol + '//' + 
+         window.location.host + window.location.pathname +
+          '?roomID=' +
+          roomID +
+          '&role=Cohost',
+      });
+    }
+    sharedLinks.push({
+      name: 'Join as audience',
+      url:
+       window.location.protocol + '//' + 
+       window.location.host + window.location.pathname +
+        '?roomID=' +
+        roomID +
+        '&role=Audience',
+    });
+   // generate Kit Token
+   const appID = ;
+   const serverSecret = "";
+   const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+
+
+   // Create instance object from Kit Token.
+  const zp = ZegoUIKitPrebuilt.create(kitToken);
+  // start the call
+  zp.joinRoom({
+        container: this.root.nativeElement,
+        scenario: {
+          mode: ZegoUIKitPrebuilt.LiveStreaming,
+          config: {
+            role,
+          },
+        },
+        sharedLinks,
+   });
+  }
+}
+
+```
+
+
+```js Vue
+<template>
+  <div id="app" ref="root"></div>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue';
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+
+function randomID(len) {
+  let result = '';
+  if (result) return result;
+  var chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
+    maxPos = chars.length,
+    i;
+  len = len || 5;
+  for (i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return result;
+}
+
+export function getUrlParams(
+  url = window.location.href
+) {
+  let urlStr = url.split('?')[1];
+  return new URLSearchParams(urlStr);
+}
+
+export default {
+  name: 'App',
+  components: {},
+  mounted() {
+    const roomID = getUrlParams().get('roomID') || randomID(5);
+    let role_str = getUrlParams(window.location.href).get('role') || 'Host';
+    const role =
+    role_str === 'Host'
+      ? ZegoUIKitPrebuilt.Host
+      : role_str === 'Cohost'
+      ? ZegoUIKitPrebuilt.Cohost
+      : ZegoUIKitPrebuilt.Audience;
+
+    let sharedLinks = [];
+   if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+     sharedLinks.push({
+       name: 'Join as co-host',
+       url:
+        window.location.protocol + '//' + 
+        window.location.host + window.location.pathname +
+        '?roomID=' +
+        roomID +
+        '&role=Cohost',
+     });
+   }
+   sharedLinks.push({
+    name: 'Join as audience',
+    url:
+      window.location.protocol + '//' +
+      window.location.host + window.location.pathname +
+      '?roomID=' +
+      roomID +
+      '&role=Audience',
+    });  
+   // Generate Kit Token
+   const appID = ;
+   const serverSecret = "";
+   const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+
+  // Create instance object from Kit Token.
+  const zp = ZegoUIKitPrebuilt.create(kitToken);
+  // start the call
+  zp.joinRoom({
+        container: this.$refs.root,
+        scenario: {
+          mode: ZegoUIKitPrebuilt.LiveStreaming,
+          config: {
+            role,
+          },
+        },
+        sharedLinks,
+   });
+  },
+};
+</script>
+
+<style>
+#app {
+  height: 100vh;
+  width: 100vw;
+}
+</style>
+```
+</CodeGroup>
+
+
+## Complete code
+
+Click the button below to get the complete code:
+
+<Button href="https://stackblitz.com/edit/zegocloud-prebuilt-live-react-ts?file=App.tsx" primary-color="NavyBlue" target="_blank">React</Button>
+
+<Button href="https://stackblitz.com/edit/zegocloud-prebuilt-live-angular?file=src%2Fapp%2Fapp.component.ts" primary-color="NavyBlue" target="_blank">Angular</Button>
+
+<Button href="https://stackblitz.com/edit/zegocloud-prebuilt-live-vue?file=src%2FApp.vue" primary-color="NavyBlue" target="_blank">Vue</Button>
+
+
+## Complete parameter examples
+
+You can also tailor the specific features by customizing parameters. The following shows the complete parameter examples:
+
+<Web_UIKits_Complete_parameter_examples/>
+
+
+## Related guide
+
+
+<CardGroup cols={2}>
+  <Card title="Authentication and Kit Token" href="../04-Authentication%20and%20Kit%20Token.mdx">
+    Follow the steps to generate a Kit Token.
+  </Card>
+</CardGroup>

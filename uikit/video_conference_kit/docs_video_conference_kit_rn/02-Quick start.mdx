@@ -1,0 +1,175 @@
+# Quick start
+
+- - -
+
+<Video src="https://www.youtube.com/embed/mMza0sja0OY"/>
+
+## Integrate the SDK
+
+1. **Import the SDK**
+
+    1. Add the @zegocloud/zego-uikit-prebuilt-video-conference-rn as dependencies.
+
+    <CodeGroup>
+    ```shell yarn
+    yarn add @zegocloud/zego-uikit-prebuilt-video-conference-rn
+    ```
+
+    ```shell npm
+    npm install @zegocloud/zego-uikit-prebuilt-video-conference-rn
+    ```
+    </CodeGroup>
+
+    2. Add other dependencies.
+
+    Run the following command to install other dependencies for making sure the `@zegocloud/zego-uikit-prebuilt-video-conference-rn` can work properly:
+
+    <CodeGroup>
+    ```bash yarn
+    yarn add @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.14.5
+    ```
+
+    ```bash npm
+    npm install @zegocloud/zego-uikit-rn react-delegate-component zego-express-engine-reactnative@3.14.5
+    ```
+    </CodeGroup>
+
+2. **Using the ZegoUIKitPrebuiltVideoConference component in your project**
+
+    - Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com/), get the `appID` and `appSign` of your project.
+    - Specify the `userID` and `userName` for connecting the Video Conference Kit service.
+    - Create a `conferenceID` that represents the video conference you want to start.
+
+    <Note title="Note">
+    - `userID` and `conferenceID` can only contain numbers, letters, and underlines (_). 
+    - Using the same `conferenceID` will enter the same video conference. 
+    </Note>
+
+    ```js App.js {2,8-18}
+    import React, { Component } from 'react';
+    import ZegoUIKitPrebuiltVideoConference from '@zegocloud/zego-uikit-prebuilt-video-conference-rn'
+    import { StyleSheet, View } from 'react-native';
+
+    export default function VideoConferencePage(props) {
+        return (
+            <View style={styles.container}>
+                <ZegoUIKitPrebuiltVideoConference
+                    appID={yourAppID}
+                    appSign={yourAppSign}
+                    userID={userID} // userID can be something like a phone number or the user id on your own user system. 
+                    userName={userName}
+                    conferenceID={conferenceID} // conferenceID can be any unique string. 
+
+                    config={{
+                        onLeave: () => { props.navigation.navigate('HomePage') },
+                    }}
+                />
+            </View>
+        );
+    }
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start'
+        },
+    });
+    ```
+
+
+## Configure your project
+
+<Accordion title="Android" defaultOpen="false">
+
+1. Open the `my_project/android/app/src/main/AndroidManifest.xml` file and add the following:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/android_config.gif" />
+</Frame>
+
+```xml AndroidManifest.xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+```
+
+2. Open `my_project/android/app/proguard-rules.pro` file and add the following:
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/proguard_rules_config.jpg" />
+</Frame>
+  
+  
+```xml proguard-rules.pro
+-keep class **.zego.**  { *; }
+```
+</Accordion>
+
+
+
+<Accordion title="iOS" defaultOpen="false">
+Open the `my_project/ios/my_project/Info.plist` file and add the following:
+
+<Frame width="512" height="auto" >
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/ios_config2.gif" />
+</Frame>
+
+```xml Info.plist
+<key>NSCameraUsageDescription</key>
+<string>We need to use the camera</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need to use the microphone</string>
+```
+</Accordion>
+
+## Run & Test
+
+<Note title="Note">
+
+If your device is not performing well or you found a UI stuttering, run in **Release mode** for a smoother experience.
+</Note>
+
+- Run on an iOS device:
+
+<CodeGroup>
+```bash yarn
+yarn ios
+```
+
+```bash npm
+npm run ios
+```
+</CodeGroup>
+
+- Run on an Android device:
+
+<CodeGroup>
+```bash yarn
+yarn android
+```
+
+```bash npm
+npm run android
+```
+</CodeGroup>
+
+
+## Related guide
+
+[Custom Prebuilt UI](./customize-prebuilt-features/01-overview.mdx)
+
+
+## Resources
+
+<Button primary-color="NavyBlue" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_video_conference_example_rn">Sample Code</Button>
+
+Click here to get the complete sample code.

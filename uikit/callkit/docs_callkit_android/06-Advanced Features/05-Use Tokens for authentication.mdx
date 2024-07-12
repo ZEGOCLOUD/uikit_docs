@@ -1,0 +1,65 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Use Tokens for authentication
+
+<TokensAuthenticationIntro/>
+
+## Use a Token 
+
+If you need to use a token instead of appsign, you can call `newInstanceWithToken` to finish the initialization.
+
+```java
+ZegoUIKitPrebuiltCallFragment.newInstanceWithToken(appID, appToken, userID, userName, callID, config);
+```
+
+if you use call-invite,please call `initWithToken` to finish the initialization.
+
+```java
+ZegoUIKitPrebuiltCallService.initWithToken(getApplication(), appID, token, userID, userName,callInvitationConfig)
+```
+
+## Renew a Token
+
+In most cases, the token retrieval approach mentioned above should work fine. However, in certain extreme situations, it may be unreliable. 
+
+To ensure the reliability of the token, you can make the following modifications:
+
+1. The validity period of the token should be set as long as possible, for example, 3 days.
+2. Listen to `onTokenWillExpire` callback and call `renewToken` to update new token. 
+
+    ```java
+    ZegoUIKit.setTokenWillExpireListener(new ZegoUIKitTokenExpireListener() {
+        @Override
+        public void onTokenWillExpire(int second) {
+            // ...
+            ZegoUIKit.renewToken(token);
+        }
+    });
+    ```
+3. Renew the token at the appropriate time, such as when the application enters the foreground.
+   
+   ```java
+   // ...
+    ZegoUIKit.renewToken(token)
+   ```
+
+## For beauty plugin
+
+Only if you have used our beauty plugin,to avoid use appSign,you can use a licence to init,too.
+
+Here is the reference code :
+
+```java
+ZegoUIKit.getBeautyPlugin().setLicenceProvider(new LicenceProvider() {
+    @Override
+    public void onLicenseRequired(BeautyPluginLicenseSetter setter) {
+        //.. http request for licence to you server
+        httpRequest.enquene(new CallBack(){
+            //
+            setter.setLicence(context, license);
+        });
+    }
+});
+```
+
+Please ensure that after you get your licence ,you must call `BeautyPluginLicenseSetter.setLicence(context, license);` to init the beauty service.

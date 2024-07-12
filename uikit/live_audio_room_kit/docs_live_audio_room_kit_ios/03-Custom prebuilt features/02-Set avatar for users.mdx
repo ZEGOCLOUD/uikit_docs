@@ -1,0 +1,28 @@
+import SetAvatarForUser_Basic1_En from "/snippets/uikit/live_audio_room/LiveAudioRoomKit_CustomPrebuiltFeatures/SetAvatarForUser_Basic1-en.mdx";
+
+# Set avatar for users
+
+<SetAvatarForUser_Basic1_En />
+
+Here is the reference code:
+
+```Swift
+class ViewController: UIViewController {
+
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = "YourAppSign"
+    let roomID: String = "YourRoomID"
+
+    @IBAction func startLiveAudio(_ sender: Any) {
+
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveAudioRoomConfig = ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        config.userAvatarUrl = "https://www.zegocloud.com/_nuxt/img/discord_nav@2x.8739674.png"// Example
+        let liveAudioVC = ZegoUIKitPrebuiltLiveAudioRoomVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName, roomID: roomID, config: config)
+        liveAudioVC.modalPresentationStyle = .fullScreen
+        self.present(liveAudioVC, animated: true, completion: nil)
+    }
+}
+```

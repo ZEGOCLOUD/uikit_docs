@@ -1,0 +1,148 @@
+# Message component
+
+import ZIM_ZIMKit_message_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_message_info-en.mdx";
+
+<ZIM_ZIMKit_message_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/message_demo.gif" />
+</Frame>
+
+## Integrate the message component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+###  Show the message component
+
+```swift ViewController.swift {1,2,13-18}
+import UIKit
+import ZIMKit
+
+/// your ViewController.swift
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    /// Call the following method to display the message component after login succeeded.
+    func showMessageListVC() {
+        let conversationID = "xxx"  // Conversation ID. For one-on-one chats, it refers to the peer's userID. For group chats, it refers to the GroupID. 
+        let type: ConversationType = .peer // Conversation type (one-on-one chats or group chats). 
+        let messageVC = ZIMKitMessagesListVC(conversationID: conversationID, type: type)
+        navigationController?.pushViewController(messageVC, animated: true)
+    }
+}
+```
+
+
+## Customize features
+
+If the default message-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
+
+<Accordion title="Customizing header bar" defaultOpen="false">
+
+To customize buttons on the `NavigationBar`, you can implement the delegate `ZIMKitMessagesListVCDelegate`.
+
+For example, when you want to add a "Start a call" button on the upper right of the message list. To learn more details, see <a href="../04-Advanced%20features/01-Use%20in%20conjunction%20with%20Call%20Kit.mdx">Use with the Call Kit</a>.
+
+```swift ViewController.swift {48,49}
+import UIKit
+import ZIMKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+
+        let messageVC = ZIMKitMessagesListVC(conversationID: "conversationID", type: .peer)
+        messageVC.delegate = self
+        
+        // Set up and listen to the messageDelegate to receive message relevant notifications if you integrated the ZIMKitConversationListVC
+        let conversationVC = ZIMKitConversationListVC()
+        conversationVC.messageDelegate = self
+    }
+}
+
+extension ViewController: ZIMKitMessagesListVCDelegate {
+    
+    /// Callback for get the HeaderBar
+    /// - Parameter messageListVC: ZIMKitMessagesListVC
+    /// - Returns: ZIMKitHeaderBar: Include the leftItems, rightItems, and titleView
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+
+        // Get the conversation ID via the messageListVC.conversationID 
+        // Get the conversation name via the messageListVC.conversationName 
+        // Get the conversation type (one-on-one or group chat) via themessageListVC.conversationType 
+
+        if messageListVC.conversationType != .peer { return nil }
+        
+        let conversationID = messageListVC.conversationID
+        let conversationName = messageListVC.conversationName
+        
+        // Create voice call button and set the user to be called as ZegoUIKitUser
+        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create video call button and set the user to be called as ZegoUIKitUser
+        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create UIBarButtonItem using the above buttons
+        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
+        let videoItem = UIBarButtonItem(customView: videoCallButton)
+        
+        // Create HeaderBar and set voice and video to `rightItems`
+        let header = ZIMKitHeaderBar()
+        header.rightItems = [videoItem, voiceItem]
+
+        
+        return headerBar
+    }
+}
+```
+
+</Accordion>
+
+<Accordion title="Custom input bar" defaultOpen="false">
+
+To customize the buttons on the input bar, you can configure them using `InputConfig`:
+
+- `showVoiceButton`: Whether to display the voice button.
+- `showEmojiButton`: Whether to display the Emoji button.
+- `showAddButton`: Whether to display the Add button.
+
+
+Here's the reference code:
+
+```swift
+let inputConfig = InputConfig(showVoiceButton: true,
+                              showEmojiButton: true,
+                              showAddButton: false)
+
+let messageListVC = ZIMKitMessagesListVC(conversationID: conversation.id,
+                                         type: conversation.type,
+                                         conversationName: conversation.name,
+                                         inputConfig: inputConfig)
+```
+
+</Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitMessagesListVCDelegate" defaultOpen="false">
+```swift
+@objc public protocol ZIMKitMessagesListVCDelegate: AnyObject {
+    @objc optional
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar?
+}
+```
+</Accordion>
+

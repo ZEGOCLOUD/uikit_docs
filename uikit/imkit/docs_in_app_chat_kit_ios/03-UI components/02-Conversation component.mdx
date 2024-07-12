@@ -1,0 +1,93 @@
+# Conversation component
+
+import ZIM_ZIMKit_chat_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_chat_info-en.mdx";
+
+<ZIM_ZIMKit_chat_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/conversation_demo.gif" />
+</Frame>
+
+## Integrate the conversation component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+### Show the conversation component
+
+```swift ViewController.swift {1,2,13-16}
+import UIKit
+import ZIMKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    // Call this method anywhere you need it after a successful login.
+    func showConversationListVC(_ sender: Any) {
+        let conversationVC = ZIMKitConversationListVC()
+        let nav = UINavigationController(rootViewController: conversationVC)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true)
+    }
+}
+```
+
+## Customize features
+
+If the default conversation-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
+
+<Accordion title="Customizing click events" defaultOpen="false">
+
+To customize click event logic, you can listen to the callback on a `Conversation` clicked by implementing the delegate `ZIMKitConversationListVCDelegate`.
+
+```swift ViewController.swift {22-24}
+import UIKit
+import ZIMKit
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+
+        let conversationVC = ZIMKitConversationListVC()
+        conversationVC.delegate = self
+    }
+}
+
+extension ViewController: ZIMKitConversationListVCDelegate {
+    
+    /// Callback on a conversation clicked.
+    /// - Parameters:
+    ///   - conversationListVC: ZIMKitConversationListVC
+    ///   - conversation: conversation model
+    ///   - defaultAction: Clicking will jump to the message page by default.
+    func conversationList(_ conversationListVC: ZIMKitConversationListVC, didSelectWith conversation: ZIMKitConversation, defaultAction: () -> ()) {
+        // You can add your event handling logic here.
+        defaultAction()
+    }
+}
+```
+
+</Accordion>
+
+## API
+
+
+<Accordion title="ZIMKitConversationListVCDelegate" defaultOpen="false">
+```swift Definition
+@objc public protocol ZIMKitConversationListVCDelegate: AnyObject {
+    @objc optional
+    func conversationList(_ conversationListVC: ZIMKitConversationListVC,
+                          didSelectWith conversation: ZIMKitConversation,
+                          defaultAction: ()-> ())
+}
+```
+</Accordion>

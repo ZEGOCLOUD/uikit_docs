@@ -1,0 +1,109 @@
+# Set a hangup confirmation dialog
+
+
+Call Kit (ZegoUIKitPrebuilt) ends a call by default when the user clicks the End Call button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to hang up a call, you can use the `hangUpConfirmInfo` config: After configuring the hangUpConfirmInfo parameter, ZegoUIKitPrebuilt will pop up a confirmation dialog box with the default style before ending the call, showing the confirmation info you set.
+
+The effect will be like this:
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/hangup_confirm.gif" />
+</Frame>
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```swift title="Basic call"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
+        hangUpConfirmDialogInfo.title = "Hangup confirm"
+        hangUpConfirmDialogInfo.message = "Do you want to hangup?"
+        hangUpConfirmDialogInfo.cancelButtonName = "Cancel"
+        hangUpConfirmDialogInfo.confirmButtonName = "Confirm"
+        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
+        
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+
+```swift title="With call invitation"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // Modify your custom configurations here.
+        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
+        hangUpConfirmDialogInfo.title = "Hangup confirm"
+        hangUpConfirmDialogInfo.message = "Do you want to hangup?"
+        hangUpConfirmDialogInfo.cancelButtonName = "Cancel"
+        hangUpConfirmDialogInfo.confirmButtonName = "Confirm"
+        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
+        return config
+    }
+}
+```
+</CodeGroup>
+
+If you want to listen for hang-up events, for example, to save the call recording when ending the call, ZegoUIKitPrebuiltCall provides a `ZegoUIKitPrebuiltCallVCDelegate` method, and the `onHangUp` will be triggered when the call ends. And sure, you can also implement custom business logic in the `onHangUp`.
+
+Here is the sample code:
+
+```swift 
+ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
+
+extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+    func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+        print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
+    }
+}
+```

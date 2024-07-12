@@ -1,0 +1,31 @@
+
+Open the file `android/app/build.gradle`, and add the following:
+
+<Steps>
+  <Step title="add the following">
+    ```gradle
+    dependencies {
+      implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
+    ```
+    <Frame width="800" height="auto" caption="">
+      <img src="images/android-config-appbuildgradle.jpeg" />
+    </Frame>
+  </Step>
+  <Step title="edit the 'minSdkVersion'">
+    ```xml
+    minSdkVersion 21
+    ```
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_min_sdk_21.png" />
+    </Frame>
+  </Step>
+</Steps>
+
+<Tip title="created with Flutter 2.x.x">
+  > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
+  
+  <Frame width="800" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
+  </Frame>
+</Tip>

@@ -1,0 +1,120 @@
+# Conversation component
+
+import ZIM_ZIMKit_chat_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_chat_info-en.mdx";
+
+<ZIM_ZIMKit_chat_info />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_conversation_en_new.gif" />
+</Frame>
+
+## Integrate the conversation component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+### Add the conversation component
+
+You can add the conversation component to the activity's view hierarchy either by defining the fragment in your activity's layout file or by defining a fragment container in your activity's layout file and then programmatically adding the fragment from within your activity. 
+
+<Tabs>
+<Tab title="Add the fragment programmatically">
+
+The layout of the `ConversationActivity` is specified in  `activity_conversation.xml`:
+<CodeGroup>
+```java ConversationActivity.java {11-13}
+public class ConversationActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_conversation);
+        addConversationFragment();
+    }
+
+    private void addConversationFragment() {
+        ZIMKitConversationFragment fragment = new ZIMKitConversationFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation refers to the ID of FrameLayout
+                                                              // that is defined in the XML.
+        transaction.commit();
+    }
+
+}
+```
+
+```xml activity_conversation.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/fra_conversation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</CodeGroup>
+</Tab>
+<Tab title="Add the fragment via XML">
+
+```xml {7}
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/frag_conversation_list"
+        android:name="im.zego.zimkitconversation.ui.ZIMKitConversationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</Tab>
+</Tabs>
+
+
+## Customize features
+
+If the default conversation-relevant features and behaviors don't fully meet your needs, we allow you to flexibly customize those through the config we mentioned in this section.
+
+<Accordion title="Customizing click events" defaultOpen="false">
+
+To customize click event logic, you can listen to the callback on a `Conversation` clicked by implementing the `registerConversationListListener`.
+
+```java {3-6}
+ZIMKit.registerConversationListListener(new ZIMKitConversationListListener() {
+    @Override
+    public void onConversationListClick(ZIMKitConversationFragment conversationFragment, ZIMKitConversation conversation, DefaultAction defaultAction) {
+        // Add your own event handling logic here, e.g., jump to the message page.
+        defaultAction.toMessage();
+    }
+});
+
+```
+</Accordion>
+
+
+## API
+
+
+<Accordion title="ZIMKitConversationListListener" defaultOpen="false">
+```java Definition
+public interface ZIMKitConversationListListener {
+    default void onConversationListClick(ZIMKitConversationFragment conversationFragment,
+        ZIMKitConversation conversation, DefaultAction defaultAction) {}
+}
+```
+</Accordion>

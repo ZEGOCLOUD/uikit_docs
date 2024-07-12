@@ -1,0 +1,32 @@
+# Send offline message
+
+## Introduction
+
+IMKit supports sending messages to offline applications (i.e., applications that are frozen in the background or killed by the system or user).
+
+## Prerequisites
+
+Before implementing the "Send offline message" feature, please make sure that you have integrated the latest version of IMKit and completed the online messaging functionality.
+
+## Implementation Process
+
+<Steps>
+<Step title="Integrate Google FCM">
+Please refer to [here](/callkit-android/quick-start-(with-call-invitation)#configure-offline-invitaionfcm) for integrating Google FCM. Note that when setting the resourceID, you should choose the Notification messages type. Leave the Channel ID and Sound options blank to use the default system notification sound.
+<Frame width="256" height="auto" caption="">
+    <img src="http://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/4accd96a55.jpg" alt="set_resource_id_for_notification_messages.jpg"/>
+</Frame>
+</Step>
+<Step title="Initialize with resourceID">
+To send offline messages, you need to initialize using `ZIMKitConfig` and pass in the resourceID that you configured in the ZEGOCLOUD console in the previous step.
+```java {6}
+long appID;
+String appSign;
+String resourceID;
+
+ZIMKitConfig zimKitConfig = new ZIMKitConfig();
+zimKitConfig.resourceID = resourceID;
+ZIMKit.initWith(this, appID, appSign,zimKitConfig);
+```
+</Step>
+</Steps>

@@ -1,0 +1,131 @@
+# API
+
+## ZegoUIKitPrebuiltCallInvitationService
+
+### initWithAppID
+
+> You must call this method as soon as the user login(or re-login, auto-login) to your app.
+>
+> function prototype:
+>
+> ```swift
+> /// Initialization of call service
+> /// - Parameters:
+> ///   - appID: Your appID
+> ///   - appSign: Your appSign
+> ///   - userID: User unique identification
+> ///   - userName: userName
+> ///   - config: CallInvitation personalized configuration
+> public func initWithAppID(_ appID: UInt32, 
+>                           appSign: String,
+>                           userID: String, 
+>                           userName: String, 
+>                           config: ZegoUIKitPrebuiltCallInvitationConfig)
+> ```
+
+
+### unInit
+
+> Should be used in pairs with the `initWithAppID `  api.
+>
+> function prototype:
+>
+> ```swift
+> /// Deinitialize call service
+> public func unInit()
+> ```
+
+### getPrebuiltCallVC
+
+> You can access the call page controller through this interface
+>
+> function prototype:
+>
+> ```swift
+> /// Obtain the call page controller
+> /// - Returns: ZegoUIKitPrebuiltCallVC
+> public func getPrebuiltCallVC()-> ZegoUIKitPrebuiltCallVC?
+> ```
+
+### setRemoteNotificationsDeviceToken
+
+> If you want to use offline invitations you must call this interface to set the token of the current device
+>
+> function prototype:
+>
+> ```swift
+> /// Set the device Token to be pushed offline
+> /// - Parameter deviceToken: device token
+> public static func setRemoteNotificationsDeviceToken(_ deviceToken: Data)
+> ```
+
+
+### endCall
+
+> You can call this interface to end the current call
+>
+> function prototype:
+>
+> ```swift
+> /// End the call
+> public func endCall()
+> ```
+
+
+### setAudioOutputToSpeaker
+
+> You can route the audio to the speaker by calling this interface.
+>
+> function prototype:
+>
+> ```swift
+>public func setAudioOutputToSpeaker(outputToSpeaker: Bool)
+> ```
+
+
+### getAudioRouteType
+
+> You can use this interface to get the current audio route
+>
+> function prototype:
+>
+> ```swift
+> public func getAudioRouteType() -> ZegoUIKitAudioOutputDevice
+> ```
+
+
+
+## ZegoUIKitPrebuiltCallVC
+
+
+### addButtonToBottomMenuBar
+
+> You can add custom buttons to the bottom bar by calling this interface
+>
+> function prototype:
+>
+> ```swift
+> public func addButtonToBottomMenuBar(_ button: UIButton)
+> ```
+
+
+### addButtonToTopMenuBar
+
+> You can add custom buttons to the top bar by calling this interface
+>
+> function prototype:
+>
+> ```swift
+> public func addButtonToTopMenuBar(_ button: UIButton)
+> ```
+
+
+### finish
+
+> You can call this method to end the current call.
+>
+> function prototype:
+>
+> ```swift
+> public func finish()
+> ```

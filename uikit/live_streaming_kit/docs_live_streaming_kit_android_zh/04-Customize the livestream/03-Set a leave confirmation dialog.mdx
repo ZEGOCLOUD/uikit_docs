@@ -1,0 +1,89 @@
+# Set a leave confirmation dialog
+
+Live Streaming Kit (ZegoUIkitPrebuiltLiveStreaming) ends a live by default when the user clicks the End Live button or the Android’s Back button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to leave a live, you can use the `confirmDialogInfo` config: After configuring the confirmDialogInfo parameter, ZegoUIKitPrebuilt will pop up a confirmation dialog box with the default style before ending the live, showing the confirmation info you set.
+
+The effect will be like this:
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/live_confirm.gif" />
+</Frame> 
+
+Here is the reference code:
+
+
+<CodeGroup>
+```java Java
+public class LiveActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_live);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String liveID = "testLiveID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltLiveStreamingConfig config;
+    if (isHost) {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
+    } else {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience();
+    }
+    ZegoDialogInfo confirmDialogInfo = new ZegoDialogInfo();
+    confirmDialogInfo.title= "Leave confirm";
+    confirmDialogInfo.message= "Do you want to leave?";
+    confirmDialogInfo.cancelButtonName= "Cancel";
+    confirmDialogInfo.confirmButtonName= "Confirm";
+    config.confirmDialogInfo = confirmDialogInfo;
+
+    ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName, liveID, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```kotlin Kotlin
+class LiveActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        val appID: Long = YourAppID
+        val appSign: String = YourAppSign
+        val userID = "userID"
+        val userName = "userName"
+        val liveID = "testLiveID"
+
+        // Modify your custom configurations here.
+        val config: ZegoUIKitPrebuiltLiveStreamingConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        }
+        val confirmDialogInfo = ZegoDialogInfo()
+        confirmDialogInfo.title = "Leave confirm"
+        confirmDialogInfo.message = "Do you want to leave?"
+        confirmDialogInfo.cancelButtonName = "Cancel"
+        confirmDialogInfo.confirmButtonName = "Confirm"
+        config.confirmDialogInfo = confirmDialogInfo
+        val fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName, liveID, config)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+If you want to listen for leave events,  ZegoUIKitPrebuiltLiveStreaming provides a `setOnLeaveLiveStreamingListener` method, the `leaveLiveStreamingListener` will be triggered when the live ends. And sure, you can also implement custom business logic in the `leaveLiveStreamingListener`.

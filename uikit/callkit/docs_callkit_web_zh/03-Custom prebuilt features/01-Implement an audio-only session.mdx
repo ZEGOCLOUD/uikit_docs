@@ -1,0 +1,34 @@
+# Implement an audio-only session
+
+## Introduction
+
+In ZEGOCLOUD UIKits, the audio and video call features are enabled by default. And you can customize an audio-only session by disabling the video feature as needed. This guide shows how to implement an audio-only session.
+
+It will look like this after the video feature is disabled:
+
+
+ <Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/joinRoom_onlyAudio.jpg" />
+</Frame>
+
+
+## How do I implement an audio-only session?
+
+To disable the video and make an audio-only session, you just need to complete configuring the following:
+
+- Set the `turnOnCameraWhenJoining` to `false` to turn off the camera. 
+- Set the `showMyCameraToggleButton` to `false` to hide the toggle button for enabling/disabling the camera.  
+- Set the `showAudioVideoSettingsButton` to `false` to hide the advanced setting button for audio and video. 
+- Set the `showScreenSharingButton` to `false` to hide the screen sharing button. 
+
+```javascript
+// ....
+zp.joinRoom({
+     // ...,
+    turnOnCameraWhenJoining: false,
+    showMyCameraToggleButton: false,
+    showAudioVideoSettingsButton: false,
+    showScreenSharingButton: false; 
+     // ...
+});
+```

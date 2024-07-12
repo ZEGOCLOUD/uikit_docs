@@ -1,0 +1,93 @@
+# Minimize video call window
+
+With only two simple steps, you can achieve the effect of minimizing the video call window within the application.
+
+Ideally, the final effect will look like this:
+
+<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/android_minimize.gif" /></Frame>
+
+## Integrate the minimize function into the app
+
+### Display the minimize button
+
+To display the minimize button, configure the `ZegoUIKitPrebuiltCallConfig`'s `topMenuBarConfig` or `bottomMenuBarConfig`, and add the `ZegoMenuBarButtonName.MINIMIZING_BUTTON` to  `bottomMenuBarConfig.buttons` or `topMenuBarConfig.buttons` to show a minimize button.
+
+Here is the sample code:
+
+<CodeGroup>
+```java title="With call invitation"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+//...
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+  @Override
+  public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+      ZegoUIKitPrebuiltCallConfig config = null;
+      boolean isVideoCall = invitationData.type == ZegoInvitationType.VIDEO_CALL.getValue();
+      boolean isGroupCall = invitationData.invitees.size() > 1;
+      if (isVideoCall && isGroupCall) {
+          config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+      } else if (!isVideoCall && isGroupCall) {
+          config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+      } else if (!isVideoCall) {
+          config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+      } else {
+          config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+      }
+      config.topMenuBarConfig.isVisible = true;
+      config.topMenuBarConfig.buttons.add(ZegoMenuBarButtonName.MINIMIZING_BUTTON);
+      return config;
+  }
+};
+// ...
+
+```
+
+```java title="Basic call"
+not support yet
+//! Since the activity is managed by yourself, you need to implement the minimizing logic of the activity yourself.
+```
+</CodeGroup>
+
+### Grant relevant permissions
+
+After adding `MINIMIZING_BUTTON`, if the user clicks the minimize button, the app will request the `SYSTEM_ALERT_WINDOW` permission from the user. The UI for requesting permission will vary depending on the device's system. After authorization, the app can display a small window for the current call's video. Additionally, the small window will also be displayed automatically when the user switches the app to the background. If the user turns off this permission, the small window will not be displayed.
+
+
+
+### Customize mini window configuration
+
+After adding MINIMIZING_BUTTON,You can customize the text color and icon color of the mini window in audio mode, as well as change the permission request text of the mini window. These settings can be configured in ZegoUIKitPrebuiltCallConfig.miniVideoConfig, as shown below：
+
+<CodeGroup>
+
+```java title="With call invitation"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+//...
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+  @Override
+  public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+      ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+      //...
+      config.miniVideoConfig.miniVideoTextColor = Color.RED;
+      config.miniVideoConfig.miniVideoDrawableColor = Color.RED;
+      config.miniVideoConfig.permissionText = "Request Permission";
+      return config;
+  }
+};
+// ...
+```
+
+```java title="Basic call"
+not support yet
+//! Since the activity is managed by yourself, you need to implement the minimizing logic of the activity yourself.
+```
+</CodeGroup>
+
+
+After completing the above steps, you can now minimize the video call window.
+
+## FAQ: When will the mini video be displayed
+
+When the `MINIMIZING_BUTTON` is added and the  mini video button is clicked after obtaining authorization, the  mini video will be displayed if clicked the button again or switched to the desktop. When the mini video is clicked, it will return to the call page. If you have not granted authorization or have closed the permission, the  mini video will not be displayed.

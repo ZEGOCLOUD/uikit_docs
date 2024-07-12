@@ -1,0 +1,26 @@
+# FAQs
+
+<Accordion title="1. How to temporarily muting/unmuting the streams of the room?" defaultOpen="false">
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) allows temporarily muting/unmuting the streams of the room, which does not affect other users and only takes effect locally.
+
+As an example, let's take **"mute when the app is in the background, unmute when it returns to the foreground."** The sample code is as follows:
+
+```java
+//The Activity that added ZegoUIKitPrebuiltLiveStreamingFragment.
+public class LiveActivity extends AppCompatActivity {
+    ...
+     @Override
+    protected void onStart() {
+        super.onStart();
+        ZegoLiveStreamingManager.getInstance().unMuteAllAudioVideo();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ZegoLiveStreamingManager.getInstance().muteAllAudioVideo();
+    }
+
+```
+</Accordion>
+

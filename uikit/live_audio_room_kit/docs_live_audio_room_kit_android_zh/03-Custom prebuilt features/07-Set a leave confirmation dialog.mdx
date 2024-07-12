@@ -1,0 +1,100 @@
+# Set a leave confirmation dialog
+
+Live Audio Room Kit (ZegoUIKitPrebuiltLiveAudioRoom) ends a live audio room by default when the user clicks the Leave the room button or the Android&rsquo;s Back button.
+
+If you want to add a confirmation dialog box to double confirm whether the user wants to leave the live audio room, you can use the `confirmDialogInfo` config.
+
+`confirmDialogInfo`: After configuring this parameter, ZegoUIKitPrebuiltLiveAudioRoom will pop up a confirmation dialog box with the default style before ending the live audio room, showing the confirmation info you set.
+
+The following shows the effect and the reference code:
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/leave_confirmation.gif" />
+  </Frame>
+</div>
+
+<CodeGroup>
+
+```java Java
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+        String userID = yourUserID;
+        String userName = yourUserName;
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+
+        ZegoDialogInfo confirmDialogInfo = new ZegoDialogInfo();
+        confirmDialogInfo.title= "Leave the room";
+        confirmDialogInfo.message= "Are you sure to leave the room?";
+        confirmDialogInfo.cancelButtonName= "Cancel";
+        confirmDialogInfo.confirmButtonName= "OK";
+        config.confirmDialogInfo = confirmDialogInfo;
+
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName,roomID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+
+```kotlin Kotlin
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID
+        val appSign = yourAppSign
+        val userID = YourUserID
+        val userName = YourUserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+
+        val confirmDialogInfo = ZegoDialogInfo()
+        confirmDialogInfo.title = "Leave the room"
+        confirmDialogInfo.message = "Are you sure to leave the room?"
+        confirmDialogInfo.cancelButtonName = "Cancel"
+        confirmDialogInfo.confirmButtonName = "OK"
+        config.confirmDialogInfo = confirmDialogInfo
+
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+
+</CodeGroup>

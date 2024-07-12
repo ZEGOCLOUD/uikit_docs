@@ -1,0 +1,330 @@
+# Use with Call Kit
+
+This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegocloud.com/docs/uikit/callkit-rn/quick-start). 
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+</Frame>
+
+## Prerequisites
+
+Integrate the **In-app Chat Kit SDK** into your project. For more information, see <a href="../02-Quick%20start.mdx">Quick start</a>.
+
+## Integrate the Call Kit
+
+### Add Call Kit dependency 
+
+1. Add @zegocloud/zego-uikit-prebuilt-call-rn as dependencies.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-prebuilt-call-rn
+```
+```bash npm
+npm install @zegocloud/zego-uikit-prebuilt-call-rn
+```
+</CodeGroup>
+
+2. Add other dependencies.
+
+Run the following command to install other dependencies for making sure the `@zegocloud/zego-uikit-prebuilt-call-rn` can work properly.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
+```
+```bash npm
+npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.0-alpha react-native-keep-awake@4.0.0
+```
+</CodeGroup>
+
+<Accordion title={`Check here if you encounter the issue "undefined is not an object (evaluating 'RNSound.IsAndroid')"`} defaultOpen="false">
+
+Internally, the [react-native-sound](https://www.npmjs.com/package/react-native-sound) plugin is used to play ringtones. If you encounter this error:
+
+```bash
+undefined is not an object (evaluating 'RNSound.IsAndroid')
+```
+
+Then, you may additionally need to fully clear your build caches for Android. You can do this using:
+
+```bash
+cd android
+./gradlew cleanBuildCache
+```
+
+After clearing your build cache, you should execute a new react-native build.
+
+If you still experience issues, know that this is the most common build issue. And check it [here](https://github.com/zmxv/react-native-sound/issues/592) and the several issues linked to it for possible resolution.
+
+</Accordion>
+
+### Initialize the Call Kit
+
+To receive the call invites from others and let the calling notification show on the top bar when receiving it, you will need to initialize the call invitation.
+
+1. Config React Navigation
+
+- Place the `ZegoCallInvitationDialog` component on the top level of the `NavigationContainer`.
+
+```js
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigation from './AppNavigation';
+
+// Add this line \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import { ZegoCallInvitationDialog } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+// Add this line \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+export default function App() {
+    return (
+        <NavigationContainer>
+            // Add this line \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <ZegoCallInvitationDialog />
+            // Add this line \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <AppNavigation />
+        </NavigationContainer>
+    );
+}
+```
+- Add two routes (`ZegoUIKitPrebuiltCallWaitingScreen` and `ZegoUIKitPrebuiltCallInCallScreen`) to your stack navigator.
+
+```js
+// AppNavigation.js
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { MessageListPage } from '@zegocloud/zimkit-rn';
+import LoginPage from './LoginPage.js'; // Import the login page you created.
+import HomePage from './HomePage.js'; // Import the In-app Chat home page you created.
+
+// Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import {
+ZegoUIKitPrebuiltCallWaitingScreen,
+ZegoUIKitPrebuiltCallInCallScreen,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+// Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+const Stack = createNativeStackNavigator();
+
+export default function AppNavigation() {
+    return (
+        <Stack.Navigator initialRouteName="LoginPage">
+            <Stack.Screen
+                name="LoginPage"  // Specify a page route for the login page.
+                component={LoginPage}  // Fill in the imported login page.
+            />
+            <Stack.Screen
+                name="HomePage"  // Specify a page route for the In-app Chat home page.
+                component={HomePage}  // Fill in the imported In-app Chat home page.
+            />
+            <Stack.Screen
+                name="MessageListPage"  // Specify a page route for the message list page.
+                component={MessageListPage}  // Fill in the imported message list component.
+            />
+
+            // Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            <Stack.Screen
+                options={{ headerShown: false }}
+                // DO NOT change the name 
+                name="ZegoUIKitPrebuiltCallWaitingScreen"
+                component={ZegoUIKitPrebuiltCallWaitingScreen}
+            />
+            <Stack.Screen
+                options={{ headerShown: false }}
+                // DO NOT change the name
+                name="ZegoUIKitPrebuiltCallInCallScreen"
+                component={ZegoUIKitPrebuiltCallInCallScreen}
+            />
+            // Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+            ...  // Other page info.
+        </Stack.Navigator>
+    );
+}
+```
+
+2. Initialize/Deinitialize the call invitation service.
+
+Initialize the service when your app users logged in successfully or re-logged in after an exit.
+
+```js
+// LoginPage.js
+import { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { ZIMKit } from '@zegocloud/zimkit-rn';
+
+// Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import * as ZIM from 'zego-zim-react-native';
+import ZegoUIKitPrebuiltCallService from "@zegocloud/zego-uikit-prebuilt-call-rn";
+// Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+
+export default function LoginPage() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.  
+    const appConfig = {
+        appID: 0, // The AppID you get from ZEGOCLOUD Admin Console.
+        appSign: '', // The AppSign you get from ZEGOCLOUD Admin Console.
+    };
+    useEffect(() => {
+        ZIMKit.init(appConfig.appID, appConfig.appSign);
+        ZIMKit.connectUser({
+            userID: '', // Your ID as a user.  
+            userName: '' // Your name as a user.
+        }, '')
+        .then(() => {
+            // Implement your event handling logic after logging in successfully. 
+
+            // initialized ZegoUIKitPrebuiltCallInvitationService.
+            // when app's user is logged in or re-logged in.
+            // We recommend calling this method as soon as the user logs in to your app.
+            ZegoUIKitPrebuiltCallService.init(
+                appConfig.appID, // The AppID you get from ZEGOCLOUD Admin Console.
+                appConfig.appSign, // The AppSign you get from ZEGOCLOUD Admin Console.
+                userID, // Your ID as a user.  
+                userName, // Your name as a user.
+                [ZIM],
+            );
+
+            // Navigate to the In-app Chat Kit page.
+            navigation.navigate('HomePage');
+        });
+    }, []);
+}
+```
+
+### Add a call button
+
+Add a call button to the `appBar` using the `appBarActions` parameter of jump to the `MessageListPage`:
+
+```js
+// HomePage.js
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native';
+import { ConversationList } from '@zegocloud/zimkit-rn';
+
+export default function HomePage() {
+    const navigation = useNavigation(); // Use the React Navigation for page routing.
+    const goToMessageListPage = props => {
+        // Rount to the message list page via the React Navigation.  For more, refer to: https://reactnavigation.org/
+        navigation.navigate('MessageListPage', {
+            ...props,
+            // The callback method for the top button on the message list page.
+
+            // Add call button for peer chat
+            appBarActions: props.conversationType === 0 ? [
+                {
+                    icon: 'goBack',
+                    onPressed: () => {
+                        navigation.goBack();
+                    },
+                },
+                // Voice call button
+                () => <ZegoSendCallInvitationButton
+                    invitees={[{userID: props.conversationID, userName: props.conversationName }]}
+                />,
+                // Video call button
+                () => <ZegoSendCallInvitationButton
+                    isVideoCall={true}
+                    invitees={[{userID: props.conversationID, userName: props.conversationName }]}
+                />
+            ] : [{
+                icon: 'goBack',
+                onPressed: () => {
+                    navigation.goBack();
+                },
+            }],
+        });
+    };
+    const onPressed = (props) => {
+        goToMessageListPage(props);
+    };
+    return (
+        <SafeAreaView style={{flex: 1}}>
+            <ConversationList onPressed={onPressed}></ConversationList>
+        </SafeAreaView>
+    );
+}
+```
+
+<Accordion title="After integrating Call Kit, configure the following for your app project" defaultOpen="false">
+
+## Configure your project
+
+### Android:
+
+1. Open the `my_project/android/app/src/main/AndroidManifest.xml` file and add the following:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/android_config.gif" />
+</Frame>
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+```
+
+2. Open the `my_project/android/app/proguard-rules.pro` file and add the following:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/proguard_rules.jpeg" />
+</Frame>
+
+```xml
+-keep class **.zego.**  { *; }
+-keep class **.**.zego_zpns.** { *; }
+```
+
+3. Save your ringtone files under the directory `android/app/src/main/res/raw`. Note that files in this directory must be lowercase and underscored (e.g. my_file_name.mp3) and that subdirectories are not supported by Android.
+
+<Note title="Note">
+The wrapped ringtone file supports aac, aiff, mp3, wav, caf, etc.
+</Note>
+
+### iOS:
+
+1. Open the `my_project/ios/my_project/Info.plist` file and add the following:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/ios_config2.gif" />
+</Frame>
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>We need to use the camera</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need to use the microphone</string>
+```
+
+2. Open Xcode and add your sound files to the project (Right-click the project and select Add Files to **PROJECTNAME**)
+
+<Note title="Note">
+The wrapped ringtone file supports aiff, wav, caf, etc.
+</Note>
+
+</Accordion>
+
+So far, you have successfully integrated Call Kit in the In-app Chat Kit. You can now run and experience it.
+
+## More resources
+
+The above content only introduces the basic configuration required for integrating Call Kit. If you need to further customize the configuration of the call, refer to the following documents:
+
+<CardGroup cols={2}>
+  
+  <Card title="Call Kit - Quick start" href="https://zegocloud.com/docs/uikit/callkit-rn/quick-start" target="_blank">
+    Steps in this doc helps you to make a call quickly.
+  </Card>
+
+  <Card title="Call Kit - Custom prebuilt UI" href="https://zegocloud.com/docs/uikit/callkit-rn/calling-config/overview" target="_blank">
+    This article guides you on how to further customize the features and UI of the call.
+  </Card>
+
+</CardGroup>

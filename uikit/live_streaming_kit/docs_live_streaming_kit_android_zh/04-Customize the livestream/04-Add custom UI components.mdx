@@ -1,0 +1,83 @@
+# Add custom components to user view
+
+
+If you want to add some custom components at the top level of the view, such as, want to display the user avatars when the video view is displayed, add user-level icons, etc., then you can use `audioVideoViewConfig.provider`.
+The `audioVideoViewConfig.provider` requires you (the developer) to return a custom Widget that will be placed at the top of the view.
+
+Here is the reference code:
+
+<CodeGroup>
+```java Java
+public class LiveActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_live);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String liveID = "testLiveID";
+
+    // Modify your custom configurations here.
+    ZegoUIKitPrebuiltLiveStreamingConfig config;
+    if (isHost) {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
+    } else {
+        config = ZegoUIKitPrebuiltLiveStreamingConfig.audience();
+    }
+    
+    config.audioVideoViewConfig.provider = new ZegoViewProvider() {
+        @Override
+        public View getForegroundView(ViewGroup parent,ZegoUIKitUser userInfo) {
+            return new YourCustomVideoForegroundView(parent.getContext(), userInfo);
+        }
+    };
+
+    ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName,liveID, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+
+```kotlin Kotlin
+class LiveActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        val appID: Long = YourAppID
+        val appSign: String = YourAppSign
+        val userID = "userID"
+        val userName = "userName"
+        val liveID = "testLiveID"
+
+        // Modify your custom configurations here.
+        val config: ZegoUIKitPrebuiltLiveStreamingConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+        }
+        config.audioVideoViewConfig.provider = object : ZegoViewProvider() {
+            fun getForegroundView(parent:ViewGroup,userInfo: ZegoUIKitUser?): View {
+                return YourCustomVideoForegroundView(parent.context, userInfo)
+            }
+        }
+
+        val fragment = ZegoUIKitPrebuiltLiveStreamingFragment
+            .newInstance(appID, appSign, userID, userName, liveID, config)
+      
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+

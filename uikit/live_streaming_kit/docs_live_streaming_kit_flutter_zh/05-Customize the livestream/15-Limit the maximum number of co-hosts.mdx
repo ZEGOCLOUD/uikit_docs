@@ -1,0 +1,52 @@
+# Limit the maximum number of co-hosts
+
+If you want to limit the number of co-hosts (by default, we allow up to 12 co-cohosts), you can set `maxCoHostCount` to achieve this.
+
+If you want to receive a notification when the number of co-hosts reaches the limit, you can listen for `onMaxCoHostReached` to receive the notification.
+
+Here is the reference code:
+```dart
+class LivePage extends StatefulWidget {
+  final String liveID;
+  final bool isHost;
+
+  const LivePage({
+    Key? key,
+    required this.liveID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => LivePageState();
+}
+
+class LivePageState extends State<LivePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveStreaming(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: 'userID',
+        userName: 'userName',
+        liveID: widget.liveID,
+        events: ZegoUIKitPrebuiltLiveStreamingEvents(
+          coHost: ZegoLiveStreamingCoHostEvents(
+            onMaxCountReached: (count){
+              debugPrint('onMaxCountReached:$count');
+            }
+          ),
+        ),
+        config: (widget.isHost
+            ? ZegoUIKitPrebuiltLiveStreamingConfig.host(
+          plugins: [ZegoUIKitSignalingPlugin()],
+        )
+            : ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+          plugins: [ZegoUIKitSignalingPlugin()],
+        ))
+          ..maxCoHostCount = 12
+      ),
+    );
+  }
+}
+```

@@ -1,0 +1,104 @@
+# Use in conjunction with Call Kit
+
+This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start). 
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+</Frame>
+
+## Implementation Process
+
+<Steps>
+<Step title="Integrate In-app Chat Kit">
+Please refer to [Quick start](../02-Quick%20start.mdx) to integrate the In-app Chat Kit. If it has already been integrated, you can ignore this step.
+</Step>
+<Step title="Integrate Call Kit">
+Please refer to the [Call Kit Quick start](/callkit-ios/quick-start-(with-call-invitation)) to integrate the Call Kit.
+</Step>
+<Step title="Initialize Call Kit">
+
+After successfully logging in to the In-app Chat Kit, add the following code to initialize Call Kit:
+
+```swift {7,8}
+let appID: UInt32 = YOUR_APPID
+let appSign: String = YOUR_APP_SIGN
+let userID: String = YOUR_USER_ID
+let userName: String = YOUR_USER_NAME
+ZIMKit.connectUser(userID: userID, userName: userName) { error in
+    if error.code == .success {
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(appID, appSign: appSign, userID: userID, userName: userName, config: config)
+    }
+}
+```
+
+</Step>
+<Step title="Add Send call invitation buttons">
+You can return a header bar by using the `getMessageListHeaderBar` method of `ZIMKitMessagesListVCDelegate`. Then, you can add the voice call button and video call button to the top right corner of the header bar using the `ZIMKitHeaderBar.rightItems` property.
+
+```swift {27,28}
+import ZIMKit
+import ZegoUIKitPrebuiltCall
+
+extension ViewController: ZIMKitMessagesListVCDelegate {
+    
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+        
+        if messageListVC.conversationType != .peer { return nil }
+        
+        // Get conversationID and conversationName from messageListVC
+        let conversationID = messageListVC.conversationID
+        let conversationName = messageListVC.conversationName
+        
+        // Create voice call button and set the user to be called as ZegoUIKitUser
+        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create video call button and set the user to be called as ZegoUIKitUser
+        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
+        
+        // Create UIBarButtonItem using the above buttons
+        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
+        let videoItem = UIBarButtonItem(customView: videoCallButton)
+        
+        // Create HeaderBar and set voice and video to `rightItems`
+        let header = ZIMKitHeaderBar()
+        header.rightItems = [videoItem, voiceItem]
+        
+        return header
+    }
+}
+```
+No matter if you are integrating the conversation component or the message component, you need to set the ZIMKitMessagesListVCDelegate delegate. Here are the ways to set the delegate for each integration method:
+<CodeGroup>
+```swift title="With conversation component" {2}
+let conversationVC = ZIMKitConversationListVC()
+conversationVC.messageDelegate = self
+```
+
+```swift title="With message component" {2}
+let messageVC = ZIMKitMessagesListVC(conversationID: "conversationID", type: .peer)
+messageVC.delegate = self
+```
+</CodeGroup>
+</Step>
+</Steps>
+
+So far, you have successfully integrated Call Kit in the In-app Chat Kit. You can now run and experience it.
+
+## More resources
+
+The above content only introduces the basic configuration required for integrating Call Kit. If you need to further customize the configuration of the call, refer to the following documents:
+
+<CardGroup cols={2}>
+  
+  <Card title="Call Kit - Quick start" href="https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start" target="_blank">
+    Steps in this doc helps you to make a call quickly.
+  </Card>
+
+  <Card title="Call Kit - Custom prebuilt UI" href="https://zegocloud.com/docs/uikit/callkit-ios/calling-config/overview" target="_blank">
+    This article guides you on how to further customize the features and UI of the call.
+  </Card>
+
+</CardGroup>

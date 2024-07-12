@@ -1,0 +1,932 @@
+# Event
+
+## ZegoUIKitPrebuiltLiveStreamingVCDelegate
+
+
+
+### getForegroundView
+
+> - function prototype:
+>
+> ```swift
+> func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView? {
+>     let view = ZegoBaseAudioVideoForegroundView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), userID: userInfo?.userID, delegate: nil)
+>     //...
+>     return view
+>   }
+> }
+> ```
+
+
+
+
+
+### onLeaveLiveStreaming
+
+> - function prototype:
+>
+> ```swift
+> func onLeaveLiveStreaming()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func onLeaveLiveStreaming() {
+>     print("is leave live streaming")
+>     //....
+>   }
+> }
+> ```
+
+
+
+
+
+### onLiveStreamingEnded
+
+> - function prototype:
+>
+> ```swift
+> func onLiveStreamingEnded()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func onLiveStreamingEnded() {
+>     print("live streaming is end")
+>     //....
+>   }
+> }
+> ```
+
+
+
+
+
+### onStartLiveButtonPressed
+
+> - function prototype:
+>
+> ```swift
+> func onStartLiveButtonPressed()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func onStartLiveButtonPressed() {
+>     print("start live button is click")
+>     //....
+>   }
+> }
+> ```
+
+
+
+
+
+### getPKBattleTopView
+
+> - function prototype:
+>
+> ```swift
+> func getPKBattleTopView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func getPKBattleTopView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+>     let view = UIView()
+>     view.backgroundColor = UIColor.red
+>     return view
+>   }
+> }
+> ```
+>
+> 
+
+###  getPKBattleForegroundView
+
+> - function prototype:
+>
+> ```swift
+> func getPKBattleForegroundView(_ parentView: UIView, userInfo: ZegoUIKitUser) -> UIView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func getPKBattleForegroundView(_ parentView: UIView, userInfo: ZegoUIKitUser) -> UIView? {
+>     let view = UIView()
+>     let button: MutePKUserButton = MutePKUserButton()
+>     button.frame = CGRect(x: 30, y: 30, width: 80, height: 40)
+>     view.addSubview(button)
+>     return view
+>   }
+> }
+> ```
+
+
+
+### getPKBattleBottomView
+
+> - function prototype:
+>
+> ```swift
+> func getPKBattleBottomView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>   func getPKBattleBottomView(_ parentView: UIView, userList: [ZegoUIKitUser]) -> UIView? {
+>     let view = UIView()
+>     view.backgroundColor = UIColor.red
+>     return view
+>   }
+> }
+> ```
+
+
+
+### onInRoomMessageClick
+
+> - function prototype:
+>
+> ```swift
+> func onInRoomMessageClick(_ message: ZegoInRoomMessage)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+>     func onInRoomMessageClick(_ message: ZegoInRoomMessage) {
+>        // ...
+>        // ZegoInRoomMessage has these property
+>        // public var message: String?
+>        // public var messageID: Int64 = 0
+>        // public var sendTime: UInt64 = 0
+>        // public var user: ZegoUIKitUser?
+>     }
+> }
+> ```
+
+
+### onIMRecvBarrageMessage
+
+- function prototype:
+
+    ```swift
+    func onIMRecvBarrageMessage(_ roomID: String, messageList: [ZegoUIKitBarrageMessageInfo])
+    ```
+
+- example:
+
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltLiveStreamingVCDelegate {
+        func func onIMRecvBarrageMessage(_ roomID: String, messageList: [ZegoUIKitBarrageMessageInfo]) {
+        // ...
+        // ZegoInRoomMessage has the following properties:
+        // public var message: String?
+        // public var messageID: String?
+        // public var sendTime: CUnsignedLongLong = 0
+        // public var user: ZegoUIKitUser?
+        }
+    }
+    ```
+
+
+## ZegoLiveStreamingManagerDelegate
+
+
+
+### onIncomingCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostRequest(inviter: ZegoUIKitUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostRequest(inviter: ZegoUIKitUser) {
+>      //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingInviteToCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingInviteToCohostRequest(inviter: ZegoUIKitUser, invitationID: String)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingInviteToCohostRequest(inviter: ZegoUIKitUser, invitationID: String) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingRemoveCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingRemoveCohostRequest(inviter: ZegoUIKitUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingRemoveCohostRequest(inviter: ZegoUIKitUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingAcceptCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingAcceptCohostRequest(invitee: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingAcceptCohostRequest(invitee: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCancelCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCancelCohostRequest(inviter: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCancelCohostRequest(inviter: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCancelCohostInvite
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCancelCohostInvite(inviter: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCancelCohostInvite(inviter: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingRefuseCohostRequest
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingRefuseCohostRequest(invitee: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingRefuseCohostRequest(invitee: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingRefuseCohostInvite
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingRefuseCohostInvite(invitee: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingRefuseCohostInvite(invitee: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCohostRequestTimeOut
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostRequestTimeOut(inviter: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostRequestTimeOut(inviter: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCohostInviteTimeOut
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostInviteTimeOut(inviter: ZegoUIKitUser, data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostInviteTimeOut(inviter: ZegoUIKitUser, data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCohostInviteResponseTimeOut
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCohostRequestResponseTimeOut
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingCohostInviteResponseTimeOut(invitees: [ZegoUIKitUser], data: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingPKRequestReceived
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingPKRequestReceived(requestID: String, 
+>                                  anotherHostUser: ZegoUIKitUser, 
+>                                  anotherHostLiveID: String, 
+>                                  customData: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingPKRequestReceived(requestID: String, 
+>                                    anotherHostUser: ZegoUIKitUser, 
+>                                    anotherHostLiveID: String, 
+>                                    customData: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingResumePKRequestReceived
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingResumePKRequestReceived(requestID: String)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingResumePKRequestReceived(requestID: String) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingPKRequestCancelled
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingPKRequestCancelled(anotherHostLiveID: String, 
+>                                   anotherHostUser: ZegoUIKitUser, 
+>                                   customData: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingPKRequestCancelled(anotherHostLiveID: String, 
+>                                     anotherHostUser: ZegoUIKitUser, 
+>                                     customData: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingPKRequestAccepted
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingPKRequestAccepted(anotherHostLiveID: String,
+>                                  anotherHostUser: ZegoUIKitUser, 
+>                                  customData: String?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onOutgoingPKRequestAccepted(anotherHostLiveID: String, 
+>                                    anotherHostUser: ZegoUIKitUser, 
+>                                    customData: String?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingPKRequestRejected
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingPKRequestRejected(reason: Int, anotherHostUser: ZegoUIKitUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onOutgoingPKRequestRejected(reason: Int, anotherHostUser: ZegoUIKitUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingPKRequestTimeout
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingPKRequestTimeout(requestID: String, anotherHostUser: ZegoUIKitUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onIncomingPKRequestTimeout(requestID: String, anotherHostUser: ZegoUIKitUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingPKRequestTimeout
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingPKRequestTimeout(requestID: String, anotherHost: ZegoUIKitUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onOutgoingPKRequestTimeout(requestID: String, anotherHost: ZegoUIKitUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onPKStarted
+
+> - function prototype:
+>
+> ```swift
+> func onPKStarted(roomID: String, userID: String)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onPKStarted(roomID: String, userID: String) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onPKEnded
+
+> - function prototype:
+>
+> ```swift
+> func onPKEnded()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onPKEnded() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onPKViewAvaliable
+
+> - function prototype:
+>
+> ```swift
+> func onPKViewAvaliable()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onPKViewAvaliable() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onLocalHostCameraStatus
+
+> - function prototype:
+>
+> ```swift
+> func onLocalHostCameraStatus(isOn: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onLocalHostCameraStatus(isOn: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onAnotherHostCameraStatus
+
+> - function prototype:
+>
+> ```swift
+> func onAnotherHostCameraStatus(isOn: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onAnotherHostCameraStatus(isOn: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onAnotherHostIsReconnecting
+
+> - function prototype:
+>
+> ```swift
+> func onAnotherHostIsReconnecting()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onAnotherHostIsReconnecting() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onAnotherHostIsConnected
+
+> - function prototype:
+>
+> ```swift
+> func onAnotherHostIsConnected()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onAnotherHostIsConnected() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onHostIsReconnecting
+
+> - function prototype:
+>
+> ```swift
+> func onHostIsReconnecting()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onHostIsReconnecting() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onHostIsConnected
+
+> - function prototype:
+>
+> ```swift
+> func onHostIsConnected()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onHostIsConnected() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onMixerStreamTaskFail
+
+> - function prototype:
+>
+> ```swift
+> func onMixerStreamTaskFail(errorCode: Int)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onMixerStreamTaskFail(errorCode: Int) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onStartPlayMixerStream
+
+> - function prototype:
+>
+> ```swift
+> func onStartPlayMixerStream()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onStartPlayMixerStream() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onStopPlayMixerStream
+
+> - function prototype:
+>
+> ```swift
+> func onStopPlayMixerStream()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onStopPlayMixerStream() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOtherHostMuted
+
+> - function prototype:
+>
+> ```swift
+> func onOtherHostMuted(userID: String, mute: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoLiveStreamingManagerDelegate {
+>   func onOtherHostMuted(userID: String, mute: Bool) {
+>     //...
+>   }
+> }
+> ```

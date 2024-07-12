@@ -1,0 +1,85 @@
+# Set avatar for users
+
+
+User avatars are generally stored in the server. Call Kit (ZegoUIKitPrebuiltCall) does not know the real profile picture of each user, so it uses the first letter of the username to draw the user avatars by default, as shown below:
+
+|                                                               When a user in silence                                                                |                                                              When a user speaks                                                              |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: |
+| <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/_default_avatar_nowave.jpg" /></Frame> | <Frame width="200" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/_default_avatar.jpg" /></Frame> |
+
+To configure the custom user avatars, you can use the `avatarViewProvider ` in `ZegoUIKitPrebuiltCallConfig`to set a custom view.
+
+<Warning title="Warning">
+
+Please note that here you need to return different avatars for different users based on the user parameter in the callback parameters. If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+
+</Warning>
+
+
+
+Here is the reference code:
+
+
+<CodeGroup>
+
+```java title="Basic call"
+long appID = yourAppID;
+String appSign = yourAppSign;
+String userID = yourUserID;
+String userName = yourUserName;
+String callID = ;
+
+ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+
+config.avatarViewProvider = new ZegoAvatarViewProvider() {
+    @Override
+    public View onUserIDUpdated(ViewGroup parent, ZegoUIKitUser uiKitUser) {
+        ImageView imageView = new ImageView(parent.getContext());
+        // Please note that here you need to return different avatars for different users based on the user parameter in the callback parameters. 
+        // If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+        String avatarUrl = getAvatarByUserID(uiKitUser.userID);
+        if (!TextUtils.isEmpty(avatarUrl)) {
+            RequestOptions requestOptions = new RequestOptions().circleCrop();
+            Glide.with(parent.getContext()).load(avatarUrl).apply(requestOptions).into(imageView);
+        }
+        return imageView;
+    }
+};
+
+ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(appID, appSign, userID,userName, callID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+```
+
+```java title="Call with invitation"
+long appID = yourAppID;
+String appSign = yourAppSign;
+String userID = yourUserID;
+String userName = yourUserName;
+
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+    @Override
+    public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+        ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+        config.avatarViewProvider = new ZegoAvatarViewProvider() {
+            @Override
+            public View onUserIDUpdated(ViewGroup parent, ZegoUIKitUser uiKitUser) {
+                ImageView imageView = new ImageView(parent.getContext());
+                // Please note that here you need to return different avatars for different users based on the user parameter in the callback parameters. 
+                // If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+                String avatarUrl = getAvatarByUserID(uiKitUser.userID);
+                if (!TextUtils.isEmpty(avatarUrl)) {
+                    RequestOptions requestOptions = new RequestOptions().circleCrop();
+                    Glide.with(parent.getContext()).load(avatarUrl).apply(requestOptions).into(imageView);
+                }
+                return imageView;
+            }
+        };
+        return config;
+    }
+};
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+```
+</CodeGroup>
+
+When complete, the Call Kit (ZegoUIKitPrebuiltCall) displays the custom user avatar that you set.

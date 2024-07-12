@@ -1,0 +1,818 @@
+import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
+
+# Quick start (with call invitation)
+
+You can refer to this document to understand the effects of the offline call invitation (system-calling UI) and complete the basic integration.
+
+
+<Note title="Note">
+
+1. If your project needs Firebase integration or customization of features like ringtone and UI, complete the basic integration first and then refer to **Customize the call** and **Enhance the call** for further configuration.
+
+2. Offline call invitation configuration is complex. If you only require online call invitations, please skip the steps related to firebase console and apple certificate.
+
+</Note>
+
+## UI Implementation Effects
+
+Recorded on Xiaomi and iPhone, the outcome may differ on different devices.
+
+| Online call                                                                                                                                                    | online call (Android App background)                                                                                                                               | offline call (Android App killed)                                                                                                                               | offline call (iOS Background/Killed)                                                                                                                              |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="300" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/1online.gif" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/2background.gif" /></Frame> | <Frame width="300" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/3offline.gif" /></Frame> | <Frame width="155" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/iOScallkit.gif" /></Frame> |
+
+
+## Integration Guide for Common Components
+
+### Prerequisites
+
+<UIKitInvitationPrerequisitesZIMSignaling/>
+
+
+### Add dependencies.
+
+1. Run the following code in your project root directory, to install `@zegocloud/zego-uikit-prebuilt-call-rn`.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-prebuilt-call-rn
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-prebuilt-call-rn
+```
+</CodeGroup>
+
+<Warning title="Warning">
+
+- If you are using Expo, please note that we only support Expo bare workflow. (We have only done basic testing on expo. If possible, it is recommended to integrate call kit with a standard react native project.)
+
+- call invitation feature is not compatible with "expo-notifications" and cannot be used together. If you are using "expo-notifications", it is recommended to remove this dependency or migrate to "@react-native-firebase/messaging".
+
+</Warning>
+
+
+
+
+2. Add other dependencies.
+
+Run the following command to install other dependencies for making sure the `@zegocloud/zego-uikit-prebuilt-call-rn` can work properly.
+
+<CodeGroup>
+```bash yarn
+yarn add @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.2-alpha react-native-keep-awake@4.0.0
+```
+
+```bash npm
+npm install @zegocloud/zego-uikit-rn react-delegate-component @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context react-native-sound react-native-encrypted-storage zego-express-engine-reactnative@3.14.5 zego-zim-react-native@2.12.1 zego-zpns-react-native@2.5.2-alpha react-native-keep-awake@4.0.0
+```
+</CodeGroup>
+
+<Accordion title="When your React Native version is below 0.60, please follow these steps" defaultOpen="false">
+
+If your react-native version is below 0.60, you need to run the following command in your project root directory to ensure that `react-native-encrypted-storage` can work properly.
+```bash
+react-native link react-native-encrypted-storage
+```
+</Accordion>
+
+<Accordion title={`Check here if you encounter the issue "undefined is not an object (evaluating 'RNSound.IsAndroid')"`} defaultOpen="false">
+
+Internally, the [react-native-sound](https://www.npmjs.com/package/react-native-sound) plugin is used to play ringtones. If you encounter this error:
+
+```bash
+undefined is not an object (evaluating 'RNSound.IsAndroid')
+```
+
+Then, you may additionally need to fully clear your build caches for Android. You can do this using:
+
+```bash
+cd android
+./gradlew cleanBuildCache
+```
+
+After clearing your build cache, you should execute a new react-native build.
+
+If you still experience issues, know that this is the most common build issue. And check it [here](https://github.com/zmxv/react-native-sound/issues/592) and the several issues linked to it for possible resolution.
+
+</Accordion>
+
+
+
+### Config React Navigation
+
+To let users transition between multiple screens, you will need to install a navigation library. In React Native, there are several different types of navigation libraries you can use to create a navigation structure. For now, we use the [React navigation](https://reactnavigation.org/).
+
+
+1. Place the `ZegoCallInvitationDialog` component on the top level of the `NavigationContainer`.
+
+```js
+<ZegoCallInvitationDialog />
+```
+
+2. Add two routes (`ZegoUIKitPrebuiltCallWaitingScreen` and `ZegoUIKitPrebuiltCallInCallScreen`) to your stack navigator.
+
+
+```js
+<Stack.Screen
+    options={{ headerShown: false }}
+    // DO NOT change the name 
+    name="ZegoUIKitPrebuiltCallWaitingScreen"
+    component={ZegoUIKitPrebuiltCallWaitingScreen}
+/>
+<Stack.Screen
+    options={{ headerShown: false }}
+    // DO NOT change the name
+    name="ZegoUIKitPrebuiltCallInCallScreen"
+    component={ZegoUIKitPrebuiltCallInCallScreen}
+/>
+```
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/config_react_navigation.jpg" /></Frame>
+
+
+### Initialize the call invitation service
+
+1. Call the `useSystemCallingUI` method in the `index.js` file.
+
+```js index.js {6-10}
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+
+// Add these lines \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn'
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.useSystemCallingUI([ZIM, ZPNs]);
+// Add these lines /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+
+AppRegistry.registerComponent(appName, () => App);
+```
+
+
+
+2. Call the `ZegoUIKitPrebuiltCallService.init` method.
+
+<Note title="Note">
+
+We recommend calling this method immediately after the user logs into your app.
+
+1. After the user logs in, it is necessary to Initialize the ZegoUIKitPrebuiltCallInvitationService to ensure that it is initialized only once, avoiding errors caused by repeated initialization.
+
+2. When the user logs out, it is ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​important to perform Deinitialize to clear the previous login records, preventing any impact on the next login.
+
+<Frame width="300" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/mermaid-diagram-2023-10-19-170946.png" />
+</Frame>
+
+</Note>
+
+
+```js
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn'
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+const onUserLogin = async (userID, userName, props) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID, // It can be any valid characters, but we recommend using a phone number.
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    });
+}
+
+const onUserLogout = async () => {
+  return ZegoUIKitPrebuiltCallService.uninit()
+}
+```
+
+<Accordion title="The parameters of the init method" defaultOpen="false">
+The prototype of init method: init(appID, appSign, userInfo, plugins, config = {})
+
+| Parameter                        | Type     | Required | Description                                                                                                                                                                                                                          |
+| -------------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| appID                            | Number   | Yes      | You can get the App ID from [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).                                                                                                                                               |
+| appSign                          | String   | Yes      | You can get the App Sign from [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).                                                                                                                                             |
+| userID                           | String   | Yes      | `userID` can be something like a phone number or the user ID on your own user system. userID can only contain numbers, letters, and underlines (_).                                                                                  |
+| userName                         | String   | Yes      | `userName` can be any character or the user name on your own user system.                                                                                                                                                            |
+| plugins                          | Array    | No       | Set it to [ZIM, ZPNs] if you want to use the invitation functionality                                                                                                                                                                |
+| config                           | Object   | Yes      | You can set it to empty object {} if you don't want to change any configuration                                                                                                                                                      |
+| config.ringtoneConfig            | Object   | No       | `ringtoneConfig.incomingCallFileName` and `ringtoneConfig.outgoingCallFileName` is the name of the ringtone file, which requires you a manual import. To know how to import, refer to the following chapter: Configure your project. |
+| config.requireConfig             | Function | No       | This method is called when you receive a call invitation. You can control the SDK behaviors by returning the required config based on the data parameter. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx). |
+| config.androidNotificationConfig | Object   | No       | `androidNotificationConfig.channelID` must be the same as the FCM Channel ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and the `androidNotificationConfig.channelName` can be an arbitrary value.                 |
+| config.innerText                 | Object   | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                                 |
+
+</Accordion>
+
+
+
+### Add a call invitation button
+
+Configure the "ZegoSendCallInvitationButton" to enable making calls. 
+
+<CodeGroup>
+```react title="One-on-one"
+<ZegoSendCallInvitationButton
+    invitees={[{userID: varUserID, userName: varUserName}]}
+    isVideoCall={true}
+    resourceID={"zego_call"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+/>
+```
+
+```react title="Group call"
+<ZegoSendCallInvitationButton
+    invitees={invitees.map((inviteeID) => {
+        return { userID: inviteeID, userName: 'user_' + inviteeID };
+    })}
+    isVideoCall={true}
+    resourceID={"zego_call"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+/>
+```
+</CodeGroup>
+
+<Accordion title="Props of ZegoSendCallInvitationButton" defaultOpen="false">
+| Property      | Type     | Required | Description                                                                                                                                                                                              |
+| :------------ | :------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| invitees      | Array    | Yes      | The information of the callee. userID and userName are required. For example: [\{ userID: inviteeID, userName: inviteeName \}]                                                                           |
+| isVideoCall   | Boolean  | Yes      | If true, a video call is made when the button is pressed. Otherwise, a voice call is made.                                                                                                               |
+| resourceID    | Boolean  | No       | `resourceID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). |
+| timeout       | Number   | No       | The timeout duration. It's 60 seconds by default.                                                                                                                                                        |
+| onPressed     | Function | No       | Callback method after pressing the button and sending an invitation.                                                                                                                                     |
+| onWillPressed | Function | No       | This method will be triggered before pressing the send invitation button. You need to return a Promise in this method. If the value of the Promise is false, the invitation will be cancelled.           |
+
+</Accordion>
+
+
+For more parameters, go to [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).
+
+<Accordion title="Complete sample code" defaultOpen="false">
+
+The example code uses `react-native-device-info` and `@react-native-async-storage/async-storage` to generate `userID` and `userName`. If you also need to use them, please execute the following command to install dependencies:
+
+
+<CodeGroup>
+```bash yarn
+yarn add react-native-device-info @react-native-async-storage/async-storage
+```
+
+```bash npm
+npm install react-native-device-info @react-native-async-storage/async-storage
+```
+</CodeGroup>
+
+```js
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { getFirstInstallTime } from 'react-native-device-info'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+import ZegoUIKitPrebuiltCallService, {
+  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, ZegoSendCallInvitationButton,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+const Stack = createNativeStackNavigator();
+
+
+const storeUserInfo = async (info) => {
+  await AsyncStorage.setItem("userID", info.userID)
+  await AsyncStorage.setItem("userName", info.userName)
+}
+const getUserInfo = async () => {
+  try {
+    const userID = await AsyncStorage.getItem("userID")
+    const userName = await AsyncStorage.getItem("userName")
+    if (userID == undefined) {
+      return undefined
+    } else {
+      return { userID, userName }
+    }
+  } catch (e) {
+    return undefined
+  }
+}
+
+const onUserLogin = async (userID, userName) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+      ringtoneConfig: {
+        incomingCallFileName: 'zego_incoming.mp3',
+        outgoingCallFileName: 'zego_outgoing.mp3',
+      },
+      androidNotificationConfig: {
+        channelID: "ZegoUIKit",
+        channelName: "ZegoUIKit",
+      },
+    });
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Step 1: Config React Navigation
+export default function App() {
+  return (
+    <NavigationContainer >
+      
+      <ZegoCallInvitationDialog />
+
+      <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+        />
+
+        <Stack.Screen
+          options={{ headerShown: false }}
+          // DO NOT change the name 
+          name="ZegoUIKitPrebuiltCallWaitingScreen"
+          component={ZegoUIKitPrebuiltCallWaitingScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          // DO NOT change the name
+          name="ZegoUIKitPrebuiltCallInCallScreen"
+          component={ZegoUIKitPrebuiltCallInCallScreen}
+        />
+
+      </Stack.Navigator>
+    </NavigationContainer>);
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Step 2: Call the "ZegoUIKitPrebuiltCallService.init" method after the user login.
+function LoginScreen(props) {
+  const navigation = useNavigation();
+  const [userID, setUserID] = useState('');
+  const [userName, setUserName] = useState('');
+
+  const loginHandler = () => {
+    // Simulated login successful
+
+    // Store user info to auto login
+    storeUserInfo({ userID, userName })
+
+    // Init the call service
+    onUserLogin(userID, userName).then(() => {
+      // Jump to HomeScreen to make new call
+      navigation.navigate('HomeScreen', { userID });
+    })
+  }
+
+  useEffect(() => {
+    getFirstInstallTime().then(firstInstallTime => {
+      const id = String(firstInstallTime).slice(-5);
+      setUserID(id);
+      const name = 'user_' + id
+      setUserName(name);
+    });
+  }, [])
+
+  return <View style={styles.container}>
+    <View style={{ marginBottom: 30 }}>
+      <Text>appID: {yourAppID}</Text>
+      <Text>userID: {userID}</Text>
+      <Text>userName: {userName}</Text>
+    </View>
+    <View style={{ width: 160 }}>
+      <Button title='Login' onPress={loginHandler}></Button>
+    </View>
+  </View>;
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Step 3: Configure the "ZegoSendCallInvitationButton" to enable making calls. 
+function HomeScreen({ route, navigation }) {
+  const [userID, setUserID] = useState('')
+  const [invitees, setInvitees] = useState([]);
+  const viewRef = useRef(null);
+  const blankPressedHandle = () => {
+    viewRef.current.blur();
+  };
+  const changeTextHandle = value => {
+    setInvitees(value ? value.split(',') : []);
+  };
+
+
+  useEffect(() => {
+    // Simulated auto login if there is login info cache
+    getUserInfo().then((info) => {
+      if (info) {
+        setUserID(info.userID)
+        onUserLogin(info.userID, info.userName)
+      } else {
+        //  Back to the login screen if not login before
+        navigation.navigate('LoginScreen');
+      }
+    })
+  }, [])
+
+  return (
+    <TouchableWithoutFeedback onPress={blankPressedHandle}>
+      <View style={styles.container}>
+        <Text>Your user id: {userID}</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={viewRef}
+            style={styles.input}
+            onChangeText={changeTextHandle}
+            placeholder="Invitees ID, Separate ids by ','"
+          />
+          <ZegoSendCallInvitationButton
+            invitees={invitees.map((inviteeID) => {
+              return { userID: inviteeID, userName: 'user_' + inviteeID };
+            })}
+            isVideoCall={false}
+            resourceID={"zego_call"}
+          />
+          <ZegoSendCallInvitationButton
+            invitees={invitees.map((inviteeID) => {
+              return { userID: inviteeID, userName: 'user_' + inviteeID };
+            })}
+            isVideoCall={true}
+            resourceID={"zego_call"}
+          />
+        </View>
+        <View style={{ width: 220, marginTop: 100 }}>
+          <Button title='Back To Login Screen' onPress={() => { navigation.navigate('LoginScreen') }}></Button>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: "gray"
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    input: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#dddddd',
+    },
+});
+```
+</Accordion>
+
+
+
+
+## Configure your project
+
+<Accordion title="Android" defaultOpen="true">
+
+### Android
+#### 1. Firebase Console and ZEGO Console Configuration
+
+- step1. In the Firebase console: Create a project. (Resource may help: [Firebase Console](https://console.firebase.google.com/))
+
+<Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>
+
+- step2. In the ZegoCloud console: Add FCM certificate, create a resource ID;
+
+> In the create resource ID popup dialog, you should switch to the VoIP option for APNs, and switch to Data messages for FCM.
+
+<Video src="https://www.youtube.com/embed/K3kRWyafRIY"/>
+When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/android_resource_id.png" /></Frame>
+
+
+
+After the above is completed, the `resourceID` property value of `ZegoSendCallInvitationButton` needs to be replaced with the resource ID you get.
+
+
+<CodeGroup>
+```html title="One-on-one"
+<ZegoSendCallInvitationButton
+    invitees={[{userID: varUserID, userName: varUserName'}]}
+    isVideoCall={true}
+    resourceID={"zego_call"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+/>
+```
+
+```html title="Group call"
+<ZegoSendCallInvitationButton
+    invitees={invitees.map((inviteeID) => {
+        return { userID: inviteeID, userName: 'user_' + inviteeID };
+    })}
+    isVideoCall={true}
+    resourceID={"zego_call"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+/>
+```
+</CodeGroup>
+
+
+
+- step3. In the Firebase console: Create an Android application and modify your code;
+
+<Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
+
+
+
+#### 2. Guide your users to set app permissions
+
+- To guide your users to enable `Appear on top` permission:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/app_settings.png" /></Frame>
+
+- Or you can refer to the following code to request system aler window permission after the initialization is completed.
+
+```js
+const onUserLogin = async (userID, userName, props) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID, // It can be any valid characters, but we recommend using a phone number.
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    }
+  ).then(() => {
+    // /////////////////////////
+    ZegoUIKitPrebuiltCallService.requestSystemAlertWindow({
+      message: 'We need your consent for the following permissions in order to use the offline call function properly',
+      allow: 'Allow',
+      deny: 'Deny',
+    });
+    // /////////////////////////
+  });
+}
+```
+
+#### 3. Prevent code obfuscation
+
+Open the `my_project/android/app/proguard-rules.pro` file and add the following:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/proguard_rules.jpeg" /></Frame>
+
+```xml
+-keep class **.zego.**  { *; }
+-keep class **.**.zego_zpns.** { *; }
+```
+
+#### 4. Add firebase-messaging dependency
+
+Add this line to your project's `my_project/android/app/build.gradle` file as instructed.
+
+```xml
+implementation 'com.google.firebase:firebase-messaging:21.1.0'
+```
+
+#### 5. Check whether the local config is set up properly.
+
+- Download the [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) to your project's root directory, and run the following command:
+
+```bash
+python3 zego_check_android_offline_notification.py
+```
+
+- You will see the following if everything goes well: 
+```
+✅ The google-service.json is in the right location.
+✅ The package name matches google-service.json.
+✅ The project level gradle file is ready.
+✅ The plugin config in the app-level gradle file is correct.
+✅ Firebase dependencies config in the app-level gradle file is correct.
+✅ Firebase-Messaging dependencies config in the app-level gradle file is correct.
+```
+
+</Accordion>
+
+<Accordion title="iOS" defaultOpen="true">
+### iOS
+#### 1. Apple Developer Center and ZEGOCLOUD Console Configuration
+
+- step1. You need to refer to [Create VoIP services certificates](https://developer.apple.com/help/account/create-certificates/create-voip-services-certificates/) to create the VoIP service certificate, and ​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​export a .p12 file on your Mac.
+
+<Video src="https://www.youtube.com/embed/UK9AUXcTGCE"/>
+
+
+- step2. Add the voip service certificate .p12 file. Then, create a resource ID;
+
+> ​In the create resource ID popup dialog, you should switch to the VoIP option for APNs, and switch to Data messages for FCM.
+
+<Video src="https://www.youtube.com/embed/sYFeq7sZFEA"/>
+
+
+When you have completed the configuration, you will obtain the `resourceID`. You can refer to the image below for comparison.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_resource_id.png" /></Frame>
+
+#### 2. Add app permissions
+
+Open the `my_project/ios/my_project/Info.plist` file and add the following:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/RN/PrebuiltCall/ios_config2.gif" /></Frame>
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>We need to use the camera</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need to use the microphone</string>
+```
+
+#### 3. Add Push Notifications configuration
+
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" /></Frame>
+
+
+And double-click on `Push Notifications` to add this feature.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push.jpeg" /></Frame>
+
+
+#### 4. Add the Background Modes capability.
+
+Open the project with Xcode, and click the`+ Capability` on the `Signing & Capabilities` page again.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capabili.jpeg" /></Frame>
+
+
+And double-click on `Background Modes` in the pop-up window. This will allow you to see the `Background Modes` configuration in the `Signing & Capabilities`. 
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/capability_window.jpeg" /></Frame>
+
+#### 5. Check and Make sure the following features are enabled
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/push2.png" /></Frame>
+
+#### 6. Import the PushKit and CallKit libraries.
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios-callkit-framework.png" /></Frame>
+
+
+</Accordion>
+
+
+## Run & Test
+
+<Note title="Note">
+
+If your device is not performing well or you found a UI stuttering, run in **Release mode** for a smoother experience.
+</Note>
+
+
+- Run on an iOS device:
+
+<CodeGroup>
+```bash yarn
+yarn ios
+```
+
+```bash npm
+npm run ios
+```
+</CodeGroup>
+
+- Run on an Android device:
+
+<CodeGroup>
+```bash yarn
+yarn android
+```
+
+```bash npm
+npm run android
+```
+</CodeGroup>
+
+## FAQ
+
+<Accordion title="1. How to configure offline push certificates two APPs" defaultOpen="false">
+
+I have two different apps that need to support offline calling with each other. How should I configure them?
+
+1. First, you need to configure the index 2 certificate for the second app in the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).
+
+<Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/index2_ios.png" /></Frame>
+
+2. Then, you need to set the `certificateIndex` of the `second app` to `secondCertificate` in the place where you initialize the `ZegoUIKitPrebuiltCallService` on the client side.
+
+```javascript
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+import ZegoUIKitPrebuiltCallService, { ZegoMultiCertificate } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
+const onUserLogin = async (userID, userName, props) => {
+  return ZegoUIKitPrebuiltCallService.init(
+    yourAppID, // You can get it from ZEGOCLOUD's console
+    yourAppSign, // You can get it from ZEGOCLOUD's console
+    userID, // It can be any valid characters, but we recommend using a phone number.
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+        certificateIndex: ZegoMultiCertificate.second,
+    });
+}
+```
+
+<Warning title="Warning">
+
+Please ensure that the certificates on the console correspond one-to-one with the certificateIndex in your code.
+
+</Warning>
+</Accordion>
+
+
+<Accordion title="2. How to resolve the 'permission is null' error?" defaultOpen="false">
+
+For Call Kit's offline push, system notification permission is required. Starting from Android 13, you need to actively apply for notification permission. However, if the React Native version is lower than 0.71.0, applying for permission will result in a `permission is null` error. 
+Here are two solutions:
+
+- **Solution A: Upgrade React Native Version**
+
+  To upgrade React Native version to 0.71.0 and above, please refer to this [link](https://react-native-community.github.io/upgrade-helper).
+
+- **Solution B: Manual Editing of React Native Source Code**
+
+  1. Locate the `PermissionAndroid.js` file at the following path:
+
+      ```bash
+      ../node_modules/react-native/Libraries/PermissionsAndroid/PermissionAndroid.js
+      ```
+
+  2. Open `PermissionAndroid.js` file, and add the following code to `Permissions = Object.freeze({})`
+
+      ```js PermissionAndroid.js
+      POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS',
+      ```
+
+  3. Add the following code to the `PermissionsAndroid` class.
+
+      ```js PermissionAndroid.js
+      POST_NOTIFICATIONS: string,
+      ```
+
+  4. Now go to build.gradle in android folder and change compileSDK and targetSDK version to 33.
+
+      ```groovy build.gradle
+      compileSdkVersion = 33
+      targetSdkVersion = 33
+      ```
+
+</Accordion>
+
+  ## Related guide
+
+
+  <CardGroup cols={2}>
+    <Card title="Custom prebuilt UI" href="./04-Calling config/01-Overview.mdx">
+      Refer this doc to make further customization.
+    </Card>
+  </CardGroup>
+
+
+  ## Resources
+
+  <CardGroup cols={2}>
+    <Card title="Sample code" target="_blank" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_rn">
+      Click here to get the complete sample code.
+    </Card>
+  </CardGroup>

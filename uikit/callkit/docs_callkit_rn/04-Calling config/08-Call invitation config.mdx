@@ -1,0 +1,472 @@
+# Call invitation config
+
+## Customize the call ringtone 
+
+
+First, you need to add the ringtone file to your project.
+
+<Accordion title="For Android project" defaultOpen="false">
+Save your ringtone files under the directory `android/app/src/main/res/raw`. Note that files in this directory must be lowercase and underscored (e.g. my_file_name.mp3) and that subdirectories are not supported by Android.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/rn_android_ringtone.png" />
+</Frame>
+
+<Note title="Note">
+
+The wrapped ringtone file supports aac, aiff, mp3, wav, caf, etc.
+</Note>
+</Accordion>
+
+<Accordion title="For iOS project" defaultOpen="false">
+Open Xcode and add your sound files to the project (Right-click the project and select Add Files to **your project**)
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/rn_ios_ringtone.png" />
+</Frame>
+
+<Note title="Note">
+
+1. The wrapped ringtone file supports aiff, wav, caf, etc.
+
+2. Due to Apple's restrictions, System-UI offline call invitations(VOIP) can only use iOS system ringtones.
+
+</Note>
+</Accordion>
+
+To set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `ringtoneConfig` in the `ZegoUIKitPrebuiltCallService.init` `config` parameter.
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import ZegoUIKitPrebuiltCallService, { ZegoSendCallInvitationButton } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+// LoginScreen
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return callConfig;
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+    },
+)
+
+// HomeScreen
+<ZegoSendCallInvitationButton
+    invitees={[{ userID: inviteeID, userName: inviteeName }]} // List of user object.
+    isVideoCall={false}
+    resourceID={"zegouikit_call"} // For offline call notification
+/>
+<ZegoSendCallInvitationButton
+    invitees={[{ userID: inviteeID, userName: inviteeName }]} // List of user object.
+    isVideoCall={true}
+    resourceID={"zegouikit_call"} // For offline call notification
+/>
+```
+</CodeGroup>
+
+## Hide the decline button
+
+To hide the Decline button when receiving incoming call invitations, set the `showDeclineButton` to `false`.
+
+
+## Modify User Interface text
+
+Call Kit (ZegoUIKitPrebuiltCallService)'s UI text provided by the internal components is editable, to modify those, use the `innerText` config.
+
+The following are the supported properties in `innerText`:
+
+- incomingVideoCallDialogTitle
+- incomingVideoCallDialogMessage
+- incomingVoiceCallDialogTitle
+- incomingVoiceCallDialogMessage
+- incomingVideoCallPageTitle
+- incomingVideoCallPageMessage
+- incomingVoiceCallPageTitle
+- incomingVoiceCallPageMessage
+- incomingGroupVideoCallDialogTitle
+- incomingGroupVideoCallDialogMessage
+- incomingGroupVoiceCallDialogTitle
+- incomingGroupVoiceCallDialogMessage
+- incomingGroupVideoCallPageTitle
+- incomingGroupVideoCallPageMessage
+- incomingGroupVoiceCallPageTitle
+- incomingGroupVoiceCallPageMessage
+- outgoingVideoCallPageTitle
+- outgoingVideoCallPageMessage
+- outgoingVoiceCallPageTitle
+- outgoingVoiceCallPageMessage
+- incomingCallPageDeclineButton
+- incomingCallPageAcceptButton
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        innerText: {
+            incomingVideoCallDialogTitle: "%0",
+            incomingVideoCallDialogMessage: "Incoming video call...",
+        },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return callConfig;
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+</CodeGroup>
+
+## Customize ZegoSendCallInvitationButton
+You can customise the style of ZegoSendCallInvitationButton with the following parameters.
+
+Here are the relevant attributes:
+
+- width: Button width
+- height: Button height
+- invitees: Invitees
+- isVideoCall: Video call or audio call
+- timeout: Default is 60s
+- onWillPressed: Callback of willPressed
+- onPressed: Callback of pressed
+- callID: Custom callID
+- icon: Button icon image
+- text: Button text
+- textColor: Button text color
+- fontSize: Button text size
+- backgroundColor: Button background color
+- borderRadius: Button corner radius
+- borderWidth: Button border width
+- borderColor: Button border color
+- borderStyle: Button border style
+
+Here is the reference code:
+
+<CodeGroup>
+```JavaScript
+<ZegoSendCallInvitationButton
+  text={'Call'}
+  icon={require('xxx.png')}
+  width={200}
+  height={50}
+  textColor={'#DA1818'}
+  backgroundColor={'#CFAAAA'}
+  borderRadius={10}
+  borderWidth={2}
+  borderColor={'#0E0E0E'}
+  borderStyle={'dotted'}
+  fontSize={16}
+  isVideoCall={false}
+  resourceID={"zego_data"}
+/>
+```
+</CodeGroup>
+
+## Customize CallID
+
+As the caller, you can customize the CallID for the call invitation through the `ZegoSendCallInvitationButton`.
+
+Here is the reference code:
+
+```JavaScript
+<ZegoSendCallInvitationButton
+  invitees={invitees.map((inviteeID) => {
+    return { userID: inviteeID, userName: 'user_' + inviteeID };
+  })}
+  isVideoCall={false}
+  resourceID={"zego_data"}
+  callID={'your_custom_call_id'}
+/>
+```
+
+Of course, you can obtain the current CallID through the following callback.
+
+Here is the reference code:
+
+```JavaScript
+ZegoUIKitPrebuiltCallService.init(
+  KeyCenter.appID,
+  KeyCenter.appSign,
+  userID,
+  userName,
+  [ZIM, ZPNs],
+  {
+    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+    requireConfig: (data) => {
+      const callID = data.callID;
+    }
+    //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+  }
+);
+```
+
+## API for call invitation
+
+### sendCallInvitation
+
+`sendCallInvitation(invitees, isVideoCall, navigation, options)`
+
+- `invitees`, a list of target users
+- `isVideoCall`, true or false
+- `navigation`, page navigation after invitation successful
+- `options`
+    - `resourceID`, If you want to set a ringtone for offline call invitations, set resourceID to a value that matches the push resource ID in the ZEGOCLOUD management console.
+    - `timeout`, call invitation timeout, default is 60.
+    - `notificationTitle`, the title of call notification.
+    - `notificationMessage`, the message of call notification.
+    - `callID`, custom call id, if not provided, the system will generate one automatically based on certain rules.
+    - `customData`, you can pass custom data to callees.
+
+Here is the reference code:
+
+```JavaScript
+<Button title='Voice' onPress={() => {
+  const newInvitees = invitees.map((inviteeID) => {
+    return { userID: inviteeID, userName: 'user_' + inviteeID };
+  });
+  ZegoUIKitPrebuiltCallService
+    .sendCallInvitation(
+      newInvitees, 
+      false, 
+      props.navigation, 
+      { 
+        resourceID: 'zego_data', 
+        timeout: 60,
+        callID: '123456789',
+        notificationTitle: 'Title',
+        notificationMessage: 'Message',
+        customData: '',
+      }
+    );
+}} />
+```
+
+
+## Listen for call invitation event callbacks
+
+You can implement further business logic by listening for event callbacks related to the call invitation.
+
+
+The following are supported event callbacks:
+
+- `onIncomingCallDeclineButtonPressed`(navigation): This callback will be triggered when the Decline button is pressed (the callee declines the call invitation).
+- `onIncomingCallAcceptButtonPressed`(navigation): This callback will be triggered when the Accept button is pressed (the callee accepts the call invitation).
+- `onOutgoingCallCancelButtonPressed`(navigation, callID, invitees, type): This callback will be triggered when the Cancel button is pressed (the caller cancels the call invitation).
+- `onIncomingCallReceived`(callID, inviter, type, invitees, customData): This callback will be triggered when receiving call invitations.
+- `onIncomingCallCanceled`(callID, inviter): This callback will be triggered when the caller cancels the call invitation.
+- `onOutgoingCallAccepted`(callID, invitee): The caller will receive a notification through this callback when the callee accepts the call invitation.
+- `onOutgoingCallRejectedCauseBusy`(callID, invitee): The caller will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+- `onOutgoingCallDeclined`(callID, invitee):  The caller will receive a notification through this callback when the callee declines the call invitation actively.
+- `onIncomingCallTimeout`(callID, inviter): The callee will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+- `onOutgoingCallTimeout`(callID, invitees): The caller will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+
+
+Here is the reference code:
+
+<CodeGroup>
+```js title="With call invitation"
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        onIncomingCallReceived: (callID, inviter, type, invitees) => {
+            console.log('Incoming call: ', callID, inviter, type, invitees)
+        },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+            const callConfig =
+                data.invitees.length > 1
+                    ? ZegoInvitationType.videoCall === data.type
+                        ? GROUP_VIDEO_CALL_CONFIG
+                        : GROUP_VOICE_CALL_CONFIG
+                    : ZegoInvitationType.videoCall === data.type
+                        ? ONE_ON_ONE_VIDEO_CALL_CONFIG
+                        : ONE_ON_ONE_VOICE_CALL_CONFIG;
+            return callConfig;
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+</CodeGroup>
+
+## Call End Event
+If you want to receive relevant callbacks when a call ends, you can use `onCallEnd`.
+
+- `onCallEnd`(callID, reason, duration)
+
+The reason for call end:
+- 0: the call ends due to a local hang-up.
+- 1: the call ends when the remote user hung up, leaving only one local user in the call.
+- 2: the call ends because the local user is kicked out or the room is ended.
+
+Here is the reference code:
+
+```js title="With call invitation"
+import ZegoUIKitPrebuiltCallService from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        requireConfig: (data) => {
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+            onCallEnd: (callID, reason, duration) => {
+                console.log('########CallWithInvitation onCallEnd', callID, reason, duration);
+                props.navigation.navigate('HomeScreen');
+            },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+            channelID: "ZegoUIKit",
+            channelName: "ZegoUIKit",
+        },
+    },
+)
+```
+
+## Customize the call waiting page view
+
+If you want to customize the call waiting page, you can use `waitingPageConfig` for relevant configurations.
+
+The waitingPageConfig has the following parameters available for configuration:
+
+1. `backgroundColor`: Use this to set the backgroundColor of waiting page.
+2. `avatarBuilder(invitee)`: Use this to customize the avatar of the invitee.
+3. `hangupBuilder`: Use this to customize the hangup button.
+4. `nameBuilder(userName)`: Use this to customize the name of the invitee.
+5. `stateBuilder`: Use this to customize the state of the page.
+6. `switchCameraBuilder`: Use this to customize the switch camera button.
+7. `backgroundBuilder(invitee, isVideoCall)`: Use this to customize the background of the waiting page.
+
+Here is the reference code:
+
+```js
+import React, { Component } from 'react';
+import ZegoUIKitPrebuiltCallService, { ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import { ZegoLayoutMode } from '@zegocloud/zego-uikit-rn'
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
+
+ZegoUIKitPrebuiltCallService.init(
+    KeyCenter.appID,
+    KeyCenter.appSign,
+    userID,
+    userName,
+    [ZIM, ZPNs],
+    {
+        ringtoneConfig: {
+            incomingCallFileName: 'zego_incoming.mp3',
+            outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        waitingPageConfig: {
+          backgroundColor: 'skyblue',
+          avatarBuilder: (invitee) => {
+            return <View style={{width: 100, height: 100}}>
+             <Image 
+              style={{ width: '100%', height: '100%' }}
+              resizeMode="cover"
+              source={{ uri: `https://robohash.org/${invitee.userID}.png` }}
+              />
+            </View>
+          },
+          hangupBuilder:() => {
+            // ...
+          },
+          nameBuilder: (userName) => {
+            // ...
+          },
+          stateBuilder: () => {
+            // ...
+          },
+          switchCameraBuilder: () => {
+            // ...
+          },
+          backgroundBuilder: (invitee, isVideoCall) => {
+            // ...
+          },
+        },
+        ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+    },
+)
+```

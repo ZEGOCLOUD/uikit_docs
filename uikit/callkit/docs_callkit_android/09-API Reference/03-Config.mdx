@@ -1,0 +1,126 @@
+# Config
+
+## ZegoUIKitPrebuiltCallInvitationConfig
+Call invitation configuration class
+
+| Property                            | Description                                                                                                                                                                                                                                                                                                                                                    | Type                                |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| incomingCallRingtone                | Configures the ringtone for incoming online calls. The resource file needs to be placed in the res/raw/ directory. When setting this parameter, you do not need to include the file name extension. For example, if you have added the zego_incoming.mp3 resource file in the res/raw/ directory, then set incomingCallRingtone to the string "zego_incoming". | String                              |
+| outgoingCallRingtone                | Configures the ringtone for outgoing online calls. The resource file needs to be placed in the res/raw/ directory. When setting this parameter, you do not need to include the file name extension. For example, if you have added the zego_outgoing.mp3 resource file in the res/raw/ directory, then set outgoingCallRingtone to the string "zego_outgoing". | String                              |
+| ZegoUIKitPrebuiltCallConfigProvider | Returns the ZegoUIKitPrebuiltCallConfig configuration class to customize the call. You can use the ZegoUIKitPrebuiltCallInvitationConfig .generateDefaultConfig(ZegoCallInvitationData invitationData) method to generate the default configuration. Please refer to the [Overview](../04-Calling%20config/01-Overview.mdx)                                    | ZegoUIKitPrebuiltCallConfigProvider |
+| incomingCallBackground              | Configures the background image for the waiting page of incoming online calls.                                                                                                                                                                                                                                                                                 | Drawable                            |
+| outgoingCallBackground              | Configures the background image for the waiting page of outgoing online calls.                                                                                                                                                                                                                                                                                 | Drawable                            |
+| showDeclineButton                   | Specifies whether to display the decline button when receiving an incoming online call.                                                                                                                                                                                                                                                                        | boolean                             |
+| notificationConfig                  | Offline call related configuration.                                                                                                                                                                                                                                                                                                                            | ZegoNotificationConfig              |
+| translationText                     | Text related to call invitations.                                                                                                                                                                                                                                                                                                                              | ZegoTranslationText                 |
+## ZegoUIKitPrebuiltCallConfig
+Call configuration class
+
+| Property                    | Description                                                                                                                                                         | Type                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| turnOnCameraWhenJoining     | Whether to enable the camera by default when joining a call. Default value is true.                                                                                 | boolean                                                               |
+| turnOnMicrophoneWhenJoining | Whether to enable the microphone by default when joining a call. Default value is true.                                                                             | boolean                                                               |
+| useSpeakerWhenJoining       | Whether to enable the speaker by default when joining a call. Default value is true.                                                                                | boolean                                                               |
+| audioVideoViewConfig        | Configuration for audio and video views, such as microphone and camera status icons, whether to display usernames, sound wave effects, and video display modes.     | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) |
+| layout                      | Display style of audio and video windows on the call page, including picture-in-picture layout and gallery layout.                                                     | [ZegoLayout](#zegolayout)                                             |
+| bottomMenuBarConfig         | Configuration parameters for the bottom menu bar on the call page, such as buttons, button count limit, auto-hide, hide when clicking other areas, and color style. | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   |
+| topMenuBarConfig            | Configuration parameters for the top menu bar on the call page, such as buttons, button count limit, auto-hide, hide when clicking other areas, and color style.    | [ZegoTopMenuBarConfig](#zegotopmenubarconfig)                         |
+| hangUpConfirmDialogInfo     | Whether to display the dialog information when clicking the hang up button to leave the room. If not set, it will not be displayed.                                 | ZegoHangUpConfirmDialogInfo                                           |
+| memberListConfig            | Configuration for displaying the member list in the call, such as the camera and microphone status of each member.                                                  | [ZegoMemberListConfig](#zegomemberlistconfig)                         |
+| screenSharingVideoConfig    | Resolution of the screen sharing video, default value is 540p.                                                                                                      | ZegoPrebuiltVideoConfig                                               |
+| videoConfig                 | Resolution of the call video, default value is 360p.                                                                                                                | ZegoPrebuiltVideoConfig                                               |
+| durationConfig              | Call duration configuration.                                                                                                                                        | [ZegoCallDurationConfig](#zegocalldurationconfig)                     |
+| beautyConfig                | Only valid when using the face beautification plugin. Used to customize the effectsTypes of the face beautification plugin.                                         | ZegoBeautyPluginConfig                                                |
+| inRoomChatConfig            | Configuration for the title and input prompt of in-room chat, or customizing the in-room chat view.                                                                 | ZegoInRoomChatConfig                                                  |
+| miniVideoConfig             | Configuration for the text and drawable resources of the mini video window.                                                                                         | [ZegoMiniVideoConfig](#zegominivideoconfig)                           |
+| avatarViewProvider          | Customizable user avatars.                                                                                                                                          | ZegoAvatarViewProvider                                                |
+| leaveCallListener           | Callback when leaving the call.                                                                                                                                     | LeaveCallListener                                                     |
+| zegoCallText                | Text related to the call.                                                                                                                                           | ZegoCallText                                                          |
+
+## ZegoPrebuiltAudioVideoViewConfig
+View configuration class
+
+| Property                        | Description                                                                                       | Type                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------- |
+| showMicrophoneStateOnView       | Whether to display the microphone state icon on the VideoView. The default value is false.        | boolean                    |
+| showCameraStateOnView           | Whether to display the camera state icon on the VideoView. The default value is false.            | boolean                    |
+| showUserNameOnView              | Whether to display the username on the VideoView. The default value is false.                     | boolean                    |
+| showSoundWavesInAudioMode       | Whether to display sound waves around the avatar in audio mode. The default value is true.        | boolean                    |
+| useVideoViewAspectFill          | Whether to display the video in aspect fill mode (with black borders). The default value is true. | boolean                    |
+| videoViewForegroundViewProvider | Custom foreground view for the video view.                                                        | ZegoForegroundViewProvider |
+
+## ZegoBottomMenuBarConfig
+Bottom menu bar configuration class
+
+| Property          | Description                                                                                                                                                                  | Type                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| buttons           | The buttons to be displayed, displayed in the order of the actual List.                                                                                                      | List\<ZegoMenuBarButtonName> |
+| maxCount          | The maximum number of buttons that can be displayed, up to 5. If this value is exceeded, a "More" button will be displayed. Note that this value includes the "More" button. | int                          |
+| hideAutomatically | The top and bottom will automatically collapse if there is no screen operation within 5 seconds, or if the user clicks on a non-responsive area of the screen.               | boolean                      |
+| hideByClick       | Whether the user can click on a non-responsive area of the screen to collapse the top and bottom.                                                                            | boolean                      |
+| style             | The color of the menu bar, with two options: highlight and dark.                                                                                                             | ZegoMenuBarStyle             |
+| buttonConfig      | Menu bar button configuration, use this configuration to change the icon of the button.                                                                                      | ZegoMenuBarButtonConfig      |
+
+## ZegoTopMenuBarConfig
+Top menu bar configuration class
+
+| Property          | Description                                                                                                                                                           | Type                         |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| title             | Title of the top menu bar.                                                                                                                                            | String                       |
+| buttons           | Buttons to be displayed, displayed in the order of the actual List.                                                                                                   | List\<ZegoMenuBarButtonName> |
+| maxCount          | Maximum number of buttons that can be displayed, up to 5. If exceeded, a "More" button will be displayed. Note that this value includes the "More" button.            | int                          |
+| hideAutomatically | The top and bottom will automatically collapse if there is no operation on the screen within 5 seconds, or if the user clicks on a non-responsive area of the screen. | boolean                      |
+| hideByClick       | Whether the user can click on a non-responsive area of the screen to collapse the top and bottom.                                                                     | boolean                      |
+| style             | The color of the menu bar, with two options: highlight and dark.                                                                                                      | ZegoMenuBarStyle             |
+| buttonConfig      | Menu bar button configuration, use this configuration to change the icon of the button.                                                                               | ZegoMenuBarButtonConfig      |
+
+## ZegoMemberListConfig
+Room member list configuration class
+
+| Property               | Description                                                           | Type                           |
+| ---------------------- | --------------------------------------------------------------------- | ------------------------------ |
+| showMicrophoneState    | Whether to display the microphone status icon, default value is true. | boolean                        |
+| showCameraState        | Whether to display the camera status icon, default value is true.     | boolean                        |
+| memberListItemProvider | Custom member list view.                                              | ZegoMemberListItemViewProvider |
+
+## ZegoCallDurationConfig
+Call duration configuration class
+
+| Property               | Description                                                  | Type                   |
+| ---------------------- | ------------------------------------------------------------ | ---------------------- |
+| isVisible              | Whether to display call duration, default value is true.     | boolean                |
+| durationUpdateListener | Callback for call duration update. Triggered every 1 second. | DurationUpdateListener |
+
+
+## ZegoMiniVideoConfig
+Mini window configuration class
+
+| Property               | Description                                                      | Type     |
+| ---------------------- | ---------------------------------------------------------------- | -------- |
+| miniVideoTextColor     | Text color of the mini window video.                             | int      |
+| miniVideoDrawableColor | Drawable color of the mini window video.                         | int      |
+| miniVideoAudioDrawable | Audio drawable resource of the mini window video.                | Drawable |
+| miniVideoVideoDrawable | Video drawable resource of the mini window video.                | Drawable |
+| permissionText         | Text displayed when requesting permission for mini window video. | String   |
+
+## ZegoMenuBarButtonConfig
+Menu bar button configuration class
+
+| Property                          | Description                                                      | Type     |
+| --------------------------------- | ---------------------------------------------------------------- | -------- |
+| toggleCameraOnImage               | Icon for the button when the camera is turned on.                | Drawable |
+| toggleCameraOffImage              | Icon for the button when the camera is turned off.               | Drawable |
+| toggleMicrophoneOnImage           | Icon for the button when the microphone is turned on.            | Drawable |
+| toggleMicrophoneOffImage          | Icon for the button when the microphone is turned off.           | Drawable |
+| hangUpButtonImage                 | Icon for the hang up button.                                     | Drawable |
+| switchCameraFrontImage            | Icon for the button to switch to the front camera.               | Drawable |
+| switchCameraBackImage             | Icon for the button to switch to the back camera.                | Drawable |
+| showMemberListButtonImage         | Icon for the button to show the member list.                     | Drawable |
+| chatButtonImage                   | Icon for the chat button.                                        | Drawable |
+| minimizingButtonImage             | Icon for the minimize button.                                    | Drawable |
+| audioOutputSpeakerImage           | Icon for the button when the audio output is set to speaker.     | Drawable |
+| audioOutputEarSpeakerImage        | Icon for the button when the audio output is set to ear speaker. | Drawable |
+| audioOutputBluetoothImage         | Icon for the button when the audio output is set to Bluetooth.   | Drawable |
+| screenSharingToggleButtonOnImage  | Icon for the screen sharing toggle button when it is turned on.  | Drawable |
+| screenSharingToggleButtonOffImage | Icon for the screen sharing toggle button when it is turned off. | Drawable |
+| beautyButtonImage                 | Icon for the face beautification button.                         | Drawable |

@@ -1,0 +1,80 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Use Tokens for authentication
+
+<TokensAuthenticationIntro/>
+
+
+## Use a Token 
+
+If you need to use a token instead of appsign, you will need to set appsign to empty during initialization.
+
+```JavaScript
+ZegoUIKitPrebuiltCallService.init(
+  KeyCenter.appID,
+  '', // appsign
+  userID,
+  userName,
+  [ZIM, ZPNs],
+  ......
+}
+```
+
+And then you need to listen to the `ZegoUIKit.onTokenProvide` callback at the appropriate place, and then return the token.
+
+```JavaScript
+import ZegoUIKit from '@zegocloud/zego-uikit-rn'
+
+ZegoUIKitPrebuiltCallService.useSystemCallingUI([ZIM, ZPNs]);
+
+ZegoUIKit.onTokenProvide(async () => {
+  try {
+    // Request token from your serve.
+    const response = await fetch('your url');
+    const token = await response.text();
+    console.log('token: ', token);
+
+    // return the token.
+    return token;
+  } catch (error) {
+    console.error('error:', error);
+    return '';
+  }
+});
+
+AppRegistry.registerComponent(appName, () => App);
+```
+
+## Renew a Token
+
+In most cases, the token retrieval approach mentioned above should work fine. However, in certain extreme situations, it may be unreliable. 
+
+To ensure the reliability of the token, you can make the following modifications:
+
+1. The validity period of the token should be set as long as possible, for example, 3 days.
+2. Renew the token at the appropriate time, such as when the application enters the foreground.
+   
+Here is the reference code:
+
+```JavaScript
+AppState.addEventListener('change', async nextState => {
+  // 1. When the application comes to the foreground.
+  if (nextState === 'active') {
+    const oldTokenTimestamp = 123;
+    const currentTimestamp = Date.now();
+
+    // 2. Determine if the token will expire within a certain period of time (e.g., within 1 day).
+    if (currentTimestamp - oldTokenTimestamp < 1000 * 24 * 60 * 60) {
+
+      // 3. Retrieve the latest token from your server.
+      const response = await fetch('your url');
+      const token = await response.text();
+
+      // 4. call `renewToken`
+      ZegoUIKit.renewToken(token);
+
+      // 5. save the current timestamp.
+    }
+  }
+});
+```

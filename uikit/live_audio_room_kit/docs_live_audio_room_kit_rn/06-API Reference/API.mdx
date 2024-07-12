@@ -1,0 +1,604 @@
+# API
+
+- [ZegoUIKitPrebuiltLiveAudioRoom](./API.mdx#ZegoUIKitPrebuiltLiveAudioRoom)
+  - [applyToTakeSeat](./API.mdx#applyToTakeSeat)
+  - [cancelSeatTakingRequest](./API.mdx#cancelSeatTakingRequest)
+  - [acceptSeatTakingRequest](./API.mdx#acceptSeatTakingRequest)
+  - [rejectSeatTakingRequest](./API.mdx#rejectSeatTakingRequest)
+  - [inviteAudienceToTakeSeat](./API.mdx#inviteAudienceToTakeSeat)
+  - [acceptHostTakeSeatInvitation](./API.mdx#acceptHostTakeSeatInvitation)
+  - [turnMicrophoneOn](./API.mdx#)
+  - [removeSpeakerFromSeat](./API.mdx#removeSpeakerFromSeat)
+  - [takeSeat](./API.mdx#takeSeat)
+  - [leaveSeat](./API.mdx#leaveSeat)
+  - [openSeat](./API.mdx#openSeat)
+  - [closeSeat](./API.mdx#closeSeat)
+  - [openSeats](./API.mdx#openSeats)
+  - [closeSeats](./API.mdx#closeSeats)
+  - [minimizeWindow](./API.mdx#minimizeWindow)
+  - [leave](./API.mdx#leave)
+  - [muteUserAudio](./API.mdx#muteUserAudio)
+
+---
+
+<a id="ZegoUIKitPrebuiltLiveAudioRoom"></a>
+
+# ZegoUIKitPrebuiltLiveAudioRoom
+
+<a id="applyToTakeSeat"></a>
+
+## applyToTakeSeat
+
+> request take seat to be a speaker.
+>
+>- function prototype:
+>
+>```js
+> applyToTakeSeat(index = -1)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.applyToTakeSeat(index);
+>```
+
+<a id="cancelSeatTakingRequest"></a>
+
+## cancelSeatTakingRequest
+
+> cancel take seat request.
+>
+>- function prototype:
+>
+>```js
+> cancelSeatTakingRequest()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.cancelSeatTakingRequest();
+>```
+
+<a id="acceptSeatTakingRequest"></a>
+
+## acceptSeatTakingRequest
+
+> accept room user's take seat request.
+>
+>- function prototype:
+>
+>```js
+> acceptSeatTakingRequest(audienceUserID)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.acceptSeatTakingRequest(audienceUserID);
+>```
+
+<a id="rejectSeatTakingRequest"></a>
+
+## rejectSeatTakingRequest
+
+> reject room user's take seat request.
+>
+>- function prototype:
+>
+>```js
+> rejectSeatTakingRequest(audienceUserID)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.rejectSeatTakingRequest(audienceUserID);
+>```
+
+<a id="inviteAudienceToTakeSeat"></a>
+
+## inviteAudienceToTakeSeat
+
+> invite room user to take seat.
+>
+>- function prototype:
+>
+>```js
+> inviteAudienceToTakeSeat(audienceUserID)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.inviteAudienceToTakeSeat(audienceUserID);
+>```
+
+<a id="acceptHostTakeSeatInvitation"></a>
+
+## acceptHostTakeSeatInvitation
+
+> accept the take seat invitation from others.
+>
+>- function prototype:
+>
+>```js
+> acceptHostTakeSeatInvitation()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.acceptHostTakeSeatInvitation();
+>```
+
+<a id="turnMicrophoneOn"></a>
+
+## turnMicrophoneOn
+
+> open the microphone of specific user,if the target is not your userID,then the target will receive a onTurnOnYourMicrophoneRequest callback.
+>
+>- function prototype:
+>
+>```js
+> turnMicrophoneOn(userID, isOn)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.turnMicrophoneOn(userID, isOn);
+>```
+
+<a id="removeSpeakerFromSeat"></a>
+
+## removeSpeakerFromSeat
+
+> remove user from speaker
+>
+>- function prototype:
+>
+>```js
+> removeSpeakerFromSeat(userID)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.removeSpeakerFromSeat(userID);
+>```
+
+<a id="takeSeat"></a>
+
+## takeSeat
+
+> try to take seat in position index.
+>
+>- function prototype:
+>
+>```js
+> takeSeat(index)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.takeSeat(index);
+>```
+
+<a id="leaveSeat"></a>
+
+## leaveSeat
+
+> leave seat. If your are not speaker,nothing will happen.
+>
+>- function prototype:
+>
+>```js
+> leaveSeat()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.leaveSeat();
+>```
+
+<a id="openSeat"></a>
+
+## openSeat
+
+> open seat of position index.
+>
+>- function prototype:
+>
+>```js
+> openSeat(index)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.openSeat(index);
+>```
+
+<a id="closeSeat"></a>
+
+## closeSeat
+
+> close seat of position index.
+>
+>- function prototype:
+>
+>```js
+> closeSeat(index)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.closeSeat(index);
+>```
+
+<a id="openSeats"></a>
+
+## openSeats
+
+> make all seats avaiable.Room users can take empty seat directly.
+>
+>- function prototype:
+>
+>```js
+> openSeats()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.openSeats();
+>```
+
+<a id="closeSeats"></a>
+
+## closeSeats
+
+> make all seats locked.Room users should request to take empty seat.
+>
+>- function prototype:
+>
+>```js
+> closeSeats()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.closeSeats();
+>```
+
+<a id="minimizeWindow"></a>
+
+## minimizeWindow
+
+> minimize the window.
+>
+>- function prototype:
+>
+>```js
+> minimizeWindow()
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.minimizeWindow();
+>```
+
+<a id="leave"></a>
+
+## leave
+
+> leave the audio room.
+>
+>- function prototype:
+>
+>```js
+> leave(showConfirmation = false)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.leave();
+>```
+
+<a id="muteUserAudio"></a>
+
+## muteUserAudio
+
+> Decide whether to mute the speaker corresponding to the `userID` based on the `mute` setting.
+>
+>- function prototype:
+>
+>```js
+> muteUserAudio(userID, mute)
+>```
+>
+>- example:
+>
+>```js
+>import ZegoUIKitPrebuiltLiveAudioRoom from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+>
+> const prebuiltRef = useRef();
+> 
+> <ZegoUIKitPrebuiltLiveAudioRoom
+>   ref={prebuiltRef}
+>   appID={KeyCenter.appID}
+>   appSign={KeyCenter.appSign}
+>   userID={userID}
+>   userName={userName}
+>   roomID={roomID}
+>   config={{
+>
+>   }}
+> />
+>
+> prebuiltRef.current.muteUserAudio(userID, mute);
+>```

@@ -1,0 +1,350 @@
+# Event
+
+- [CallEvents](#callevents)
+    - [IExpressEngineEventHandler](#iexpressengineeventhandler)
+    - [onBackPressed](#onbackpressed)
+    - [onOnlySelfInRoom](#ononlyselfinroom)
+    - [onCallEnd](#oncallend)
+    - [onAudioOutputDeviceChanged](#onaudiooutputdevicechanged)
+    - [onClick](#onclick)
+- [InvitationEvents](#invitationevents)
+    - [onIncomingCallDeclineButtonPressed](#onincomingcalldeclinebuttonpressed)
+    - [onIncomingCallAcceptButtonPressed](#onincomingcallacceptbuttonpressed)
+    - [onOutgoingCallCancelButtonPressed](#onoutgoingcallcancelbuttonpressed)
+    - [onIncomingCallReceived](#onincomingcallreceived)
+    - [onIncomingCallCanceled](#onincomingcallcanceled)
+    - [onIncomingCallTimeout](#onincomingcalltimeout)
+    - [onOutgoingCallAccepted](#onoutgoingcallaccepted)
+    - [onOutgoingCallRejectedCauseBusy](#onoutgoingcallrejectedcausebusy)
+    - [onOutgoingCallDeclined](#onoutgoingcalldeclined)
+    - [onOutgoingCallTimeout](#onoutgoingcalltimeout)
+- [onError](#onerror)
+
+## CallEvents
+
+### IExpressEngineEventHandler
+
+ You can set this handler to listen to all express SDK event,like room update,user enter or left,stream update,etc.
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.setExpressEngineEventHandler(new IExpressEngineEventHandler() {
+          
+});
+```
+
+### onBackPressed
+ this callback will be invoked when back button of android is pressed.if returned false,UIKit
+ will use default action(end call or show a confirm dialog) when back button is pressed,or 
+ true if you want to custom your logic.
+
+<CodeGroup>
+```java title="function prototype"
+boolean onBackPressed();
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.setBackPressEvent(new BackPressEvent() {
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+ });
+```
+</CodeGroup>
+
+
+### onOnlySelfInRoom
+
+ user will receive this callback when all other persons leaves call.The default action is finish current call.
+ if user override this callback ,the default action will not work,and user can add custom logic.
+
+<CodeGroup>
+```java title="function prototype"
+void onOnlySelfInRoom();
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.setOnlySelfInRoomListener(new ZegoOnlySelfInRoomListener() {
+    @Override
+    public void onOnlySelfInRoom() {
+        
+    }
+});
+```
+</CodeGroup>
+
+
+### onCallEnd
+
+ this listener will be invoked when call ends.The ZegoCallEndReason value can be LOCAL_HANGUP,REMOTE_HANGUP or KICK_OUT.
+ if the callEndReason is KICK_OUT,jsonObject's value is who kicked out you.if the value is empty,means you are kicked out by server
+ if you hangup or quit by back button, callEndReason will be LOCAL_HANGUP.
+ if the other person ends the call, callEndReason will be REMOTE_HANGUP.
+ 
+<CodeGroup>
+```java title="function prototype"
+void onCallEnd(ZegoCallEndReason callEndReason, String jsonObject) ;
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.setCallEndListener(new CallEndListener() {
+    @Override
+    public void onCallEnd(ZegoCallEndReason callEndReason, String jsonObject) {
+        
+    }
+});
+```
+</CodeGroup>
+
+### onAudioOutputDeviceChanged
+
+Audio device routing change notification. This callback is triggered when there is a change in audio routing, such as headphone insertion or removal, speaker and earpiece switching, etc.
+
+<CodeGroup>
+```java function prototype
+void onAudioOutputDeviceChanged(ZegoAudioOutputDevice audioOutput);
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.addAudioOutputDeviceChangedListener(new ZegoAudioOutputDeviceChangedListener() {
+    @Override
+    public void onAudioOutputDeviceChanged(ZegoAudioOutputDevice audioOutput) {
+    }
+});
+```
+</CodeGroup>
+
+### onClick
+
+ The click event of the button corresponding to the enumeration class ZegoMenuBarButtonName
+ 
+<CodeGroup>
+```java title="function prototype"
+void onClick(ZegoMenuBarButtonName name, View view);
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.callEvents.setButtonClickListener(new ZegoMenuBarButtonClickListener() {
+    @Override
+    public void onClick(ZegoMenuBarButtonName name, View view) {
+        
+    }
+});
+```
+</CodeGroup>
+
+
+
+## InvitationEvents
+
+### onIncomingCallDeclineButtonPressed
+
+This callback will be triggered to **callee** when callee click decline button in incoming call
+
+<CodeGroup>
+```java title="function prototype"
+void onIncomingCallDeclineButtonPressed();
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setIncomingCallButtonListener(new IncomingCallButtonListener() {
+    @Override
+    public void onIncomingCallDeclineButtonPressed() {
+        //...
+    }
+    //...
+});
+```
+</CodeGroup>
+
+### onIncomingCallAcceptButtonPressed
+
+This callback will be triggered to **callee** when callee click accept button in incoming call
+
+<CodeGroup>
+```java title="function prototype"
+void onIncomingCallAcceptButtonPressed();
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setIncomingCallButtonListener(new IncomingCallButtonListener() {
+    @Override
+    public void onIncomingCallAcceptButtonPressed() {
+        //...  
+    }
+    //...
+});
+```
+</CodeGroup>
+
+### onOutgoingCallCancelButtonPressed
+
+This callback will be triggered to **caller** when caller cancels the call invitation by click the cancel button
+
+<CodeGroup>
+```java title="function prototype"
+void onOutgoingCallCancelButtonPressed();
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setOutgoingCallButtonListener(new OutgoingCallButtonListener() {
+    @Override
+    public void onOutgoingCallCancelButtonPressed() {
+        //...
+    }
+});
+```
+</CodeGroup>
+
+### onIncomingCallReceived
+
+This callback will be triggered to **callee** when callee receive a call
+
+<CodeGroup>
+```java title="function prototype"
+void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees);
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType,
+        List<ZegoCallUser> callees) {
+        //...
+    }
+});
+```
+</CodeGroup>
+
+### onIncomingCallCanceled
+
+This callback will be triggered to **callee** when the caller cancels the call invitation.
+
+<CodeGroup>
+```java title="function prototype"
+public void onIncomingCallCanceled(String callID, ZegoCallUser caller) 
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onIncomingCallCanceled(String callID, ZegoCallUser caller)  {
+        //...
+    }
+ });
+```
+</CodeGroup>
+
+### onIncomingCallTimeout
+
+The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+
+<CodeGroup>
+```java title="function prototype"
+public void onIncomingCallTimeout(String callID, ZegoCallUser caller)
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onIncomingCallTimeout(String callID, ZegoCallUser caller)  {
+        //...
+    }
+ });
+```
+</CodeGroup>
+
+### onOutgoingCallAccepted
+
+The **caller** will receive a notification through this callback when the callee accepts the call invitation.
+
+<CodeGroup>
+```java title="function prototype"
+public void onOutgoingCallAccepted(String callID, ZegoCallUser callee)
+```
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onOutgoingCallAccepted(String callID, ZegoCallUser callee)  {
+        //...
+    }
+ });
+```
+</CodeGroup>
+
+### onOutgoingCallRejectedCauseBusy
+
+The **caller** will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+
+<CodeGroup>
+```java title="function prototype"
+public void onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)  {
+        //...
+    }
+});
+```
+</CodeGroup>
+
+### onOutgoingCallDeclined
+
+The **caller** will receive a notification through this callback when the callee declines the call invitation actively.
+
+<CodeGroup>
+```java title="function prototype"
+public void onOutgoingCallDeclined(String callID, ZegoCallUser callee) 
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onOutgoingCallDeclined(String callID, ZegoCallUser callee)  {
+        //...
+    }
+});
+```
+</CodeGroup>
+
+### onOutgoingCallTimeout
+
+The **caller** will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+
+<CodeGroup>
+```java title="function prototype"
+public void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees) 
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setInvitationListener(new ZegoInvitationCallListener() {
+    @Override
+    public onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees)  {
+        //...
+    }
+ });
+```
+</CodeGroup>
+
+
+## onError
+
+This callback will be invoked when SDK error. For example, if SDK init error, `INIT_PARAM_ERROR` will be throwed .
+
+<CodeGroup>
+```java title="function prototype"
+void onError(int errorCode, String message);
+```
+
+```java example
+ZegoUIKitPrebuiltCallService.events.setErrorEventsListener(new ErrorEventsListener() {
+    @Override
+    public void onError(int errorCode, String message) {
+
+    }
+});
+```
+</CodeGroup>

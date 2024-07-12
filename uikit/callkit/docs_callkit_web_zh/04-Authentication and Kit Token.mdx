@@ -1,0 +1,124 @@
+# Using Kit Token for authentication
+
+## Introduction
+
+Kit Token is a credential the ZEGOCLOUD UIKit uses for authentication: to validate the user’s permission.
+It will also determine:
+- Which room the user will join
+- The unique identifier of the user in the room (userID)
+- Default username 
+
+ZEGOCLOUD UIKits provide the method to generate the Kit Token on the client app, while it's not safe enough for you to make your app go live officially. Here, we recommend you generate the Kit Token on your app server. Check this guide out:
+
+
+### Prerequisites
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com/account/signup) to sign up.
+- Create a project and get the AppID and ServerSecret.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Web/adminconsole_appidandsecret_web.png" />
+</Frame>
+
+
+
+### Step 1 Generate a Token
+
+After getting your AppID and ServerSecret, you can define the validation rules **on your app server or client** based on your business requirements. 
+
+<Warning title="Warning">
+For business security, we recommend you generate Tokens on your app server; Otherwise, there is a risk of ServerSecret being stolen.
+</Warning>
+
+#### Generate a Token on your app server (recommended)
+
+We provide an open-source [Token generator](https://github.com/zegoim/zego_server_assistant) plug-in on GitHub, which you can use to generate Tokens using different programming languages such as Go, C++, Java, Python, PHP,.NET, and Node.js.
+
+| Language | Supported version                 | Core function    | Code base                                                                                                                                                   | Sample code                                                                                                                                                                                              |
+| :------- | :-------------------------------- | :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Go       | Go 1.14.15 or later               | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04/README.md">GitHub</a></li></ul>        | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul>                                              |
+| C++      | C++ 11&nbsp; or later             | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/README.md">GitHub</a></li></ul>               | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/sample/demo/main.cc">GitHub</a></li></ul>                                                  |
+| Java     | Java 1.8&nbsp; or later           | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/README.md">GitHub</a></li></ul>          | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleForRtcRoom.java">GitHub</a></li></ul> |
+| Python   | Python 3.6.8&nbsp; or later       | generate_token04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/README.md">GitHub</a></li></ul>        | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/rtcroom_sample.py">GitHub</a></li></ul>                                        |
+| PHP      | PHP 5.6 or later                  | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04-php5.6%2B/README.md">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04-php5.6%2B/test/testForRtcRoom.php">GitHub</a></li></ul>                                |
+| .NET     | .NET Framework 3.5&nbsp; or later | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net/README.md">GitHub</a></li></ul>                  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net/demo/WindowsFormsApp1/Form1.cs">GitHub</a></li></ul>                                          |
+| Node.js  | Node.js 8&nbsp; or later          | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/README.md">GitHub</a></li></ul>                | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-rtc-room.js">GitHub</a></li></ul>                                             |
+
+
+
+#### Generate a Token (PHP as an example)
+
+**Here we recommend the Composer Autoload, that is the Composer's PSR-4 autoload.**
+
+
+##### 1 Install the plug-in
+
+a. Copy the downloaded package to the project's root directory. Let's take the `/my_project/zego` directory as an example, where `/my_project/` is the root directory.
+
+b. Include the `psr-4` autoload config to the `vim /my_project/composer.json` file.
+```json
+{
+  ...
+  "autoload": {
+    "psr-4": {
+      "ZEGO\\": "zego/src/ZEGO"
+    }
+  }
+  ...
+}
+```
+
+c. Run the `composer dump-autoload`, or `composer dump-autoload -o`(for production environment), or `composer update` command to generate an autoload file.
+
+
+##### 2. Generate the Token   
+
+- Use the following in the `/my_project/xxx.php` file. 
+- Leave the `payload` field empty (because the Token is only used for a simple permission validation for service API).
+
+
+```php
+require 'vendor/autoload.php';
+use ZEGO\ZegoServerAssistant;
+use ZEGO\ZegoErrorCodes;
+$appId = 1111;
+$userId = 'demo';
+$secret = 'You serverSecret';
+$payload = '';
+$token = ZegoServerAssistant::generateToken04($appId,$userId,$secret,3600,$payload);
+if( $token->code == ZegoErrorCodes::success ){
+   print_r(json_encode($token));
+}
+```
+   
+
+### Step 2 Generate a Kit Token
+
+
+
+To generate the Kit Token:
+- Fill in the `token` field in the following code with the Token you just generated in the previous steps
+- Fill in other fields and run the following code.
+
+
+```js
+//... your own logic code
+fetch(
+      `${youServerUrl}?userID=${userID}&expired_ts=86400`,
+      {
+        method: "GET",
+      }
+    )
+.then((res) => res.json())
+.then(({token})=>{
+  const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+     appID,
+     token,
+     roomID,
+     userID,
+     userName
+  );
+ const zp = ZegoUIKitPrebuilt.create(kitToken);
+ //... to joinRoom 
+})
+```

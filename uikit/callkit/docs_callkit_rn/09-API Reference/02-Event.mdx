@@ -1,0 +1,332 @@
+# Event
+
+- [Invitation Events](#invitation-events)
+  - [onIncomingCallDeclineButtonPressed](#onincomingcalldeclinebuttonpressed)
+  - [onIncomingCallAcceptButtonPressed](#onincomingcallacceptbuttonpressed)
+  - [onOutgoingCallCancelButtonPressed](#onoutgoingcallcancelbuttonpressed)
+  - [onIncomingCallReceived](#onincomingcallreceived)
+  - [onIncomingCallCanceled](#onincomingcallcanceled)
+  - [onIncomingCallTimeout](#onincomingcalltimeout)
+  - [onOutgoingCallAccepted](#onoutgoingcallaccepted)
+  - [onOutgoingCallRejectedCauseBusy](#onoutgoingcallrejectedcausebusy)
+  - [onOutgoingCallDeclined](#onoutgoingcalldeclined)
+  - [onOutgoingCallTimeout](#onoutgoingcalltimeout)
+  - [onCallEnd](#oncallend)
+
+
+- - -
+
+
+
+# Invitation Events
+
+
+
+## onIncomingCallDeclineButtonPressed
+
+>
+> This callback will be triggered to **callee** when callee click decline button in incoming call
+>
+>- function prototype:
+>
+>```js
+>onIncomingCallDeclineButtonPressed(navigation)
+>```
+>
+>- example:
+>
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onIncomingCallDeclineButtonPressed: (navigation) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onIncomingCallAcceptButtonPressed
+
+>
+> This callback will be triggered to **callee** when callee click accept button in incoming call
+>
+>- function prototype:
+>
+>```js
+>onIncomingCallAcceptButtonPressed(navigation)
+>```
+>
+>- example:
+>
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onIncomingCallAcceptButtonPressed: (navigation) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onOutgoingCallCancelButtonPressed
+
+>
+> This callback will be triggered to **caller** when caller cancels the call invitation by click the cancel button
+>
+>- function prototype:
+>```js
+>onOutgoingCallCancelButtonPressed(navigation, callID, invitees, type)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onOutgoingCallCancelButtonPressed: (navigation, callID, invitees, type) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onIncomingCallReceived
+
+>
+> This callback will be triggered to **callee** when callee receive a call
+>
+>- function prototype:
+>```js
+>onIncomingCallReceived(callID, inviter, type, invitees, customData)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onIncomingCallReceived: (callID, inviter, type, invitees, customData) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onIncomingCallCanceled
+
+>
+> This callback will be triggered to **callee** when the caller cancels the call invitation.
+>
+>- function prototype:
+>```js
+>onIncomingCallCanceled(callID, inviter)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onIncomingCallCanceled: (callID, inviter) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onIncomingCallTimeout
+
+>
+> The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+>
+>- function prototype:
+>```js
+>onIncomingCallTimeout(callID, inviter)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onIncomingCallTimeout: (callID, inviter) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onOutgoingCallAccepted
+
+>
+> The **caller** will receive a notification through this callback when the callee accepts the call invitation.
+>
+>- function prototype:
+>```js
+>onOutgoingCallAccepted(callID, invitee)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onOutgoingCallAccepted: (callID, invitee) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onOutgoingCallRejectedCauseBusy
+
+>
+> The **caller** will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
+>
+>- function prototype:
+>```js
+>onOutgoingCallRejectedCauseBusy(callID, invitee)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onOutgoingCallRejectedCauseBusy: (callID, invitee) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onOutgoingCallDeclined
+
+>
+> The **caller** will receive a notification through this callback when the callee declines the call invitation actively.
+>
+>- function prototype:
+>```js
+>onOutgoingCallDeclined(callID, invitee)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onOutgoingCallDeclined: (callID, invitee) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onOutgoingCallTimeout
+
+>
+> The **caller** will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
+>
+>- function prototype:
+>```js
+>onOutgoingCallTimeout(callID, invitees)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    onOutgoingCallTimeout: (callID, invitees) => {
+>      //...
+>    },
+>  }
+>);
+>```
+
+
+
+## onCallEnd
+
+> user will receive this callback at the end of the call. 
+>>Possible reasons that may trigger this callback include:
+>>- the call ended due to a local hang-up
+>>- the call ended when the remote user hung up, leaving only one local user in the call
+>>- the call ended due to being kicked out
+>
+>- function prototype:
+>```js
+>onCallEnd(callID, reason, duration)
+>```
+>- example:
+>```js
+>return ZegoUIKitPrebuiltCallService.init(
+>  Your_APPID,
+>  Your_APPSign,
+>  Your_UserID,
+>  Your_UserName,
+>  [ZIM, ZPNs],
+>  {
+>    requireConfig: (data) => {
+>      return {
+>        onCallEnd: (callID, reason, duration) => {
+>          //...
+>          props.navigation.navigate('HomeScreen');
+>        }
+>      }
+>    }
+>  }
+>);
+>```

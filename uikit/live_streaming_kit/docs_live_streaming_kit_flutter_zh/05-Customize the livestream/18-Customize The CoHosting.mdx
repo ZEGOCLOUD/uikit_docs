@@ -1,0 +1,150 @@
+# Customize The CoHosting
+
+
+## APIs
+
+With the following APIs, you can customize your own live streaming co-host logic. 
+
+These interfaces are called through **ZegoUIKitPrebuiltLiveStreamingController().coHost.function**:
+
+### audience
+  - Future `audienceSendCoHostRequest`(\{
+    bool **withToast** = false,
+  \}) async: 
+
+    audience requests to become a co-host by sending a request to the host. 
+
+    if you want audience be co-host without request to the host, use `startCoHost`. 
+
+    if **withToast** is set to true, a toast message will be displayed after the request succeeds or fails.
+
+  - Future `audienceCancelCoHostRequest`() async: 
+
+    audience cancels the co-host request to the host.
+  
+  - Future `startCoHost`() async: 
+
+    audience switch to be an co-host directly, without request to host.
+
+    if you want audience be co-host with request to the host, use `audienceSendCoHostRequest`
+
+  - Future `audienceAgreeCoHostInvitation`(\{
+    bool **withToast** = false,
+  \}) async:
+    
+    Audience accepts host's invitation to connect be a co-host.
+
+  - Future `audienceRejectCoHostInvitation`() async:
+    
+    Audience declines host's invitation to connect be a co-host.
+
+
+### host
+  - Future `hostAgreeCoHostRequest`(ZegoUIKitUser **audience**) async:
+
+    host approve the co-host request made by **audience**.
+
+  - Future `hostRejectCoHostRequest`(ZegoUIKitUser **audience**) async: 
+
+    host reject the co-host request made by **audience**.
+
+  - Future `removeCoHost`(ZegoUIKitUser **coHost**) async:
+
+    host remove the co-host, make **coHost** to be a audience
+
+  - Future `hostSendCoHostInvitationToAudience `(
+    ZegoUIKitUser **audience**, \{
+    bool **withToast** = false,
+  \}) async:
+
+    host invite **audience** to be a co-host.
+
+    if **withToast** is set to true, a toast message will be displayed after the request succeeds or fails.
+
+  - `onRequestCoHostEvent`: Notification that an audience has requested to become a co-host to the host.
+
+  - `onCancelCoHostEvent`: Notification that an audience has cancelled their co-host request.
+
+  - `onRequestCoHostTimeoutEvent`: Notification that an audience co-host request has timed out.
+
+### co-host
+  - Future `stopCoHost`(\{
+    bool **showRequestDialog** = true,
+  \}) async:
+
+    co-host ends the connection and switches to the audience role voluntarily.
+
+    if **showRequestDialog** is true, a confirmation dialog will be displayed to prevent accidental clicks.
+
+  
+## Events
+
+Through the following callbacks, you can receive notifications about the state changes during the co-hosting process, allowing you to further customize your own logic.
+
+These callbacks are thrown through **ZegoLiveStreamingCoHostEvents**, and you can register these callbacks in **ZegoUIKitPrebuiltLiveStreaming.events.coHost**.
+
+```dart
+ZegoUIKitPrebuiltLiveStreaming(
+  events: ZegoUIKitPrebuiltLiveStreamingEvents(
+    coHost: ZegoLiveStreamingCoHostEvents(
+      onUpdated: (coHosts) {
+        
+      },
+      onMaxCountReached: (count){
+        
+      },
+      host: ZegoLiveStreamingCoHostHostEvents(
+        
+      ),
+      audience: ZegoLiveStreamingCoHostAudienceEvents(
+        
+      ),
+    ),
+  ),
+)
+```
+
+  - `Function(List<ZegoUIKitUser> coHosts)? onUpdated`: 
+  
+      co-host updated, refers to the event where there is a change in the co-hosts.
+      this can occur when a new co-host joins the session or when an existing co-host leaves the session.
+
+### host
+
+  - `Function(ZegoUIKitUser audience)? onRequestReceived`: receive a request that audience request to become a co-host
+
+  - `Function(ZegoUIKitUser audience)? onRequestCanceled`: audience cancelled the co-host request.
+
+  - `Function(ZegoUIKitUser audience)? onRequestTimeout`: the audience's co-host request has timed out.
+
+  - `Function()? onActionAcceptRequest`: host accept the audience's co-host request.
+
+  - `Function()? onActionRefuseRequest`: host refuse the audience's co-host request.
+
+  - `Function(ZegoUIKitUser audience)? onInvitationSent`: host sent invitation to become a co-host to the audience.
+
+  - `Function(ZegoUIKitUser audience)? onInvitationTimeout`: the host's co-host invitation has timed out.
+
+  - `void Function(ZegoUIKitUser audience)? onInvitationAccepted`: 
+
+  - `void Function(ZegoUIKitUser audience)? onInvitationRefused`: audience refused to a co-host request from host
+  
+### audience
+
+  - `Function()? onRequestSent`: audience requested to become a co-host to the host.
+
+  - `Function()? onActionCancelRequest`: audience cancelled the co-host request.
+
+  - `Function()? onRequestTimeout`: the audience's co-host request has timed out.
+
+  - `Function()? onRequestAccepted`: host accept the audience's co-host request.
+
+  - `Function()? onRequestRefused`: host refuse the audience's co-host request.
+
+  - `void Function(ZegoUIKitUser host)? onInvitationReceived`: received a co-host invitation from the host.
+  
+  - `Function()? onInvitationTimeout`: the host's co-host invitation has timed out.
+
+  - `Function()? onActionAcceptInvitation`: audience refuse co-host invitation from the host.
+
+  - `Function()? onActionRefuseInvitation`: audience refuse co-host invitation from the host.

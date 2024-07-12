@@ -1,0 +1,181 @@
+# Use in conjunction with Call Kit
+
+This doc will introduce how to use In-app Chat Kit with [Call Kit](/callkit-android/overview). 
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+</Frame>
+
+## Implementation Process
+
+<Steps>
+<Step title="Integrate In-app Chat Kit">
+Please refer to [Quick start](../02-Quick%20start.mdx) to integrate the In-app Chat Kit. If it has already been integrated, you can ignore this step.
+</Step>
+<Step title="Integrate Call Kit">
+Please refer to the [Call Kit Quick start](/callkit-android/quick-start-(with-call-invitation)) to integrate the Call Kit.
+</Step>
+<Step title="Initialize Call Kit">
+After successfully logging in to the In-app Chat Kit, add the following code to initialize Call Kit:
+
+```java
+Application application = ; // Android's application context
+long appID = ;   // yourAppID
+String appSign =;  // yourAppSign
+String userID =; // yourUserID, userID should only contain numbers, English characters, and '_'. 
+String userName =;   // yourUserName
+
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+ZegoUIKitPrebuiltCallService.init(application, appID, appSign, userID, userName,callInvitationConfig);
+```
+<Warning title="Warning">
+After logging out of the application, you need to call the `logoutUser` method.
+
+```java
+ZegoUIKitPrebuiltCallService.logoutUser();
+```
+</Warning>
+</Step>
+<Step title="Add Send call invitation buttons">
+You can return a header bar through the `getMessageListHeaderBar` method of `ZIMKitMessagesListListener`. You can define a `ZegoSendCallButtonFragment` and place a button on it to initiate a Voice Call, and then place another button to initiate a Video Call. Finally, you can add the `ZegoSendCallButtonFragment` to the top right corner of the header bar using the `ZIMKitHeaderBar.setRightView` method.
+
+The layout of the `ZegoSendCallButtonFragment` is specified in  `send_call_buttons_layout.xml`:
+<CodeGroup>
+
+```java ZegoSendCallButtonFragment.java {36,44-49,53-58}
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.widget.FrameLayout;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ZegoSendCallButtonFragment extends FrameLayout {
+
+    private SendCallLayoutBinding mBinding;
+    private String userId;
+    private String userName;
+
+    public ZegoSendCallButtonFragment(Context context, String userId, String userName) {
+        super(context);
+        this.userId = userId;
+        this.userName = userName;
+        initView(context);
+    }
+
+    public ZegoSendCallButtonFragment(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initView(context);
+    }
+
+    public ZegoSendCallButtonFragment(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView(context);
+    }
+
+    private void initView(Context context) {
+        mBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.send_call_buttons_layout, this, true);
+
+        initVoiceButton();
+        initVideoButton();
+
+    }
+
+    private void initVideoButton() {
+        mBinding.newVideoCall.setIsVideoCall(true);
+        mBinding.newVideoCall.setOnClickListener(v -> {
+            List<ZegoUIKitUser> users = new ArrayList<>();
+            users.add(new ZegoUIKitUser(userId, userName));
+            mBinding.newVideoCall.setInvitees(users);
+        });
+    }
+
+    private void initVoiceButton() {
+        mBinding.newVoiceCall.setIsVideoCall(false);
+        mBinding.newVoiceCall.setOnClickListener(v -> {
+            List<ZegoUIKitUser> users = new ArrayList<>();
+            users.add(new ZegoUIKitUser(userId, userName));
+            mBinding.newVoiceCall.setInvitees(users);
+        });
+    }
+
+}
+```
+
+```xml send_call_buttons_layout.xml {9,16}
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+            android:id="@+id/new_voice_call"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+            android:id="@+id/new_video_call"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toRightOf="@+id/new_voice_call"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+```
+```java title="Add ZegoSendCallButtonFragment to header bar" {11-14}
+ZIMKit.registerMessageListListener(new ZIMKitMessagesListListener() {
+            @Override
+            public ZIMKitHeaderBar getMessageListHeaderBar(ZIMKitMessageFragment fragment) {
+                if (fragment != null) {
+                    // Need to add a custom header bar in one-to-one chat
+                    if (fragment.getConversationType() == ZIMConversationType.PEER) {
+                        // Get conversationID and conversationName from the fragment
+                        String conversationID = fragment.getConversationID(); //The ID of the user you want to call.
+                        String conversationName = fragment.getConversationName(); //The username of the user you want to call.
+                        // Create a call buttons
+                        ZegoSendCallButtonFragment sendCallButtonFragment = new ZegoSendCallButtonFragment(YourActivity.this, fconversationID, conversationName);
+                        // Create a header bar and set the sendCallButton to the 'rightView'
+                        ZIMKitHeaderBar headerBar = new ZIMKitHeaderBar();
+                        headerBar.setRightView(sendCallButtonFragment);
+
+                        return headerBar;
+                    }
+                }
+                return null;
+            }
+ });
+```
+</CodeGroup>
+</Step>
+</Steps>
+
+
+
+So far, you have successfully integrated Call Kit in the In-app Chat Kit. You can now run and experience it.
+
+## More resources
+
+The above content only introduces the basic configuration required for integrating Call Kit. If you need to further customize the configuration of the call, refer to the following documents:
+
+<CardGroup cols={2}>
+  
+  <Card title="Call Kit - Quick start" href="/callkit-android/quick-start" target="_blank">
+    Steps in this doc helps you to make a call quickly.
+  </Card>
+
+  <Card title="Call Kit - Custom prebuilt UI" href="/callkit-android/calling-config/overview" target="_blank">
+    This article guides you on how to further customize the features and UI of the call.
+  </Card>
+
+</CardGroup>

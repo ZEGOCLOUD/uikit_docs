@@ -1,0 +1,19 @@
+
+To prevent obfuscation of the SDK public class names, do the following:
+
+<Steps>
+  <Step title="In your project's 'your_project > android > app' folder, create a 'proguard-rules.pro' file with the following content as shown below">
+    ```gradle
+    -keep class **.zego.** { *; }
+    ```
+  </Step>
+  <Step title="Add the following config code to the 'release' part of the 'your_project/android/app/build.gradle' file">
+    ```gradle
+    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    ```
+
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
+    </Frame>
+  </Step>
+</Steps>

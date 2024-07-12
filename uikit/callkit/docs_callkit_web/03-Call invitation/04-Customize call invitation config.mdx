@@ -1,0 +1,92 @@
+# Customize call invitation config
+
+- - -
+
+## Introduction
+
+
+After having a basic look-through of the Call Kit docs, you will know it is totally possible for you to customize the UI and logic based on your actual needs. So the same, the Call Kit with call invitation feature also allows you to make the same customization.
+
+In addition, you may want to jump to your own existing pages or implement other logic when the call ends, which can also be customized.
+
+## How do I customize the call config?
+
+```javascript
+zp.setCallInvitationConfig({
+  // The callback for the call invitation is accepted before joining the room (a room is used for making a call), which can be used to set up the room config. The Call Kit enables you to join the room automatically, and the room config adapts according to the specific call type (ZegoInvitationType).
+  onSetRoomConfigBeforeJoining: (callType) => {
+    return {
+     // ...,
+     showScreenSharingButton: false,
+     // ...
+    }
+  },
+})
+```
+
+You can also tailor the specific features by customizing parameters. The following shows the complete parameter examples:
+
+``` javascript
+export interface RoomConfig {
+  container?: HTMLElement | undefined | null; // Call component container. 
+  turnOnMicrophoneWhenJoining?: boolean; // Whether to enable the microphone when joining the call. Enabled by default.
+  turnOnCameraWhenJoining?: boolean; // Whether to enable the camera when joining the call. Enabled by default.
+  showMyCameraToggleButton?: boolean; // Whether to display the button for toggling my camera. Displayed by default.
+  showMyMicrophoneToggleButton?: boolean; // Whether to display the button for toggling my microphone. Displayed by default.
+  showAudioVideoSettingsButton?: boolean; // Whether to display the button for audio and video settings. Displayed by default.
+
+  showTextChat?: boolean; // Whether to display the text chat interface on the right side. Displayed by default.
+  showUserList?: boolean; // Whether to display the participant list. Displayed by default. 
+  lowerLeftNotification?: {
+    showUserJoinAndLeave?: boolean; // Whether to display notifications on the lower left area when participants join and leave the room. Displayed by default.
+    showTextChat?: boolean; // Whether to display the latest messages on the lower left area. Displayed by default.
+  };
+  branding?: {
+    logoURL?: string; // The branding LOGO URL.
+  };
+  maxUsers?: number; // In-call participants ranges from [2 - 20]. The default value is unlimited.
+  layout?: "Sidebar" | "Grid" | "Auto"; // The layout modes. Uses the Auto mode by default. 
+
+  showNonVideoUser?: boolean; // Whether to display the non-video participants. Displayed by default. 
+  showOnlyAudioUser?: boolean; // Whether to display audio-only participants. Displayed by default.
+
+  useFrontFacingCamera?: boolean; // Whether to use the front-facing camera when joining the room. Uses a front-facing camera by default.
+  onJoinRoom?: (users: ZegoUser[]) => void; // Callback for participants enter the prejoin view.
+  onLeaveRoom?: (users: ZegoUser[]) => void;// Callback for participants exits the leaving view.
+  onUserJoin?: (user: ZegoUser[]) => void; // Callback for other participants join the call.
+  onUserLeave?: (user: ZegoUser[]) => void; // Callback for other participants leave the call. 
+  showScreenSharingButton?: boolean; // Whether to display the Screen Sharing button. Displayed by default. 
+  showLayoutButton?: boolean; // Whether to display the button for switching layouts. Displayed by default.
+  showPinButton?: boolean; // Whether to display the Pin button. Displayed by default.
+
+  onUserAvatarSetter?: (user: ZegoUser[]) => void; // Callback for the user avatar can be set. 
+  videoResolutionList?: VideoResolution[]; // Video resolution list.
+  videoResolutionDefault?: VideoResolution; // The default video resolution.
+  whiteboardConfig?: {            
+           showAddImageButton?: boolean, // It's set to false by default. To use this feature, activate the File Sharing feature, and then import the plugin. Otherwise, this prompt will occur: "Failed to add image, this feature is not supported."
+  }
+}
+```
+
+
+## How do I customize the logic when a call ends?
+
+```javascript
+zp.setCallInvitationConfig({
+  // The callback for the call invitation ends (this will be triggered when the call invitation is refused/timed out/canceled/ended due to busy status.)
+  onCallInvitationEnded: (reason,data) =>{
+      // Add your custom logic here.
+  };
+})
+```
+
+The following lists all the values for the `reason` (why the call invitation fails/call invitation ends):
+```ts
+export enum CallInvitationEndReason {
+  Declined = "Declined",
+  Timeout = "Timeout",
+  Canceled = "Canceled",
+  Busy = "Busy",
+  LeaveRoom = "LeaveRoom",
+}
+```

@@ -1,0 +1,355 @@
+# API
+
+## ZegoLiveStreamingManager
+
+### addLiveManagerDelegate
+
+> You can call this interface to listen to live events, such as coHost request events, PK events
+>
+> function prototype:
+>
+> ```swift
+> /// Add live event listener
+> /// - Parameter delegate: Observer
+> public func addLiveManagerDelegate(_ delegate: ZegoLiveStreamingManagerDelegate)
+> ```
+
+
+
+
+
+### getHostID
+
+> You can call this interface to get the host ID of the current room
+>
+> function prototype:
+>
+> ```swift
+> /// Get host ID
+> /// - Returns: host id
+> public func getHostID() -> String
+> ```
+
+
+
+
+
+### isHost
+
+> You can call this interface to determine if the user is host
+>
+> function prototype:
+>
+> ```swift
+> /// Is the user a host?
+> /// - Parameter userID: Unique identifier for the user
+> /// - Returns: The result 'true' indicates that the person is a host, while 'false' indicates that they are not.
+> public func isHost(_ userID: String) -> Bool
+> ```
+
+
+
+
+
+### isCurrentUserHost
+
+> You can call this interface to determine if you are a host
+>
+> function prototype:
+>
+> ```swift
+> /// Is the current user a host?
+> /// - Returns: The return result 'true' represents yes, while 'false' represents no.
+> public func isCurrentUserHost() -> Bool
+> ```
+
+
+
+
+
+### isCurrentUserCoHost
+
+> You can call this interface to determine if you are a coHost
+>
+> function prototype:
+>
+> ```swift
+> /// Is the current user a cohost?
+> /// - Returns: The return result 'true' represents yes, while 'false' represents no.
+> public func isCurrentUserCoHost() -> Bool
+> ```
+
+
+
+
+
+### stopPKBattle
+
+> You can call this interface to send a stop pk request
+>
+> function prototype:
+>
+> ```swift
+> /// Sending stop pk request
+> public func stopPKBattle()
+> ```
+
+
+
+
+
+### acceptIncomingPKBattleRequest
+
+> You can call this interface to accept the received invitation PK request
+>
+> You can pass some data to the inviter using the `customData` parameter
+>
+> function prototype:
+>
+> ```swift
+> /// Accept PK invitation
+> /// - Parameters:
+> ///   - requestID: Unique ID for PK request
+> ///   - anotherHostLiveID: Sender's live ID
+> ///   - anotherHostUser: Sender
+> ///   - customData: Custom data
+> public func acceptIncomingPKBattleRequest(_ requestID: String, 
+>                                           anotherHostLiveID: String, 
+>                                           anotherHostUser: ZegoUIKitUser, 
+>                                           customData: String)
+> ```
+
+
+
+
+
+### acceptIncomingPKBattleRequest
+
+> You can call this interface to accept the received invitation PK request
+>
+> function prototype:
+>
+> ```swift
+> /// Accept PK invitation
+> /// - Parameters:
+> ///   - requestID: Unique ID for PK request
+> ///   - anotherHostLiveID: Sender's live ID
+> ///   - anotherHostUser: Sender
+> public func acceptIncomingPKBattleRequest(_ requestID: String, 
+>                                           anotherHostLiveID: String, 
+>                                           anotherHostUser: ZegoUIKitUser)
+> ```
+
+
+
+
+
+### rejectPKBattleStartRequest
+
+> You can call this interface to reject a pk invitation
+>
+> function prototype:
+>
+> ```swift
+> /// Refuse PK invitation
+> /// - Parameter requestID: Unique ID for PK request
+> public func rejectPKBattleStartRequest(_ requestID: String)
+> ```
+
+
+
+
+
+### muteAnotherHostAudio
+
+> You can call this interface to block or accept the audio stream from the PK user.
+>
+> function prototype:
+>
+> ```swift
+> /// Whether to block audio from other host
+> /// - Parameters:
+> ///   - mute: true represents blocking, while false represents receiving.
+> ///   - callback: Callback of operation result
+> public func muteAnotherHostAudio(_ mute: Bool, callback: ZegoUIKitCallBack?)
+> ```
+>
+> 
+
+
+
+
+
+### sendPKBattleRequest
+
+> You can call this interface to send a PK invitation.
+>
+> function prototype:
+>
+> ```swift
+> /// Send PK invitation
+> /// - Parameters:
+> ///   - anotherHostUserID: Inviting user's ID
+> ///   - timeout: Request timeout limit, Default value is 60 seconds
+> ///   - customData: Custom data that needs to be passed.
+> ///   - callback: Callback for request results
+> public func sendPKBattleRequest(anotherHostUserID: String,
+>                                 timeout: UInt32 = 60,
+>                                 customData: String,
+>                                 callback: UserRequestCallback?)
+> ```
+
+
+
+
+
+### sendPKBattleRequest
+
+> You can call this interface to send a PK invitation.
+>
+> function prototype:
+>
+> ```swift
+> /// Send PK invitation
+> /// - Parameters:
+> ///   - anotherHostUserID: Inviting user's ID
+> ///   - timeout: Request timeout limit, Default value is 60 seconds
+> ///   - callback: Callback for request results
+> public func sendPKBattleRequest(anotherHostUserID: String,
+>                                 timeout: UInt32 = 60,
+>                                 callback: UserRequestCallback?)
+> ```
+
+
+
+
+
+### cancelPKBattleRequest
+
+> You can call this interface to cancel the pk request you issued.
+>
+> function prototype:
+>
+> ```swift
+> public func cancelPKBattleRequest(customData: String?, callback: UserRequestCallback?)
+> ```
+
+
+
+
+
+### leaveRoom
+
+> You can call this interface to exit the live broadcast room.
+>
+> function prototype:
+>
+> ```swift
+> /// Leave the room
+> public func leaveRoom()
+> ```
+
+
+
+
+
+
+
+## ZegoUIKitPrebuiltLiveStreamingVC
+
+
+
+### init
+
+> You must call this interface to initialize the live page
+>
+> You can set a liveID for the current live stream by using the liveID parameter
+>
+> You can configure the display and functions of the live broadcast page through the `config` parameter, such as the on-off status of the camera, the layout mode, and the display of the bottom bar
+>
+> function prototype:
+>
+> ```swift
+> public init(_ appID: UInt32, 
+>             appSign: String, 
+>             userID: String, 
+>             userName: String, 
+>             liveID: String, 
+>             config: ZegoUIKitPrebuiltLiveStreamingConfig) 
+> ```
+
+
+
+
+
+### addButtonToBottomMenuBar
+
+> You can add custom buttons to the bottom bar by calling this interface
+>
+> You can control the identity scene displayed by the button by setting the `role` parameter
+> `position`: Button placement. By default, the button is added on the left side.
+>
+> function prototype:
+>
+> ```swift
+>  public func addButtonToBottomMenuBar(_ button: UIButton, role: ZegoLiveStreamingRole, position: ZegoBottomMenuBarPosition = .lef)
+> ```
+
+
+
+
+
+### setStartLiveButton
+
+> You can call this interface to customize the start Live button
+>
+> function prototype:
+>
+> ```swift
+> public func setStartLiveButton(_ button: ZegoStartLiveButton) 
+> ```
+
+
+
+
+
+### clearBottomMenuBarExtendButtons
+
+> You can call this interface to empty the button added by `addButtonToBottomMenuBar`
+>
+> function prototype:
+>
+> ```swift
+> public func clearBottomMenuBarExtendButtons(_ role: ZegoLiveStreamingRole)
+> ```
+
+
+
+
+
+### setBackgroundView
+
+> You can call this interface to customize the background view of the live page
+>
+> function prototype:
+>
+> ```swift
+> public func setBackgroundView(_ view: UIView)
+> ```
+
+
+### leaveRoom
+
+You can use this interface to exit the live streaming.
+
+```swift
+public func leaveRoom()
+```
+
+### sendBarrageMessage
+
+You can use this interface to send a barrage message.
+
+```swift
+public func sendBarrageMessage(roomID: String, message: String, callback: ((Int, String) -> Void)?) 
+```

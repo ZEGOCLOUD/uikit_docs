@@ -1,0 +1,733 @@
+# Message component
+
+import ZIM_ZIMKit_message_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_message_info-en.mdx";
+
+<ZIM_ZIMKit_message_info />
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/message_demo.gif" />
+</Frame>
+
+##  Integrate the message component into your project
+
+###  Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+###  Add the MessageList component
+
+In the file that needs to use the `MessageList` component, use the `ZIMKitMessageListPage` widget.
+
+(The `ZIMKitMessageListPage` widget consists of the `appBar`, `ZIMKitMessageListView` component, and the `ZIMKitMessageInput` component.)
+
+```dart
+import 'package:zego_zimkit/zego_zimkit.dart';
+
+class YourMessagePage extends StatelessWidget {
+  const YourMessagePage({Key? key, required this.conversationID, required this.conversationType})
+      : super(key: key);
+
+  final String conversationID;
+  final ZIMConversationType conversationType;
+
+  @override
+  Widget build(BuildContext context) {
+    return ZIMKitMessageListPage(
+      conversationID: conversationID,
+      conversationType: conversationType,
+    );
+  }
+}
+```
+
+## Customize features/UI
+
+If the default message-relevant features, behaviors or UI don&rsquo;t fully meet your needs, we allow you to flexibly customize those through the parameters provided by the `ZIMKitMessageListView` and `ZIMKitMessageInput` mentioned in this section.
+
+> `ZIMKitMessageListPage` has all the parameters of `ZIMKitMessageListView` and `ZIMKitMessageInput`, so you can pass any parameters to `ZIMKitMessageListView` and `ZIMKitMessageInput` through `ZIMKitMessageListPage`.
+
+The usage of commonly used parameters is as follows:
+
+<Accordion title="1. Custom message UI" defaultOpen="false">
+
+The UI of each message can be customized, You can use the messageItemBuilder or messageContentBuilder to build your custom message widget.
+
+**messageContentBuilder:**
+
+In most cases, you may only need to customize the message body, while keeping the avatar or the send status icon next to the message. to do so, you can use the `messageContentBuilder`. The parameter types are as follows:
+
+```dart
+final Widget Function(BuildContext context, ZIMKitMessage message, Widget defaultWidget)? messageContentBuilder;
+```
+You can use it like this.
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  messageContentBuilder: (context, message, defaultWidget) {
+    if (message.type == ZIMMessageType.custom) {
+      return RedEnvelopeMessage(message: message);
+    } else {
+      return defaultWidget;
+    }
+  },
+);
+```
+
+**messageItemBuilder:**
+
+ZIMKitMessageListView is essentially a listView. If you need to customize the drawing of the avatar, message body, sender's name, and sending status, you can use the messageItemBuilder."
+
+The parameter types are as follows:
+
+```dart
+final Widget Function(BuildContext context, ZIMKitMessage message, Widget defaultWidget)? messageItemBuilder;
+```
+
+In addition to fully customizing the message item, you can also change the `primaryColor` of the default message widget to yellow. The code is as follows: 
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  messageItemBuilder: (context, message, defaultWidget) {
+    return Theme(
+      data: ThemeData(primaryColor: Colors.yellow),
+      child: defaultWidget,
+    );
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="2. Custom press and long press events" defaultOpen="false">
+
+To customize the press and long press events for a message, use the `onMessageItemPressed` and `onMessageItemLongPress`. The parameter types are as follows:
+
+```dart
+final void Function(BuildContext context, ZIMKitMessage message, Function defaultAction)? onMessageItemPressed;
+final void Function(BuildContext context, LongPressStartDetails details, ZIMKitMessage message, Function defaultAction)? onMessageItemLongPress;
+```
+
+For example, you can implement functions such as a full-screen preview of images and file download by customizing click and long-press events like this:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  onMessageItemLongPress: (context, details, message, defaultAction) {
+    debugPrint('onMessageItemLongPress: ${message.hashCode}');
+    defaultAction();
+  },
+  onMessageItemPressed: (context, message, defaultAction) {
+    debugPrint('onMessageItemPressed: ${message.hashCode}');
+    defaultAction();
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="3. Custom app bar of message list page" defaultOpen="false">
+
+To customize the app bar, you can use `appBarActions` or `appBarBuilder`. The parameter types are as follows: 
+
+```dart
+final List<Widget>? appBarActions;
+final AppBar? Function(BuildContext context, AppBar defaultAppBar)? appBarBuilder;
+```
+
+For example, adding a call button to the app bar, and the preview effect is as follows:
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/custom_appbar.jpeg" />
+</Frame>
+
+Here are two ways to achieve this:
+
+1. To add a few buttons to the app bar, use the `appBarActions` parameter. The sample code is as follows:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  appBarActions: [
+    IconButton(icon: const Icon(Icons.local_phone), onPressed: () {}),
+    IconButton(icon: const Icon(Icons.videocam), onPressed: () {}),
+  ],
+);
+```
+
+2. To fully customize the app bar, use the `appBarBuilder` parameter. The sample code is as follows:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  appBarBuilder: (context, defaultAppBar) {
+    return AppBar(
+      title: Row(
+        children: [
+          CircleAvatar(child: conversation.icon),
+          const SizedBox(width: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(conversation.name, style: const TextStyle(fontSize: 16), overflow: TextOverflow.clip),
+              Text(conversation.id, style: const TextStyle(fontSize: 12), overflow: TextOverflow.clip)
+            ],
+          )
+        ],
+      ),
+      actions: [
+        IconButton(icon: const Icon(Icons.local_phone), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.videocam), onPressed: () {}),
+      ],
+    );
+  },
+);
+```
+
+- If you don't need to show the app bar, you can return null in the `appBarBuilder`. 
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  appBarBuilder: (context, defaultAppBar) {
+    return null;
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="4. Custom input text field style" defaultOpen="false">
+
+The input field uses the `TextField` component in Flutter. 
+
+1. To customize the decoration style of the `TextField`, pass the `InputDecoration` parameter to the component through the `MessageListPage`. 
+The following shows the sample code and effect:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  inputDecoration: const InputDecoration(hintText: 'Type message here...'),
+);
+```
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/custom_decoration.jpeg" />
+</Frame>
+
+2. Also support these commonly used TextFiled parameters:
+
+| Config                         | Default value                |
+| ------------------------------ | ---------------------------- |
+| messageInputKeyboardType       | TextInputType.multiline      |
+| messageInputMaxLines           | 3                            |
+| messageInputMinLines           | 1                            |
+| messageInputTextInputAction    | TextInputAction.newline      |
+| messageInputTextCapitalization | TextCapitalization.sentences |
+
+3. In addition, `TextField` is wrapped by a container, and you can also configure the container additionally. Here are the supported configurations and their default values.
+
+  - `messageInputContainerPadding`, The default value is`const EdgeInsets.symmetric(horizontal: 20, vertical: 10)`
+
+  - `messageInputContainerDecoration`, The default value is:
+  
+    ```dart
+    BoxDecoration(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      boxShadow: [
+        BoxShadow(
+          offset: const Offset(0, 4),
+          blurRadius: 32,
+          color: Theme.of(context).primaryColor.withOpacity(0.15),
+        ),
+      ],
+    )
+    ```
+
+</Accordion>
+
+<Accordion title="5. Custom input background style" defaultOpen="false">
+
+You can customize the input background style using `inputBackgroundDecoration`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  inputBackgroundDecoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
+);
+```
+
+</Accordion>
+
+<Accordion title="6. Custom input field buttons" defaultOpen="false">
+
+1. To hide the default buttons, use the following:
+
+- `showPickFileButton`: whether to show the `PickFileButton`, which is shown by default. 
+- `showPickMediaButton`: whether to show the `PickMediaButton`, which is shown by default.
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/show_xxx_buttons.jpeg" />
+</Frame>
+
+Sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  showPickFileButton: false,
+  showPickMediaButton: true,
+);
+``` 
+
+2. To customize the style of default buttons, use the following:
+
+- `sendButtonWidget`: customize the style of the send button.
+- `pickMediaButtonWidget`: customize the style of the media pick button.
+- `pickFileButtonWidget`: customize the style of the file pick button.
+
+Sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  showPickFileButton: true,
+  showPickMediaButton: true,
+  sendButtonWidget: const Icon(Icons.send),
+  pickMediaButtonWidget: const Icon(Icons.photo_library),
+  pickFileButtonWidget: const Icon(Icons.attach_file),
+);
+```
+
+3. To add your customized buttons, use the `messageInputActions`. 
+
+For example, to add a microphone button and an emoji button on the left side of the input field, use the following sample code:
+
+```dart 
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageInputActions: [
+    ZIMKitMessageInputAction.left(
+      IconButton(icon: const Icon(Icons.mic), onPressed: () {}),
+    ),
+    ZIMKitMessageInputAction.leftInside(
+      IconButton(icon: const Icon(Icons.sentiment_satisfied_alt_outlined), onPressed: () {}),
+    ),
+  ],
+);
+```
+
+> As shown in the sample code, you can specify the position of the custom button relative to the `TextField` by using `ZIMKitMessageInputAction.left`, `ZIMKitMessageInputAction.right`, `ZIMKitMessageInputAction.leftInside`, and `ZIMKitMessageInputAction.rightInside`.
+
+Its position is as follows:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/input_actions2.png" />
+</Frame>
+ 
+</Accordion>
+
+<Accordion title="7. Custom message list background" defaultOpen="false">
+
+You can customize the message list background using `inputBackgroundDecoration`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageListBackgroundBuilder: (context, defaultWidget) {
+    return YourCustomBackgroundWidget();
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="8. Custom voice messaging" defaultOpen="false">
+
+Support for the following features when sending voice messages:
+- Swipe left to cancel sending voice messages
+- Long press and swipe up to lock and continue recording after releasing the finger
+- Display countdown for voice recording
+
+|                                                                                                                                                    |                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| <Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_lock_slider_cancel.gif" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/flutter/audio_count_down.gif" /></Frame> |
+
+  
+You can set `showRecordButton` to false if you don't need the voice messaging feature.
+```dart
+ZIMKitMessageListPage(
+  showRecordButton: false,
+);
+```
+
+In addition, some callbacks have been provided as follows.:
+
+- `void Function(int errorCode)? onFailed`: This callback will be triggered when the message fails to send.
+
+- `void Function(int remainingSecond)? onCountdownTick`: The callback will be triggered every second after starting the countdown. When the countdown reaches zero, it will automatically send the voice message.
+
+```dart example {4,8}
+ZIMKitMessageListPage(
+  events: ZIMKitMessageListPageEvents(
+    audioRecord: ZIMKitAudioRecordEvents(
+      onFailed: (int errorCode) {
+        /// audio message's error list:  https://doc-preview-zh.zego.im/article/20148
+        debugPrint('onRecordFailed: $errorCode');
+      },
+      onCountdownTick: (int remainingSecond) {
+        debugPrint('onCountdownTick: $remainingSecond');
+      },
+    ),
+  ),
+);
+```
+
+</Accordion>
+
+
+<Accordion title="9. Custom message-list load error" defaultOpen="false">
+
+You can customize the message-list load error using `YourCustomErrorWidget`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageListErrorBuilder: (context, defaultWidget) {
+    return YourCustomErrorWidget();
+  },
+);
+```
+
+</Accordion>
+
+
+<Accordion title="10. Custom message-list loading effect" defaultOpen="false">
+
+You can customize the message loading using `YourCustomLoadingWidget`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  messageListLoadingBuilder: (context, defaultWidget) {
+    return YourCustomLoadingWidget();
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="11. Custom message before sent" defaultOpen="false">
+
+You can customize the message before sent using `preMessageSending`.
+
+The following shows the sample code:
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+  preMessageSending: (ZIMKitMessage message) {
+    return message;
+  },
+);
+```
+
+</Accordion>
+
+## Message-related methods
+
+The following methods can be called using `ZIMKit()` syntax, such as `ZIMKit().deleteMessage()`.
+
+<Accordion title="Delete Messages & Recall Messages" defaultOpen="false">
+
+1. `deleteMessage`: Only delete local messages, after deletion, you cannot see the message yourself.
+2. `recallMessage`: Recall messages, can recall your own messages, or in a group chat, the group owner can recall messages from other members, after recall, users in the conversation cannot see the message anymore.
+
+> By default, In-app Chat Kit supports recalling messages sent in 2 minutes. If you want to modify the default configuration (It can be configured to recall messages within 24 hours.), contact ZEGOCLOUD technical support.
+
+Refer to the example code in `_onMessageItemLongPress`:
+
+```dart
+class ZIMKitDemoHomePage extends StatelessWidget {
+  const ZIMKitDemoHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Conversations'),
+          actions: const [HomePagePopupMenuButton()],
+        ),
+        body: ZIMKitConversationListView(
+          onPressed: (context, conversation, defaultAction) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return ZIMKitMessageListPage(
+                  conversationID: conversation.id,
+                  conversationType: conversation.type,
+                  onMessageItemLongPress: _onMessageItemLongPress,
+                );
+              },
+            ));
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onMessageItemLongPress(
+    BuildContext context,
+    LongPressStartDetails details,
+    ZIMKitMessage message,
+    Function defaultAction,
+  ) async {
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text('Confirme'),
+          content: const Text('Delete or recall this message?'),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: Navigator.of(context).pop,
+              child: const Text('Cancel'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                ZIMKit().deleteMessage([message]);
+                Navigator.pop(context);
+              },
+              child: const Text('Delete'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                ZIMKit().recallMessage(message).catchError((error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Recall'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+```
+
+The default effect when a message is recalled:
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/recall_message.jpeg" />
+</Frame>
+
+To hide the prompt for a recalled message ("Recalled a message" in the above image) or to customize the prompt style for recalling messages, you can use `messageItemBuilder` for customization. 
+Here is an example code snippet to hide the display of recalled messages:
+
+```dart
+class ZIMKitDemoHomePage extends StatelessWidget {
+  const ZIMKitDemoHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Conversations'),
+          actions: const [HomePagePopupMenuButton()],
+        ),
+        body: ZIMKitConversationListView(
+          onPressed: (context, conversation, defaultAction) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return ZIMKitMessageListPage(
+                  conversationID: conversation.id,
+                  conversationType: conversation.type,
+                  messageItemBuilder: (context, message, defaultWidget) {
+                    // *****  hide the display of recalled messages
+                    if (message.type == ZIMMessageType.revoke) {
+                      return const SizedBox.shrink();
+                    } else {
+                      return defaultWidget;
+                    }
+                  },
+                );
+              },
+            ));
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Delete Conversastion's all Messages" defaultOpen="false">
+
+You can use ZIMKit().deleteAllMessage() to delete all messages in this conversation.
+
+> If you only want to delete the message on this device, you can set isAlsoDeleteFromServer to false.
+
+```dart
+ZIMKit().deleteAllMessage(
+  conversationID: conversationID,
+  conversationType: conversationType,
+  isAlsoDeleteFromServer: true,
+);
+```
+
+</Accordion>
+
+<Accordion title="Send and render custom messages." defaultOpen="false">
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/zimkit_custom_message.jpeg" />
+</Frame>
+
+1. How to send custom messages.
+
+You can use `ZIMKit().sendCustomMessage()` to send your custom message, which can be a red envelope, gift, vote, or any other type of message.
+
+What you need to do is define your message protocol, encapsulating `customType` and `customMessage`. Generally, you can define `customMessage` as `JSON format` and further expand your message protocol.
+
+```dart
+ZIMKit().sendCustomMessage(
+  conversationID,
+  conversationType,
+  customType: DemoCustomMessageType.redEnvelope.index,
+  customMessage: jsonEncode({'count': 10, 'money': 100}),
+);
+```
+
+2. How to render custom messages.
+
+The UI of each message can be customized, You can use the messageItemBuilder or messageContentBuilder to build your custom message widget.
+
+**messageContentBuilder:**
+
+In most cases, you may only need to customize the message body, while keeping the avatar or the send status icon next to the message. to do so, you can use the `messageContentBuilder`. The parameter types are as follows:
+
+```dart
+final Widget Function(BuildContext context, ZIMKitMessage message, Widget defaultWidget)? messageContentBuilder;
+```
+You can use it like this.
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  messageContentBuilder: (context, message, defaultWidget) {
+    if (message.type == ZIMMessageType.custom &&
+        message.customContent!.type == DemoCustomMessageType.redEnvelope.index) {
+      return RedEnvelopeMessage(message: message);
+    } else {
+      return defaultWidget;
+    }
+  },
+);
+```
+
+**messageItemBuilder:**
+
+ZIMKitMessageListView is essentially a listView. If you need to customize the drawing of the avatar, message body, sender's name, and sending status, you can use the messageItemBuilder."
+
+The parameter types are as follows:
+
+```dart
+final Widget Function(BuildContext context, ZIMKitMessage message, Widget defaultWidget)? messageItemBuilder;
+```
+
+In addition to fully customizing the message item, you can also change the `primaryColor` of the default message widget to yellow. The code is as follows: 
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  messageItemBuilder: (context, message, defaultWidget) {
+    return Theme(
+      data: ThemeData(primaryColor: Colors.yellow),
+      child: defaultWidget,
+    );
+  },
+);
+```
+
+</Accordion>
+
+<Accordion title="Update message's localExtendedDate" defaultOpen="false">
+
+1. How to update extended data.
+
+You can use `ZIMKit().updateLocalExtendedData` to update message's local extended data.
+
+Message extended data can be used to display the business logic carried by the messages.
+
+```dart
+ZIMKit().updateLocalExtendedData(message, 'localExtendedData');
+```
+
+2. How to use it or render it.
+
+You can use `ValueListenableBuilder` to listen to the value of `message.localExtendedData` at any place where you can access the zimkit message, or you can directly read the current value using `message.localExtendedData.value`.
+
+```dart
+ZIMKitMessageListPage(
+  conversationID: conversation.id,
+  conversationType: conversation.type,
+ 
+  messageItemBuilder: (context, message, defaultWidget) {
+    // ....
+    final extendedDataWidget = ValueListenableBuilder(
+      valueListenable: message.localExtendedData,
+      builder: (BuildContext context, String localExtendedData, Widget? child) {
+        return Text(localExtendedData);
+      },
+    ),
+    // ...
+
+    return ...;
+  },
+);
+```
+
+</Accordion>

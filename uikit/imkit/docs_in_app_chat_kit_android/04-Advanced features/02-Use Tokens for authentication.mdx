@@ -1,0 +1,41 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Use Tokens for authentication
+
+<TokensAuthenticationIntro/>
+
+## Use a Token 
+
+If you need to use a token instead of appsign, you can call `initWith` without appsign to finish the initialization.
+
+```java
+ZIMKit.initWith(application, appID);
+```
+
+And,if you init without appSign,a token will be required when call `ZIMKit.connectUser`.
+
+## Renew a Token
+
+In most cases, the token retrieval approach mentioned above should work fine. However, in certain extreme situations, it may be unreliable. 
+
+To ensure the reliability of the token, you can make the following modifications:
+
+1. The validity period of the token should be set as long as possible, for example, 3 days.
+2. Listen to `onTokenWillExpire` callback and call `renewToken` to update new token. 
+
+```java
+ZIMKit.registerZIMKitDelegate(new ZIMKitDelegate() {
+    @Override
+    public void onTokenWillExpire(int second) {
+        // Please obtain the token from your app server.
+        ZIMKit.renewToken(token,callback);
+    }
+});
+```
+
+3. Renew the token at the appropriate time, such as when the application enters the foreground.
+   
+```java
+// Please obtain the token from your app server.
+ZIMKit.renewToken(token,callback);
+```

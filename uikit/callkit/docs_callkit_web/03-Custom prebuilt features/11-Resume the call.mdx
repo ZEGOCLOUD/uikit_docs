@@ -1,0 +1,90 @@
+# Resume the call
+
+## Introduction
+
+During a call, if the user refreshes the browser, the call will be terminated. To resume the call after refreshing the browser, please refer to this document.
+
+## How do I resume the call after refreshing the browser?
+### 1. Get the Room ID
+
+The process of obtaining the Room ID varies depending on the type of call.
+
+#### Basic Call
+
+When calling the `joinRoom` method, listen for the `onJoinRoom` callback function and call the `getRoomID` method within the `onJoinRoom` callback function to obtain and properly record the room ID after successfully joining the call. For example, store it in `sessionStorage` for returning to the call after refreshing the browser.
+
+```ts
+zp.joinRoom({
+    onJoinRoom: () => {
+        // Get the roomID
+        const roomID = zp.getRoomID();
+        // Store it in sessionStorage
+        sessionStorage.setItem('roomID', roomID);
+    }   
+});
+```
+
+<Note title="Note">
+
+After the user ends the call, the application should delete the `roomID` stored in `sessionStorage`.
+</Note>
+
+#### Call with Invitation
+
+When configuring the call invitation using the `setCallInvitationConfig` method, listen for the `onSetRoomConfigBeforeJoining` callback function.
+
+Call the `getRoomID` method within the `onSetRoomConfigBeforeJoining` callback function to obtain and properly record the room ID after successfully joining the call. For example, store it in `sessionStorage` to return to the room after refreshing the browser.
+
+Then, return a configuration object that includes the `autoLeaveRoomWhenOnlySelfInRoom` property set to `false` so that the only user left in the call will not automatically exiting the room.
+
+```ts
+zp.setCallInvitationConfig({
+    onSetRoomConfigBeforeJoining: () => {
+        // Get the roomID
+        const roomID = zp.getRoomID();
+        // Store it in sessionStorage
+        sessionStorage.setItem('roomID', roomID);
+        return {
+            // Disable the functionality of automatically exiting the room when there is only one person left in the room
+            autoLeaveRoomWhenOnlySelfInRoom: false,
+        }
+    }
+});
+```
+
+<Note title="Note">
+
+After the user ends the call, the application should delete the `roomID` stored in `sessionStorage`.
+</Note>
+
+### 2. Rejoin the Room
+
+After the user refreshes the browser, the application should retrieve the `roomID` from `sessionStorage` and call the `joinRoom` method to rejoin the room, and set `showPreJoinView` to false to disable the pre-join check page for a better user experience.
+
+```ts
+if (sessionStorage.getItem('roomID')){
+    // Generate Kit Token
+    const appID = ;
+    const token = "";
+    const roomID = sessionStorage.getItem('roomID');
+    const userID = "";
+    const userName = "userName" + userID;    
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(appID, token, roomID, userID, userName);
+
+    // Create an instance object using the Kit Token.
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.joinRoom({
+        // Hide the pre-join check view
+        showPreJoinView: false,
+    });
+}
+```
+
+## Reference
+
+### getRoomID
+
+```ts
+// Description: Get the Room ID
+getRoomID(): string;
+```

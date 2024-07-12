@@ -1,0 +1,417 @@
+# Customize the seat-taking logic
+
+## Customize the audience's seat-taking logic
+
+The reference code below implements the following:
+
+1. Decide whether to show the "apply to take a seat" button.
+
+- Listen to the `ZegoLiveAudioRoomSeatEvents.onClosed` and `ZegoLiveAudioRoomSeatEvents.onOpened`, you can tell whether the seat is open or closed. If open, the button shows. If closed, the button shall be hidden.
+
+2. How to know whether a seat-taking request is sent?
+
+- Listen to the `ZegoLiveAudioRoomSeatAudienceEvents.onTakingRequestFailed` and `ZegoLiveAudioRoomSeatAudienceEvents.onTakingRequestRejected` callbacks, and you can tell when the request is sent successfully via these callbacks.
+- Listen to the `takenSeats`in the callback `ZegoLiveAudioRoomSeatEvents.onChanged`, you can tell when the audience takes a seat successfully.
+
+3. How to **apply to take a seat** and **cancel the seat-taking request**?
+
+- To send a seat-taking request, use the `applyToTake` method in `ZegoUIKitPrebuiltLiveAudioRoomController().seat.audience`.
+- To cancel the seat-taking request after applying, use the `cancelTakingRequest` method in `ZegoUIKitPrebuiltLiveAudioRoomController().seat.audience`.
+- And sure, these methods will return a result, you can do further logic customization based on the returned results.
+
+<div style={{width:"30%"}}>
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/connect_custom.gif" />
+  </Frame> 
+</div>
+
+```dart
+class LivePage extends StatefulWidget {
+  const LivePage({
+    Key? key,
+    required this.roomID,
+    this.isHost = false,
+  }) : super(key: key);
+
+  final String roomID;
+  final bool isHost;
+
+  @override
+  State<LivePage> createState() => _LivePageState();
+}
+
+class _LivePageState extends State<LivePage> {
+  final isSeatClosedNotifier = ValueNotifier<bool>(false);
+  final isRequestingNotifier = ValueNotifier<bool>(false);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltLiveAudioRoom(
+          appID: YourSecret.appID,
+          appSign: YourSecret.appSign,
+          userID: userID,
+          userName: 'user_$userID',
+          roomID: widget.roomID,
+          events: ZegoUIKitPrebuiltLiveAudioRoomEvents(
+            seat: ZegoLiveAudioRoomSeatEvents(
+              onClosed: () {
+                isSeatClosedNotifier.value = true;
+              },
+              onOpened: () {
+                isSeatClosedNotifier.value = false;
+              },
+              onChanged: (
+                Map<int, ZegoUIKitUser> takenSeats,
+                List<int> untakenSeats,
+              ) {
+                if (isRequestingNotifier.value) {
+                  if (takenSeats.values
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(userID)) {
+                    /// on the seat now
+                    isRequestingNotifier.value = false;
+                  }
+                }
+              },
+              host: ZegoLiveAudioRoomSeatHostEvents(),
+              audience: ZegoLiveAudioRoomSeatAudienceEvents(
+                onTakingRequestFailed: () {
+                  isRequestingNotifier.value = false;
+                },
+                onTakingRequestRejected: () {
+                  isRequestingNotifier.value = false;
+                },
+              ),
+            ),
+          ),
+          config: (widget.isHost
+              ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+              : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience())
+
+            ///  Remove the button that is used for the audience to apply to take a seat.
+            ..bottomMenuBar.audienceButtons = const [
+              ZegoLiveAudioRoomMenuBarButtonName.showMemberListButton,
+            ]
+
+            /// Add custom button.
+            ..bottomMenuBar.audienceExtendButtons = [
+              connectButton(),
+            ]),
+    );
+  }
+
+  Widget connectButton() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: isSeatClosedNotifier,
+      builder: (context, isSeatClosed, _) {
+        return isSeatClosed
+            ? ValueListenableBuilder<bool>(
+                valueListenable: isRequestingNotifier,
+                builder: (context, isRequesting, _) {
+                  return isRequesting
+                      ? ElevatedButton(
+                          onPressed: () {
+                            ZegoUIKitPrebuiltLiveAudioRoomController()
+                                .seat
+                                .audience
+                                .cancelTakingRequest()
+                                .then((result) {
+                              isRequestingNotifier.value = false;
+                            });
+                          },
+                          child: const Text('Cancel'),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            ZegoUIKitPrebuiltLiveAudioRoomController()
+                                .seat
+                                .audience
+                                .applyToTake()
+                                .then((result) {
+                              isRequestingNotifier.value = result;
+                            });
+                          },
+                          child: const Text('Request'),
+                        );
+                },
+              )
+            : Container();
+      },
+    );
+  }
+}
+```
+
+## Customize your own business logic
+
+You can use API, config, and callback to achieve more detailed control to fit your business logic.
+
+### API
+
+#### speaker
+
+The following functions will only take effect when the user role performing the operation is a speaker.
+
+##### leave
+
+Leave the seat voluntarily.
+
+A pop-up confirmation prompt will show when the `showDialog` is `true`.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> leave({bool showDialog = true}) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.speaker.leave(showDialog: true)
+```
+</CodeGroup>
+
+
+
+#### host
+
+The following functions will only take effect when the user role performing the operation is a host.
+
+##### removeSpeaker
+
+Remove the user with the ID `userID` from the seat.
+<CodeGroup>
+```dart Prototype
+Future<void> removeSpeaker(String userID, {bool showDialogConfirm = true,}) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.removeSpeaker(userID)
+```
+</CodeGroup>
+
+##### close
+
+Close(lock) the seat(s).
+
+You can use the `close()` method to close all seats or specify only to close a certain seat by using the `targetIndex`.
+
+Once all seats are closed, audiences can only be invited by the host or request a seat by sending a seat-taking request themselves.
+<CodeGroup>
+```dart Prototype
+Future<bool> close({
+  int targetIndex = -1,
+}) async 
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.close(targetIndex: 2)
+```
+</CodeGroup>
+
+##### open
+
+When the current user is the host, Open(unlock) the seat(s).
+
+You can use `open()` to open all seats or open the seat specified by `targetIndex`.
+
+Once the seat is opened, the audience can then take the seat by clicking on the seat.
+<CodeGroup>
+```dart Prototype
+Future<bool> open({
+  int targetIndex = -1,
+}) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.close(targetIndex: 2)
+```
+</CodeGroup>
+
+##### acceptTakingRequest
+
+When the current user is the host, accept seat-taking requests for the audience with the ID `audienceUserID`.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> acceptTakingRequest(String audienceUserID) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.acceptTakingRequest(audienceUserID)
+```
+</CodeGroup>
+
+##### rejectTakingRequest
+
+When the current user is the host, reject seat-taking requests for the audience with the ID `audienceUserID`.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> rejectTakingRequest(String audienceUserID) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.rejectTakingRequest(audienceUserID)
+```
+</CodeGroup>
+
+##### inviteToTake
+
+When the current user is the host, invite the audience with the ID `audienceUserID` to take the speaker seat.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> inviteToTake(String audienceUserID) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.inviteToTake(audienceUserID)
+```
+</CodeGroup>
+
+
+##### mute
+
+When the current user is the host, set whether the speaker at the seat position `targetIndex` is muted based on the `muted` value.
+
+After the host initiates the mute operation, if the value of `muted` is false, the speaker at the position of `targetIndex` will receive the `ZegoLiveAudioRoomAudioVideoEvents.onMicrophoneTurnOnByOthersConfirmation` callback. The speaker needs to return `true` in this callback to agree to the host opening their microphone.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> mute({
+  int targetIndex = -1,
+  bool muted = true,
+}) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.mute(targetIndex: 1, muted: true)
+```
+</CodeGroup>
+
+##### muteByUserID
+
+
+When the current user is the host, set whether the speaker with id `targetUserID` is muted based on the `muted` value.
+
+After the host initiates the mute operation, if the value of `muted` is false, the speaker with id `targetUserID` will receive the `ZegoLiveAudioRoomAudioVideoEvents.onMicrophoneTurnOnByOthersConfirmation` callback. The speaker needs to return `true` in this callback to agree to the host opening their microphone.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> muteByUserID(
+  String userID, {
+  bool muted = true,
+}) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.host.mute(targetUserID, muted: true)
+```
+</CodeGroup>
+
+#### audience 
+
+The following functions will only take effect when the user role performing the operation is a speaker.
+
+##### applyToTake
+
+Applies to take a speaker seat.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> applyToTake() async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.audience.applyToTake()
+```
+</CodeGroup>
+
+##### cancelTakingRequest
+
+Cancels his seat-taking request.
+
+<CodeGroup>
+```dart Prototype
+Future<bool> cancelTakingRequest() async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.audience.cancelTakingRequest()
+```
+</CodeGroup>
+
+##### acceptTakingInvitation
+
+Accepts the seat-taking invite from the host.
+
+<CodeGroup>
+```dart Prototype
+ Future<bool> acceptTakingInvitation({
+   required BuildContext context,
+   bool rootNavigator = false,
+ }) async
+```
+
+```dart example
+ZegoUIKitPrebuiltLiveAudioRoomController().seat.audience.acceptTakingInvitation()
+```
+</CodeGroup>
+
+### config
+
+- [ZegoLiveAudioRoomLayoutConfig](./03-Customize%20the%20seats.mdx#customize-the-seat-layout) `layout`:
+
+  The default layout of the audio chat room supports free layout with multiple rows and columns of seats.
+
+  You can use this parameter to control the specific style of each row and column.
+
+- int `takeIndexWhenJoining`:
+
+  Specifies the seat to occupy when joining the live audio room.
+
+  This is only valid when the role is set to host or speaker.
+
+- int Function(ZegoUIKitUser user)? `takeIndexWhenAudienceRequesting`:
+
+  When the audience take on seat, do you want specify a seat? If so, return to the seat you want to specify
+
+- bool `closeWhenJoining`:
+
+  Specifies whether to lock the seat automatically after entering the room.
+
+  It only takes effect when set by the host, the default value is `true`.
+
+- List\<int\> `hostIndexes`:
+
+  Specifies the list of seats occupied by the host.
+
+  Once specified, these seats can only be used by the host and cannot be occupied by speakers or audience members.
+
+  The default value is `[0]`.
+
+### event callbacks
+
+<Note title="Note">
+The `ZegoLiveAudioRoomSeatEvents.onClicked` and `ZegoLiveAudioRoomMemberListEvents.onMoreButtonPressed` overrides Live Audio Room Kit's prebuilt logic, meaning that when you customize these events, the prebuilt events are no longer executed.
+</Note>
+
+- ZegoLiveAudioRoomMemberListEvents
+    - Function(ZegoUIKitUser user)? `onMoreButtonPressed`: This callback will be triggered when the more button in the member list is pressed. 
+- ZegoLiveAudioRoomSeatEvents
+    - Function(int index, ZegoUIKitUser? user) `onClicked`: This callback will be triggered when a seat is clicked. 
+    - Function() `onClosed`: This callback will be triggered when a speaker seat is closed. 
+    - Function() `onOpened`: This callback will be triggered when a closed speaker seat is opened. 
+    - Function(Map&lt;int/*seat index*/, ZegoUIKitUser&gt; takenSeats, List&lt;int&gt; untakenSeats) `onChanged`: This callback will be triggered when someone gets on/gets off/switches seat. 
+    - ZegoLiveAudioRoomSeatHostEvents
+        - Function(ZegoUIKitUser audience) `onTakingRequested`: The host will receive a notification via this callback when the audience applies to take a seat.
+
+        - Function(ZegoUIKitUser audience) `onTakingRequestCanceled`: The host will receive a notification via this callback when the audience cancels his seat-taking request.
+        - VoidCallback? `onTakingInvitationFailed`: The host will receive a notification via this callback when a seat-taking invite failed.
+        - void Function(ZegoUIKitUser audience)? `onTakingInvitationRejected`: The host will receive a notification via this callback when the audience rejects the seat-taking invite.  
+    - ZegoLiveAudioRoomSeatAudienceEvents
+        - VoidCallback? `onTakingRequestFailed`: The audience will receive a notification via this callback when his seat-taking request fails.
+        - VoidCallback? `onTakingRequestRejected`: The audience will receive a notification via this callback when his seat-taking request is rejected by the host.
+        - VoidCallback? `onTakingInvitationReceived`: The audience will receive a notification via this callback when the host invites them to take a seat.
+
+

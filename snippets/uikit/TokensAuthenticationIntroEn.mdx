@@ -1,0 +1,76 @@
+
+## Introduction
+
+<Video src="https://www.youtube.com/embed/CuRq8wucobU"/>
+
+To avoid unauthorized service access or operations, ZEGOCLOUD uses digital Tokens to verify user identity, control and validate user privileges. You will need to pass a Token when you log in to a room. 
+
+
+## Understand the process
+
+Your app clients request Tokens from your app server and provide the Token for privilege validation when logging in to a room. 
+
+The following diagram shows the process of room login privilege validation:
+
+<Frame width="auto" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/doc/video/zegocloud/KeyConceptIntro-Token-flowchart.jpg" />
+</Frame>
+
+1. Your app client requests a Token from your app server.
+2. Your app server generates a Token and passes it to the client.
+3. Your app client logs in to a room with userID, roomID, and the Token.
+4. The ZEGOCLOUD SDK sends the Token to the ZEGO server for validation.
+5. The ZEGOCLOUD server returns the validation result to the ZEGO Express SDK.
+6. The ZEGOCLOUD SDK returns the validation result to the app client. If the validation passes, the user logs in to the room successfully; otherwise, the login fails.
+
+
+## Get the AppID and ServerSecret
+
+Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com) to get the App ID and ServerSecret of your project.
+
+## Generate a Token on your app server
+
+After getting your AppID and ServerSecret, you can define the validation rules on your app server or client based on your business requirements. 
+
+Upon request from your app clients, your app server generates Tokens and sends the Tokens to the corresponding app clients. 
+
+ZEGOCLOUD provides an open-source [Token generator](https://github.com/ZEGOCLOUD/zego_server_assistant) plug-in on GitHub, which you can use to generate Tokens on your app server using different programming languages such as Go, C++, Java, Python, PHP,.NET, and Node.js.
+
+Currently, the Token generator we provided supports generating the following two types of Tokens:
+
+| Token type          | Description                                                                                   | Use Cases                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User identity Token | Developers must include the Token parameter when logging into a room to verify the user's legitimacy. | The user identity Token is used for simple permission verification in most business scenarios. In most cases, generating this Token is sufficient.                                                                                                                                                                                                                                 |
+| User privilege Token | To further enhance security, room ID and stream ID privileges are opened to verify the logged-in room ID and stream ID. | The general use cases for room ID and stream ID privileges are as follows:<br/>- Distinguishing between regular rooms and member rooms, and controlling non-member users from logging into member rooms.<br/>- In voice chat rooms or live streaming scenarios, ensuring consistency between streaming users and users on the microphone to prevent "ghost microphone" phenomenon, where non-microphone users' voices are heard in the room.<br/>- In games like Werewolf, preventing hackers from using other user IDs to log into the same room after cracking the application, obtaining game information, and cheating, which affects the gaming experience of normal users. |
+
+When generating two types of tokens, the `payload` requirements are as follows:
+
+- **User identity Token**: To check the user's identity, you can pass null to the `payload` field.
+- **User privilege Token**: To check the user's permissions based on the room ID and the streamed ID, you need to generate a valid payload field according to the following validation rules:
+  - Validate room login permission only: Add the enable room validation configuration and disable stream publishing permission configuration to the `privilege` field of the `payload`. Set `room_id` to a valid room ID.
+  - Validate stream publishing permission only: Add the disable room validation configuration and enable stream publishing permission configuration to the `privilege` field of the `payload`. Set `stream_id_list` to a valid list of stream IDs.
+  - Validate both room login and stream publishing permissions: Add the enable room validation configuration and enable stream publishing permission configuration to the `privilege` field of the `payload`. Set `room_id` to a valid room ID and `stream_id_list` to a valid list of stream IDs.
+
+
+<Warning title="Warning">
+
+For business security, you must generate Tokens on your app server; Otherwise, there is a risk of ServerSecret being stolen.
+
+</Warning>
+
+| Language | Supported version           | Core function    | Code base                                                                                                                                  | Example - User identity Token                                                                                                                                                                      | Example - User privilege Token                                                                                                                                                                           |
+| -------- | --------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Go       | Go 1.14.15 or later         | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-base.go">GitHub</a></li></ul>                                               | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul>                                              |
+| C++      | C++ 11 or later             | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B">GitHub</a></li></ul>        | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/sample/demo/main.cc">GitHub</a></li></ul>                                            |                                                                                                                                                                                                          |
+| Java     | Java 1.8 or later           | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04">GitHub</a></li></ul>   | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleBase.java">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleForRtcRoom.java">GitHub</a></li></ul> |
+| Python   | Python 3.6.8 or later       | generate_token04 | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04">GitHub</a></li></ul> | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/base_sample.py">GitHub</a></li></ul>                                     | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/rtcroom_sample.py">GitHub</a></li></ul>                                        |
+| PHP      | PHP 7.0 or later            | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04">GitHub</a></li></ul>    | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/test.php">GitHub</a></li></ul>                                              | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/testForRtcRoom.php">GitHub</a></li></ul>                                          |
+| .NET     | .NET Framework 3.5 or later | GenerateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net">GitHub</a></li></ul>           | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net/demo/WindowsFormsApp1/Form1.cs">GitHub</a></li></ul>                                    |                                                                                                                                                                                                          |
+| Node.js  | Node.js 8 or later          | generateToken04  | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs">GitHub</a></li></ul>         | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-base.js">GitHub</a></li></ul>                                           | <ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-rtc-room.js">GitHub</a></li></ul>                                             |
+
+
+
+
+## How to get a temporary Token
+
+To make it easier for you to try and test the user authentication feature, [ZEGOCLOUD Admin Console](https://console.zegocloud.com) provides a tool for generating temporary Tokens, which you can use directly in a testing environment. In production, you must generate Tokens on your app server.

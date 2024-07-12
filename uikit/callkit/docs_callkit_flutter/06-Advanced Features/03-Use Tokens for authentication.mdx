@@ -1,0 +1,51 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Use Tokens for authentication
+
+<TokensAuthenticationIntro/>
+
+## Use a Token 
+
+<Tabs>
+  <Tab title="Basic call">
+    If you need to use a token instead of appsign, you can do like follow:
+
+    ```dart {3-4,7-10}
+    ZegoUIKitPrebuiltCall(
+      appID: yourAppID /*input your AppID*/,
+      /// appSign: 'do not assign app sign',
+      token: $yourToken,
+      events: ZegoUIKitPrebuiltCallEvents(
+        room: ZegoCallRoomEvents(
+          onTokenExpired: (remainedSeconds) {
+            /// when your token is notified to expired, please renew it.
+            ZegoUIKitPrebuiltCallController().room.renewToken($yourNewToken);
+          },
+        ),
+      ),
+      ...
+    )
+    ```
+  </Tab>
+  <Tab title="Call with invitation">
+  ```dart {3-4,10-13}
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    appID: yourAppID /*input your AppID*/,
+    /// appSign: 'do not assign app sign',
+    token: $yourToken,
+    plugins: [
+      ZegoUIKitSignalingPlugin(),
+    ],
+    events: ZegoUIKitPrebuiltCallEvents(
+      room: ZegoCallRoomEvents(
+        onTokenExpired: (remainedSeconds) {
+            /// when your token is notified to expired, please renew it.
+            ZegoUIKitPrebuiltCallController().room.renewToken($yourNewToken);
+        },
+      ),
+    ),
+    ...
+  );
+  ```
+  </Tab>
+</Tabs>

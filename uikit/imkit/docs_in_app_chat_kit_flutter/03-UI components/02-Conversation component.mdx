@@ -1,0 +1,677 @@
+# Conversation component
+
+import ZIM_ZIMKit_chat_info from "/snippets/uikit/in_app_chat/ZIM_ZIMKit_chat_info-en.mdx";
+
+<ZIM_ZIMKit_chat_info />
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/IOS/swift/conversation_demo.gif" />
+</Frame>
+
+## Integrate the conversation component into your project
+
+### Prerequisites
+
+import ZIM_ZIMKIt_component_Prefix_info_New from "/snippets/uikit/in_app_chat/ZIM_ZIMKIt_component_Prefix_info_New-en.mdx";
+
+<ZIM_ZIMKIt_component_Prefix_info_New />
+
+### Add the conversation component
+
+In the file that needs to use the conversation component, use the `ZIMKitConversationListView` widget.
+
+```dart
+import 'package:zego_zimkit/zego_zimkit.dart';
+
+// home_page.dart
+class ZIMKitDemoHomePage extends StatelessWidget {
+  const ZIMKitDemoHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Conversations'),
+          actions: const [HomePagePopupMenuButton()],
+        ),
+        body: ZIMKitConversationListView(
+          onPressed: (context, conversation, defaultAction) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return ZIMKitMessageListPage(
+                  conversationID: conversation.id,
+                  conversationType: conversation.type,
+                );
+              },
+            ));
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Customize features/UI
+
+If the default conversation-relevant features, behaviors or UI don&rsquo;t fully meet your needs, we allow you to flexibly customize those through the parameters provided by the `ZIMKitConversationListView` mentioned in this section.
+
+The usage of commonly used parameters is as follows:
+
+<Accordion title="1. Custom press and long press events" defaultOpen="false">
+
+To customize the press and long press events for a conversation, use the `onPressed` and `onLongPress`.
+
+- `onPressed`: usually, this callback is used to jump to the `MessageListPage`, and you can also customize other business logic for this press event.
+
+  > For example, you can implement paid chat feature by redefining the click event of the conversation list and modifying it to enter the chat after payment.
+
+  ```dart
+  ZIMKitConversationListView(
+    onPressed: (context, conversation, defaultAction) {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return ZIMKitMessageListPage(
+            conversationID: conversation.id,
+            conversationType: conversation.type,
+          );
+        },
+      ));
+    },
+  )
+  ```
+
+- `onLongPress`: use this to set the long press event for a conversation.
+
+  When this callback is not set, the default behavior is to pop up a menu. You can choose to delete the conversation or exit the group (if the long-pressed conversation is a group chat). 
+  You can refer to the following to implement a custom long-press menu:
+
+  ```dart
+  ZIMKitConversationListView(
+    onLongPress: (context, conversation, longPressDownDetails, defaultAction) {
+      final conversationBox = context.findRenderObject()! as RenderBox;
+      final offset = conversationBox.localToGlobal(Offset(0, conversationBox.size.height / 2));
+
+      showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(
+          longPressDownDetails.globalPosition.dx,
+          offset.dy,
+          longPressDownDetails.globalPosition.dx,
+          offset.dy,
+        ),
+        items: [
+          const PopupMenuItem(value: 0, child: Text('Delete')),
+          if (conversation.type == ZIMConversationType.group) const PopupMenuItem(value: 1, child: Text('Quit'))
+        ],
+      ).then((value) {
+        switch (value) {
+          case 0:
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Confirm'),
+                  content: const Text('Do you want to delete this conversation?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ZIMKit().deleteConversation(conversation.id, conversation.type);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+          case 1:
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Confirm'),
+                  content: const Text('Do you want to leave this group?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ZIMKit().leaveGroup(conversation.id);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+        }
+      });
+    },
+  )
+  ```
+
+</Accordion>
+
+<Accordion title="2. Custom conversation list UI" defaultOpen="false">
+
+The UI of each item in the conversation list can be fully customized, to do so, you can use the `itemBuilder` of `ZIMKitConversationListView`. The parameter types are as follows:
+
+```dart
+final Widget Function(BuildContext context, ZIMKitConversation conversation, Widget defaultWidget)? itemBuilder;
+```
+
+For example, replace each item in the default conversation list (`ZIMKitConversationListView`) with a custom `TextButton`.
+
+```dart
+ZIMKitConversationListView(
+  itemBuilder: (context, conversation, defaultWidget) {
+    return Center(
+      child: TextButton(
+        child: Text(conversation.name),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return ZIMKitMessageListPage(
+                conversationID: conversation.id,
+                conversationType: conversation.type,
+              );
+            },
+          ));
+        },
+      ),
+    );
+  },
+)
+```
+
+</Accordion>
+
+<Accordion title="Click to see the list of other interfaces" defaultOpen="false">
+
+1. `filter`: use this to set how to filter the conversations.
+2. `sorter`: use this to set how the conversation list sorts.
+3. `errorBuilder`: use this to customize the UI when error loading the message list.
+4. `emptyBuilder`: use this to customize the UI when the message list is empty.
+5. `loadingBuilder`: use this to customize the UI when loading the message list.
+6. `lastMessageBuilder`: use this to customize how the UI of the latest message of a conversation shows. 
+7. `lastMessageTimeBuilder`: use this to customize how the UI of the latest message time of a conversation shows.
+
+</Accordion>
+
+## Conversastion API
+
+<Accordion title="Delete Conversastion" defaultOpen="false">
+
+You can use ZIMKit().deleteConversation(id,type) to delete conversation.
+
+1. If you only want to delete the conversations on this device, you can set isAlsoDeleteFromServer to false.
+2. If you want to delete a conversation along with its messages, you can set isAlsoDeleteMessages to true.
+
+```dart
+ZIMKit().deleteAllConversation(
+  id,type,
+  isAlsoDeleteFromServer: true,
+  isAlsoDeleteMessages: true,
+);
+```
+
+</Accordion>
+
+<Accordion title="Delete All Conversastions" defaultOpen="false">
+
+You can use ZIMKit().deleteAllConversation() to delete conversations.
+
+> If you only want to delete the conversations on this device, you can set isAlsoDeleteFromServer to false.
+
+```dart
+ZIMKit().deleteAllConversation(
+  isAlsoDeleteFromServer: true,
+  isAlsoDeleteMessages: true,
+);
+```
+
+</Accordion>
+
+## Group Conversation Related Methods
+
+The following methods can be called using `ZIMKit()` syntax, such as `ZIMKit().createGroup()`.
+
+<Frame width="200" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/zimkit/group_management.gif" />
+</Frame>
+
+<Accordion title="1. Create group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<String?> createGroup(String name, List<String> inviteUserIDs, {String id = ''}) 
+```
+
+This method return the new group's conversationID, If you specify an ID by the id param, the group will be created using the ID you specified.
+
+</Accordion>
+
+<Accordion title="2. Disband group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> disbandGroup(String conversationID) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="3. Join group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> joinGroup(String conversationID) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="4. Leave group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> leaveGroup(String conversationID) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="5. Add users to group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> addUersToGroup(String conversationID, List<String> userIDs) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="6. Remove users from group" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> removeUesrsFromGroup(String conversationID, List<String> userIDs) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="7. query group info" defaultOpen="false">
+
+method prototype:
+
+```dart
+ValueNotifier<ZIMKitGroupInfo> queryGroupInfo(String conversationID)
+```
+
+This method return `ValueNotifier<ZIMKitGroupInfo>`:
+
+```dart
+class ZIMKitGroupInfo {
+  String notice = "";
+  Map<String, String> attributes = {};
+  ZIMGroupState state = ZIMGroupState.enter;
+  ZIMGroupEvent event = ZIMGroupEvent.created;
+}
+```
+
+</Accordion>
+
+<Accordion title="8. Query group member list" defaultOpen="false">
+
+method prototype:
+
+```dart
+ListNotifier<ZIMGroupMemberInfo> queryGroupMemberList(String conversationID)
+```
+
+This method return a ListNotifier, which can used by the `ValueListenableBuilder`, complete sample code can be found [here](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter/blob/master/basic_demo/lib/demo_widgets/member_list_dialog.dart).
+
+</Accordion>
+
+<Accordion title="9. Query group member Info" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<ZIMGroupMemberInfo?> queryGroupMemberInfo(String conversationID, String userID) 
+```
+
+</Accordion>
+
+<Accordion title="10. Transfer group owner" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int> transferGroupOwner(String conversationID, String toUserID) 
+```
+
+This method return error code. 0 means success.
+
+</Accordion>
+
+<Accordion title="11. Query group member count" defaultOpen="false">
+
+method prototype:
+
+```dart
+Future<int?> queryGroupMemberCount(String conversationID)
+```
+
+</Accordion>
+
+<Accordion title="12. Query group owner" defaultOpen="false">
+
+method prototype:
+
+```dart
+ValueNotifier<ZIMGroupMemberInfo?> queryGroupOwner(String conversationID)
+```
+
+</Accordion>
+
+<Accordion title="13. Set group member role" defaultOpen="false">
+
+method prototype:
+
+```dart
+// Return error code. 0 means success.
+Future<int> setGroupMemberRole({required String conversationID, required String userID, required int role})
+```
+
+`Role`: 1 - owner, 2 - manager, 3 - member, others - If you need to customize group roles, please choose a number above 100. These roles have the same permissions as regular members.
+
+`Events`: After setting the role, you can obtain the Role update event through the following two events:
+
+1. If you have already obtained the member list data through `queryGroupMemberList`, the role in the data will be automatically updated.
+2. You can also obtain the role update event separately by the `getGroupMemberInfoUpdatedEventStream` event.
+
+> Please refer to the usage of this interface in the demo's [member_list_dialog](https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_flutter/blob/master/basic_demo/lib/demo_widgets/member_list_dialog.dart).
+
+</Accordion>
+
+## Group Conversation Related Event
+
+The following methods can be called using `ZIMKit()` syntax, such as `ZIMKit().getGroupStateChangedEventStream().listen(onGroupStateChangedEvent)`.
+
+<Accordion title="FAQ: How to listen to events in a widget?" defaultOpen="false">
+
+1. In YourStatefulWidget's initState method, subscribe the event.
+2. When YourStatefulWidget is disposed, please remember to cancel subscribe.
+
+```dart
+class YourStatefulWidget extends StatefulWidget {
+  const YourStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<YourStatefulWidget> createState() => YourStatefulWidgetState();
+}
+
+class YourStatefulWidgetState extends State<YourStatefulWidget> {
+  List<StreamSubscription> sbuscriptions = [];
+
+
+  // In the initState method, subscribe the event.
+  @override
+  void initState() {
+    sbuscriptions = [
+      if (widget.conversationType == ZIMConversationType.group)
+        ZIMKit().getGroupStateChangedEventStream().listen(onGroupStateChangedEvent)
+    ];
+    super.initState();
+  }
+
+  // When the widget is disposed, please remember to cancel subscribe.
+  @override
+  void dispose() {
+    for (final element in sbuscriptions) {
+      element.cancel();
+    }
+    super.dispose();
+  }
+
+  Future<void> onGroupStateChangedEvent(ZIMKitEventGroupStateChanged event) async {
+    debugPrint('getGroupStateChangedEventStream: $event');
+    // If you need to automatically exit the page and delete the group
+    // conversation that is already in the 'quit' state,
+    // you can use this code here.
+
+    // if ((event.groupInfo.baseInfo.id == widget.conversationID) && (event.state == ZIMGroupState.quit)) {
+    //   debugPrint('app deleteConversation: $event');
+    //   await ZIMKit().deleteConversation(widget.conversationID, widget.conversationType);
+    //   if (mounted) {
+    //     Navigator.pop(context);
+    //   }
+    // }
+  }
+}
+
+```
+
+</Accordion>
+
+<Accordion title="1. Group state changed event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupStateChanged> getGroupStateChangedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupStateChanged.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupStateChanged {
+  ZIMKitEventGroupStateChanged({
+    required this.state,
+    required this.event,
+    required this.operatedInfo,
+    required this.groupInfo,
+  });
+  final ZIMGroupState state;
+  final ZIMGroupEvent event;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final ZIMGroupFullInfo groupInfo;
+}
+```
+
+</Accordion>
+
+<Accordion title="2. Group name updated event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupNameUpdated> getGroupNameUpdatedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupNameUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupNameUpdated.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupNameUpdated {
+  ZIMKitEventGroupNameUpdated({
+    required this.groupName,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final String groupName;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+```
+
+</Accordion>
+
+<Accordion title="3. Group avatar url updated event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupAvatarUrlUpdated> getGroupAvatarUrlUpdatedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupAvatarUrlUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupAvatarUrlUpdated.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupAvatarUrlUpdated {
+  ZIMKitEventGroupAvatarUrlUpdated({
+    required this.groupAvatarUrl,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final String groupAvatarUrl;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+```
+
+</Accordion>
+
+<Accordion title="4. Group notice updated event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupNoticeUpdated> getGroupNoticeUpdatedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupNoticeUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupNoticeUpdated.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupNoticeUpdated {
+  ZIMKitEventGroupNoticeUpdated({
+    required this.groupNotice,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final String groupNotice;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+```
+
+</Accordion>
+
+<Accordion title="5. Group attributes updated event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupAttributesUpdated> getGroupAttributesUpdatedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupAttributesUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupAttributesUpdated.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupAttributesUpdated {
+  ZIMKitEventGroupAttributesUpdated({
+    required this.updateInfo,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final List<ZIMGroupAttributesUpdateInfo> updateInfo;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+```
+
+</Accordion>
+
+<Accordion title="6. Group member state changed event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupMemberStateChanged> getGroupMemberStateChangedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupMemberStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMemberStateChanged.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupMemberStateChanged {
+  ZIMKitEventGroupMemberStateChanged({
+    required this.state,
+    required this.event,
+    required this.userList,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final ZIMGroupMemberState state;
+  final ZIMGroupMemberEvent event;
+  final List<ZIMGroupMemberInfo> userList;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+```
+
+</Accordion>
+
+<Accordion title="7. Group member info updated event" defaultOpen="false">
+
+Call this method to get the event stream
+
+```dart
+Stream<ZIMKitEventGroupMemberInfoUpdated> getGroupMemberInfoUpdatedEventStream() 
+```
+
+The event prototype is :
+
+> This Event encapsulates the [onGroupMemberInfoUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMemberInfoUpdated.html) callback of ZIM SDK.
+
+```dart
+class ZIMKitEventGroupMemberInfoUpdated {
+  ZIMKitEventGroupMemberInfoUpdated({
+    required this.userInfo,
+    required this.operatedInfo,
+    required this.groupID,
+  });
+  final List<ZIMGroupMemberInfo> userInfo;
+  final ZIMGroupOperatedInfo operatedInfo;
+  final String groupID;
+}
+
+```
+
+</Accordion>
+

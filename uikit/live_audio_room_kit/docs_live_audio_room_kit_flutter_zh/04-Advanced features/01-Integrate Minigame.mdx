@@ -1,0 +1,342 @@
+# Integrate Minigame
+
+## Principle of integrating MiniGame with Flutter
+
+Our Flutter MiniGame Solution is based on [MiniGame Web JS SDK](https://www.zegocloud.com/docs/game-engine/implement-mini-game?platform=web&language=javascript). The Flutter solution relies on the `flutter_inappwebview` plugin to achieve interaction with JS and HTML. 
+
+Our demo has currently completed the basic integration process examples, including HTML coding, Dart and HTML interaction encapsulation, etc. If you need to implement more game features, you will need to refer to the implementation method in the demo and expand it yourself. This may require you to read the demo code to understand the interaction between JS, HTML, and Dart.
+
+# Overview
+
+|Game List|Start The Game|In The Game|
+|---|---|---|
+| <Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/audioroom/minigame/1_game_list.gif" /></Frame> | <Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/audioroom/minigame/2_start_game.gif" /></Frame> | <Frame width="auto" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/audioroom/minigame/3_gaming.jpeg" /></Frame> |
+
+## Download demo and test it.
+
+1. Before starting, please contact technical support to enable the mini-game service.
+2. Download Demo: [Client Demo](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/tree/master/live_streaming_with_minigame), [Server Demo](https://storage.zego.im/ZegoMiniGameSDK/server/ZegoMiniGameServerDemo.zip). 
+3. Modify The Authentication Information: Please replace the appid, appsign, and server secret in Client Demo and Server Demo with those of your project.
+4. Running the Server Demo,  then replace the Client Demo's miniGameHostUrl with your own server url.
+5. Then you can test ClientDemo (there are multiple demos in the Client Demo repository, please use live_streaming_with_minigame project).
+
+<Warning title="Warning">
+
+<Accordion title="Disclaimer and Risks of Demo Code Usage" defaultOpen="false">
+
+Dear user,
+
+Before you proceed with the Demo code, we urge you to read the following disclaimer thoroughly. This code is purely for reference and learning. Please be aware that any risks arising from the use of this code lie solely with the user. The author will not be held accountable for any loss or risk incurred.
+
+The potential security risks include:
+- The code may contain vulnerabilities or errors.
+- System malfunctions or data loss might occur.
+- The code may depend on third-party libraries or services.
+- Some portions of the code should be used for teaching and demonstration only.
+
+Users should:
+- Be prepared for the security risks and take necessary measures to safeguard their systems and data.
+- Backup data to avoid potential data loss.
+- Evaluate the security and reliability of any third-party dependencies.
+- Handle sample or demonstration code with caution, not using them in production environments.
+
+Please ensure you fully comprehend and accept all risks and disclaimers before using this code. The author will not be accountable for any issues that arise from the use of this code. If you disagree with any part of this disclaimer, please refrain from using the code.
+
+</Accordion>
+
+</Warning>
+
+## Integrated into your project
+
+1. Copy the `./assets/minigame` and `./lib/minigame` folders from the Demo to your project.
+  <Frame width="auto" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/live/minigame/copy_minigame.png" />
+  </Frame>
+
+2. Declare the newly added assets in your project's `pubspec.yaml` file.
+  ```yaml
+  assets:
+    - assets/minigame/index.js
+    - assets/minigame/index.html
+  ```
+
+3. Execute the following command to add the following dependency libraries.
+  ```bash
+  flutter pub add flutter_inappwebview dio encrypt
+  ```
+
+## Usage Instructions
+
+### initialize the `ZegoMiniGame` SDK and render the mini-game UI.
+
+After integrating `flutter_inappwebview`, you can use `InAppWebView` to render the mini-game UI and initialize the `ZegoMiniGame`. You can use `InAppWebView` anywhere you need it.
+
+<Note title="Note">
+In the demo, we render the game as a full-screen game. You can adjust the size of the `InAppWebView` as you like to achieve different display effects, such as a half-screen game.
+</Note>
+
+You can refer to [this part of the code](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/live_streaming_page.dart#L67)
+
+Please note that:
+
+1. You need to call `ZegoMiniGame().initWebViewController(controller)` in the `onWebViewCreated` of `InAppWebView`.
+2. You need to call `YourGameServer().getToken` and `ZegoMiniGame().initGameSDK()` in the `onWebViewCreated` of `InAppWebView`.
+
+With these two steps, you can complete the initialization of `ZegoMiniGame` SDK.
+
+### Uninit the ZegoMiniGame SDK
+
+When you no longer need the ZegoMiniGame SDK, you need to use `WillPopScope` to destroy the ZegoMiniGame SDK before exiting the page.
+
+> Notice: This portion of code should not be placed in the `dispose` of widget. Because destroying the `ZegoMiniGame` SDK depends on `InAppWebView`, and when the widget is disposed, `InAppWebView` has already been destroyed.
+
+```dart
+Widget build(BuildContext context) {
+  return PopScope(
+    onPopInvoked: (bool didPop) async {
+      if(didPop){
+        await ZegoMiniGame().unloadGame();
+        await ZegoMiniGame().uninitGameSDK();
+        await ZegoMiniGame().uninitWebViewController();
+      }
+    },
+    child: YourPage(),
+  );
+}
+```
+
+### Get game list
+
+After ensuring the initialization of `ZegoMiniGame`, you can use `ZegoMiniGame().getAllGameList()` to get the game list and render it in the UI.
+
+> You can check the complete demo code for this part [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/minigame/ui/show_game_list_view.dart#L32).
+
+```dart
+Future<dynamic> showGameListView(BuildContext context, String userID) {
+  return showModalBottomSheet(context: context,
+    builder: (context) {
+      return SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('GameList', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 5),
+              ValueListenableBuilder(
+                // Get Game List
+                valueListenable: ZegoMiniGame().getAllGameList(),
+                builder: (BuildContext context, List<dynamic> gameList, Widget? child) {
+                  // RENDER THE GAME LIST HERE
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+```
+
+### Exchange Currency
+
+<Accordion title="According to the different types of games, this step may be optional or mandatory. Please contact technical support for more details." defaultOpen="false">
+
+Before starting the game:
+
+1. You need to use `YourGameServer().exchangeUserCurrency` to exchange game coins for the user.
+2. And use `YourGameServer().getUserCurrency` to query the current amount of game coins for the user.
+
+Demo will call these two methods every time it enters the game, please refer to [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/live_streaming_page.dart#L131). You need to adjust the specific logic of `Currency` according to your own needs.
+
+</Accordion>
+
+### Load the game
+
+After obtaining the game list, you can load the game by using `ZegoMiniGame().loadGame()`.
+
+> In addition, you can obtain the state of the 'loadGame' through `ZegoMiniGame().loadedStateNotifier`.
+
+```dart
+Future<void> loadGame(String gameID) async {
+  try {
+    await ZegoMiniGame().loadGame(
+      gameID: gameID,
+      gameMode: ZegoGameMode.inroom,
+      loadGameConfig: ZegoLoadGameConfig(
+        minGameCoin: 0,
+        roomID: roomID,
+        useRobot: true,
+      ),
+    );
+    debugPrint('[APP]loadGame: $gameID');
+    currentGameID = gameID;
+    // ...
+    // your logic here
+    // ...
+  } catch (e) {
+    ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(content: Text('$e')));
+  }
+}
+```
+
+> You can check the complete demo code for this part [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/live_audio_room_game.dart#L146).
+
+### Start the game
+
+If the game mode is in-room game (please refer to [GameMode](https://www.zegocloud.com/docs/game-engine/gaming-modes?platform=web&language=javascript) for details), the host needs to use the `startGame` method to select other users in the room to play the game together. Additionally, if there are not enough players, the host can use this method to add robots to play the game together.
+
+```dart
+Future<void> startGame(List<String> playWithUserID) async {
+  final gameInfo = ZegoMiniGame().getAllGameList().value.firstWhere((e) => e.miniGameId == currentGameID!);
+  final gameMaxPlayer = gameInfo.detail!.player.reduce(max);
+  await ZegoMiniGame().startGame(
+    playerList: [
+      ...playWithUserID.asMap().entries.map((e) => ZegoPlayer(seatIndex: e.key, userID: e.value)),
+    ],
+    robotList: playWithUserID.length < gameMaxPlayer
+        ? List.generate(
+            gameMaxPlayer - playWithUserID.length,
+            (index) => ZegoGameRobot(
+              robotAvatar: 'https://robohash.org/${Random().nextInt(1000000)}.png',
+              seatIndex: playWithUserID.length + index,
+              robotName: faker.person.name(),
+              robotCoin: 1000,
+            ),
+          )
+        : [],
+    gameConfig: ZegoStartGameConfig(
+      taxRate: 0,
+      minGameCoin: 0,
+      timeout: 60,
+      taxType: ZegoTaxType.winnerDeduction,
+    ),
+  );
+}
+```
+
+> You can check the complete demo code for this part [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/live_audio_room_game.dart#L189).
+
+### Stop the game
+
+`unloadGame` is used to quit the game.
+
+```dart
+await ZegoMiniGame().unloadGame();
+```
+
+## FAQ
+
+### 1. How should I inform other users in the room about the ongoing game?
+
+<Warning title="Warning">
+Only when the game mode is in-room game (please refer to [GameMode](https://www.zegocloud.com/docs/game-engine/gaming-modes?platform=web&language=javascript) for details) is it necessary to implement this feature.
+</Warning>
+
+1. When the host starts the game, use `ZegoUIKit().getSignalingPlugin().updateRoomProperty` to update the property of the room, in order to inform other users in the room of the current game ID.
+
+  ```dart
+  Widget loadGameButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        showGameListView(context).then((ZegoGameInfo? gameInfo) async {
+          if (gameInfo != null) {
+            updateGameRoomAttributes(gameInfo.miniGameId!).then((result) async {
+              // ...
+            });
+          }
+        });
+      },
+      child: const Text('Game List'),
+    );
+  }
+  ```
+
+2. When the host ends the game, use `ZegoUIKit().getSignalingPlugin().deleteRoomProperties` to delete the property of the room, in order to inform other users in the room that the current game has ended.
+
+  ```dart
+  void onloadedStateUpdated() {
+    if (!ZegoMiniGame().loadedStateNotifier.value) {
+      if (isHost) {
+        deleteGameRoomAttributes();
+      } else {
+        // ...
+      }
+    }
+  }
+  ```
+
+3. After the user enters the room, use `ZegoUIKit().getSignalingPlugin().getRoomPropertiesStream()` to listen for the update event of the room's property, and rely on this to synchronize with the host to either load or unload the game.
+
+  ```dart
+  void onGameRoomAttributesUpdated(
+    ZegoSignalingPluginRoomPropertiesUpdatedEvent propertiesData,
+  ) {
+    if (propertiesData.setProperties.containsKey(attributeKeyRoomGame)) {
+      final gameID = propertiesData.setProperties[attributeKeyRoomGame]!;
+      ZegoLoggerService.logInfo('onGameRoomAttributesUpdated, loadGame: $gameID', tag: 'APP', subTag: 'minigame');
+
+      final gameList = ZegoMiniGame().getAllGameList();
+
+      if (gameList.value.where((e) => e.miniGameId == gameID).isEmpty) {
+        void onGameListUpdate() {
+          if (gameList.value.where((e) => e.miniGameId == gameID).isNotEmpty) {
+            gameList.removeListener(onGameListUpdate);
+            loadGame(gameID);
+          }
+        }
+
+        gameList.addListener(onGameListUpdate);
+      } else {
+        // If a player or audience clicks the close button in the game and unloads the game, 
+        // but the game is still ongoing in the room, the game will automatically reload here.
+        loadGame(gameID);
+      }
+    }
+    if (propertiesData.deleteProperties.containsKey(attributeKeyRoomGame)) {
+      ZegoLoggerService.logInfo('onGameRoomAttributesUpdated, unloadGame', tag: 'APP', subTag: 'minigame');
+      unloadGame();
+    }
+  }
+  ```
+
+### 2. I need to implement a dialog for selecting players. How can I keep the user list in the dialog synchronized with the user list in the `LiveAudioRoomKit` seats?
+
+<Warning title="Warning">
+  Only when the game mode is in-room game (please refer to [GameMode](https://www.zegocloud.com/docs/game-engine/gaming-modes?platform=web&language=javascript) for details) is it necessary to implement this feature.
+</Warning>
+
+- step1. You can obtain the user list notifier through `userMapNotifier` in `ZegoUIKitPrebuiltLiveAudioRoomController().seat`.
+
+  ```dart
+  ZegoUIKitPrebuiltLiveAudioRoom(
+    appID: yourAppID /*input your AppID*/,
+    appSign: yourAppSign /*input your AppSign*/,
+    userID: widget.userID,
+    userName: widget.userName,
+    roomID: widget.roomID,
+    config: (widget.isHost ? hostConfig : audienceConfig)
+  ),
+  // ...
+
+  // get the seats user map notifier
+  final userListNotifier = ZegoUIKitPrebuiltLiveAudioRoomController().seat.userMapNotifier;
+  ```
+
+- step2. When implementing the select user dialog, `ValueListenableBuilder` can be used to synchronize the user list.
+
+  > You can check the complete demo code for this part [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/minigame/ui/start_game_dialog.dart).
+
+# Conclusion
+
+Congratulations! Hereby you have completed the development of minigame feature. 
+
+If you have any suggestions or comments, feel free to share them with us via [Discord](https://discord.gg/EtNRATttyp). We value your feedback.
+
+### 3. How to know the progress of the game?
+
+You can listen to the game state by using `ZegoMiniGame().gameStateNotifier`.
+
+> You can check the complete demo code for this part [here](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_flutter/blob/master/live_streaming_with_minigame/lib/live_audio_room_game.dart#L104).

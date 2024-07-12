@@ -1,0 +1,608 @@
+# Event
+
+## ZegoUIKitPrebuiltCallInvitationServiceDelegate
+
+```swift title="Set Delegate"
+ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+```
+
+
+
+### requireConfig
+
+> - function prototype:
+>
+> ```swift
+> func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+>         if data.type == .voiceCall {
+>             if data.invitees?.count ?? 0 > 1 {
+>                 let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+>                 return config
+>             } else {
+>                 let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+>                 return config
+>             }
+>         } else {
+>             if data.invitees?.count ?? 0 > 1 {
+>                 let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+>                 return config
+>             } else {
+>                 let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+>                 return config
+>             }
+>         }
+>     }
+> }
+> ```
+
+
+
+
+
+### onIncomingCallDeclineButtonPressed
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCallDeclineButtonPressed()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onIncomingCallDeclineButtonPressed() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCallAcceptButtonPressed
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCallAcceptButtonPressed()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onIncomingCallAcceptButtonPressed() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingCallCancelButtonPressed
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingCallCancelButtonPressed()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onOutgoingCallCancelButtonPressed() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCallReceived
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCallCanceled
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingCallAccepted
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingCallRejectedCauseBusy
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingCallDeclined
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onIncomingCallTimeout
+
+> - function prototype:
+>
+> ```swift
+> func onIncomingCallTimeout(_ callID: String,  caller: ZegoCallUser)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onIncomingCallTimeout(_ callID: String,  caller: ZegoCallUser) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onOutgoingCallTimeout
+
+> - function prototype:
+>
+> ```swift
+> func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser])
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser]) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onCallTimeUpdate
+
+> - function prototype:
+>
+> ```swift
+> func onCallTimeUpdate(_ duration: Int)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+>   func onCallTimeUpdate(_ duration: Int) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+## ZegoUIKitPrebuiltCallVCDelegate
+
+
+```swift title="Set Delegate"
+ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
+```
+
+
+
+### getForegroundView
+
+> - function prototype:
+>
+> ```swift
+> func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView? {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getMemberListItemView
+
+> - function prototype:
+>
+> ```swift
+> func getMemberListItemView(_ tableView: UITableView, indexPath: IndexPath, userInfo: ZegoUIKitUser) -> UITableViewCell?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getMemberListItemView(_ tableView: UITableView, indexPath: IndexPath, userInfo: ZegoUIKitUser) -> UITableViewCell? {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getMemberListviewForHeaderInSection
+
+> - function prototype:
+>
+> ```swift
+> func getMemberListviewForHeaderInSection(_ tableView: UITableView, section: Int) -> UIView?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getMemberListviewForHeaderInSection(_ tableView: UITableView, section: Int) -> UIView? {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getMemberListItemHeight
+
+> - function prototype:
+>
+> ```swift
+> func getMemberListItemHeight(_ userInfo: ZegoUIKitUser) -> CGFloat
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getMemberListItemHeight(_ userInfo: ZegoUIKitUser) -> CGFloat {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getMemberListHeaderHeight
+
+> - function prototype:
+>
+> ```swift
+> func getMemberListHeaderHeight(_ tableView: UITableView, section: Int) -> CGFloat
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getMemberListHeaderHeight(_ tableView: UITableView, section: Int) -> CGFloat {
+>     //...
+>   }
+> }
+> ```
+
+### onCallEnd
+
+> - function prototype:
+>
+> ```swift
+> func onCallEnd(_ endEvent: ZegoCallEndEvent)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>     func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+>         print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
+>     }
+> }
+> ```
+
+
+
+### onToggleMicButtonClick
+
+> - function prototype:
+>
+> ```swift
+> func onToggleMicButtonClick(_ isOn: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onToggleMicButtonClick(_ isOn: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+### onToggleCameraButtonClick
+
+> - function prototype:
+>
+> ```swift
+> func onToggleCameraButtonClick(_ isOn: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onToggleCameraButtonClick(_ isOn: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+### onSwitchCameraButtonClick
+
+> - function prototype:
+>
+> ```swift
+> func onSwitchCameraButtonClick(_ isFrontFacing: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onSwitchCameraButtonClick(_ isFrontFacing: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+### onAudioOutputButtonClick
+
+> - function prototype:
+>
+> ```swift
+> func onAudioOutputButtonClick(_ isSpeaker: Bool)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onAudioOutputButtonClick(_ isSpeaker: Bool) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+### onOnlySelfInRoom
+
+> - function prototype:
+>
+> ```swift
+> func onOnlySelfInRoom()
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onOnlySelfInRoom() {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getChatViewItemView
+
+> - function prototype:
+>
+> ```swift
+> func getChatViewItemView(_ tableView: UITableView, indexPath: IndexPath, message: ZegoInRoomMessage) -> UITableViewCell?
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getChatViewItemView(_ tableView: UITableView, indexPath: IndexPath, message: ZegoInRoomMessage) -> UITableViewCell? {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### getChatViewItemHeight
+
+> - function prototype:
+>
+> ```swift
+> func getChatViewItemHeight(_ tableView: UITableView, heightForRowAt indexPath: IndexPath, message: ZegoInRoomMessage) -> CGFloat
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func getChatViewItemHeight(_ tableView: UITableView, heightForRowAt indexPath: IndexPath, message: ZegoInRoomMessage) -> CGFloat {
+>     //...
+>   }
+> }
+> ```
+
+
+
+
+
+### onCallTimeUpdate
+
+> - function prototype:
+>
+> ```swift
+> func onCallTimeUpdate(_ duration: Int)
+> ```
+>
+> - example:
+>
+> ```swift
+> extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>   func onCallTimeUpdate(_ duration: Int) {
+>     //...
+>   }
+> }
+> ```
+
+
+
+### onAudioOutputDeviceChanged
+
+> - function prototype:
+>
+> ```swift
+> func onAudioOutputDeviceChanged(_ audioOutput: ZegoUIKitAudioOutputDevice)
+> ```
+>
+> - example:
+>
+> ```swift
+>extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+>    func onAudioOutputDeviceChanged(_ audioOutput: ZegoUIKitAudioOutputDevice) {
+>        // ...
+>    }
+>}
+> ```

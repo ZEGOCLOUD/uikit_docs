@@ -1,0 +1,35 @@
+# Customizing the icon for the iOS CallKit UI
+
+Below, we will using the example of setting a `CallKitIcon` icon, to explain how to set the icon for the CallKit lock screen interface on iOS system .
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_callkits_icon_device.jpeg" />
+</Frame>
+
+
+1. Place your icon file in the `ios/Runner/Assets.xcassets/` folder, as shown in the figure, with the file name `CallKitIcon.imageset`.
+
+<Tip title="Tip">
+
+The icon should be square and have a transparent background.
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/ios_callkits_icon.jpeg" />
+</Frame>
+
+</Tip>
+
+2. When calling `ZegoUIKitPrebuiltCallInvitationService.init`, configure the `iOSNotificationConfig.systemCallingIconName` parameter with the file name (without the file extension).
+
+```dart
+ZegoUIKitPrebuiltCallInvitationService().init(
+...
+    notificationConfig: ZegoCallInvitationNotificationConfig(
+        iOSNotificationConfig: ZegoIOSNotificationConfig(
+          systemCallingIconName: 'CallKitIcon',
+        ),
+    ),
+...
+```
+
+

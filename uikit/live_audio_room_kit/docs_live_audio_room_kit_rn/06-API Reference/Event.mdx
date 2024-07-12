@@ -1,0 +1,413 @@
+# Event
+
+- [onSeatTakingRequested](./Event.mdx#onSeatTakingRequested)
+- [onSeatTakingRequestCanceled](./Event.mdx#onSeatTakingRequestCanceled)
+- [onSeatTakingInviteRejected](./Event.mdx#onSeatTakingInviteRejected)
+- [onSeatTakingRequestRejected](./Event.mdx#onSeatTakingRequestRejected)
+- [onHostSeatTakingInviteSent](./Event.mdx#onHostSeatTakingInviteSent)
+- [onMemberListMoreButtonPressed](./Event.mdx#onMemberListMoreButtonPressed)
+- [onSeatsChanged](./Event.mdx#onSeatsChanged)
+- [onSeatsClosed](./Event.mdx#onSeatsClosed)
+- [onSeatsOpened](./Event.mdx#onSeatsOpened)
+- [onSeatClosed](./Event.mdx#onSeatClosed)
+- [onSeatOpened](./Event.mdx#onSeatOpened)
+- [onTurnOnYourMicrophoneRequest](./Event.mdx#onTurnOnYourMicrophoneRequest)
+- [onSeatClicked](./Event.mdx#onSeatClicked)
+- [onUserCountOrPropertyChanged](./Event.mdx#onUserCountOrPropertyChanged)
+- [playAudioConfig](./Event.mdx#playAudioConfig)
+
+- - -
+
+<a id="onSeatTakingRequested"></a>
+
+## onSeatTakingRequested
+
+>
+> This callback will be triggered to host when room host receive user's request to be a speaker.
+>- function prototype:
+>```js
+>onSeatTakingRequested(audience)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatTakingRequested: (audience) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatTakingRequestCanceled"></a>
+
+## onSeatTakingRequestCanceled
+
+>
+> This callback will be triggered to host when room host receive audience's request to be a speaker and then canceled the request.
+>- function prototype:
+>```js
+>onSeatTakingRequestCanceled(audience)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatTakingRequestCanceled: (audience) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatTakingInviteRejected"></a>
+
+## onSeatTakingInviteRejected
+
+>
+> This callback will be triggered to host when room host invite audience to be speaker and is rejected by audience.
+>- function prototype:
+>```js
+>onSeatTakingInviteRejected()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatTakingInviteRejected: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatTakingRequestRejected"></a>
+
+## onSeatTakingRequestRejected
+
+>
+> This callback will be triggered to audience when room user request take seat and is rejected by room host.
+>- function prototype:
+>```js
+>onSeatTakingRequestRejected()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatTakingRequestRejected: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onHostSeatTakingInviteSent"></a>
+
+## onHostSeatTakingInviteSent
+
+>
+> This callback will be triggered to audience when room host invite users to be a speaker.
+>- function prototype:
+>```js
+>onHostSeatTakingInviteSent()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onHostSeatTakingInviteSent: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onMemberListMoreButtonPressed"></a>
+
+## onMemberListMoreButtonPressed
+
+>
+> This callback will be triggered to host when room host click more button of memebr list.
+>- function prototype:
+>```js
+>onMemberListMoreButtonPressed(userInfo)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onMemberListMoreButtonPressed: (userInfo) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatsChanged"></a>
+
+## onSeatsChanged
+
+>
+> This callback will be triggered when room speaker changed.
+>- function prototype:
+>```js
+>onSeatsChanged(takenSeats, untakenSeats)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatsChanged: (takenSeats, untakenSeats) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatsClosed"></a>
+
+## onSeatsClosed
+
+>
+> This callback will be triggered when room host close all seats.
+>- function prototype:
+>```js
+>onSeatsClosed()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatsClosed: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatsOpened"></a>
+
+## onSeatsOpened
+
+>
+> This callback will be triggered when room host open all seats.
+>- function prototype:
+>```js
+>onSeatsOpened()
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatsOpened: () => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatClosed"></a>
+
+## onSeatClosed
+
+>
+> This callback will be triggered when room host close seat of position index.
+>- function prototype:
+>```js
+>onSeatClosed(index)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatClosed: (index) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatOpened"></a>
+
+## onSeatOpened
+
+>
+> This callback will be triggered when room host open seat of position index.
+>- function prototype:
+>```js
+>onSeatOpened(index)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatOpened: (index) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+
+<a id="onTurnOnYourMicrophoneRequest"></a>
+
+## onTurnOnYourMicrophoneRequest
+
+>
+> This callback will be triggered when other user try to open your microphone.
+>- function prototype:
+>```js
+>onTurnOnYourMicrophoneRequest(formUser)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onTurnOnYourMicrophoneRequest: (formUser) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onSeatClicked"></a>
+
+## onSeatClicked
+
+>
+> This callback will be triggered when host or audience click the seat.
+>- function prototype:
+>```js
+>onSeatClicked(index, user)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onSeatClicked: (index, user) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="onUserCountOrPropertyChanged"></a>
+
+## onUserCountOrPropertyChanged
+
+>
+> This callback will be triggered when room user count changed or property changed.
+>- function prototype:
+>```js
+>onUserCountOrPropertyChanged(userList)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        onUserCountOrPropertyChanged: (userList) => {
+>            //...
+>        },
+>    }}
+>/>
+>```
+
+<a id="playAudioConfig"></a>
+
+## playAudioConfig
+
+>
+> If there is an audience in the audio room and they take a seat become speakers, this callback will be triggered. If you return false in this callback, you will not hear the voice of the speaker.
+>- function prototype:
+>```js
+>playAudioConfig(localUserID, localRole, speaker)
+>```
+>- example:
+>```js
+><ZegoUIKitPrebuiltLiveAudioRoom
+>    appID={Your_APPID}
+>    appSign={Your_APPSign}
+>    userID={Your_UserID}
+>    userName={Your_UserName}
+>    roomID={roomID}
+>    config={{
+>        playAudioConfig: (localUserID, localRole, speaker) => {
+>            //...
+>            // Returning true means to play the audio from the speaker.
+>            // Returning false means to mute the speaker.
+>            return true;
+>        },
+>    }}
+>/>
+>```

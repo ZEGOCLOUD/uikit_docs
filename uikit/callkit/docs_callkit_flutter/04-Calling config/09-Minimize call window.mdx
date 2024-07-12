@@ -1,0 +1,157 @@
+# Minimize call window
+
+With only two simple steps, you can achieve the effect of minimizing the video call window within the application.
+
+Ideally, the final effect will look like this:
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/call_mini.gif" />
+</Frame>
+
+
+## Integrate the minimize function into the app
+
+<Steps>
+
+  <Step title="Display the minimize button">
+
+    To display the minimize button, configure the `ZegoUIKitPrebuiltCallConfig`'s `topMenuBarConfig`, and add the `ZegoMenuBarButtonName.minimizingButton` button to the top menu bar.
+
+    <CodeGroup>
+    ```dart title="With call invitation" {18-19}
+    ZegoUIKitPrebuiltCallInvitationService().init(
+      appID: YourAppID,
+      appSign: YourAppSign,
+      userID: userID,
+      userName: userName,
+      plugins: [ZegoUIKitSignalingPlugin()],
+      requireConfig: (ZegoCallInvitationData data) {
+        var config = (data.invitees.length > 1)
+            ? ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            : ZegoCallType.videoCall == data.type
+            ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+        /// show minimizing button
+        config.topMenuBarConfig.isVisible = true;
+        config.topMenuBarConfig.buttons
+            .insert(0, ZegoMenuBarButtonName.minimizingButton);
+
+        return config;
+      },
+    );
+    ```
+    ```dart title="Basic call" {18}
+    class CallPage extends StatelessWidget {
+      const CallPage({Key? key, required this.callID}) : super(key: key);
+      final String callID;
+
+      @override
+      Widget build(BuildContext context) {
+        return ZegoUIKitPrebuiltCall(
+          appID: YourAppID,
+          appSign: YourAppSign,
+          userID: userID,
+          userName: userName,
+          callID: callID,
+
+          /// show minimizing button
+          config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+              ..topMenuBarConfig.isVisible = true
+              ..topMenuBarConfig.buttons = [
+                ZegoMenuBarButtonName.minimizingButton,
+                ZegoMenuBarButtonName.showMemberListButton,
+              ],
+        );
+      }
+    }
+    ```
+    </CodeGroup>
+
+  </Step>
+
+  <Step title="Configure the Overlay">
+
+    To achieve the effect of minimizing the window, you need to use the `ZegoUIKitPrebuiltCallMiniOverlayPage `component and insert it into the `Overlay` of the app.
+
+    ```dart {1-2,17-18,21,26-31}
+    ///  Step 1/3: Declare a NavigatorState
+    final navigatorKey = GlobalKey();
+
+    void main() async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      ZegoUIKit().initLog().then((value) {
+        runApp(const MyApp());
+      });
+    }
+
+    class MyApp extends StatelessWidget {
+      const MyApp({Key? key}) : super(key: key);
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          home: const ZegoUIKitPrebuiltCallMiniPopScope(
+            child: YourHomePage(),
+          ),
+          /// Step 2/3: Assign the NavigatorState to MaterialApp
+          navigatorKey: navigatorKey,
+          builder: (BuildContext context, Widget? child) {
+            return Stack(
+              children: [
+                child!,
+                ///  Step 3/3: Insert ZegoUIKitPrebuiltCallMiniOverlayPage into Overlay, and return the context of NavigatorState in contextQuery.
+                ZegoUIKitPrebuiltCallMiniOverlayPage(
+                  contextQuery: () {
+                    return navigatorKey.currentState!.context;
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Prevent building multiple ZegoUIKitPrebuiltCall">
+
+    When you minimize the interface, if the button is not restricted, clicking the call button again will enter the call page again. To avoid this situation, it is necessary to restrict the button.
+
+    Therefore, in the click event of the button, you need to handle it: if it is currently in a minimized state, do not carry out the page jump operation.
+
+    <CodeGroup>
+
+    ```dart title="With call invitation"
+    ///    You don't need to do any extra operations, because we have processed it internally.
+    ```
+
+    ```dart title="Basic call" {3-7}
+    ElevatedButton(
+      onPressed: () {
+        if (ZegoUIKitPrebuiltCallController().minimize.isMinimizing) {
+          /// When the application is minimized (in a minimized state),
+          /// Disable button clicks to prevent multiple ZegoUIKitPrebuiltCall components from being created.
+          return;
+        }
+
+        /// The code you used to initialize or navigate ZegoUIKitPrebuiltCall previously.
+        Navigator.pushNamed(
+          context,
+          ZegoUIKitPrebuiltCall(...),
+        );
+      },
+      child: const Text('join'),
+    );
+    ```
+
+    </CodeGroup>
+
+  </Step>
+
+</Steps>
+
+After completing the above two steps, you can now minimize the video call window within the application.

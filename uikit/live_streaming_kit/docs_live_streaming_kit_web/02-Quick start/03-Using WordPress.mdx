@@ -1,0 +1,128 @@
+import Content from "/snippets/uikit/webEnviromentRequirementEn.md"
+
+# Using WordPress
+
+In this guide, we will get started using Call Kit on WordPress with a few steps. Let's try this out: 
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/wordpress_call_effect.png" />
+</Frame>
+
+## Prepare the environment
+
+<Content/>
+
+## Step 1: Add a new page
+
+Log in to the WordPress dashboard, and in the sidebar panel, click **Add New** to create a new page.
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/wodpress_dashboard.png" />
+</Frame>
+
+## Step 2: Add a custom HTML 
+
+After creating a new page, click on the **+** button, and then click **Custom HTML** to add a custom HTML.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/wordpress_add_html.png" />
+</Frame>
+
+
+## Step 3: Add Live Streaming Kit code in an HTML block
+
+After adding a custom HTML, copy the prebuilt code from the below snippet.
+
+- You'll need to generate a [Kit Token](../04-Authentication%20and%20Kit%20Token.mdx).
+
+    (**Note**: You can `skip this step` if you wanna speed up your integration testing. Remember to generate the Kit Token by referring to [this](../04-Authentication%20and%20Kit%20Token.mdx) when you plan to make your app go live officially.)
+
+```html
+<script>
+function getUrlParams(
+  url  = window.location.href
+) {
+  let urlStr = url.split('?')[1];
+  return new URLSearchParams(urlStr);
+}
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+
+  script.addEventListener("load", function (event) {
+      // Generate a Kit Token by calling a method.
+    // @param 1: appID
+    // @param 2: serverSecret
+    // @param 3: Room ID
+    // @param 4: User ID
+    // @param 5: Username
+    const roomID = 'room01';
+    const userID = Math.floor(Math.random() * 10000) + "";
+    const userName = "userName" + userID;
+    const appID = ;
+    const serverSecret = "";
+    const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+
+
+    // You can assign different roles based on URL parameters.
+    let role = getUrlParams(window.location.href)['role'] || 'Host';
+    role = role === 'Host' ? ZegoUIKitPrebuilt.Host : ZegoUIKitPrebuilt.Audience;
+
+
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.joinRoom({
+        container: document.querySelector("#root"),
+        scenario: {
+            mode: ZegoUIKitPrebuilt.LiveStreaming,
+            config: {
+                role,
+            },
+        },
+        sharedLinks: [{
+            name: 'Join as the audience',
+            url:
+                window.location.protocol + '//' +
+                window.location.host + window.location.pathname +
+                '?roomID=' +
+                roomID +
+                '&role=Audience',
+        }]
+    });
+  });
+
+  script.src =
+    "https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js";
+  document.getElementsByTagName("head")[0].appendChild(script);
+</script>
+```
+
+
+## Step 4: Provide appID and serverSecret
+
+Then, replace the `appID` and `serverSecret` parameters in the following code with your project's AppID and ServerSecret that you get from [Admin Console](https://console.zegocloud.com/project). 
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/wordpress_code_call_appID.png" />
+</Frame>
+
+## Step 5: Preview
+
+After clicking the **Save draft**, the last step is to execute the code by clicking the **Preview** button.
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/wordpress_call_preview.png" />
+</Frame>
+
+
+Congratulations! So far, you've finished all the steps.
+
+
+## Related guide
+
+
+<CardGroup cols={2}>
+  <Card title="Authentication and Kit Token" href="../04-Authentication%20and%20Kit%20Token.mdx">
+    Follow the steps to generate a Kit Token.
+  </Card>
+</CardGroup>
