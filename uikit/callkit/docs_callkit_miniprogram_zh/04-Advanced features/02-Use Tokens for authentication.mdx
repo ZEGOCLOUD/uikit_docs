@@ -1,0 +1,41 @@
+import TokensAuthenticationIntroEnZh from "/snippets/uikit/TokensAuthenticationIntroEnZh.mdx"
+
+# 使用 Token 鉴权
+
+<TokensAuthenticationIntroEnZh/>
+
+## 使用 Token 
+
+如果你需要使用 Token 而不是 Appsign，您可以调用`initWith`而不带上`appsign`参数来完成初始化。
+
+```java
+ZIMKit.initWith(application, appID);
+```
+
+如果您在没有appSign的情况下进行初始化，当调用`ZIMKit.connectUser`时将需要一个token。
+
+## 更新 Token
+
+在大多数情况下，上述提到的Token 获取方法应该可以正常工作。然而，在某些极端情况下，它可能不可靠。
+
+为了确保 Token 的可靠性，您可以进行以下修改：
+
+1.  Token 的有效期应尽可能设置得长，例如3天。
+2. 监听`onTokenWillExpire`回调，并调用`renewToken`来更新新的 Token。
+
+```java
+ZIMKit.registerZIMKitDelegate(new ZIMKitDelegate() {
+    @Override
+    public void onTokenWillExpire(int second) {
+        // 请从您的应用服务器获取 Token。
+        ZIMKit.renewToken(token,callback);
+    }
+});
+```
+
+3. 在适当的时候更新 Token，比如当应用程序进入前台时。
+   
+```java
+// 请从您的应用服务器获取 Token。
+ZIMKit.renewToken(token,callback);
+```

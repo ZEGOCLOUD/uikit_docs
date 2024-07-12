@@ -1,0 +1,274 @@
+# 快速开始
+
+这份文档将指导您集成 IMKit 并快速开始聊天。
+
+## 前提条件
+
+import ZIMKITPrerequisitesFeatures from "/snippets/uikit/in_app_chat/ZIMKITPrerequisitesFeatures.mdx"
+
+<ZIMKITPrerequisitesFeatures />
+
+- 准备环境：
+    - Android Studio Arctic Fox（2020.3.1）或更高版本
+    - Android SDK包：Android SDK 30，Android SDK平台-工具30
+    - 运行在Android 5.0或更高版本且支持音频和视频的Android设备或模拟器。我们建议您使用真实设备。
+    - Android设备和您的计算机已连接到互联网。
+
+## 集成 SDK
+
+<Steps>
+<Step title="将 com.github.ZEGOCLOUD:zego_inapp_chat_uikit_android 添加为依赖项">
+- **添加 `jitpack` 配置**
+
+
+<Accordion title="Android Gradle 插件版本为 7.1.0 或更高" defaultOpen="true">
+
+进入项目的根目录，打开 `settings.gradle` 文件，将 jitpack 添加到 `dependencyResolutionManagement` > `repositories` 中，如下所示：
+``` groovy settings.gradle {6-7}
+dependencyResolutionManagement {
+   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+   repositories {
+      google()
+      mavenCentral()
+      maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+      maven { url 'https://www.jitpack.io' } // <- Add this line.
+   }
+}
+```
+
+<Warning title="警告">
+
+如果在`settings.gradle`中找不到上述字段，可能是因为您的Android Gradle插件版本低于v7.1.0。
+
+更多详细信息，请参阅[Android Gradle插件发布说明v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle)。
+</Warning>
+</Accordion>
+
+<Accordion title="Android Gradle插件版本低于7.1.0" defaultOpen="false">
+
+进入项目的根目录，打开`build.gradle`文件，将jitpack添加到`allprojects` > `repositories`中，如下所示：
+```groovy build.gradle {5-6}
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- Add this line.
+        maven { url "https://jitpack.io" }  // <- Add this line.
+    }
+}
+```
+</Accordion>
+
+- **修改应用级 `build.gradle` 文件**
+
+
+```groovy {3}
+dependencies {
+    ...
+    implementation 'com.github.ZEGOCLOUD:zego_inapp_chat_uikit_android:+'    // add this line in your module-level build.gradle file's dependencies, usually named [app].
+}
+```  
+</Step>
+<Step title="调用 init 方法来初始化 IMKit">
+```java MyApplication.java {15}
+
+import android.app.Application;
+
+import com.zegocloud.zimkit.services.ZIMKit;
+
+public class MyApplication extends Application {
+    public static MyApplication sInstance;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
+        Long appId = ;    // The AppID you get from ZEGOCLOUD Admin Console.
+        String appSign = ;    // The App Sign you get from ZEGOCLOUD Admin Console.
+        ZIMKit.initWith(this,appId,appSign);
+        // Online notification for the initialization (use the following code if this is needed).
+        ZIMKit.initNotifications();
+    }
+}
+```
+</Step>
+<Step title="在登录页面上调用 connectUser 方法以登录到 IMKit">
+
+import ZIMKitSDKWarning from "/snippets/uikit/in_app_chat/ZIMKitSDKWarning.mdx"
+
+<ZIMKitSDKWarning />
+
+```java MyZIMKitActivity.java {27-34}
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import im.zego.zim.enums.ZIMErrorCode;
+import com.zegocloud.zimkit.services.ZIMKit;
+
+public class MyZIMKitActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    public void buttonClick() {
+        // 用户ID和用户名：1到32个字符，只能包含数字、字母和以下特殊字符：'~'、'!'、'@'、'#'、'$'、'%'、'^'、'&'、'*'、'('、')'、'_'、'+'、'='、'-'、'`'、';'、'’'、','、'.'、'<'、'>'、'/'、'\'。
+        String userId = ; // 作为用户的您的ID。
+        String userName = ; // 作为用户的您的姓名。
+        String userAvatar = ; // 您设置的用户头像必须是网络图片。例如，https://storage.zego.im/IMKit/avatar/avatar-0.png。
+        connectUser(userId, userName,userAvatar); 
+    }
+
+    public void connectUser(String userId, String userName,String userAvatar) {
+        // Logs in.
+        ZIMKit.connectUser(userId,userName,userAvatar, errorInfo -> {
+            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+                // 成功登录后的操作。只有在成功登录后，您才会被重定向到其他模块。在这个示例代码中，您将被重定向到对话模块。
+                toConversationActivity();
+            } else {
+
+            }
+        });
+    }
+
+    // 将会话列表集成到您的Activity中作为一个Fragment。
+    private void toConversationActivity() {
+      // 重定向到您创建的会话列表（Activity）。
+      Intent intent = new Intent(this,ConversationActivity.class);
+      startActivity(intent);
+    }
+}
+```
+</Step>
+<Step title="显示 IMKit 的会话组件">
+
+`ConversationActivity`的布局在`activity_conversation.xml`中指定：
+
+<CodeGroup>
+
+```java ConversationActivity.java {6}
+   public class ConversationActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_conversation);
+    }
+
+}
+```
+
+
+```xml activity_conversation.xml {9}
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/frag_conversation_list"
+        android:name="com.zegocloud.zimkit.components.conversation.ui.ZIMKitConversationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+</CodeGroup>
+
+理想情况下，到这个时候，您的应用程序应该是这个样子的：
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_conversation_en_new.jpeg" />
+</Frame>
+</Step>
+</Steps>
+
+
+## 开始聊天
+
+IMKit 支持以下功能：
+
+
+<Accordion title="开始一对一聊天" defaultOpen="false">
+import ZIMKitStartAChat from "/snippets/uikit/in_app_chat/ZIMKitStartAChat.mdx"
+
+<ZIMKitStartAChat />
+
+1. 使用您自己的业务逻辑生成`userId`（这里的`userId`是指您想要与之聊天的对等用户）。
+2. 填写`userId`参数并运行以下代码：
+
+```java {2}
+private void startSingleChat(String userId) {
+    ZIMKitRouter.toMessageActivity(this, userId, ZIMKitConversationType.ZIMKitConversationTypePeer);
+}
+```
+
+</Accordion>
+
+<Accordion title="开始一个群聊" defaultOpen="false">
+
+1. 使用您自己的业务逻辑获取生成的 `ids` 和 `groupName`。（这里的 `ids` 指的是您想邀请加入群聊的用户的ID列表。）
+2. 填写 `ids` 和 `groupName` 参数，并运行以下代码：
+
+```java {5-17}
+public void createGroupChat(List<String> ids, String groupName) {
+    if (ids == null || ids.isEmpty()) {
+        return;
+    }
+    ZIMKit.createGroup(groupName, ids, (groupInfo, inviteUserErrors, errorInfo) -> {
+        if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+            if (!inviteUserErrors.isEmpty()) {
+                // 根据您的业务逻辑，当群组中存在一个不存在的用户ID时实现提示窗口的逻辑。
+            } else {
+                // 成功创建群聊后直接进入聊天页面。
+                ZIMKitRouter.toMessageActivity(this, groupInfo.getId(),
+                        ZIMKitConversationType.ZIMKitConversationTypeGroup);
+            }
+        } else {
+                // 根据返回的错误信息实现提示窗口的逻辑，用于在创建群聊失败时使用。
+        }
+    });
+}
+```
+
+</Accordion>
+
+<Accordion title="加入一个群聊" defaultOpen="false">
+
+1. 使用您自己的业务逻辑生成`groupId`（这里的`groupId`指的是您想要加入的群聊）。
+2. 填写`groupId`参数并运行以下代码：
+
+```java {2-9}
+public void joinGroupChat(String groupId) {
+    ZIMKit.joinGroup(groupId, (groupInfo, errorInfo) -> {
+        if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // 成功加入群聊后，进入群聊页面。
+            ZIMKitRouter.toMessageActivity(this, groupInfo.getId(), ZIMKitConversationType.ZIMKitConversationTypeGroup);
+        } else {
+            // 根据返回的错误信息实现提示窗口的逻辑，用于在加入群聊失败时使用。
+        }
+    });
+}
+```
+
+</Accordion>
+
+## 相关指南
+
+<CardGroup cols={2}>
+    <Card title="组件概述" href="./03-UI components/01-Overview.mdx">
+        点击这里了解更多UI组件。
+    </Card>
+    <Card title="运行示例代码" href="https://github.com/ZEGOCLOUD/zego_inapp_chat_uikit_example_android" target="_blank">
+        一个快速指南，帮助您运行示例代码。
+    </Card>
+</CardGroup>

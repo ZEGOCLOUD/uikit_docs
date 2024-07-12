@@ -195,6 +195,25 @@
       }
     },
     {
+      "id": "callkit_miniprogram_zh",
+      "label": "callkit_miniprogram_zh",
+      "path": "uikit/callkit/docs_callkit_miniprogram_zh",
+      "routeBasePath": "zh/callkit-miniprogram",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "小程序: JS"
+      }
+    },
+    {
       "id": "callkit_flutter_zh",
       "label": "docs_callkit_flutter_zh",
       "path": "uikit/callkit/docs_callkit_flutter_zh",

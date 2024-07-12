@@ -1,0 +1,118 @@
+# 会话组件
+
+import ZIMKitChatInfo from "/snippets/uikit/in_app_chat/ZIMKitChatInfo.mdx";
+
+<ZIMKitChatInfo />
+
+<Frame width="200" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/zimkit_android/zimkit_android_conversation_en_new.gif" />
+</Frame>
+
+## 将会话组件集成到您的项目中
+
+### 前提条件
+
+import ZIMKItComponentPrefixInfoNew from "/snippets/uikit/in_app_chat/ZIMKItComponentPrefixInfoNew.mdx";
+
+<ZIMKItComponentPrefixInfoNew/>
+
+### 添加会话组件
+
+您可以通过两种方式将对话组件添加到 activity 的视图层次结构中：一种是在 activity 的布局文件中定义 fragment，另一种是在 activity 的布局文件中定义一个 fragment 容器，然后在 activity 中以编程方式添加 fragment。
+
+<Tabs>
+<Tab title="以编程方式添加 Fragment">
+
+`ConversationActivity`的布局在`activity_conversation.xml`中指定：
+<CodeGroup>
+```java ConversationActivity.java {11-13}
+public class ConversationActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_conversation);
+        addConversationFragment();
+    }
+
+    private void addConversationFragment() {
+        ZIMKitConversationFragment fragment = new ZIMKitConversationFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fra_conversation, fragment); // R.id.fra_conversation 是指在 XML 中定义的 FrameLayout 的 ID。
+        transaction.commit();
+    }
+
+}
+```
+
+```xml activity_conversation.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/fra_conversation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</CodeGroup>
+</Tab>
+<Tab title="通过 XML 添加 Fragment">
+
+```xml {7}
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/frag_conversation_list"
+        android:name="im.zego.zimkitconversation.ui.ZIMKitConversationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+</Tab>
+</Tabs>
+
+
+## 定制功能
+
+如果默认的与会话相关的功能和行为不能完全满足您的需求，您可以通过我们在本节中提到的配置进行灵活的定制。
+
+<Accordion title="自定义点击事件" defaultOpen="false">
+
+要自定义点击事件逻辑，您可以通过实现`registerConversationListListener`来监听会话点击的回调。
+
+```java {3-6}
+ZIMKit.registerConversationListListener(new ZIMKitConversationListListener() {
+    @Override
+    public void onConversationListClick(ZIMKitConversationFragment conversationFragment, ZIMKitConversation conversation, DefaultAction defaultAction) {
+        // 在这里添加自己的事件处理逻辑，例如，跳转到消息页面。
+        defaultAction.toMessage();
+    }
+});
+```
+</Accordion>
+
+
+## API
+
+
+<Accordion title="ZIMKitConversationListListener" defaultOpen="false">
+```java 定义
+public interface ZIMKitConversationListListener {
+    default void onConversationListClick(ZIMKitConversationFragment conversationFragment,
+        ZIMKitConversation conversation, DefaultAction defaultAction) {}
+}
+```
+</Accordion>

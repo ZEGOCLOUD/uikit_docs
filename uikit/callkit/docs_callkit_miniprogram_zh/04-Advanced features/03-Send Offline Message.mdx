@@ -1,0 +1,56 @@
+# 向离线应用发送消息
+
+## 功能简介
+
+IMKit 支持向离线应用（即在后台被冻结或遭系统或用户杀掉的应用）发送消息。
+
+## 前提条件
+
+在实现“离线推送”功能之前，请确保已集成最新版本的 IMKit，并且完成在线消息功能。
+
+## 实现流程
+
+<Steps>
+<Step title="接入第三方厂商离线推送">
+集成所需的第三方厂商离线推送 SDK，接入各厂商的离线推送，详情请参考：
+- [集成小米推送](https://doc-zh.zego.im/article/20607)
+- [集成华为推送](https://doc-zh.zego.im/article/20609)
+- [集成 OPPO 推送](https://doc-zh.zego.im/article/20611)
+- [集成 vivo 推送](https://doc-zh.zego.im/article/20613)
+</Step>
+<Step title="初始化传入 resourceID">
+使用离线推送，你需要使用 `ZIMKitConfig` 来进行初始化并且传入您在上一步中在 ZEGO 控制台中配置的 resourceID 。
+```java {6}
+long appID;
+String appSign;
+String resourceID;
+
+ZIMKitConfig zimKitConfig = new ZIMKitConfig();
+zimKitConfig.resourceID = resourceID;
+ZIMKit.initWith(this, appID, appSign,zimKitConfig);
+```
+</Step>
+<Step title="配置第三方推送通道">
+在调用 ZIMKit.connectUser() 登录之前或者在登录的回调中调用 `enableHWPush`/`enableMiPush`/`enableVivoPush`/`enableOppoPush` 启用所需的第三方推送。
+
+```java {7,10,13,16}
+long appID = ; // 您的 ZEGO 项目 appID
+String appSign = ; // 您的 ZEGO 项目 appSign
+String userID = ; // 由您定义的用户 ID
+String userName = ; // 由您定义的用户名称
+
+// 启用华为推送的方法
+ZIMKit.enableHWPush({hwAppID}); 
+
+// 启用小米推送的方法
+ZIMKit.enableMiPush({miAppID},{miAppKey}); 
+
+// 启用 vivo 推送的方法
+ZIMKit.enableVivoPush({vivoAppID}, {vivoAppKey}); 
+
+// 启用 OPPO 推送的方法
+ZIMKit.enableOppoPush({oppoAppID},{oppoAppKey},{oppoAppSecret}); 
+
+```
+</Step>
+</Steps>
