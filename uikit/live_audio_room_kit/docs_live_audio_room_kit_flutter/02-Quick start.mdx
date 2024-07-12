@@ -81,15 +81,22 @@ Then, you can create a live audio room. And the audience can join the live audio
 
       ```xml
       <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-      <uses-permission android:name="android.permission.RECORD_AUDIO" />
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-      <uses-permission android:name="android.permission.CAMERA" />
-      <uses-permission android:name="android.permission.BLUETOOTH" />
+
       <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-      <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+      <uses-permission android:name="android.permission.RECORD_AUDIO" />
+      <uses-permission android:name="android.permission.CAMERA" />
+
+      <uses-permission android:name="android.permission.BLUETOOTH" />
       <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+      <!-- if you use media -->
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+      <uses-permission android:name="android.permission.READ_MEDIA_VIDEOS"/>
+      <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+      <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
       ```
 
       <Frame width="auto" height="auto" caption="">
