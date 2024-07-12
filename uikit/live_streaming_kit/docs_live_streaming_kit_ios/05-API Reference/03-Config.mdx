@@ -1,0 +1,183 @@
+# Config
+
+
+## ZegoUIKitPrebuiltLiveStreamingConfig
+Initialization related configuration class.
+
+| Property                              | Description                                                                                                                                                                                                                                   | Type                                                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| role                                  | Defines the role of the user in live streaming. The default value is .audience.                                                                                                                                                               | [ZegoLiveStreamingRole](#zegolivestreamingrole)                       |
+| turnOnCameraWhenJoining               | Whether to turn on the camera when joining live streaming. The default value is false.                                                                                                                                                        | Bool                                                                  |
+| turnOnMicrophoneWhenJoining           | Whether to turn on the microphone when joining live streaming. The default value is false.                                                                                                                                                    | Bool                                                                  |
+| useSpeakerWhenJoining                 | Whether to use the speaker when joining live streaming. The default value is true.                                                                                                                                                            | Bool                                                                  |
+| audioVideoViewConfig                  | Configuration of audio and video views.                                                                                                                                                                                                       | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) |
+| bottomMenuBarConfig                   | Configuration parameters for the bottom menu bar of the live streaming page, such as the buttons in the bottom bar, the button quantity limit, whether to hide automatically, whether to hide when clicking other areas, and the color style. | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   |
+| confirmDialogInfo                     | Configuration of the confirmation dialog displayed when leaving live streaming.                                                                                                                                                               | [ZegoLeaveConfirmDialogInfo](#zegoleaveconfirmdialoginfo)             |
+| translationText                       | Supports switching the language environment of UIKit and modifying specific texts. The default value is ZegoTranslationText(language:.ENGLISH).                                                                                               | ZegoTranslationText                                                   |
+| enableCoHosting                       | Whether to allow co-hosting. The default value is false.                                                                                                                                                                                      | Bool                                                                  |
+| markAsLargeRoom                       | Whether to mark the room as a large room (more than 500 people). If the number of participants in your live streaming will exceed 500, please set this flag to true. The default value is false.                                              | Bool                                                                  |
+| canCameraTurnOnByOthers               | Whether others can turn on your camera. The default value is false.                                                                                                                                                                           | Bool                                                                  |
+| canMicrophoneTurnOnByOthers           | Whether others can turn on your microphone. The default value is false.                                                                                                                                                                       | Bool                                                                  |
+| turnOnYourCameraConfirmDialogInfo     | When others want to turn on your camera, a confirmation dialog will be displayed in your app. You can set the content of this dialog.                                                                                                         | [ZegoDialogInfo](#zegodialoginfo)                                     |
+| turnOnYourMicrophoneConfirmDialogInfo | When others want to turn on your microphone, a confirmation dialog will be displayed in your app. You can set the content of this dialog.                                                                                                     | [ZegoDialogInfo](#zegodialoginfo)                                     |
+| layout                                | Configures the display layout of audio and video windows in the call page, including picture-in-picture layout and gallery layout.                                                                                                            | [ZegoLayout](#zegolayout)                                             |
+| enableSignalingPlugin                 | Whether to use SignalingPlugin. If you need to use the co-hosting and PK functions, you need to set this value to true and import the ZegoUIKitSignalingPlugin library.                                                                       | Bool                                                                  |
+| videoConfig                           | Custom configuration of video call resolution. The default is 360p.                                                                                                                                                                           | [ZegoPrebuiltVideoConfig](#ZegoPrebuiltVideoConfig)                   |
+
+
+## ZegoPrebuiltAudioVideoViewConfig
+View configuration class.
+
+| Property                  | Description                                                                                                             | Type |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---- |
+| useVideoViewAspectFill    | Whether to display the video in aspect fill mode (with black borders). Default is true.                                 | Bool |
+| showSoundWavesInAudioMode | Whether to display sound waves around the user's avatar when the host or co-host turns off the camera. Default is true. | Bool |
+
+## ZegoBottomMenuBarConfig
+Class for managing the bottom menu bar buttons.
+
+| Property                | Description                                                                        | Type                                              |
+| ----------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------- |
+| maxCount                | The maximum number of buttons in the menu bar. Default value is 5.                 | Int                                               |
+| showInRoomMessageButton | Whether to show the in-room message button in the menu bar. Default value is true. | Bool                                              |
+| hostButtons             | The list of bottom menu bar buttons visible to the host.                           | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+| coHostButtons           | The list of bottom menu bar buttons visible to the co-host.                        | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+| audienceButtons         | The list of bottom menu bar buttons visible to the audience.                       | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] |
+
+## ZegoLayout
+
+| Property | Description                                                                                                 | Type                                        |
+| -------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| mode     | Page layout mode, supports picture-in-picture and gallery layout. The default is picture-in-picture layout. | [ZegoUIKitLayoutMode](#zegouikitlayoutmode) |
+| config   | Page layout configuration.                                                                                  | [ZegoLayoutConfig](#zegolayoutconfig)       |
+
+## ZegoLayoutPictureInPictureConfig
+Picture-in-picture layout configuration class.
+
+| Property                            | Description                                                                             | Type                                  |
+| ----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------- |
+| isSmallViewDraggable                | Whether the small view can be dragged. Default value is false.                          | Bool                                  |
+| smallViewBackgroundColor            | Background color of the small view. Default value is #333437.                           | UIColor                               |
+| largeViewBackgroundColor            | Background color of the large view. Default value is #4A4B4D.                           | UIColor                               |
+| smallViewBackgroundImage            | Background image of the small view. Default value is null.                              | UIImage                               |
+| largeViewBackgroundImage            | Background image of the large view. Default value is null.                              | UIImage                               |
+| smallViewPosition                   | Position of the small view on the UI. Default value is .topRight.                       | [ZegoViewPosition](#zegoviewposition) |
+| switchLargeOrSmallViewByClick       | Whether to switch between large and small views by clicking. Default value is true.     | Bool                                  |
+| smallViewSize                       | Size of the small view. Default value is CGSize(width: 95, height: 169).                | CGSize                                |
+| spacingBetweenSmallViews            | Spacing between small views. Default value is 0.                                        | CGFloat                               |
+| removeViewWhenAudioVideoUnavailable | Whether to remove the view when audio and video are unavailable. Default value is true. | Bool                                  |
+
+## ZegoLayoutGalleryConfig
+Gallery layout configuration class.
+
+| Property                                         | Description                                                                                | Type |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------ | ---- |
+| addBorderRadiusAndSpacingBetweenView             | Whether to add rounded corners and spacing between views. Default value is true.           | Bool |
+| removeViewWhenAudioVideoUnavailable              | Whether to remove the view when audio and video are unavailable. Default value is false.   | Bool |
+| showNewScreenSharingViewInFullscreenMode         | Whether to set fullscreen directly when entering screen sharing. Default value is true.    | Bool |
+| showScreenSharingFullscreenModeToggleButtonRules | Display rules for the screen sharing fullscreen mode toggle button. Default value is true. | Bool |
+
+
+## ZegoLeaveConfirmDialogInfo
+
+| Property          | Description                                                                                                                                     | Type             |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| title             | The title text.                                                                                                                                 | String           |
+| message           | The confirmation message text.                                                                                                                  | String           |
+| cancelButtonName  | The text for the cancel button.                                                                                                                 | String           |
+| confirmButtonName | The text for the confirm button.                                                                                                                | String           |
+| dialogPresentVC   | The view controller where the leave live streaming confirmation dialog is displayed. By default, it is displayed in the current live streaming. | UIViewController |
+
+## ZegoDialogInfo
+Dialog information class.
+
+| Property          | Description                                                                                                                                | Type             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| title             | The title text.                                                                                                                            | String           |
+| message           | The confirmation message text.                                                                                                             | String           |
+| cancelButtonName  | The text for the cancel button.                                                                                                            | String           |
+| confirmButtonName | The text for the confirm button.                                                                                                           | String           |
+| dialogPresentVC   | The view controller where the leave live streaming confirmation dialog is displayed. By default, it is displayed in the current chat room. | UIViewController |
+
+
+## ZegoPrebuiltVideoConfig
+Class for video resolution configuration.
+
+| Property   | Description                      |
+| :--------- | :------------------------------- |
+| resolution | ZegoPresetResolution  Resolution |
+
+
+## ZegoShowFullscreenModeToggleButtonRules
+
+Rules for displaying the toggle button in fullscreen mode.
+
+| Enumeration           | Description                      |
+| :-------------------- | :------------------------------- |
+| showWhenScreenPressed | Show when the screen is pressed. |
+| alwaysShow            | Always show.                     |
+| alwaysHide            | Always hide.                     |
+
+
+## ZegoLiveStreamingRole
+
+Role enumeration
+
+| Enumeration | Description |
+| :---------- | :---------- |
+| host        | Host.       |
+| coHost      | Co-host.    |
+| audience    | Audience.   |
+
+
+
+
+## ZegoUIKitLayoutMode
+
+Page layout modes enumeration.
+
+| Enumeration      | Description                |
+| :--------------- | :------------------------- |
+| pictureInPicture | Picture-in-picture layout. |
+| gallery          | Gallery layout.            |
+| invalid          | Invalid value.             |
+
+
+
+## ZegoMenuBarButtonName
+
+Menu bar button names enumeration.
+
+| Enumeration             | Description                                                                                    |
+| :---------------------- | :--------------------------------------------------------------------------------------------- |
+| leaveButton             | Button to leave the live streaming.                                                            |
+| toggleCameraButton      | Button to toggle the camera on/off.                                                            |
+| toggleMicrophoneButton  | Button to toggle the microphone on/off.                                                        |
+| switchCameraButton      | Button to switch between front and rear camera.                                                |
+| swtichAudioOutputButton | Button to switch audio output device.                                                          |
+| coHostControlButton     | Button for audience to request co-hosting.                                                     |
+| enableChatButton        | Button for host to control whether to allow audience to co-host in the current live streaming. |
+
+
+
+## ZegoUIKitLanguage
+
+UI languages enumeration.
+
+| Enumeration | Description |
+| :---------- | :---------- |
+| ENGLISH     | UIKit displays in English.    |
+| CHS         | UIKit displays in Chinese.    |
+
+
+
+## ZegoViewPosition
+View positions enumeration.
+
+| Enumeration | Description   |
+| :---------- | :------------ |
+| topLeft     | Top left.     |
+| topRight    | Top right.    |
+| bottomLeft  | Bottom left.  |
+| bottomRight | Bottom right. |
+

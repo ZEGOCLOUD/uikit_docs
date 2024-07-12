@@ -1,22 +1,8 @@
 # API
 
--  [ZegoUIKitPrebuiltCallInvitationService](#zegouikitprebuiltcallinvitationservice)
-  -  [initWithAppID](#initwithappid)
-  -  [unInit](#uninit)
-  -  [getPrebuiltCallVC](#getprebuiltcallvc)
-  -  [setRemoteNotificationsDeviceToken](#setremotenotificationsdevicetoken)
-  -  [endCall](#endcall)
--  [ZegoUIKitPrebuiltCallVC](#zegouikitprebuiltcallvc)
-  -  [addButtonToBottomMenuBar](#addbuttontobottommenubar)
-  -  [addButtonToTopMenuBar](#addbuttontotopmenubar)
-  -  [finish](#finish)
+## ZegoUIKitPrebuiltCallInvitationService
 
----
-
-
-# ZegoUIKitPrebuiltCallInvitationService
-
-## initWithAppID
+### initWithAppID
 
 > You must call this method as soon as the user login(or re-login, auto-login) to your app.
 >
@@ -38,7 +24,7 @@
 > ```
 
 
-## unInit
+### unInit
 
 > Should be used in pairs with the `initWithAppID `  api.
 >
@@ -49,7 +35,7 @@
 > public func unInit()
 > ```
 
-## getPrebuiltCallVC
+### getPrebuiltCallVC
 
 > You can access the call page controller through this interface
 >
@@ -61,7 +47,7 @@
 > public func getPrebuiltCallVC()-> ZegoUIKitPrebuiltCallVC?
 > ```
 
-## setRemoteNotificationsDeviceToken
+### setRemoteNotificationsDeviceToken
 
 > If you want to use offline invitations you must call this interface to set the token of the current device
 >
@@ -74,7 +60,7 @@
 > ```
 
 
-## endCall
+### endCall
 
 > You can call this interface to end the current call
 >
@@ -86,11 +72,33 @@
 > ```
 
 
+### setAudioOutputToSpeaker
 
-# ZegoUIKitPrebuiltCallVC
+> You can route the audio to the speaker by calling this interface.
+>
+> function prototype:
+>
+> ```swift
+>public func setAudioOutputToSpeaker(outputToSpeaker: Bool)
+> ```
 
 
-## addButtonToBottomMenuBar
+### getAudioRouteType
+
+> You can use this interface to get the current audio route
+>
+> function prototype:
+>
+> ```swift
+> public func getAudioRouteType() -> ZegoUIKitAudioOutputDevice
+> ```
+
+
+
+## ZegoUIKitPrebuiltCallVC
+
+
+### addButtonToBottomMenuBar
 
 > You can add custom buttons to the bottom bar by calling this interface
 >
@@ -101,7 +109,7 @@
 > ```
 
 
-## addButtonToTopMenuBar
+### addButtonToTopMenuBar
 
 > You can add custom buttons to the top bar by calling this interface
 >
@@ -112,7 +120,7 @@
 > ```
 
 
-## finish
+### finish
 
 > You can call this method to end the current call.
 >
