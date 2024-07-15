@@ -1,6 +1,6 @@
 # 快速开始
 
-这份文档将指导您如何用 uni-app 集成 UIKit 小程序并快速开始音视频通话。
+这份文档将指导您如何在 uni-app 项目集成`音视频通话 UIKit`小程序 SDK 并快速开始音视频通话。如果您还没有 uni-app 项目，请参考 [uni-app 文档](https://zh.uniapp.dcloud.io/quickstart-hx.html)创建。
 
 ## 准备环境：
 
@@ -12,19 +12,26 @@
 - 联系 ZEGO 技术支持，开通 UIKit 相关服务。
 ## 安装 SDK
 
+请在项目根目录运行以下命令将 SDK 安装到项目中。
+
 ```shell
 npm i @zegocloud/zego-uikit-prebuilt-call-mini-program --save
 ```
 
-## 初始化 SDK
+## 实现流程
 
-1. 在您的服务端生成一个 [Token](https://doc-zh.zego.im/article/10360)。
-2. 导入 UIKit 组件
+<Steps>
+<Step title="在您的服务端部署好 Token 生成服务。">
+详细步骤请参考 [Token](https://doc-zh.zego.im/article/8940) 生成文档。如需快速调试，建议使用控制台生成的临时 Token，生成临时 Token 的具体操作请参考 [控制台 - 项目管理](https://doc-zh.zego.im/article/12107)。
+</Step>
+<Step title="导入 UIKit 页面">
+您需要在项目根目录下创建一个名为 `ZegoUIKitPrebuiltCall` 的目录，然后将 UIKit 相关的页面拷贝至该目录中。可以参考以下命令操作：
 ```shell
 mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/zegocloud/zego-uikit-prebuilt-call-mini-program/pages/ ./ZegoUIKitPrebuiltCall/pages/
 ```
-
-3. 在 pages.json 文件中注册全局监听页面。
+</Step>
+<Step title="在 uni-app 的 pages.json 文件中添加一个跳转至 UIKit 的页面配置项。">
+其中 path 指向上一个步骤中从 SDK 拷贝出来的页面路径。
 ```js
 {
     "path": "ZegoUIKitPrebuiltCall/pages/call/SingleCall",
@@ -33,14 +40,16 @@ mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/zegocloud/zego-uikit-preb
     }
 }
 ```
+</Step>
+<Step title="跳转至通话页面。">
 
-4. 在以下代码中替换 appID 和 server 参数为您从 ZEGO 控制台获取的项目的 AppID 和 Server 地址，详情请参考 [控制台 - 项目信息](https://doc-zh.zego.im/article/12107)。
+在您的其他页面中，参考以下代码调用 `ZegoUIKitPrebuiltCall.joinRoom` 方法，然后运行。当点击“拨打电话”按钮后，就会跳转至通话页面。
 
-```js Vue
+```js YourPage.vue
 <template>
    <view class="button-container">
         <button @tap="startCall" >
-            开始音视频通话
+            拨打电话
         </button>
     </view>
 </template>
@@ -64,5 +73,13 @@ function startCall() {
 }
 </script>
 ```
+
+</Step>
+</Steps>
+
+至此，您已经完成了所有步骤！运行后的效果如下：
+|                                                                                                                                                                                                          |                                                                                                                                                                                                                 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="256" height="auto" caption=""><img src="http://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/12765df983.jpeg" alt="miniprogram_your_page.jpeg"/></Frame> | <Frame width="256" height="auto" caption=""><img src="http://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/efee65a3e8.jpeg" alt="miniprogram_single_call_page.jpeg"/></Frame> |
 
 
