@@ -1,0 +1,14 @@
+{
+  "mySidebar": [
+    {
+      "type": "doc",
+      "label": "概述",
+      "id": "overview"
+    },
+    {
+      "type": "doc",
+      "label": "快速开始",
+      "id": "quick-start"
+    }
+  ]
+}
