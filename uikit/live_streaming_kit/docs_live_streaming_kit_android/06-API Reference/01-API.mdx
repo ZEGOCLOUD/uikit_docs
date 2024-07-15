@@ -1,205 +1,372 @@
 # API
 
-- <a href="#ZegoUIKitPrebuiltLiveStreamingFragment">ZegoUIKitPrebuiltLiveStreamingFragment</a>
-  - <a href="#addButtonToBottomMenuBar">addButtonToBottomMenuBar</a>
-- <a href="#ZegoLiveStreamingManager">ZegoLiveStreamingManager</a>
-  - <a href="#muteAllAudioVideo">muteAllAudioVideo</a>
-  - <a href="#unMuteAllAudioVideo">unMuteAllAudioVideo</a>
-  - <a href="#showTopTips">showTopTips</a>
-  - <a href="#sendPKBattleRequest">sendPKBattleRequest</a>
-  - <a href="#stopPKBattle">stopPKBattle</a>
-  - <a href="#cancelPKBattleRequest">cancelPKBattleRequest</a>
-  - <a href="#acceptIncomingPKBattleRequest">acceptIncomingPKBattleRequest</a>
-  - <a href="#rejectPKBattleStartRequest">rejectPKBattleStartRequest</a>
-  - <a href="#getPKInfo">getPKInfo</a>
-  - <a href="#getSendPKStartRequest">getSendPKStartRequest</a>
+## ZegoUIKitPrebuiltLiveStreamingFragment
 
----
+The live streaming component. You can add this Fragment to any Activity in your project to integrate live streaming functionality.
 
-<a id="ZegoUIKitPrebuiltLiveStreamingFragment"></a>
+#### newInstance
 
-# ZegoUIKitPrebuiltLiveStreamingFragment
+Initialize the live streaming configuration with the AppSign.
 
->
-> LiveStreaming Widget.
->
-> You can add this Fragment into any Activity of your project to integrate the functionality of a liveStreaming.
->
->
-> - function prototype:
->
->```java
->  /// You can create a project and obtain an appID from the [ZEGOCLOUD Admin >Console](https://console.zegocloud.com).
->  final long appID;
->
->  /// You can create a project and obtain an appSign from the [ZEGOCLOUD >Admin Console](https://console.zegocloud.com).
->  final String appSign;
->
->  /// The ID of the currently logged-in user.
->  /// It can be any valid string.
->  /// Typically, you would use the ID from your own user system, such as >Firebase.
->  final String userID;
->
->  /// The name of the currently logged-in user.
->  /// It can be any valid string.
->  /// Typically, you would use the name from your own user system, such as >Firebase.
->  final String userName;
->
->  /// The ID of the live.
->  /// This ID is a unique identifier for the current live, so you need to >ensure its uniqueness.
->  /// It can be any valid string.
->  /// Users who provide the same liveID will be logged into the same room >for the live.
->  final String liveID;
->
->  /// Initialize the configuration for the live.
->  final ZegoUIKitPrebuiltLiveStreamingConfig config;
->
->  public static ZegoUIKitPrebuiltLiveStreamingFragment newInstance(long appID, @NonNull String appSign, @NonNull String userID, @NonNull String userName, @NonNull String liveID, @NonNull ZegoUIKitPrebuiltLiveStreamingConfig config) 
->```
+```java Prototype
+/**
+ * @param appID    You can create a project and obtain the appID from the [ZEGOCLOUD Console](https://console.zegocloud.com/account/).
+ * @param appSign  You can create a project and obtain the appSign from the [ZEGOCLOUD Console](https://console.zegocloud.com/account/).
+ * @param userID   The ID of the current logged-in user. It can be any valid string. Typically, you can use the ID from your own user system.
+ * @param userName The name of the current logged-in user. It can be any valid string. Typically, you can use the name from your own user system.
+ * @param liveID   The ID of the live streaming. This ID is the unique identifier for the current live streaming, so you need to ensure its uniqueness. It can be any valid string. Users with the same liveID will join the same live streaming room.
+ * @param config   The configuration used to initialize the live streaming.
+ * @return
+ */
+public static ZegoUIKitPrebuiltLiveStreamingFragment newInstance(long appID, @NonNull String appSign, @NonNull String userID, @NonNull String userName, @NonNull String liveID, @NonNull ZegoUIKitPrebuiltLiveStreamingConfig config) 
+```
 
-<a id="addButtonToBottomMenuBar"></a>
+#### newInstanceWithToken
 
-## addButtonToBottomMenuBar
->
-> add your custom buttons to bottom menubar.It will show when user role equals to `role`
->
->```java
->  public void addButtonToBottomMenuBar(List<View> viewList, ZegoLiveStreamingRole role)
->```
+Initialize live streaming configuration using Token.
 
-<a id="ZegoLiveStreamingManager"></a>
+```java Prototype
+/**
+ * @param appID    You can create a project and obtain the AppID in the [ZEGOCLOUD Console](https://console.zegocloud.com/account/).
+ * @param token    You can create a project and obtain the ServerSecret in the [ZEGOCLOUD Console](https://console.zegocloud.com/account/), and then generate a Token on your server to avoid leaking your AppSign.
+ * @param userID   The ID of the currently logged-in user. It can be any valid string. Typically, you would use the ID from your own user system.
+ * @param userName The name of the currently logged-in user. It can be any valid string. Typically, you would use the name from your own user system.
+ * @param liveID   The ID of the live streaming. This ID is the unique identifier for the current live streaming, so you need to ensure its uniqueness. It can be any valid string. Users with the same liveID will join the same live streaming room.
+ * @param config   The configuration used to initialize the live streaming.
+ * @return
+ */
+public static ZegoUIKitPrebuiltLiveStreamingFragment newInstanceWithToken(long appID, @NonNull String token, @NonNull String userID, @NonNull String userName, @NonNull String liveID, @NonNull ZegoUIKitPrebuiltLiveStreamingConfig config);
+```
 
-# ZegoLiveStreamingManager
+#### addButtonToBottomMenuBar
 
+Add your custom button to the bottom menu bar. It will be displayed when the user role is equal to `role`.
 
-<a id="muteAllAudioVideo"></a>
+```java Prototype
+/**
+ *
+ * @param viewList The list of custom buttons to be added.
+ * @param role The corresponding role to which the custom button will be added for display.
+ */
+public void addButtonToBottomMenuBar(List<View> viewList, ZegoLiveStreamingRole role);
+```
+## ZegoUIKitPrebuiltLiveStreamingService
 
-## muteAllAudioVideo
+### Common
 
-> mute all audio and video. If you want the app to stop audio and video when it switches to the background, you can use this interface, and then use unMuteAllAudioVideo to restore audio and video when the app returns to the foreground.
->
-> - function prototype:
->
-> ```java
-> public void muteAllAudioVideo()
-> ```
+The interface and events for general co-hosting, excluding PK-related interfaces and events.
+
+#### muteAllAudioVideo
+
+Mutes all audio and video. If you want your application to stop audio and video when it goes to the background, you can use this interface, and then use `unMuteAllAudioVideo` to restore audio and video when the application returns to the foreground.
+
+<CodeGroup>
+```java Prototype
+public void muteAllAudioVideo();
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.common.muteAllAudioVideo()
+```
+</CodeGroup>
 
 
-<a id="unMuteAllAudioVideo"></a>
+#### unMuteAllAudioVideo
 
-## unMuteAllAudioVideo
+This function is used in conjunction with `muteAllAudioVideo`.
 
-> This function is used with muteAllAudioVideo.
->
-> - function prototype:
->
-> ```java
->  public void unMuteAllAudioVideo()
-> ```
+<CodeGroup>
+```java Prototype
+public void unMuteAllAudioVideo();
+```
 
-<a id="showTopTips"></a>
-
-## showTopTips
-
-> 
->  used to show messages on ZegoUIKitPrebuiltCallFragment. 
->
-> - function prototype:
->
-> ```java
->  public void showTopTips(String message, boolean green)
-> ```
-
-<a id="sendPKBattleRequest"></a>
-
-## sendPKBattleRequest
-
-> 
->  send pk battle request to anotherHostUserID,receiver can use ZegoLiveStreamingManager.getInstance().addLiveStreamingListener() to listen to PK battle events, onIncomingPKBattleRequestReceived will be triggered.
->
-> - function prototype:
->
-> ```java
->  public void sendPKBattleRequest(String anotherHostUserID, UserRequestCallback callback)
-> ```
-
-<a id="stopPKBattle"></a>
-
-## stopPKBattle
-
-> 
-> stop pk battle. 
->
-> - function prototype:
->
-> ```java
->  public void stopPKBattle()
-> ```
-
-<a id="cancelPKBattleRequest"></a>
-
-## cancelPKBattleRequest
-
-> 
-> After you call sendPKBattleRequest,you can use this method to cancel the pk battle request. 
->
-> - function prototype:
->
-> ```java
->  public void cancelPKBattleRequest(UserRequestCallback callback)
-> ```
-
-<a id="acceptIncomingPKBattleRequest"></a>
-
-## acceptIncomingPKBattleRequest
-
-> 
-> when received a pk battle request,you can accept it by this method
->
-> - function prototype:
->
-> ```java
-> void acceptIncomingPKBattleRequest(String requestID, String anotherHostLiveID, ZegoUIKitUser anotherHostUser)
-> ```
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.common.unMuteAllAudioVideo()
+```
+</CodeGroup>
 
 
-<a id="rejectPKBattleStartRequest"></a>
+#### showTopTips
 
-## rejectPKBattleStartRequest
+Used to display messages on the `ZegoUIKitPrebuiltCallFragment`.
 
-> 
-> when received a pk battle request,you can reject it by this method
->
-> - function prototype:
->
-> ```java
->  void rejectPKBattleStartRequest(String requestID)
-> ```
+<CodeGroup>
+```java Prototype
+/**
+ *  Display a message at the top.
+ * @param message  The content of the message.
+ * @param green  The color of the message, either green or red. true for green, false for red.
+ */
+public void showTopTips(String message, boolean green);
+```
 
-
-<a id="getPKInfo"></a>
-
-## getPKInfo
-
-> 
-> get current PKInfo. if you are not in PK ,will return null.
->
-> - function prototype:
->
-> ```java
->  public PKInfo getPKInfo()
-> ```
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.common.showTopTips(message, green)
+```
+</CodeGroup>
 
 
-<a id="getSendPKStartRequest"></a>
+#### sendInRoomMessage
 
-## getSendPKStartRequest
+Send a broadcast message to the room. Users who have logged into the same room will receive the message. The message is reliable and will be displayed in the lower left corner of the live streaming room. In addition to the interface callback, you can also use `ZegoUIKitPrebuiltLiveStreamingService.common.events.addInRoomMessageReceivedListener` to listen for events of sending and receiving room messages.
 
-> 
-> After you call sendPKBattleRequest,you can use this method to get the request info. 
->
-> - function prototype:
->
-> ```java
->  public PKRequest getSendPKStartRequest()
-> ```
+<CodeGroup>
+```java Prototype
+/**
+ * 
+ * @param message The content of the message sent in the room.
+ * @param listener The listener for the result status of sending the message in the room.
+ */
+public void sendInRoomMessage(String message, ZegoInRoomMessageSendStateListener listener);
+```
+
+```java Example
+// Add a listener to get messages from others.
+ZegoUIKitPrebuiltLiveStreamingService.common.events.addInRoomMessageReceivedListener(inRoomMessageListener)
+// Send a message to others when needed
+ZegoUIKitPrebuiltLiveStreamingService.common.sendInRoomMessage(message, listener)
+```
+</CodeGroup>
+
+
+#### sendBarrageMessage
+
+Send barrage messages in the room, usually used in scenarios where there is a large amount of message exchange in the room and message reliability is not required, such as live streaming barrage. In addition to the interface callback, you can also use `ZegoUIKitPrebuiltLiveStreamingService.common.events.addBarrageMessageListener` to listen for the sending and receiving events of room messages.
+
+<CodeGroup>
+```java Prototype
+/**
+ * 
+ * @param message The content of the barrage message sent in the room.
+ * @param listener The result status listener for sending barrage messages in the room.
+ */
+public void sendBarrageMessage(String roomID, String message, IZegoIMSendBarrageMessageCallback listener);
+```
+
+```java Example
+// Add a listener to get messages from others
+ZegoUIKitPrebuiltLiveStreamingService.common.events.addBarrageMessageListener(barrageMessageListener)
+// Send messages to others when needed
+ZegoUIKitPrebuiltLiveStreamingService.common.sendBarrageMessage(roomid, message, listener)
+```
+</CodeGroup>
+
+
+### PK
+APIs and events related to PK battles.
+
+#### sendPKBattleRequest [1/2]
+
+Send a request to `anotherHostUserID` for a PK battle and pass custom data. The receiver can use `ZegoUIKitPrebuiltLiveStreamingService.pk.events.addPKListener` to listen for PK battle events. When a PK battle request is received, the `onIncomingPKBattleRequestReceived` event will be triggered.
+
+<CodeGroup>
+```java Prototype
+/**
+ * 
+ * @param anotherHostUserID The UserID of the other host participating in the PK battle.
+ * @param timeout The timeout duration.
+ * @param customData Custom data to be passed.
+ * @param callback The callback to listen for the result of the invitation.
+ */
+public void sendPKBattleRequest(String anotherHostUserID, int timeout, String customData, UserRequestCallback callback); 
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.sendPKBattleRequest(anotherHostUserID, timeout, customData, callback)
+```
+</CodeGroup>
+
+
+#### sendPKBattleRequest [2/2]
+
+Send a request to `anotherHostUserID` for a PK battle. The receiver can use `ZegoUIKitPrebuiltLiveStreamingService.pk.events.addPKListener` to listen for PK battle events. When a PK battle request is received, the `onIncomingPKBattleRequestReceived` event will be triggered.
+
+<CodeGroup>
+```java Prototype
+/**
+ * 
+ * @param anotherHostUserID The UserID of the other host participating in the PK battle.
+ * @param callback The callback to listen for the result of the invitation.
+ */
+public void sendPKBattleRequest(String anotherHostUserID, UserRequestCallback callback);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.sendPKBattleRequest(anotherHostUserID, callback)
+```
+</CodeGroup>
+
+
+#### startPKBattleWith
+
+After sending a PK battle request to another host and receiving their acceptance, call this API to start the PK battle.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param anotherHostLiveID The Live stremain ID of the other host participating in the PK battle.
+ * @param anotherHostUserID The UserID of the other host participating in the PK battle.
+ * @param anotherHostName The name of the other host participating in the PK battle.
+ */
+public void startPKBattleWith(String anotherHostLiveID, String anotherHostUserID, String anotherHostName);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.startPKBattleWith(anotherHostLiveID, anotherHostUserID, anotherHostName)
+```
+</CodeGroup>
+
+
+#### stopPKBattle
+
+Stop the PK battle.
+
+<CodeGroup>
+```java Prototype
+public void stopPKBattle();
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.stopPKBattle()
+```
+</CodeGroup>
+
+
+
+#### cancelPKBattleRequest [1/2]
+
+After you call `sendPKBattleRequest`, you can use this method to cancel the PK battle request.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param callback The callback for the result of canceling the invitation.
+ */
+public void cancelPKBattleRequest(UserRequestCallback callback);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.cancelPKBattleRequest(callback)
+```
+</CodeGroup>
+
+
+
+
+#### cancelPKBattleRequest [2/2]
+
+After you call `sendPKBattleRequest`, you can use this method to cancel the PK battle request and pass custom data.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param customData Custom data to be passed.
+ * @param callback The callback for the result of canceling the invitation.
+ */
+public void cancelPKBattleRequest(String customData, UserRequestCallback callback);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.cancelPKBattleRequest(customData, callback)
+```
+</CodeGroup>
+
+
+#### acceptIncomingPKBattleRequest
+
+When you receive a PK battle request, you can use this method to accept it.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param requestID The ID of the PK invitation, indicating which PK invitation to accept.
+ * @param anotherHostLiveID The live streaming ID of the other host who participates in the PK battle.
+ * @param anotherHostUser The information of the other host who participates in the PK battle.
+ */
+public void acceptIncomingPKBattleRequest(String requestID, String anotherHostLiveID, ZegoUIKitUser anotherHostUser);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.acceptIncomingPKBattleRequest(requestID, anotherHostLiveID, anotherHostUser)
+```
+</CodeGroup>
+
+
+#### rejectPKBattleStartRequest
+
+When you receive a PK battle request, you can use this method to reject it.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param requestID The ID of the PK invitation, indicating which PK invitation to reject.
+ */
+void rejectPKBattleStartRequest(String requestID);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.rejectPKBattleStartRequest(requestID)
+```
+</CodeGroup>
+
+
+#### getPKInfo
+
+Get the current PK information. If you are not in a PK, it will return null.
+
+<CodeGroup>
+```java Prototype
+public PKInfo getPKInfo();
+```
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.getPKInfo()
+```
+</CodeGroup>
+
+
+#### getSendPKStartRequest
+
+After calling `sendPKBattleRequest`, you can use this method to get the request information.
+
+<CodeGroup>
+```java Prototype
+public PKRequest getSendPKStartRequest();
+```
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.getSendPKStartRequest()
+```
+</CodeGroup>
+
+
+#### muteAnotherHostAudio
+
+In a PK, mute the audio of the other host.
+
+<CodeGroup>
+```java Prototype
+/**
+ * @param mute Whether to mute the mixed audio of the other person.
+ * @param callback The operation result.
+ */
+public void muteAnotherHostAudio(boolean mute, ZegoUIKitCallback callback);
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.muteAnotherHostAudio(mute, callback)
+```
+</CodeGroup>
+
+
+#### isAnotherHostMuted
+
+In a PK, check if the other host is muted.
+
+<CodeGroup>
+```java Prototype
+public boolean isAnotherHostMuted();
+```
+
+```java Example
+ZegoUIKitPrebuiltLiveStreamingService.pk.isAnotherHostMuted()
+```
+</CodeGroup>
