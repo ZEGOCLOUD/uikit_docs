@@ -214,25 +214,6 @@
       }
     },
     {
-      "id": "callkit_flutter_zh",
-      "label": "docs_callkit_flutter_zh",
-      "path": "uikit/callkit/docs_callkit_flutter_zh",
-      "routeBasePath": "zh/callkit-flutter",
-      "locale": "zh",
-      "navigationInfo": {
-        "group": {
-          "id": "callkit_zh",
-          "name": "音视频通话 UIKit",
-          "tag": "New"
-        },
-        "category": [
-          "Products",
-          "ZEGO UIKits"
-        ],
-        "platform": "Flutter: Dart"
-      }
-    },
-    {
       "id": "live_streaming_kit_android",
       "label": "Live Streaming Kit(Android)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android",
