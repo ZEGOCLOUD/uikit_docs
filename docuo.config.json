@@ -8,9 +8,26 @@
       "respectPrefersColorScheme": false
     },
     "navbar": {
-      "title": "UIKit",
+      "title": "ZEGOCLOUD",
       "logo": "image/logo.png",
-      "items": []
+      "items": [
+        {
+          "type": "default",
+          "label": "Console",
+          "href": "https://console.zegocloud.com/"
+        }
+      ]
+    },
+    "navbar.zh": {
+      "title": "ZEGO",
+      "logo": "image/logo.png",
+      "items": [
+        {
+          "type": "default",
+          "label": "控制台",
+          "href": "https://console.zego.im/"
+        }
+      ]
     },
     "footer": {
       "logo": "",
@@ -21,6 +38,17 @@
           "logo": "Discord",
           "href": "https://discord.gg/EtNRATttyp"
         },
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/ZEGOCLOUD"
+        }
+      ]
+    },
+    "footer.zh": {
+      "logo": "",
+      "caption": "",
+      "links": [],
+      "socials": [
         {
           "logo": "GitHub",
           "href": "https://github.com/ZEGOCLOUD"
