@@ -2,14 +2,21 @@
   "title": "UIKit",
   "favicon": "image/favicon.ico",
   "themeConfig": {
+    "colors": {
+      "primaryLight": "#0055FF",
+      "primaryDark": "#266EFF"
+    },
     "colorMode": {
       "defaultMode": "light",
       "disableSwitch": false,
       "respectPrefersColorScheme": false
     },
     "navbar": {
-      "title": "ZEGOCLOUD",
-      "logo": "image/logo.png",
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zegocloud_dark.png",
+        "light": "image/logo_zegocloud_light.png"
+      },
       "items": [
         {
           "type": "default",
@@ -19,8 +26,11 @@
       ]
     },
     "navbar.zh": {
-      "title": "ZEGO",
-      "logo": "image/logo.png",
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zego_dark.png",
+        "light": "image/logo_zego_light.png"
+      },
       "items": [
         {
           "type": "default",
