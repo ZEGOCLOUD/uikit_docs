@@ -1,0 +1,180 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md";
+
+# 快速开始
+
+
+## 准备环境
+
+在开始集成语聊房 UIKit 前，请确保开发环境满足以下要求：
+
+<EnviromentRequiremenZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+#### 1. 添加依赖
+
+按照以下步骤添加 `ZegoUIKitPrebuiltLiveAudioRoom` 依赖：
+
+1. 打开终端，导航到您的项目的根目录，并运行以下命令创建一个 `podfile`：
+    ```
+    pod init
+    ```
+2. 编辑 `Podfile` 文件以添加依赖：
+    ```
+    pod 'ZegoUIKitPrebuiltLiveAudioRoom'
+    ```
+3. 在终端中运行以下命令，使用 Cocoapods 安装所需的依赖：
+    ```
+    pod install
+    ```
+
+#### 2. 导入 SDK
+
+参考以下代码导入 `ZegoUIKitPrebuiltLiveAudioRoom` SDK 和 `ZegoUIKit` SDK。
+
+<CodeGroup>
+```swift title="swift"
+import ZegoUIKitPrebuiltLiveAudioRoom
+import ZegoUIKit
+// YourViewController.swift
+class ViewController: UIViewController {
+    // 其他代码...
+}
+```
+```objc title="objc"
+@import ZegoUIKit;
+@import ZegoUIKitPrebuiltLiveAudioRoom;
+```
+</CodeGroup>
+
+### 配置您的项目
+
+1. 打开 `Info.plist`，并在 `dict` 部分内添加以下代码：
+```plist
+<key>NSCameraUsageDescription</key>
+<string>需要访问相机的权限。</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>需要访问麦克风的权限。</string>
+```
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/add_mic_camera_permissions.png" />
+</Frame>
+
+2. 关闭 Bitcode。选择您的目标项目，并按照以下两张图片上的说明分别关闭 Bitcode。
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/project_bitcode.png" />
+</Frame>
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/pods_bitcode.png" />
+</Frame>
+
+### 使用语聊房 UIKit
+
+- 为连接语聊房组件服务指定 `userID` 和 `userName`。
+- 创建一个 `roomID`，代表您想要创建的语聊房。
+
+<Note title="Note">
+
+- `userID` 和 `roomID` 只能包含数字、字母和下划线 (_)。
+- 使用相同的 `roomID` 将进入同一个语聊房。
+- 使用相同的 `roomID`，只能有一个用户作为主持人进入语聊房。其他用户需要作为观众进入语聊房。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltLiveAudioRoomConfig.translationText`。
+</Note>
+
+<CodeGroup>
+```swift title="swift"
+class ViewController: UIViewController {
+    let appID: UInt32 = <#AppID#>
+    let appSign: String = <#AppSign#>
+    var userID: String = <#UserID#>
+    var userName: String = <#UserName#>
+    var roomID: String = <#RoomID#>
+    
+    // 房主开始
+    @IBAction func startLiveAudio(_ sender: Any) {
+        
+        let config: ZegoUIKitPrebuiltLiveAudioRoomConfig = ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        let liveAudioVC: ZegoUIKitPrebuiltLiveAudioRoomVC = ZegoUIKitPrebuiltLiveAudioRoomVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, roomID: self.roomID, config: config)
+        liveAudioVC.modalPresentationStyle = .fullScreen
+        self.present(liveAudioVC, animated: true, completion: nil)
+    }
+    
+    // 观众收听
+    @IBAction func joinLiveAudio(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveAudioRoomConfig = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        let liveAudioVC: ZegoUIKitPrebuiltLiveAudioRoomVC = ZegoUIKitPrebuiltLiveAudioRoomVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, roomID: self.roomID, config: config)
+        liveAudioVC.modalPresentationStyle = .fullScreen
+        self.present(liveAudioVC, animated: true)
+    }
+}
+```
+```objc title="objc"
+@implementation ViewController
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+  // Do any additional setup after loading the view.
+  unsigned int appID =appID;
+  NSString *appSign = @"appSign";
+  NSString *userName = @"userName";
+  NSString *userID =  @"userID";
+  NSString *roomID =  @"roomID";
+}
+
+// 房主开始
+- (void)startLiveAudio {
+    ZegoUIKitPrebuiltLiveAudioRoomConfig *config = [ZegoUIKitPrebuiltLiveAudioRoomConfig host];
+    // 修改语言为中文
+    config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];    
+    ZegoUIKitPrebuiltLiveAudioRoomVC *vc = [[ZegoUIKitPrebuiltLiveAudioRoomVC alloc] init:appID appSign:appSign userID:userID userName:userName roomID:roomID config:config];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:self.vc animated:YES completion:^{
+
+    }];
+}
+
+// 观众收听
+- (void) joinLiveAudio {
+    ZegoUIKitPrebuiltLiveAudioRoomConfig *config = [ZegoUIKitPrebuiltLiveAudioRoomConfig audience];
+    // 修改语言为中文
+    config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+    ZegoUIKitPrebuiltLiveAudioRoomVC *vc = [[ZegoUIKitPrebuiltLiveAudioRoomVC alloc] init:appID appSign:appSign userID:userID userName:userName roomID:roomID config:config];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:self.vc animated:YES completion:^{
+
+    }];
+}
+```
+</CodeGroup>
+
+
+然后，您可以通过展示 `ViewController` 来创建一个语聊房。
+
+## 运行 & 测试
+
+现在您已经完成了所有步骤！
+
+您只需在 XCode 中，点击 **运行**，就可以在您的设备上运行和测试您的应用。
+
+## 相关指南 
+
+您可以参考 [基础功能](./Custom%20prebuilt%20features/Overview.mdx) 相关文档。
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_example_ios" target="_blank">
+  点击这里获取完整的示例代码。
+</Card>
+</CardGroup>

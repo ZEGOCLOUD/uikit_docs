@@ -1,0 +1,164 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import AndroidEnviromentRequirementZh from "/snippets/uikit/AndroidEnviromentRequirementZh.md";
+
+# 快速开始
+
+
+## 准备环境
+
+在开始集成语聊房 UIKit 前，请确保开发环境满足以下要求：
+
+<AndroidEnviromentRequirementZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+1. 添加 `jitpack` 配置。
+  - 如果您的 Android Gradle 插件是 **7.1.0 或更高版本**：   
+    进入您的项目的根目录，打开 `settings.gradle` 文件，按照如下方式将 jitpack 添加到 `dependencyResolutionManagement` > `repositories`：
+    ```groovy
+    dependencyResolutionManagement {
+        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+        repositories {
+            google()
+            mavenCentral()
+            maven { url 'https://storage.zego.im/maven'  }   // <- 添加这行。
+            maven { url 'https://www.jitpack.io'  } // <- 添加这行。
+        }
+    }
+    ```
+    <div class="mk-warning">
+
+    如果您在 `settings.gradle` 中找不到上述字段，可能是因为您的 Android Gradle 插件版本低于 v7.1.0。
+    有关更多详细信息，请参阅 [Android Gradle 插件发布说明 v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle)。
+    </div>
+
+ - 如果您的 Android Gradle 插件是 **7.1.0 之前的版本** ：   
+   进入您的项目的根目录，打开 `build.gradle` 文件，按照如下方式将 jitpack 添加到 `allprojects`->`repositories`：
+    ```groovy
+    allprojects {
+        repositories {
+            google()
+            mavenCentral()
+            maven { url 'https://storage.zego.im/maven'  }   // <- 添加这行。
+            maven { url "https://jitpack.io"  }  // <- 添加这行。
+        }
+    }
+    ```
+
+2. 修改您的应用级别的 `build.gradle` 文件：
+    ```groovy
+    dependencies {
+        ...
+        implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_audio_room_android:+'    // 添加这行到您的模块级别的 build.gradle 文件的依赖部分，通常命名为 [app]。
+    }
+    ```  
+
+### 使用语聊房 UIKit
+
+- 为连接语聊房 UIKit 服务指定 `userID` 和 `userName`。
+- 创建一个 `roomID`，代表您想要创建的语聊房。
+
+<Note title="Note">
+
+- `userID`、`userName` 和 `roomID` 只能包含数字、字母和下划线 (_)。
+- 使用相同的 `roomID` 将进入同一个语聊房。
+- 使用相同的 `roomID`，只能有一个用户作为主持人进入语聊房。其他用户需要作为观众进入语聊房。
+- UIKit 默认语言为英文，如需修改为中文，请修改`ZegoUIKitPrebuiltLiveAudioRoomConfig.translationText`
+</Note>
+
+<CodeGroup>
+```java title="Java"
+public class LiveAudioRoomActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID; // 替换为您的 AppID
+        String appSign = yourAppSign; // 替换为您的 AppSign
+        String userID = yourUserID; // 替换为您的 UserID
+        String userName = yourUserName; // 替换为您的 UserName
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String roomID = getIntent().getStringExtra("roomID");
+
+        ZegoUIKitPrebuiltLiveAudioRoomConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.host();
+        } else {
+            config = ZegoUIKitPrebuiltLiveAudioRoomConfig.audience();
+        }
+        // 修改为中文
+        config.translationText = new ZegoTranslationText(ZegoUIKitLanguage.CHS);
+        ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+```kotlin title="Kotlin"
+class LiveAudioRoomActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID // 替换为您的 AppID
+        val appSign = yourAppSign // 替换为您的 AppSign
+        val userID = YourUserID // 替换为您的 UserID
+        val userName = YourUserName // 替换为您的 UserName
+        
+        val isHost = intent.getBooleanExtra("host", false)
+        val roomID = intent.getStringExtra("roomID")
+
+        val config: ZegoUIKitPrebuiltLiveAudioRoomConfig = if (isHost) {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+        } else {
+            ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+        }
+        // 修改为中文
+        config.translationText = ZegoTranslationText(ZegoUIKitLanguage.CHS)
+        val fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+然后，您可以通过启动您的 `LiveAudioRoomActivity` 来创建一个语聊房。
+
+## 运行 & 测试
+
+现在您已经完成了所有步骤！
+
+您只需在 Android Studio 中点击 **运行** 就可以在设备上运行和测试您的应用。
+
+## 相关指南
+
+您可以参考 [基础功能](./Custom%20prebuilt%20features/Overview.mdx) 相关文档。
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_example_android" target="_blank">
+  点击这里获取完整的示例代码。
+</Card>
+</CardGroup>
