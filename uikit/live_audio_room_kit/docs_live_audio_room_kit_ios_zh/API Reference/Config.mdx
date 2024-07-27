@@ -1,0 +1,127 @@
+# Config
+
+
+## ZegoUIKitPrebuiltLiveAudioRoomConfig
+
+初始化相关配置
+
+| 属性                        | 类型                                                           | 描述                                                                                                                                                                  |
+| --------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| role                        | [ZegoLiveAudioRoomRole](zegoliveaudioroomrole)                 | 定义用户在语聊房中的角色。默认值是 .audience。                                                                                                                        |
+| takeSeatIndexWhenJoining    | Int                                                            | 加入时的麦位位置，仅当用户的角色为房主和发言人时有效。默认值是-1表示没有指定的麦位位置。                                                                              |
+| hostSeatIndexes             | [Int]                                                          | 只有房主可以入座的位置。默认没有设置。                                                                                                                                |
+| turnOnMicrophoneWhenJoining | Bool                                                           | 加入语聊房时是否自动打开麦克风。默认值为false。                                                                                                                       |
+| useSpeakerWhenJoining       | Bool                                                           | 加入语聊房时是否使用扬声器。默认值为true。                                                                                                                            |
+| userAvatarUrl               | String                                                         | 用户头像的URL。只支持http或者https协议的链接。                                                                                                                        |
+| userInRoomAttributes        | [String : String]                                              | 用户在房间内的属性，可根据业务需求控制UI元素展示或者逻辑判断。                                                                                                        |
+| bottomMenuBarConfig         | [ZegoBottomMenuBarConfig](zegobottommenubarconfig)             | 底部菜单栏的配置。请参考[自定义底部菜单栏按钮](../Custom%20prebuilt%20features/Customize%20the%20bottom%20menu%20bar%20buttons.mdx)。                                                                                |
+| confirmDialogInfo           | [ZegoLeaveConfirmDialogInfo](zegoleaveconfirmdialoginfo)       | 点击退出按钮时显示的确认对话框信息，提供默认 UI。如需自定义，可通过此参数设置。                                                                                       |
+| translationText             | [ZegoTranslationText](zegotranslationtext)                     | 支持切换 UIKit 的语言环境，也可以修改特定的文字。请参考[切换语言](../Custom%20prebuilt%20features/Switch%20language.mdx)和[自定义 UI 文案](../Custom%20prebuilt%20features/Modify%20user%20interface%20text.mdx)。 |
+| layoutConfig                | [ZegoLiveAudioRoomLayoutConfig](zegoliveaudioroomlayoutconfig) | 布局配置。请参考[自定义麦位](../Custom%20prebuilt%20features/Customize%20the%20seats.mdx)。                                                                                                  |
+| seatConfig                  | [ZegoLiveAudioRoomSeatConfig](zegoliveaudioroomseatconfig)     | 麦位配置，包括背景图标等。                                                                                                                                            |
+
+
+## ZegoBottomMenuBarConfig
+
+底部菜单栏配置
+
+| 属性                    | 类型                                             | 描述                                                 |
+| ----------------------- | ------------------------------------------------ | ---------------------------------------------------- |
+| hostButtons             | [[ZegoMenuBarButtonName](zegomenubarbuttonname)] | 房主的菜单栏按钮列表。                               |
+| speakerButtons          | [[ZegoMenuBarButtonName](zegomenubarbuttonname)] | 发言人的菜单栏按钮列表。                             |
+| audienceButtons         | [[ZegoMenuBarButtonName](zegomenubarbuttonname)] | 观众的菜单栏按钮列表。                               |
+| maxCount                | Int                                              | 菜单栏按钮的最大数量。默认值为5。                    |
+| showInRoomMessageButton | Bool                                             | 是否在底部菜单栏中显示房间内消息按钮。默认值为true。 |
+
+
+## ZegoLiveAudioRoomLayoutConfig
+
+麦位布局配置
+
+| 属性       | 类型                                                                   | 描述                                                                                                                                                               |
+| ---------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| rowConfigs | [[ZegoLiveAudioRoomLayoutRowConfig](zegoliveaudioroomlayoutrowconfig)] | 行配置列表，指定麦位布局的每行如何排列以及元素如何对齐。默认值包含两个 ZegoLiveAudioRoomLayoutRowConfig 对象的列表，每个对象配置为4个元素，对齐方式为 .spaceAround |
+| rowSpecing | Int                                                                    | 每行麦位之间的间距。默认值为0。                                                                                                                                    |
+
+
+## ZegoLiveAudioRoomLayoutRowConfig
+
+麦位布局每行配置
+
+| 属性        | 类型                             | 描述                                        |
+| ----------- | -------------------------------- | ------------------------------------------- |
+| seatSpacing | Int                              | 麦位之间的距离。                            |
+| alignment   | ZegoLiveAudioRoomLayoutAlignment | 麦位之间的对齐方式。默认为 .center 居中对齐 |
+
+## ZegoLiveAudioRoomSeatConfig
+
+单个麦位配置
+
+| 属性                     | 类型    | 描述                                      |
+| ------------------------ | ------- | ----------------------------------------- |
+| showSoundWaveInAudioMode | Bool    | 是否在用户头像周围显示声浪。默认为 true。 |
+| backgroudColor           | UIColor | 麦位背景颜色。                            |
+| backgroundImage          | UIImage | 麦位背景图片。                            |
+
+
+## ZegoLeaveConfirmDialogInfo
+
+离开语聊房确认对话框信息
+
+| 属性              | 类型             | 描述                                                           |
+| ----------------- | ---------------- | -------------------------------------------------------------- |
+| title             | String           | 标题文本。                                                     |
+| message           | String           | 确认消息文本。                                                 |
+| cancelButtonName  | String           | 取消按钮文本。                                                 |
+| confirmButtonName | String           | 确认按钮文本。                                                 |
+| dialogPresentVC   | UIViewController | 在哪个界面显示离开语聊房确认弹窗。默认在当前语聊房显示该弹窗。 |
+
+
+
+## ZegoLiveAudioRoomRole
+
+角色枚举
+
+| 枚举值   | 描述     |
+| -------- | -------- |
+| host     | 房主。   |
+| speaker  | 发言人。 |
+| audience | 观众。   |
+
+
+## ZegoMenuBarButtonName
+
+菜单栏按钮名称枚举
+
+| 枚举值                 | 描述                       |
+| ---------------------- | -------------------------- |
+| leaveButton            | 离开语聊房按钮。           |
+| toggleMicrophoneButton | 打开麦克风按钮。           |
+| showMemberListButton   | 展示在线列表的按钮。       |
+| showSpeakerButton      | 展示扬声器的按钮。         |
+| closeSeatButton        | 展示锁定、解锁麦位的按钮。 |
+| applyTakeSeatButton    | 展示申请连麦的按钮。       |
+
+
+## ZegoUIKitLanguage
+
+UI 语言枚举
+
+| 枚举值  | 描述                   |
+| ------- | ---------------------- |
+| ENGLISH | UIKit 显示语言为英文。 |
+| CHS     | UIKit 显示语言为中文。 |
+
+
+## ZegoLiveAudioRoomLayoutAlignment
+
+布局对齐方式枚举
+
+| 枚举值       | 描述                                                     |
+| ------------ | -------------------------------------------------------- |
+| spaceAround  | 分散对齐，不靠着容器壁，剩余空间在每个麦位两侧平均分配。 |
+| spaceBetween | 让弹性容器内的元素向两端对齐，并且平摊对应的宽度。       |
+| spaceEvenly  | 平均对齐，不靠着容器壁，剩余空间平分。                   |
+| start        | 开始对齐显示。                                           |
+| end          | 底部对齐显示。                                           |
+| center       | 中间居中对齐显示。                                       |

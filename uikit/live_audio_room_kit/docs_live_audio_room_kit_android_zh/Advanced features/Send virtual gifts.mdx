@@ -1,0 +1,135 @@
+# 发送虚拟礼物
+
+
+## 功能简介
+
+社交应用中的虚拟礼物功能允许用户向主播发送虚拟礼物，这些礼物可以是各种物品，如咖啡、汽车等。
+
+通过发送虚拟礼物，观众可以在直播节目中与主播建立联系，并增强社交应用中的互动性和活跃度。
+
+本文档将为您介绍，如何实现虚拟礼物功能。
+
+## 前提条件
+
+在虚拟礼物功能前，请确保您已集成语聊房 UIKit，详情请参考 [快速开始\|_blank](!LiveAudioRoomKit_QuickStart) 文档。
+
+## 实现流程
+
+### 创建虚拟礼物入口
+
+创建一个用于发送虚拟礼物的入口，可通过配置 `addButtonToBottomMenuBar` 添加按钮并添加相应的事件。
+
+```java
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID, appSign, userID, userName, roomID, config);
+
+ImageView imageView = new ImageView(context);
+imageView.setImageResource(R.drawable.presents_icon);
+int size = Utils.dp2px(36f, context.getResources().getDisplayMetrics());
+int marginTop = Utils.dp2px(10f, context.getResources().getDisplayMetrics());
+int marginBottom = Utils.dp2px(16f, context.getResources().getDisplayMetrics());
+int marginEnd = Utils.dp2px(8, context.getResources().getDisplayMetrics());
+LayoutParams layoutParams = new LayoutParams(size, size);
+layoutParams.topMargin = marginTop;
+layoutParams.bottomMargin = marginBottom;
+layoutParams.rightMargin = marginEnd;
+imageView.setLayoutParams(layoutParams);
+
+fragment.addButtonToBottomMenuBar(Collections.singletonList(imageView), ZegoLiveAudioRoomRole.AUDIENCE);
+
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+```
+
+### 实现礼物发送逻辑
+
+当观众点击礼物发送按钮时，您可以通过 `ZegoUIKit.getSignalingPlugin().sendInRoomCommandMessage` 向房间用户发送字符串数据，详情如下：
+
+```json
+{
+  "room_id": "room888",   // 语聊房房间 ID
+  "user_id": "user987",   // 礼物发送者的用户 ID
+  "user_name": "James",   // 礼物发送者的用户名称
+  "gift_type": 1001,      // 礼物类型
+  "gift_count": 2,         // 礼物数量
+  "timestamp": 1670814533,    // 请求时间戳
+}
+```
+
+您可以根据业务需求灵活修改请求参数。一旦观众请求发送礼物，您的服务器将执行以下操作：
+
+1. 验证用户的账户余额是否满足基于参数所需的金额。
+2. 从用户的账户余额中扣除费用。
+3. 增加主播的礼物金额。
+
+具体实现方式如下：
+
+```java
+imageView.setOnClickListener(v -> {
+    JSONObject jsonObject = new JSONObject();
+    try {
+        jsonObject.put("room_id", roomID);
+        jsonObject.put("user_id", userID);
+        jsonObject.put("user_name", userName);
+        jsonObject.put("gift_type", 1001);
+        jsonObject.put("gift_count", 1);
+        jsonObject.put("timestamp", System.currentTimeMillis());
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+    ZegoUIKit.getSignalingPlugin().sendInRoomCommandMessage(jsonObject.toString(), roomID,
+        new SendRoomMessageCallback() {
+            @Override
+            public void onResult(int errorCode, String errorMessage) {
+                // showAnimation();
+            }
+        });
+});
+```
+
+### 监听礼物消息并显示礼物动画
+
+如需显示礼物动画，只需在客户端上监控礼物消息。一旦收到新的礼物消息，即可播放动画，不同的角色需要不同的礼物消息回调。
+
+为了获得酷炫的动画效果，使用 Lottie 或 SVGA 等动画库在屏幕上显示文件。
+
+#### 礼物发送者
+
+在发送礼物后，礼物发送者可以通过检查礼物发送 API 的状态码，来确认其是否成功交付。如果 API 返回成功代码，将显示礼物动画。
+
+```java
+ZegoUIKit.getSignalingPlugin().sendInRoomCommandMessage(jsonObject.toString(), roomID,
+    new SendRoomMessageCallback() {
+        @Override
+        public void onResult(int errorCode, String errorMessage) {
+            if(errorCode == 0){
+                showAnimation();
+            }
+        }
+    });
+```
+
+#### 主播和其余观众
+
+
+假设服务器使用不可靠的信令通道广播消息。在这种情况下，需要监听不可靠消息的通知回调方法 `onInRoomCommandReceived` 以确定是否有人在发送礼物。当收到新的礼物通知时，它将显示礼物效果。
+
+如果服务器使用不可靠的信令通道广播消息，可以监听 `onInRoomCommandReceived` 通知回调方法，以检测礼物是否已发送，一旦收到新的礼物通知，将会显示礼物效果。
+
+```java
+// 当房间中有人发送礼物时，将接收到 InRoomCommandMessage
+ZegoUIKit.getSignalingPlugin().addInRoomCommandMessageListener(new ZegoUIKitSignalingPluginInRoomCommandMessageListener() {
+    @Override
+    public void onInRoomCommandMessageReceived(List<ZegoSignalingInRoomCommandMessage> messages,
+        String roomID) {
+        for (ZegoSignalingInRoomCommandMessage message : messages) {
+            if (!message.senderUserID.equals(userID) && message.text.contains("gift_type")) {
+                showAnimation();
+            }
+        }
+
+    }
+});
+```
+
+## 运行示例
+
+要访问此功能的示例代码，请从 [此处](https://github.com/ZEGOCLOUD/zego_virtual_gift/tree/main/samples/android/live_audio_room) 下载。

@@ -1,0 +1,158 @@
+# 发送虚拟礼物
+
+
+## 功能简介
+
+社交应用中的虚拟礼物功能允许观众向主播发送虚拟礼物，这些礼物可以是各种物品，如咖啡、汽车等。
+
+通过发送虚拟礼物，观众可以在直播节目中与主播建立联系，并增强社交应用中的互动性和活跃度。
+
+本文档将为您介绍，如何实现虚拟礼物功能。
+
+## 前提条件
+
+在实现虚拟礼物功能前，请确保您已集成语聊房 UIKit，详情请参考 [快速开始](../Quick%20start.mdx) 文档。
+
+## 实现流程
+
+### 创建虚拟礼物入口
+
+创建一个用于发送虚拟礼物的入口，可通过配置 `bottomMenuBarConfig` 并监听相应事件添加相关按钮。
+
+```swift
+let liveAudioVC = ZegoUIKitPrebuiltLiveAudioRoomVC(yourAppID, appSign: yourAppSign, userID: yourUserID, userName: yourUserName, roomID: yourRoomID, config: config)
+
+// 添加礼物按钮。
+let giftButton = UIButton(type: .system)
+giftButton.backgroundColor = .red
+giftButton.setTitle("Gift", for: .normal)
+giftButton.setTitleColor(.white, for: .normal)
+giftButton.addTarget(self, action: #selector(sendGift), for: .touchUpInside)
+
+liveAudioVC.addButtonToMenuBar(giftButton, role: .audience)
+liveAudioVC.addButtonToMenuBar(giftButton, role: .speaker)
+liveAudioVC.modalPresentationStyle = .fullScreen
+liveAudioVC.delegate = self
+self.present(liveAudioVC, animated: true, completion: nil)
+
+// 添加事件处理器。
+ZegoUIKit.shared.addEventHandler(self)
+```
+
+### 实现礼物发送逻辑
+
+当观众点击礼物发送按钮时，将触发您业务服务器的相应 API，具体请求参数如下：
+
+```json
+{
+    "room_id": "room888",   // 语聊房房间 ID
+    "user_id": "user987",   // 礼物发送者的用户 ID
+    "user_name": "James",   // 礼物发送者的用户名称
+    "gift_type": 1001,      // 礼物类型
+    "gift_count": 2,         // 礼物数量
+    "access_token": "fasd2r34dfasd...fasdf",    // 用于认证的 Token
+    "timestamp": 1670814533,    // 请求时间戳
+}
+```
+
+您可以根据业务需求灵活修改请求参数。一旦观众请求发送礼物，您的服务器将执行以下操作：
+1. 验证用户的账户余额是否满足基于参数所需的金额。
+2. 从用户的账户余额中扣除费用。
+3. 增加主播的礼物金额。
+
+观众在处理后收到相应的状态码，并创建一个消息队列，以通知主播和其他观众关于礼物的信息。
+
+通过使用 `Next.js` 展示如何调用 ZEGO 服务器 API。您可以下载 [源代码](https://github.com/ZEGOCLOUD/zego_virtual_gift/blob/main/server_nextjs/pages/api/send_gift.js) 作为参考。
+
+### 通知主播和观众显示礼物动画
+
+向主播和观众显示礼物动画，请使用 [发送房间内消息](https://doc-preview-zh.zego.im/article/12225) API 并通过 `MessageType: 2` 发送通知。
+
+我们建议将多个礼物合并为一条消息，以避免超过每秒每个应用 ID 10 个请求的速率限制。例如：
+
+<Note title="Note">
+
+当收礼者遇到网络问题而未能接收到信号的情况下，可能会发送失败。
+</Note>
+
+```json
+{
+    "FromUserId": "serverID",
+    "RoomId": "room888",
+    "MessageType": 2,
+    "Priority": 1,
+    "MessageBody": {
+        "Message": [
+            {
+                "user_id": "user987",
+                "user_name": "James",
+                "gift_type": 1001,
+                "gift_cout": 2,
+                "timestamp": 1670814533,
+            },
+            ...
+        ],
+        "ExtendedData":"",
+    }
+}
+```
+
+### 监听礼物消息并显示礼物动画
+
+如需显示礼物动画，只需在客户端上监控礼物消息。一旦收到新的礼物消息，即可播放动画，不同的角色需要不同的礼物消息回调。
+
+为了获得酷炫的动画效果，使用 Lottie 或 SVGA 等动画库在屏幕上显示文件。
+
+#### 礼物发送者
+
+在发送礼物后，礼物发送者可以通过检查礼物发送 API 的状态码，来确认其是否成功交付。如果 API 返回成功代码，将显示礼物动画。
+
+```swift
+@objc func sendGift() {
+    // ...
+    // 省略参数和请求逻辑
+    // ...
+    print("开始发送礼物...")
+    let task = session.dataTask(with: request) { data, response, error in
+        if let httpResponse = response as? HTTPURLResponse,
+           httpResponse.statusCode == 200 {
+            print("发送礼物成功。")
+            // 显示礼物动画
+            DispatchQueue.main.async {
+                self.giftView.show("vap.mp4", container: self.liveAudioRoomVC?.view)
+            }
+        } else {
+            print("发送礼物失败。")
+        }
+    }
+    task.resume()
+}
+```
+
+#### 主播和其余观众
+
+假设服务器使用不可靠的信令通道广播消息。在这种情况下，需要监听不可靠消息的通知回调方法 `onInRoomCommandReceived` 以确定是否有人在发送礼物。当收到新的礼物通知时，它将显示礼物效果。
+
+如果服务器使用不可靠的信令通道广播消息，可以监听 `onInRoomCommandReceived` 通知回调方法，以检测礼物是否已发送，一旦收到新的礼物通知，将会显示礼物效果。
+
+```swift
+// 添加事件处理器
+ZegoUIKit.shared.addEventHandler(self)
+
+extension ViewController: ZegoUIKitEventHandle {
+    func onInRoomCommandMessageReceived(_ messages: [ZegoSignalingInRoomCommandMessage], roomID: String) {
+        if let message = messages.first {
+            if message.senderUserID != userID {
+                // 显示礼物动画
+                DispatchQueue.main.async {
+                    self.giftView.show("vap.mp4", container: self.liveAudioVC.view)
+                }
+            }
+        }
+    }
+}
+```
+
+## 运行示例
+
+如需访问此功能的示例代码，请从 [此处](https://github.com/ZEGOCLOUD/zego_virtual_gift/tree/main/samples/ios/live_audio_room) 下载。
