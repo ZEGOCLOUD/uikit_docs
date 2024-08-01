@@ -1,0 +1,34 @@
+# 自定义 UI 界面文案
+
+
+互动直播 UIKit（Live Streaming Kit）中的 UI 组件提供了一套默认文案，但也支持开发者根据业务需求要修改对应界面的文案。
+
+## 实现流程
+
+要修改完整文案，请查看并使用 `ZegoTranslationText` 配置。
+
+以下举例修改部分界面文案的参考代码：
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // 在此处自定义 UI 文案。
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        config.translationText.startLiveStreamingButton = '开始直播'
+        config.translationText.noHostOnline = '无主播在线'
+
+        let liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+}
+```

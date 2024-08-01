@@ -1,0 +1,111 @@
+# Config
+
+
+## ZegoUIKitPrebuiltLiveStreamingConfig
+直播初始化相关配置类。
+
+| 属性                                        | 类型                                                                       | 描述                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| role                                        | ZegoLiveStreamingRole                                                      | 定义用户在直播中的角色。默认值是 ZegoLiveStreamingRole.AUDIENCE。                                                                                                                                                                                                                                                                                                                                                                |
+| turnOnCameraWhenJoining                     | boolean                                                                    | 加入直播时是否自动打开摄像头。默认值为false。                                                                                                                                                                                                                                                                                                                                                                                    |
+| turnOnMicrophoneWhenJoining                 | boolean                                                                    | 加入直播时是否自动打开麦克风。默认值为false。                                                                                                                                                                                                                                                                                                                                                                                    |
+| turnOnCameraWhenCohosted                    | boolean                                                                    | 连麦时是否自动打开摄像头。默认值为true。                                                                                                                                                                                                                                                                                                                                                                                         |
+| useSpeakerWhenJoining                       | boolean                                                                    | 加入直播时是否使用扬声器。默认值为true。                                                                                                                                                                                                                                                                                                                                                                                         |
+| audioVideoViewConfig                        | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) | 音频和视频视图的配置。 请参考[隐藏声浪的 UI 效果组件](https://doc-zh.zego.im/article/20397)和[添加自定义 UI 组件](https://doc-zh.zego.im/article/20405)。                                                                                                                                                                                                                                                                        |
+| bottomMenuBarConfig                         | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   | 底部菜单栏的配置。请参考[自定义菜单栏](https://doc-zh.zego.im/article/20411)。                                                                                                                                                                                                                                                                                                                                                   |
+| memberListConfig                            | [ZegoMemberListConfig](#zegomemberlistconfig)                         | 直播间成员列表的相关配置。                                                                                                                                                                                                                                                                                                                                                                                                       |
+| confirmDialogInfo                           | ZegoDialogInfo                                                             | 如果`confirmDialogInfo`不为空，当主播停止直播或点击退出按钮或按下返回键时，则会显示确认对话框。ZegoDialogInfo内属性已经弃用，请使用`ZegoTranslationText.stopLiveDialogInfo`来修改对话框文本 。                                                                                                                                                                                                                                   |
+| zegoLiveStreamingEndListener                | ZegoLiveStreamingEndListener                                               | 直播结束监听器。当主播关闭直播的时候，观众会收到此回调。请参考[Event](https://doc-zh.zego.im/article/20425#ZegoLiveStreamingEndListener)文档。                                                                                                                                                                                                                                                                                   |
+| leaveLiveStreamingListener                  | ZegoLeaveLiveStreamingListener                                             | 离开直播监听器。点击直播预览页面的返回按钮或者直播页面的退出按钮会触发此回调，默认行为是退出并关闭直播页面，如果你自定义了此接口，则默认行为不会执行，需要您主动关闭直播页面。请参考[Event](https://doc-zh.zego.im/article/20425#ZegoLeaveLiveStreamingListener)文档。                                                                                                                                                           |
+| removedFromRoomListener                     | ZegoMeRemovedFromRoomListener                                              | 从房间中被移除的监听器。如果被挤下线或者被踢出房间会触发此回调，默认行为是退出直播间并关闭直播页面，如果你自定义了此接口，则默认行为不会执行，需要您主动关闭直播页面。请参考[Event](https://doc-zh.zego.im/article/20425#ZegoMeRemovedFromRoomListener)文档。                                                                                                                                                                    |
+| translationText                             | ZegoTranslationText                                                        | 请参考[切换语言](https://doc-zh.zego.im/article/20553)和[自定义 UI 界面文案](https://doc-zh.zego.im/article/20408)                                                                                                                                                                                                                                                                                                               |
+| enableCoHosting                             | boolean                                                                    | 是否启用连麦功能                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| markAsLargeRoom                             | boolean                                                                    | 是否将房间标记为大型房间（超过 500 人为大房间）。如果你的直播人数会超过500人请将该标记设置为true。默认值是false。                                                                                                                                                                                                                                                                                                                |
+| needConfirmWhenOthersTurnOnYourCamera       | boolean                                                                    | 当其他人打开您的摄像头时，是否需要确认。默认值是true。                                                                                                                                                                                                                                                                                                                                                                          |
+| needConfirmWhenOthersTurnOnYourMicrophone   | boolean                                                                    | 当其他人打开您的麦克风时，是否需要确认。默认值是true。                                                                                                                                                                                                                                                                                                                                                                          |
+| othersTurnOnYourCameraConfirmDialogInfo     | ZegoDialogInfo                                                             | 当其他人打开您的摄像头时，显示的确认对话框信息。                                                                                                                                                                                                                                                                                                                                                                                 |
+| othersTurnOnYourMicrophoneConfirmDialogInfo | ZegoDialogInfo                                                             | 当其他人打开您的麦克风时，显示的确认对话框信息。                                                                                                                                                                                                                                                                                                                                                                                 |
+| startLiveButton                             | ZegoStartLiveButton                                                        | 用于自定义开始直播按钮，如果值不为空，将会替换默认的开始直播按钮。                                                                                                                                                                                                                                                                                                                                                               |
+| onStartLiveButtonPressed                    | View.OnClickListener                                                       | 默认的开始直播按钮被按下时的监听器。自定义直播按钮后不会再触发。                                                                                                                                                                                                                                                                                                                                                                 |
+| zegoLayout                                  | ZegoLayout                                                                 | 直播布局配置，可以设置画中画布局和网格布局。                                                                                                                                                                                                                                                                                                                                                                                     |
+| screenSharingVideoConfig                    | ZegoPrebuiltVideoConfig                                                    | 屏幕共享直播的配置，目前仅支持设置分辨率。默认是540P。                                                                                                                                                                                                                                                                                                                                                                           |
+| videoConfig                                 | ZegoPrebuiltVideoConfig                                                    | 视频画面配置，目前仅支持设置分辨率。默认是360P。                                                                                                                                                                                                                                                                                                                                                                                 |
+| avatarViewProvider                          | ZegoAvatarViewProvider                                                     | 自定义用户头像，直播页面会在适当的时候调用此接口来设置用户头像                                                                                                                                                                                                                                                                                                                                                                   |
+| pkBattleConfig                              | [ZegoLiveStreamingPKBattleConfig](#zegolivestreamingpkbattleconfig)   | 主播 PK 的配置。请参考[PK 连麦](https://doc-zh.zego.im/article/20389#5_1)。                                                                                                                                                                                                                                                                                                                                                      |
+| beautyConfig                                | [ZegoBeautyPluginConfig](#zegobeautypluginconfig)                     | 美颜插件配置，需要添加美颜插件后才会生效。请参考[自定义美颜相关功能](https://doc-zh.zego.im/article/20560)。                                                                                                                                                                                                                                                                                                                     |
+| showMemberButton                            | boolean                                                                    | 是否在右上角显示成员按钮。默认值是true。                                                                                                                                                                                                                                                                                                                                                                                         |
+| host(boolean enableCoHosting)               | 静态方法                                                                   | 创建一个适用于主持人角色的直播配置实例，根据传入参数决定是否启用连麦功能，启用后会显示邀请连麦按钮、用户列表更多按钮等。如果需要连麦功能，需要配置`signaling` 插件，请参考 [快速开始\|_blank](!Live_Streaming_Kit-Quick_Start) 部分。<br/>主持人的默认配置包括：<br/>- 角色设置成 主持人<br/>- 进入直播时自动打开摄像头<br/>- 进入直播时自动打开麦克风<br/>- 退出直播前会有确认弹窗<br/>你也可以再这个基础上继续自定义相关参数。 |
+| audience(boolean enableCoHosting)           | 静态方法                                                                   | 创建一个适用于观众角色的直播配置实例，根据传入参数决定是否启用连麦功能，启用后会显示申请连麦按钮。如果需要此功能，需要配置`signaling` 插件，请参考 [快速开始\|_blank](!Live_Streaming_Kit-Quick_Start) 部分。<br/>观众的默认配置包括：<br/>- 角色设置成观众<br/>你也可以再这个基础上继续自定义相关参数。                                                                                                                         |
+
+
+
+## ZegoPrebuiltAudioVideoViewConfig
+
+互动直播视图设置类。
+
+| 属性                     | 类型                       | 描述                                                                                                                                      |
+| ------------------------ | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| showSoundWaveOnAudioView | boolean                    | 是否在音频视图上显示声浪效果。默认为true。                                                                                                |
+| useVideoViewAspectFill   | boolean                    | 是否等比缩放填充整个 View，可能有部分画面被裁减。默认为true。                                                                             |
+| provider                 | ZegoForegroundViewProvider | 前景视图提供者，使用 `transient` 关键字标记，表示序列化时不包括此字段。请参考[添加自定义 UI 组件](https://doc-zh.zego.im/article/20405)。 |
+
+
+
+
+## ZegoBottomMenuBarConfig
+
+互动直播菜单栏按钮相关类
+
+| 属性                    | 类型                         | 描述                                             |
+| ----------------------- | ---------------------------- | ------------------------------------------------ |
+| hostButtons             | List\<ZegoMenuBarButtonName> | 主播的菜单栏按钮列表。                           |
+| coHostButtons           | List\<ZegoMenuBarButtonName> | 连麦用户的菜单栏按钮列表。                       |
+| audienceButtons         | List\<ZegoMenuBarButtonName> | 观众的菜单栏按钮列表。                           |
+| menuBarButtonsMaxCount  | int                          | 菜单栏按钮的最大数量。默认值为4。                |
+| showInRoomMessageButton | boolean                      | 是否在菜单栏中显示房间内消息按钮。默认值为true。 |
+
+
+
+
+## ZegoMemberListConfig
+
+互动直播成员列表配置类。 
+
+| 属性                       | 类型                           | 描述                                                           |
+| -------------------------- | ------------------------------ | -------------------------------------------------------------- |
+| memberListItemViewProvider | ZegoMemberListItemViewProvider | 成员列表项视图的提供者，用于自定义成员列表中每个成员项的视图。 |
+
+
+
+## ZegoLiveStreamingPKBattleConfig
+
+互动直播 PK 视图设置类。
+
+| 属性                           | 类型                                   | 描述                                                                               |
+| ------------------------------ | -------------------------------------- | ---------------------------------------------------------------------------------- |
+| pkBattleViewTopProvider        | ZegoLiveStreamingPKBattleViewProvider  | 主播PK时会在适当的时机调用此接口来获取自定义传入的View并显示在主播PK的视图顶部。   |
+| pkBattleViewBottomProvider     | ZegoLiveStreamingPKBattleViewProvider  | 主播PK时会在适当的时机调用此接口来获取自定义传入的View并显示在主播PK的视图底部。   |
+| pkBattleViewForegroundProvider | ZegoLiveStreamingPKBattleViewProvider  | 主播PK时会在适当的时机调用此接口来获取自定义传入的View并显示在主播PK的视图的上层。 |
+| hostReconnectingProvider       | ZegoLiveStreamingPKBattleViewProvider2 | 主播PK时会在适当的时机调用此接口来获取自定义传入的View并显示在断网重连的视图上层。 |
+
+
+
+
+
+
+
+
+
+
+## ZegoBeautyPluginConfig
+
+互动直播美颜插件设置类。
+
+| 属性                            | 类型                               | 描述                                                                    |
+| ------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| effectsTypes                    | List\<ZegoBeautyPluginEffectsType> | 根据`ZegoBeautyPluginEffectsType`的枚举类型，动态配置需要哪些美颜效果。 |
+| innerText                       | ZegoBeautyPluginInnerText          | 用于设置插件内部文本的配置对象，可用于调整 UI 上的文案。                |
+| uiConfig                        | ZegoBeautyPluginUIConfig           | 用于配置插件 UI 的对象，可以设置部分图片、文字颜色大小等等。            |
+| enableFaceDetection             | boolean                            | enableFaceDetection                                                     |
+| beautyEventHandler              | IBeautyEventHandler                | 美颜事件处理器，用于处理美颜相关的事件。                                |
+| segmentationBackgroundImageName | String                             | 指定分割背景所使用的图片名称。                                          |

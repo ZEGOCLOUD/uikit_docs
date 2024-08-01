@@ -1,0 +1,93 @@
+# 功能地图
+
+- - -
+
+互动直播 UIKit 提供默认行为和风格，但如果默认行为和样式不能完全满足您的需求，您也可以自定义 UIKit。
+
+图中显示的数字与特定功能列表中的类别相对应。
+
+<a id="t1" href="#开始直播界面">1 开始直播界面</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t2" href="#连麦界面">2 连麦界面</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t3" href="#底部菜单栏">3 底部菜单栏</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t4" href="#成员列表视图">4 成员列表视图</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t5" href="#PK 界面">5 PK 界面</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t6" href="#退出直播确认">6 退出直播确认</a>
+    
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/feature_map/live_streaming_kit_iOS_1_new.png" /></Frame>
+
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/feature_map/live_streaming_kit_iOS_new_2.png" /></Frame>
+
+<table>
+<tbody><tr>
+<th><div style={{width: "150px"}}>类别</div> </th>
+<th><div style={{width: "150px"}}>功能</div> </th>
+<th>描述</th>
+</tr>
+<tr id="开始直播界面">
+<td><a href="#t1">1 开始直播界面</a></td>
+<td>自定义开始直播界面</td>
+<td>支持：
+<ul><li>设置进入通话时本地设备（包括摄像头、麦克风、扬声器）状态。</li><li>设置开始直播按钮。</li><li>监听开始直播按钮的点击事件。</li></ul></td>
+</tr>
+<tr id="连麦界面">
+<td rowspan="4"><a href="#t2">2 连麦界面</a></td>
+<td>切换视频填充模式</td>
+<td>支持以下视频画面填充模式：
+<ul><li>裁剪填充。</li><li>等比例填充。</li></ul></td>
+</tr>
+<tr>
+<td>[添加自定义 UI 组件](Customize%20the%20livestream/Add%20custom%20UI%20components.mdx)</td>
+<td>支持在视图顶层添加设置组件。</td>
+</tr>
+<tr>
+<td>调整布局</td>
+<td><ul><li>提供画中画和宫格式两种视图布局。</li><li>画中画布局支持设置小视图位置、大小和间距，点击切换大小视图、设置视图背景与颜色</li><li>宫格式布局支持设置视图间距，以及全屏显示屏幕共享。</li></ul></td>
+</tr>
+<tr>
+<td>[隐藏声浪效果](Customize%20the%20livestream/Hide%20components.mdx)</td>
+<td>用户在关闭摄像头后，用户头像周围默认显示声浪（可关闭）。</td>
+</tr>
+<tr id="底部菜单栏">
+<td><a href="#t3">3 底部菜单栏</a></td>
+<td>[自定义底部菜单栏](Customize%20the%20livestream/Customize%20the%20menu%20bar.mdx)</td>
+<td>支持：
+<ul><li>添加自定义的按钮。</li><li>增减菜单栏按钮。</li><li>设置菜单栏是否可见。</li><li>设置是否自动隐藏菜单栏。</li><li>设置可否通过点击隐藏菜单栏。</li><li>设置菜单栏风格。</li><li>设置按钮个数（至多5个）。</li><li>显示聊天按钮。</li></ul></td>
+</tr>
+<tr id="成员列表视图">
+<td><a href="#t4">4 成员列表视图</a></td>
+<td>展示房间成员列表</td>
+<td>菜单栏添加成员列表按钮后，启用成员列表视图，支持设置成员列表 item view，以及配置是否展示麦克风摄像头状态 。</td>
+</tr>
+<tr id="PK 界面">
+<td><a href="#t5">5 PK 界面</a></td>
+<td>[实现 PK 连麦](Enhance%20the%20livestream/PK%20battles.mdx)</td>
+<td>支持在 PK 界面的上方、下方和顶部添加自定义的 View。</td>
+</tr>
+<tr id="退出直播确认">
+<td><a href="#t6">6 退出直播确认</a></td>
+<td>[实现退出直播确认对话框](Customize%20the%20livestream/Set%20a%20leave%20confirmation%20dialog.mdx)</td>
+<td>支持添加一个直播结束确认的对话框，以便在用户点击“结束直播”按钮或 Android 退出按钮时，确认用户是否要退出直播。</td>
+</tr>
+<tr>
+<td rowspan="6">其他</td>
+<td>[自定义 UI 文本](Customize%20the%20livestream/Modify%20User%20Interface%20text.mdx)。</td>
+<td>支持调整界面文本。</td>
+</tr>
+<tr>
+<td>[实现纯语音互动](Customize%20the%20livestream/Implement%20an%20audio-only%20live.mdx)</td>
+<td>支持实现纯语音直播。</td>
+</tr>
+<tr>
+<td>连麦关闭摄像头</td>
+<td>支持设置连麦时用户的摄像头为关闭状态。</td>
+</tr>
+<tr>
+<td>开启本端设备遭远端用户打开的提醒</td>
+<td>当远端用户想要开启本端设备（摄像头、麦克风）时，支持设置是否需要本端用户确认，以及修改相关对话框上的文本。</td>
+</tr>
+<tr>
+<td>实现大房间直播</td>
+<td>支持创建容纳超过 500 名用户的直播间。</td>
+</tr>
+<tr>
+<td>监听回调</td>
+<td>支持监听以下回调：<ul><li>直播结束：可用于 [强制关闭直播间](Customize%20the%20livestream/Forcefully%20end%20a%20livestream%20room.mdx)。</li><li>离开直播。</li><li>被踢出直播间。</li></ul></td>
+</tr>
+</tbody></table>

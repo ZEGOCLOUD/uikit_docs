@@ -1,0 +1,169 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md";
+
+# 快速开始
+
+- - -
+
+## 准备环境
+
+在开始集成互动直播 UIKit 前，请确保开发环境满足以下要求：
+
+<EnviromentRequiremenZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+#### 1 添加 ZegoUIKitPrebuiltLiveStreaming 作为依赖项
+1. 打开终端，前往到项目的根目录，并运行以下命令创建 `podfile`：
+    ```bash
+    pod init
+    ```
+2. 编辑 `Podfile` 文件添加基本依赖项：
+    ```ruby
+    pod 'ZegoUIKitPrebuiltLiveStreaming'
+    ```
+3. 在终端中运行以下命令，使用 Cocoapods 下载所需的所有依赖项和 SDK：
+    ```bash
+    pod install
+    ```
+
+#### 2 导入 ZegoUIKit 和 ZegoUIKitPrebuiltCall
+
+在项目中导入 ZegoUIKit 和 ZegoUIKitPrebuiltCall。
+<CodeGroup>
+```swift title="swift"
+import ZegoUIKit
+import ZegoUIKitPrebuiltLiveStreaming
+//  MainViewController.swift
+class MainViewController: UIViewController {
+    // 其他代码...
+}
+  ```
+```objc title="objc"
+@import ZegoUIKit;
+@import ZegoUIKitPrebuiltLiveStreaming;
+@import ZegoUIKitSignalingPlugin;
+  ```
+</CodeGroup>
+
+
+### 项目配置
+
+打开`Info.plist`，在`dict`部分内添加以下代码：
+
+```plist
+<key>NSCameraUsageDescription</key>
+<string>我们需要相机访问权限以实现通话</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>我们需要麦克风访问权限以实现通话</string>
+```
+
+### 使用 ZegoUIKitPrebuiltLiveStreamingVC
+
+- 指定 `userID` 和 `userName` 来指定用户以实现直播服务。
+- `liveID` 代表您想要开始或观看的一场直播（目前仅支持一个主播）。
+
+<Note title="Note">
+
+- `userID`、`userName` 和 `liveID` 只能包含数字、字母和下划线 (_)。
+- 使用相同的 `liveID` 将进入相同的直播间，但直播间内只有一个用户可以作为主播加入，其他用户只能作为观众加入。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltLiveStreamingConfig.translationText`。
+</Note>
+
+<CodeGroup>
+```swift title="swift"
+// 您的 MainViewController.swift
+class MainViewController: UIViewController {
+    // 其他相关代码
+    var userID: String = <#UserID#>
+    var userName: String = <#UserName#>
+    var liveID: String = <#liveID#>
+    var appID: UInt32 = <#AppID#> // 从 ZEGO 控制台获取
+    var appSign: String = <#appSign#> // 从 ZEGO 控制台获取
+
+    // 房主开始直播
+    func startLive() {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, liveID: self.liveID, config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+
+    // 观众观看直播
+    func watchLive() {
+      let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+       // 修改语言为中文
+       config.translationText = ZegoTranslationText(language: .CHS)
+      let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, liveID: self.liveID, config: config)
+      liveVC.modalPresentationStyle = .fullScreen
+      self.present(liveVC, animated: true, completion: nil)
+    }
+
+}
+```
+```objc title="objc"
+@implementation ViewController
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+  // Do any additional setup after loading the view.
+  unsigned int appID =appID; // 从 ZEGO 控制台获取
+  NSString *appSign = @"appSign"; // 从 ZEGO 控制台获取
+  NSString *userName = @"userName";
+  NSString *userID =  @"userID";
+  NSString *roomID =  @"roomID";
+}
+
+// 房主开始直播
+- (void)startLive {
+    ZegoUIKitPrebuiltLiveStreamingConfig *config = [ZegoUIKitPrebuiltLiveStreamingConfig hostWithEnableSignalingPlugin:YES];
+    // 修改语言为中文
+    config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+   
+    ZegoUIKitPrebuiltLiveStreamingVC *liveVC = [[ZegoUIKitPrebuiltLiveStreamingVC alloc] init:appID appSign:appSign userID:userID userName:userName liveID:roomID config:config];
+
+    liveVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:liveVC animated:YES completion:^{
+
+    }];
+  }
+
+// 观众观看直播
+- (void)watchLive {
+    ZegoUIKitPrebuiltLiveStreamingConfig *config = [ZegoUIKitPrebuiltLiveStreamingConfig audienceWithEnableSignalingPlugin:YES];
+    // 修改语言为中文
+    config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+    
+    ZegoUIKitPrebuiltLiveStreamingVC *liveVC = [[ZegoUIKitPrebuiltLiveStreamingVC alloc] init:appID appSign:appSign userID:userID userName:userName liveID:roomID config:config];
+    
+    liveVC.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:liveVC animated:YES completion:^{
+    }];
+}
+```
+</CodeGroup>
+
+然后，通过呈现`liveVC`来实现直播互动。
+
+## 运行和测试
+
+至此，您已经完成了所有集成步骤。
+
+只需在 Xcode 中点击 **Run** 即可在设备上运行和测试您的应用程序。
+
+
+## 相关资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_ios" target="_blank">
+  获取完整示例代码。
+</Card>
+</CardGroup>

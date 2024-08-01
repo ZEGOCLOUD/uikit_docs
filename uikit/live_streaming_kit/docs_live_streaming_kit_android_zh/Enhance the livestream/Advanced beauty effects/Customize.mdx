@@ -1,0 +1,622 @@
+# 自定义美颜相关功能
+
+
+本文将为您介绍如何自定义美颜效果及 UI 样式，及如何管理美颜相关资源。
+
+<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/effects.png" /></Frame>
+
+## 前提条件
+
+
+在使用自定义美颜功能前，需保证已 [集成进阶美颜效果](./Integrate.mdx)。
+
+
+
+## 自定义美颜效果
+
+
+<Warning title="Warning">
+当前美颜效果包支持两种类型：**基础版和专业版**。
+- 基础版：仅包括基本美颜效果。
+- 专业版：包括面部美化、面部塑形、面部特征增强、美妆样式、贴纸和滤镜等其他功能。更多详情，请参考 [AI 美颜](https://doc-zh.zego.im/article/9556) 相关文档。
+</Warning>
+
+要自定义美颜效果，请在 `ZegoUIKitPrebuiltLiveStreamingConfig` 中配置 `beautyConfig`。
+
+### 美颜效果
+
+美颜效果包括 4 个功能：基础美颜效果、高级美颜效果（面部塑形）、面部特征增强和美妆样式。您可以启用所有四个功能，或者只选择其中几个。
+
+基础版只包括基础美颜效果，如果您需要其他功能，请选择专业版。
+
+#### 示例 1：选择基础美颜效果和高级美颜效果
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+**显示效果如下：**
+
+<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/basic.png" /></Frame>
+
+<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/advanced.png" /></Frame>
+
+#### 示例 2：选择所有四个功能
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+**显示效果如下：**
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/makeup.png" /></Frame>
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/style.png" /></Frame>
+
+### 滤镜
+
+滤镜包括共 10 种不同的滤镜效果，您可以使用以下代码进行设置：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+**显示效果如下：**
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/filter.png" /></Frame>
+
+### 贴纸
+
+贴纸功能需要相对较多的资源，您可以根据需要选择是否集成贴纸功能，详情可参考如下代码。
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.stickerTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+**显示效果如下：**
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/sticker.png" /></Frame>
+
+### 背景分割
+
+如需集成背景分割功能，可参考如下代码：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.addAll(ZegoBeautyPluginConfig.basicTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.advancedTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.makeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.styleMakeupTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.filterTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.stickerTypes());
+customTypes.addAll(ZegoBeautyPluginConfig.backgroundTypes());
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+对于背景分割中的肖像分割，您需要提供一张背景图片。您可以将图片放入 **BackgroundImages** 文件夹中，并通过 config 进行设置。
+
+```java
+BeautyResources/BackgroundImages/image1.jpg
+```
+
+您可以通过以下代码进行设置：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+List<ZegoBeautyPluginEffectsType> customTypes = new ArrayList<>();
+customTypes.add(ZegoBeautyPluginEffectsType.FILTER_GRAY_FILMLIKE);
+customTypes.add(ZegoBeautyPluginEffectsType.FILTER_DREAMY_COZILY);
+
+config.beautyConfig.effectsTypes = customTypes;
+
+//...
+```
+
+
+## 自定义 UI
+
+在底部弹出的 BottomBar 支持自定义 UI，每部分内容都支持自定义    ，效果如下。
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/bottombar_caption1.jpg" /></Frame>
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/bottombar_caption2.jpg" /></Frame>
+
+### 自定义文本
+
+如需自定义与高级美颜效果特性相关的文本，可以使用 `ZegoBeautyPluginInnerText`，详情请参考如下代码：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.innerText.titleFilter = "滤镜";
+config.beautyConfig.innerText.beautyBasicSmoothing = "磨皮";
+config.beautyConfig.innerText.beautyMakeupLipstick = "口红";
+
+//...   
+```
+
+### 自定义背景颜色
+
+如需自定义视图的背景颜色，请参考如下代码：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.backgroundColor = Color.RED;
+
+//...   
+```
+
+### 自定义文本颜色
+
+如需自定义文本颜色，请参考如下代码：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.selectedHeaderTitleTextColor = Color.GREEN;
+config.beautyConfig.uiConfig.selectedTextColor = Color.CYAN;
+
+//...   
+```
+
+### 自定义返回按钮图标
+
+如需自定义返回按钮图标，请参考如下代码：
+
+```java
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.uiConfig.backIcon = getDrawable(R.drawable.custom_back_icon); 
+
+//...   
+```
+
+## 资源管理
+
+上述的下载资源，包含所有特性的资源。但如果您不需要所有特性，您可以删除一些不必要的资源以减小应用包的大小。
+
+### 资源描述
+
+* 必要资源（必要的**所有特性**，不能删除）
+
+    ```
+    BeautyResources/CommonResources.bundle
+    BeautyResources/FaceDetection.model
+    ```
+
+* 贴纸的**必要资源**（如果您需要使用贴纸特性，则不能删除）
+
+    ```
+    BeautyResources/StickerBaseResources.bundle
+    ```
+
+* 背景分割的**必要资源**（如果您需要使用背景分割特性，则不能删除）
+    ```
+    BeautyResources/BackgroundSegmentation.model
+    ```
+
+* 特性资源文件夹      
+  特性资源文件夹中的每个资源，都对应一个特定的特性。如果您需要使用某个特性，则需要保留相应的资源文件夹，否则，您可以删除它。
+    ```
+    BeautyResources/AdvancedResources
+    ```
+
+### 详细的特性资源 
+
+<Accordion title="点击这里查看详细的特性资源表" defaultOpen="false">
+
+<table>
+
+<tbody><tr>
+<th><div style={{width: "100px"}}>特性</div></th>
+<th><div style={{width: "100px"}}>子特性</div></th>
+<th>枚举名称</th>
+<th>资源名称</th>
+</tr>
+<tr>
+<td rowspan="53">美颜</td>
+<td rowspan="6">基础</td>
+<td>BASIC_SMOOTHING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BASIC_SKIN_TONE</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BASIC_BLUSHER</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BASIC_SHARPENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BASIC_WRINKLES</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BASIC_DARK_CIRCLES</td>
+<td>-</td>
+</tr>
+<tr>
+<td rowspan="12">高级</td>
+<td>ADVANCED_FACE_SLIMMING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_EYES_ENLARGING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_EYES_BRIGHTENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_CHIN_LENGTHENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_MOUTH_RESHAPE</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_TEETH_WHITENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_NOSE_SLIMMING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_NOSE_LENGTHENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_FACE_SHORTENING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_MANDIBLE_SLIMMING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_CHEEKBONE_SLIMMING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ADVANCED_FOREHEAD_SLIMMING</td>
+<td>-</td>
+</tr>
+<tr>
+<td rowspan="30">美妆</td>
+<td>MAKEUP_LIPSTICK_CAMEO_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickCameoPink.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_LIPSTICK_SWEET_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickSweetOrange.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_LIPSTICK_RUST_RED&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickRustRed.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_LIPSTICK_CORAL</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickCoral.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_LIPSTICK_RED_VELVET</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupLipstickRedVelvet.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_BLUSHER_SLIGHTLY_DRUNK&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_BLUSHER_PEACH&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherPeach.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_BLUSHER_MILKY_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_BLUSHER_APRICOT_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherApricotPink.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_BLUSHER_SWEET_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupBlusherSweetOrange.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELASHES_NATURAL</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesNatural.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELASHES_TENDER&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesTender.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELASHES_CURL&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesCurl.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELASHES_EVERLONG&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesEverlong.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELASHES_THICK&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelashesThick.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELINER_NATURAL&nbsp;</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerNatural.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELINER_CAT_EYE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerCatEye.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELINER_NAUGHTY</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerNaughty.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELINER_INNOCENT</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerInnocent.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYELINER_DIGNIFIED</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyelinerDignified.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYESHADOW_PINK_MIST</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYESHADOW_SHIMMER_PINK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYESHADOW_TEA_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYESHADOW_BRIGHT_ORANGE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_EYESHADOW_MOCHA_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_COLORED_CONTACTS_DARKNIGHT_BLACK</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_COLORED_CONTACTS_STARRY_BLUE</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_COLORED_CONTACTS_BROWN_GREEN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_COLORED_CONTACTS_LIGHTS_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle</td>
+</tr>
+<tr>
+<td>MAKEUP_COLORED_CONTACTS_CHOCOLATE_BROWN</td>
+<td>BeautyResources/AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle</td>
+</tr>
+<tr>
+<td rowspan="5">风格妆</td>
+<td>STYLE_MAKEUP_INNOCENT_EYES</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupInnocentEyes.bundle</td>
+</tr>
+<tr>
+<td>STYLE_MAKEUP_MILKY_EYES</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupMilkyEyes.bundle</td>
+</tr>
+<tr>
+<td>STYLE_MAKEUP_CUTIE_COOL</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupCutieCool.bundle</td>
+</tr>
+<tr>
+<td>STYLE_MAKEUP_PURE_SEXY</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupPureSexy.bundle</td>
+</tr>
+<tr>
+<td>STYLE_MAKEUP_FLAWLESS</td>
+<td>BeautyResources/AdvancedResources/beautyStyleMakeupFlawless.bundle</td>
+</tr>
+<tr>
+<td rowspan="10">滤镜梦境</td>
+<td rowspan="4">自然</td>
+<td>FILTER_NATURAL_CREAMY</td>
+<td>BeautyResources/AdvancedResources/filterNaturalCreamy.bundle</td>
+</tr>
+<tr>
+<td>FILTER_NATURAL_BRIGHTEN</td>
+<td>BeautyResources/AdvancedResources/filterNaturalBrighten.bundle</td>
+</tr>
+<tr>
+<td>FILTER_NATURAL_FRESH</td>
+<td>BeautyResources/AdvancedResources/filterNaturalFresh.bundle</td>
+</tr>
+<tr>
+<td>FILTER_NATURAL_AUTUMN</td>
+<td>BeautyResources/AdvancedResources/filterNaturalAutumn.bundle</td>
+</tr>
+<tr>
+<td rowspan="3">灰调</td>
+<td>FILTER_GRAY_MONET</td>
+<td>BeautyResources/AdvancedResources/filterGrayMonet.bundle</td>
+</tr>
+<tr>
+<td>FILTER_GRAY_NIGHT</td>
+<td>BeautyResources/AdvancedResources/filterGrayNight.bundle</td>
+</tr>
+<tr>
+<td>FILTER_GRAY_FILMLIKE</td>
+<td>BeautyResources/AdvancedResources/filterGrayFilmlike.bundle</td>
+</tr>
+<tr>
+<td rowspan="3">梦境</td>
+<td>FILTER_DREAMY_SUNSET</td>
+<td>BeautyResources/AdvancedResources/filterDreamySunset.bundle</td>
+</tr>
+<tr>
+<td>FILTER_DREAMY_COZILY</td>
+<td>BeautyResources/AdvancedResources/filterDreamyCozily.bundle</td>
+</tr>
+<tr>
+<td>FILTER_DREAMY_SWEET</td>
+<td>BeautyResources/AdvancedResources/filterDreamySweet.bundle</td>
+</tr>
+<tr>
+<td rowspan="9">贴纸</td>
+<td rowspan="9">贴纸</td>
+<td>STICKER_ANIMAL</td>
+<td>-</td>
+</tr>
+<tr>
+<td>STICKER_DIVE</td>
+<td>BeautyResources/AdvancedResources/stickerDive.bundle</td>
+</tr>
+<tr>
+<td>STICKER_CAT</td>
+<td>BeautyResources/AdvancedResources/stickerCat.bundle</td>
+</tr>
+<tr>
+<td>STICKER_WATERMELON</td>
+<td>BeautyResources/AdvancedResources/stickerWatermelon.bundle</td>
+</tr>
+<tr>
+<td>STICKER_DEER</td>
+<td>BeautyResources/AdvancedResources/stickerDeer.bundle</td>
+</tr>
+<tr>
+<td>STICKER_COOL_GIRL</td>
+<td>BeautyResources/AdvancedResources/stickerCoolGirl.bundle</td>
+</tr>
+<tr>
+<td>STICKER_CLOWN</td>
+<td>BeautyResources/AdvancedResources/stickerClown.bundle</td>
+</tr>
+<tr>
+<td>STICKER_CLAW_MACHINE</td>
+<td>BeautyResources/AdvancedResources/stickerClawMachine.bundle</td>
+</tr>
+<tr>
+<td>STICKER_SAILOR_MOON</td>
+<td>BeautyResources/AdvancedResources/stickerSailorMoon.bundle</td>
+</tr>
+<tr>
+<td rowspan="3">背景</td>
+<td rowspan="3">-</td>
+<td>BACKGROUND_PORTRAIT_SEGMENTATION</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BACKGROUND_MOSAICING</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BACKGROUND_GAUSSIAN_BLUR</td>
+<td>-</td>
+</tr>
+</tbody></table>
+</Accordion>
+
+
+### 监听 BeautyPlugin 事件
+
+您可以通过 `config.beautyConfig.beautyEventHandler` 监听 BeautyPlugin 事件，如果您在 `config.beautyConfig` 中启用了 faceDetection，可以在 `onFaceDetectionResult` 中接收面部检测数据。
+
+<Warning title="Warning">
+
+请特别注意 `onInitResult` 回调，如果初始化失败，美颜功能将无法使用，主要原因如下：
+- 当前应用的 ApplicationID 和 AppID 与注册的 ApplicationID 和 AppID 不一致。
+- 或 License 许可证已过期，请联系 ZEGO 技术支持处理。
+</Warning>
+
+```java
+
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+// ...
+
+config.beautyConfig.beautyEventHandler = new IBeautyEventHandler() {
+    @Override
+    public void onInitResult(int errorCode, String message) {
+        super.onInitResult(errorCode, message);
+        Log.d(TAG, "onInitResult() called with: errorCode = [" + errorCode + "], message = [" + message + "]");
+    }
+
+    @Override
+    public void onError(int errorCode, String message) {
+        super.onError(errorCode, message);
+        Log.d(TAG, "onError() called with: errorCode = [" + errorCode + "], message = [" + message + "]");
+    }
+
+    @Override
+    public void onFaceDetectionResult(ZegoBeautyPluginFaceDetectionResult[] results) {
+        super.onFaceDetectionResult(results);
+        Log.d(TAG, "onFaceDetectionResult() called with: results = [" + results + "]");
+    }
+};
+
+//... 
+```

@@ -1,0 +1,109 @@
+# 房间内消息
+
+
+## 功能概述
+
+ZEGO UIKit 不仅支持发送常见的聊天消息或弹幕，而且支持赠送虚拟礼物。参考本文档，您将了解如何集成这两个功能。
+
+## 自定义显示房间消息
+
+当屏幕右侧的聊天窗口关闭时，屏幕左下角将默认实时显示聊天消息和房间成员的加入/离开消息。但支持分别设置：
+- 隐藏左侧消息的动态显示
+- 设置和监听房间消息的回调，并自定义房间消息的显示。
+
+```typescript
+// 示例
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.joinRoom({
+    lowerLeftNotification:{
+        showUserJoinAndLeave: false, // 在左下角隐藏房间成员加入/离开通知。
+        showTextChat: false, // 在左下角隐藏文本聊天。
+    },
+    onInRoomMessageReceived: (messageInfo: InRoomMessageInfo) => {
+        console.warn("onInRoomMessageReceived", messageInfo);
+        // 使用适当的UI元素包装接收到的房间消息，并在对应位置展示。
+    },
+    // 要自定义用户加入/离开通知的显示方式，可以设置和实现 [onUserJoin] 和 [onUserLeave] 房间回调。
+    onUserJoin:(user) => {
+    },
+    onUserLeave:(user) => {
+    }
+})
+
+//接口
+interface InRoomMessageInfo {
+    fromUser: ZegoUser;
+    message: string;
+    sendTime: number;
+    messageID: number;
+}
+```
+
+
+## 使用 ZIM 增强消息功能
+
+### 1 安装ZIM
+
+ZEGO UiKit 内部支持使用 ZIM 扩展消息功能。在使用之前需要集成 ZIM。
+
+1. 选择以下任一方式导入 ZIM SDK：
+
+<Tabs>
+<Tab title="NPM">
+a. 安装插件。
+    ```js
+    npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.5.0 --save 
+    ```
+b. 在项目的`js`或`ts`文件中导入Call Kit：
+    ```js
+    import { ZIM } from "zego-zim-web";
+    import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+    ```
+</Tab>
+<Tab title="HTML">
+在`HTML`页面中导入以下脚本代码：   
+（**更推荐的方式**：下载并保存在您的应用服务器上，并将其导入到相应的路径。）
+```html
+<script src="https://unpkg.com/zego-zim-web@2.5.0/index.js"></script>
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+```
+</Tab>
+</Tabs>
+
+2. 使用 `Create` 方法获取 ZEGO UIKit 实例后，需要将 `ZIM` 安装到实例中。
+
+    ```js
+    const zp = ZegoUIKitPrebuilt.create(TOKEN);
+    zp.addPlugins({ ZIM });
+    ```
+
+### 2 发送自定义信令消息
+
+- 您可以调用服务端 API [发送房间消息](https://doc-zh.zego.im/article/12225) 发送 MessageType=2 的信令消息。
+
+- 除了服务器端 API 接口， ZEGO UIKit还提供了客户端接口，供您发送自定义信令消息。
+
+    ```typescript
+    // 示例
+    const zp = ZegoUIKitPrebuilt.create(token);
+    zp.addPlugins({ ZIM });
+    zp.sendInRoomCustomCommand({msg:'1123'}).then(res => console.log(res)).catch(err=> console.error(err))
+    ```
+
+### 3 接收自定义信令消息
+
+```typescript
+// 示例
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.addPlugins({ ZIM });
+zp.joinRoom({
+    onInRoomCustomCommandReceived(messages:ZegoSignalingInRoomCommandMessage[]) {
+        console.warn("onInRoomCustomCommandReceived", messages);
+    },
+});
+```
+
+### 4 使用自定义信令消息实现礼物信令
+
+1. 发送礼物：您可以调用服务端 API [发送房间消息](https://doc-zh.zego.im/article/12225) 发送 MessageType=2 的命令消息，以及对命令消息进行编码以表示不同的礼物。
+2. 接收礼物：使用上述提到的 `onInRoomCustomCommandReceived` 回调接收从服务器发送的礼物消息。

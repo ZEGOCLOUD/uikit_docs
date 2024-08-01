@@ -1,0 +1,174 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import AndroidEnviromentRequirementZh from "/snippets/uikit/AndroidEnviromentRequirementZh.md";
+
+# 快速开始（包含连麦功能）
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live_with_cohosting2.gif" />
+</Frame>
+
+## 准备环境
+
+在开始集成互动直播 UIKit 前，请确保开发环境满足以下要求：
+
+<AndroidEnviromentRequirementZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+1. 添加 `jitpack` 配置。
+   - 如果您的 Android Gradle 插件是 **7.1.0 或更高版本**：进入项目根目录，打开 `settings.gradle` 文件，以如下方式在 `dependencyResolutionManagement` > `repositories` 中添加 jitpack：
+
+      ```groovy
+      dependencyResolutionManagement {
+         repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+         repositories {
+            google()
+            mavenCentral()
+            maven { url 'https://storage.zego.im/maven'  }   // <- 添加这行。
+            maven { url 'https://www.jitpack.io'  } // <- 添加这行。
+         }
+      }
+      ```
+
+    <Warning title="Warning">
+
+    如果您在 `settings.gradle` 中找不到上述字段，可能是因为您的 Android Gradle 插件版本低于 v7.1.0。
+    更多详细信息，请参阅 [Android Gradle 插件发布说明 v7.1.0](https://developer.android.com/studio/releases/gradle-plugin#settings-gradle)。
+    </Warning>
+
+    - 如果您的 Android Gradle 插件是 **7.1.0 之前** 的版本：进入项目根目录，打开 `build.gradle` 文件，以如下方式在 `allprojects`->`repositories` 中添加 jitpack：
+
+      ```groovy
+      allprojects {
+         repositories {
+            google()
+            mavenCentral()
+            maven { url 'https://storage.zego.im/maven'  }   // <- 添加这行。
+            maven { url "https://jitpack.io"  }  // <- 添加这行。
+         }
+      }
+      ```
+
+2. 修改应用级别的 `build.gradle` 文件。
+
+   ```groovy
+   dependencies {
+      ...
+      implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+'    // 添加这行到您的模块级 build.gradle 文件的依赖部分，通常命名为 [app]。
+      implementation 'com.github.ZEGOCLOUD:zego_uikit_signaling_plugin_android:+'  // 添加这行到您的模块级 build.gradle 文件的依赖部分，通常命名为 [app]。
+   }
+   ```  
+
+### 使用互动直播 UIKit
+
+- 指定 userID 和 userName 来指定用户以实现直播服务。
+- liveID 代表您想要开始或观看的一场直播。
+
+<Note title="Note">
+
+- `userID`、`userName` 和 `liveID` 只能包含数字、字母和下划线 (_)。
+- 使用相同的 `liveID` 将进入同一个直播间。且同一个直播间内，只有一个用户可以作为主播加入，其他用户需要作为观众加入，但观众可以连麦。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltLiveStreamingConfig.translationText`。
+
+</Note>
+
+
+<CodeGroup>
+```java title="Java"
+public class LiveActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addFragment();
+    }
+
+    public void addFragment() {
+        long appID = yourAppID; // 替换为您的 AppID
+        String appSign = yourAppSign; // 替换为您的 AppSign
+        String userID = yourUserID; // 替换为您的 UserID
+        String userName = yourUserName; // 替换为您的 UserName
+
+        boolean isHost = getIntent().getBooleanExtra("host", false);
+        String yourLiveID = getIntent().getStringExtra("liveID");
+
+        ZegoUIKitPrebuiltLiveStreamingConfig config;
+        if (isHost) {
+            config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
+        } else {
+            config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(true);
+        }
+            //修改为中文
+            config.translationText = new ZegoTranslationText(ZegoUIKitLanguage.CHS);
+        ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
+            appID, appSign, userID, userName,yourLiveID,config);
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+```kotlin title="Kotlin"
+class LiveActivity : AppCompatActivity() {
+   
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live)
+        addFragment()
+    }
+
+    private fun addFragment() {
+        val appID: Long = yourAppID // 替换为您的 AppID
+        val appSign = yourAppSign // 替换为您的 AppSign
+        val userID = YourUserID // 替换为您的 UserID
+        val userName = YourUserName // 替换为您的 UserName
+
+        val isHost = intent.getBooleanExtra("host", false)
+        val yourLiveID = intent.getStringExtra("liveID")
+
+        val config: ZegoUIKitPrebuiltLiveStreamingConfig
+        config = if (isHost) {
+            ZegoUIKitPrebuiltLiveStreamingConfig.host(true)
+        } else {
+            ZegoUIKitPrebuiltLiveStreamingConfig.audience(true)
+        }
+            //修改为中文
+            config.translationText = ZegoTranslationText(ZegoUIKitLanguage.CHS)
+        val fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(
+            appID, appSign, userID, userName, yourLiveID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+
+
+然后，您可以通过启动您的 `LiveActivity` 开始直播。
+
+## 运行 & 测试
+
+现在您已经完成了所有步骤。
+
+您只需在 Android Studio 中点击 **运行** 就可以在设备上运行和测试应用。
+
+## 资源
+
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_android" target="_blank">
+    点击此处获取完整的示例代码。
+</Card>
+</CardGroup>
