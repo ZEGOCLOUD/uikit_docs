@@ -1,0 +1,251 @@
+# 发送虚拟礼物
+
+## 功能简介
+
+
+社交应用中的虚拟礼物功能允许用户向主播发送虚拟礼物，这些礼物可以是各种物品，如咖啡、汽车等。
+
+通过发送虚拟礼物，观众可以在直播节目中与主播建立联系，并增强社交应用中的互动性和活跃度。
+
+本文档将为您介绍，如何实现虚拟礼物功能。
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/send_virtual_gift.gif" /></Frame>
+
+## 前提条件
+
+在实现虚拟礼物功能前，请确保已集成互动直播 UIKit，详情请参考 [快速开始（适用于连麦）](../Quick%20start/Quick%20start-(with%20cohosting).mdx)。
+
+## 实现流程
+
+### 创建虚拟礼物入口
+
+:::if{props.platform=undefined}
+创建一个用于发送虚拟礼物的入口，可通过配置 `ZegoUIKitPrebuiltLiveAudioRoomFragment.addButtonToBottomMenuBar` 添加按钮并添加相应的事件。
+
+```java
+ZegoUIKitPrebuiltLiveAudioRoomFragment fragment = ZegoUIKitPrebuiltLiveAudioRoomFragment.newInstance(appID,
+    appSign, userID, userName, roomID, config);
+
+// 在 liveAudioRoom 观众中添加礼物按钮
+GiftHelper giftHelper = new GiftHelper(findViewById(R.id.layout), userID, userName);
+View giftButton = giftHelper.getGiftButton(this, appID, serverSecret, roomID);
+fragment.addButtonToBottomMenuBar(Collections.singletonList(giftButton), ZegoLiveAudioRoomRole.AUDIENCE);
+```
+:::
+:::if{props.platform="iOS"}
+创建一个发送虚拟礼物的入口，即点击可以发送虚拟礼物的按钮。为此，通过配置 `bottomMenuBarConfig` 并监听相应的事件添加相应按钮。
+
+```swift
+let liveVC = ZegoUIKitPrebuiltLiveStreamingVC(你的应用ID, appSign: 你的应用签名, userID: 你的用户ID, userName: 你的用户名, liveID: 你的直播ID, config: 配置)
+
+// 添加礼物按钮。
+let giftButton = UIButton(type: .system)
+giftButton.backgroundColor = .red
+giftButton.setTitle("礼物", for: .normal)
+giftButton.setTitleColor(.white, for: .normal)
+giftButton.addTarget(self, action: #selector(sendGift), for: .touchUpInside)
+liveVC.addButtonToBottomMenuBar(giftButton, role: .audience)
+liveVC.addButtonToBottomMenuBar(giftButton, role: .coHost)
+
+liveVC.modalPresentationStyle = .fullScreen
+self.present(liveVC, animated: true, completion: nil)
+
+// 添加事件处理器。
+ZegoUIKit.shared.addEventHandler(self)
+```
+:::
+
+
+### 实现礼物发送逻辑
+
+当观众点击礼物发送按钮时，即可触发业务服务器的相应 API，请求参数如下：
+
+```json 请求参数示例
+{
+    "room_id": "room888",   // 直播房间 ID
+    "user_id": "user987",   // 礼物发送者的用户 ID
+    "user_name": "James",   // 礼物发送者的用户名
+    "gift_type": 1001,      // 礼物类型
+    "gift_count": 2,         // 礼物数量
+    "access_token": "fasd2r34dfasd...fasdf",    // 用于认证的Token
+    "timestamp": 1670814533,    // 请求时间戳
+}
+```
+
+您可以根据自己的业务需求灵活修改请求参数，一旦观众请求发送礼物，您的服务器将执行以下操作：
+
+1. 验证用户的账户余额是否满足基于参数所需的金额。
+2. 从用户的账户余额中扣除费用。
+3. 增加主播的礼物金额。
+
+观众在处理后收到相应的状态码，并创建一个消息队列，以通知主播和其他观众关于礼物的信息。
+
+通过使用 `Next.js` 来展示如何调用 ZEGO 服务器 API。您可以下载 [源代码](https://github.com/ZEGOCLOUD/zego_virtual_gift/blob/main/server_nextjs/pages/api/send_gift.js) 作为参考。
+
+### 通知主持人和观众显示礼物动画
+
+要向主持人和观众显示礼物动画，请使用 [发送房间内消息](https://doc-zh.zego.im/article/12225) API 并通过 `MessageType: 2` 发送通知。
+
+我们建议将多个礼物合并为一条消息，以避免超过每秒每个应用 ID 10 个请求的速率限制。例如：
+
+<Note title="Note">
+当收礼者遇到网络问题而未能接收到信号的情况下，可能会发送失败。
+</Note>
+
+
+```json
+{
+    "FromUserId": "serverID",
+    "RoomId": "room888",
+    "MessageType": 2,
+    "Priority": 1,
+    "MessageBody": {
+        "Message": [
+            {
+                "user_id": "user987",
+                "user_name": "James",
+                "gift_type": 1001, 
+                "gift_count": 2,
+                "timestamp": 1670814533,
+            },
+            ...
+        ],
+        "ExtendedData":"",
+    }
+}
+```
+
+### 监听礼物消息并显示礼物动画
+
+如需显示礼物动画，只需在客户端上监控礼物消息。一旦收到新的礼物消息，即可播放动画，不同的角色需要不同的礼物消息回调。
+
+为了获得酷炫的动画效果，使用 Lottie 或 SVGA 等动画库在屏幕上显示文件。
+
+#### 礼物发送者
+
+在发送礼物后，礼物发送者可以通过检查礼物发送 API 的状态码，来确认其是否成功交付。如果 API 返回成功代码，将显示礼物动画。
+
+:::if{props.platform=undefined}
+```java
+imageView.setOnClickListener(v -> {
+    // 在演示中，礼物是直接通过发送命令发送的。但是，
+    // 当您集成时，您需要通过您的业务服务器转发命令
+    // 以便处理结算相关的逻辑。
+    final String path = "https://zego-example-server-nextjs.vercel.app/api/send_gift"; 
+    JSONObject jsonObject = new JSONObject();
+    try {
+        jsonObject.put("app_id", appID);
+        jsonObject.put("server_secret", serverSecret);
+        jsonObject.put("room_id", roomID);
+        jsonObject.put("user_id", userID);
+        jsonObject.put("user_name", userName);
+        jsonObject.put("gift_type", 1001);
+        jsonObject.put("gift_count", 1);
+        jsonObject.put("timestamp", System.currentTimeMillis());
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+    String jsonString = jsonObject.toString();
+    new Thread() {
+        public void run() {
+            httpPost(path, jsonString, () -> showAnimation());
+        }
+    }.start();
+});
+```
+:::
+:::if{props.platform="iOS"}
+```swift
+@objc func sendGift() {
+    let parameters: [String: Any] = [
+        "app_id": 应用ID,
+        "server_secret": 服务器密钥,
+        "room_id": liveIDTextField.text!,
+        "user_id": 用户ID,
+        "user_name": 用户名!,
+        "gift_type": 1001,
+        "gift_count": 1,
+        "timestamp": "123"
+    ]
+    
+    let session = URLSession(configuration: .default)
+    let url = URL(string: "https://zego-virtual-gift.vercel.app/api/send_gift") 
+    var request = URLRequest(url: url!)
+    request.httpMethod = "POST"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    do {
+        let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        request.httpBody = jsonData
+    } catch {
+    }
+
+    print("开始发送礼物...")
+    let task = session.dataTask(with: request) { data, response, error in
+        if let httpResponse = response as? HTTPURLResponse,
+           httpResponse.statusCode == 200 {
+            print("发送礼物成功。")
+            // 显示礼物动画
+            DispatchQueue.main.async {
+                self.giftView.show("vap.mp4", container: self.liveVC.view)
+            }
+        } else {
+            print("发送礼物失败。")
+        }
+    }
+    task.resume()
+}
+```
+:::
+
+#### 主播和其余观众
+
+假设服务器使用不可靠的信令通道广播消息。在这种情况下，需要监听不可靠消息的通知回调方法 `onInRoomCommandReceived` 以确定是否有人在发送礼物。当收到新的礼物通知时，它将显示礼物效果。
+
+如果服务器使用不可靠的信令通道广播消息，可以监听 `onInRoomCommandReceived` 通知回调方法，以检测礼物是否已发送，一旦收到新的礼物通知，将会显示礼物效果。
+
+:::if{props.platform=undefined}
+```java
+// 当有人在房间中发送礼物时，每个人都会收到 InRoomCommand
+ZegoUIKit.getSignalingPlugin().addInRoomCommandMessageListener(new ZegoUIKitSignalingPluginInRoomCommandMessageListener() {
+        @Override
+        public void onInRoomCommandMessageReceived(List<ZegoSignalingInRoomCommandMessage> messages,
+            String roomID) {
+            for (ZegoSignalingInRoomCommandMessage message : messages) {
+                if (!message.senderUserID.equals(userID) && message.text.contains("gift_type")) {
+                    showAnimation();
+                }
+            }
+
+        }
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```swift
+// 添加事件处理器
+ZegoUIKit.shared.addEventHandler(self)
+
+extension ViewController: ZegoUIKitEventHandle {
+    func onInRoomCommandMessageReceived(_ messages: [ZegoSignalingInRoomCommandMessage], roomID: String) {
+        if let message = messages.first {
+            if message.senderUserID != userID {
+                // 显示礼物动画
+                DispatchQueue.main.async {
+                    self.giftView.show("vap.mp4", container: self.liveVC.view)
+                }
+            }
+        }
+    }
+}
+```
+:::
+## 运行示例
+
+:::if{props.platform=undefined}
+如需访问此功能的示例代码，请从 [此处](https://github.com/ZEGOCLOUD/zego_virtual_gift/blob/main/samples/android/live_streaming/app/src/main/java/com/zegocloud/uikit/livestreaming/LiveActivity.java) 下载。
+:::
+:::if{props.platform="iOS"}
+如需访问此功能的示例代码，请从 [此处](https://github.com/ZEGOCLOUD/zego_virtual_gift/tree/main/samples/ios/live_streaming) 下载。
+:::
+

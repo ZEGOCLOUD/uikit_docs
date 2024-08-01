@@ -1,0 +1,185 @@
+# Config
+
+
+## ZegoUIKitPrebuiltLiveStreamingConfig
+初始化相关配置类。
+
+| 属性                                  | 类型                                                                       | 描述                                                                                                                |
+| ------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| role                                  | [ZegoLiveStreamingRole](#zegolivestreamingrole)                       | 定义用户在直播中的角色。默认值为.audience。                                                                         |
+| turnOnCameraWhenJoining               | Bool                                                                       | 加入直播时是否打开摄像头。默认为 false。                                                                            |
+| turnOnMicrophoneWhenJoining           | Bool                                                                       | 加入直播时是否打开麦克风。默认为 false。                                                                            |
+| useSpeakerWhenJoining                 | Bool                                                                       | 加入直播时是否使用扬声器。默认为 true。                                                                             |
+| audioVideoViewConfig                  | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) | 音频和视频视图的配置。                                                                                              |
+| bottomMenuBarConfig                   | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   | 直播页面的底部菜单栏的配置参数，如底部的栏按钮、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。      |
+| confirmDialogInfo                     | [ZegoLeaveConfirmDialogInfo](#zegoleaveconfirmdialoginfo)             | 配置退出直播间时显示的确认弹窗。                                                                                    |
+| translationText                       | ZegoTranslationText                                                        | 支持切换 UIKit 的语言环境，也可以修改特定的文案。默认为 ZegoTranslationText(language:.ENGLISH)。                    |
+| enableCoHosting                       | Bool                                                                       | 是否允许连麦。默认为 false。                                                                                        |
+| markAsLargeRoom                       | Bool                                                                       | 是否将房间标记为大型房间（超过 500 人为大房间）。如果你的直播人数会超过500人请将该标记设置为true。默认值是false。   |
+| canCameraTurnOnByOthers               | Bool                                                                       | 其他人是否可以打开您的摄像头。默认为 false。                                                                        |
+| canMicrophoneTurnOnByOthers           | Bool                                                                       | 其他人是否可以打开您的麦克风。默认为 false。                                                                        |
+| turnOnYourCameraConfirmDialogInfo     | [ZegoDialogInfo](#zegodialoginfo)                                     | 其他人想要打开您的的摄像头时，会在本端应用展示确认弹窗。您可以设置该弹窗的内容。                                    |
+| turnOnYourMicrophoneConfirmDialogInfo | [ZegoDialogInfo](#zegodialoginfo)                                     | 其他人想要打开您的的麦克风时，会在本端应用展示确认弹窗。您可以设置该弹窗的内容。                                    |
+| layout                                | [ZegoLayout](#zegolayout)                                             | 配置通话页面音视频窗口的显示布局，包括画中画布局、宫格式布局。                                                      |
+| enableSignalingPlugin                 | Bool                                                                       | 是否使用SignalingPlugin。如果需要使用连麦和PK功能，那么需要把这个值设置成true，并且导入ZegoUIKitSignalingPlugin库。 |
+| videoConfig                 | [ZegoPrebuiltVideoConfig](#ZegoPrebuiltVideoConfig)                                                                         | 自定义配置视频通话分辨率。默认360p |
+
+
+
+## ZegoPrebuiltAudioVideoViewConfig
+视图设置类。
+
+| 属性                      | 类型 | 描述                                                                    |
+| ------------------------- | ---- | ----------------------------------------------------------------------- |
+| useVideoViewAspectFill    | Bool | 是否以等比例填充模式（黑边模式）显示视频。默认为 true。                 |
+| showSoundWavesInAudioMode | Bool | 在主播或麦上用户关闭摄像头后，是否在用户头像周围显示声浪。默认为 true。 |
+
+## ZegoBottomMenuBarConfig
+菜单栏按钮相关类。
+
+| 属性                    | 类型                                                   | 描述                                             |
+| ----------------------- | ------------------------------------------------------ | ------------------------------------------------ |
+| maxCount                | Int                                                    | 菜单栏按钮的最大数量。默认值为5。                |
+| showInRoomMessageButton | Bool                                                   | 是否在菜单栏中显示房间内消息按钮。默认值为true。 |
+| hostButtons             | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] | 主播可见的底部菜单栏按钮列表。                   |
+| coHostButtons           | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] | 麦上用户可见的底部菜单栏按钮列表。               |
+| audienceButtons         | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)] | 观众可见的底部菜单栏按钮列表。                   |
+
+## ZegoLayout
+
+| 属性   | 类型                                             | 描述                                                         |
+| ------ | ------------------------------------------------ | ------------------------------------------------------------ |
+| mode   | [ZegoUIKitLayoutMode](#zegouikitlayoutmode) | 页面布局模式，支持画中画和宫格式两种布局。默认为画中画布局。 |
+| config | [ZegoLayoutConfig](#zegolayoutconfig)       | 页面布局配置。                                               |
+
+
+## ZegoLayoutPictureInPictureConfig
+画中画布局配置类。
+
+| 属性                                | 类型                                       | 描述                                                    |
+| ----------------------------------- | ------------------------------------------ | ------------------------------------------------------- |
+| isSmallViewDraggable                | Bool                                       | 是否可以拖拽小视图。默认值为 false。                    |
+| smallViewBackgroundColor            | UIColor                                    | 小视图的背景颜色。默认值为 #333437。                    |
+| largeViewBackgroundColor            | UIColor                                    | 大视图的背景颜色。默认值为 #4A4B4D。                    |
+| smallViewBackgroundImage            | UIImage                                    | 小视图的背景图片。默认值为 null。                       |
+| largeViewBackgroundImage            | UIImage                                    | 大视图的背景图片。默认值为 null。                       |
+| smallViewPosition                    | [ZegoViewPosition](#zegoviewposition) | 小视图在 UI 上的位置。默认值为 .topRight。              |
+| switchLargeOrSmallViewByClick       | Bool                                       | 是否可以点击切换大小视图。默认值为 true。               |
+| smallViewSize                       | CGSize                                     | 小视图的尺寸。默认值为 CGSize(width: 95, height: 169)。 |
+| spacingBetweenSmallViews            | CGFloat                                    | 小视图之间的间距。默认值为 0。                          |
+| removeViewWhenAudioVideoUnavailable | Bool                                       | 当音频和视频不可用的时候是否移除 view。默认值为 true。  |
+
+## ZegoLayoutGalleryConfig
+宫格布局配置类。
+
+| 属性                                             | 类型 | 描述                                                    |
+| ------------------------------------------------ | ---- | ------------------------------------------------------- |
+| addBorderRadiusAndSpacingBetweenView             | Bool | 是否在视图之间添加圆角和间距。默认值为 true。           |
+| removeViewWhenAudioVideoUnavailable              | Bool | 当音频和视频不可用的时候是否移除 view。默认值为 false。 |
+| showNewScreenSharingViewInFullscreenMode         | Bool | 是否在进入屏幕共享的时候直接设置全屏。默认值为 true。   |
+| showScreenSharingFullscreenModeToggleButtonRules | Bool | 屏幕共享全屏模式切换按钮的显示规则。默认值为 true。     |
+
+
+
+## ZegoLeaveConfirmDialogInfo
+
+| 属性              | 类型             | 描述                                                           |
+| ----------------- | ---------------- | -------------------------------------------------------------- |
+| title             | String           | 标题文本。                                                     |
+| message           | String           | 确认消息文本。                                                 |
+| cancelButtonName  | String           | 取消按钮文本。                                                 |
+| confirmButtonName | String           | 确认按钮文本。                                                 |
+| dialogPresentVC   | UIViewController | 在哪个界面显示离开直播间确认弹窗。默认在当前直播间显示该弹窗。 |
+
+## ZegoDialogInfo
+对话框信息类。
+
+| 属性              | 类型             | 描述                                                           |
+| ----------------- | ---------------- | -------------------------------------------------------------- |
+| title             | String           | 标题文本。                                                     |
+| message           | String           | 确认消息文本。                                                 |
+| cancelButtonName  | String           | 取消按钮文本。                                                 |
+| confirmButtonName | String           | 确认按钮文本。                                                 |
+| dialogPresentVC   | UIViewController | 在哪个界面显示离开直播间确认弹窗。默认在当前语聊房显示该弹窗。 |
+
+
+## ZegoShowFullscreenModeToggleButtonRules
+
+全屏模式下切换按钮显示规则。
+
+| 枚举                  | 描述                   |
+| :-------------------- | :--------------------- |
+| showWhenScreenPressed | 当屏幕点击的时候显示。 |
+| alwaysShow            | 一直显示。             |
+| alwaysHide            | 一直隐藏。             |
+
+
+## ZegoLiveStreamingRole
+
+用户角色枚举类。
+
+| 枚举     | 描述       |
+| :------- | :--------- |
+| host     | 主播。     |
+| coHost   | 麦上用户。 |
+| audience | 观众。     |
+
+
+
+
+## ZegoUIKitLayoutMode
+
+直播页面布局模式枚举类。
+
+| 枚举             | 描述         |
+| :--------------- | :----------- |
+| pictureInPicture | 画中画布局。 |
+| gallery          | 宫格式布局。 |
+| invalid          | 非法值。     |
+
+
+
+## ZegoMenuBarButtonName
+
+菜单栏按钮枚举类。
+
+| 枚举                    | 描述                                         |
+| :---------------------- | :------------------------------------------- |
+| leaveButton             | 离开直播间的按钮。                           |
+| toggleCameraButton      | 打开/关闭摄像头的按钮。                      |
+| toggleMicrophoneButton  | 打开/关闭麦克风的按钮。                      |
+| switchCameraButton      | 切换前后摄像头的按钮。                       |
+| swtichAudioOutputButton | 切换音频输出设备按钮。                       |
+| coHostControlButton     | 观众申请连麦按钮。                           |
+| enableChatButton        | 主播通过此按钮控制是否允许在当前直播间连麦。 |
+
+
+
+## ZegoUIKitLanguage
+
+UI 语言枚举类。
+
+| 枚举    | 描述   |
+| :------ | :----- |
+| ENGLISH | 英文。 |
+| CHS     | 中文。 |
+
+
+
+## ZegoViewPosition
+视图位置类。
+
+| 枚举        | 描述   |
+| :---------- | :----- |
+| topLeft     | 左上。 |
+| topRight    | 右上。 |
+| bottomLeft  | 左下。 |
+| bottomRight | 右下。 |
+
+
+## ZegoPrebuiltVideoConfig
+视频分辨率配置类。
+
+| 属性        | 描述   |
+| :---------- | :----- |
+| resolution     | ZegoPresetResolution  分辨率 |

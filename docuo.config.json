@@ -17,6 +17,7 @@
         "dark": "image/logo_zegocloud_dark.png",
         "light": "image/logo_zegocloud_light.png"
       },
+      "iconRedirectUrl": "https://zegocloud.com",
       "items": [
         {
           "type": "default",
@@ -31,6 +32,7 @@
         "dark": "image/logo_zego_dark.png",
         "light": "image/logo_zego_light.png"
       },
+      "iconRedirectUrl": "https://zego.im",
       "items": [
         {
           "type": "default",
@@ -234,7 +236,7 @@
     },
     {
       "id": "callkit_miniprogram_zh",
-      "label": "callkit_miniprogram_zh",
+      "label": "音视频通话 UIKit (小程序)",
       "path": "uikit/callkit/docs_callkit_miniprogram_zh",
       "routeBasePath": "zh/callkit-miniprogram",
       "locale": "zh",
@@ -256,6 +258,7 @@
       "label": "Live Streaming Kit(Android)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android",
       "routeBasePath": "live-streaming-kit-android",
+      "locale": "en",
       "navigationInfo": {
         "group": {
           "id": "live_streaming_kit",
@@ -274,6 +277,7 @@
       "label": "Live Streaming Kit(iOS)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios",
       "routeBasePath": "live-streaming-kit-ios",
+      "locale": "en",
       "navigationInfo": {
         "group": {
           "id": "live_streaming_kit",
@@ -292,6 +296,7 @@
       "label": "Live Streaming Kit(Flutter)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_flutter",
       "routeBasePath": "live-streaming-kit-flutter",
+      "locale": "en",
       "navigationInfo": {
         "group": {
           "id": "live_streaming_kit",
@@ -310,6 +315,7 @@
       "label": "Live Streaming Kit(RN)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_rn",
       "routeBasePath": "live-streaming-kit-rn",
+      "locale": "en",
       "navigationInfo": {
         "group": {
           "id": "live_streaming_kit",
@@ -328,6 +334,7 @@
       "label": "Live Streaming Kit(Web)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web",
       "routeBasePath": "live-streaming-kit-web",
+      "locale": "en",
       "navigationInfo": {
         "group": {
           "id": "live_streaming_kit",
@@ -344,7 +351,7 @@
     {
       "id": "live_streaming_kit_android_zh",
       "label": "互动直播 UIKit (Android)",
-      "path": "https://doc-zh.zego.im/article/20314",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android_zh",
       "routeBasePath": "zh/live-streaming-kit-android",
       "locale": "zh",
       "navigationInfo": {
@@ -363,7 +370,7 @@
     {
       "id": "live_streaming_kit_ios_zh",
       "label": "互动直播 UIKit (iOS)",
-      "path": "https://doc-zh.zego.im/article/20313",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios_zh",
       "routeBasePath": "zh/live-streaming-kit-ios",
       "locale": "zh",
       "navigationInfo": {
@@ -382,7 +389,7 @@
     {
       "id": "live_streaming_kit_web_zh",
       "label": "互动直播 UIKit (Web)",
-      "path": "https://doc-zh.zego.im/article/20316",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web_zh",
       "routeBasePath": "zh/live-streaming-kit-web",
       "locale": "zh",
       "navigationInfo": {
@@ -396,25 +403,6 @@
           "ZEGO UIKits"
         ],
         "platform": "Web: JS"
-      }
-    },
-    {
-      "id": "live_streaming_kit_flutter_zh",
-      "label": "docs_live_streaming_kit_flutter_zh",
-      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_flutter_zh",
-      "routeBasePath": "zh/live-streaming-kit-flutter",
-      "locale": "zh",
-      "navigationInfo": {
-        "group": {
-          "id": "live_streaming_kit_zh",
-          "name": "互动直播 UIKit",
-          "tag": "New"
-        },
-        "category": [
-          "Products",
-          "ZEGO UIKits"
-        ],
-        "platform": "Flutter: Dart"
       }
     },
     {

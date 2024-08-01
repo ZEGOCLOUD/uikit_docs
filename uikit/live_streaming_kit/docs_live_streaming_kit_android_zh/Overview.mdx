@@ -1,0 +1,67 @@
+# 概述
+
+
+## 什么是互动直播 UIKit
+
+互动直播 UIKit（Live Streaming Kit）是一个功能丰富、带 UI 的直播场景化 SDK，它支持仅通过几行代码，即可在网页或应用中构建常见的直播功能。同时，还支持通过配置参数来自定义实现多种直播特性。
+
+## 何时需要互动直播 UIKit
+
+- 更快速、更简便地构建应用：当您将速度或效率作为首要考虑因素，想要尽快构建并上线直播应用。
+
+- 根据需求自定义用户界面：当您想要根据实际业务需求自定义用户界面，或者不想在开发基本音视频功能上浪费时间。
+
+互动直播 UIKit 能帮助您在尽可能短的时间内集成实现直播功能，并包含业务逻辑与用户UI界面，同时支持自定义一些特性。
+:::if{props.platform=undefined}
+如果需要搭建一个玩法复杂、自定义程度更精细的直播应用，建议您接入我们的 [超低延迟直播 SDK](https://doc-zh.zego.im/article/13182) 来实现。
+:::
+:::if{props.platform="iOS"}
+如果需要搭建一个玩法复杂、自定义程度更精细的直播应用，建议您接入我们的 [超低延迟直播 SDK](https://doc-zh.zego.im/article/13404) 来实现。
+:::
+
+## 支持哪些功能特性
+
+- 即用型直播应用
+- 自定义 UI 界面
+- 实时互动文本聊天
+- 实时显示观众数量
+- 设备管理
+- 可扩展的菜单栏
+- 观众连麦（申请连麦和接受连麦邀请）
+- PK 连麦玩法
+
+## 示例 App
+
+<CardGroup cols={2}>
+:::if{props.platform=undefined}
+<Card title="蒲公英" href="https://www.pgyer.com/EUDn">
+  从蒲公英下载互动直播 UIKit Android 示例 App。
+</Card>
+:::
+:::if{props.platform="iOS"}
+<Card title="TestFlight" href="https://testflight.apple.com/join/2a50XtW0">
+  从 TestFlight 下载互动直播 UIKit iOS 示例 App。
+</Card>
+:::
+</CardGroup>
+
+## 推荐资源
+
+<CardGroup cols={2}>
+  <Card title="快速开始（基础直播）" href="Quick%20start/Quick%20start.mdx">
+  如需快速实现基础的直播功能，请按照文档说明进行操作。
+</Card>
+<Card title="快速开始（适用于连麦）" href="Quick%20start/Quick%20start%20(with%20cohosting).mdx">
+  如需实现连麦功能的直播，请按照文档说明进行操作。
+</Card>
+:::if{props.platform=undefined}
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_android" target="_blank">
+  点击此处获取完整的示例代码。
+</Card>
+:::
+:::if{props.platform="iOS"}
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_ios" target="_blank">
+  点击此处获取完整的示例代码。
+</Card>
+:::
+</CardGroup>

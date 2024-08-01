@@ -1,0 +1,76 @@
+# 集成进阶美颜
+
+
+## 什么是进阶美颜
+
+除了互动直播 UIKit 提供的基本美颜效果外，您还可以选择使用高级美颜效果来增强您的直播应用。高级美颜效果包括以下功能：面部美化、面部塑形、美妆、滤镜、贴纸和背景分割。
+
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/effects.png" />
+</Frame>
+
+
+## 前提条件
+
+在开始之前，请确保完成以下步骤：
+
+- 已集成互动直播 UIKit，详情请参考 [快速开始](../Quick%20start/Quick%20start.mdx) 或 [快速开始（适用于连麦）](../Quick%20start/Quick%20start%20(with%20cohosting).mdx)。
+- 联系 ZEGO 技术支持激活高级美颜效果。
+- 已下载 [示例源码](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_effects_demo_android)。
+
+## 实现流程
+
+### 集成 SDK
+
+#### 1. 添加依赖
+
+```groovy
+implementation 'com.github.ZEGOCLOUD:zego_uikit_beauty_plugin_android:+'
+``` 
+
+#### 2. 添加初始化代码
+
+由于在[快速开始](../Quick%20start/Quick%20start.mdx) 过程中，已添加了初始化代码，您只需要在 `ZegoUIKitPrebuiltLiveStreamingConfig.bottomMenuBarConfig` 中添加美颜按钮。
+
+```java
+//...
+ZegoUIKitPrebuiltLiveStreamingConfig config;
+if (isHost) {
+    config = ZegoUIKitPrebuiltLiveStreamingConfig.host(true);
+} else {
+    config = ZegoUIKitPrebuiltLiveStreamingConfig.audience(true);
+}
+// 添加 `ZegoMenuBarButtonName.BEAUTY_BUTTON` 至主持人
+config.bottomMenuBarConfig = new ZegoBottomMenuBarConfig(
+  Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON, ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_FACING_BUTTON, ZegoMenuBarButtonName.BEAUTY_BUTTON),
+  Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON, ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON,ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON),
+  Collections.singletonList(ZegoMenuBarButtonName.COHOST_CONTROL_BUTTON));
+
+ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(appID,appSign, userID, userName, liveID, config);
+getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNow();
+//...
+```
+
+### 添加美颜效果资源
+
+高级美颜效果需要相应的美颜资源才能生效，请参考如下流程下载相关资源。
+
+#### 下载资源
+
+点击下载 <Button primary-color="NavyBlue" target="_blank" href="https://storage.zego.im/sdk-doc/Pics/zegocloud/uikit/BeautyResources.zip">美颜资源</Button>，并将资源解压到本地文件夹。
+
+
+1. 在 Android 项目的 `main` 目录下，创建一个 assets 文件夹（如果 assets 文件夹已存在，则无需创建）。像下面示例：
+> **xxx/android/app/src/main/assets**
+
+2. 将下载的 `BeautyResources` 文件夹复制到 assets 目录。
+
+<Frame width="100%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/live/effects/android/resources.png" />
+</Frame>
+
+### 运行和测试
+
+上述步骤完成后，您只需点击**运行**或**调试**按钮，即可在设备上运行和测试您的应用。
+

@@ -1,0 +1,76 @@
+# 屏幕共享
+
+
+## 概述
+
+在 ZEGO UIKit 中，对于通话、视频会议和直播场景中的观众角色（没有推流行为），也默认允许使用屏幕共享功能。
+
+<Warning title="Warning">
+屏幕共享功能默认使用屏幕本身的分辨率，可能会产生相应的 **RTC 高分辨率的费用**。如果需要禁用屏幕共享功能或调整分辨率，请参考本文档。
+</Warning>
+
+
+
+
+支持按需禁用屏幕共享功能，但是一旦禁用，下图中标记的按钮将被隐藏：
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/joinRoom_screenShare.jpg" /></Frame>
+
+
+## 禁用屏幕共享
+
+要禁用屏幕共享功能，请将 `showScreenSharingButton` 设置为 `false`。
+
+```javascript
+// ....
+zp.joinRoom({
+    // ...,
+    showScreenSharingButton: false,
+    // ...
+});
+```
+
+## 设置屏幕共享的分辨率
+
+- 使用 SDK 提供的几组推荐分辨率配置。
+
+    ```javascript
+    // ....
+    zp.joinRoom({
+        // ...,
+        screenSharingConfig: {
+            resolution: ZegoUIKitPrebuilt.ScreenSharingResolution_720P
+        }
+        // ...
+    });
+    ```
+    `resolution` 提供以下默认配置：
+
+    | |宽*高|帧率 | 比特率 (kbps)|
+    |----|----|---- |----|
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_360P | 640 * 360  | 15 | 400 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_480P | 640 * 480 | 15 | 500 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_720P | 1280 * 720 | 15 | 1130 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_1080P | 1920 * 1080 | 15 | 1500 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_2K | 2560 * 1440 | 15 | 6000 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_4K | 3840 * 2160 | 15 | 10000 |
+    |ZegoUIKitPrebuilt.ScreenSharingResolution_Auto | 分辨率为所选共享区域的实际大小。 | 15 | 自动|
+
+- 自定义分辨率。
+
+    ```javascript
+    // ....
+    zp.joinRoom({
+        // ...,
+        screenSharingConfig: {
+            resolution: ZegoUIKitPrebuilt.ScreenSharingResolution_Custom,
+            width: 1280, 
+            height: 720,
+            frameRate: 10,
+            maxBitRate: 1130, // 单位为 kbps
+        }
+        // ...
+    });
+    ```
+
+    当 `resolution` 为 `ZegoUIKitPrebuilt.ScreenSharingResolution_Custom` 时，需要设置 `width`、`height`、`frameRate`、`maxBitRate`。

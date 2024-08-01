@@ -1,0 +1,195 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md";
+
+# 快速开始（包含连麦功能）
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="http://doc.oa.zego.im/Pics/ZegoUIKit/Flutter/live_with_cohosting2.gif" />
+</Frame>
+
+## 准备环境
+
+在开始集成互动直播 UIKit 前，请确保开发环境满足以下要求：
+
+<EnviromentRequiremenZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+### 集成 SDK
+
+#### 添加依赖
+
+按照以下步骤添加 `ZegoUIKitPrebuiltLiveStream` 和 `ZegoUIKitSignalingPlugin` 依赖：
+
+1. 打开终端，进入项目的根目录，并运行以下命令创建一个 `podfile`：
+
+    ```bash
+    pod init
+    ```
+
+2. 编辑 `Podfile` 文件以添加基本依赖：
+
+    ```bash
+    pod 'ZegoUIKitPrebuiltLiveStreaming'
+    pod 'ZegoUIKitSignalingPlugin'
+    ```
+
+3. 在终端中运行以下命令，使用 Cocoapods 下载所有所需的依赖和 SDK：
+
+    ```bash
+    pod install
+    ```
+
+#### 导入 SDK & 插件
+
+将 `ZegoUIKit`、`ZegoUIKitPrebuiltLiveStreaming` 和 `ZegoUIKitSignalingPlugin` 导入到您的项目中：
+
+<CodeGroup>
+```swift title="swift"
+import ZegoUIKit
+import ZegoUIKitSignalingPlugin
+import ZegoUIKitPrebuiltLiveStreaming
+// YourViewController.swift
+class ViewController: UIViewController {
+    //其他代码...
+}
+```
+```objc title="objc"
+@import ZegoUIKit;
+@import ZegoUIKitPrebuiltLiveStreaming;
+@import ZegoUIKitSignalingPlugin;
+@implementation ViewController
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+}
+@end
+```
+</CodeGroup>
+
+### 使用互动直播 UIKit
+
+- 指定 userID 和 userName 来指定用户以实现直播服务。
+- liveID 代表您想要开始或观看的一场直播。
+
+<Note title="Note">
+
+- `userID` 和 `liveID` 只能包含数字、字母和下划线 (_)。
+- 使用相同的 `liveID` 将进入同一个直播间。且同一个直播间内，只有一个用户可以作为主播加入，其他用户需要作为观众加入，但观众可以连麦。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltLiveStreamingConfig.translationText`。
+</Note>
+
+<CodeGroup>
+```swift title="swift"
+  class ViewController: UIViewController {
+    let appID: UInt32 = <#AppID#>  // 从 ZEGO 控制台获取
+    let appSign: String = <#AppSign#>  // 从 ZEGO 控制台获取
+    var userID: String = <#UserID#>
+    var userName: String = <#UserName#>
+    var liveID: String = <#LiveID#>
+
+    // 房主开始直播
+    @IBAction func startLive(_ sender: Any) {
+        
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host(enableSignalingPlugin: true)
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        config.enableCoHosting = true
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, liveID: self.liveID, config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+
+    // 观众观看直播
+    @IBAction func watchLive(_ sender: Any) {
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.audience(enableSignalingPlugin: true)
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        config.enableCoHosting = true
+        let liveVC: ZegoUIKitPrebuiltLiveStreamingVC = ZegoUIKitPrebuiltLiveStreamingVC(appID: self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, liveID: self.liveID, config: config)
+        liveVC.modalPresentationStyle = .fullScreen
+        self.present(liveVC, animated: true, completion: nil)
+    }
+  }
+  ```
+```objc title="objc"
+  @interface ViewController ()
+  @property (nonatomic, strong) ZegoUIKitPrebuiltLiveStreamingVC *vc;
+  @property (nonatomic, copy) NSString * userID;
+  @property (nonatomic, copy) NSString * userName;
+  @property (nonatomic, copy) NSString * appSign;
+  @property (nonatomic, copy) NSString * roomID;
+  @property (nonatomic, assign) unsigned int appID;
+  @end
+  @implementation ViewController
+
+  - (void)viewDidLoad {
+    [super viewDidLoad];
+    
+      self.userID = @"userID";  // 从 ZEGO 控制台获取
+      self.userName = @"userName";
+      self.appID = appID;  // 从 ZEGO 控制台获取
+      self.appSign = @"appsSign";
+      self.roomID = @"roomID";
+  }
+  // 房主开始直播
+  - (void) startLive {
+      ZegoUIKitPrebuiltLiveStreamingConfig *config = [ZegoUIKitPrebuiltLiveStreamingConfig hostWithEnableSignalingPlugin:YES];
+      config.enableCoHosting = YES;
+      // 修改语言为中文
+      config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+      ZegoUIKitPrebuiltLiveStreamingVC.VC = [[ZegoUIKitPrebuiltLiveStreamingVC alloc] init:self.appID appSign:self.appSign userID:self.userID userName:self.userName liveID:self.roomID config:config];
+      VC.modalPresentationStyle = UIModalPresentationFullScreen;
+      [self presentViewController:VC animated:YES completion:^{
+      
+    }];
+  }
+  // 观众观看直播
+  - (void)watchLive {
+      ZegoUIKitPrebuiltLiveStreamingConfig *config = [ZegoUIKitPrebuiltLiveStreamingConfig audienceWithEnableSignalingPlugin:YES];
+      config.enableCoHosting = YES;
+      // 修改语言为中文
+      config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+      ZegoUIKitPrebuiltLiveStreamingVC.VC = [[ZegoUIKitPrebuiltLiveStreamingVC alloc] init:self.appID appSign:self.appSign userID:self.userID userName:self.userName liveID:self.roomID config:config];
+      VC.modalPresentationStyle = UIModalPresentationFullScreen;
+      [self presentViewController:VC animated:YES completion:^{
+      
+    }];
+  }
+  ```
+</CodeGroup>
+
+然后，您可以通过启动 `VC` 开始直播。
+
+## 项目配置
+
+打开 `Info.plist`，在 `dict` 部分内添加以下代码：
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>需要访问相机的权限。</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>需要访问麦克风的权限。</string>
+```
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/add_mic_camera_permissions.png" />
+</Frame>
+
+## 运行 & 测试
+
+现在您已经完成了所有步骤。
+
+您只需在 Xcode 中点击 **运行** 就可以在您的设备上运行和测试应用。
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_streaming_example_ios" target="_blank">
+  点击此处获取完整的示例代码。
+</Card>
+</CardGroup>
