@@ -43,7 +43,7 @@ class LivePageState extends State<LivePage> {
         events: ZegoUIKitPrebuiltLiveStreamingEvents(
             duration: ZegoLiveStreamingDurationEvents(
           onUpdate: (Duration duration) {
-            if (duration.inSeconds >= 5 * 60) {
+            if (duration.inSeconds == 5 * 60) {
               ZegoUIKitPrebuiltLiveStreamingController().leave(context);
             }
           },

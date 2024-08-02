@@ -1,0 +1,64 @@
+# Calculate duration
+
+This doc describes how to calculate the duration through configuration.
+
+
+<Frame width="30%" height="auto" caption="">
+    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/9b891343e9.png" alt="conference_duration.png"/>
+</Frame> 
+
+To calculate the duration, do the following:
+
+1. Set the `isVisible` property of `ZegoVideoConferenceDurationConfig` to display the current timer. (It is displayed by default)
+
+2. Set the `canSync` property, and only one user can set it. Repeated settings will cause timing to restart.
+
+3. Assuming that the duration is 5 minutes, the conference will automatically end when the time is up (refer to the following code). You will be notified of the end of the duration through `ZegoVideoConferenceDurationEvents.onUpdated`. To end the conference, you can call the `leave` method of `ZegoUIKitPrebuiltVideoConferenceController().room`.
+
+
+```dartx
+enum Role { Host, Audience }
+
+class VideoConferencePage extends StatefulWidget {
+  final String conferenceID;
+  final Role role;
+
+  const VideoConferencePage({
+    Key? key,
+    required this.conferenceID,
+    required this.role,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => VideoConferencePageState();
+}
+
+class VideoConferencePageState extends State<VideoConferencePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltVideoConference(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: 'userID',
+        userName: 'userName',
+        conferenceID: widget.conferenceID,
+        config: ZegoUIKitPrebuiltVideoConferenceConfig()
+          ..duration = ZegoVideoConferenceDurationConfig(
+            canSync: widget.role == Role.Host,
+          ),
+        events: ZegoUIKitPrebuiltVideoConferenceEvents(
+          duration: ZegoVideoConferenceDurationEvents(
+            onUpdated: (Duration d) {
+                if (duration.inSeconds == 5 * 60) {
+                  ZegoUIKitPrebuiltVideoConferenceController().room.leave(context);
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
