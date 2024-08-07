@@ -7,18 +7,8 @@
     },
     {
       "type": "doc",
-      "label": "功能地图",
-      "id": "feature-map"
-    },
-    {
-      "type": "doc",
       "label": "快速开始",
       "id": "quick-start"
-    },
-    {
-      "type": "doc",
-      "label": "快速开始（包含呼叫邀请）",
-      "id": "quick-start-(with-call-invitation)"
     },
     {
       "type": "category",
@@ -31,8 +21,8 @@
         },
         {
           "type": "doc",
-          "label": "切换语言",
-          "id": "calling-config/switch-language"
+          "label": "设置用户头像",
+          "id": "calling-config/set-avatar-for-users"
         },
         {
           "type": "doc",
@@ -66,35 +56,8 @@
         },
         {
           "type": "doc",
-          "label": "呼叫邀请配置",
-          "id": "calling-config/call-invitation-config"
-        },
-        {
-          "type": "doc",
           "label": "计算通话时长",
           "id": "calling-config/calculate-call-duration"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "实现离线呼叫",
-      "items": [
-        {
-          "type": "doc",
-          "label": "集成 Apple VoIP",
-          "id": "implement-offline-call/integrate-apple-voip"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "高级功能",
-      "items": [
-        {
-          "type": "doc",
-          "label": "实现悬浮窗",
-          "id": "advanced-features/minimize-call-window"
         }
       ]
     },

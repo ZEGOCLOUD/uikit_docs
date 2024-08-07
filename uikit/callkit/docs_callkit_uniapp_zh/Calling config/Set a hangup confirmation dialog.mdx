@@ -11,98 +11,102 @@
 
 使用 `hangUpConfirmInfo` 配置：在配置了 `hangUpConfirmInfo` 参数之后，Call Kit 将在结束通话之前弹出一个带有默认样式的确认对话框，显示您设置的确认信息。
 
-示例代码如下：
+以下是参考代码：
 
 <CodeGroup>
-```swift title="基本通话"
-class ViewController: UIViewController {
-    
-    let selfUserID: String = "userID"
-    let selfUserName: String = "userName"
-    let yourAppID: UInt32 = YourAppID 
-    let yourAppSign: String = YourAppSign
-    let callID: String = "testCallID"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    @IBAction func makeNewCall(_ sender: Any) {
-        
-        // 在这里修改您的自定义配置。
-        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+```js title="基本通话"
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+    </ZegoUIKitPrebuiltCall>
+</template>
+<script lang="ts" setup>
+import { ref } from "vue"
+import keyCenter from "@/pages/KeyCenter";
+import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
+import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
 
-        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
-        hangUpConfirmDialogInfo.title = "挂断确认"
-        hangUpConfirmDialogInfo.message = "您是否要挂断通话？"
-        hangUpConfirmDialogInfo.cancelButtonName = "取消"
-        hangUpConfirmDialogInfo.confirmButtonName = "确认"
-        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
-        
-        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
-        callVC.modalPresentationStyle = .fullScreen
-        self.present(callVC, animated: true, completion: nil)
-    }
-}
-```
-```swift title="携带邀请的通话"
-class CallInvitationVC: UIViewController {
-    let appID: UInt32 = yourAppID
-    let appSign: String = "yourAppSign"
-    let userID: String = "userID"
-    let userName: String = "userName"
-    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
-    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+const appID = ref(keyCenter.getAppID());
+const appSign = ref(keyCenter.getAppSign());
+const userID = ref(keyCenter.getUserID());
+const userName = ref(keyCenter.getUserID() + '_Nick');
+const callID = ref(keyCenter.getCallID());
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
-        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
-        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
-    }
-}
+const config: ZegoUIKitPrebuiltCallConfig = {
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 预设配置
+    hangUpConfirmInfo: {
+        title: "提醒",
+        message: "真的要离开吗?",
+        cancelButtonName: "点错了",
+        confirmButtonName: "就要"
+    },
+    onHangUp: () => {
+        // 挂断后返回上一页
+        uni.navigateBack()
+    },
+};
 
-extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
-    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
-    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
-        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
-        if data.type == .voiceCall {
-            if data.invitees?.count ?? 0 > 1 {
-                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
-            } else {
-                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
-            }
-        } else {
-            if data.invitees?.count ?? 0 > 1 {
-                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-            } else {
-                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-            }
-        }
-        // 在这里修改您的自定义配置。
-        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
-        hangUpConfirmDialogInfo.title = "挂断确认"
-        hangUpConfirmDialogInfo.message = "您是否要挂断通话？"
-        hangUpConfirmDialogInfo.cancelButtonName = "取消"
-        hangUpConfirmDialogInfo.confirmButtonName = "确认"
-        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
-        return config
-    }
-}
+</script>
 ```
 </CodeGroup>
 
 ## 监听挂断事件
 
-如果您想要监听挂断事件，例如在结束通话时保存通话录音，Call Kit 提供了一个 `ZegoUIKitPrebuiltCallVCDelegate` 方法，当通话结束时将触发 `onCallEnd`。当然，您也可以在 `onCallEnd` 中实现自定义的业务逻辑。
+您可以通过监听 `onHangUp` 事件，在用户挂断通话时返回到上一页面或者首页。
 
-示例代码如下：
+另外，如果默认的对话框样式不能满足您的需求，或者您想要弹出一个更复杂的对话框，那么您可以使用 `onHangUpConfirmation` 参数。这个参数需要一个函数类型的值，并且要求该函数返回一个 `Promise`。您可以在 `Promise` 中设置您想要弹出的确认对话框。
 
-```swift 
-ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
+当然，您也可以在这个回调中实现决定是否结束通话的逻辑，或者根据需要实现任何其他业务逻辑。
 
-extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
-    func onCallEnd(_ endEvent: ZegoCallEndEvent) {
-        print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
-    }
-}
+
+
+以下是参考代码：
+
+<CodeGroup>
+```js title="基本通话"
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+    </ZegoUIKitPrebuiltCall>
+</template>
+<script lang="ts" setup>
+import { ref } from "vue"
+import keyCenter from "@/pages/KeyCenter";
+import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
+import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
+
+const appID = ref(keyCenter.getAppID());
+const appSign = ref(keyCenter.getAppSign());
+const userID = ref(keyCenter.getUserID());
+const userName = ref(keyCenter.getUserID() + '_Nick');
+const callID = ref(keyCenter.getCallID());
+
+const config: ZegoUIKitPrebuiltCallConfig = {
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 预设配置
+    onHangUpConfirmation: () => {
+        return new Promise((resolve, reject) => {
+            uni.showModal({
+                title: "警告",
+                content: "确定退出吗?",
+                showCancel: true,
+                confirmText: "对的",
+                cancelText: "不是",
+                success: function (res) {
+                    if (res.confirm) {
+                        resolve(true)
+                    } else if (res.cancel) {
+                        resolve(false)
+                    }
+                }
+            });
+        });
+    },
+    onHangUp: () => {
+        // 挂断后返回上一页
+        uni.navigateBack()
+    },
+};
+
+</script>
 ```
+</CodeGroup>

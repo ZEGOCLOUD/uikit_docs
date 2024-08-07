@@ -1,3 +1,44 @@
 import Content from '/uikit/callkit/docs_callkit_android_zh/Calling config/Hide the label on the user view.mdx'
 
 <Content />
+
+以下是参考代码：
+
+<CodeGroup>
+```js title="基本通话"
+// Callkit.nvue
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+    </ZegoUIKitPrebuiltCall>
+</template>
+<script lang="ts" setup>
+import { ref } from "vue"
+import keyCenter from "@/pages/KeyCenter";
+import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
+import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
+
+const appID = ref(keyCenter.getAppID());
+const appSign = ref(keyCenter.getAppSign());
+const userID = ref(keyCenter.getUserID());
+const userName = ref(keyCenter.getUserID() + '_Nick');
+const callID = ref(keyCenter.getCallID());
+
+const config: ZegoUIKitPrebuiltCallConfig = {
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 预设配置
+    audioVideoViewConfig: {
+        showMicrophoneStateOnView: true, // 显示麦克风状态
+        showCameraStateOnView: true, // 显示摄像头状态
+        showUserNameOnView: false, // 不要显示用户名
+        showSoundWavesInAudioMode: false, // 关闭摄像头时, 头像四周不要显示声浪
+    },
+    onHangUp: () => {
+        // 挂断后返回上一页
+        uni.navigateBack()
+    },
+};
+
+</script>
+
+```
+</CodeGroup>

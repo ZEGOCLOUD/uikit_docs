@@ -1,143 +1,133 @@
 # 添加自定义组件
 
 
-## 自定义前景视图
+## 自定义通话界面的前景
 
-如果您想要在视图的顶层添加自定义组件，例如在视频视图显示时展示用户头像、添加用户等级的图标等，您可以使用 `ZegoUIKitPrebuiltCallVCDelegate.getForegroundView` 协议。   
-`getForegroundView`要求您返回一个自定义视图，该视图将放置在视图的顶部。
+如果您想在整个通话界面的顶层添加一些自定义前景，您可以使用 `prebuiltForegroundView` 插槽，该插槽的内容将会显示在视频内容的最上面，您可以用其他内容覆盖上去，实现类似送礼动画、画框等效果。
+
+
+以下是参考代码：
+
+<CodeGroup>
+```js title="基础通话"
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+        <template #prebuiltForegroundView>
+            <image class="forground-image" :src="imgSrc" />
+        </template>
+    </ZegoUIKitPrebuiltCall>
+</template>
+<script lang="ts" setup>
+import { ref } from "vue"
+import keyCenter from "@/pages/KeyCenter";
+import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
+import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
+import PrairieImg from '@/static/pic.jpeg'
+
+// 前景放个图片
+const imgSrc = ref(PrairieImg)
+
+const appID = ref(keyCenter.getAppID());
+const appSign = ref(keyCenter.getAppSign());
+const userID = ref(keyCenter.getUserID());
+const userName = ref(keyCenter.getUserID() + '_Nick');
+const callID = ref(keyCenter.getCallID());
+const config: ZegoUIKitPrebuiltCallConfig = {
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
+    onHangUp: () => {
+        // 挂断后返回上一页
+        uni.navigateBack()
+    },
+};
+
+</script>
+
+<style scoped>
+.forground-image {
+    margin-top: 200rpx;
+    width: 100rpx;
+    height: 100rpx;
+}
+</style>
+
+```
+</CodeGroup>
+
+## 自定义音视频视图的前景视图
+
+
+如果您想要在音视频视图(AudioVideoView)的顶层添加自定义前景视图，例如在音视频视图显示时展示用户标签、彩色用户名、添加用户等级的图标等，则可以使用`audioVideoForeground`插槽。
+`audioVideoForeground` 的参数里将会传入用户信息(userInfo)，您可以根据用户信息，来确定应该显示的内容。
 
 
 <Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/custom_audio_videoiOS_bg.png" /></Frame>
 
-以下为适用于基本通话（不包含呼叫邀请的通话）的参考代码：
 
-```swift
-class ViewController: UIViewController {
-    
-    let selfUserID: String = "userID"
-    let selfUserName: String = "userName"
-    let yourAppID: UInt32 = YourAppID 
-    let yourAppSign: String = YourAppSign
-    let callID: String = "testCallID"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    @IBAction func makeNewCall(_ sender: Any) {
-        
-        // 在这里修改您的自定义配置。
-        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-
-        config.turnOnCameraWhenJoining = false;
-        config.audioVideoViewConfig.showCameraStateOnView = false;
-        config.bottomMenuBarConfig.buttons = [.toggleMicrophoneButton,.hangUpButton,.swtichAudioOutputButton]
-
-        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
-        
-        callVC.delegate = self
-
-        callVC.modalPresentationStyle = .fullScreen
-        self.present(callVC, animated: true, completion: nil)
-    }
-    
-}
-extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
-    func getForegroundView(_ userInfo: ZegoUIKitUser?) -> UIView? {
-        return YourCustomView()
-    }
-}
-```
-
-
-## 自定义纯语音通话场景的视图
-
-如果您需要在纯语音模式下自定义用户的通话界面，例如设置背景图片，您可以使用 `ZegoLayoutPictureInPictureConfig` 中的 `largeViewBackgroundImage`、`smallViewBackgroundImage`、`largeViewBackgroundColor`、`smallViewBackgroundColor`。
-
-<Note title="Note">
-
-这些配置仅在用户关闭摄像头时有效（当摄像头打开时，摄像头画面将自动显示）。
-</Note>
-
-参考代码如下所示：
+以下是参考代码：
 
 <CodeGroup>
-```swift title="基本通话"
-class ViewController: UIViewController {
+```js title="基础通话"
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+        <template #audioVideoForeground="{ userInfo }">
+            <view class="userinfo-container">
+                <text :style="{ color: getColorByUser(userInfo) }">{{ userInfo.userName }}</text>
+            </view>
+        </template>
+    </ZegoUIKitPrebuiltCall>
+</template>
+<script setup>
+import { ref } from "vue"
+import keyCenter from "@/pages/KeyCenter";
+import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
+import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
+
+const appID = ref(keyCenter.getAppID());
+const appSign = ref(keyCenter.getAppSign());
+const userID = ref(keyCenter.getUserID());
+const userName = ref(keyCenter.getUserID() + '_Nick');
+const callID = ref(keyCenter.getCallID());
+const config = {
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
+    onHangUp: () => {
+        // 挂断后返回上一页
+        uni.navigateBack()
+    },
+};
+
+// 根据用户id显示不同的字体颜色
+function getColorByUser(userInfo) {
+    if (userInfo.userID == 'user1') {
+        return 'green'
+    } else {
+        return 'red'
+    }
+}
+</script>
+
+<style scoped>
+.userinfo-container {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #2A2A2A;
+
+    opacity: 0.7;
+    position: absolute;
+    padding-left: 5rpx;
+    padding-right: 5rpx;
+    padding-bottom: 3rpx;
+    padding-top: 3rpx;
+    border-radius: 6rpx;
+    top: 5rpx;
+    left: 5rpx;
     
-    let selfUserID: String = "userID"
-    let selfUserName: String = "userName"
-    let yourAppID: UInt32 = YourAppID 
-    let yourAppSign: String = YourAppSign
-    let callID: String = "testCallID"
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    @IBAction func makeNewCall(_ sender: Any) {
-        
-        // 在这里修改您的自定义配置。
-        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-
-        let layout: ZegoLayout = ZegoLayout()
-        layout.mode = .pictureInPicture
-        let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
-        pipConfig.largeViewBackgroundColor = UIColor.darkGray
-        pipConfig.smallViewBackgroundColor = UIColor.lightGray
-        layout.config = pipConfig
-        config.layout = layout
-
-        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
-        callVC.modalPresentationStyle = .fullScreen
-        self.present(callVC, animated: true, completion: nil)
-    }
 }
-```
-```swift title="携带邀请的通话"
-class CallInvitationVC: UIViewController {
-    let appID: UInt32 = yourAppID
-    let appSign: String = "yourAppSign"
-    let userID: String = "userID"
-    let userName: String = "userName"
-    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
-    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+</style>
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
-        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
-        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
-    }
-}
-
-extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
-    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
-    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
-        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
-        if data.type == .voiceCall {
-            if data.invitees?.count ?? 0 > 1 {
-                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
-            } else {
-                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
-            }
-        } else {
-            if data.invitees?.count ?? 0 > 1 {
-                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-            } else {
-                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-            }
-        }
-        // 在这里修改您的自定义配置。
-        if data.invitees?.count ?? 0 <= 1 {
-            let layout: ZegoLayout = ZegoLayout()
-            layout.mode = .pictureInPicture
-            let pipConfig: ZegoLayoutPictureInPictureConfig = ZegoLayoutPictureInPictureConfig()
-            pipConfig.largeViewBackgroundColor = UIColor.darkGray
-            pipConfig.smallViewBackgroundColor = UIColor.lightGray
-            layout.config = pipConfig
-            config.layout = layout
-        }
-        return config
-    }
-}
 ```
 </CodeGroup>
+
+
