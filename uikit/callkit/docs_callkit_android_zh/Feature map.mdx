@@ -1,0 +1,117 @@
+# 功能地图
+
+音视频通话 UIKit 提供默认行为和风格，但如果默认行为和样式不能完全满足您的需求，您也可以自定义 UIKit。
+
+图中显示的数字与特定功能列表中的类别相对应。
+
+<a id="t1" href="#呼叫邀请">1 呼叫邀请</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t2" href="#顶部菜单栏">2 顶部菜单栏</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t3" href="#通话界面">3 通话界面</a><a id="t4" href="#聊天视图">&nbsp;&nbsp;&nbsp;&nbsp;4 聊天视图</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t5" href="#成员列表视图">5 成员列表视图</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t6" href="#成员列表视图">6 美颜插件</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t7" href="#悬浮窗">7 悬浮窗</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t8" href="#退出通话确认">8 退出通话确认</a>&nbsp;&nbsp;&nbsp;&nbsp;<a id="t9" href="#屏幕共享">9 屏幕共享</a>
+       
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/feature_map/1.jpeg" /></Frame>    
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/feature_map/2.jpg" /></Frame>   
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/feature_map/3.jpg" /></Frame>
+
+<table>
+<tbody><tr>
+<th>类别</th>
+<th>功能</th>
+<th>描述</th>
+</tr>
+<tr id="呼叫邀请">
+<th rowspan="2"><a href="#t1">1 呼叫邀请</a></th>
+<td>[自定义呼叫邀请](./Calling%20config/Overview.mdx)</td>
+<td>支持：
+<ul><li>设置呼入呼出的铃声。</li><li>设置呼叫页面的背景</li><li>设置呼叫邀请中的文本。</li><li>展示或隐藏拒绝邀请的按钮。</li></ul></td>
+</tr>
+<tr>
+<td>[实现离线推送](./Implement%20offline%20call/Offline%20call.mdx)</td>
+<td>支持向离线应用（在后台被冻结或遭系统或用户杀掉的应用）推送呼叫邀请。</td>
+</tr>
+<tr id="顶部菜单栏">
+<th><a href="#t2">2 顶部菜单栏</a></th>
+<td>[自定义顶部菜单栏](./Calling%20config/Customize%20the%20menu%20bar.mdx)</td>
+<td>支持：
+<ul><li>添加自定义按钮。</li><li>增减菜单栏按钮。</li><li>设置菜单栏标题文本。</li><li>设置菜单栏是否可见。</li><li>设置是否自动隐藏菜单栏。</li><li>设置可否通过点击隐藏菜单栏。</li><li>设置菜单栏风格。</li><li>设置按钮个数（至多5个）。</li><li>设置按钮的图片。</li></ul></td>
+</tr>
+<tr id="通话界面">
+<th rowspan="6"><a href="#t3">3 通话界面</a></th>
+<td>切换视频填充模式</td>
+<td>支持以下视频画面填充模式：
+<ul><li>裁剪填充。</li><li>等比例填充。</li></ul></td>
+</tr>
+<tr>
+<td>[调整布局](./Calling%20config/Configure%20layouts.mdx)</td>
+<td><ul><li>提供画中画和宫格式两种视图布局。</li><li>画中画布局支持设置小视图位置、大小和间距，点击切换大小视图、设置视图背景与颜色</li><li>宫格式布局支持设置视图间距，以及全屏显示屏幕共享。</li></ul></td>
+</tr>
+<tr>
+<td>[自定义前景视图](./Calling%20config/Add%20custom%20components.mdx)</td>
+<td>支持在视图顶层添加设置组件。</td>
+</tr>
+<tr>
+<td>[隐藏用户视图标签](./Calling%20config/Hide%20the%20label%20on%20the%20user%20view.mdx)</td>
+<td>支持展示或隐藏用户名称、麦克风状态和摄像头状态。</td>
+</tr>
+<tr>
+<td>[隐藏声浪效果](./Calling%20config/Hide%20the%20label%20on%20the%20user%20view.mdx)</td>
+<td>用户在关闭摄像头后，用户头像周围默认显示声浪（可关闭）。</td>
+</tr>
+<tr>
+<td>[自定义底部菜单栏](./Calling%20config/Customize%20the%20menu%20bar.mdx)</td>
+<td>支持：
+<ul><li> 添加自定义的按钮。</li><li>增减菜单栏按钮。</li><li>设置菜单栏是否可见。</li><li>设置是否自动隐藏菜单栏。</li><li>设置可否通过点击隐藏菜单栏。</li><li>设置菜单栏风格。</li><li>设置按钮个数（至多5个）。</li><li>设置按钮图标。</li></ul></td>
+</tr>
+<tr id="聊天视图">
+<th><a href="#t4">4 聊天视图</a></th>
+<td>展示房间内聊天</td>
+<td>菜单栏添加聊天按钮后，启用聊天窗口，支持设置聊天 item view。</td>
+</tr>
+<tr id="成员列表视图">
+<th><a href="#t5">5 成员列表视图</a></th>
+<td>展示房间成员列表</td>
+<td>菜单栏添加成员列表按钮后，启用成员列表视图，支持设置成员列表 item view，以及配置是否展示麦克风摄像头状态 。</td>
+</tr>
+<tr id="美颜插件">
+<th><a href="#t6">6 美颜插件</a></th>
+<td>[实现美颜功能](./Advanced%20Features/Advanced%20beauty%20effects/Integrate.mdx)</td>
+<td>集成美颜插件且菜单栏添加美颜按钮后，用户可在此设置美颜效果。</td>
+</tr>
+<tr id="悬浮窗">
+<th><a href="#t7">7 悬浮窗</a></th>
+<td>[最小化视频通话视图](./Advanced%20Features/Minimize%20call%20window.mdx)</td>
+<td>菜单栏添加了最小化按钮后，启用视频通话悬浮窗。支持设置悬浮窗的文本颜色，图片样式等。</td>
+</tr>
+<tr id="退出通话确认">
+<th><a href="#t8">8 退出通话确认</a></th>
+<td>[实现退出确认对话框](./Calling%20config/Set%20a%20hangup%20confirmation%20dialog.mdx)</td>
+<td>当点击返回键或者是挂断按钮的时候，默认直接退出通话。音视频通话 Kit 支持使用对话框确认用户挂断意图。</td>
+</tr>
+<tr id="屏幕共享">
+<th><a href="#t9">9 屏幕共享界面</a></th>
+<td>[实现屏幕共享](./Advanced%20Features/Screen%20sharing.mdx)</td>
+<td>支持<ul><li>设置屏幕共享分辨率。</li><li>全屏查看屏幕共享画面。</li><li>显示/隐藏全屏模式按钮。</li><li>开启/关闭屏幕旋转功能。</li></ul></td>
+</tr>
+<tr>
+<th rowspan="6">其他</th>
+<td>[配置进入通话的本地设备状态](./Calling%20config/Implement%20an%20audio-only%20call.mdx)</td>
+<td>支持设置进入通话时本地设备的状态，包括摄像头、麦克风、扬声器。</td>
+</tr>
+<tr>
+<td>配置通话视频</td>
+<td>支持设置分辨率。</td>
+</tr>
+<tr>
+<td>[实现纯语音互动](./Calling%20config/Implement%20an%20audio-only%20call.mdx)</td>
+<td>支持实现纯语音通话。</td>
+</tr>
+<tr>
+<td>[监听离开通话](./Calling%20config/Set%20a%20hangup%20confirmation%20dialog.mdx)</td>
+<td>点击挂断按钮或者退出确认对话框的 OK 按钮的时候触发，默认是结束通话，你可以在这里覆盖默认的动作。</td>
+</tr>
+<tr>
+<td>自定义 UI 文本</td>
+<td>支持调整界面文本。</td>
+</tr>
+<tr>
+<td>[设置头像](./Calling%20config/Set%20avatar%20for%20users.mdx)</td>
+<td>用户可设置头像。</td>
+</tr>
+</tbody></table>

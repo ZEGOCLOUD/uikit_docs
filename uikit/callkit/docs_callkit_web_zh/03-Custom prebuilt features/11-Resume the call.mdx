@@ -1,51 +1,49 @@
-# Resume the call
+# 恢复通话
 
-## Introduction
+- - -
 
-During a call, if the user refreshes the browser, the call will be terminated. To resume the call after refreshing the browser, please refer to this document.
+## 功能概述
 
-## How do I resume the call after refreshing the browser?
-### 1. Get the Room ID
+在通话过程中，用户如果刷新浏览器，就会退出通话。如需实现刷新浏览器后仍保持在相同通话中，可参考本文档。
 
-The process of obtaining the Room ID varies depending on the type of call.
+## 实现流程
 
-#### Basic Call
+### 1 获取房间 ID
 
-When calling the `joinRoom` method, listen for the `onJoinRoom` callback function and call the `getRoomID` method within the `onJoinRoom` callback function to obtain and properly record the room ID after successfully joining the call. For example, store it in `sessionStorage` for returning to the call after refreshing the browser.
+<Tabs>
+<Tab title="基本通话">
+在调用 `joinRoom` 方法时，监听 `onJoinRoom` 回调函数，并在 `onJoinRoom` 回调函数中调用 `getRoomID` 方法，以在成功加入通话房间后，获取该房间的 ID 并妥善记录。例如存储在 `sessionStorage` 中，以便在刷新浏览器后返回到该房间。
 
 ```ts
 zp.joinRoom({
     onJoinRoom: () => {
-        // Get the roomID
+        // 获取 roomID
         const roomID = zp.getRoomID();
-        // Store it in sessionStorage
+        // 存在 sessionStorage 中
         sessionStorage.setItem('roomID', roomID);
     }   
 });
 ```
-
 <Note title="Note">
-
-After the user ends the call, the application should delete the `roomID` stored in `sessionStorage`.
+用户结束通话后，应用需删除存储于 `sessionStorage` 的 `roomID`。
 </Note>
+</Tab>
+<Tab title="支持邀请的通话">
+调用 `setCallInvitationConfig` 方法配置呼叫邀请时，监听 `onSetRoomConfigBeforeJoining` 回调函数。
 
-#### Call with Invitation
+在 `onSetRoomConfigBeforeJoining` 回调函数中调用 `getRoomID` 方法，以在成功加入通话房间后，获取该房间 的 ID 并妥善记录。例如存储在 `sessionStorage` 中，以便在刷新浏览器后返回到该房间。
 
-When configuring the call invitation using the `setCallInvitationConfig` method, listen for the `onSetRoomConfigBeforeJoining` callback function.
-
-Call the `getRoomID` method within the `onSetRoomConfigBeforeJoining` callback function to obtain and properly record the room ID after successfully joining the call. For example, store it in `sessionStorage` to return to the room after refreshing the browser.
-
-Then, return a configuration object that includes the `autoLeaveRoomWhenOnlySelfInRoom` property set to `false` so that the only user left in the call will not automatically exiting the room.
+接着，返回一个配置对象，其中包含 `autoLeaveRoomWhenOnlySelfInRoom` 属性设置为 `false`，以禁用当房间内只剩一个人时用户自动退出房间的功能。
 
 ```ts
 zp.setCallInvitationConfig({
     onSetRoomConfigBeforeJoining: () => {
-        // Get the roomID
+        // 获取 roomID
         const roomID = zp.getRoomID();
-        // Store it in sessionStorage
+        // 存在 sessionStorage 中
         sessionStorage.setItem('roomID', roomID);
         return {
-            // Disable the functionality of automatically exiting the room when there is only one person left in the room
+            // 关闭房间内只剩一个人时自动退出房间功能
             autoLeaveRoomWhenOnlySelfInRoom: false,
         }
     }
@@ -53,17 +51,18 @@ zp.setCallInvitationConfig({
 ```
 
 <Note title="Note">
-
-After the user ends the call, the application should delete the `roomID` stored in `sessionStorage`.
+用户结束通话后，应用需删除存储于 `sessionStorage` 的 `roomID`。
 </Note>
+</Tab>
+</Tabs>
 
-### 2. Rejoin the Room
+### 2 重新加入房间
 
-After the user refreshes the browser, the application should retrieve the `roomID` from `sessionStorage` and call the `joinRoom` method to rejoin the room, and set `showPreJoinView` to false to disable the pre-join check page for a better user experience.
+用户刷新浏览器后，应用需从 `sessionStorage` 获取 `roomID`，调用 `joinRoom` 方法重新加入房间，且设置 `showPreJoinView` 为 false，关闭通话前检测页面，以提供更好的用户体验。
 
 ```ts
 if (sessionStorage.getItem('roomID')){
-    // Generate Kit Token
+    // 生成 Kit Token
     const appID = ;
     const token = "";
     const roomID = sessionStorage.getItem('roomID');
@@ -71,20 +70,20 @@ if (sessionStorage.getItem('roomID')){
     const userName = "userName" + userID;    
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(appID, token, roomID, userID, userName);
 
-    // Create an instance object using the Kit Token.
+    // 使用 Kit Token 创建实例对象。
     const zp = ZegoUIKitPrebuilt.create(kitToken);
     zp.joinRoom({
-        // Hide the pre-join check view
+        // 隐藏通话前检测界面
         showPreJoinView: false,
     });
 }
 ```
 
-## Reference
+## 参考信息
 
 ### getRoomID
 
 ```ts
-// Description: Get the Room ID
+// 描述：获取房间 ID
 getRoomID(): string;
 ```

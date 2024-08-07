@@ -1,0 +1,108 @@
+# 实现挂断确认对话框
+
+
+在默认情况下，当用户点击“结束通话”按钮时，Call Kit 会直接结束通话。但是您也可以设置**确认对话框**来双重确认用户是否要挂断通话。
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/hangup_confirm.gif" />
+</Frame>
+
+## 实现流程
+
+使用 `hangUpConfirmInfo` 配置：在配置了 `hangUpConfirmInfo` 参数之后，Call Kit 将在结束通话之前弹出一个带有默认样式的确认对话框，显示您设置的确认信息。
+
+示例代码如下：
+
+<CodeGroup>
+```swift title="基本通话"
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID"
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID 
+    let yourAppSign: String = YourAppSign
+    let callID: String = "testCallID"
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // 在这里修改您的自定义配置。
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+
+        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
+        hangUpConfirmDialogInfo.title = "挂断确认"
+        hangUpConfirmDialogInfo.message = "您是否要挂断通话？"
+        hangUpConfirmDialogInfo.cancelButtonName = "取消"
+        hangUpConfirmDialogInfo.confirmButtonName = "确认"
+        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
+        
+        let callVC = ZegoUIKitPrebuiltCallVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: selfUserName ?? "", callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+```swift title="携带邀请的通话"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        // 在这里修改您的自定义配置。
+        let hangUpConfirmDialogInfo = ZegoLeaveConfirmDialogInfo()
+        hangUpConfirmDialogInfo.title = "挂断确认"
+        hangUpConfirmDialogInfo.message = "您是否要挂断通话？"
+        hangUpConfirmDialogInfo.cancelButtonName = "取消"
+        hangUpConfirmDialogInfo.confirmButtonName = "确认"
+        config.hangUpConfirmDialogInfo = hangUpConfirmDialogInfo
+        return config
+    }
+}
+```
+</CodeGroup>
+
+## 监听挂断事件
+
+如果您想要监听挂断事件，例如在结束通话时保存通话录音，Call Kit 提供了一个 `ZegoUIKitPrebuiltCallVCDelegate` 方法，当通话结束时将触发 `onCallEnd`。当然，您也可以在 `onCallEnd` 中实现自定义的业务逻辑。
+
+示例代码如下：
+
+```swift 
+ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
+
+extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+    func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+        print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
+    }
+}
+```

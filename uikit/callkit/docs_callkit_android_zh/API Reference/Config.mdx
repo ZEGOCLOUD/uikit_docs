@@ -1,0 +1,138 @@
+# Config
+
+- - -
+
+
+## ZegoUIKitPrebuiltCallInvitationConfig
+通话配置类
+
+| 属性                                | 类型                                | 描述                                                                                                                                                                                                                          |
+| ----------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| incomingCallRingtone                | String                              | 配置在线来电呼叫的铃声。资源文件需要放到 res/raw/ 目录下，设置该参数时不用填写文件名后缀。例如：在res/raw/ 目录下添加了 zego_incoming.mp3 资源文件，那么就把 incomingCallRingtone 设置成字符串 "zego_incoming".               |
+| outgoingCallRingtone                | String                              | 配置在线呼出的铃声。资源文件需要放到 res/raw/ 目录下，设置该参数时不用填写文件名后缀。例如：在res/raw/ 目录下添加了 zego_outgoing.mp3 资源文件，那么就把 outgoingCallRingtone 设置成字符串 "zego_outgoing".                   |
+| ZegoUIKitPrebuiltCallConfigProvider | ZegoUIKitPrebuiltCallConfigProvider | 返回 ZegoUIKitPrebuiltCallConfig 配置类以自定义通话。您可以使用 ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(ZegoCallInvitationData invitationData) 方法来生成默认配置。请参考[功能概述](./../Overview.mdx) |
+| incomingCallBackground              | Drawable                            | 配置在线来电呼叫的等待页面的背景图片。                                                                                                                                                                                        |
+| outgoingCallBackground              | Drawable                            | 配置在线呼出的等待页面的背景图片。                                                                                                                                                                                            |
+| showDeclineButton                   | boolean                             | 收到在线来电呼叫的时候，是否显示拒绝按钮。                                                                                                                                                                                    |
+| notificationConfig                  | ZegoNotificationConfig              | 离线呼相关配置，具体请参考离线[向离线应用发送呼叫邀请](./../Implement%20offline%20call/Offline%20call.mdx)文档。                                                                                                              |
+| translationText                     | ZegoTranslationText                 | 呼叫邀请相关的文案。请参考[切换语言](./../Calling%20config/Switch%20language.mdx)。                                                                                                                                        |
+
+
+## ZegoUIKitPrebuiltCallConfig
+通话配置类
+
+| 属性                        | 类型                                                                  | 描述                                                                                                     |
+| --------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| turnOnCameraWhenJoining     | boolean                                                               | 默认是否启用摄像头。默认值为 true。                                                                      |
+| turnOnMicrophoneWhenJoining | boolean                                                               | 默认是否启用麦克风。默认值为 true。                                                                      |
+| useSpeakerWhenJoining       | boolean                                                               | 默认是否启用扬声器。默认值为 true。                                                                      |
+| audioVideoViewConfig        | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) | 音频和视频视图的配置。如麦克风和摄像头状态图标、是否显示用户名、声浪效果和视频显示模式。                 |
+| layout                      | [ZegoLayout](#zegolayout)                                             | 通话页面音视频窗口显示样式，包括画中画布局、宫格布局。                                                   |
+| bottomMenuBarConfig         | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   | 通话页面底部栏的配置参数，如底部的栏按钮、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。 |
+| topMenuBarConfig            | [ZegoTopMenuBarConfig](#zegotopmenubarconfig)                         | 通话页面顶部栏的配置参数，如顶部的栏按钮、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。 |
+| hangUpConfirmDialogInfo     | ZegoHangUpConfirmDialogInfo                                           | 点击挂断按钮时，是否显示离开房间的对话框信息。如果没有设置，则不显示。                                   |
+| memberListConfig            | [ZegoMemberListConfig](#zegomemberlistconfig)                         | 通话成员列表显示配置，如成员的摄像头和麦克风状态。                                                       |
+| screenSharingVideoConfig    | ZegoPrebuiltVideoConfig                                               | 屏幕共享视频的分辨率，默认值为 540p。                                                                    |
+| videoConfig                 | ZegoPrebuiltVideoConfig                                               | 通话视频的分辨率，默认值为 360p。                                                                        |
+| durationConfig              | [ZegoCallDurationConfig](#zegocalldurationconfig)                     | 通话时长配置。                                                                                           |
+| beautyConfig                | ZegoBeautyPluginConfig                                                | 仅在使用美颜插件时有效。用于自定义美颜插件的 effectsTypes。                                              |
+| inRoomChatConfig            | ZegoInRoomChatConfig                                                  | 配置房间内聊天的标题和输入提示，或自定义房间内聊天视图。                                                 |
+| miniVideoConfig             | [ZegoMiniVideoConfig](#zegominivideoconfig)                           | 小窗口视频的文案和可绘制资源配置。                                                                       |
+| avatarViewProvider          | ZegoAvatarViewProvider                                                | 可自定义用户头像。                                                                                       |
+| leaveCallListener           | LeaveCallListener                                                     | 自己离开通话的回调。                                                                                     |
+| zegoCallText                | ZegoCallText                                                          | 通话相关文案。                                                                                           |
+
+
+## ZegoPrebuiltAudioVideoViewConfig
+视图配置类
+
+| 属性                            | 类型                       | 描述                                                    |
+| ------------------------------- | -------------------------- | ------------------------------------------------------- |
+| showMicrophoneStateOnView       | boolean                    | 是否在 VideoView 上显示麦克风状态Icon。默认值为 false。 |
+| showCameraStateOnView           | boolean                    | 是否在 VideoView 上显示摄像头状态Icon。默认值为 false。 |
+| showUserNameOnView              | boolean                    | 是否在 VideoView 上显示用户名。默认值为 false。         |
+| showSoundWavesInAudioMode       | boolean                    | 在语音模式下是否显示头像周围的声浪。默认值为 true。     |
+| useVideoViewAspectFill          | boolean                    | 正常的黑边模式（否则横屏会难看）。默认值为 true。       |
+| videoViewForegroundViewProvider | ZegoForegroundViewProvider | 自定义视频视图前景 View。                               |
+
+
+## ZegoBottomMenuBarConfig
+底部菜单栏配置类
+
+| 属性              | 类型                         | 描述                                                                                                     |
+| ----------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| buttons           | List\<ZegoMenuBarButtonName> | 需要显示的按钮，按照实际 List 的顺序显示。                                                               |
+| maxCount          | int                          | 可以显示的按钮的最大数量，最多为 5个。如果超过这个值，则会显示“更多”按钮。注意，这个值包含了“更多”按钮。 |
+| hideAutomatically | boolean                      | 5 秒内没有操作屏幕，或者用户点击屏幕非响应区域的位置，顶部和底部会自动收起。                             |
+| hideByClick       | boolean                      | 用户是否可以点击屏幕非响应区域的位置，并收起顶部和底部。                                                 |
+| style             | ZegoMenuBarStyle             | 菜单栏显示颜色，有高亮和暗色两种。                                                                       |
+| buttonConfig      | ZegoMenuBarButtonConfig      | 菜单栏按钮配置，使用此配置来改变按钮的图标。                                                             |
+
+
+## ZegoTopMenuBarConfig
+顶部菜单栏配置类
+
+| 属性              | 类型                         | 描述                                                                                                     |
+| ----------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| title             | String                       | 顶部菜单栏标题。                                                                                         |
+| buttons           | List\<ZegoMenuBarButtonName> | 需要显示的按钮，按照实际 List 的顺序显示。                                                               |
+| maxCount          | int                          | 可以显示的按钮的最大数量，最多为 5个。如果超过这个值，则会显示“更多”按钮。注意，这个值包含了“更多”按钮。 |
+| hideAutomatically | boolean                      | 5 秒内没有操作屏幕，或者用户点击屏幕非响应区域的位置，顶部和底部会自动收起。                             |
+| hideByClick       | boolean                      | 用户是否可以点击屏幕非响应区域的位置，并收起顶部和底部。                                                 |
+| style             | ZegoMenuBarStyle             | 菜单栏显示颜色，有高亮和暗色两种。                                                                       |
+| buttonConfig      | ZegoMenuBarButtonConfig      | 菜单栏按钮配置，使用此配置来改变按钮的图标。                                                             |
+
+
+## ZegoMemberListConfig
+房间用户列表配置类
+
+| 属性                   | 类型                           | 描述                                      |
+| ---------------------- | ------------------------------ | ----------------------------------------- |
+| showMicrophoneState    | boolean                        | 是否显示麦克风的状态图标，默认值为 true。 |
+| showCameraState        | boolean                        | 是否显示摄像头的状态图标，默认值为 true。 |
+| memberListItemProvider | ZegoMemberListItemViewProvider | 自定义成员列表视图。                      |
+
+
+## ZegoCallDurationConfig
+通话时长配置类
+
+| 属性                   | 类型                   | 描述                                  |
+| ---------------------- | ---------------------- | ------------------------------------- |
+| isVisible              | boolean                | 是否显示通话时间时长，默认值为 true。 |
+| durationUpdateListener | DurationUpdateListener | 通话时长更新的回调。每隔1s触发一次。  |
+
+
+
+## ZegoMiniVideoConfig
+小窗口配置类
+
+| 属性                   | 类型     | 描述                             |
+| ---------------------- | -------- | -------------------------------- |
+| miniVideoTextColor     | int      | 小窗口视频的文字颜色。           |
+| miniVideoDrawableColor | int      | 小窗口视频的可绘制颜色。         |
+| miniVideoAudioDrawable | Drawable | 小窗口视频的音频可绘制资源。     |
+| miniVideoVideoDrawable | Drawable | 小窗口视频的视频可绘制资源。     |
+| permissionText         | String   | 请求小窗口视频权限时显示的文本。 |
+
+
+## ZegoMenuBarButtonConfig
+菜单栏按钮配置类
+
+| 属性                              | 类型     | 描述                             |
+| --------------------------------- | -------- | -------------------------------- |
+| toggleCameraOnImage               | Drawable | 摄像头开启状态的按钮图标。       |
+| toggleCameraOffImage              | Drawable | 摄像头关闭状态的按钮图标。       |
+| toggleMicrophoneOnImage           | Drawable | 麦克风开启状态的按钮图标。       |
+| toggleMicrophoneOffImage          | Drawable | 麦克风关闭状态的按钮图标。       |
+| hangUpButtonImage                 | Drawable | 挂断按钮的图标。                 |
+| switchCameraFrontImage            | Drawable | 切换至前置摄像头的按钮图标。     |
+| switchCameraBackImage             | Drawable | 切换至后置摄像头的按钮图标。     |
+| showMemberListButtonImage         | Drawable | 显示成员列表的按钮图标。         |
+| chatButtonImage                   | Drawable | 聊天按钮的图标。                 |
+| minimizingButtonImage             | Drawable | 最小化按钮的图标。               |
+| audioOutputSpeakerImage           | Drawable | 扬声器音频输出状态的按钮图标。   |
+| audioOutputEarSpeakerImage        | Drawable | 耳机音频输出状态的按钮图标。     |
+| audioOutputBluetoothImage         | Drawable | 蓝牙音频输出状态的按钮图标。     |
+| screenSharingToggleButtonOnImage  | Drawable | 屏幕共享切换按钮开启状态的图标。 |
+| screenSharingToggleButtonOffImage | Drawable | 屏幕共享切换按钮关闭状态的图标。 |
+| beautyButtonImage                 | Drawable | 美颜按钮的图标。                 |

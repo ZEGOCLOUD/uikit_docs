@@ -1,92 +1,88 @@
-# Customize call invitation config
+# 自定义呼叫邀请配置
 
-- - -
+## 介绍
 
-## Introduction
+Call Kit 支持配置呼叫邀请中的各项设置，以及定义呼叫结束后的逻辑。
 
-
-After having a basic look-through of the Call Kit docs, you will know it is totally possible for you to customize the UI and logic based on your actual needs. So the same, the Call Kit with call invitation feature also allows you to make the same customization.
-
-In addition, you may want to jump to your own existing pages or implement other logic when the call ends, which can also be customized.
-
-## How do I customize the call config?
+## 自定义呼叫配置
 
 ```javascript
 zp.setCallInvitationConfig({
-  // The callback for the call invitation is accepted before joining the room (a room is used for making a call), which can be used to set up the room config. The Call Kit enables you to join the room automatically, and the room config adapts according to the specific call type (ZegoInvitationType).
-  onSetRoomConfigBeforeJoining: (callType) => {
-    return {
-     // ...,
-     showScreenSharingButton: false,
-     // ...
-    }
-  },
+    // 在加入房间之前接受呼叫邀请的回调（房间用于进行呼叫），可用于设置房间配置。Call Kit 使您能够自动加入房间，并根据特定呼叫类型（ZegoInvitationType）调整房间配置。
+    onSetRoomConfigBeforeJoining: (callType) => {
+        return {
+            // ...,
+            showScreenSharingButton: false,
+            // ...
+        }
+    },
 })
 ```
 
-You can also tailor the specific features by customizing parameters. The following shows the complete parameter examples:
+您还可以通过自定义参数来定制特定功能。以下是完整的参数示例：
 
 ``` javascript
 export interface RoomConfig {
-  container?: HTMLElement | undefined | null; // Call component container. 
-  turnOnMicrophoneWhenJoining?: boolean; // Whether to enable the microphone when joining the call. Enabled by default.
-  turnOnCameraWhenJoining?: boolean; // Whether to enable the camera when joining the call. Enabled by default.
-  showMyCameraToggleButton?: boolean; // Whether to display the button for toggling my camera. Displayed by default.
-  showMyMicrophoneToggleButton?: boolean; // Whether to display the button for toggling my microphone. Displayed by default.
-  showAudioVideoSettingsButton?: boolean; // Whether to display the button for audio and video settings. Displayed by default.
+    container?: HTMLElement | undefined | null; // 呼叫组件容器。
+    turnOnMicrophoneWhenJoining?: boolean; // 加入呼叫时是否启用麦克风。默认启用。
+    turnOnCameraWhenJoining?: boolean; // 加入呼叫时是否启用摄像头。默认启用。
+    showMyCameraToggleButton?: boolean; // 是否显示切换本端用户的摄像头的按钮。默认显示。
+    showMyMicrophoneToggleButton?: boolean; // 是否显示切换本端用户的麦克风的按钮。默认显示。
+    showAudioVideoSettingsButton?: boolean; // 是否显示音频和视频设置按钮。默认显示。
 
-  showTextChat?: boolean; // Whether to display the text chat interface on the right side. Displayed by default.
-  showUserList?: boolean; // Whether to display the participant list. Displayed by default. 
-  lowerLeftNotification?: {
-    showUserJoinAndLeave?: boolean; // Whether to display notifications on the lower left area when participants join and leave the room. Displayed by default.
-    showTextChat?: boolean; // Whether to display the latest messages on the lower left area. Displayed by default.
-  };
-  branding?: {
-    logoURL?: string; // The branding LOGO URL.
-  };
-  maxUsers?: number; // In-call participants ranges from [2 - 20]. The default value is unlimited.
-  layout?: "Sidebar" | "Grid" | "Auto"; // The layout modes. Uses the Auto mode by default. 
+    showTextChat?: boolean; // 是否在右侧显示文本聊天界面。默认显示。
+    showUserList?: boolean; // 是否显示参与者列表。默认显示。
+    lowerLeftNotification?: {
+        showUserJoinAndLeave?: boolean; // 是否在左下角显示通知有参与者加入和离开房间。默认显示。
+        showTextChat?: boolean; // 是否在左下角显示最新消息。默认显示。
+    };
+    branding?: {
+        logoURL?: string; // 品牌 LOGO 的 URL。
+    };
+    maxUsers?: number; // 呼叫中的参与者范围为[2-20]。默认值为无限制。
+    layout?: "Sidebar" | "Grid" | "Auto"; // 布局模式。默认使用自动模式。
 
-  showNonVideoUser?: boolean; // Whether to display the non-video participants. Displayed by default. 
-  showOnlyAudioUser?: boolean; // Whether to display audio-only participants. Displayed by default.
+    showNonVideoUser?: boolean; // 是否显示非视频参与者。默认显示。
+    showOnlyAudioUser?: boolean; // 是否显示仅音频参与者。默认显示。
 
-  useFrontFacingCamera?: boolean; // Whether to use the front-facing camera when joining the room. Uses a front-facing camera by default.
-  onJoinRoom?: (users: ZegoUser[]) => void; // Callback for participants enter the prejoin view.
-  onLeaveRoom?: (users: ZegoUser[]) => void;// Callback for participants exits the leaving view.
-  onUserJoin?: (user: ZegoUser[]) => void; // Callback for other participants join the call.
-  onUserLeave?: (user: ZegoUser[]) => void; // Callback for other participants leave the call. 
-  showScreenSharingButton?: boolean; // Whether to display the Screen Sharing button. Displayed by default. 
-  showLayoutButton?: boolean; // Whether to display the button for switching layouts. Displayed by default.
-  showPinButton?: boolean; // Whether to display the Pin button. Displayed by default.
+    useFrontFacingCamera?: boolean; // 加入房间时是否使用前置摄像头。默认使用前置摄像头。
+    onJoinRoom?: (users: ZegoUser[]) => void; // 参与者进入加入前视图的回调。
+    onLeaveRoom?: (users: ZegoUser[]) => void;// 参与者退出离开视图的回调。
+    onUserJoin?: (user: ZegoUser[]) => void; // 其他参与者加入呼叫的回调。
+    onUserLeave?: (user: ZegoUser[]) => void; // 其他参与者离开呼叫的回调。
+    showScreenSharingButton?: boolean; // 是否显示屏幕共享按钮。默认显示。
+    showLayoutButton?: boolean; // 是否显示切换布局的按钮。默认显示。
+    showPinButton?: boolean; // 是否显示固定按钮。默认显示。
 
-  onUserAvatarSetter?: (user: ZegoUser[]) => void; // Callback for the user avatar can be set. 
-  videoResolutionList?: VideoResolution[]; // Video resolution list.
-  videoResolutionDefault?: VideoResolution; // The default video resolution.
-  whiteboardConfig?: {            
-           showAddImageButton?: boolean, // It's set to false by default. To use this feature, activate the File Sharing feature, and then import the plugin. Otherwise, this prompt will occur: "Failed to add image, this feature is not supported."
-  }
+    onUserAvatarSetter?: (user: ZegoUser[]) => void; // 可以设置用户头像的回调。
+    videoResolutionList?: VideoResolution[]; // 视频分辨率列表。
+    videoResolutionDefault?: VideoResolution; // 默认视频分辨率。
+    whiteboardConfig?: {            
+        showAddImageButton?: boolean, // 默认设置为false。要使用此功能，请激活文件共享功能，然后导入插件。否则，将出现此提示：“添加图像失败，不支持此功能。”
+    }
 }
 ```
 
 
-## How do I customize the logic when a call ends?
+## 如何自定义呼叫结束时的逻辑？
 
 ```javascript
 zp.setCallInvitationConfig({
-  // The callback for the call invitation ends (this will be triggered when the call invitation is refused/timed out/canceled/ended due to busy status.)
-  onCallInvitationEnded: (reason,data) =>{
-      // Add your custom logic here.
-  };
+    // 呼叫邀请结束的回调（当呼叫邀请被拒绝/超时/取消/因忙碌状态结束时触发）。
+    onCallInvitationEnded: (reason,data) =>{
+        // 在此处添加自定义逻辑。
+    };
 })
 ```
 
-The following lists all the values for the `reason` (why the call invitation fails/call invitation ends):
+以下列出了“reason”（呼叫邀请失败/呼叫邀请结束的原因）的所有值：
+
 ```ts
 export enum CallInvitationEndReason {
-  Declined = "Declined",
-  Timeout = "Timeout",
-  Canceled = "Canceled",
-  Busy = "Busy",
-  LeaveRoom = "LeaveRoom",
+    Declined = "Declined",
+    Timeout = "Timeout",
+    Canceled = "Canceled",
+    Busy = "Busy",
+    LeaveRoom = "LeaveRoom",
 }
 ```

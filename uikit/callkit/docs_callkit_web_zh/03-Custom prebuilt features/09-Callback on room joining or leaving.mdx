@@ -1,37 +1,47 @@
-import CompleteParameter from "/snippets/uikit/Web_UIKits_Complete_parameter_examples-en.md"
+import WebCompleteParameterExample from '/snippets/uikit/WebCompleteParameterExampleZh.mdx'
 
-# Callbacks on room joining or leaving
-
-## Introduction
-
-ZEGOCLOUD UIKits allows you to set up and configure some function parameters for UIKits to trigger various events according to lifetime.
-
-For example, you might want the timer to start when the room host joins the room and end when the host leaves.
+# 监听进出房间回调
 
 
-**How do I listen for the callbacks on room joining/leaving?**
+## 功能概述
 
+ZEGO UIKit 允许设置部分功能参数，便于开发者在生命周期内触发并监听各种事件。
 
-- To listen for the callback for room joining, set up the `onJoinRoom` to be a function that takes all the users in the room (an array) as a parameter.
-- To listen for the callback for room leaving, set up the `onLeaveRoom` to be a function that takes all the users in the room (an array) as a parameter.
+:::if{props.kitType="LiveStreaming"}
+例如，您可能希望当房主（或主播）加入房间时开始计时，并在房主（或主播）离开时结束计时。
+:::
+:::if{props.kitType="LiveStreaming"}
+例如，您可能希望有人加入通话时开始计时，并在其他人都离开离开时结束计时。
+:::
+
+## 实现流程
+
+- 如需监听加入房间的回调，请调用 `onJoinRoom` 函数，该函数以将房间中的所有用户（一个数组）作为参数。
+- 如需监听离开房间的回调，请调用 `onLeaveRoom` 函数，该函数以房间中的所有用户（一个数组）作为参数。
 
 
 ```javascript
 // ....
 zp.joinRoom({
-     // ...,
-     onJoinRoom: () => {
-        // Add your custom logic
-     },
-     onLeaveRoom: () => {
-       // Add your custom logic
-     }
-     // ...
+    // ...,
+    onJoinRoom: () => {
+        // 添加您的自定义逻辑
+    },
+    onLeaveRoom: () => {
+       // 添加您的自定义逻辑
+    }
+    // ...
 });
 ```
 
-For more callbacks, check the complete parameter examples as needed:
 
-<Accordion title="Complete parameter examples" defaultOpen="false">
-<CompleteParameter/>
+## 完整参数示例
+
+有关更多回调，请根据需要查看完整的参数示例：
+
+
+<Accordion title="展开查看完整参数实例" defaultOpen="false">
+
+<WebCompleteParameterExample/>
+
 </Accordion>

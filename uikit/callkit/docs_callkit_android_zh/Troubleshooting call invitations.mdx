@@ -1,0 +1,186 @@
+# 排查呼叫邀请故障
+
+
+<Warning title="Warning">
+如果您的项目已经集成了 Firebase Cloud Messaging，您将需要额外的步骤来处理 Firebase 和 Call Kit 之间的兼容性问题。详情请参考 [如何解决同时集成 Firebase Cloud Message 时的冲突？](./FAQ.mdx)
+</Warning>
+
+如果您遇到离线通话问题，**我们建议您在排查离线问题之前先测试并确保在线通话功能正常工作**。这通常会缩短您解决问题的时间。
+
+以下是一些常见的集成问题和现象组合。**您可以尝试使用此列表快速自我诊断并定位问题的原因。**
+
+## 排除在线呼叫故障
+
+### 主叫用户点击通话按钮后，被叫用户 UI 无响应
+
+如果主叫用户点击通话按钮后用户界面没有响应，请检查以下内容：
+
+1. 请确保双方都已成功初始化并连接，请参考 <a href="#检查初始化错误">检查是否有任何初始化错误</a>。
+
+2. 检查主叫用户端是否有任何错误报告，请参考 <a href="#检查主叫用户端是否有任何错误">检查主叫用户端是否有任何错误</a>。
+
+## 排除离线通话故障
+
+离线通话问题可能相当复杂且棘手，特别是在Android设备上。为了帮助您，我们下面列出了一些常见情况及其相应的解决方案。
+
+<Warning title="Warning">
+
+在尝试排除离线通话故障之前，请**确保在线呼叫邀请功能正常工作**。
+
+请 <a href="#检查测试设备是否已授予应用相关权限">检查测试设备是否已授予应用相关权限</a>。
+
+</Warning>
+
+### 可以收到通话邀请，但邀请对话框中只有通知，没有接受和拒绝按钮。
+
+请 <a href="#检查-resourceid-配置是否正确">检查 ResourceID 配置是否正确</a>。
+
+### 可以收到通话邀请，但点击接受后，应用无法启动。
+
+请 <a href="#检查测试设备是否已授予应用相关权限">检查测试设备是否已授予应用相关权限</a>。
+
+### 用户在退出应用后仍能收到离线通知。
+
+用户退出应用后，您应该调用`ZegoUIKitPrebuiltCallService().uninit()`。
+
+```java
+// 在应用的用户登出时
+void onUserLogout() {
+    // 当应用的用户退出登录时
+    ZegoUIKitPrebuiltCallService().uninit();
+}
+```
+
+### 被叫用户离线时未收到通话邀请通知
+
+#### 1 确保使用的是最新版本
+
+在项目终端中输入 `./gradlew build --refresh-dependencies` 进行强制同步。同步完成后，再次点击同步按钮进行同步。
+
+#### 2 检查应用是否已启用必要权限
+
+安装后，某些 Android 设备可能会默认阻止应用显示通知。ZEGO 建议您打开应用设置，检查是否已向应用授予通知权限，确保应用被允许显示通知。
+
+#### 3 检查被叫用户是否正确获取了推送 ID
+
+在 IDE（Android Studio）调试时，您通常可以在应用的控制台日志中查看到如 `push id` 或 `pushID` 等重要信息。请确保被叫用户正确获取了推送ID。
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/2.jpeg" />
+</Frame>
+
+如果您在获取有效的推送 ID 时遇到问题，可能是由于您的证书配置存在问题。我们建议您再次查看 [快速开始（包含呼叫邀请）](./Quick%20start%20(with%20call%20invitation).mdx)，以确保您在控制台上的证书配置正确。配置正确后，您应该能看到类似以下内容：
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Copy_1.jpeg" /></Frame>
+
+如果在 [ZEGO 控制台](https://console.zego.im/) 上配置了证书后，仍然无法获取推送 ID，请仔细检查 Android 上的 `google-service.json` 文件中的 `package_name` 是否与您项目的包名匹配。
+
+确认无误后，您应该能够正确获取推送ID。
+
+#### 4 检查是否能够从 ZEGO 控制台接收调试消息
+
+要检查是否能够从 ZEGOC 控制台接收调试消息，请登录到 [ZEGO](https://console.zego.im) 并导航到 **开发辅助**，点击 `ZIM 离线推送测试` 按钮，即可开始测试。
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/UIKit/console_debug.jpeg" />
+</Frame>
+
+如果在点击 **测试** 按钮时遇到与 `厂商推送服务器` 相关的错误，请查看错误码和错误信息。这可以帮助您确定问题的根本原因。
+
+`厂商推送服务器` 错误可能由以下原因引起：
+
+- 被叫用户未注册或未登录，这可能导致测试失败。确保被叫用户的应用程序未被卸载或被叫用户未退出应用程序。
+
+- 您的 Firebase 项目可能已被修改或删除，导致信息不匹配。通过登录 Firebase 控制台来确认这一点。
+
+
+## 检查清单
+
+### 检查初始化错误
+
+检查ZEGO SDK是否初始化成功，以及 signalPlugin 是否已连接。您应该调用 `ZegoUIKitPrebuiltCallService.init` 来初始化并登录 ZEGO signalPlugin。通过以下代码检查连接状态：
+
+```java
+ZegoUIKitPrebuiltCallService.events.setErrorEventsListener(new ErrorEventsListener() {
+    @Override
+    public void onError(int errorCode, String message) {
+        // 如果有错误抛出
+    }
+});
+ZegoUIKitPrebuiltCallService.events.invitationEvents.setPluginConnectListener(
+    new SignalPluginConnectListener() {
+    @Override
+    public void onSignalPluginConnectionStateChanged(ZIMConnectionState state, ZIMConnectionEvent event,
+        JSONObject extendedData) {
+            // signalPlugin 用于发送呼叫邀请，如果您的 ZIMConnectionState 是 DISCONNECTED，您将无法发送或接收通话邀请。
+    }
+});
+```
+
+### 检查主叫用户端是否有任何错误
+
+<a id="callingSide"></a>
+
+- 如果您使用 `ZegoSendCallInvitationButton` 来启动通话，您可以这样检查错误码：
+
+    ```java
+    newVideoCall.setOnClickListener(new ClickListener() {
+        @Override
+        public void onClick(int errorCode, String errorMessage, List<ZegoCallUser> errorInvitees) {
+            
+        }
+    });
+    ```
+
+- 如果您使用 `ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange()`，只需检查该方法的回调。
+    ```java
+    ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange(activity, invitees, type, new PluginCallbackListener() {
+        @Override
+        public void callback(Map<String, Object> result) {
+            int code = (int) result.get("code");
+            String message = (String) result.get("message");
+            List<ZegoUIKitUser> errorInvitees = (List<ZegoUIKitUser>) result.get("errorInvitees");
+        }
+    });
+    ```
+
+请检查错误码和消息，并确认 `errorInvitees` 列表是否为空。
+
+有关错误码的详细信息，请参阅 [即时通讯  - ZIM 错误码](https://doc-preview-zh.zego.im/article/11606)。
+
+<Note title="Note">
+
+此外，如果您在发送通话邀请时使用了 `customData` 参数，请注意该参数的大小不能超过 1024 字节。
+</Note>
+
+### 检查测试设备是否已授予应用相关权限
+
+请确保应用已在手机设置中被授予相关权限。同时请检查手机是否处于勿扰模式。
+
+以下是在小米设备上实现离线推送所需的权限参考：
+|                                                                                                                                                                         |                                                                                                                                                                         |                                                                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings1.jpg" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings2.jpg" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/miui12_settings3.jpg" /></Frame> |
+
+
+通常需要检查的权限包括：
+
+- 通知：切换到启用
+
+- 显示悬浮窗：切换到启用
+
+- 电池优化：无限制
+
+您可以在 [这里](https://dontkillmyapp.com/) 查找您手机品牌的相关信息权限设置方法。
+
+### 检查 ResourceID 配置是否正确
+
+
+请检查 ZEGO 控制台中的 resourceID 配置是否为 FCM Data messages。
+
+请检查 ZEGO 控制台中配置的 resourceID 是否与代码中 `ZegoSendCallInvitationButton` 使用的 resourceID 完全相同。
+
+```java
+ZegoSendCallInvitationButton button;
+button.setResourceID(String resourceID);
+```

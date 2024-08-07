@@ -1,63 +1,60 @@
-# Send a call invitation to offline apps
+# 向离线应用发送呼叫邀请
 
 
-## Introduction
+## 功能介绍
 
+当原生应用在后台运行或退出时，Call Kit 允许您的 Web 应用向原生应用发送离线呼叫邀请。目前，它仅支持 Web 应用向原生应用发送呼叫邀请。
 
-Call Kit allows your Web app to send an offline call invitation to native apps when the native app is running in the backend or quit. It only supports Web apps to native apps only for now.
+## 启用离线呼叫邀请
 
-This doc describes the implementation:
-
-
-## Enable the offline call invitation
-
-To send a call invitation to offline apps, you must run the following to enable the offline call invitation feature first:
+要向离线应用发送呼叫邀请，您首先需要运行以下代码以启用离线呼叫邀请功能：
 
 ```js
-    const zp = ZegoUIKitPrebuilt.create(token);
-    zp.addPlugins({ ZIM });
-    
-    zp.setCallInvitationConfig({
-        enableNotifyWhenAppRunningInBackgroundOrQuit: true,
-    })
+const zp = ZegoUIKitPrebuilt.create(token);
+zp.addPlugins({ ZIM });
+
+zp.setCallInvitationConfig({
+    enableNotifyWhenAppRunningInBackgroundOrQuit: true,
+})
 ```
 
-## How do I customize the notification dialog?
+## 自定义通知对话框
 
-You can customize the UI of the notification dialog when your Web apps send a call invitation to offline apps. To do so, refer to the following:
+当您的 Web 应用向离线应用发送呼叫邀请时，您可以自定义通知对话框的界面。请参考以下内容：
 
 ```typescript
-    sendCallInvitation(params: {
-        callees: ZegoUser[];
-        callType: ZegoInvitationType;
-        timeout?: number;
-        data?: string;
-        notificationConfig?: ZegoSignalingPluginNotificationConfig;
-    })
+sendCallInvitation(params: {
+    callees: ZegoUser[];
+    callType: ZegoInvitationType;
+    timeout?: number;
+    data?: string;
+    notificationConfig?: ZegoSignalingPluginNotificationConfig;
+})
 
-    interface ZegoSignalingPluginNotificationConfig {
-      resourcesID?: string;
-      title?: string;
-      message?: string;
+interface ZegoSignalingPluginNotificationConfig {
+  resourcesID?: string;
+  title?: string;
+  message?: string;
+}
+
+
+//for example 
+zp.sendCallInvitation({
+    callees: [{userID:'123',userName:'U_123'}],
+    callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+    notificationConfig?: {
+        resourcesID:'zegouikit_call',
+        title:'呼叫邀请', 
+        message:'收到视频通话...'
     }
-
-
-    //for example 
-    zp.sendCallInvitation({
-        callees: [{userID:'123',userName:'U_123'}],
-        callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
-        notificationConfig?: {
-            resourcesID:'zegouikit_call',
-            title:'Call invitation', 
-            message:'Incoming video call...'
-        }
-    })
+})
 ```
 
-#### Parameters of ZegoSignalingPluginNotificationConfig
-| Parameter   | Type   | Required | Description                                                                                                                                                                                                                                                                                           |
-| ----------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| resourcesID | string | No       | The `resourcesID` can be used to specify the ringtone of an offline call invitation, which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). This only takes effect when the `enableNotifyWhenAppRunningInBackgroundOrQuit` is true. |
-| title       | string | No       | Title of the offline call. It uses the sender's username by default.                                                                                                                                                                                                                                  |
-| message     | string | No       | Content of the offline call notification.                                                                                                                                                                                                                                                             |
+#### ZegoSignalingPluginNotificationConfig 参数
+
+| 参数        | 类型   | 是否必填 | 描述                                                                                                                                                                                               |
+| :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| resourcesID | string | 否       | `resourcesID` 可用于指定离线呼叫邀请的铃声，必须与&nbsp; [ZEGO 控制台](https://console.zego.im) 中已设置的 resourceID 相同。仅当 `enableNotifyWhenAppRunningInBackgroundOrQuit` 为 true 时才生效。 |
+| title       | string | 否       | 离线呼叫的标题。默认使用发送者的用户名。                                                                                                                                                           |
+| message     | string | 否       | 离线呼叫通知的内容。                                                                                                                                                                               |
 

@@ -1,0 +1,171 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import AndroidEnviromentRequirementZh from "/snippets/uikit/AndroidEnviromentRequirementZh.md";
+
+# 快速开始
+
+
+## 准备环境
+
+在开始集成音视频 UIKit 前，请确保开发环境满足以下要求：
+
+<AndroidEnviromentRequirementZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+1. 添加 `jitpack` 配置。
+
+根据您的 Android Gradle 插件版本，选择对应的实现步骤。
+<Tabs>
+<Tab title="7.1.0 或更高版本">
+进入项目的根目录，打开 `settings.gradle` 文件，在 `dependencyResolutionManagement` > `repositories` 中添加 jitpack，示例代码如下：
+``` groovy
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+      google()
+      mavenCentral()
+      maven { url 'https://storage.zego.im/maven' }   // <- 添加这行。
+      maven { url 'https://www.jitpack.io' } // <- 添加这行。
+  }
+}
+```
+</Tab>
+<Tab title="低于 7.1.0 的版本">
+进入项目的根目录，打开 `build.gradle` 文件，在 `allprojects`->`repositories` 中添加 jitpack，示例代码如下：
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- 添加这行。
+        maven { url "https://jitpack.io" }  // <- 添加这行。
+    }
+}
+```
+</Tab>
+</Tabs>
+
+2. 修改您的 app 级别的 `build.gradle` 文件。
+
+```groovy
+dependencies {
+    ...
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+' 
+}
+```  
+
+### 使用 ZegoUIKitPrebuiltCallFragment
+
+声明 `userID`、`userName` 和 `callID`，用于创建通话。
+
+<Note title="Note">
+- `userID` 和 `callID` 只能包含数字、字母和下划线(_)。
+- 使用相同 `callID` 的用户可以连接到同一个通话。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltCallConfig.zegoCallText`。
+</Note>
+
+
+<CodeGroup>
+```java title="Java"
+public class CallActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_call);
+
+        addCallFragment();
+    }
+
+    public void addCallFragment() {
+        long appID = yourAppID;
+        String appSign = yourAppSign;
+
+        String callID = callID;
+        String userID = userID;
+        String userName = userName;
+
+        // 您也可以使用 GroupVideo/GroupVoice/OneOnOneVoice 来进行更多类型的呼叫。
+        ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+        // 设置语言为中文
+        config.zegoCallText = new ZegoCallText(ZegoUIKitLanguage.CHS);
+        ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
+            appID, appSign, userID, userName,callID,config);
+
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+    }
+}
+```
+```kotlin title="Kotlin"
+class CallActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_call)
+        addCallFragment()
+    }
+
+    private fun addCallFragment() {
+        val appID: Long = yourAppID
+        val appSign: String = yourAppSign
+        val callID: String = callID
+        val userID: String = userID
+        val userName: String = userName
+
+        // 您也可以使用 GroupVideo/GroupVoice/OneOnOneVoice 来进行更多类型的呼叫。
+        val config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        //  设置语言为中文
+        config.zegoCallText = ZegoCallText(ZegoUIKitLanguage.CHS);
+        val fragment = ZegoUIKitPrebuiltCallFragment.newInstance(
+            appID, appSign, userID, userName,callID, config
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow()
+    }
+}
+```
+</CodeGroup>
+
+修改自动生成的 `activity_call.xml` 文件：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/fragment_container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+现在，您可以启动 `CallActivity` 进行音视频通话。
+
+
+## 运行和测试
+
+至此，您已经完成了所有步骤！
+
+在 Android Studio 上点击 **Run** 即可在设备上运行和测试您的 App。
+
+## 相关指南
+
+<CardGroup cols={2}>
+<Card title="通话设置" href="./Calling%20config/Overview.mdx">
+</Card>
+</CardGroup>
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android" target="_blank">
+  获取完整示例代码。
+</Card>
+</CardGroup>
