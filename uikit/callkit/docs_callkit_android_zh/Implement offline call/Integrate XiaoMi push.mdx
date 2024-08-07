@@ -1,0 +1,111 @@
+# 集成小米推送
+
+
+## 概述
+
+`统一推送联盟` 成立之后，各大厂商都推出了自己的推送服务通道，主要目的是为了建立 Android 推送生态。目前小米，华为，魅族，OPPO，vivo 等厂商都推出了系统级别的推送通道，避免了各家 APP 都使用各自的长链接来维持推送通道、需要应用进程处于存活状态，而造成手机耗电、耗内存等问题。
+
+## 前提条件
+
+在接入 `小米` 的离线推送通道之前，请确保：
+
+- 已集成最新版本的音视频通话 UIKit（Call Kit），并且完成在线邀请功能，详情请参考 [快速开始（包含呼叫邀请）](./../Quick%20start%20(with%20call%20invitation).mdx)。
+- 已完成如下步骤：
+    1. 前往 <a href="https://dev.mi.com/console/appservice/push.html" target="_blank" rel="noreferrer noopener">小米开放平台</a> 注册开发者账号，并进行认证，详情请参考 <a href="https://dev.mi.com/console/doc/detail?pId=848" target="_blank" rel="noreferrer noopener">企业开发者账号注册流程</a>。
+    2. 开发者身份认证成功后，使用小米开发者账号，登录 <a href="https://dev.mi.com/console/man/" target="_blank" rel="noreferrer noopener">小米开发者后台</a>，在“应用服务”中选择“消息推送”。
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/xiaomi2.png" /></Frame>
+    3. 点击“创建应用”，按照流程输入相关信息，创建自己的应用，并获取该应用的 AppID、AppKey、AppSecret 等信息。
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/xiaomi3.png" /></Frame>
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/xiaomi4.png" /></Frame>
+    4. 完成以上步骤以后，您还需要提交应用审核。审核通过即应用创建完成，接下来还需要申请开通小米推送服务，请参考本文 [小米推送消息限制](#小米推送消息限制)
+
+## 使用步骤
+
+1. 下载 [小米推送 SDK](https://storage.zego.im/zpns/sdk/xiaomi/MiPush_SDK_Client_5_7_8-C_3rd.aar)。
+
+2. 将下载到的 SDK “MiPush_SDK_Client_5_7_8-C_3rd.aar” 文件，拷贝到您项目路径的 “app/libs” 目录下。
+
+3. 在 “build.prop” 中添加 aar 依赖。
+
+    ```java
+    dependencies {
+        implementation files('libs/MiPush_SDK_Client_5_7_8-C_3rd.aar') // 版本为 5.7.8 的小米推送 SDK
+    }
+    ```
+
+    <Warning title="Warning">
+    由于 Android 12 通知 trampoline 限制（详情请参考 Google 官方文档 <a href="https://developer.android.google.cn/about/versions/12/behavior-changes-12?hl=zh-cn#notification-trampolines" target="_blank" rel="noreferrer noopener">行为变更：以 Android 12 为目标平台的应用 - 通知 trampoline 限制</a>），targetSdkVersion >= 31 的应用需要接入小米推送 SDK 4.9.1 或以上版本，否则会出现点击通知无法正常跳转的情况。
+    </Warning>
+
+4. 以上配置完成后，请前往 [ZEGO 控制台](https://console.zego.im/)，点击“项目管理”，选择需要配置的项目，查看“项目配置”。在“服务配置 - 即时通讯 - 离线推送证书配置” 中 “点击添加证书”，如下图所示(针对每个 Android 厂商，您至多可以添加两个证书)：
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Consle/09161.png" /></Frame>
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Consle/09162.png" /></Frame>
+
+    <Note title="Note">
+    图中字段“Project ID” 为您在各厂商申请的参数，根据每个厂商不一样。
+    </Note>
+
+    添加完成后，您可以在“离线推送证书配置”模块看到该证书，还可以再次编辑或删除该证书。
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Consle/09163.png" /></Frame>
+
+5. 防止混淆代码
+
+    在 “proguard-rules.pro” 文件中，为 小米推送 SDK 添加 -keep 类的配置，这样可以防止混淆小米推送 SDK 公共类名称：
+
+    ```java
+    # 以下的 “com.xiaomi.mipushdemo.DemoMessageRreceiver” 应改成 App 中定义的完整类名
+    -keep class com.xiaomi.mipush.sdk.DemoMessageReceiver {*;}
+    ```
+
+## 小米推送消息限制
+
+小米推送将消息分为“私信消息”和“公信消息”两个类别，若应用选择不接入私信或公信，则会接入默认通道，详情请参考小米官网文档 <a href="https://dev.mi.com/console/doc/detail?pId=2086" target="_blank" rel="noreferrer noopener">小米推送消息限制说明</a>。
+
+<table>
+<tbody><tr>
+<th>消息类型</th>
+<th>用户接收数量限制</th>
+<th>申请方式</th>
+</tr>
+<tr>
+<td>默认</td>
+<td>单个应用单个设备单日 1 条。</td>
+<td>无需申请。</td>
+</tr>
+<tr>
+<td>公信消息</td>
+<td>单个应用单个设备单日 5-8 条。</td>
+<td rowspan="2">需在推送运营平台申请。</td>
+</tr>
+<tr>
+<td>私信消息</td>
+<td>不限量。</td>
+</tr>
+</tbody></table>
+
+
+## 使用私信通道无限制推送
+
+1. 请参考小米官方文档 <a href="https://dev.mi.com/console/doc/detail?pId=2422#_2" target="_blank" rel="noreferrer noopener">小米推送消息分类新规 - channel申请及接入方法</a>，创建 Channel，创建 Channel 时选择私信通道。创建后，请提交小米审核。
+
+    <Warning title="Warning">
+    一旦创建 Channel 并发送了带有 Channel 的消息，设备上即会生成这个 Channel，不能删除也不能修改，所以请谨慎创建 Channel。 
+    </Warning>                                  
+2. 审核通过后，请登录 [ZEGO 控制台](https://console.zego.im/)，添加 resourceID，步骤如下：
+    1. 选择项目管理，查看对应的项目。
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Enter_project_1.jpeg" /></Frame>
+    2. 选择 服务配置- 即时通讯 页面，下滑到“自定义推送策略（resourcesID）配置，点击“添加 resourceID”。
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Add_1.jpeg" /></Frame>
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/resouceID.jpeg" /></Frame>
+    3. 填入 `resourceID`（由您自定义，不超过 32 个字符）、您在小米控制台添加的 `channel_id`（渠道 ID，必需）、`channel_name`（渠道名称，可选）、`channel_description`（渠道描述，可选）。
+
+        <Note title="Note">
+        建议 resourceID 能够直接反映推送目的。例如，目的是打电话，就可以命名为 `call_resource`。
+        </Note>
+
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/resourceID_xiaomi.png" /></Frame>
+
+3. 在发起呼叫时，可以指定使用该 Resource ID 对应的通道进行推送。您需要将配置的 Resource ID 填写到对应的呼叫邀请按钮中或者设置给呼叫邀请接口，即可在呼叫邀请的时候使用离线推送功能。

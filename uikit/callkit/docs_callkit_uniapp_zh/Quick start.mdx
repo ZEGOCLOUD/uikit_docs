@@ -1,0 +1,160 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md";
+
+# 快速开始
+
+
+## 准备环境
+
+在开始集成音视频 UIKit 前，请确保开发环境满足以下要求：
+
+<EnviromentRequiremenZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 实现流程
+
+### 集成 SDK
+
+#### 1 添加 ZegoUIKitPrebuiltCall 作为依赖项
+1. 打开终端，前往到您项目的根目录，并运行以下命令创建 `podfile`：
+    ```bash
+    pod init
+    ```
+2. 编辑 `Podfile` 文件添加基本依赖项：
+    ```ruby
+    pod 'ZegoUIKitPrebuiltCall'
+    ```
+3. 在终端中运行以下命令，使用 Cocoapods 下载所需的所有依赖项和 SDK：
+    ```bash
+    pod install
+    ```
+
+#### 2 导入 ZegoUIKit 和 ZegoUIKitPrebuiltCall
+
+在您的项目导入 ZegoUIKit 和 ZegoUIKitPrebuiltCall。
+<CodeGroup>
+```swift title="swift"
+  import ZegoUIKit
+  import ZegoUIKitPrebuiltCall
+  // 您的 ViewController.swift
+  class ViewController: UIViewController {
+      // 其他代码...
+  }
+  ```
+```objc title="objc"
+  @import ZegoUIKit;
+  @import ZegoUIKitPrebuiltCall;
+  @import ZegoUIKitSignalingPlugin;
+  @import ZegoPluginAdapter;
+  ```
+</CodeGroup>
+
+
+### 配置项目
+
+打开`Info.plist`，在`dict`部分内添加以下代码：
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>我们需要相机访问权限以实现通话</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>我们需要麦克风访问权限以实现通话</string>
+```
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_ios.png" />
+</Frame>
+
+### 使用 ZegoUIKitPrebuiltCallVC
+
+声明 `userID`、`userName` 和 `callID`，用于创建通话。
+
+<Note title="Note">
+
+- `userID` 和 `callID`只能包含数字、字母和下划线(_)。
+- 用户使用相同的 `callID` 即可相互通话。
+- UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltCallConfig.zegoCallText`。
+</Note>
+
+<CodeGroup>
+```swift title="swift"
+// 您的 ViewController.swift
+class ViewController: UIViewController {
+    // 其他代码...
+    var userID: String = <#UserID#> 
+    var userName: String = <#UserName#>
+    var callID: String = <#CallID#>
+    var appSign: String = <#AppSign#> // 从 ZEGO 控制台获取
+    var appID: UInt32 = <#AppID#>  // 从 ZEGO 控制台获取 
+
+    @IBAction func makeNewCall(_ sender: Any) {
+        
+        // 您还可以使用 groupVideo/groupVoice/oneOnOneVoice 进行更多类型的呼叫。
+        let config: ZegoUIKitPrebuiltCallConfig = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        // 修改语言为中文
+        config.zegoCallText = ZegoCallText(language: .CHS)
+        let callVC = ZegoUIKitPrebuiltCallVC.init(appID: self.appID, 
+                                                  appSign: self.appSign, 
+                                                  userID: self.userID, 
+                                                  userName: self.userName, 
+                                                  callID: self.callID, 
+                                                  config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+}
+```
+```objc title="objc"
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    NSString * userID = @"userID";
+    NSString * userName = @"userName";
+    unsigned int appID = appID; // 从 ZEGO 控制台获取
+    NSString * appSign = @"appSign"; // 从 ZEGO 控制台获取
+    NSString * callID = @"callID";
+    
+    // 您还可以使用 groupVideo/groupVoice/oneOnOneVoice 进行更多类型的呼叫。
+    ZegoUIKitPrebuiltCallConfig *config = [ZegoUIKitPrebuiltCallConfig oneOnOneVideoCall];
+    // 修改语言为中文
+    config.translationText = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+    ZegoUIKitPrebuiltCallVC *vc = [[ZegoUIKitPrebuiltCallVC alloc] init:appID appSign:appSign userID:userID userName:userName callID:callID config:config];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+```
+</CodeGroup>
+
+然后，通过呈现`VC`来进行新的呼叫。
+
+## 运行和测试
+
+至此，您已经完成了所有步骤！
+
+只需在 Xcode 中点击 **Run** 即可在设备上运行和测试您的应用程序。
+
+## 相关指南
+
+<CardGroup cols={2}>
+<Card title="通话设置" href="./Calling%20config/Overview.mdx">
+</Card>
+</CardGroup>
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_ios" target="_blank">
+  获取完整示例代码。
+</Card>
+</CardGroup>
+
+## 常见问题
+<CardGroup cols={2}>
+<Card title="如何处理接入错误" href="https://doc-zh.zego.im/faq/integration_error" target="_blank">
+</Card>
+</CardGroup>

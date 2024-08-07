@@ -1,0 +1,255 @@
+# Config
+
+
+## ZegoUIKitPrebuiltCallInvitationConfig
+呼叫邀请配置类
+
+| 属性                                   | 类型                                                                             | 描述                                                                             |
+| -------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| incomingCallRingtone                   | String                                                                           | 收到呼叫（来电）的铃声资源的完整 MP3 文件路径。                                  |
+| outgoingCallRingtone                   | String                                                                           | 呼出铃声资源的完整 MP3 文件路径。                                                |
+| showDeclineButton                      | Bool                                                                             | 是否显示拒绝按钮。                                                               |
+| notifyWhenAppRunningInBackgroundOrQuit | Bool                                                                             | 当 App 在后台时是否接受通知。                                                    |
+| isSandboxEnvironment                   | Bool                                                                             | 是否为沙盒环境。                                                                 |
+| certificateIndex                       | [ZegoSignalingPluginMultiCertificate](#zegosignalingpluginmulticertificate) | 证书验证方式。                                                                   |
+| translationText                        | [ZegoTranslationText](#zegotranslationtext)                                 | 呼叫邀请相关的文案。                                                             |
+| videoConfig                            | [ZegoPrebuiltCallVideoConfig](#zegoprebuiltcallvideoconfig)                 | 视频分辨率配置，默认值为 ZegoPrebuiltCallVideoConfig(resolution: .PRESET_360P)。 |
+
+
+## ZegoUIKitPrebuiltCallConfig
+通话配置类
+
+| 属性                        | 类型                                                                       | 描述                                                                                                     |
+| --------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| turnOnCameraWhenJoining     | Bool                                                                       | 默认是否启用摄像头，默认值为 true。                                                                      |
+| turnOnMicrophoneWhenJoining | Bool                                                                       | 默认是否启用麦克风，默认值为 true。                                                                      |
+| useSpeakerWhenJoining       | Bool                                                                       | 默认是否启用扬声器，默认值为 true。                                                                      |
+| audioVideoViewConfig        | [ZegoPrebuiltAudioVideoViewConfig](#zegoprebuiltaudiovideoviewconfig) | 音频和视频视图的配置。如麦克风和摄像头状态图标、是否显示用户名、声浪效果和视频显示模式。                 |
+| layout                      | [ZegoLayout](#zegolayout)                                             | 配置通话页面音视频窗口的显示布局，包括画中画布局、宫格式布局。                                           |
+| bottomMenuBarConfig         | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)                   | 通话页面底部栏的配置参数，如底部的栏按钮、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。 |
+| topMenuBarConfig            | [ZegoTopMenuBarConfig](#zegotopmenubarconfig)                         | 通话页面顶部栏的配置参数，如按钮列表、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。     |
+| hangUpConfirmDialogInfo     | [ZegoLeaveConfirmDialogInfo](#zegoleaveconfirmdialoginfo)             | 点击挂断按钮时，是否显示离开房间的对话框信息。如果没有设置，则不显示，反之亦然。                         |
+| memberListConfig            | [ZegoMemberListConfig](#zegomemberlistconfig)                         | 通话成员列表显示配置，如成员的摄像头和麦克风状态。                                                       |
+| videoConfig                 | [ZegoPrebuiltCallVideoConfig](#zegoprebuiltcallvideoconfig)           | 视频分辨率配置，默认值为 ZegoPrebuiltCallVideoConfig(resolution: .PRESET_360P)。                         |
+| showCallDuration            | Bool                                                                       | 是否显示通话时长，默认值为 true。                                                                        |
+| zegoCallText                | ZegoCallText                                                               | 通话相关文案。                                                                                           |
+
+
+## ZegoPrebuiltAudioVideoViewConfig
+视图配置类
+
+| 属性                      | 类型 | 描述                                                          |
+| ------------------------- | ---- | ------------------------------------------------------------- |
+| showMicrophoneStateOnView | Bool | 是否在视频通话页面展示麦克风状态的图标。默认值为 true。       |
+| showCameraStateOnView     | Bool | 是否在视频通话页面展示摄像头状态的图标。默认值为 true。       |
+| showUserNameOnView        | Bool | 是否在视频通话页面展示用户名称。默认值为 true。               |
+| showSoundWavesInAudioMode | Bool | 在语音通话模式下，是否在用户头像周围显示声浪。默认值为 true。 |
+| useVideoViewAspectFill    | Bool | 是否以等比例填充模式（黑边模式）显示视频。默认值为 true。     |
+
+## ZegoBottomMenuBarConfig
+底部菜单栏配置类
+
+| 属性              | 类型                                                     | 描述                                                                                                                                                                                |
+| ----------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| buttons           | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)]   | 需要在菜单栏上显示的按钮，按照数组的顺序显示。**swift专用** 默认值为 [.toggleCameraButton, .switchCameraButton, .hangUpButton, .toggleMicrophoneButton, .swtichAudioOutputButton]。 |
+| buttonsOC         | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)]   | 需要在菜单栏上显示的按钮，按照数组的顺序显示。**OC专用** 默认值为 [.toggleCameraButton, .switchCameraButton, .hangUpButton, .toggleMicrophoneButton, .swtichAudioOutputButton]。    |
+| maxCount          | Int                                                      | 可以显示的按钮的最大数量，最多为 5个。如果超过这个值，则会显示“更多”按钮。注意，这个值包含了“更多”按钮。                                                                            |
+| hideAutomatically | Bool                                                     | 5 秒内没有操作屏幕，或者用户点击屏幕非响应区域的位置，底部菜单栏是否会自动收起。默认值为 true。                                                                                     |
+| hideByClick       | Bool                                                     | 用户是否可以点击屏幕非响应区域的位置，收起菜单栏。默认值为 true。                                                                                                                   |
+| style             | [ZegoMenuBarStyle](#zegomenubarstyle)               | 菜单栏的显示颜色。默认值为 ZegoMenuBarStyle.dark。                                                                                                                                  |
+| buttonConfig      | [ZegoMenuBarButtonConfig](#zegomenubarbuttonconfig) | 底部菜单栏按钮配置，可使用此配置来改变按钮的图标。                                                                                                                                  |
+
+
+
+## ZegoTopMenuBarConfig
+顶部菜单栏配置类
+
+| 属性              | 类型                                                     | 描述                                                                                            |
+| ----------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| buttons           | [[ZegoMenuBarButtonName](#zegomenubarbuttonname)]   | 需要在菜单栏上显示的按钮，按照数组的顺序显示。                                                  |
+| hideAutomatically | Bool                                                     | 5 秒内没有操作屏幕，或者用户点击屏幕非响应区域的位置，顶部菜单栏是否会自动收起。默认值为 true。 |
+| hideByClick       | Bool                                                     | 用户是否可以点击屏幕非响应区域的位置，收起菜单栏。默认值为 true。                               |
+| style             | [ZegoMenuBarStyle](#zegomenubarstyle)               | 菜单栏的显示颜色。默认值为 ZegoMenuBarStyle.dark。                                              |
+| isVisible         | Bool                                                     | 菜单栏是否可见。默认值为 false。                                                                |
+| buttonConfig      | [ZegoMenuBarButtonConfig](#zegomenubarbuttonconfig) | 顶部菜单栏按钮配置，使用此配置来改变按钮的图标。                                                |
+
+
+## ZegoMemberListConfig
+房间用户列表配置类
+
+| 属性                | 类型 | 描述                                      |
+| ------------------- | ---- | ----------------------------------------- |
+| showMicrophoneState | Bool | 是否显示麦克风的状态图标。默认值为 true。 |
+| showCameraState     | Bool | 是否显示摄像头的状态图标。默认值为 true。 |
+
+
+## ZegoMenuBarButtonConfig
+菜单栏按钮配置类
+
+| 属性                       | 类型    | 描述                             |
+| -------------------------- | ------- | -------------------------------- |
+| toggleCameraOnImage        | UIImage | 摄像头开启状态的按钮图标。       |
+| toggleCameraOffImage       | UIImage | 摄像头关闭状态的按钮图标。       |
+| toggleMicrophoneOnImage    | UIImage | 麦克风开启状态的按钮图标。       |
+| toggleMicrophoneOffImage   | UIImage | 麦克风关闭状态的按钮图标。       |
+| hangUpButtonImage          | UIImage | 挂断按钮图标。                   |
+| switchCameraFrontImage     | UIImage | 切换至前置摄像头按钮的图标。     |
+| switchCameraBackImage      | UIImage | 切换至后置摄像头按钮的图标。     |
+| showMemberListButtonImage  | UIImage | 显示成员列表按钮的图标。         |
+| chatButtonImage            | UIImage | 聊天按钮的图标。                 |
+| minimizingButtonImage      | UIImage | 切换至视频通话悬浮窗按钮的图标。 |
+| audioOutputSpeakerImage    | UIImage | 扬声器音频输出状态的图标。       |
+| audioOutputEarSpeakerImage | UIImage | 耳机音频输出状态的图标。         |
+| audioOutputBluetoothImage  | UIImage | 蓝牙音频输出状态的图标。         |
+
+
+## ZegoPrebuiltCallVideoConfig
+视频分辨率配置类
+
+| 属性       | 类型                                               | 描述                                   |
+| ---------- | -------------------------------------------------- | -------------------------------------- |
+| resolution | [ZegoPresetResolution](#zegopresetresolution) | 自定义视频分辨率。默认为 PRESET_360P。 |
+
+
+
+## ZegoLayout
+通话页面布局类
+
+| 属性   | 类型                                             | 描述                                  |
+| ------ | ------------------------------------------------ | ------------------------------------- |
+| mode   | [ZegoUIKitLayoutMode](#zegouikitlayoutmode) | 通话页面音视频窗口显示样式，包括画中画布局、宫格布局。 |
+| config | [ZegoLayoutConfig](#zegolayoutconfig)       | UI 布局配置。      |
+
+
+
+
+## ZegoLayoutConfig
+
+通话页面布局配置类。请根据所选布局模式，选择查看其子类 [ZegoLayoutPictureInPictureConfig](#zegolayoutpictureinpictureconfig) 或 [ZegoLayoutGalleryConfig](#zegolayoutgalleryconfig)。
+
+
+
+## ZegoLayoutPictureInPictureConfig
+画中画布局配置类
+
+| 属性                                | 类型                                       | 描述                                                    |
+| ----------------------------------- | ------------------------------------------ | ------------------------------------------------------- |
+| isSmallViewDraggable                | Bool                                       | 小视图是否可以拖拽。默认为 `false`。                    |
+| smallViewBackgroundColor            | UIColor                                    | 小视图的背景颜色。默认为 `#333437`。                    |
+| largeViewBackgroundColor            | UIColor                                    | 大视图的背景颜色。默认为 `#4A4B4D`。                    |
+| smallViewBackgroundImage            | UIImage                                    | 小视图的背景图片。默认为 `null`。                       |
+| largeViewBackgroundImage            | UIImage                                    | 大视图的背景图片。默认为 `null`。                       |
+| smallViewPostion                    | [ZegoViewPosition](#zegoviewposition) | 小视图在UI上的位置。默认为 `.topRight`。                |
+| switchLargeOrSmallViewByClick       | Bool                                       | 大小视图是否可以点击切换。默认为 `true`。               |
+| smallViewSize                       | CGSize                                     | 小视图的大小。默认为 `CGSize(width: 95, height: 169)`。 |
+| spacingBetweenSmallViews            | CGFloat                                    | 小视图之间的间距。默认为 `0`。                          |
+| removeViewWhenAudioVideoUnavailable | Bool                                       | 当音频和视频不可用的时候是否移除 view。默认为 `true`。  |
+
+
+## ZegoLayoutGalleryConfig
+宫格布局配置类
+
+| 属性                                             | 类型 | 描述                                                   |
+| ------------------------------------------------ | ---- | ------------------------------------------------------ |
+| addBorderRadiusAndSpacingBetweenView             | Bool | 是否在视图之间添加圆角和间距。默认为 `true`。          |
+| removeViewWhenAudioVideoUnavailable              | Bool | 当音频和视频不可用的时候是否移除view。默认为 `false`。 |
+| showNewScreenSharingViewInFullscreenMode         | Bool | 是否在进入屏幕共享的时候直接设置全屏。默认为 `true`。  |
+| showScreenSharingFullscreenModeToggleButtonRules | Bool | 屏幕共享全屏模式切换按钮的显示规则。默认为 `true`。    |
+
+
+## ZegoLeaveConfirmDialogInfo
+离开通话确认对话框信息配置类
+
+| 属性              | 类型             | 描述                                                           |
+| ----------------- | ---------------- | -------------------------------------------------------------- |
+| title             | String           | 标题文本。                                                     |
+| message           | String           | 确认消息文本。                                                 |
+| cancelButtonName  | String           | 取消按钮文本。                                                 |
+| confirmButtonName | String           | 确认按钮文本。                                                 |
+| dialogPresentVC   | UIViewController | 在哪个界面显示离开直播间确认弹窗。默认在当前语聊房显示该弹窗。 |
+
+
+
+
+## ZegoMenuBarStyle
+菜单栏主题枚举类
+
+| 枚举  | 描述       |
+| :---- | :--------- |
+| light | 亮色主题。 |
+| dark  | 暗色主题。 |
+
+
+
+## ZegoUIKitLayoutMode
+通话页面布局模式枚举类
+
+| 枚举             | 描述         |
+| :--------------- | :----------- |
+| pictureInPicture | 画中画布局。 |
+| gallery          | 宫格式布局。 |
+| invalid          | 非法值。     |
+
+
+
+## ZegoUIKitLanguage
+UIKit 展示语言枚举类
+
+| 枚举    | 描述   |
+| :------ | :----- |
+| ENGLISH | 英语。 |
+| CHS     | 中文。 |
+
+
+
+
+## ZegoMenuBarButtonName
+菜单栏按钮名称枚举类
+
+| 枚举                    | 描述                 |
+| :---------------------- | :------------------- |
+| hangUpButton            | 挂断按钮。           |
+| toggleCameraButton      | 摄像头开关按钮。     |
+| toggleMicrophoneButton  | 麦克风开关按钮。     |
+| switchCameraButton      | 前后摄像头切换按钮。 |
+| switchAudioOutputButton | 音频外放开关按钮。   |
+| showMemberListButton    | 在线列表显示按钮。   |
+| chatButton              | 聊天按钮。           |
+| minimizingButton        | 悬浮窗按钮。         |
+
+
+
+## ZegoSignalingPluginMultiCertificate
+证书验证方式枚举类
+
+| 枚举              | 描述                 |
+| :---------------- | :------------------- |
+| firstCertificate  | 第一种证书验证方式。 |
+| secondCertificate | 第二种证书验证方式。 |
+
+
+
+## ZegoPresetResolution
+视频分辨率枚举类
+
+| 枚举         | 描述    |
+| :----------- | :------ |
+| PRESET_180P  | 180P。  |
+| PRESET_270P  | 270P。  |
+| PRESET_360P  | 360P。  |
+| PRESET_540P  | 540P。  |
+| PRESET_720P  | 720P。  |
+| PRESET_1080P | 1080P。 |
+
+
+
+
+## ZegoViewPosition
+视图位置类
+
+| 枚举        | 描述   |
+| :---------- | :----- |
+| topLeft     | 左上。 |
+| topRight    | 右上。 |
+| bottomLeft  | 左下。 |
+| bottomRight | 右下。 |

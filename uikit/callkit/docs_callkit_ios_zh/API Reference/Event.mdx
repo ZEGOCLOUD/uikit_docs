@@ -1,0 +1,504 @@
+# Event
+
+
+
+
+# ZegoUIKitPrebuiltCallInvitationServiceDelegate
+
+## 设置代理
+
+```swift
+ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+```
+
+
+
+## requireConfig
+
+- 函数原型：
+    ```swift
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+            if data.type == .voiceCall {
+                if let invitees = data.invitees, invitees.count > 1 {
+                    let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+                    return config
+                }  else {
+                    let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+                    return config
+                }
+            } else {
+                if let invitees = data.invitees, invitees.count > 1 {
+                    let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+                    return config
+                } else {
+                    let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+                    return config
+                }
+            }
+        }
+    }
+    ```
+
+
+
+## onIncomingCallDeclineButtonPressed
+
+- 函数原型：
+  ```swift
+  func onIncomingCallDeclineButtonPressed()
+  ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onIncomingCallDeclineButtonPressed() {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onIncomingCallAcceptButtonPressed
+
+- 函数原型：
+    ```swift
+    func onIncomingCallAcceptButtonPressed()
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onIncomingCallAcceptButtonPressed() {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onOutgoingCallCancelButtonPressed
+
+- 函数原型：
+    ```swift
+    func onOutgoingCallCancelButtonPressed()
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onOutgoingCallCancelButtonPressed() {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onIncomingCallReceived
+
+- 函数原型：
+    ```swift
+    func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onIncomingCallCanceled
+
+- 函数原型：
+    ```swift
+    func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onOutgoingCallAccepted
+
+- 函数原型：
+    ```swift
+    func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onOutgoingCallRejectedCauseBusy
+
+- 函数原型：
+    ```swift
+    func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onOutgoingCallDeclined
+
+- 函数原型：
+    ```swift
+    func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onIncomingCallTimeout
+
+- 函数原型：
+    ```swift
+    func onIncomingCallTimeout(_ callID: String, caller: ZegoCallUser)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onIncomingCallTimeout(_ callID: String, caller: ZegoCallUser) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onOutgoingCallTimeout
+
+- 函数原型：
+    ```swift
+    func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser])
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser]) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onCallTimeUpdate
+
+- 函数原型：
+    ```swift
+    func onCallTimeUpdate(_ duration: Int)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+        func onCallTimeUpdate(_ duration: Int) {
+            // ...
+        }
+    }
+    ```
+
+# ZegoUIKitPrebuiltCallVCDelegate
+
+## 设置代理
+
+```swift
+ZegoUIKitPrebuiltCallInvitationService.shared.callVCDelegate = self
+```
+
+
+
+## getForegroundView
+
+- 函数原型：
+    ```swift
+    func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView?
+    ```
+
+- 示例：
+```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getForegroundView(_ userInfo: ZegoUIKitUser?) -> ZegoBaseAudioVideoForegroundView? {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getMemberListItemView
+
+- 函数原型：
+    ```swift
+    func getMemberListItemView(_ tableView: UITableView, indexPath: IndexPath, userInfo: ZegoUIKitUser) -> UITableViewCell?
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getMemberListItemView(_ tableView: UITableView, indexPath: IndexPath, userInfo: ZegoUIKitUser) -> UITableViewCell? {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getMemberListviewForHeaderInSection
+
+- 函数原型：
+    ```swift
+    func getMemberListviewForHeaderInSection(_ tableView: UITableView, section: Int) -> UIView?
+    ```
+
+- 示例：
+```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getMemberListviewForHeaderInSection(_ tableView: UITableView, section: Int) -> UIView? {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getMemberListItemHeight
+
+- 函数原型：
+    ```swift
+    func getMemberListItemHeight(_ userInfo: ZegoUIKitUser) -> CGFloat
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getMemberListItemHeight(_ userInfo: ZegoUIKitUser) -> CGFloat {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getMemberListHeaderHeight
+
+- 函数原型：
+    ```swift
+    func getMemberListHeaderHeight(_ tableView: UITableView, section: Int) -> CGFloat
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getMemberListHeaderHeight(_ tableView: UITableView, section: Int) -> CGFloat {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onCallEnd
+
+- 函数原型：
+    ```swift
+    func onCallEnd(_ endEvent: ZegoCallEndEvent)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+    func onCallEnd(_ endEvent: ZegoCallEndEvent) {
+      print("reason: \(String(describing: endEvent.reason)) kickerUserID: \(endEvent.kickerUserID)")
+    }
+    }
+    ```
+
+
+
+## onToggleMicButtonClick
+
+- 函数原型：
+    ```swift
+    func onToggleMicButtonClick(_ isOn: Bool)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onToggleMicButtonClick(_ isOn: Bool) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onToggleCameraButtonClick
+
+- 函数原型：
+    ```swift
+    func onToggleCameraButtonClick(_ isOn: Bool)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onToggleCameraButtonClick(_ isOn: Bool) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onSwitchCameraButtonClick
+
+- 函数原型：
+    ```swift
+    func onSwitchCameraButtonClick(_ isFrontFacing: Bool)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onSwitchCameraButtonClick(_ isFrontFacing: Bool) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onAudioOutputButtonClick
+
+- 函数原型：
+    ```swift
+    func onAudioOutputButtonClick(_ isSpeaker: Bool)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onAudioOutputButtonClick(_ isSpeaker: Bool) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getChatViewItemView
+
+- 函数原型：
+    ```swift
+    func getChatViewItemView(_ tableView: UITableView, indexPath: IndexPath, message: ZegoInRoomMessage) -> UITableViewCell?
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getChatViewItemView(_ tableView: UITableView, indexPath: IndexPath, message: ZegoInRoomMessage) -> UITableViewCell? {
+            // ...
+        }
+    }
+    ```
+
+
+
+## getChatViewItemHeight
+
+- 函数原型：
+    ```swift
+    func getChatViewItemHeight(_ tableView: UITableView, heightForRowAt indexPath: IndexPath, message: ZegoInRoomMessage) -> CGFloat
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func getChatViewItemHeight(_ tableView: UITableView, heightForRowAt indexPath: IndexPath, message: ZegoInRoomMessage) -> CGFloat {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onCallTimeUpdate
+
+- 函数原型：
+    ```swift
+    func onCallTimeUpdate(_ duration: Int)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onCallTimeUpdate(_ duration: Int) {
+            // ...
+        }
+    }
+    ```
+
+
+
+## onAudioOutputDeviceChanged
+
+- 函数原型：
+    ```swift
+    func onAudioOutputDeviceChanged(_ audioOutput: ZegoUIKitAudioOutputDevice)
+    ```
+
+- 示例：
+    ```swift
+    extension ViewController: ZegoUIKitPrebuiltCallVCDelegate {
+        func onAudioOutputDeviceChanged(_ audioOutput: ZegoUIKitAudioOutputDevice) {
+            // ...
+        }
+    }
+    ```

@@ -1,0 +1,216 @@
+# API
+
+
+## ZegoUIKitPrebuiltCallFragment
+
+您可以将此 Fragment 添加到项目的任何 Activity 中，以集成通话功能。
+如果您需要 `通话邀请` 功能，请使用 `ZegoUIKitPrebuiltCallService`。
+
+函数原型：
+```java
+/// 您可以在 [ZEGO 管理控制台](https://console.zego.im) 创建项目并获取appID。 
+final long appID;
+  
+/// 您可以在 [ZEGO 管理控制台](https://console.zego.im) 创建项目并获取 appSign。 
+final String appSign;
+  
+/// 当前登录用户的 ID。
+/// 可以是任何有效的字符串。
+/// 通常，您会使用您自己的用户系统中的ID，例如 Firebase。
+final String userID;
+  
+/// 当前登录用户的名称。
+/// 可以是任何有效的字符串。
+/// 通常，您会使用您自己的用户系统中的名称，例如 Firebase。
+final String userName;
+  
+/// 通话的ID。
+/// 此ID是当前通话的唯一标识符，因此您需要确保其唯一性。
+/// 可以是任何有效的字符串。
+/// 提供相同 callID 的用户将登录到同一个通话房间。
+final String callID;
+  
+/// 初始化通话的配置。
+final ZegoUIKitPrebuiltCallConfig config;
+  
+public static ZegoUIKitPrebuiltCallFragment newInstance(long appID, @NonNull String appSign, @NonNull String userID, @NonNull String userName, @NonNull String callID, @NonNull ZegoUIKitPrebuiltCallConfig config) 
+```
+
+
+
+## ZegoUIKitPrebuiltCallService
+
+
+
+### init
+使用 appSign 初始化 ZegoUIKitPrebuiltCallService，用户登录（或重新登录、自动登录）到您的应用后，您必须立即调用此方法。   
+如果您需要设置 `ZegoUIKitPrebuiltCallConfig`，可以通过 `ZegoUIKitPrebuiltCallInvitationConfig.provider` 进行设置。   
+使用呼叫邀请服务时，每次 `ZegoUIKitPrebuiltCallFragment` 启动将请求此回调以获取当前通话的配置。   
+此外，您可以通过 `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallRingtone` 和 `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallRingtone` 自定义通话铃声，并通过 `notificationConfig` 配置通知。   
+您还可以使用 `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallBackground` 和 `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallBackground` 自定义邀请界面。如果您想修改界面上的相关文本，可以设置 `innerText`。   
+如果您想监听事件并执行自定义逻辑，可以使用 `addInvitationCallListener` 获取相关的邀请事件。
+
+函数原型：
+```java
+public static void init(Application application, long appID, String appSign, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
+```
+
+
+
+### initWithToken
+
+使用 token 初始化 ZegoUIKitPrebuiltCallService ，用户登录（或重新登录、自动登录）到您的应用后，您必须立即调用此方法。   
+如果您需要设置 `ZegoUIKitPrebuiltCallConfig`，可以通过 `ZegoUIKitPrebuiltCallInvitationConfig.provider` 进行设置。   
+使用呼叫邀请服务时，每次 `ZegoUIKitPrebuiltCallFragment` 启动将请求此回调以获取当前通话的配置。   
+此外，您可以通过 `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallRingtone` 和 `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallRingtone` 自定义通话铃声，并通过 `notificationConfig` 配置通知。   
+您还可以使用 `ZegoUIKitPrebuiltCallInvitationConfig.incomingCallBackground` 和 `ZegoUIKitPrebuiltCallInvitationConfig.outgoingCallBackground` 自定义邀请界面。如果您想修改界面上的相关文本，可以设置 `innerText`。   
+如果您想监听事件并执行自定义逻辑，可以使用 `addInvitationCallListener` 获取相关的邀请事件。
+
+函数原型：
+```java
+public static void initWithToken(Application application, long appID, String token, String userID, String userName,ZegoUIKitPrebuiltCallInvitationConfig config)
+```
+
+
+
+### uninit
+
+用户登出应用后，必须立即调用此方法
+
+函数原型：
+```java
+public static void unInit()
+```
+
+
+
+### endCall
+
+结束并离开当前通话。当前 Activity 将被完成。   
+
+函数原型：
+```java
+public static void endCall()
+```
+
+
+
+### minimizeCall
+
+此功能用于实现通话悬浮窗。通常，它可以与返回监听器一起使用，在按下返回按钮时最小化通话。要使其生效，您应该:
+- 在 manifest 里面声明了 android.Manifest.permission.SYSTEM_ALERT_WINDOW 权限。
+- 用户通过 ACTION_MANAGE_OVERLAY_PERMISSION 手动进行了授权。
+- 在 ZegoBottomMenuBarConfig 或者 ZegoTopMenuBarConfig 中配置了 MINIMIZING_BUTTON 按钮。
+- 使用了 ZEGO 的呼叫邀请服务。
+
+函数原型：
+```java
+public static void minimizeCall()
+```
+
+
+
+### getPrebuiltCallFragment
+
+当处于通话中时，此功能可用于获取 `ZegoUIKitPrebuiltCallFragment`。如果不在通话中，将返回 null。
+
+函数原型：
+```java
+public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
+```
+
+
+
+### sendInvitationWithUIChange
+
+使用此方法向其他用户发送邀请，并导航到通话等待页面。
+
+函数原型：
+```java
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, PluginCallbackListener callbackListener);
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
+public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
+    ZegoInvitationType type, String customData, String callID,
+    ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
+```
+
+
+
+### openCamera
+
+打开或关闭您的摄像头。
+
+函数原型：
+```java
+public static void openCamera(boolean enable);
+```
+
+
+
+### openMicrophone
+
+打开或关闭您的麦克风。
+
+函数原型：
+```java
+public static void openMicrophone(boolean enable);
+```
+
+
+
+### isMicrophoneOn
+您的麦克风是否已经打开
+
+函数原型：
+```java
+public static boolean isMicrophoneOn();
+```
+
+
+
+### isCameraOn
+您的摄像头是否已经打开
+
+函数原型：
+```java
+public static boolean isCameraOn() ;
+```
+
+
+
+### setAudioOutputToSpeaker
+
+设置音频输出设备为扬声器。   
+当 `outputToSpeaker` 为 false：使用音视频通话 Kit 会根据系统调度选择当前优先级最高的音频输出设备播放声音，常见的音频路由有：听筒、耳机、蓝牙设备等。   
+当 `outputToSpeaker` 为 true 且原输出设备设备为听筒：使用内置扬声器播放声音。    
+当 `outputToSpeaker` 为 true 且原输出设备设备为耳机或蓝牙设备：此方法无效，使用原设备输出音频。   
+
+函数原型：
+```java
+public static void setAudioOutputToSpeaker(boolean outputToSpeaker) ;
+```
+
+
+
+
+### getAudioRouteType
+
+获取当前音频路由。音频路由是指 App 在播放音频时使用的音频输出设备，常见的音频路由有：扬声器、听筒、耳机、蓝牙设备等。
+
+函数原型：
+```java
+public static ZegoAudioOutputDevice getAudioRouteType() ;
+```
+
+
+
+### resetAllBeautiesToDefault
+
+重置所有的美颜效果和选中状态,在下次进入通话页面生效。
+
+函数原型：
+```java
+public static void resetAllBeautiesToDefault() ;
+```

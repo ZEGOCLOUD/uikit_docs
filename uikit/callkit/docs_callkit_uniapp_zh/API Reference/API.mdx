@@ -1,0 +1,148 @@
+# API
+
+
+# ZegoUIKitPrebuiltCallInvitationService
+
+
+
+## initWithAppID
+
+用户登录（或重新登录、自动登录）您的应用后，您必须立即调用此方法。
+
+#### 函数原型：
+
+```swift
+/// 初始化通话服务
+/// - 参数:
+///   - appID: 您的 appID
+///   - appSign: 您的 appSign
+///   - userID: 用户唯一标识
+///   - userName: 用户名
+///   - config: 通话邀请个性化配置
+public func initWithAppID(_ appID: UInt32, 
+                           appSign: String,
+                           userID: String, 
+                           userName: String, 
+                           config: ZegoUIKitPrebuiltCallInvitationConfig)
+```
+
+
+
+## unInit
+
+应与 `initWithAppID` API成对使用。
+
+函数原型：
+
+```swift 
+/// 反初始化通话服务
+public func unInit()
+```
+
+
+
+## getPrebuiltCallVC
+
+您可以通过此接口访问通话页面控制器
+
+函数原型：
+
+```swift
+/// 获取通话页面控制器
+/// - Returns: ZegoUIKitPrebuiltCallVC
+public func getPrebuiltCallVC() -> ZegoUIKitPrebuiltCallVC?
+```
+
+
+
+## setRemoteNotificationsDeviceToken
+
+如果您想使用离线呼叫邀请，您必须调用此接口来设置当前设备的 token
+
+函数原型：
+
+```swift
+/// 设置要推送离线的设备Token
+/// - 参数:  
+/// - deviceToken: 设备token
+public static func setRemoteNotificationsDeviceToken(_ deviceToken: Data)
+```
+
+
+
+## endCall
+
+您可以通过调用此接口来结束当前通话
+
+函数原型：
+
+```swift
+/// 结束通话
+public func endCall()
+```
+---
+
+
+## setAudioOutputToSpeaker
+
+您可以通过调用此接将音频路由到扬声器。
+
+函数原型：
+
+```swift
+/// 设置音频路由到扬声器。
+public func setAudioOutputToSpeaker(outputToSpeaker: Bool)
+```
+---
+
+
+## getAudioRouteType
+
+您可以通过调用此接口来获取当前音频路由。
+
+函数原型：
+
+```swift
+/// 获取当前音频路由。
+public func getAudioRouteType() -> ZegoUIKitAudioOutputDevice
+```
+---
+
+
+# ZegoUIKitPrebuiltCallVC
+
+
+
+## addButtonToBottomMenuBar
+
+您可以通过调用此接口将自定义按钮添加到底部栏
+
+函数原型：
+
+```swift
+public func addButtonToBottomMenuBar(_ button: UIButton)
+```
+
+
+
+## addButtonToTopMenuBar
+
+您可以通过调用此接口将自定义按钮添加到顶部栏
+
+函数原型：
+
+```swift
+public func addButtonToTopMenuBar(_ button: UIButton)
+```
+
+
+
+## finish
+
+您可以通过调用此方法来结束当前通话。
+
+函数原型：
+
+```swift
+public func finish()
+```

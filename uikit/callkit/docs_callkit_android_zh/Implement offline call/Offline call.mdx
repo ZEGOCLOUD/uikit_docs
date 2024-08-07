@@ -1,0 +1,90 @@
+# 向离线应用发送呼叫邀请
+
+
+## 功能简介
+
+音视频通话 UIKit（Call Kit）支持向离线应用（即在后台被冻结或遭系统或用户杀掉的应用）发送呼叫邀请。
+
+## 前提条件
+
+在实现“离线推送”功能之前，请确保已集成最新版本的音视频通话 UIKit（Call ），并且完成在线邀请功能。详情请参考 [快速开始（包含呼叫邀请）](./../Quick%20start%20(with%20call%20invitation).mdx)。
+
+## 实现流程
+
+### 1 接入第三方厂商离线推送通道
+
+集成所需的第三方厂商离线推送 SDK，接入各厂商的离线推送通道，详情请参考：
+- [集成 Google FCM](./%20Integrate%20Google%20FCM.mdx)
+- [集成小米推送](./Integrate%20XiaoMi%20push.mdx)
+- [集成华为推送](./Integrate%20Huawei%20push.mdx)
+- [集成 OPPO 推送](./Integrate%20OPPO%20push.mdx)
+- [集成 VIVO 推送](./Integrate%20VIVO%20push.mdx)
+
+### 2 配置第三方推送通道
+
+调用 `enableHWPush`/`enableMiPush`/`enableVivoPush`/`enableOppoPush` 启用所需的第三方推送，随后调用 `ZegoUIKitPrebuiltCallService.init` 接口完成初始化。
+
+```java
+long appID = ; // 您的 ZEGO 项目 appID
+String appSign = ; // 您的 ZEGO 项目 appSign
+String userID = ; // 由您定义的用户 ID
+String userName = ; // 由您定义的用户名称
+
+// 启用华为推送的方法
+ZegoUIKitPrebuiltCallService.enableHWPush({hwAppID}); 
+
+// 启用小米推送的方法
+ZegoUIKitPrebuiltCallService.enableMiPush({miAppID},{miAppKey}); 
+
+// 启用 vivo 推送的方法
+ZegoUIKitPrebuiltCallService.enableVivoPush({vivoAppID}, {vivoAppKey}); 
+
+// 启用 OPPO 推送的方法
+ZegoUIKitPrebuiltCallService.enableOppoPush({oppoAppID},{oppoAppKey},{oppoAppSecret}); 
+
+// 初始化
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName, callInvitationConfig);
+```
+
+在 `ZegoUIKitPrebuiltCallService.init` 成功之后，Call Kit 会注册离线推送功能，你可以可以在 Android logcat 控制台中查看验证推送所需要的厂商 deviceToken 和 ZEGO的 pushID。
+
+### 3 发送呼叫邀请
+
+您可以根据所需效果，从以下方式中选择最适合的实现发送呼叫邀请。
+
+- **最便捷**：使用 `ZegoSendCallInvitationButton` 来发送呼叫邀请，并使用 `setResourceID()` 接口传入您在控制台配置的 `resourceID` 字段的值。
+
+  ```java
+  ZegoSendCallInvitationButton newVideoCall = ...;
+  newVideoCall.setResourceID(...);
+  ```
+
+- **如需自定义邀请按钮**：使用 `ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange()`来发送呼叫邀请，传入您在控制台配置的 `resourceID` 字段的值，前者将使用默认的通知标题和正文。
+
+    ```java
+    Activity activity = ;  //Android 上下文
+    List<ZegoUIKitUser> invitees =;  // 呼叫邀请的目标用户ID
+    ZegoInvitationType type =;   // 呼叫邀请类型
+    String resourceID = ; //离线呼叫邀请需要传入，从控制台获取
+    PluginCallbackListener callbackListener = ; // 呼叫邀请回调
+    ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange(activity,invitees,type,resourceID,callbackListener);
+    ```
+
+- **如需自定义通知的标题和正文**：使用 `ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange()` 来发送呼叫邀请，传入 `notificationConfig` 的重载方法传入您在控制台配置的 `resourceID` 字段的。
+
+    ```java
+    // 如果需要完全的自定义 
+    Activity activity = ;  //Android 上下文
+    List<ZegoUIKitUser> invitees =;  // 呼叫邀请的目标用户ID
+    ZegoInvitationType type =;   // 呼叫邀请类型
+    String customData =;  // 透传的数据
+    String title =;  // 通知的标题
+    String message =;  // 通知的正文
+    String resourceID = ; //离线呼叫邀请需要传入，从控制台获取
+    ZegoSignalingPluginNotificationConfig notificationConfig = new ZegoSignalingPluginNotificationConfig();
+    notificationConfig.setResourceID(resourceID);
+    notificationConfig.setTitle(title);
+    notificationConfig.setMessage(message);
+    PluginCallbackListener callbackListener = ; // 呼叫邀请回调
+    ZegoUIKitPrebuiltCallService.sendInvitationWithUIChange(activity, invitees, type, customData, notificationConfig,callbackListener)
+    ```

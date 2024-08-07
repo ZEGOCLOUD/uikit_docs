@@ -74,6 +74,11 @@
           "type": "doc",
           "label": "强制关闭直播间",
           "id": "customize-the-livestream/forcefully-end-a-livestream-room"
+        },
+        {
+          "type": "doc",
+          "label": "连麦时默认关闭摄像头",
+          "id": "customize-the-livestream/turn-off-camera-during-co-hosting"
         }
       ]
     },

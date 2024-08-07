@@ -1,33 +1,24 @@
 # Quick start
 
-- - -
 
 <Video src="https://resource.zegocloud.com/prebuilt/call_invitation_pro.mp4"/>
 
 
-## Prerequisites
+## 集成SDK
 
+### 导入 SDK
 
-- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com) to create a UIKit project.
-- Get the **AppID** and **ServerSecret** of the project.
-
-
-
-## Integrate the SDK
-
-### Import the SDK
-
-Choose either of the following to import the Call Kit:
+选择以下任一方式导入 Call Kit:
 
 <Tabs>
-  <Tab title="Using the NPM">
+  <Tab title="使用 NPM">
     <Steps>
-      <Step title="Install the plug-in">
+      <Step title="安装插件">
       ```js
       npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.9.0 --save 
       ```
       </Step>
-      <Step title="Import the Call Kit in your project's js or ts file">
+      <Step title="在项目的`js`或`ts`文件中导入Call Kit">
         ```js
         import { ZIM } from "zego-zim-web";
         import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
@@ -35,9 +26,9 @@ Choose either of the following to import the Call Kit:
       </Step>
     </Steps>
   </Tab>
-  <Tab title="Using the HTML Script Tag">
-    Import the following script code in the `HTML` page:
-    (**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
+  <Tab title="使用 HTML Script Tag">
+    在 `HTML` 页面中导入以下脚本代码:   
+    (**更推荐的方式**：下载并保存在你的应用服务器上，并导入到相应路径。)
     ```html
     <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
@@ -46,19 +37,26 @@ Choose either of the following to import the Call Kit:
 </Tabs>
 
 
-### Initialize the Call Kit with call invitation feature
+### 初始化带有呼叫邀请功能的 Call Kit
 
-Initialize the Call Kit, and add the call invitation plug-in:
-- Generate a [Kit Token](../04-Authentication%20and%20Kit%20Token.mdx)
-- Fill in the required parameters in the following code.
+初始化 Call Kit，并添加呼叫邀请插件:
+- 生成一个[Kit Token](../Authentication%20and%20Kit%20Token.mdx)
+- 在以下代码中填写所需参数
+
+<Note title="Note">
+
+- 以下示例代码展示了在客户端生成 Kit Token 的方法，可用于测试 Call Kit。但是，在您的 App 正式上线时，建议参考 [使用 Kit Token 鉴权文档](../Authentication%20and%20Kit%20Token.mdx) 在服务端生成 Kit Token，以避免安全风险。
+
+- UIKit 默认语言为英文，如需修改为中文，可以通过 `setCallInvitationConfig` 接口设置 `language` 参数。
+</Note>
 
 ```javascript
-// Generate a Token by calling a method.
+// 调用方法生成一个Token。
 // @param 1: appID
 // @param 2: serverSecret
-// @param 3: Room ID
-// @param 4: User ID
-// @param 5: Username
+// @param 3: 房间ID
+// @param 4: 用户ID
+// @param 5: 用户名
 const userID = ""; 
 const userName = "userName" + userID;
 const appID = 0;
@@ -67,84 +65,95 @@ const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret,null
 
 const zp = ZegoUIKitPrebuilt.create(TOKEN);
 zp.addPlugins({ ZIM });
+
+// 设置语言为中文
+zp.setCallInvitationConfig({
+    ...
+    language: ZegoUIKitLanguage.CHS,    
+    ...
+})
 ```
 
 
-### Set a button-trigger event
+### 设置按钮触发事件
 
 Set up a button and add a button-click event for making call invitations.
 
 You can customize the position of the button you set for making call invitations accordingly, passing in the ID of the user you want to call.
 
+设置一个按钮，并为呼叫邀请添加一个按钮点击事件。
 
-```html
+您可以自定义上一步设置的按钮位置，并传入呼叫目标用户的 ID。
+
+<CodeGroup>
+```html title="HTML"
   <button onclick="invite()">invite</button>
-```
+  ```
+```javascript title="JS"
+  function invite() {
+     const targetUser = {
+          userID:'',
+          userName:''
+      };
+     zp.sendCallInvitation({
+      callees: [targetUser],
+      callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+      timeout: 60,
+      }).then((res) => {
+          console.warn(res);
+      })
+      .catch((err) => {
+          console.warn(err);
+      });
+  }
+  ```
+</CodeGroup>
 
-```javascript
-function invite() {
-   const targetUser = {
-        userID:'',
-        userName:''
-    };
-   zp.sendCallInvitation({
-    callees: [targetUser],
-    callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
-    timeout: 60, // Timeout duration (second). 60s by default, range from [1-600s].
-   }).then((res) => {
-    console.warn(res);
-   })
-   .catch((err) => {
-   console.warn(err);
-   });
-}
-```
+## 运行和测试
 
-## Run & Test
+至此，你已经完成了所有的步骤！
 
-So far, you have finished all the steps!
+现在你可以使用你熟悉的服务器在浏览器中启动和运行项目。
 
-Now you can start up and run the project in a browser using a server you're familiar with.
-
-## Resources
+## 资源
 
 <CardGroup cols={2}>
-  <Card title="Realtime Coding" href="https://stackblitz.com/edit/zegocloud-prebuilt-call-invitation?file=index.js">
-  Click here to code online and check it in action.
+<Card title="在线编程" href="https://stackblitz.com/edit/zegocloud-prebuilt-call-invitation?file=index.js" target="_blank">
+点击这里在线编码并查看它的运行情况。
 </Card>
-<Card title="Live Demo" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/call_invitation">
-  Click here to try a live demo.
+<Card title="在线体验" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/call_invitation" target="_blank">
+点击这里尝试实时演示。
 </Card>
 </CardGroup>
 
 ## Related guides
 
 <CardGroup cols={2}>
-    <Card title="Customize the UI for call invitation" href="./02-Customize the UI for call invitation.mdx">
+    <Card title="自定义呼叫邀请用户界面" href="./02-Customize the UI for call invitation.mdx">
     </Card>
-    <Card title="Customize call invitation config"  href="./04-Customize call invitation config.mdx">
+    <Card title="自定义呼叫邀请配置"  href="./04-Customize call invitation config.mdx">
     </Card>
-    <Card title="Customize ringtones"  href="./03-Customize ringtones.mdx">
+    <Card title="自定义铃声"  href="./03-Customize ringtones.mdx">
     </Card>
-    <Card title="Customize event callbacks"  href="./05-Customize event callbacks.mdx">
+    <Card title="自定义事件回调"  href="./05-Customize event callbacks.mdx">
     </Card>
 </CardGroup>
 
 ## Reference
 
 <Accordion title="sendCallInvitation" defaultOpen="false">
-- **Description**
+- **接口说明**
 
-  Send a call invitation.
+  发送呼叫邀请。
 
-- **Function Prototype**
+- **函数原型：**
 
   ```ts
   sendCallInvitation(params: {
       callees: ZegoUser[];
       callType: ZegoInvitationType;
       timeout?: number;
-      roomID?: string;      
+      roomID?: string;
       data?: string;
       notificationConfig?: ZegoSignalingPluginNotificationConfig;
   }): Promise<{
@@ -152,57 +161,54 @@ Now you can start up and run the project in a browser using a server you're fami
   }>;
   ```
 
-- **Parameter Description**
+- **参数说明：**
 
-  | Parameter | Type | Required | Description |
-  | :-- | :-- | :-- | :-- | 
-  | callees | ZegoUser[] | Yes | List of callee users. A user can invite up to 9 other users at most. |
-  | callType | ZegoInvitationType | Yes | Call type. |
-  | timeout | number | No | The duration of waiting for the callee response to the invitation, in seconds, with a value range of [1, 600]. The default value is 90. |
-  | roomID | string | No | Room ID, generated by you, is a string with a maximum length of 128 bytes. It only supports numbers, English characters, and the following characters: '~', '!', '@', '#', '$', '', '^', '&', '*', '(', ')', '_', '+', '=', '-', ', ';', '’', ',', '.', '&lt;', '&gt;', '/'. |
-  | data | string | No | Extension field. |
-  | notificationConfig | ZegoSignalingPluginNotificationConfig | No | Offline push configuration. |
+| 参数               | 类型                                  | 是否必填 | 说明                                                                                                                                                                                             |
+| :----------------- | :------------------------------------ | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| callees            | ZegoUser[]                            | 是       | 被叫用户列表，最多可邀请不超过 9 名用户。                                                                                                                                                        |
+| callType           | ZegoInvitationType                    | 是       | 呼叫类型。                                                                                                                                                                                       |
+| timeout            | number                                | 否       | 等待用户响应邀请时长，单位为秒，取值范围为 [1, 600]。默认为 90。                                                                                                                                 |
+| roomID             | string                                | 否       | 房间 ID，由开发者自己生成，最大长度为 128 字节的字符串。仅支持数字，英文字符 和 '~', '!', '@', '#', '$', '', '^', '&', '*', '(', ')', '_', '+', '=', '-', ', ';', '’', ',', '.', '&lt;', '&gt;', '/'。 |
+| data               | string                                | 否       | 扩展字段。                                                                                                                                                                                       |
+| notificationConfig | ZegoSignalingPluginNotificationConfig | 否       | 离线推送配置。                                                                                                                                                                                   |
+
 
 </Accordion>
 
 <Accordion title="ZegoUser" defaultOpen="false">
-- **Description**
+- 类型描述：用户信息类。
+- 参数说明：
 
-  User information class.
+  | 属性/方法     | 类型                        | 是否必选 | 描述                                                                                                                                                                                     |
+  | :------------ | :-------------------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | userID        | string                      | 是       | 用户唯一标识，由开发者自定义，最长不超过 32 字节，仅支持数字，英文字符和 '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '&lt;', '=', '.', '&gt;', '?', '@', '\[', '\]', '^', '_', '\{', '\}', '|', '~'。|
+  | userName      | string                      | 否       | 用户的名称。最长不超过 256 字节。                                                                                                                                                        |
+  | setUserAvatar | (avatar: string) =&gt; void | 否       | 传入图片资源地址设置用户头像的方法。                                                                                                                                                     |
 
-- **Parameter Description**
-
-  | Parameter | Type | Required | Description |
-  | :-- | :-- | :-- | :-- |
-  | userID | string | Yes | Unique identifier of the user, defined by you, up to 32 bytes long, only supporting numbers, English characters, and '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '&lt;', '=', '.', '&gt;', '?', '@', '\[', '\]', '^', '_', '\{', '\}', '|', '~'. | 
-  | userName | string | No | Name of the user. Up to 256 bytes long. |
-  | setUserAvatar | (avatar: string) => void | No | Method to set the user avatar by passing in the image resource address. |
 </Accordion>
 
 <Accordion title="ZegoInvitationType" defaultOpen="false">
-- **Description**
+- 类型描述：通话邀请类型枚举类。
+- 枚举说明：
 
-  Enumeration class of call invitation types.
+| 枚举      | 枚举值 | 描述       |
+| :-------- | :----- | :--------- |
+| VoiceCall | 0      | 语音通话。 |
+| VideoCall | 1      | 视频通话。 |
 
-- **Enumerations**
 
-  | Enum | Value | Description | 
-  | :-- | :-- | :-- |
-  | VoiceCall | 0 | Voice call. |
-  | VideoCall | 1 | Video call. |
 </Accordion>
 
 <Accordion title="ZegoSignalingPluginNotificationConfig" defaultOpen="false">
-- **Description**
 
-  Offline invitation configuration.
+- 类型描述：离线邀请配置类。
+- 枚举说明：
 
-- **Parameter Description**
+| 属性        | 类型   | 是否必选 | 描述                                                                                                                                                                                                                                      |
+| :---------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| resourcesID | string | 否       | 一个可映射多个厂商进阶推送配置的英文字符串，长度不超过 32 个字，由开发者自定义。使用此字段，可将多个厂商的推送配置抽象为一种您自定的推送策略。具体介绍请参考 [即时通讯 - resourceID 说明](https://doc-zh.zego.im/article/19207)。 |
+| title       | string | 否       | 推送标题。                                                                                                                                                                                                                                |
+| message     | string | 否       | 推送的内容。                                                                                                                                                                                                                              |
 
-  | Parameter | Type | Required | Description |
-  | :-- | :-- | :-- | :-- | 
-  | resourcesID | string | No | An English string that can map multiple vendor advanced push configurations, with a length not exceeding 32 characters, customized by the developer. which must be set to the same value as the Push Resource ID in [ZEGOCLOUD Admin Console](https://console.zegocloud.com). |
-  | title | string | No | Push title. |
-  | message | string | No | Content of the push. |
 
 </Accordion>

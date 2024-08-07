@@ -1,0 +1,466 @@
+# API
+
+- - -
+
+- <a href="#ZegoUIKitPrebuilt">ZegoUIKitPrebuilt</a>
+  - <a href="#generateKitTokenForTest">generateKitTokenForTest</a>
+  - <a href="#generateKitTokenForProduction">generateKitTokenForProduction</a>
+  - <a href="#create">create</a>
+  - <a href="#addPlugins">addPlugins</a>
+  - <a href="#joinRoom">joinRoom</a>
+  - <a href="#destroy">destroy</a>
+  - <a href="#sendInRoomCommand">sendInRoomCommand</a>
+  - <a href="#sendInRoomCustomCommand">sendInRoomCustomCommand</a>
+  - <a href="#hangUp">hangUp</a>
+  - <a href="#setLanguage">setLanguage</a>
+---
+
+<a id="ZegoUIKitPrebuilt"></a>
+
+## ZegoUIKitPrebuilt
+
+<a id="generateKitTokenForTest"></a>
+
+### generateKitTokenForTest
+
+**函数原型：**
+
+```ts
+static generateKitTokenForTest(
+    appID: number,
+    serverSecret: string,
+    roomID: string,
+    userID: string,
+    userName?: string,
+    ExpirationSeconds?: number
+): string;
+```
+
+**接口说明：**
+
+根据 appID 和 serverSecret 生成用于测试的 kit token。
+
+<div class="mk-warning">
+
+为规避安全风险，在您的 App 正式上线时，请使用 `generateKitTokenForProduction` 生成 kit token，而非当前接口。
+</div>
+
+**参数说明：**
+
+<table>
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr>
+<td>appID</td>
+<td>number</td>
+<td>是</td>
+<td>项目唯一标识 AppID，请从 [ZEGO 控制台|_blank](https://console.zego.im) 获取，详情请参考 [控制台 - 项目信息|_blank](#12107)。</td>
+</tr>
+<tr>
+<td>serverSecret</td>
+<td>string</td>
+<td>是</td>
+<td>用于后台服务请求接口的鉴权校验，请从 [ZEGO 控制台|_blank](https://console.zego.im)&nbsp; 获取，详情请参考 [控制台 - 项目信息|_blank](#12107)。</td>
+</tr>
+<tr>
+<td>roomID</td>
+<td>string</td>
+<td>是</td>
+<td>房间 ID。由开发者自定义，最长不超过 128 字节，仅支持数字，英文字符 和 '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'。</td>
+</tr>
+<tr>
+<td>userID</td>
+<td>string</td>
+<td>是</td>
+<td>用户 ID。由开发者自定义，最长不超过 32 字节，仅支持数字，英文字符和 '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'。</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>string</td>
+<td>否</td>
+<td>用户名称。由开发者自定义，最长不超过 256 字节。</td>
+</tr>
+<tr>
+<td>ExpirationSeconds</td>
+<td>number</td>
+<td>否</td>
+<td>有效期，单位为秒。</td>
+</tr>
+</tbody></table>
+
+<a id="generateKitTokenForProduction"></a>
+
+### generateKitTokenForProduction
+
+**接口说明：**
+
+将 [服务器生成的 token\|_blank](!KitToken_Authentication) 转换为 UIKit 需要用的 kit Token。
+
+<div class="mk-warning">
+
+为规避安全风险，在您的 App 正式上线时，请使用此接口生成 kit token，不要使用 `generateKitTokenForTest`。
+</div>
+
+**函数原型：**
+
+```ts
+static generateKitTokenForProduction(
+    appID: number,
+    token: string,
+    roomID: string,
+    userID: string,
+    userName?: string
+): string;
+```
+
+**参数说明：**
+
+<table>
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr>
+<td>appID</td>
+<td>number</td>
+<td>是</td>
+<td>项目唯一标识 AppID，请从 [ZEGO 控制台|_blank]() 获取，详情请参考 [控制台 - 项目信息|_blank](#12107)。</td>
+</tr>
+<tr>
+<td>token</td>
+<td>string</td>
+<td>是</td>
+<td>开发者在自己的服务端生成，生成方法请参考 [使用 Kit Token 鉴权|_blank](!KitToken_Authentication)。</td>
+</tr>
+<tr>
+<td>roomID</td>
+<td>string</td>
+<td>是</td>
+<td>房间 ID。由开发者自定义，最长不超过 128 字节，仅支持数字、英文字符和 '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'。</td>
+</tr>
+<tr>
+<td>userID</td>
+<td>string</td>
+<td>是</td>
+<td>用户 ID。由开发者自定义，最长不超过 64 字节，仅支持数字、英文字符和 '!', '#', '$', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'。</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>string</td>
+<td>否</td>
+<td>用户名称。由开发者自定义，最长不超过 256 字节。</td>
+</tr>
+</tbody></table>
+
+<a id="create"></a>
+
+### create
+
+**接口说明**
+
+创建 UIKit 实例。
+
+**函数原型：**
+
+```ts
+static create(kitToken: string): ZegoUIKitPrebuilt;
+```
+
+**参数说明：**
+
+<table>
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr>
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr>
+<td>kitToken</td>
+<td>number</td>
+<td>是</td>
+<td>ZEGO UIKit 用于验证用户身份和权限的凭证。</td>
+</tr>
+</tbody></table>
+
+**返回值**
+
+- 含义：UIKit 实例
+- 类型：ZegoUIKitPrebuilt
+
+<a id="addPlugins"></a>
+
+### addPlugins
+
+**接口说明**
+
+增加插件功能。
+
+<div class="mk-hint">
+
+请参考如下文档完成所需插件的集成步骤：
+- 白板：[使用白板\|_blank](#20282)。
+- 房间消息：[房间消息\|_blank](#20283)。
+</div>
+
+**函数原型：**
+
+```ts
+addPlugins(plugins?: { ZegoSuperBoardManager?: any; ZIM?: any }): void;
+```
+
+**参数说明：**
+
+<table class="collapsible-table" >
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr data-row-level="1">
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr data-row-level="2" data-row-child="true">
+<td>plugins</td>
+<td>object</td>
+<td>否</td>
+<td>插件。</td>
+</tr>
+<tr data-row-level="2-1">
+<td>ZegoSuperBoardManager</td>
+<td>any</td>
+<td>否</td>
+<td>白板插件。</td>
+</tr>
+<tr data-row-level="2-2">
+<td>ZIM</td>
+<td>any</td>
+<td>否</td>
+<td>消息插件。</td>
+</tr>
+</tbody></table>
+
+<a id="joinRoom"></a>
+
+### joinRoom
+
+**接口说明**
+
+加入通话。
+
+**函数原型：**
+
+```ts
+joinRoom(roomConfig?: ZegoCloudRoomConfig): void;
+```
+
+**参数说明：**
+
+<table class="collapsible-table" >
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr data-row-level="1">
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr data-row-level="2">
+<td>roomConfig</td>
+<td>ZegoCloudRoomConfig</td>
+<td>否</td>
+<td>加入房间配置。</td>
+</tr>
+</tbody></table>
+
+<a id="destroy"></a>
+
+### destroy
+
+**接口说明**
+
+销毁 UIKit 实例。
+
+
+**函数原型：**
+
+```ts
+destroy(): void;
+```
+
+<a id="sendInRoomCommand"></a>
+
+### sendInRoomCommand
+
+**接口说明**
+
+发送房间自定义消息。
+
+**函数原型：**
+
+```ts
+sendInRoomCommand(command: string, toUserIDs: string[]): Promise<boolean>;
+```
+
+**参数说明：**
+<table>
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr data-row-level="1">
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr data-row-level="2">
+<td>command</td>
+<td>string</td>
+<td>是</td>
+<td>自定义消息内容，长度不超过 1024 字节。</td>
+</tr>
+<tr data-row-level="3">
+<td>toUserIDs</td>
+<td>string[]</td>
+<td>是</td>
+<td>目标用户 userID 数组。</td>
+</tr>
+</tbody></table>
+
+**返回值**
+
+- 含义：消息发送是否成功。
+- 类型：boolean
+
+<a id="sendInRoomCustomCommand"></a>
+
+### sendInRoomCustomCommand
+
+**接口说明**
+
+使用 ZIM 发送房间自定义消息。
+
+**函数原型：**
+
+```ts
+sendInRoomCustomCommand(command: object, priority?: MessagePriority): Promise<ZegoSignalingInRoomCommandMessage>;
+```
+
+**参数说明：**
+
+<table>
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr data-row-level="1">
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr data-row-level="2">
+<td>command</td>
+<td>object</td>
+<td>是</td>
+<td>自定义消息内容。</td>
+</tr>
+<tr data-row-level="3">
+<td>priority</td>
+<td>MessagePriority</td>
+<td>是</td>
+<td>消息优先级。</td>
+</tr>
+</tbody></table>
+
+返回值：
+- 含义：发送的信令消息对象。
+- 类型：ZegoSignalingInRoomCommandMessage
+
+<a id="hangUp"></a>
+
+### hangUp
+
+**接口说明**
+
+主动退出通话。
+
+**函数原型：**
+
+```ts
+hangUp(): void;
+```
+
+<a id="setLanguage"></a>
+
+### setLanguage
+
+**接口说明**
+
+设置 UIKit 的显示语言。
+
+**函数原型：**
+
+```ts
+setLanguage(language: ZegoUIKitLanguage): void;
+```
+
+**参数说明：**
+
+<table class="collapsible-table" >
+  <colgroup>
+    <col width="20%">
+    <col width="15%">
+    <col width="10%">
+    <col width="55%">
+  </colgroup>
+<tbody><tr data-row-level="1">
+<th>参数</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+<tr data-row-level="2">
+<td>language</td>
+<td>ZegoUIKitLanguage</td>
+<td>是</td>
+<td>语言配置。</td>
+</tr>
+</tbody></table>

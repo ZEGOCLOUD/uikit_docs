@@ -1,0 +1,166 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import AndroidEnviromentRequirementZh from "/snippets/uikit/AndroidEnviromentRequirementZh.md";
+
+# 快速开始（包含呼叫邀请）
+
+
+参考此文档，您可以了解并集成呼叫邀请功能。
+
+
+## 准备环境
+
+在开始集成音视频 UIKit 前，请确保开发环境满足以下要求：
+
+<AndroidEnviromentRequirementZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## UI 实现效果
+
+以下 Gif 为小米设备上的效果，不同设备可能会有不同的结果。
+
+<Note title="Note">
+以下离线通话的效果需要您实现在线呼叫邀请功能后，参考 [向离线应用发送呼叫邀请](./Implement%20offline%20call/Offline%20call.mdx) 进一步集成离线推送功能。
+</Note>
+
+| 在线通话                                                                                                            | 在线通话（APP处于后台状态）                                                                                             | 离线通话（APP被终止）                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/1online.gif" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/2background.gif" /></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/5fa3f99cda659c8c9f2907cbb0242e6c/workspace86/3offline.gif" /></Frame> |
+
+## 集成呼叫邀请功能
+
+### 添加 ZegoUIKitPrebuiltCall 为依赖项
+
+1. 添加 `jitpack` 配置。
+
+根据您的 Android Gradle 插件版本，选择对应的实现步骤。
+
+<Tabs>
+<Tab title="7.1.0 或更高版本">
+进入项目的根目录，打开 `settings.gradle` 文件，在 `dependencyResolutionManagement` > `repositories` 中添加 jitpack，示例代码如下：
+``` groovy
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+      google()
+      mavenCentral()
+      maven { url 'https://storage.zego.im/maven' }   // <- 添加这行。
+      maven { url 'https://www.jitpack.io' } // <- 添加这行。
+  }
+}
+```
+</Tab>
+<Tab title="低于 7.1.0 的版本">
+进入项目的根目录，打开 `build.gradle` 文件，在 `allprojects`->`repositories` 中添加 jitpack，示例代码如下：
+```groovy
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://storage.zego.im/maven' }   // <- 添加这行。
+        maven { url "https://jitpack.io" }  // <- 添加这行。
+    }
+}
+```
+</Tab>
+</Tabs>
+
+2. 修改您的 app 级别的 `build.gradle` 文件。
+
+    ```groovy
+    dependencies {
+        ...
+        implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'   
+    }
+    ```  
+
+### 初始化呼叫邀请服务
+
+在用户登录后，调用`init`方法，并指定 `userID` 和 `userName` 来连接呼音视频通话服务。
+
+我们建议在用户登录您的 App 后立即调用此方法。
+
+1. 用户登录后，需要初始化 ZegoUIKitPrebuiltCallService 以接收呼叫邀请。
+2. 用户登出时，需要调用 `uninit` 以清除先前的登录记录，以免影响下次登录。
+
+<Note title="Note">
+UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltCallInvitationConfig.translationText`。
+</Note>
+
+```java
+Application application = ; // Android 应用程序上下文
+long appID = ;   // 您的 AppID
+String appSign =;  // 您的 AppSign
+String userID =; // 您的 userID，userID应仅包含数字、英文字母和'_'
+String userName =;   // 您的 userName
+
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+// 设置语言为中文
+callInvitationConfig.translationText = new ZegoTranslationText(ZegoUIKitLanguage.CHS);
+
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName, callInvitationConfig);
+```
+
+#### ZegoUIKitPrebuiltCallService 组件属性
+
+| 属性     | 类型   | 必需 | 描述                                                                                |
+| :------- | :----- | :--- | :---------------------------------------------------------------------------------- |
+| appID    | long   | 是   | 您从 [ZEGO 控制台](https://console.zego.im/) 获取的App ID。                         |
+| appSign  | String | 是   | 您从  [ZEGO 控制台](https://console.zego.im/) 获取的App Sign。                      |
+| userID   | String | 是   | `userID`可以是电话号码或您自己用户系统上的用户ID。只能包含数字、字母和下划线（_）。 |
+| userName | String | 是   | `userName`可以是任何字符或您自己用户系统上的用户名。                                |
+
+
+### 添加呼叫邀请按钮
+
+您可以自定义 `ZegoSendCallInvitationButton` 的位置，传入您想要呼叫的用户的ID。
+
+```java
+String targetUserID = ; // 呼叫目标的用户 ID。
+String targetUserName = ; // 呼叫目标的用户名。
+Context context = ; // Android上下文。
+
+ZegoSendCallInvitationButton button = new ZegoSendCallInvitationButton(context);
+button.setIsVideoCall(true);
+button.setInvitees(Collections.singletonList(new ZegoUIKitUser(targetUserID,targetUserName)));
+```
+
+#### ZegoSendCallInvitationButton 属性
+
+| 属性        | 类型    | 必需 | 描述                                                                                        |
+| :---------- | :------ | :--- | :------------------------------------------------------------------------------------------ |
+| invitees    | Array   | 是   | 被叫用户信息。必须包括 userID 和 userName。                                                 |
+| isVideoCall | Boolean | 是   | 如果为 true，则按下按钮时进行视频通话，否则进行语音通话。                                   |
+| resourceID  | String  | 否   | 用于配置离线呼叫邀请铃声，需与在 [ZEGO 控制台](https://console.zego.im/) 配置的值保持一致。 |
+| timeout     | Number  | 否   | 超时时长。默认为60秒。                                                                      |
+
+
+如需了解更多参数，请参考 [自定义通话](./Calling%20config/Overview.mdx)。
+
+至此，您可以通过点击此按钮进行呼叫邀请。
+
+
+## 运行和测试
+
+至此，您已经完成了所有步骤！
+
+只需在 Android Studio 中点击 Run 即可在设备上运行和测试您的应用程序。
+
+
+
+## 相关指南
+
+<CardGroup cols={2}>
+<Card title="通话设置" href="./Calling%20config/Overview.mdx">
+</Card>
+</CardGroup>
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android" target="_blank">
+  获取完整示例代码。
+</Card>
+</CardGroup>

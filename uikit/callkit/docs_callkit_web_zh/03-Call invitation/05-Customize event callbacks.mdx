@@ -1,40 +1,35 @@
-# Customize event callbacks
+# 自定义事件回调
 
-- - -
 
-## Introduction
-
-If the [Customize the UI for call invitation](./02-Customize%20the%20UI%20for%20call%20invitation.mdx) and [Customize logic hooks](./04-Customize%20call%20invitation%20config.mdx) documents can't meet your needs to do further customization, we also provide some event callbacks for you.
-
-The event callbacks we provided:
+如果 [自定义呼叫邀请用户界面](./02-Customize%20the%20UI%20for%20call%20invitation.mdx) 和[自定义呼叫邀请配置](./04-Customize%20call%20invitation%20config.mdx) 文档无法满足您进一步定制的需求，Call Kit 还为您提供了一些事件回调：
 
 ```javascript
 zp.setCallInvitationConfig({
-  // The callee will receive the notification through this callback when receiving a call invitation.
-  onIncomingCallReceived: (callID, caller, callType, callees) => {},
+    // 当收到呼叫邀请时，被叫用户将通过此回调接收通知。
+    onIncomingCallReceived: (callID, caller, callType, callees) => {},
 
-  // The callee will receive the notification through this callback when the caller canceled the call invitation.  
-  onIncomingCallCanceled: (callID, caller) => {},
+    // 当主叫用户取消呼叫邀请时，被叫用户将通过此回调接收通知。
+    onIncomingCallCanceled: (callID, caller) => {},
 
-  // The caller will receive the notification through this callback when the callee accepts the call invitation. 
-  onOutgoingCallAccepted: (callID, callee) => {},
+    // 当被叫用户接受呼叫邀请时，主叫用户将通过此回调接收通知。
+    onOutgoingCallAccepted: (callID, callee) => {},
 
-  // The caller will receive the notification through this callback when the callee is on a call.
-  onOutgoingCallRejected: (callID, callee) => {},
+    // 当被叫用户拒绝呼叫时，主叫用户将通过此回调接收通知。
+    onOutgoingCallRejected: (callID, callee) => {},
 
-  // The caller will receive the notification through this callback when the callee declines the call invitation. 
-  onOutgoingCallDeclined: (callID, callee) => {},
+    // 当被呼叫者拒绝呼叫邀请时，呼叫者将通过此回调接收通知。
+    onOutgoingCallDeclined: (callID, callee) => {},
 
-  // The callee will receive the notification through this callback when he didn't respond to the call invitation. 
-  onIncomingCallTimeout: (callID, caller) => {},
-  
-  // The caller will receive the notification through this callback when the call invitation timed out.
-  onOutgoingCallTimeout: (callID, callees) => {},
+    // 当被叫用户未响应呼叫邀请时，被叫用户将通过此回调接收通知。
+    onIncomingCallTimeout: (callID, caller) => {},
 
-  // When the callee user clicks the accept button on the call invitation popup, the callee will receive this callback.
-  onIncomingCallAcceptButtonPressed: () => {},
+    // 当呼叫邀请超时时，主叫用户将通过此回调接收通知。
+    onOutgoingCallTimeout: (callID, callees) => {},
 
-  // When the callee user clicks the decline button on the call invitation popup, the callee will receive this callback.
-  onIncomingCallDeclineButtonPressed: () => {}
+    // 当被叫用户点击呼叫邀请弹窗上的接受按钮时，会收到该回调通知。
+    onIncomingCallAcceptButtonPressed: () => {},
+
+    // 当被叫用户点击呼叫邀请弹窗上的拒绝按钮时，会收到该回调通知。
+    onIncomingCallDeclineButtonPressed: () => {}
 })
 ```

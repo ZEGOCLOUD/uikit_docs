@@ -1,0 +1,695 @@
+# Config
+
+- - -
+
+- <a href="#ZegoCloudRoomConfig">ZegoCloudRoomConfig</a> 
+    - <a href="#container">container</a> 
+    - <a href="#maxUsers">maxUsers</a> 
+    - <a href="#bottomMenuBarConfig">bottomMenuBarConfig</a> 
+    - <a href="#layout">layout</a> 
+    - <a href="#turnOnCameraWhenJoining">turnOnCameraWhenJoining</a> 
+    - <a href="#turnOnMicrophoneWhenJoining">turnOnMicrophoneWhenJoining</a> 
+
+- - -
+
+<a id="ZegoCloudRoomConfig"></a>
+
+## ZegoCloudRoomConfig
+
+<a id="container"></a>
+
+### container
+- **描述**：组件容器。
+- **类型**：HTMLElement | undefined | null
+- **是否必填**：否
+
+<a id="maxUsers"></a>
+
+### maxUsers
+- **描述**：房间内最大人数。取值范围为 [2, 20]。
+- **类型**：number
+- **默认值**：2
+- **是否必填**：否
+
+### scenario
+- **描述**：场景。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>scenario</td>
+      <td>object</td>
+      <td>否</td>
+      <td>场景配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>mode</td>
+      <td><a href="#ScenarioModel">ScenarioModel</a></td>
+      <td>否</td>
+      <td>场景选择</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>config</td>
+      <td><a href="#ScenarioConfig">ScenarioConfig</a>[<a href="#ScenarioModel">ScenarioModel</a>]</td>
+      <td>否</td>
+      <td>相应场景的具体配置</td>
+    </tr>
+  </tbody></table>
+
+- **默认值**：-
+- **是否必填**：否
+
+### console
+- **描述**：用于问题定位，不是常规设置。设置此项可以决定要打印的日志的严重程度。
+- **类型**：ConsoleLevel
+- **默认值**：-
+- **是否必填**：否
+
+### screenSharingConfig
+- **描述**：屏幕共享设置，分辨率设置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>类型</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>screenSharingConfig</td>
+      <td>object</td>
+      <td>否</td>
+      <td>屏幕共享配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>resolution</td>
+      <td><a href="#ScreenSharingResolution">ScreenSharingResolution</a></td>
+      <td>否</td>
+      <td>分辨率</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>width</td>
+      <td>number</td>
+      <td>否</td>
+      <td>宽度</td>
+    </tr>
+    <tr data-row-level="2-3">
+      <td>height</td>
+      <td>number</td>
+      <td>否</td>
+      <td>高度</td>
+    </tr>
+    <tr data-row-level="2-4">
+      <td>frameRate</td>
+      <td>number</td>
+      <td>否</td>
+      <td></td>
+    </tr>
+    <tr data-row-level="2-5">
+      <td>maxBitRate</td>
+      <td>number</td>
+      <td>否</td>
+      <td></td>
+    </tr>
+    <tr data-row-level="2-5">
+      <td>onError</td>
+      <td>(errorCode: number) => string | undefined</td>
+      <td>否</td>
+      <td>屏幕共享失败回调，若需要自定义提示文本可根据错误码返回对应字符串，若需要自定义 UI 则返回空字符串。</td>
+    </tr>
+  </tbody></table>
+- **默认值**：-
+- **是否必填**：否
+
+### showPreJoinView
+- **描述**：是否显示加入房间前页面。
+- **类型**：boolean
+- **默认值**：-
+- **是否必填**：否
+
+### preJoinViewConfig
+- **描述**：加入房间前页面配置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>preJoinViewConfig</td>
+      <td>object</td>
+      <td>否</td>
+      <td>加入前页面的配置。</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>title</td>
+      <td>string</td>
+      <td>否</td>
+      <td>加入前页面的标题。默认为“Join Room”。</td>
+    </tr>
+  </tbody></table>
+- **默认值**：-
+- **是否必填**：否
+
+### turnOnMicrophoneWhenJoining
+- **描述**：加入通话时是否开启麦克风。默认开启。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### turnOnCameraWhenJoining
+- **描述**：加入通话时是否开启摄像头。默认开启。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### useFrontFacingCamera
+- **描述**：加入房间时是否使用前置摄像头。默认使用前置摄像头。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### videoResolutionDefault
+- **描述**：默认视频分辨率。
+- **类型**：<a href="#VideoResolution">VideoResolution</a>
+- **默认值**：-
+- **是否必填**：否
+
+### enableStereo
+- **描述**：是否开启立体声模式。默认关闭。
+- **类型**：boolean
+- **默认值**：false
+- **是否必填**：否
+
+### showTurnOffRemoteCameraButton
+- **描述**：是否显示关闭远程摄像头的按钮。默认不显示。
+- **类型**：boolean
+- **默认值**：false
+- **是否必填**：否
+
+### showTurnOffRemoteMicrophoneButton
+- **描述**：是否显示关闭远程麦克风的按钮。默认不显示。
+- **类型**：boolean
+- **默认值**：false
+- **是否必填**：否
+
+### showMyCameraToggleButton
+- **描述**：是否显示切换我的摄像头的按钮。默认显示。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showMyMicrophoneToggleButton
+- **描述**：是否显示切换我的麦克风的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showAudioVideoSettingsButton
+- **描述**：是否显示音视频设置的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showTextChat
+- **描述**：是否显示右侧的文本聊天。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showUserList
+- **描述**：是否显示参与者列表。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showRemoveUserButton
+- **描述**：是否显示移除参与者的按钮。
+- **类型**：boolean
+- **默认值**：false
+- **是否必填**：否
+
+### lowerLeftNotification
+- **描述**：左下角显示通知配置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>lowerLeftNotification</td>
+      <td>object</td>
+      <td>否</td>
+      <td>左下角通知配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>showUserJoinAndLeave</td>
+      <td>boolean</td>
+      <td>否</td>
+      <td>是否在左下角显示参与者加入和离开的通知。默认显示。</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>showTextChat</td>
+      <td>boolean</td>
+      <td>否</td>
+      <td>是否在左下角显示最新的消息。默认显示。</td>
+    </tr>
+  </tbody></table>
+- **默认值**：false
+- **是否必填**：否
+
+### branding
+- **描述**：品牌 LOGO 的 URL。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>branding</td>
+      <td>object</td>
+      <td>否</td>
+      <td>品牌配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>logoURL</td>
+      <td>string</td>
+      <td>否</td>
+      <td>logo 的链接。</td>
+    </tr>
+  </tbody></table>
+- **默认值**：false
+- **是否必填**：否
+
+### layout
+- **描述**：布局模式。默认使用自动模式。
+- **类型**："Sidebar" | "Grid" | "Auto"
+- **默认值**："Auto"
+- **是否必填**：否
+
+### showLayoutButton
+- **描述**：是否显示切换布局的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showNonVideoUser
+- **描述**：是否显示无视频的参与者。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showOnlyAudioUser
+- **描述**：是否显示仅音频参与者。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### sharedLinks
+- **描述**：共享链接的配置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>sharedLinks</td>
+      <td>object array</td>
+      <td>否</td>
+      <td>共享链接的配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>name</td>
+      <td>string</td>
+      <td>否</td>
+      <td>链接名称</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>url</td>
+      <td>string</td>
+      <td>否</td>
+      <td>链接地址</td>
+    </tr>
+  </tbody></table>
+- **默认值**：true
+- **是否必填**：否
+
+### showScreenSharingButton
+- **描述**：是否显示屏幕共享按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showPinButton
+- **描述**：是否显示固定按钮。默认显示。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### whiteboardConfig
+- **描述**：白板相关配置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>whiteboardConfig</td>
+      <td>object</td>
+      <td>否</td>
+      <td>白板配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>showAddImageButton</td>
+      <td>boolean</td>
+      <td>否</td>
+      <td>默认为 false。要使用此功能，请激活文件共享功能，然后导入插件。否则，将出现此提示：“添加图像失败，不支持此功能。”</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>showCreateAndCloseButton</td>
+      <td>boolean</td>
+      <td>否</td>
+      <td>是否显示用于创建/关闭白板的按钮。默认显示。</td>
+    </tr>
+  </tbody></table>
+- **默认值**：-
+- **是否必填**：否
+
+### showRoomTimer
+- **描述**：是否显示计时器。默认不显示。
+- **类型**：boolean
+- **默认值**：false
+- **是否必填**：否
+
+### showRoomDetailsButton
+- **描述**：是否显示查看房间详情的按钮。默认显示。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showInviteToCohostButton
+- **描述**：是否显示邀请观众连麦的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showRemoveCohostButton
+- **描述**：是否显示下麦连麦观众的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showRequestToCohostButton
+- **描述**：是否显示请求连麦的按钮。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### rightPanelExpandedType
+- **描述**：控制右侧面板显示的信息类型，默认显示“无”。
+- **类型**：RightPanelExpandedType
+- **默认值**：-
+- **是否必填**：否
+
+### autoHideFooter
+- **描述**：是否自动隐藏底部工具栏，默认自动隐藏。仅适用于移动浏览器。
+- **类型**：boolean
+- **默认值**：-
+- **是否必填**：否
+
+### enableUserSearch
+- **描述**：是否启用用户搜索功能，默认为false。
+- **类型**：boolean
+- **默认值**：-
+- **是否必填**：否
+
+### showLeavingView
+- **描述**：是否显示离开房间页面。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### showLeaveRoomConfirmDialog
+- **描述**：离开房间时是否显示确认弹窗。
+- **类型**：boolean
+- **默认值**：true
+- **是否必填**：否
+
+### leaveRoomDialogConfig
+- **描述**：离开房间弹窗配置。
+- **类型**：
+  <table class="collapsible-table" >
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tbody><tr data-row-level="1">
+      <th>参数</th>
+      <th>类型</th>
+      <th>是否必填</th>
+      <th>说明</th>
+    </tr>
+    <tr data-row-level="2" data-row-child="true">
+      <td>leaveRoomDialogConfig</td>
+      <td>object</td>
+      <td>否</td>
+      <td>离开房间弹窗配置</td>
+    </tr>
+    <tr data-row-level="2-1">
+      <td>titleText</td>
+      <td>string</td>
+      <td>否</td>
+      <td>弹窗标题</td>
+    </tr>
+    <tr data-row-level="2-2">
+      <td>descriptionText</td>
+      <td>string</td>
+      <td>否</td>
+      <td>弹窗描述</td>
+    </tr>
+  </tbody></table>
+- **默认值**：-
+- **是否必填**：否
+
+### onJoinRoom
+- **描述**：加入房间时触发此回调函数。
+- **类型**：() => void
+- **默认值**：-
+- **是否必填**：否
+
+### onLeaveRoom
+- **描述**：离开房间时触发此回调函数。
+- **类型**：() => void
+- **默认值**：-
+- **是否必填**：否
+
+### onUserJoin
+- **描述**：房间内有参与者加入时触发此回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onUserLeave
+- **描述**：房间内有参与者离开时触发此回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onUserAvatarSetter
+- **描述**：设置用户头像的回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onLiveStart
+- **描述**：直播开始时的回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onLiveEnd
+- **描述**：直播结束时的回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onYouRemovedFromRoom
+- **描述**：被移出房间时的回调函数。
+- **类型**：(users: ZegoUser[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onInRoomMessageReceived
+- **描述**：收到房间内聊天消息时的回调函数。
+- **类型**：(messageInfo: InRoomMessageInfo) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onInRoomCustomCommandReceived
+- **描述**：收到房间内自定义命令消息时的回调函数。
+- **类型**：(command: ZegoSignalingInRoomCommandMessage[]) => void
+- **默认值**：-
+- **是否必填**：否
+
+### onReturnToHomeScreenClicked
+- **描述**：点击“返回主屏幕”按钮时触发此回调函数。设置此回调函数后，点击按钮将不会导航到主屏幕；而是您可以在此处添加自己的页面导航逻辑。
+- **类型**：() => void
+- **默认值**：-
+- **是否必填**：否
+
+- - -
+
+## enum
+### ScenarioModel
+// 场景模式
+```ts
+enum ScenarioModel {
+    OneONoneCall = "OneONoneCall",
+    GroupCall = "GroupCall",
+    VideoConference = "VideoConference",
+    LiveStreaming = "LiveStreaming",
+}
+```
+
+### ScenarioConfig
+```ts
+// 场景配置
+interface ScenarioConfig {
+    [ScenarioModel.LiveStreaming]: {
+        role: LiveRole;
+	liveStreamingMode: LiveStreamingMode;
+	enableVideoMixing?: boolean;
+	videoMixingOutputResolution?: VideoMixinOutputResolution;
+    };
+    [ScenarioModel.OneONoneCall]: {
+	role: LiveRole;
+    };
+    [ScenarioModel.GroupCall]: {
+        role: LiveRole;
+    };
+    [ScenarioModel.VideoConference]: {
+        role: LiveRole;
+    };
+}
+```
+
+### LiveRole
+```ts
+// 角色
+enum LiveRole {
+    Host = "Host",
+    Cohost = "Cohost",
+    Audience = "Audience",
+}
+```
+
+### LiveStreamingMode
+```ts
+// 流模式
+enum LiveStreamingMode {
+    LiveStreaming = "LiveStreaming", // CDN
+    InteractiveLiveStreaming = "InteractiveLiveStreaming", // L3
+    RealTimeLive = "RealTimeLive", //RTC
+}
+```
+
+### VideoMixinOutputResolution
+```ts
+// 视频流分辨率
+enum VideoMixinOutputResolution {
+    _180P = "180p",
+    _360P = "360p",
+    _540P = "540p",
+    _720P = "720p",
+    _1080P = "1080p",
+}
+```
+
+### ScreenSharingResolution
+```ts
+// 屏幕共享分辨率
+enum ScreenSharingResolution {
+    _360P = "360p",
+    _480P = "480p",
+    _720P = "720p",
+    _1080P = "1080p",
+    _2K = "2k",
+    _4K = "4k",
+    Auto = "auto",
+    Custom = "custom",
+}
+```
+
+### VideoResolution
+```ts
+// 视频分辨率
+enum VideoResolution {
+    _180P = "180p",
+    _360P = "360p",
+    _480P = "480p",
+    _720P = "720p",
+}
+```
