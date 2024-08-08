@@ -1,0 +1,112 @@
+# 集成 Google FCM
+
+
+如需通过 Google FCM（Firebase Cloud Message） 服务实现离线推送，请参考本文档完成集成。
+
+
+## 1 配置 Firebase 控制台和 ZEGO 控制台
+
+1. 在 [Firebase控制台](https://console.firebase.google.com/) 创建一个项目。如需了解具体操作，请参考 [即时通讯 - Google 推送集成指南](https://doc-zh.zego.im/article/14869)。
+
+<Video src="https://www.youtube.com/embed/HhP7rLirCA4"/>
+
+2. 在 [ZEGO 控制台](https://console.zego.im/) 添加 FCM 证书，详情请参考 [控制台 - 离线推送配置](https://doc-zh.zego.im/article/16233)。
+3. 在 [ZEGO 控制台](https://console.zego.im/) 创建一个 resourceID，详情请参考 [即时通讯 - resourceID 说明](https://doc-zh.zego.im/article/19204)。
+
+    <Warning title="Warning">
+    完成上述步骤后，需要将 `ZegoSendCallInvitationButton` 的`resourceID`属性值替换为您设置的 resourceID。
+    </Warning>
+
+4. 在 [Firebase控制台](https://console.firebase.google.com/) 中，创建一个 Android 应用程序并修改您的代码。
+
+<Video src="https://www.youtube.com/embed/0f9Ai2uJM5o"/>
+
+## 2 检查本地配置是否正确设置。
+
+将 [zego_check_android_offline_notification.py](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation/zego_check_android_offline_notification.py) 下载到您的项目根目录，并运行以下命令：
+
+```bash
+python3 zego_check_android_offline_notification.py
+```
+
+如果一切正常，您将看到以下内容：
+
+```
+✅ google-service.json位于正确的位置。
+✅ 包名与google-service.json匹配。
+✅ 项目级别的gradle文件已准备就绪。
+✅ 应用级别的gradle文件中的插件配置正确。
+✅ 应用级别的gradle文件中的Firebase依赖项配置正确。
+```
+
+## 3 为呼叫邀请配置ResourceID
+
+在您的 `ZegoSendCallInvitationButton` 代码中，添加设置ResourceID代码：`button.setResourceID("zego_uikit_call");`，请在此处填写在 ZEGO 控制台中配置过的 resource ID名称。
+
+```java
+String targetUserID = ; // 呼叫目标的用户 ID。
+String targetUserName = ; // 呼叫目标的用户名。
+Context context = ; // Android上下文。
+
+ZegoSendCallInvitationButton button = new ZegoSendCallInvitationButton(context);
+button.setIsVideoCall(true);
+button.setResourceID("zego_uikit_call"); // 请在此处填写在 ZEGO 控制台中配置过的 resource ID名称。
+button.setInvitees(Collections.singletonList(new ZegoUIKitUser(targetUserID,targetUserName)));
+```
+
+## 4 设置权限
+
+您的项目需获得以下权限：
+
+- 通知：如果您的项目中的 targetSdk 为 33 或更高版本，请动态请求通知权限。没有此权限，本产品无法发送通知。您可以按照以下方式请求此权限：
+   ```java
+     // 需要一个 activityContext。
+   PermissionX.init(activityContext).permissions(PermissionX.permission.POST_NOTIFICATIONS)
+      .onExplainRequestReason(new ExplainReasonCallback() {
+          @Override
+          public void onExplainReason(@NonNull ExplainScope scope, @NonNull List<String> deniedList) {
+              String message = "为了正常使用离线通话功能，我们需要您同意以下权限";
+              scope.showRequestReasonDialog(deniedList, message, "允许", "拒绝");
+          }
+      }).request(new RequestCallback() {
+          @Override
+          public void onResult(boolean allGranted, @NonNull List<String> grantedList,
+              @NonNull List<String> deniedList) {
+          }
+      });
+   ```
+
+- 在顶部出现或显示弹出窗口：
+   在一些手机上（如“小米”），本产品需要“出现在顶部”或“显示弹出窗口”权限，没有此权限，本产品无法显示通话离线邀请。您可以按照以下方式请求此权限：
+
+   ```java
+    // 需要一个 activityContext。
+   PermissionX.init(activityContext).permissions(permission.SYSTEM_ALERT_WINDOW)
+      .onExplainRequestReason(new ExplainReasonCallback() {
+          @Override
+          public void onExplainReason(@NonNull ExplainScope scope, @NonNull List<String> deniedList) {
+              String message = "为了正常使用离线通话功能，我们需要您同意以下权限";
+              scope.showRequestReasonDialog(deniedList, message, "允许", "拒绝");
+          }
+      }).request(new RequestCallback() {
+          @Override
+          public void onResult(boolean allGranted, @NonNull List<String> grantedList,
+              @NonNull List<String> deniedList) {
+          }
+      });
+   ```
+
+- 自启动：
+   对于某些设备（如小米），您需要启用某些特殊权限，才能使您的应用在接收到离线推送消息时自动在前台显示。因此，您需要引导用户启用自启动权限以使该功能正常工作。
+
+    | | |
+    |--|--|
+    |<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/permission_1.png" /></Frame>|<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Android/permission_2.png" /></Frame>|
+
+## 5 使用示例代码进行调试。
+
+考虑到配置离线呼叫邀请的复杂步骤，我们建议您在集成过程中下载 [示例代码](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_android/blob/master/call_with_offline_invitation) 进行调试。
+
+## 关于 Firebase Cloud Message
+
+如果您的项目已经集成了 Firebase Cloud Message，您将需要额外的步骤来完成集成，请参考 [如何解决同时集成 Firebase Cloud Message 时的冲突](https://doc-zh.zego.im/faq/solve_conflict_during_firebase_integration?product=Call_Kit&platform=android) 。

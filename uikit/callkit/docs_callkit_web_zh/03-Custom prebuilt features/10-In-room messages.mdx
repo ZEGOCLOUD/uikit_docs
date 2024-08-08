@@ -1,121 +1,109 @@
-# In-room messages
-
-## Introduction
-
-Our latest version of the SDK supports customizing common chat messages and also supports gifting virtual gifts, not just basic chat functionality like before. 
-This document will guide you on how to integrate these two new features.
+# 房间内消息
 
 
-## How do I customize the display of in-room messages?
+## 功能概述
 
+ZEGO UIKit 不仅支持发送常见的聊天消息或弹幕，而且支持赠送虚拟礼物。参考本文档，您将了解如何集成这两个功能。
 
-When the chat window on the right side of the screen is closed, the bottom left of the screen will display the chat messages and in-room member joining/leaving messages in real-time. 
-You can customize the display by turning off the dynamic display of left side messages and setting up and listening to callbacks on in-room messages.
+## 自定义显示房间消息
 
+当屏幕右侧的聊天窗口关闭时，屏幕左下角将默认实时显示聊天消息和房间成员的加入/离开消息。但支持分别设置：
+- 隐藏左侧消息的动态显示
+- 设置和监听房间消息的回调，并自定义房间消息的显示。
 
-```typescript 
-// example
+```typescript
+// 示例
 const zp = ZegoUIKitPrebuilt.create(token);
 zp.joinRoom({
     lowerLeftNotification:{
-        showUserJoinAndLeave: false,// Hide the user joining/leaving notification on the lower left.
-        showTextChat: false,// Hide the text chat on the lower left.
+        showUserJoinAndLeave: false, // 在左下角隐藏房间成员加入/离开通知。
+        showTextChat: false, // 在左下角隐藏文本聊天。
     },
     onInRoomMessageReceived: (messageInfo: InRoomMessageInfo) => {
         console.warn("onInRoomMessageReceived", messageInfo);
-        // Wrap the received in-room messages with appropriate elements and display them in the desired location.
-     },
-    // To customize the way how the user joining/leaving notification shows, you can set up and implement the [onUserJoin] and [onUserLeave] callbacks.
+        // 使用适当的UI元素包装接收到的房间消息，并在对应位置展示。
+    },
+    // 要自定义用户加入/离开通知的显示方式，可以设置和实现 [onUserJoin] 和 [onUserLeave] 房间回调。
     onUserJoin:(user) => {
     },
     onUserLeave:(user) => {
     }
 })
 
-// interface
+//接口
 interface InRoomMessageInfo {
-  fromUser: ZegoUser;
-  message: string;
-  sendTime: number;
-  messageID: number;
+    fromUser: ZegoUser;
+    message: string;
+    sendTime: number;
+    messageID: number;
 }
 ```
 
 
-## Using the ZIM enhances messaging capabilities.
+## 使用 ZIM 增强消息功能
 
-### 1. Install ZIM
+### 1 安装ZIM
 
-Zego Prebuilt internally supports the use of ZIM extension message capability. Before using it, you need to import ZIM.
+ZEGO UiKit 内部支持使用 ZIM 扩展消息功能。在使用之前需要集成 ZIM。
 
-1. Choose either of the following to import the ZIM SDK:
+1. 选择以下任一方式导入 ZIM SDK：
 
-<Accordion title="Using the NPM" defaultOpen="false">
-1. Install the plug-in.
-```js
- npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.5.0 --save 
-```
-
-2. Import the Call Kit in your project's `js` or `ts` file:
-
-```js
-import { ZIM } from "zego-zim-web";
-import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-```
-</Accordion>
-
-
-<Accordion title="HTML Script Tag" defaultOpen="false">
-
-- Import the following script code in the `HTML` page:
-(**A more  recommended way**: Download and save it on your app server, and import it to the corresponding path.)
+<Tabs>
+<Tab title="NPM">
+a. 安装插件。
+    ```js
+    npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.5.0 --save 
+    ```
+b. 在项目的`js`或`ts`文件中导入Call Kit：
+    ```js
+    import { ZIM } from "zego-zim-web";
+    import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+    ```
+</Tab>
+<Tab title="HTML">
+在`HTML`页面中导入以下脚本代码：   
+（**更推荐的方式**：下载并保存在您的应用服务器上，并将其导入到相应的路径。）
 ```html
 <script src="https://unpkg.com/zego-zim-web@2.5.0/index.js"></script>
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 ```
-</Accordion>
+</Tab>
+</Tabs>
 
+2. 使用 `Create` 方法获取 ZEGO UIKit 实例后，需要将 `ZIM` 安装到实例中。
 
-2. After obtaining the Prebuilt instance using the Create method, you need to install ZIM into the instance.
+    ```js
+    const zp = ZegoUIKitPrebuilt.create(TOKEN);
+    zp.addPlugins({ ZIM });
+    ```
 
+### 2 发送自定义信令消息
 
-```js
-const zp = ZegoUIKitPrebuilt.create(TOKEN);
-zp.addPlugins({ ZIM });
-```
+- 您可以调用服务端 API [发送房间消息](https://doc-zh.zego.im/article/12225) 发送 MessageType=2 的信令消息。
 
-### 2. How to send custom command messages?
+- 除了服务器端 API 接口， ZEGO UIKit还提供了客户端接口，供您发送自定义信令消息。
 
-1. You can use this [server-side API](https://docs.zegocloud.com/article/14010) to send command messages with MessageType=2.
+    ```typescript
+    // 示例
+    const zp = ZegoUIKitPrebuilt.create(token);
+    zp.addPlugins({ ZIM });
+    zp.sendInRoomCustomCommand({msg:'1123'}).then(res => console.log(res)).catch(err=> console.error(err))
+    ```
 
-2. Apart from server-side, our Prebuilt also provides an interface on the client-side for you to send custom command messages.
+### 3 接收自定义信令消息
 
 ```typescript
-//example
-const zp = ZegoUIKitPrebuilt.create(token);
-zp.addPlugins({ ZIM });
-zp.sendInRoomCustomCommand({msg:'1123'}).then(res => console.log(res)).catch(err=> console.error(err))
-```
-
-### 3. How to receive custom command messages?
-
-```typescript
-//example
+// 示例
 const zp = ZegoUIKitPrebuilt.create(token);
 zp.addPlugins({ ZIM });
 zp.joinRoom({
-  onInRoomCustomCommandReceived(messages:ZegoSignalingInRoomCommandMessage[]) {
-    console.warn("onInRoomCustomCommandReceived", messages);
-  },
+    onInRoomCustomCommandReceived(messages:ZegoSignalingInRoomCommandMessage[]) {
+        console.warn("onInRoomCustomCommandReceived", messages);
+    },
 });
 ```
 
+### 4 使用自定义信令消息实现礼物信令
 
-### 4. Using custom command messages to implement gift signaling
-
-1. send gift: You can use this [server-side API](https://docs.zegocloud.com/article/14010) to send command messages with MessageType=2.  And encode the command message to represent different gifts.
-2. receive gift: Use the onInRoomCustomCommandReceived callback mentioned above to receive gift messages sent from the server.
-
-
-
-For the complete implementation of the virtual gifting feature, we suggest that you refer to this doc [How to Implement the Virtual Gifts Function](https://www.zegocloud.com/blog/virtual-gifts).
+1. 发送礼物：您可以调用服务端 API [发送房间消息](https://doc-zh.zego.im/article/12225) 发送 MessageType=2 的命令消息，以及对命令消息进行编码以表示不同的礼物。
+2. 接收礼物：使用上述提到的 `onInRoomCustomCommandReceived` 回调接收从服务器发送的礼物消息。

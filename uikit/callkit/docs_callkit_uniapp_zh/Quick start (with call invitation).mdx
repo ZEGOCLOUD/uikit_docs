@@ -1,0 +1,226 @@
+import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md";
+
+# 快速开始（包含呼叫邀请）
+
+
+<Frame width="512" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/call/invitation_calls.gif" />
+</Frame>
+
+## 准备环境
+
+在开始集成音视频 UIKit 前，请确保开发环境满足以下要求：
+
+<EnviromentRequiremenZh/>
+
+## 前提条件
+
+<UIKitCreateAccountAndServicesZh/>
+
+## 添加 ZegoUIKitPrebuiltCall 为依赖项
+
+1. 打开终端，前往您项目的根目录，并运行以下命令创建 `podfile` 文件：
+    ```bash
+    pod init
+    ```
+2. 编辑 `Podfile` 文件，添加基本依赖项：
+    ```ruby
+    pod 'ZegoUIKitPrebuiltCall'
+    pod 'ZegoUIKitSignalingPlugin'
+    ```
+3. 在终端中运行以下命令，使用 Cocoapods 下载所有必需的依赖项和 SDK：
+    ```bash
+    pod install
+    ```
+
+## 集成呼叫邀请功能
+
+### 初始化呼叫邀请服务
+
+在您的 App 启动时，调用`init`方法，并为连接音视频通话服务指定 `userID` 和 `userName`。
+
+<Note title="Note">
+UIKit 默认语言为英文，如需修改为中文，请修改 `ZegoUIKitPrebuiltCallInvitationConfig.translationText`。
+</Note>
+
+<CodeGroup>
+```swift title="swift"
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // 从 ZEGO 的控制台获取您的 appID 和 appSign
+        // userID 只能包含数字、字母和'_'
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true)
+        // 修改语言为中文
+        config.translationText = ZegoTranslationText(language: .CHS)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(appID: YOUR_APPID, appSign: YOUR_APP_SIGN, userID:YOUR_USER_ID, userName:YOUR_USER_NAME, config: config)
+    }
+}
+```
+```objc title="objc"
+#import "ViewController.h"
+
+@import ZegoUIKit;
+@import ZegoUIKitPrebuiltCall;
+@import ZegoUIKitSignalingPlugin;
+@import ZegoPluginAdapter;
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  // 从 ZEGO 的控制台获取您的 appID 和 appSign
+  // userID 只能包含数字、字母和'_'
+  // certificateIndex：信令组建证书校验方式
+  ZegoUIKitPrebuiltCallInvitationConfig *config = [[ZegoUIKitPrebuiltCallInvitationConfig alloc] initWithNotifyWhenAppRunningInBackgroundOrQuit:YES isSandboxEnvironment:YES certificateIndex:ZegoSignalingPluginMultiCertificateFirstCertificate];
+  // 修改语言为中文
+  ZegoTranslationText *text = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+  config.translationText = text;
+
+  [[ZegoUIKitPrebuiltCallInvitationService shared] initWithAppID:YOUR_APPID appSign:YOUR_APP_SIGN userID:YOUR_USER_ID userName:YOUR_USER_NAME config:config];
+}
+```
+</CodeGroup>
+
+#### ZegoUIKitPrebuiltCallInvitationConfig 类参数
+
+| 参数 | 类型 | 是否必需 | 描述 |
+| :-- | :-- | :-- | :-- | 
+| notifyWhenAppRunningInBackgroundOrQuit | Bool | 否 | 当 App 在后台运行或用户已退出 App 时，如果不需要接收呼叫邀请通知，请将 `notifyWhenAppRunningInBackgroundOrQuit` 设置为false。 |
+| incomingCallRingtone | String | 否 | 用于设置接收呼叫邀请时的铃声。 |
+| outgoingCallRingtone | String | 否 | 用于设置发送呼叫邀请时的铃声。 |
+| isSandboxEnvironment | Bool | 否 | 是否为沙盒环境，默认值为 <code>true</code>。如需将您的应用程序发布到 TestFlight 或 App Store，请在开始构建之前将 <code>isSandboxEnvironment</code> 设置为 <code>false</code>。如需进行本地调试，请将其设置为 <code>true</code>。当 <code>notifyWhenAppRunningInBackgroundOrQuit</code> 为 <code>false</code> 时，请忽略此设置。 |
+| certificateIndex | Int | 否 | 如需使用同一个 AppID 实现两个不同工程之间的离线推送互通，请在 [ZEGO 控制台] 需要配置此字段，传入适用于当前项目的离线推送证书。 |
+| translationText | ZegotranslationText | 否 | 使用此属性修改 UI 文本。有关详细信息，请参见 [基础功能](./Calling%20config/Overview.mdx)。 |
+
+
+#### ZegoUIKitPrebuiltCallInvitationService 类参数
+
+| 参数 | 类型 | 是否必需 | 描述 |
+| :-- | :-- | :-- | :-- | 
+| appID | String | 是 | 您从 [ZEGOC 控制台](https://console.zego.im) 获取的AppID。 |
+| appSign | String | 是 | 您从 [ZEGOC 控制台](https://console.zego.im) 获取的AppSign。 |
+| userID | String | 是 | `userID` 可以是电话号码或您用户系统中的用户ID。userID 只能包含数字、字母和下划线(_)。 |
+| userName | String | 是 | `userName`可以是任意字符或您自己的用户系统中的用户名。 |
+
+
+### 添加呼叫邀请按钮
+
+您可以自定义 `ZegoSendCallInvitationButton` 的位置，传入您想要呼叫的用户的ID。
+- 设置一个用于发起语音通话的按钮。
+<CodeGroup>
+```swift title="swift"
+  class ViewController: UIViewController {
+      override func viewDidLoad() {
+          super.viewDidLoad()
+      
+          // 创建语音通话邀请按钮
+          let callTargetUser: ZegoUIKitUser = ZegoUIKitUser.init("目标用户 ID", "目标用户名")
+          let sendVoiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+          sendVoiceCallButton.text = "语音"
+          sendVoiceCallButton.resourceID = "xxx" // 用于通话的离线通知
+          sendVoiceCallButton.setTitleColor(UIColor.blue, for: .normal)
+          sendVoiceCallButton.inviteeList.append(callTargetUser)
+          sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+          // 将按钮添加到您的视图中
+          self.view.addSubview(sendVoiceCallButton)
+      }
+  }
+  ```
+```objc title="objc"
+  @implementation ViewController
+    - (void)viewDidLoad {
+        [super viewDidLoad];
+        // 创建语音通话邀请按钮
+        self.audioButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVoiceCall];
+        self.audioButton.frame = CGRectMake(100, 100, 100, 30);
+        [self.audioButton setText:@"语音"];
+        self.audioButton.resourceID = @"xxx" // 用于通话的离线通知
+        ZegoUIKitUser *user = [[ZegoUIKitUser alloc] init:@"用户id" userName:@"用户昵称" isCameraOn:NO isMicrophoneOn:YES];
+        self.audioButton.inviteeList = @[user];
+        // 将按钮添加到您的视图中
+        [self.view addSubview:self.audioButton];
+  }
+  ```
+</CodeGroup>
+
+- 设置一个用于发起视频通话的按钮。
+<CodeGroup>
+```swift title="swift"
+  class ViewController: UIViewController {
+      override func viewDidLoad() {
+          super.viewDidLoad()
+  
+          // 创建视频通话邀请按钮
+          let callTargetUser: ZegoUIKitUser = ZegoUIKitUser.init("目标用户ID", "目标用户名")
+          let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+          sendVideoCallButton.text = "视频"
+          sendVideoCallButton.resourceID = "xxx" // 用于通话的离线通知
+          sendVideoCallButton.setTitleColor(UIColor.blue, for: .normal)
+          sendVideoCallButton.inviteeList.append(callTargetUser)
+          sendVideoCallButton.resourceID = "zegouikit_call" // 用于通话的离线通知
+          sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+          // 将按钮添加到您的视图中。
+          self.view.addSubview(sendVideoCallButton)
+      }
+  }
+  ```
+```objc title="objc"
+  @implementation ViewController
+  - (void)viewDidLoad {
+      [super viewDidLoad];
+      ZegoUIKitUser *user = [[ZegoUIKitUser alloc] init:@"用户id" userName:@"用户昵称" isCameraOn:YES isMicrophoneOn:YES];
+
+      // 创建视频通话邀请按钮
+      self. sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVideoCall];
+      self. sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
+      [self. sendVideoCallButton setText:@"视频"];
+      self.sendVideoCallButton.resourceID = @"xxx" // 用于通话的离线通知
+      self. sendVideoCallButton.inviteeList = @[user];
+      // 将按钮添加到您的视图中。
+      [self.view addSubview:self. sendVideoCallButton];
+  }
+  ```
+</CodeGroup>
+
+#### ZegoSendCallInvitationButton 类参数
+
+| 参数&nbsp | 类型 | 必填 | 描述 |
+| :-- | :-- | :-- | :-- | 
+| inviteeList | Array | 是 | 被叫用户列表。必须包含 userID 和 userName。例如：[\{ userID: inviteeID, userName: inviteeName \}] |
+| type | int | 是 | 如果`type`设置为`ZegoInvitationType.videoCall.rawValue`，则按下按钮时进行视频通话。如果设置为其他值，则进行语音通话。 |
+| timeout | UInt32 | 否 | 超时持续时间，默认为 60 秒。 |
+
+
+如需了解更多参数，请查看 [基础功能](./Calling%20config/Overview.mdx)。
+
+现在，您可以通过简单点击设置的按钮发起呼叫邀请。
+
+## 运行和测试
+
+至此，您已经完成了所有步骤！
+
+只需在 XCode 中点击 Run 即可在设备上运行和测试您的应用程序。
+
+## 相关指南
+
+<CardGroup cols={2}>
+<Card title="通话设置" href="./Calling%20config/Overview.mdx">
+</Card>
+</CardGroup>
+
+## 资源
+
+<CardGroup cols={2}>
+<Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_example_ios" target="_blank">
+  获取完整示例代码。
+</Card>
+</CardGroup>
+
+## 常见问题
+<CardGroup cols={2}>
+<Card title="如何处理接入错误" href="https://doc-zh.zego.im/faq/integration_error" target="_blank">
+</Card>
+</CardGroup>

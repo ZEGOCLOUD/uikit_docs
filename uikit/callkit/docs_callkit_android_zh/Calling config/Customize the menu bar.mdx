@@ -1,0 +1,198 @@
+# 自定义菜单栏
+
+## 自定义菜单栏按钮列表
+
+您可以配置 Call Kit 菜单栏的按钮。要删除默认按钮或向底部菜单栏添加自定义按钮，您可以配置`bottomMenuBarConfig`：
+
+<Note title="Note">
+如需配置顶部菜单栏按钮或向顶部菜单栏添加自定义按钮，请使用`topMenuBarConfig`。
+</Note>
+
+- `buttons`：菜单栏中放置的内置按钮。默认情况下，所有按钮都会显示。如果您需要隐藏某些按钮，请修改此配置。
+- `maxCount`：菜单栏可以显示的最大按钮数，取值范围为 [1, 5]，默认值为 5。
+- `extendButtons`：使用此配置向菜单栏添加自定义按钮。
+
+如果内置按钮和自定义按钮的总数不超过 5 个，所有按钮都将显示。
+当按钮总数超过 5 个时，无法显示的按钮将隐藏在三点按钮（⋮）中。单击此按钮将弹出底部表单呼出剩余按钮。
+
+效果如下：
+
+<Frame width="256" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/menuBarLimit.gif" />
+</Frame>
+
+代码参考如下：
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="基本通话"
+public class CallActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_call);
+
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    // 在此处修改您的自定义配置。
+    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+    config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SWITCH_AUDIO_OUTPUT_BUTTON);
+    ZegoUIKitPrebuiltCallFragment fragment = ZegoUIKitPrebuiltCallFragment
+            .newInstance(appID, appSign, callID, userID, userName, config);
+
+    getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commitNow();
+  }
+}
+```
+```java title="携带邀请的通话"
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+                @Override
+                public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                    ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+                    // 在此处修改您的自定义呼叫配置。
+                    config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SWITCH_AUDIO_OUTPUT_BUTTON);
+                    return config;
+                }
+        };
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZegoUIKitPrebuiltCallService.logout();
+    }
+}
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```swift title="基本通话"
+class ViewController: UIViewController {
+    let appID: UInt32 = 
+    let appSign: String = 
+    String userID = "userID";
+    String userName = "userName";
+    String callID = "testCallID";
+
+    @IBAction func startVideoCall(_ sender: Any) {
+        let config: ZegoUIkitPrebuiltCallConfig = ZegoUIkitPrebuiltCallConfig()
+        let callVC: ZegoUIKitPrebuiltCallVC = ZegoUIKitPrebuiltCallVC.init(appID, appSign: appSign, userID: userID, userName: userName, callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+
+    @IBAction func startVoiceCall(_ sender: Any) {
+        let config: ZegoUIkitPrebuiltCallConfig = ZegoUIkitPrebuiltCallConfig()
+        config.turnOnCameraWhenjoining = false
+        let menuBarConfig = ZegoBottomMenuBarConfig()
+        menuBarConfig.buttons = [.toggleMicrophoneButton,.hangUpButton,.swtichAudioOutputButton]
+        config.bottomMenuBarConfig = menuBarConfig
+        let callVC: ZegoUIKitPrebuiltCallVC = ZegoUIKitPrebuiltCallVC.init(appID, appSign: appSign, userID: userID, userName: userName, callID: callID, config: config)
+        callVC.modalPresentationStyle = .fullScreen
+        self.present(callVC, animated: true, completion: nil)
+    }
+
+}
+```
+```swift title="携带邀请的通话"
+class ViewController: UIViewController {
+    let appID: UInt32 = 
+    let appSign: String = 
+    String userID = "userID"
+    String userName = "userName"
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // 在加载视图后进行任何额外的设置。
+        let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: userID, userName: userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension ViewController: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+                return config
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+                return config
+            }
+        }
+    }
+
+}
+```
+</CodeGroup>
+:::
+
+
+
+## 自定义菜单栏的隐藏行为
+
+Call Kit 支持自动或手动隐藏菜单栏。您可以使用`ZegoBottomMenuBarConfig`中的以下两个配置来控制此功能：
+
+- `hideByClick`：是否可以通过单击不响应区域来隐藏菜单栏，默认启用。
+- `hideAutomatically`：是否在用户不活动5秒后自动隐藏菜单栏，默认启用。
+
+
+## 向菜单栏添加聊天按钮
+
+您可以修改 `config.bottomMenuBarConfig.buttons` 以将聊天按钮添加到菜单栏。
+
+代码参考如下：
+
+:::if{props.platform="iOS"}
+```swift
+config.bottomMenuBarConfig.buttons = [.toggleCameraButton,.switchCameraButton,.hangUpButton,.toggleMicrophoneButton,.swtichAudioOutputButton, .chatButton]
+```
+:::
+:::if{props.platform=undefined}
+```java
+config.bottomMenuBarConfig.buttons = Arrays.asList(ZegoMenuBarButtonName.CHAT_BUTTON, ZegoMenuBarButtonName.TOGGLE_CAMERA_BUTTON,ZegoMenuBarButtonName.SWITCH_CAMERA_BUTTON, ZegoMenuBarButtonName.HANG_UP_BUTTON,ZegoMenuBarButtonName.TOGGLE_MICROPHONE_BUTTON, ZegoMenuBarButtonName.SWITCH_AUDIO_OUTPUT_BUTTON);
+```
+
+<div>
+## 自定义 UIKit 内置按钮图片
+
+您可以修改 `config.bottomMenuBarConfig.buttonConfig` 来更改按钮图像。
+
+```java
+config.bottomMenuBarConfig.buttonConfig.toggleCameraOnImage = drawableXXX;
+```
+</div>
+:::

@@ -180,7 +180,7 @@
     {
       "id": "callkit_android_zh",
       "label": "音视频通话 UIKit (Android)",
-      "path": "https://doc-zh.zego.im/article/20193",
+      "path": "uikit/callkit/docs_callkit_android_zh",
       "routeBasePath": "zh/callkit-android",
       "locale": "zh",
       "navigationInfo": {
@@ -199,7 +199,7 @@
     {
       "id": "callkit_ios_zh",
       "label": "音视频通话 UIKit (iOS)",
-      "path": "https://doc-zh.zego.im/article/20192",
+      "path": "uikit/callkit/docs_callkit_ios_zh",
       "routeBasePath": "zh/callkit-ios",
       "locale": "zh",
       "navigationInfo": {
@@ -218,7 +218,7 @@
     {
       "id": "callkit_web_zh",
       "label": "音视频通话 UIKit (Web)",
-      "path": "https://doc-zh.zego.im/article/20194",
+      "path": "uikit/callkit/docs_callkit_web_zh",
       "routeBasePath": "zh/callkit-web",
       "locale": "zh",
       "navigationInfo": {
@@ -623,25 +623,6 @@
           "ZEGO UIKits"
         ],
         "platform": "iOS: Swift"
-      }
-    },
-    {
-      "id": "in_app_chat_kit_flutter_zh",
-      "label": "docs_in_app_chat_kit_flutter_zh",
-      "path": "uikit/imkit/docs_in_app_chat_kit_flutter_zh",
-      "routeBasePath": "zh/in-app-chat-kit-flutter",
-      "locale": "zh",
-      "navigationInfo": {
-        "group": {
-          "id": "imkit_zh",
-          "name": "IMKit",
-          "tag": "New"
-        },
-        "category": [
-          "Products",
-          "ZEGO UIKits"
-        ],
-        "platform": "Flutter: Dart"
       }
     },
     {

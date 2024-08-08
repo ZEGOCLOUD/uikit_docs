@@ -1,26 +1,20 @@
-# Add ringing call invitation
+# 自定义铃声
 
-- - -
+## 介绍
 
-## Introduction
-
-The Call Kit allows you to customize the ringtones when sending and receiving a call invitation.
+您可以使用 Call Kit 自定义发送和接收通话邀请时的铃声。
 
 <Note title="Note">
-
-Call Kit currently only supports ringtones in desktop browsers. This is because the browser's autoplay policy does not allow the browser to autoplay audio and video without the user designing a UI interaction, so most mobile browsers cannot autoplay ringtones.
+本功能仅适用于桌面端浏览器，不适用于移动端浏览器。
 </Note>
 
-
-
-
-## How do I customize the ringtone?
+## 实现流程
 
 ```javascript
 zp.setCallInvitationConfig({
-   ringtoneConfig: {
-    incomingCallUrl: 'https://xxx/xxx.mp3', // The ringtone when receiving an incoming call invitation.
-    outgoingCallUrl: 'https://xxx/xxx.mp3' // The ringtone when sending a call invitation. 
-  }
+    ringtoneConfig: {
+        incomingCallUrl: 'https://xxx/xxx.mp3', // 接收呼叫邀请时的铃声。
+        outgoingCallUrl: 'https://xxx/xxx.mp3'  // 发送呼叫邀请时的铃声。 
+    }
 })
 ```

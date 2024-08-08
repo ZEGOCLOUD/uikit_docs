@@ -1,0 +1,62 @@
+# 实现悬浮窗
+
+
+本文将为您介绍，如何在应用程序内实现悬浮窗的效果，显示效果如下。
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/ios_minimize.gif" /></Frame>
+
+## 准备环境
+
+支持音频和视频的 iOS 设备，且为 iOS 15.0 或更高版本。
+
+## 显示悬浮窗按钮
+
+如需显示悬浮窗按钮，请配置 `ZegoUIKitPrebuiltCallConfig` 的 `topMenuBarConfig` 或 `bottomMenuBarConfig`，并添加 `ZegoMenuBarButtonName.minimizingButton` 到 `bottomMenuBarConfig.buttons` 或 `topMenuBarConfig.buttons` 以显示悬浮窗按钮。
+
+示例代码如下（含通话邀请）：
+
+<Warning title="Warning">
+现实基本通话方式：由于 ViewController 由您自己管理，您需要自己实现 ViewController 的悬浮窗逻辑。 
+</Warning>
+
+
+```swift
+//....
+ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+//...
+func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    if data.type == .voiceCall {
+        if (data.invitees?.count ?? 0) > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        }
+    } else {
+        if (data.invitees?.count ?? 0) > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            config.topMenuBarConfig.isVisible = true
+            config.topMenuBarConfig.buttons = [.minimizingButton]
+            return config
+        }
+    }
+}
+// ...
+```
+
+完成上述步骤后，视频通话窗口可以通过悬浮窗的形式进行展示。
+
+## 常见问题
+
+- [何时会显示悬浮窗视频？](https://doc-zh.zego.im/faq/minimize_window_Q1?product=Call_Kit&platform=ios)
+- [为什么应用在后台时，不支持打开摄像头？](https://doc-zh.zego.im/faq/minimize_window_Q2?product=Call_Kit&platform=ios)

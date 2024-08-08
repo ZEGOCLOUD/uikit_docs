@@ -1,0 +1,86 @@
+# 实现悬浮窗
+
+
+本文将为您介绍，如何在应用程序内实现悬浮窗的效果，显示效果如下。
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/call/android_minimize.gif" /></Frame>
+
+### 显示悬浮窗按钮
+
+如需显示悬浮窗按钮，请配置 `ZegoUIKitPrebuiltCallConfig` 的 `topMenuBarConfig` 或 `bottomMenuBarConfig`，并添加 `ZegoMenuBarButtonName.MINIMIZING_BUTTON` 到 `bottomMenuBarConfig.buttons` 或 `topMenuBarConfig.buttons` 以显示悬浮窗按钮。
+
+以下是示例代码（含通话邀请）：
+
+<Warning title="Warning">
+实现基本通话方式：由于 Activity 由您自己管理，您需要自己实现 Activity 的悬浮窗逻辑。 
+</Warning>
+
+
+```java
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+//...
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+  @Override
+  public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+      ZegoUIKitPrebuiltCallConfig config = null;
+      boolean isVideoCall = invitationData.type == ZegoInvitationType.VIDEO_CALL.getValue();
+      boolean isGroupCall = invitationData.invitees.size() > 1;
+      if (isVideoCall && isGroupCall) {
+          config = ZegoUIKitPrebuiltCallConfig.groupVideoCall();
+      } else if (!isVideoCall && isGroupCall) {
+          config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall();
+      } else if (!isVideoCall) {
+          config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+      } else {
+          config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+      }
+      config.topMenuBarConfig.isVisible = true;
+      config.topMenuBarConfig.buttons.add(ZegoMenuBarButtonName.MINIMIZING_BUTTON);
+      return config;
+  }
+};
+// ...
+```
+
+
+
+### 授予相关权限
+
+添加 `MINIMIZING_BUTTON` 后，如果用户点击最小化按钮，应用将向用户请求 `SYSTEM_ALERT_WINDOW` 权限。请求权限的用户界面将根据设备的系统而异。授权后，应用可以显示当前通话视频的小窗口。此外，当用户将应用切换到后台时，小窗口也会自动显示。如果用户关闭此权限，则不会显示小窗口。
+
+### 自定义小窗口配置
+
+添加 `MINIMIZING_BUTTON` 后，您可以自定义音频模式下小窗口的文本颜色和图标颜色，以及更改小窗口的权限请求文本。这些设置可以在 `ZegoUIKitPrebuiltCallConfig.miniVideoConfig` 中配置，如下所示：
+
+<Warning title="Warning">
+实现基本通话方式：由于 Activity 由您自己管理，您需要自己实现 Activity 的悬浮窗逻辑。 
+</Warning>
+
+```java
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+//...
+callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+  @Override
+  public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+      ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
+      //...
+      config.miniVideoConfig.miniVideoTextColor = Color.RED;
+      config.miniVideoConfig.miniVideoDrawableColor = Color.RED;
+      config.miniVideoConfig.permissionText = "请求权限";
+      return config;
+  }
+};
+// ...
+```
+
+
+
+完成上述步骤后，视频通话窗口可以通过悬浮窗的形式进行展示。
+
+## 常见问题
+
+### 何时会显示悬浮窗视频？
+
+当添加了 `MINIMIZING_BUTTON` 并且获得授权后，点击悬浮窗按钮或切换到桌面时，将显示悬浮窗视频。单击悬浮窗视频，将返回到通话页面，如果您尚未授权或已关闭权限，则不会显示悬浮窗视频。

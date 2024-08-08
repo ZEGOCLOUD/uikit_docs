@@ -1,0 +1,286 @@
+# 呼叫邀请配置
+
+## 前提条件
+
+修改呼叫邀请配置前，需已经实现 [呼叫邀请](./../Quick%20start%20(with%20call%20invitation).mdx) 相关功能。
+
+## 自定义呼叫铃声
+
+### 呼叫邀请的铃声
+
+如果您想设置接收或发送呼叫邀请时的呼叫铃声，您可以在 `ZegoUIKitPrebuiltCallInvitationService` 中使用 `incomingCallRingtone` 和 `outgoingCallRingtone` 配置。
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/custom_incoming_ringiOS.png" /></Frame>
+
+以下是参考代码：
+
+<CodeGroup>
+```swift title="携带邀请的呼叫"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: false, isSandboxEnvironment: false)
+        config.incomingCallRingtone = NSBundle.mainBundle().pathForResource("incomingCallRingtone", ofType: "mp3")
+        config.outgoingCallRingtone = NSBundle.mainBundle().pathForResource("outgoingCallRingtone", ofType: "mp3")
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+        var config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            } else {
+                config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            }
+        }
+        return config
+    }
+}
+```
+</CodeGroup>
+
+### 离线呼叫邀请的铃声
+
+如需设置离线呼叫邀请的铃声，请按照以下步骤操作：
+1. 按照 [快速开始（包含呼叫邀请）](./../Quick%20start%20(with%20call%20invitation).mdx) 中的步骤启用和完成配置。
+2. 进入 [ZEGO 控制台](https://console.zego.im)配置 `resourceID`。
+3. 在 `ZegoSendCallInvitationButton` 方法中将 `resourceID` 参数替换为上述步骤设置的 `resourceID`。
+
+完成后，当其他人收到离线呼叫邀请时，将播放与您设置的 ID 相对应的铃声。
+
+以下是参考代码：
+
+<CodeGroup>
+```swift title="带有呼叫邀请的代码"
+let callTargetUser: ZegoUIkitUser = ZegoUIkitUser.init("TargetUserID", "TargetUserName")
+let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+sendVideoCallButton.inviteeList.append(callTargetUser)
+sendVideoCallButton.resourceID = "zegouikit_call" // 用于离线呼叫通知
+```
+</CodeGroup>
+
+## 隐藏拒绝按钮
+
+要在收到呼叫邀请界面隐藏拒绝按钮，请将 `showDeclineButton` 设置为 `false`。
+
+<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/iOS/custom_incoming_bgiOS.png" /></Frame>
+
+<CodeGroup>
+```swift title="携带邀请的呼叫"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.showDeclineButton = false
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+    func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+        if data.type == .voiceCall {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+                return config
+            }
+        } else {
+            if data.invitees?.count ?? 0 > 1 {
+                let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+                return config
+            } else {
+                let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+                return config
+            }
+        }
+    }
+}
+```
+</CodeGroup>
+
+## 修改用户界面文本
+
+Call Kit 支持开发者编辑其内部组件的 UI 文本。如需修改这些文本，请使用 `translationText` 配置。
+
+代码参考如下：
+
+<CodeGroup>
+```swift title="携带邀请的呼叫"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.translationText.incomingCallPageAcceptButton = "接受"
+        config.translationText.incomingCallPageDeclineButton = "拒绝"
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+ func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            return config
+        }
+    }
+  }
+}
+```
+</CodeGroup>
+## 监听呼叫邀请事件回调
+
+您可以通过监听与呼叫邀请相关的事件回调来实现进一步的业务逻辑。
+
+以下是支持的事件回调：
+
+- func `onIncomingCallDeclineButtonPressed()`：当拒绝按钮被按下时（被叫用户拒绝呼叫邀请），将触发此回调。
+
+- func `onIncomingCallAcceptButtonPressed()`：当接受按钮被按下时（被叫用户接受呼叫邀请），将触发此回调。
+
+- func `onIncomingCallReceived(_ callID：String，caller：ZegoCallUser，callType：ZegoCallType，callees：[ZegoCallUser]？)`：当接收到呼叫邀请时，将触发此回调。
+
+- func `onIncomingCallCanceled(_ callID：String，caller：ZegoCallUser)`：当主叫用户取消呼叫邀请时，将触发此回调。
+
+- func `onIncomingCallTimeout(_ callID：String，caller：ZegoCallUser)`：当被叫用户在超时时间后未响应呼叫邀请时，将通过此回调向被叫用户发送通知。
+
+- func `onOutgoingCallCancelButtonPressed()`：当取消按钮被按下时（主叫用户取消呼叫邀请），将触发此回调。
+
+- func `onOutgoingCallAccepted(_ callID：String，callee：ZegoCallUser)`：当被叫用户接受呼叫邀请时，将通过此回调向主叫用户发送通知。
+
+- func `onOutgoingCallRejectedCauseBusy(_ callID：String，callee：ZegoCallUser)`：当被叫用户拒绝呼叫邀请（被呼叫者忙碌）时，将通过此回调向主叫用户发送通知。
+
+- func `onOutgoingCallDeclined(_ callID：String，callee：ZegoCallUser)`：当被呼叫者主动拒绝呼叫邀请时，将通过此回调向呼叫者发送通知。
+
+- func `onOutgoingCallTimeout(_ callID：String，callees：[ZegoCallUser])`：当呼叫邀请在超时时间后未收到响应时，将通过此回调向呼叫者发送通知。
+
+代码参考如下：
+
+<CodeGroup>
+```swift title="携带邀请的呼叫"
+class CallInvitationVC: UIViewController {
+    let appID: UInt32 = yourAppID
+    let appSign: String = "yourAppSign"
+    let userID: String = "userID"
+    let userName: String = "userName"
+    let voiceCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
+    let videoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let config = ZegoUIKitPrebuiltCallInvitationConfig([ZegoUIKitSignalingPlugin()], notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        config.translationText.incomingCallPageAcceptButton = "接受"
+        config.translationText.incomingCallPageDeclineButton = "拒绝"
+        ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(self.appID, appSign: self.appSign, userID: self.userID, userName: self.userName, config: config)
+        ZegoUIKitPrebuiltCallInvitationService.shared.delegate = self
+    }
+}
+
+extension CallInvitationVC: ZegoUIKitPrebuiltCallInvitationServiceDelegate {
+    //MARK: -ZegoUIKitPrebuiltCallInvitationServiceDelegate
+ func requireConfig(_ data: ZegoCallInvitationData) -> ZegoUIKitPrebuiltCallConfig {
+    
+    if data.type == .voiceCall {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+            return config
+        }
+    } else {
+        if data.invitees?.count ?? 0 > 1 {
+            let config = ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+            return config
+        } else {
+            let config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+            return config
+        }
+    }
+  }
+
+  func onIncomingCallDeclineButtonPressed() {
+        
+  }
+  func onIncomingCallAcceptButtonPressed() {
+        
+  }
+  func onOutgoingCallCancelButtonPressed() {
+        
+  }
+    
+  func onIncomingCallReceived(_ callID: String, caller: ZegoCallUser, callType: ZegoCallType, callees: [ZegoCallUser]?) {
+        
+  }
+  func onIncomingCallCanceled(_ callID: String, caller: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallAccepted(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallRejectedCauseBusy(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onOutgoingCallDeclined(_ callID: String, callee: ZegoCallUser) {
+        
+  }
+  func onIncomingCallTimeout(_ callID: String,  caller: ZegoCallUser){
+        
+  }
+  func onOutgoingCallTimeout(_ callID: String, callees: [ZegoCallUser]) {
+        
+  }
+}
+```
+</CodeGroup>

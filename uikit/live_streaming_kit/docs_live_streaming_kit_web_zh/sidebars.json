@@ -104,6 +104,16 @@
           "type": "doc",
           "label": "自定义文本消息 UI",
           "id": "custom-prebuilt-features/modify-message-ui"
+        },
+        {
+          "type": "doc",
+          "label": "屏幕共享",
+          "id": "custom-prebuilt-features/screen-sharing"
+        },
+        {
+          "type": "doc",
+          "label": "恢复直播",
+          "id": "custom-prebuilt-features/resume-the-live-streaming"
         }
       ]
     }

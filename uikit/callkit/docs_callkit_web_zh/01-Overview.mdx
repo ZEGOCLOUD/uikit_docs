@@ -1,85 +1,84 @@
-# Overview
+# 概述
 
-**Call Kit** is a full-featured voice + video component, which enables **one-on-one and group calls** with just a few lines of code. 
+- - -
 
-Once you integrate the Call Kit, you can embed it in any website or app, and you can also add or remove various in-call features by customizing parameters.
- 
+## 产品定义
+
+音视频通话 UIKit（Call Kit）是一个包含场景化的通用 UI 的SDK，且能够针对各种UI及功能自定义调整，从而快速实现从呼叫邀请、通话到挂断的全流程通话能力。
+仅需几行代码，您就能将一对一和群组的语音/视频通话集成到您的应用程序中。
+
 
 |||
 |--|--|
-|<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/groupCall_p.jpg" /></Frame>|<Frame width="180" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/groupCall_m.png" /></Frame>|
+|<Frame width="auto" height="256" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/groupCall_p.jpg" /></Frame>|<Frame width="auto" height="256" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Prebuilt_Web/groupCall_m.png" /></Frame>|
 
 
 
-## When do you need the Call Kit
+## 何时您需要音视频通话 UIKit
 
+如果您想尽快集成一对一或群组语音/视频通话，且关注开发效率，那么音视频通话会是您的最佳选择，因为：
+- 它适用于 PC 和移动设备，并以标准方式处理复杂的网络和设备异常，无需您学习和理解更复杂的概念。
+- 您可通过修改参数自定义通话功能和用户界面效果。
 
-If you want to integrate one-on-one or group voice/video calls ASAP and consider speed or efficiency as the first priority, then the Call Kit is your best choice: 
-> 1. Adaptive to PCs and mobile devices, and handles complex network and device exceptions in a standard way, with no more complex concepts to be learned and understood.
-> 2. In-call features and UI effects can be customized by modifying parameters as needed.
+## 产品优势
+- 更省时。含UI的通用场景SDK一周内快速接入，无需从0 开发和测试，大大提高项目效率
+- 更灵活。50+UI组件，且支持与其他UIKit组合使用，在一个应用中搭建通话+直播等组合场景，更能实现 AI美颜等插件即插即用
+- 更优质。基于多年场景的最佳实践，结合业内领先的RTC、ZIM等基础互动产品，实现更优质的场景体验。
 
+## 功能概述
 
-If you want to highly customize your UI for more advanced use cases, you can make your customization based on the provided [Call Kit open source code](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_web).
+* 即时可用的音频和视频通话
+* 可自定义的音频/视频通话 UI 风格
+* 会议邀请
+* 文本聊天
+* 屏幕共享
+* 录制
+* 参与者列表和管理
+* 跨浏览器兼容性
+* 内置带宽管理
+* 自动网络重连
+* 网络分析显示
+* 可自定义的品牌 LOGO
+* 白板
+* 呼叫邀请
+* 横屏模式
+* 虚拟礼物
 
-
-
-## Embedded features 
-
-* Out-of-the-box video chat interface
-* Customizable UI
-* Meeting invitation
-* Text chat
-* Screen sharing
-* Recording
-* Participant list & management
-* Cross-browser compatibility
-* Built-in bandwidth management
-* Auto network reconnection 
-* Network analytics display
-* Customizable branding LOGO
-* Whiteboard
-* Call invitation
-* Landscape orientation
-* Virtual gifting
-
-## Resources
+## 示例 App
 
 
 <CardGroup cols={2}>
-  <Card title="I want to code online and check it in action:">
-    Click below to try it online
+<Card title="在线体验（无呼叫邀请）" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/1on1_call/index.html?roomID=Q5EAJ&role=Host&userID=30794596&lang=zh" target="_blank">
+在线体验 音视频通话 UIKit Web 示例 App。
+</Card>
+<Card title="在线体验（含呼叫邀请）" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/call_invitation/index.html?roomID=W9Jxa&role=Host&userID=83433704&lang=zh" target="_blank">
+在线体验 音视频通话 UIKit Web 示例 App。
+</Card>
+</CardGroup>
 
-    <Button primary-color="NavyBlue" target="_blank" href="https://stackblitz.com/edit/zegocloud-prebuilt-call-lqn5us?file=index.js">Realtime Coding</Button>
 
-    ---
-	
-    I want to try a live demo (call without invitation)
+## 推荐资源
 
-	  <Button primary-color="NavyBlue" target="_blank" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/1on1_call/index.html">LIVE DEMO (without invitation)</Button>
+<CardGroup cols={2}>
+  <Card title="在线编程并实时查看效果" href="https://stackblitz.com/edit/zegocloud-prebuilt-call-lqn5us?file=index.js" target="_blank">
+    点击在线尝试
   </Card>
-  <Card title="To finest-grained build a call, you may try antoher one:">
-    Click the button below to get Call Kit SDK.
-
-    <Button primary-color="NavyBlue" target="_blank" href="https://www.zegocloud.com/docs/video-call/overview?platform=web&language=javascript">Video Call SDK</Button>
-
-    ---
-	
-    I want to try a live demo
-
-    <Button primary-color="NavyBlue" target="_blank" href="https://zegocloud.github.io/zego_uikit_prebuilt_web/call_invitation/index.html">LIVE DEMO (with invitation)</Button>
+  <Card title="更精细地开发您的通话应用"  href="https://doc-zh.zego.im/article/overview?key=ExpressVideoSDK&platform=web&language=javascript" target="_blank">
+    点击了解详情
   </Card>
 </CardGroup>
 
-## Getting started
+## 入门指南
+
 
 <CardGroup cols={2}>
-  <Card title="Using HTML script (JQuery, PHP, JSP)" href="./02-Quick start/01-Using HTML script.mdx">
-    Implement a call using HTML script
-  </Card>
-  <Card title="Using NPM package manager (React, Vue, Angular)" href="./02-Quick start/02-Using NPM package manager.mdx">
-    Implement a call using NPM package manager
-  </Card>
-  <Card title="Using WordPress" href="./02-Quick start/03-Using WordPress.mdx">
-    Implement a call on WordPress with fewer steps
-  </Card>
+<Card title="使用 HTML 脚本（JQuery，PHP，JSP）" href="./02-Quick%20start/01-Using%20HTML%20script.mdx">
+  使用 HTML 脚本实现通话
+</Card>
+<Card title="使用 NPM（React，Vue，Angular）" href="./02-Quick%20start/02-Using%20NPM%20package%20manager.mdx">
+  使用 NPM 实现通话
+</Card>
+<Card title="使用 WordPress" href="./02-Quick%20start/03-Using%20WordPress.mdx">
+  在 WordPress 上实现通话，步骤更少
+</Card>
 </CardGroup>
