@@ -1,0 +1,152 @@
+import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
+
+# Live list
+
+With this feature, you can display the list of LIVEs on your homepage
+
+
+<Frame width="50%" height="auto" caption="">
+    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8f6dea1eea.gif" alt="ezgif-5-48b96c2012.gif"/>
+</Frame>
+
+
+## How to integrate
+
+<Note title="Connect ZegoLiveStreamingOutsideLiveListController to ZegoUIKitPrebuiltLiveStreaming">
+you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **controller of ZegoLiveStreamingOutsideLiveConfig**, which is **config.outsideLive.controller in ZegoUIKitPrebuiltLiveStreaming**
+</Note>
+
+<Steps>
+  <Step title="define ZegoLiveStreamingOutsideLiveListController">
+    ```dart
+    final outsideLiveListController = ZegoLiveStreamingOutsideLiveListController();
+    ```
+  </Step>
+  <Step title="add ZegoLiveStreamingOutsideLiveList">
+    ```dart
+    ZegoLiveStreamingOutsideLiveList(
+      appID: /*input your AppID*/,
+      appSign: /*input your AppSign*/,
+      controller: outsideLiveListController,
+    ),
+    ```
+  </Step>
+  <Step title="Connect ZegoLiveStreamingOutsideLiveListController to ZegoUIKitPrebuiltLiveStreaming">
+    ```dart
+    ZegoUIKitPrebuiltLiveStreaming(
+      ...
+      config: ZegoUIKitPrebuiltLiveStreamingConfig(
+        outsideLive: ZegoLiveStreamingOutsideLiveConfig(
+          controller: outsideLiveListController,
+        ),
+      ),
+    ),
+    ```
+  </Step>
+  <Step title="Fill in the LIVE room list information to be displayed">
+    ```dart
+    outsideLiveListController.updateHosts([
+      ZegoLiveStreamingOutsideLiveListHost(
+        roomID: $live_id,
+        user: ZegoUIKitUser(id: $user_id, name: $user_name),
+      ),
+    ]);
+    ```
+  </Step>
+</Steps>
+
+## Example
+
+In the following example, a horizontal list of LIVEs is displayed, and clicking the enter button can join in the corresponding LIVE.
+
+ ```dart {18,24-31,41-51,80}
+class HomePage extends StatefulWidget {
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final liveListInfos = [
+    {'live_id': $live_id_1, 'host_id': $host_id_1},
+    {'live_id': $live_id_2, 'host_id': $host_id_2},
+    {'live_id': $live_id_3, 'host_id': $host_id_3},
+    {'live_id': $live_id_4, 'host_id': $host_id_4},
+  ];
+
+  final liveListController = ZegoLiveStreamingOutsideLiveListController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    liveListController.updateHosts(
+      liveListInfos
+          .map((e) => ZegoLiveStreamingOutsideLiveListHost(
+                user: ZegoUIKitUser(id: e['host_id']!, name: ''),
+                roomID: e['live_id']!,
+              ))
+          .toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          height: 200,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ZegoLiveStreamingOutsideLiveList(
+            appID: yourAppID,
+            appSign: yourAppSign,
+            controller: liveListController,
+            style: ZegoOutsideRoomAudioVideoViewListStyle(
+              item: ZegoAudioVideoViewOutsideRoomListItemStyle(
+                foregroundBuilder: foreground,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget foreground(
+    BuildContext context,
+    Size size,
+    ZegoUIKitUser? user,
+    String roomID,
+  ) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ElevatedButton(
+        child: Text('enter live'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SafeArea(
+                child: ZegoUIKitPrebuiltLiveStreaming(
+                  appID: $your_app_id,
+                  appSign: $your_app_sign,
+                  userID: $user_id,
+                  userName: $user_name,
+                  liveID: roomID,
+                  config: ZegoUIKitPrebuiltLiveStreamingConfig.audience(
+                    plugins: [ZegoUIKitSignalingPlugin()],
+                  )
+                  ..outsideLive.controller = liveListController,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+ ```
