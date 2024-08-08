@@ -67,16 +67,6 @@
       "items": [
         {
           "type": "doc",
-          "label": "API",
-          "id": "api-reference/api"
-        },
-        {
-          "type": "doc",
-          "label": "Event",
-          "id": "api-reference/event"
-        },
-        {
-          "type": "doc",
           "label": "Config",
           "id": "api-reference/config"
         }
