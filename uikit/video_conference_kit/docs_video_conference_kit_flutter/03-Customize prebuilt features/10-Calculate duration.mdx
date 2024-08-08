@@ -11,12 +11,20 @@ To calculate the duration, do the following:
 
 1. Set the `isVisible` property of `ZegoVideoConferenceDurationConfig` to display the current timer. (It is displayed by default)
 
-2. Set the `canSync` property, and only one user can set it. Repeated settings will cause timing to restart.
+2. Set the `canSync` property, whether the current user can synchronize duration (if it has already been set, it will be reset) or not.
+
+   For example, when the teacher enters the room, if it is the beginning of class, **canSync** should be set to true. 
+   
+   If it is a break in the middle to exit the meeting and resume class, **canSync** should be set to false.
+
+   If true, the duration will be synchronized (if it has already been set, it will be reset) when user join meeting. 
+   
+   If false, the user will only read the set duration .
 
 3. Assuming that the duration is 5 minutes, the conference will automatically end when the time is up (refer to the following code). You will be notified of the end of the duration through `ZegoVideoConferenceDurationEvents.onUpdated`. To end the conference, you can call the `leave` method of `ZegoUIKitPrebuiltVideoConferenceController().room`.
 
 
-```dartx
+```dart {28-30,32-38}
 enum Role { Host, Audience }
 
 class VideoConferencePage extends StatefulWidget {
