@@ -1,28 +1,17 @@
 # Calculate duration
 
-This doc describes how to calculate the duration through configuration.
-
 
 <Frame width="30%" height="auto" caption="">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/9b891343e9.png" alt="conference_duration.png"/>
 </Frame> 
 
-To calculate the duration, do the following:
+- The `isVisible` property of `ZegoVideoConferenceDurationConfig` controls the visibility of the duration label. If none of the participants have set `canSync`, the duration label will not be visible regardless of the value of `isVisible`.
+- `canSync` controls whether the meeting starts counting the duration. If `canSync` is set to `true` when any participant joins the meeting, the meeting duration will start counting from the time that participant joins.
+- The `ZegoVideoConferenceDurationEvents.onUpdated` callback will only be triggered when a participant with `canSync` set to `true` joins the meeting. The `duration.inSeconds` may not necessarily be increasing, as the timing can be reset by a new participant joining the meeting with `canSync` set to `true`.
 
-1. Set the `isVisible` property of `ZegoVideoConferenceDurationConfig` to display the current timer. (It is displayed by default)
+It is recommended to have only one participant with `canSync` set to `true` and others set to `false`. For example, if the administrator of a meeting sets `canSync` to `true` and others set it to `false`, the meeting duration will start counting from when the administrator joins, and the duration will not be affected by other participants joining.
 
-2. Set the `canSync` property, whether the current user can synchronize duration (if it has already been set, it will be reset) or not.
-
-   For example, when the teacher enters the room, if it is the beginning of class, **canSync** should be set to true. 
-   
-   If it is a break in the middle to exit the meeting and resume class, **canSync** should be set to false.
-
-   If true, the duration will be synchronized (if it has already been set, it will be reset) when user join meeting. 
-   
-   If false, the user will only read the set duration .
-
-3. Assuming that the duration is 5 minutes, the conference will automatically end when the time is up (refer to the following code). You will be notified of the end of the duration through `ZegoVideoConferenceDurationEvents.onUpdated`. To end the conference, you can call the `leave` method of `ZegoUIKitPrebuiltVideoConferenceController().room`.
-
+You can achieve the automatic ending of a conference after a specified duration by using the `ZegoVideoConferenceDurationEvents.onUpdated` event and the `leave` method of `ZegoUIKitPrebuiltVideoConferenceController().room`. Let's take an example where the conference automatically ends after 5 minutes of starting:
 
 ```dart {28-30,32-38}
 enum Role { Host, Audience }
