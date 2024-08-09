@@ -289,3 +289,42 @@ enum ZegoOutsideRoomAudioVideoViewListPlayMode {
     - ZegoAvatarConfig? `avatar`: 
     
       custom avatar
+
+## How to control start/stop play by yourself
+
+the default setting is autoplay, which means all the ZegoLiveStreamingOutsideLiveListHost you pass in will be played automatically. 
+
+If you want to play them manually, please follow:
+
+<Steps>
+  <Step title="Set to manual mode">
+    ```dart {3}
+    ZegoLiveStreamingOutsideLiveList(
+      config: ZegoLiveStreamingOutsideLiveListConfig(
+        playMode: ZegoOutsideRoomAudioVideoViewListPlayMode.manualPlay,
+      ),
+    );
+    ```
+  </Step>
+  <Step title="Start playing/Stop playing by calling the folloing APIs.">
+    - `startPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+      start play target stream; if not in streams, it would not play, use [addStream].
+
+    - `stopPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+      stop play target stream
+
+    - `addStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream, \{bool startPlay = true\}): 
+
+      add a host
+
+    - `removeStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+      remove a host
+
+    - `updateStreams`(List\<ZegoOutsideRoomAudioVideoViewStreamUser\> streams, \{bool startPlay = true\}): 
+
+      update hosts
+  </Step>
+</Steps>
