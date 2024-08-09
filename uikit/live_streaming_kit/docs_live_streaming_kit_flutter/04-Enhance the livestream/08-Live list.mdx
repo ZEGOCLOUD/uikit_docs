@@ -13,7 +13,7 @@ With this feature, you can display the list of LIVEs on your homepage
 ## How to integrate
 
 <Note title="Connect ZegoLiveStreamingOutsideLiveListController to ZegoUIKitPrebuiltLiveStreaming">
-you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **controller of ZegoLiveStreamingOutsideLiveConfig**, which is **config.outsideLive.controller in ZegoUIKitPrebuiltLiveStreaming**
+you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **controller of ZegoLiveStreamingOutsideLiveConfig**, which is **config.outsideLives.controller in ZegoUIKitPrebuiltLiveStreaming**
 </Note>
 
 <Steps>
@@ -36,7 +36,7 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ZegoUIKitPrebuiltLiveStreaming(
       ...
       config: ZegoUIKitPrebuiltLiveStreamingConfig(
-        outsideLive: ZegoLiveStreamingOutsideLiveConfig(
+        outsideLives: ZegoLiveStreamingOutsideLivesConfig(
           controller: outsideLiveListController,
         ),
       ),
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                   config: ZegoUIKitPrebuiltLiveStreamingConfig.audience(
                     plugins: [ZegoUIKitSignalingPlugin()],
                   )
-                  ..outsideLive.controller = liveListController,
+                  ..outsideLives.controller = liveListController,
                 ),
               ),
             ),
@@ -150,3 +150,142 @@ class _HomePageState extends State<HomePage> {
   }
 }
  ```
+
+## API
+
+- `startPlayAll`: 
+
+  start play all stream
+
+- `stopPlayAll`: 
+
+  stop play all stream
+
+- `startPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+  start play target stream; if not in streams, it would not play, use [addStream].
+
+- `stopPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+  stop play target stream
+
+- `updateStreams`(List\<ZegoOutsideRoomAudioVideoViewStreamUser\> streams, \{bool startPlay = true\}): 
+
+  update hosts
+
+- `addStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream, \{bool startPlay = true\}): 
+
+  add a host
+
+- `removeStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+
+  remove a host
+
+ ## Config
+ ```dart
+/// play mode
+enum ZegoOutsideRoomAudioVideoViewListPlayMode {
+  /// All streams (video and audio) will be automatically played internally.
+  autoPlay,
+
+  /// Control the play timing by yourself, and you need to manually call the API to play the stream (video and audio).
+  /// [ZegoOutsideRoomAudioVideoViewListController]
+  /// - startPlayOne
+  /// - stopPlayOne
+  /// - startPlayAll
+  /// - stopPlayAll
+  manualPlay,
+}
+ ```
+
+  - ZegoOutsideRoomAudioVideoViewListPlayMode `playMode`: 
+  
+    mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoOutsideRoomAudioVideoViewListController** to control it.
+
+ ## Style
+ 
+  - Axis `scrollDirection`: 
+    
+    scroll direction, default is horizontal
+
+  - double `borderRadius`: 
+    
+    border radius
+
+  - Color `borderColor`: 
+    
+    border color
+
+  - double `borderColorOpacity`: 
+    
+    border color opacity
+  
+  - Color `backgroundColor`: 
+    
+    background color
+  
+  - double `backgroundColorOpacity`: 
+    
+    background color opacity
+  
+  - Widget? Function(BuildContext context)? `loadingBuilder`: 
+    
+    loading builder, return Container() if you want hide it
+  
+  - ZegoOutsideRoomAudioVideoViewListItemStyle `item`: 
+    
+    item style
+
+    - bool `useVideoViewAspectFill`: 
+
+    Video view mode. Set it to true if you want the video view to scale proportionally to fill the entire view, potentially resulting in partial cropping. Set it to false if you want the video view to scale proportionally, potentially resulting in black borders.
+
+    - double `sizeAspectRatio`: 
+    
+      Aspect ratio
+    
+    - Widget Function(
+      BuildContext context,
+      Size size,
+      ZegoUIKitUser? user,
+      String roomID,
+    )? `foregroundBuilder`: 
+    
+      foreground builder, you can display something you want on top of the view, foreground will always show
+    
+    - Widget Function(
+      BuildContext context,
+      Size size,
+      ZegoUIKitUser? user,
+      String roomID,
+    )? `backgroundBuilder`: 
+    
+      background builder, you can display something when user close camera
+    
+    - EdgeInsetsGeometry `margin`: 
+    
+      margin
+    
+    - double `borderRadius`: 
+    
+      border radius
+    
+    - Color `borderColor`: 
+    
+      border color
+    
+    - double `borderColorOpacity`: 
+
+      borderColor opacity
+    
+    - Widget? Function(
+      BuildContext context,
+      ZegoUIKitUser? user,
+      String roomID,
+    )? `loadingBuilder`: 
+
+      loading builder, return Container() if you want hide it
+
+    - ZegoAvatarConfig? `avatar`: 
+    
+      custom avatar
