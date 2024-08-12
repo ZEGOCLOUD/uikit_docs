@@ -65,6 +65,14 @@ declare interface ZegoCloudRoomConfig {
   rightPanelExpandedType?: RightPanelExpandedType; // Controls the type of the information displayed on the right panel, display "None" by default.
   autoHideFooter?: boolean; // Whether to automatically hide the footer (bottom toolbar), auto-hide by default. This only applies to mobile browsers.
   enableUserSearch?: boolean; // Whether to enable the user search feature, false by default.
+  showMoreButton?: boolean; // Whether to enable the more button, true by default.
+  showUserName?: boolean; // Whether to display the user name on chat. true by default
+  hiddenVideoUserIDList?: string[]; // List of user ids that need to hide the video box
+  turnOffCameraConfig?: { // Camera off configuration
+    appointUserID?: string; // Specifies the valid user ID. If the ID is not specified, it takes effect for all users by default
+    showAvatar?: boolean; // Whether to display the user profile picture. true by default
+  }[];
+  backgroundUrl?: string; // background
 
   // 1.4 Leaving view
   showLeavingView?: boolean; // Whether to display the leaving view. Displayed by default.
