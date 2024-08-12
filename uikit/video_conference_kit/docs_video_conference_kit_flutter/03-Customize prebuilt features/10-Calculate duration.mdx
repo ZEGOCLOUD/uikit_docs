@@ -1,0 +1,61 @@
+# Calculate duration
+
+
+<Frame width="30%" height="auto" caption="">
+    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/9b891343e9.png" alt="conference_duration.png"/>
+</Frame> 
+
+- The `isVisible` property of `ZegoVideoConferenceDurationConfig` controls the visibility of the duration label. If none of the participants have set `canSync`, the duration label will not be visible regardless of the value of `isVisible`.
+- `canSync` controls whether the meeting starts counting the duration. If `canSync` is set to `true` when any participant joins the meeting, the meeting duration will start counting from the time that participant joins.
+- The `ZegoVideoConferenceDurationEvents.onUpdated` callback will only be triggered when a participant with `canSync` set to `true` joins the meeting. The `duration.inSeconds` may not necessarily be increasing, as the timing can be reset by a new participant joining the meeting with `canSync` set to `true`.
+
+It is recommended to have only one participant with `canSync` set to `true` and others set to `false`. For example, if the administrator of a meeting sets `canSync` to `true` and others set it to `false`, the meeting duration will start counting from when the administrator joins, and the duration will not be affected by other participants joining.
+
+You can achieve the automatic ending of a conference after a specified duration by using the `ZegoVideoConferenceDurationEvents.onUpdated` event and the `leave` method of `ZegoUIKitPrebuiltVideoConferenceController().room`. Let's take an example where the conference automatically ends after 5 minutes of starting:
+
+```dart {28-30,32-38}
+enum Role { Host, Audience }
+
+class VideoConferencePage extends StatefulWidget {
+  final String conferenceID;
+  final Role role;
+
+  const VideoConferencePage({
+    Key? key,
+    required this.conferenceID,
+    required this.role,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => VideoConferencePageState();
+}
+
+class VideoConferencePageState extends State<VideoConferencePage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: ZegoUIKitPrebuiltVideoConference(
+        appID: yourAppID /*input your AppID*/,
+        appSign: yourAppSign /*input your AppSign*/,
+        userID: 'userID',
+        userName: 'userName',
+        conferenceID: widget.conferenceID,
+        config: ZegoUIKitPrebuiltVideoConferenceConfig()
+          ..duration = ZegoVideoConferenceDurationConfig(
+            canSync: widget.role == Role.Host,
+          ),
+        events: ZegoUIKitPrebuiltVideoConferenceEvents(
+          duration: ZegoVideoConferenceDurationEvents(
+            onUpdated: (Duration d) {
+                if (duration.inSeconds == 5 * 60) {
+                  ZegoUIKitPrebuiltVideoConferenceController().room.leave(context);
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
