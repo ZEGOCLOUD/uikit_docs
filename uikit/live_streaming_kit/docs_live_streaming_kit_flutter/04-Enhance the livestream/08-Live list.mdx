@@ -104,8 +104,8 @@ class _HomePageState extends State<HomePage> {
             appID: yourAppID,
             appSign: yourAppSign,
             controller: liveListController,
-            style: ZegoOutsideRoomAudioVideoViewListStyle(
-              item: ZegoAudioVideoViewOutsideRoomListItemStyle(
+            style: ZegoLiveStreamingOutsideLiveListStyle(
+              item: ZegoLiveStreamingOutsideLiveListItemStyle(
                 foregroundBuilder: foreground,
               ),
             ),
@@ -161,23 +161,23 @@ class _HomePageState extends State<HomePage> {
 
   stop play all stream
 
-- `startPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+- `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
   start play target stream; if not in streams, it would not play, use [addStream].
 
-- `stopPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+- `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
   stop play target stream
 
-- `updateStreams`(List\<ZegoOutsideRoomAudioVideoViewStreamUser\> streams, \{bool startPlay = true\}): 
+- `updateStreams`(List\<ZegoLiveStreamingOutsideLiveListHost\> streams, \{bool startPlay = true\}): 
 
   update hosts
 
-- `addStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream, \{bool startPlay = true\}): 
+- `addStream`(ZegoLiveStreamingOutsideLiveListHost stream, \{bool startPlay = true\}): 
 
   add a host
 
-- `removeStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+- `removeStream`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
   remove a host
 
@@ -200,7 +200,7 @@ enum ZegoOutsideRoomAudioVideoViewListPlayMode {
 
   - ZegoOutsideRoomAudioVideoViewListPlayMode `playMode`: 
   
-    mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoOutsideRoomAudioVideoViewListController** to control it.
+    mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoLiveStreamingOutsideLiveListController** to control it.
 
  ## Style
  
@@ -232,7 +232,7 @@ enum ZegoOutsideRoomAudioVideoViewListPlayMode {
     
     loading builder, return Container() if you want hide it
   
-  - ZegoOutsideRoomAudioVideoViewListItemStyle `item`: 
+  - ZegoLiveStreamingOutsideLiveListItemStyle `item`: 
     
     item style
 
@@ -307,23 +307,23 @@ If you want to play them manually, please follow:
     ```
   </Step>
   <Step title="Start playing/Stop playing by calling the folloing APIs.">
-    - `startPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+    - `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
       start play target stream; if not in streams, it would not play, use [addStream].
 
-    - `stopPlayOne`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+    - `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
       stop play target stream
 
-    - `addStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream, \{bool startPlay = true\}): 
+    - `addStream`(ZegoLiveStreamingOutsideLiveListHost stream, \{bool startPlay = true\}): 
 
       add a host
 
-    - `removeStream`(ZegoOutsideRoomAudioVideoViewStreamUser stream): 
+    - `removeStream`(ZegoLiveStreamingOutsideLiveListHost stream): 
 
       remove a host
 
-    - `updateStreams`(List\<ZegoOutsideRoomAudioVideoViewStreamUser\> streams, \{bool startPlay = true\}): 
+    - `updateStreams`(List\<ZegoLiveStreamingOutsideLiveListHost\> streams, \{bool startPlay = true\}): 
 
       update hosts
   </Step>
