@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
  ```dart
 /// play mode
 enum ZegoOutsideRoomAudioVideoViewListPlayMode {
-  /// All streams (video and audio) will be automatically played internally.
+  /// All streams (video and audio) in visible area will be automatically played internally.
   autoPlay,
 
   /// Control the play timing by yourself, and you need to manually call the API to play the stream (video and audio).
@@ -201,6 +201,10 @@ enum ZegoOutsideRoomAudioVideoViewListPlayMode {
   - ZegoOutsideRoomAudioVideoViewListPlayMode `playMode`: 
   
     mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoLiveStreamingOutsideLiveListController** to control it.
+
+  - ZegoUIKitVideoConfig? video:
+
+    configuration parameters for audio and video streaming, such as Resolution, Frame rate, Bit rate. The default is ZegoUIKitVideoConfig.preset180P()
 
  ## Style
  
