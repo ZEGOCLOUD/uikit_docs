@@ -17,12 +17,18 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
 </Note>
 
 <Steps>
-  <Step title="define ZegoLiveStreamingOutsideLiveListController">
+  <Step title="Define a ZegoLiveStreamingOutsideLiveListController">
+    You need to associate the `controller` to `ZegoUIKitPrebuiltLiveStreaming` on `step 3`.
+
+    You can play/stop the host audio & video by manually calling the API of this controller.
+
     ```dart
     final outsideLiveListController = ZegoLiveStreamingOutsideLiveListController();
     ```
   </Step>
-  <Step title="add ZegoLiveStreamingOutsideLiveList">
+  <Step title="Add ZegoLiveStreamingOutsideLiveList on your widget">
+    Add this list widget on the view you need to display
+
     ```dart
     ZegoLiveStreamingOutsideLiveList(
       appID: /*input your AppID*/,
@@ -32,6 +38,8 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ```
   </Step>
   <Step title="Connect ZegoLiveStreamingOutsideLiveListController to ZegoUIKitPrebuiltLiveStreaming">
+    Associate the `controller` declared on `step 1 `to `ZegoUIKitPrebuiltLiveStreaming`
+
     ```dart
     ZegoUIKitPrebuiltLiveStreaming(
       ...
@@ -43,7 +51,9 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ),
     ```
   </Step>
-  <Step title="Fill in the LIVE room list information to be displayed">
+  <Step title="Update the LIVE room list to be displayed">
+    You can update hosts at any time.
+
     ```dart
     outsideLiveListController.updateHosts([
       ZegoLiveStreamingOutsideLiveListHost(

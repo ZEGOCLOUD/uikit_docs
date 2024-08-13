@@ -15,9 +15,9 @@ Please follow the steps below:
 
 <Steps>
   <Step title="implement your own event class">
-    There are two ways:
+    You can choose one of the following two ways:
   
-    1. If you only need to listen to certain callback events, you just need to `extends` to `ZegoUIKitExpressEventInterface`.
+    1. If you only need to listen some events, you just need to `extends` to `ZegoUIKitExpressEventInterface`.
     ```dart
     class ExpressEvent extends ZegoUIKitExpressEventInterface
     {
@@ -34,7 +34,7 @@ Please follow the steps below:
     }
     ```
 
-    2. You need to listen to all callback events, the `implements` keyword will require you to implement all interfaces of `ZegoUIKitExpressEventInterface`.  
+    2. If you need to listen all events, the `implements` keyword will require you to implement all interfaces of `ZegoUIKitExpressEventInterface`.  
     ```dart
     /// 
     class ExpressEvent implements ZegoUIKitExpressEventInterface
