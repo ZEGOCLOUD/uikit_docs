@@ -1,9 +1,20 @@
-# Set User AvatarUrl livestream room
+# Set avatar for users
 
 
-Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) can give the user a custom avatar
+User avatars are generally stored in the server. LiveStreaming Kit (ZegoUIKitPrebuiltLiveStreaming) does not know the real profile picture of each user, so it uses the first letter of the username to draw the user avatars by default:
 
 
+
+
+To configure the custom user avatars, you can use the `userAvatarUrl ` in `ZegoUIKitPrebuiltLiveStreamingConfig`to set a custom view.
+
+<Warning title="Warning">
+
+Please note that here you need to return different avatars for different users based on the user parameter in the callback parameters. 
+
+If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+
+</Warning>
 Here is the reference code:
 
 ```swift
@@ -21,7 +32,7 @@ class ViewController: UIViewController {
         
         // Modify your custom configurations here.
         let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
-        // The total length of the user attribute Key-Value owned by each user in the room does not exceed 144 bytes
+        // The total length of userAvatarUrl does not exceed 144 bytes
         config.userAvatarUrl = "http://avatarUrl"
 
         self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
