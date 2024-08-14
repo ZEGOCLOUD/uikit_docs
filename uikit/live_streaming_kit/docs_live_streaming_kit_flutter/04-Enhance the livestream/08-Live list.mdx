@@ -1,11 +1,10 @@
-import TokensAuthenticationIntro from "/snippets/uikit/TokensAuthenticationIntroEn.mdx";
 
 # Live list
 
-With this feature, you can display the list of LIVEs on your homepage
+With this feature, you can display the list of LIVEs on your homepage.
 
 
-<Frame width="50%" height="auto" caption="">
+<Frame width="256" height="auto" caption="">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/b7da56fa5d.gif" alt="live list"/>
 </Frame>
 
@@ -18,8 +17,6 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
 
 <Steps>
   <Step title="Define a ZegoLiveStreamingOutsideLiveListController">
-    You need to associate the `controller` to `ZegoUIKitPrebuiltLiveStreaming` on `step 3`.
-
     You can play/stop the host audio & video by manually calling the API of this controller.
 
     ```dart
@@ -27,7 +24,7 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ```
   </Step>
   <Step title="Add ZegoLiveStreamingOutsideLiveList on your widget">
-    Add this list widget on the view you need to display
+    Add this list widget to the view where you want to display the live list.
 
     ```dart
     ZegoLiveStreamingOutsideLiveList(
@@ -38,8 +35,6 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ```
   </Step>
   <Step title="Connect ZegoLiveStreamingOutsideLiveListController to ZegoUIKitPrebuiltLiveStreaming">
-    Associate the `controller` declared on `step 1 `to `ZegoUIKitPrebuiltLiveStreaming`
-
     ```dart
     ZegoUIKitPrebuiltLiveStreaming(
       ...
@@ -51,8 +46,8 @@ you need assign the **controller of ZegoLiveStreamingOutsideLiveList** to **cont
     ),
     ```
   </Step>
-  <Step title="Update the LIVE room list to be displayed">
-    You can update hosts at any time.
+  <Step title="Update the live list to be displayed">
+    You can update the entire live list at any time by updating the host list.
 
     ```dart
     outsideLiveListController.updateHosts([
@@ -161,38 +156,75 @@ class _HomePageState extends State<HomePage> {
 }
  ```
 
+
+## How to manually start/stop playing the video and audio of the host on the live list
+
+By default, the videos and audios of the host in the live list will automatically play. If you want to control them manually, please follow the steps below to achieve it:
+
+<Steps>
+  <Step title="Set to manual play mode">
+    ```dart {3}
+    ZegoLiveStreamingOutsideLiveList(
+      config: ZegoLiveStreamingOutsideLiveListConfig(
+        playMode: ZegoOutsideRoomAudioVideoViewListPlayMode.manualPlay,
+      ),
+    );
+    ```
+  </Step>
+  <Step title="Start/Stop playing by calling the following APIs.">
+    Please refer to the [API](#api) documentation for more information.
+    - `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost host)
+    - `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost host)
+    - `addHost`(ZegoLiveStreamingOutsideLiveListHost host, \{bool startPlay = true\})
+    - `removeHost`(ZegoLiveStreamingOutsideLiveListHost host)
+    - `updateHosts`(List\<ZegoLiveStreamingOutsideLiveListHost\> hosts, \{bool startPlay = true\})
+  </Step>
+</Steps>
+
 ## API
 
-- `startPlayAll`: 
+### ZegoLiveStreamingOutsideLiveListController
 
-  start play all stream
+- `startPlayAll`:
 
-- `stopPlayAll`: 
+  Play videos and audios of all hosts in the live list.
 
-  stop play all stream
+- `stopPlayAll`:
 
-- `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
+  Stop playing videos and audios of all hosts in the live list.
 
-  start play target stream; if not in streams, it would not play, use [addStream].
+- `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost host):
 
-- `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
+  Play the video and audio of the `host`. If the `host` is not in the live list, calling this interface will have no effect. You can use `addHost` to add and play the video and audio of a host.
 
-  stop play target stream
+- `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost host):
 
-- `updateStreams`(List\<ZegoLiveStreamingOutsideLiveListHost\> streams, \{bool startPlay = true\}): 
+  Stop playing the video and audio of the `host`. If the `host` is not in the live list, calling this interface will have no effect.
 
-  update hosts
+- `updateHosts`(List\<ZegoLiveStreamingOutsideLiveListHost\> hosts, \{bool startPlay = true\}):
 
-- `addStream`(ZegoLiveStreamingOutsideLiveListHost stream, \{bool startPlay = true\}): 
+  Update the host list to update the entire live list.
 
-  add a host
+- `addHost`(ZegoLiveStreamingOutsideLiveListHost host, \{bool startPlay = true\}):
 
-- `removeStream`(ZegoLiveStreamingOutsideLiveListHost stream): 
+  Add a `host` to add a live item in the live list.
 
-  remove a host
+- `removeHost`(ZegoLiveStreamingOutsideLiveListHost host):
+
+  Remove the live item corresponding to the `host` in the live list.
 
  ## Config
- ```dart
+
+ ### ZegoLiveStreamingOutsideLiveListConfig
+
+ | Attribute | Description                                                                                                                                                                | Type                                      |
+ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+ | playMode  | Play mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoLiveStreamingOutsideLiveListController** to control it. | ZegoOutsideRoomAudioVideoViewListPlayMode |
+ | video     | Configuration parameters for audio and video, such as Resolution, Frame rate, Bit rate. The default is ZegoUIKitVideoConfig.preset180P()                                   | ZegoUIKitVideoConfig?                     |
+
+
+ ### ZegoOutsideRoomAudioVideoViewListPlayMode
+ ```dart Prototype
 /// play mode
 enum ZegoOutsideRoomAudioVideoViewListPlayMode {
   /// All streams (video and audio) in visible area will be automatically played internally.
@@ -207,138 +239,34 @@ enum ZegoOutsideRoomAudioVideoViewListPlayMode {
   manualPlay,
 }
  ```
-
-  - ZegoOutsideRoomAudioVideoViewListPlayMode `playMode`: 
-  
-    mode, default is auto play. If you want to manually control, set it to manualPlay, and call the APIs of **ZegoLiveStreamingOutsideLiveListController** to control it.
-
-  - ZegoUIKitVideoConfig? video:
-
-    configuration parameters for audio and video streaming, such as Resolution, Frame rate, Bit rate. The default is ZegoUIKitVideoConfig.preset180P()
-
- ## Style
  
-  - Axis `scrollDirection`: 
-    
-    scroll direction, default is horizontal
+### ZegoLiveStreamingOutsideLiveListStyle
 
-  - double `borderRadius`: 
-    
-    border radius
+ | Attribute              | Description                                             | Type                                      |
+ | ---------------------- | ------------------------------------------------------- | ----------------------------------------- |
+ | scrollDirection        | Scroll direction, default is horizontal                 | Axis                                      |
+ | borderRadius           | Border radius                                           | double                                    |
+ | borderColor            | Border color                                            | Color                                     |
+ | borderColorOpacity     | Border color opacity                                    | double                                    |
+ | backgroundColor        | Background color                                        | Color                                     |
+ | backgroundColorOpacity | Background color opacity                                | double                                    |
+ | loadingBuilder         | Loading builder, return Container() if you want hide it | Widget? Function(BuildContext context)?   |
+ | item                   | Item style                                              | ZegoLiveStreamingOutsideLiveListItemStyle |
 
-  - Color `borderColor`: 
-    
-    border color
 
-  - double `borderColorOpacity`: 
-    
-    border color opacity
+### ZegoLiveStreamingOutsideLiveListItemStyle
   
-  - Color `backgroundColor`: 
-    
-    background color
-  
-  - double `backgroundColorOpacity`: 
-    
-    background color opacity
-  
-  - Widget? Function(BuildContext context)? `loadingBuilder`: 
-    
-    loading builder, return Container() if you want hide it
-  
-  - ZegoLiveStreamingOutsideLiveListItemStyle `item`: 
-    
-    item style
+ | Attribute              | Description                                                                                                                                                                                                                                                        | Type                                                                                    |
+ | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+ | useVideoViewAspectFill | Video view mode. Set it to true if you want the video view to scale proportionally to fill the entire view, potentially resulting in partial cropping. Set it to false if you want the video view to scale proportionally, potentially resulting in black borders. | bool                                                                                    |
+ | sizeAspectRatio        | Aspect ratio                                                                                                                                                                                                                                                       | double                                                                                  |
+ | foregroundBuilder      | Foreground builder, you can display something you want on top of the view, foreground will always show                                                                                                                                                             | Widget Function(BuildContext context, Size size, ZegoUIKitUser? user, String roomID, )? |
+ | backgroundBuilder      | Background builder, you can display something when user close camera                                                                                                                                                                                               | Widget Function(BuildContext context, Size size, ZegoUIKitUser? user, String roomID,)?  |
+ | margin                 | Margin                                                                                                                                                                                                                                                             | EdgeInsetsGeometry                                                                      |
+ | borderRadius           | Border radius                                                                                                                                                                                                                                                      | double                                                                                  |
+ | borderColor            | Border color                                                                                                                                                                                                                                                       | Color                                                                                   |
+ | borderColorOpacity     | BorderColor opacity                                                                                                                                                                                                                                                | double                                                                                  |
+ | loadingBuilder         | Loading builder, return Container() if you want hide it                                                                                                                                                                                                            | Widget? Function(BuildContext context, ZegoUIKitUser? user, String roomID,)?            |
+ | avatar                 | Custom avatar                                                                                                                                                                                                                                                      | ZegoAvatarConfig?                                                                       |
 
-    - bool `useVideoViewAspectFill`: 
 
-    Video view mode. Set it to true if you want the video view to scale proportionally to fill the entire view, potentially resulting in partial cropping. Set it to false if you want the video view to scale proportionally, potentially resulting in black borders.
-
-    - double `sizeAspectRatio`: 
-    
-      Aspect ratio
-    
-    - Widget Function(
-      BuildContext context,
-      Size size,
-      ZegoUIKitUser? user,
-      String roomID,
-    )? `foregroundBuilder`: 
-    
-      foreground builder, you can display something you want on top of the view, foreground will always show
-    
-    - Widget Function(
-      BuildContext context,
-      Size size,
-      ZegoUIKitUser? user,
-      String roomID,
-    )? `backgroundBuilder`: 
-    
-      background builder, you can display something when user close camera
-    
-    - EdgeInsetsGeometry `margin`: 
-    
-      margin
-    
-    - double `borderRadius`: 
-    
-      border radius
-    
-    - Color `borderColor`: 
-    
-      border color
-    
-    - double `borderColorOpacity`: 
-
-      borderColor opacity
-    
-    - Widget? Function(
-      BuildContext context,
-      ZegoUIKitUser? user,
-      String roomID,
-    )? `loadingBuilder`: 
-
-      loading builder, return Container() if you want hide it
-
-    - ZegoAvatarConfig? `avatar`: 
-    
-      custom avatar
-
-## How to control start/stop play by yourself
-
-the default setting is autoplay, which means all the ZegoLiveStreamingOutsideLiveListHost you pass in will be played automatically. 
-
-If you want to play them manually, please follow:
-
-<Steps>
-  <Step title="Set to manual mode">
-    ```dart {3}
-    ZegoLiveStreamingOutsideLiveList(
-      config: ZegoLiveStreamingOutsideLiveListConfig(
-        playMode: ZegoOutsideRoomAudioVideoViewListPlayMode.manualPlay,
-      ),
-    );
-    ```
-  </Step>
-  <Step title="Start playing/Stop playing by calling the folloing APIs.">
-    - `startPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
-
-      start play target stream; if not in streams, it would not play, use [addStream].
-
-    - `stopPlayOne`(ZegoLiveStreamingOutsideLiveListHost stream): 
-
-      stop play target stream
-
-    - `addStream`(ZegoLiveStreamingOutsideLiveListHost stream, \{bool startPlay = true\}): 
-
-      add a host
-
-    - `removeStream`(ZegoLiveStreamingOutsideLiveListHost stream): 
-
-      remove a host
-
-    - `updateStreams`(List\<ZegoLiveStreamingOutsideLiveListHost\> streams, \{bool startPlay = true\}): 
-
-      update hosts
-  </Step>
-</Steps>
