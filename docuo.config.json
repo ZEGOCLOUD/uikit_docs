@@ -216,25 +216,6 @@
       }
     },
     {
-      "id": "callkit_uniapp_zh",
-      "label": "音视频通话 UIKit (uni-app)",
-      "path": "uikit/callkit/docs_callkit_uniapp_zh",
-      "routeBasePath": "zh/callkit-uniapp",
-      "locale": "zh",
-      "navigationInfo": {
-        "group": {
-          "id": "callkit_zh",
-          "name": "音视频通话 UIKit",
-          "tag": "New"
-        },
-        "category": [
-          "Products",
-          "ZEGO UIKits"
-        ],
-        "platform": "uni-app: JS"
-      }
-    },
-    {
       "id": "callkit_web_zh",
       "label": "音视频通话 UIKit (Web)",
       "path": "uikit/callkit/docs_callkit_web_zh",
