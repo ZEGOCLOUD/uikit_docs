@@ -1,0 +1,58 @@
+
+# Use with ZegoExpressEngine
+
+Please do not use these methods from ZegoExpressEngine. 
+- createEngineWithProfile
+- destroyEngine
+- loginRoom
+- logoutRoom
+
+If you want to create an engine before prebuilt, you can use `ZegoUIKit().init(...)` instead.
+
+## event/callback
+
+When you are using ZegoExpressEngine together, how do you correctly handle event listeners?
+
+Please follow the steps below:
+
+<Steps>
+  <Step title="Implement your own event class">
+    You can choose one of the following two ways:
+    <Tabs>
+    <Tab title="With extends keyword">
+    If you only need to listen some events, you just need to `extends` to `ZegoUIKitExpressEventInterface`.
+    ```dart
+    class ExpressEvent extends ZegoUIKitExpressEventInterface
+    {
+    ...
+      @override
+      void onDebugError(
+          int errorCode,
+          String funcName,
+          String info,
+          ) {
+        /// your logic code
+      }
+    ...
+    }
+    ```
+    </Tab>
+    <Tab title="With implements keyword">
+    If you need to listen all events, the `implements` keyword will require you to implement all interfaces of `ZegoUIKitExpressEventInterface`.  
+    ```dart
+    /// 
+    class ExpressEvent implements ZegoUIKitExpressEventInterface
+    {
+    ...
+    }
+    ```
+    </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Register your own implemented event class">
+    ```dart 
+    final expressEvent = ExpressEvent();
+    ZegoUIKit().registerExpressEvent(expressEvent);
+    ```
+  </Step>
+</Steps>
