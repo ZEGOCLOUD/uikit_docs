@@ -1,0 +1,34 @@
+# Set User AvatarUrl livestream room
+
+
+Live Streaming Kit (ZegoUIKitPrebuiltLiveStreaming) can give the user a custom avatar
+
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    var liveVC: ZegoUIKitPrebuiltLiveStreamingVC?
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        // The total length of the user attribute Key-Value owned by each user in the room does not exceed 144 bytes
+        config.userAvatarUrl = "http://avatarUrl"
+
+        self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        self.liveVC!.modalPresentationStyle = .fullScreen
+        self.liveVC!.delegate = self
+        self.present(self.liveVC!, animated: true, completion: nil)
+    }
+}
+```
