@@ -1,0 +1,33 @@
+# Set User AvatarUrl livestream room
+
+
+ZEGO 场景（ZegouikitPrebuiltLivEstreaming）可以为用户提供自定义头像
+
+这是参考代码：
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    var liveVC: ZegoUIKitPrebuiltLiveStreamingVC?
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // 在此处修改您的自定义配置.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        // 房间中每个用户拥有的用户属性键值的总长度不超过144个字节
+        config.userAvatarUrl = "http://avatarUrl"
+
+        self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        self.liveVC!.modalPresentationStyle = .fullScreen
+        self.liveVC!.delegate = self
+        self.present(self.liveVC!, animated: true, completion: nil)
+    }
+}
+```
