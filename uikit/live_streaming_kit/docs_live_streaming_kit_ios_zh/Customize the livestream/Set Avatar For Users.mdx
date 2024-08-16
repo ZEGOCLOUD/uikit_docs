@@ -1,7 +1,7 @@
 # 设置用户头像
 
 
-互动直播 UIKit（Live Streaming Kit）不知道每个用户的真实个人资料图片，因此默认情况下，使用用户名的第一个字母来绘制用户头像
+互动直播 UIKit 不知道每个用户的真实个人资料图片，因此在默认情况下，会使用用户名的第一个字母来绘制用户头像。不过，互动直播 UIKit 也支持用户自行设置头像。
 
 ## 实现流程
 
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         
         // 在此处修改您的自定义配置.
         let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
-        // userAvatarUrl 总长度不超过144个字节
+        // userAvatarUrl 总长度不超过 144 个字节
         config.userAvatarUrl = "http://avatarUrl"
 
         self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
