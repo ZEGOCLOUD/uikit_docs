@@ -1,3 +1,7 @@
+---
+title: 
+description: 
+---
 import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
 import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
 
@@ -75,7 +79,7 @@ class ViewController: UIViewController {
 | config    | ZegoUIKitPrebuiltCallInvitationConfig | Yes      | This can be used to set up call invitation related configurations.                                                                                  |
 
 
-### Add the button for making call invitations
+### Add the button for making call invitation当然，我会尽力帮您将待翻译的文本翻译成中文。请提供您需要翻译的内容。s
 
 You can customize the position of the `ZegoSendCallInvitationButton` accordingly, pass in the ID of the user you want to call.
 
@@ -131,9 +135,49 @@ class ViewController: UIViewController {
 
 
 For more parameters, go to [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).
-
+#### customer call button
 Now, you can make call invitations by simply clicking on the buttons you set.
+<Accordion title="Custom Call Button" defaultOpen="false">
+If the user does not want to use the ZegoSendCallInvitationButton provided by CallKit internally and wants to use a custom button instead, CallKit provides a method to initiate a call.
 
+This feature is supported in versions 2.12.0 and later.
+
+1. Edit the `Podfile` file and add the basic dependencies.：
+    ```ruby
+    pod 'ZegoUIKitPrebuiltCall' '>= 2.12.1'
+    ```
+2. Run the following command in the terminal to download all necessary dependencies and SDK using Cocoapods:
+    ```bash
+    pod install
+    ```
+3. Call the following method in the click event of the custom audio/video call button.：
+    ```swift
+    let user: ZegoPluginCallUser = ZegoPluginCallUser(userID: "userID", userName: "userName")
+    let notificationConfig: ZegoPluginCallNotificationConfig = ZegoSignalingPluginNotificationConfig(resourceID: "resourceID")
+    ZegoPluginAdapter.callPlugin?.sendInvitationWithUIChange(invitees: [user], invitationType: type == .voiceCall ? .voiceCall : .videoCall, customData: "", timeout: 60, notificationConfig: notificationConfig), callback: { data in
+                
+    })
+    ```
+</Accordion>
+
+## API
+<Accordion title="sendInvitationWithUIChange" defaultOpen="false">
+```swift
+/// Initiate an audio or video call
+/// - ParametersSure, I can help you translate the text into English. Please provide the text you would like me to translate.:
+///   - invitees: List of users to invite to the call
+///   - invitationType: Type of call. Audio or video
+///   - customData: Custom data
+///   - timeout: Timeout duration
+///   - notificationConfig: Offline notification information
+///   - callback: Callback function
+func sendInvitationWithUIChange( invitees:[ZegoPluginCallUser],invitationType: ZegoPluginCallType,
+                                     customData: String, timeout: Int, notificationConfig: ZegoSignalingPluginNotificationConfig,
+                                     callback: ZegoPluginCallback?) {
+
+}
+```
+</Accordion>
 
 ## Configure your project
 

@@ -197,7 +197,45 @@ class ViewController: UIViewController {
 如需了解更多参数，请查看 [基础功能](./Calling%20config/Overview.mdx)。
 
 现在，您可以通过简单点击设置的按钮发起呼叫邀请。
+<Accordion title="自定义呼叫按钮" defaultOpen="false">
+如果用户不想使用CallKit内部的ZegoSendCallInvitationButton 按钮，需要使用自定义的按钮，CallKit 内部提供了发起呼叫的方法
+此功能 2.12.0 以后的版本才支持。
+1. 编辑 `Podfile` 文件，添加基本依赖项：
+    ```ruby
+    pod 'ZegoUIKitPrebuiltCall' '>= 2.12.1'
+    ```
+2. 在终端中运行以下命令，使用 Cocoapods 下载所有必需的依赖项和 SDK：
+    ```bash
+    pod install
+    ```
+3. 在自定义的音、视频通话按钮的点击事件中调用以下方法：
+    ```swift
+    let user: ZegoPluginCallUser = ZegoPluginCallUser(userID: "userID", userName: "userName")
+    let notificationConfig: ZegoPluginCallNotificationConfig = ZegoSignalingPluginNotificationConfig(resourceID: "resourceID")
+    ZegoPluginAdapter.callPlugin?.sendInvitationWithUIChange(invitees: [user], invitationType: type == .voiceCall ? .voiceCall : .videoCall, customData: "", timeout: 60, notificationConfig: notificationConfig), callback: { data in
+                
+    })
+    ```
+</Accordion>
 
+## API
+<Accordion title="sendInvitationWithUIChange" defaultOpen="false">
+```swift 定义
+  /// 主动发起音、视频呼叫通话
+  /// - Parameters:
+  ///   - invitees: 邀请通话的用户list
+  ///   - invitationType: 通话类型。语音、视频
+  ///   - customData: 自定义数据
+  ///   - timeout: 超时时间
+  ///   - notificationConfig: 离线通知信息
+  ///   - callback: 回调callback
+    func sendInvitationWithUIChange( invitees:[ZegoPluginCallUser],invitationType: ZegoPluginCallType,
+                                     customData: String, timeout: Int, notificationConfig: ZegoSignalingPluginNotificationConfig,
+                                     callback: ZegoPluginCallback?) {
+
+    }
+```
+</Accordion>
 ## 运行和测试
 
 至此，您已经完成了所有步骤！
