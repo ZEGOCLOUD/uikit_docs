@@ -11,7 +11,7 @@
 
 <Steps>
 <Step title="集成 IMKit">
-请参考[快速开始](../02-Quick start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
+请参考[快速开始](../02-Quick %20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
 </Step>
 
 
@@ -48,14 +48,27 @@ ZIMKit.initNotifications();  // Online notification for the initialization (use 
 </Step>
 
 
-<Step title="启用CallKit 功能">
-在 `ZIMKitConfig` 类中，我们可以通过创建一个`ZegoCallPluginConfig`类来启用音视频通话的功能。
+<Step title="启用 CallKit 功能">
+在 `ZIMKitConfig` 类中，我们可以通过创建`ZegoCallPluginConfig`对象来启用音视频通话的功能。
 ```java
 ZIMKitConfig zimKitConfig = ；
 // ...
 zimKitConfig.callPluginConfig = new ZegoCallPluginConfig();
 ```
 开启后，在 一对一聊天页面的输入框的更多页面中，会出现音视频通话的按钮。你可以使用它呼叫联系人了。
+</Step>
+
+<Step title="添加音视频呼叫按钮">
+启用 CallKit 功能以后，我们可以通过配置 `ZIMKitConfig` 的 `ZIMKitInputConfig` 参数来添加音视频呼叫按钮。
+```java
+ZIMKitConfig zimKitConfig = new ZIMKitConfig();
+zimKitConfig.callPluginConfig = new ZegoCallPluginConfig();
+zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VOICE_CALL);
+zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VIDEO_CALL);
+
+```
+配置后，聊天页面的输入框中就会出现音视频呼叫的按钮，点击后会弹出二级菜单，你可以选择视频呼叫或者语音呼叫(暂时不支持群呼叫)。
+
 </Step>
 </Steps>
 ## 更多资源
