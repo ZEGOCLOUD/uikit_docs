@@ -3,7 +3,7 @@
 This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start). 
 
 <Frame width="200" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif" />
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIMKit/inapp_chat_with_call.gif"/>
 </Frame>
 
 ## Implementation Process
@@ -17,7 +17,57 @@ Please refer to the [Call Kit Quick start](/callkit-ios/quick-start-(with-call-i
 </Step>
 <Step title="Initialize Call Kit">
 
-After successfully logging in to the In-app Chat Kit, add the following code to initialize Call Kit:
+- Edit the `Podfile` file to add basic dependencies：
+```Ruby
+pod 'ZegoUIKitPrebuiltCall', '> 2.12.0'
+```
+- Edit `Info.plist` File and add the following：
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>NSCameraUsageDescription</key>
+        <string>Application needs to use your camera to achieve video calls and photos.</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>Applications need to use your microphone to achieve audio and video calls and voice messages.</string>
+    </dict>
+</plist>
+```
+
+- Initialize the audio and video call UIKit with 'ZIMKitConfig'：
+
+```swift AppDelegate.swift {11}
+import UIKit
+import ZIMKit
+import ZegoUIKitPrebuiltCall
+import ZegoPluginAdapter
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        let appID: UInt32 = YOUR_APPID
+        let appSign: String = YOUR_APP_SIGN
+        let userID: String = YOUR_USER_ID
+        let userName: String = YOUR_USER_NAME
+        let resourceID: String = "resourceID" 
+        let config = ZIMKitConfig()
+        let call:ZegoUIKitPrebuiltCallInvitationConfig = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: true, certificateIndex: .firstCertificate)
+        let callConfig: ZegoCallPluginConfig = ZegoCallPluginConfig(invitationConfig: call, resourceID: resourceID)
+
+        config.callPluginConfig = callConfig
+        // bottomConfig.expandButtons Provide two functional photos and files by default
+        // bottomConfig.expandButtons Add sound, video call options
+        config.bottomConfig.expandButtons.append(.voiceCall)
+        config.bottomConfig.expandButtons.append(.videoCall)
+        ZIMKit.initWith(appID: appID, appSign: appSign, config: config)
+    }
+}
+```
+
+- After successfully logging in to the In-app Chat Kit, add the following code to initialize Call Kit:
 
 ```swift {7,8}
 let appID: UInt32 = YOUR_APPID
@@ -31,57 +81,6 @@ ZIMKit.connectUser(userID: userID, userName: userName) { error in
     }
 }
 ```
-
-</Step>
-<Step title="Add Send call invitation buttons">
-You can return a header bar by using the `getMessageListHeaderBar` method of `ZIMKitMessagesListVCDelegate`. Then, you can add the voice call button and video call button to the top right corner of the header bar using the `ZIMKitHeaderBar.rightItems` property.
-
-```swift {27,28}
-import ZIMKit
-import ZegoUIKitPrebuiltCall
-
-extension ViewController: ZIMKitMessagesListVCDelegate {
-    
-    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
-        
-        if messageListVC.conversationType != .peer { return nil }
-        
-        // Get conversationID and conversationName from messageListVC
-        let conversationID = messageListVC.conversationID
-        let conversationName = messageListVC.conversationName
-        
-        // Create voice call button and set the user to be called as ZegoUIKitUser
-        let voiceCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.voiceCall.rawValue)
-        voiceCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
-        
-        // Create video call button and set the user to be called as ZegoUIKitUser
-        let videoCallButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
-        videoCallButton.inviteeList = [ZegoUIKitUser(conversationID, conversationName)]
-        
-        // Create UIBarButtonItem using the above buttons
-        let voiceItem = UIBarButtonItem(customView: voiceCallButton)
-        let videoItem = UIBarButtonItem(customView: videoCallButton)
-        
-        // Create HeaderBar and set voice and video to `rightItems`
-        let header = ZIMKitHeaderBar()
-        header.rightItems = [videoItem, voiceItem]
-        
-        return header
-    }
-}
-```
-No matter if you are integrating the conversation component or the message component, you need to set the ZIMKitMessagesListVCDelegate delegate. Here are the ways to set the delegate for each integration method:
-<CodeGroup>
-```swift title="With conversation component" {2}
-let conversationVC = ZIMKitConversationListVC()
-conversationVC.messageDelegate = self
-```
-
-```swift title="With message component" {2}
-let messageVC = ZIMKitMessagesListVC(conversationID: "conversationID", type: .peer)
-messageVC.delegate = self
-```
-</CodeGroup>
 </Step>
 </Steps>
 
