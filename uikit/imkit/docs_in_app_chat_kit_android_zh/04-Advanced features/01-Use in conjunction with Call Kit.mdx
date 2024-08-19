@@ -11,7 +11,7 @@
 
 <Steps>
 <Step title="集成 IMKit">
-请参考[快速开始](../02-Quick%20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
+请参考[快速开始](./../02-Quick%20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
 </Step>
 
 
@@ -19,12 +19,10 @@
 修改你的 app 模块的 build.gradle 文件，添加 CallKit 依赖：
 
 ```groovy
-
 dependencies {
     ...
-    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // add this line in your module-level build.gradle file's dependencies, usually named [app].
+    implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // 在您的模块级 build.gradle 文件的 dependencies 中添加这行代码，通常命名为 [app]。
 }
-
 ```
 </Step>
 
@@ -32,21 +30,21 @@ dependencies {
 <Step title="调整IMKit初始化方式">
 在之前的步骤中，您使用了如下代码来初始化ZIMKit :
 ```java
-Long appId = ;    // The AppID you get from ZEGOCLOUD Admin Console.
-String appSign = ;    // The App Sign you get from ZEGOCLOUD Admin Console.
+Long appId = ;    // 您从 ZEGO 管理控制台获取的 AppID。
+String appSign = ;    // 您从 ZEGO 管理控制台获取的 AppSign。
 ZIMKit.initWith(this,appId,appSign);    
-ZIMKit.initNotifications();    // Online notification for the initialization (use the following code if this is needed).
+ZIMKit.initNotifications();    // 在线通知初始化（如果需要，请使用以下代码）。
 ```
+
 为了集成音视频通话功能，需要使用带`ZIMKitConfig`类参数的方法来进行初始化：
 ```java
 ZIMKitConfig zimKitConfig = new ZIMKitConfig();
-Long appId = ;    // The AppID you get from ZEGOCLOUD Admin Console.
-String appSign = ;    // The App Sign you get from ZEGOCLOUD Admin Console.
+Long appId = ;    // 您从 ZEGO 管理控制台获取的 AppID。
+String appSign = ;    // 您从 ZEGO 管理控制台获取的 AppSign。
 ZIMKit.initWith(this,appId,appSign,zimKitConfig);    
-ZIMKit.initNotifications();  // Online notification for the initialization (use the following code if this is needed).
+ZIMKit.initNotifications();  // 在线通知初始化（如果需要，请使用以下代码）。
 ```
 </Step>
-
 
 <Step title="启用 CallKit 功能">
 在 `ZIMKitConfig` 类中，我们可以通过创建`ZegoCallPluginConfig`对象来启用音视频通话的功能。
@@ -65,23 +63,24 @@ ZIMKitConfig zimKitConfig = new ZIMKitConfig();
 zimKitConfig.callPluginConfig = new ZegoCallPluginConfig();
 zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VOICE_CALL);
 zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VIDEO_CALL);
-
 ```
-配置后，聊天页面的输入框中就会出现音视频呼叫的按钮，点击后会弹出二级菜单，你可以选择视频呼叫或者语音呼叫(暂时不支持群呼叫)。
+
+配置后，聊天页面的输入框中就会出现音视频呼叫的按钮，点击后会弹出二级菜单，你可以选择视频呼叫或者语音呼叫（暂时不支持群呼叫）。
 
 </Step>
 </Steps>
 ## 更多资源
 
-以上内容仅介绍了集成 音视频通话 UIKit 所需的基本配置。如果您需要进一步自定义呼叫的配置，可以设置 ：
+以上内容仅介绍了集成音视频通话 UIKit 所需的基本配置。如果您需要进一步自定义呼叫的配置，可以设置：
+
 ```java
 ZIMKitConfig zimKitConfig = ；
 // ...
 zimKitConfig.callPluginConfig = new ZegoCallPluginConfig();
 // 自定义呼叫的配置
 ZegoUIKitPrebuiltCallInvitationConfig invitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-zimKitConfig.callPluginConfig.invitationConfig = invitationConfig; // opt,invitationConfig for call
-zimKitConfig.callPluginConfig.resourceID = ; // opt,resourceID for call
+zimKitConfig.callPluginConfig.invitationConfig = invitationConfig;  // 可选，呼叫的邀请配置
+zimKitConfig.callPluginConfig.resourceID = ; // 可选，用于呼叫邀请的 resourceID
 ```
 关于使用 `ZegoUIKitPrebuiltCallInvitationConfig` 来进行通话功能的自定义，请参考以下文档：
 

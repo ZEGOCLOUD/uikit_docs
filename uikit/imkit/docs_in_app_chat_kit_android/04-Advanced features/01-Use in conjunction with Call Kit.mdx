@@ -1,6 +1,6 @@
 # Integrate Audio and Video Calling Features
 
-This document will introduce how to use the audio and video calling UIKit to add audio and video calling capabilities to ZIMKit.
+This document introduces how to use the ZEGOCLOUD Call Kit to add audio and video calling capabilities to ZIMKit.
 
 <Frame width="200" height="auto" caption="">
     <img src="https://media-resource.spreading.io/docuo/workspace737/c930b1495b92aa1bb3bd62bf096731cb/4e648e6706.gif" />
@@ -11,7 +11,7 @@ This document will introduce how to use the audio and video calling UIKit to add
 
 <Steps>
 <Step title="Integrate IMKit">
-Please refer to the[Quick Start](../02-Quick%20start.mdx)to integrate IMKit. If it has already been integrated, you can skip this step.
+Please refer to the [Quick Start](./../02-Quick%20start.mdx) to integrate IMKit. If it has already been integrated, you can skip this step.
 </Step>
 
 <Step title="Add CallKit Dependency"> 
@@ -23,10 +23,8 @@ dependencies {
     ...
     implementation 'com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+'    // add this line in your module-level build.gradle file's dependencies, usually named [app].
 }
-
 ```
 </Step>
-
 
 <Step title="Adjust IMKit Initialization Method"> 
 In previous steps, you used the following code to initialize ZIMKit:
@@ -36,6 +34,7 @@ String appSign = ;    // The App Sign you get from ZEGOCLOUD Admin Console.
 ZIMKit.initWith(this,appId,appSign);    
 ZIMKit.initNotifications();    // Online notification for the initialization (use the following code if this is needed).
 ```
+
 To integrate the audio and video calling feature, you need to use the method with `ZIMKitConfig` class parameters for initialization: 
 
 ```java
@@ -66,15 +65,16 @@ ZIMKitConfig zimKitConfig = new ZIMKitConfig();
 zimKitConfig.callPluginConfig = new ZegoCallPluginConfig();
 zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VOICE_CALL);
 zimKitConfig.inputConfig.expandButtons.add(ZIMKitInputButtonName.VIDEO_CALL);
-
 ```
-After configuration, the input box on the chat page will have audio and video calling buttons. Clicking on them will bring up a secondary menu where you can choose to make a video call or a voice call (group calls are not supported at the moment).
+
+After configuration, the input box on the chat page will have voice and video calling buttons. Clicking on them will bring up a secondary menu where you can choose to make a video call or a voice call (group calls are not supported at the moment).
 
 </Step>
 </Steps>
-## 更多资源
+## More resources
 
 The above content only introduces the basic configuration required to integrate the audio and video calling UIKit. If you need to further customize the call configuration, you can set:
+
 ```java
 ZIMKitConfig zimKitConfig = ；
 // ...
@@ -87,7 +87,7 @@ zimKitConfig.callPluginConfig.resourceID = ; // opt,resourceID for call
 
 For information on customizing call functions using ZegoUIKitPrebuiltCallInvitationConfig, please refer to the following documentation:
 <CardGroup cols={1}> 
-    <Card title="Audio and Video Calling UIKit - Customize UI" href="https://doc-zh.zego.im/article/20217" target="_blank"> 
+    <Card title="Call Kit - Custom prebuilt features" href="https://www.zegocloud.com/docs/uikit/en/callkit-android/calling-config/overview" target="_blank"> 
     This article introduces how to further customize the functions and interfaces of the call. 
     </Card>
 </CardGroup>
