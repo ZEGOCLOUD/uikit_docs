@@ -108,7 +108,7 @@ class ViewController: UIViewController {
 | appSign | String | 是 | 您从 [ZEGOC 控制台](https://console.zego.im) 获取的AppSign。 |
 | userID | String | 是 | `userID` 可以是电话号码或您用户系统中的用户ID。userID 只能包含数字、字母和下划线(_)。 |
 | userName | String | 是 | `userName`可以是任意字符或您自己的用户系统中的用户名。 |
-| config    | ZegoUIKitPrebuiltCallInvitationConfig | Yes      | 这可以用来设置呼叫邀请相关的配置。|                                                                                 |
+| config    | ZegoUIKitPrebuiltCallInvitationConfig | 是 | 这可以用来设置呼叫邀请相关的配置。|                                                                                 |
 
 
 ### 添加呼叫邀请按钮
@@ -204,7 +204,7 @@ class ViewController: UIViewController {
 
 现在，您可以通过简单点击设置的按钮发起呼叫邀请。
 
-#### 自定义按钮呼叫
+#### 自定义呼叫按钮
 <Accordion title="自定义呼叫按钮" defaultOpen="false">
 如果用户不想使用CallKit内部的ZegoSendCallInvitationButton 按钮，需要使用自定义的按钮，CallKit 内部提供了发起呼叫的方法
 此功能 2.12.0 以后的版本才支持。

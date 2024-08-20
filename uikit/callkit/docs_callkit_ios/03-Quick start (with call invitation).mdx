@@ -70,9 +70,6 @@ class ViewController: UIViewController {
   // userID can only contain numbers, letters, and '_'. 
   // certificateIndex: indicates the signaling formation certificate verification method
   ZegoUIKitPrebuiltCallInvitationConfig *config = [[ZegoUIKitPrebuiltCallInvitationConfig alloc] initWithNotifyWhenAppRunningInBackgroundOrQuit:YES isSandboxEnvironment:YES certificateIndex:ZegoSignalingPluginMultiCertificateFirstCertificate];
-  // Change the language to Chinese
-  ZegoTranslationText *text = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
-  config.translationText = text;
 
   [[ZegoUIKitPrebuiltCallInvitationService shared] initWithAppID:YOUR_APPID appSign:YOUR_APP_SIGN userID:YOUR_USER_ID userName:YOUR_USER_NAME config:config];
 }
@@ -195,12 +192,12 @@ For more parameters, go to [Custom prebuilt UI](./04-Calling%20config/01-Overvie
 Now, you can make call invitations by simply clicking on the buttons you set.
 
 #### Customer call button
-<Accordion title="Custom Call Button" defaultOpen="false">
+<Accordion title="Custom Call Buttons" defaultOpen="false">
 If the user does not want to use the ZegoSendCallInvitationButton provided by CallKit internally and wants to use a custom button instead, CallKit provides a method to initiate a call.
 
 This feature is supported in versions 2.12.0 and later.
 
-1. Edit the `Podfile` file and add the basic dependencies.:
+1. Edit the `Podfile` file and add the basic dependencies:
     ```ruby
     pod 'ZegoUIKitPrebuiltCall' '>= 2.12.1'
     ```
@@ -208,7 +205,7 @@ This feature is supported in versions 2.12.0 and later.
     ```bash
     pod install
     ```
-3. Call the following method in the click event of the custom audio/video call button.:
+3. Call the following method in the click event of the custom audio/video call button:
     ```swift
     let user: ZegoPluginCallUser = ZegoPluginCallUser(userID: "userID", userName: "userName")
     let notificationConfig: ZegoPluginCallNotificationConfig = ZegoSignalingPluginNotificationConfig(resourceID: "resourceID")
@@ -222,7 +219,7 @@ This feature is supported in versions 2.12.0 and later.
 <Accordion title="sendInvitationWithUIChange" defaultOpen="false">
 ```swift
 /// Initiate an audio or video call
-/// - ParametersSure
+/// - Parameters:
 ///   - invitees: List of users to invite to the call
 ///   - invitationType: Type of call. Audio or video
 ///   - customData: Custom data

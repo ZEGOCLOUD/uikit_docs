@@ -1,4 +1,4 @@
-# Use Call Kit
+# Use with Call Kit
 
 This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start). 
 
@@ -13,7 +13,7 @@ This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegoc
 Please refer to [Quick start](../02-Quick%20start.mdx) to integrate the In-app Chat Kit. If it has already been integrated, you can ignore this step.
 </Step>
 <Step title="Integrate Call Kit">
-Please refer to the [Call Kit Quick start](/callkit-ios/quick-start-(with-call-invitation)) to integrate the Call Kit.
+Please refer to the [Call Kit Quick start (with call invitation)](/callkit-ios/quick-start-(with-call-invitation)) to integrate the Call Kit.
 </Step>
 <Step title="Initialize Call Kit">
 
@@ -35,7 +35,7 @@ pod 'ZegoUIKitPrebuiltCall', '>= 2.12.1'
 </plist>
 ```
 
-- Initialize the audio and video call UIKit with 'ZIMKitConfig'：
+- Initialize the audio and video call UIKit with `ZIMKitConfig`：
 
 ```swift AppDelegate.swift {11}
 import UIKit
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let userName: String = YOUR_USER_NAME
         let resourceID: String = "resourceID" 
         let config = ZIMKitConfig()
-        // The production environment `isSandboxEnvironment` is set to false
+        // For the production environment, `isSandboxEnvironment` is set to false
         let call:ZegoUIKitPrebuiltCallInvitationConfig = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: true, certificateIndex: .firstCertificate)
         let callConfig: ZegoCallPluginConfig = ZegoCallPluginConfig(invitationConfig: call, resourceID: resourceID)
 
