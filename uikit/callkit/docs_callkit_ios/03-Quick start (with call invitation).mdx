@@ -20,18 +20,17 @@ import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
 ## Add ZegoUIKitPrebuiltCall as dependencies
 
 - Open Terminal, navigate to your project's root directory, and run the following to create a `podfile`: 
-    ```
+    ```bash
     pod init
     ```
 - Edit the `Podfile` file to add the basic dependencies:
-    ```
+    ```ruby
     pod 'ZegoUIKitPrebuiltCall'
     pod 'ZegoUIKitSignalingPlugin'
     pod 'ZegoUIKitAppleCallKitPlugin'
-
     ```
 - In Terminal, run the following to download all required dependencies and SDK with Cocoapods:
-    ```
+    ```bash
     pod install
     ```
 
@@ -50,8 +49,6 @@ class ViewController: UIViewController {
         // Get your AppID and AppSign from ZEGOCLOUD's Console
         // userID can only contain numbers, letters, and '_'. 
         let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
-        // Change the language to Chinese
-        config.translationText = ZegoTranslationText(language: .CHS)
         ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(YOUR_APPID, appSign: YOUR_APP_SIGN, userID:YOUR_USER_ID, userName:YOUR_USER_NAME, config: config)
     }
 }
@@ -85,10 +82,10 @@ class ViewController: UIViewController {
 #### Parameters of ZegoUIKitPrebuiltCallInvitationConfig class
 | Parameter                              | Type          | Required | Description                                                                                                                                                                                                               |
 | :------------------------------------- | :------------ | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| incomingCallRingtone                   | String        | No       | This parameter has been deprecated.                                                                                                                                                                                       |
-| outgoingCallRingtone                   | String        | No       | If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `incomingCallRingtone` and `outgoingCallRingtone`.                                     |
-| showDeclineButton                      | Bool          | No       | This parameter has been deprecated.                                                                                                                                                                                       |
-| notifyWhenAppRunningInBackgroundOrQuit | Bool          | No       | Change `notifyWhenAppRunningInBackgroundOrQuit` to false if you don't need to receive a call invitation notification while your app running in the background or quit.                                                    |
+| incomingCallRingtone                   | String        | No       | Set the ringtone for incoming call invitations.  |
+| outgoingCallRingtone                   | String        | No       | Set the ringtone for outgoing call invitations.  |
+| showDeclineButton                      | Bool          | No       | Set the display or hide for the decline button.  |
+| notifyWhenAppRunningInBackgroundOrQuit | Bool          | No       | Change `notifyWhenAppRunningInBackgroundOrQuit` to `false` if you don't need to receive a call invitation notification when your app is running in the background or the user has quitted the app.                                                    |
 | isSandboxEnvironment                   | Bool          | No       | To publish your app to TestFlight or App Store, set the `isSandboxEnvironment` to false before starting building. To debug locally, set it to true. Ignore this when the notifyWhenAppRunningInBackgroundOrQuit is false. |
 | certificateIndex                       | Enum          | No       | To configure different certificates for different bunldle ID applications. The `certificateIndex` can be set as `firstCertificate` or `secondCertificate`, defaults to `firstCertificate`.                                |
 | translationText                        | ZegotranslationText | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                      |
@@ -127,6 +124,7 @@ class ViewController: UIViewController {
         self.view.addSubview(sendVoiceCallButton)
     }
 }
+```
 ```objc title="objc"
 - (void)viewDidLoad {
     [super viewDidLoad];

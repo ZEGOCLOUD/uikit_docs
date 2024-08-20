@@ -196,7 +196,7 @@ class ViewController: UIViewController {
 | :-- | :-- | :-- | :-- | 
 | inviteeList | Array | 是 | 被叫用户列表。必须包含 userID 和 userName。例如：[\{ userID: inviteeID, userName: inviteeName \}] |
 | type | int | 是 | 如果`type`设置为`ZegoInvitationType.videoCall.rawValue`，则按下按钮时进行视频通话。如果设置为其他值，则进行语音通话。 |
-| resourceID  | String | No       | `resourceID` 可以指定离线呼叫邀请的铃声，必须设置为与[ZEGOCLOUD管理控制台](https://console.zegocloud.com)中的推送资源ID相同的值。这只在notifyWhenAppRunningInBackgroundOrQuit为true时生效 |
+| resourceID  | String | No       | `resourceID` 可以指定离线呼叫邀请的铃声，必须设置为与 [ZEGO 管理控制台](https://console.zego.im) 中的 resourceID 相同的值。这只在notifyWhenAppRunningInBackgroundOrQuit为true时生效 |
 | timeout | UInt32 | 否 | 超时持续时间，默认为 60 秒。 |
 
 
