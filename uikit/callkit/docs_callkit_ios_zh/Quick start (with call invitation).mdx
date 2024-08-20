@@ -128,7 +128,7 @@ class ViewController: UIViewController {
           sendVoiceCallButton.resourceID = "xxx" // 用于通话的离线通知
           sendVoiceCallButton.setTitleColor(UIColor.blue, for: .normal)
           sendVoiceCallButton.inviteeList.append(callTargetUser)
-          sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+          sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 100, height: 30)
           // 将按钮添加到您的视图中
           self.view.addSubview(sendVoiceCallButton)
       }
@@ -139,14 +139,15 @@ class ViewController: UIViewController {
     - (void)viewDidLoad {
         [super viewDidLoad];
         // 创建语音通话邀请按钮
-        self.audioButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVoiceCall];
-        self.audioButton.frame = CGRectMake(100, 100, 100, 30);
-        [self.audioButton setText:@"语音"];
-        self.audioButton.resourceID = @"xxx" // 用于通话的离线通知
         ZegoUIKitUser *user = [[ZegoUIKitUser alloc] init:@"用户id" userName:@"用户昵称" isCameraOn:NO isMicrophoneOn:YES];
-        self.audioButton.inviteeList = @[user];
+        ZegoSendCallInvitationButton * sendVoiceCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVoiceCall];
+        sendVoiceCallButton.frame = CGRectMake(100, 100, 100, 30);
+        [sendVoiceCallButton.setTitleColor([UIColor blueColor], for: UIControlState.normal];
+        [sendVoiceCallButton setText:@"语音"];
+        sendVoiceCallButton.resourceID = @"xxx" // 用于通话的离线通知
+        sendVoiceCallButton.inviteeList = @[user];
         // 将按钮添加到您的视图中
-        [self.view addSubview:self.audioButton];
+        [self.view addSubview:sendVoiceCallButton];
   }
   ```
 </CodeGroup>
@@ -162,11 +163,10 @@ class ViewController: UIViewController {
           let callTargetUser: ZegoUIKitUser = ZegoUIKitUser.init("目标用户ID", "目标用户名")
           let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
           sendVideoCallButton.text = "视频"
-          sendVideoCallButton.resourceID = "xxx" // 用于通话的离线通知
           sendVideoCallButton.setTitleColor(UIColor.blue, for: .normal)
+          sendVideoCallButton.resourceID = "xxx" // 用于通话的离线通知
+          sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 100, height: 30)
           sendVideoCallButton.inviteeList.append(callTargetUser)
-          sendVideoCallButton.resourceID = "zegouikit_call" // 用于通话的离线通知
-          sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
           // 将按钮添加到您的视图中。
           self.view.addSubview(sendVideoCallButton)
       }
@@ -179,13 +179,13 @@ class ViewController: UIViewController {
       ZegoUIKitUser *user = [[ZegoUIKitUser alloc] init:@"用户id" userName:@"用户昵称" isCameraOn:YES isMicrophoneOn:YES];
 
       // 创建视频通话邀请按钮
-      self.sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVideoCall];
-      self.sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
-      [self.sendVideoCallButton setText:@"视频"];
-      self.sendVideoCallButton.resourceID = @"xxx" // 用于通话的离线通知
-      self.sendVideoCallButton.inviteeList = @[user];
+      ZegoSendCallInvitationButton.sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVideoCall];
+      sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
+      [sendVideoCallButton setText:@"视频"];
+      sendVideoCallButton.resourceID = @"xxx" // 用于通话的离线通知
+      sendVideoCallButton.inviteeList = @[user];
       // 将按钮添加到您的视图中。
-      [self.view addSubview:self. sendVideoCallButton];
+      [self.view addSubview:sendVideoCallButton];
   }
   ```
 </CodeGroup>

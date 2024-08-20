@@ -119,7 +119,7 @@ class ViewController: UIViewController {
         sendVoiceCallButton.setTitleColor(UIColor.blue, for: .normal)
         sendVoiceCallButton.inviteeList.append(callTargetUser)
         sendVoiceCallButton.resourceID = "zegouikit_call" // For offline call notification
-        sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
+        sendVoiceCallButton.frame = CGRect.init(x: 100, y: 100, width: 100, height: 30)
         // Add the button to your view
         self.view.addSubview(sendVoiceCallButton)
     }
@@ -130,13 +130,13 @@ class ViewController: UIViewController {
     [super viewDidLoad];
     
     // Create Voice Call invitation Button
-    ZegoUIKitUser *callTargetUser = [[ZegoUIKitUser alloc] initWithUserID:@"TargetUserID" userName:@"TargetUserName"];
+    ZegoUIKitUser *callTargetUser = [[ZegoUIKitUser alloc] initWithUserID:@"TargetUserID" userName:@"TargetUserName" isCameraOn:NO isMicrophoneOn:YES];
     ZegoSendCallInvitationButton *sendVoiceCallButton = [[ZegoSendCallInvitationButton alloc] initWithInvitationType:ZegoInvitationTypeVoiceCall];
+    sendVoiceCallButton.frame = CGRectMake(100, 100, 100, 30);
     [sendVoiceCallButton setText:@"voice"];
     [sendVoiceCallButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [sendVoiceCallButton.inviteeList addObject:callTargetUser];
-    sendVoiceCallButton.resourceID = @"zegouikit_call";
-    sendVoiceCallButton.frame = CGRectMake(100, 100, 150, 40);
+    sendVoiceCallButton.resourceID = @"xxx";
+    sendVoiceCallButton.inviteeList = @[allTargetUser];
     // Add the button to your view
     [self.view addSubview:sendVoiceCallButton];
 }
@@ -156,9 +156,9 @@ class ViewController: UIViewController {
         let sendVideoCallButton: ZegoSendCallInvitationButton = ZegoSendCallInvitationButton(ZegoInvitationType.videoCall.rawValue)
         sendVideoCallButton.text = "Video"
         sendVideoCallButton.setTitleColor(UIColor.blue, for: .normal)
+        sendVideoCallButton.resourceID = "xxx" // For offline call notification
+        sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 100, height: 30)
         sendVideoCallButton.inviteeList.append(callTargetUser)
-        sendVideoCallButton.resourceID = "zegouikit_call" // For offline call notification
-        sendVideoCallButton.frame = CGRect.init(x: 100, y: 100, width: 150, height: 40)
         // Add the button to your view.
         self.view.addSubview(sendVideoCallButton)
     }
@@ -171,13 +171,13 @@ class ViewController: UIViewController {
     ZegoUIKitUser *user = [[ZegoUIKitUser alloc] initWithUserID:@"user id" userName:@"user nickname" isCameraOn:YES isMicrophoneOn:YES];
 
     // Create video call invitation button.
-    self.sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] initWithInvitationType:ZegoInvitationTypeVideoCall];
-    self.sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
-    [self.sendVideoCallButton setText:@"Video"];
-    self.sendVideoCallButton.resourceID = @"xxx";
-    self.sendVideoCallButton.inviteeList = @[user];
+    ZegoSendCallInvitationButton * sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] initWithInvitationType:ZegoInvitationTypeVideoCall];
+    sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
+    [sendVideoCallButton setText:@"Video"];
+    sendVideoCallButton.resourceID = @"xxx";
+    sendVideoCallButton.inviteeList = @[user];
     // Add the button to your view.
-    [self.view addSubview:self.sendVideoCallButton];
+    [self.view addSubview:sendVideoCallButton];
 }
 ```
 </CodeGroup>
