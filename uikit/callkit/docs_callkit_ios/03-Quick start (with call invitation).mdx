@@ -1,7 +1,3 @@
----
-title: 
-description: 
----
 import UIKitInvitationPrerequisitesZIMSignaling from "/snippets/uikit/UIKit_Invitation_Prerequisites_ZIMSignaling-en.md";
 import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
 
@@ -31,7 +27,8 @@ import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
     ```
     pod 'ZegoUIKitPrebuiltCall'
     pod 'ZegoUIKitSignalingPlugin'
-    pod 'ZegoUIKitAppleCallKitPlugin' 
+    pod 'ZegoUIKitAppleCallKitPlugin'
+
     ```
 - In Terminal, run the following to download all required dependencies and SDK with Cocoapods:
     ```
@@ -45,29 +42,57 @@ import Content from "/snippets/uikit/iOSEnviromentRequiremenEn.md"
 
 Call the `init` method on the App startup, and specify the `userID` and `userName` for connecting the Call Kit service. 
 
-```swift
+<CodeGroup>
+```swift title="swift"
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Get your AppID and AppSign from ZEGOCLOUD's Console
         // userID can only contain numbers, letters, and '_'. 
         let config = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: false)
+        // Change the language to Chinese
+        config.translationText = ZegoTranslationText(language: .CHS)
         ZegoUIKitPrebuiltCallInvitationService.shared.initWithAppID(YOUR_APPID, appSign: YOUR_APP_SIGN, userID:YOUR_USER_ID, userName:YOUR_USER_NAME, config: config)
     }
 }
 ```
+```objc title="objc"
+#import "ViewController.h"
+
+@import ZegoUIKit;
+@import ZegoUIKitPrebuiltCall;
+@import ZegoUIKitSignalingPlugin;
+@import ZegoPluginAdapter;
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  // Get your AppID and AppSign from ZEGOCLOUD's Console
+  // userID can only contain numbers, letters, and '_'. 
+  // certificateIndex: indicates the signaling formation certificate verification method
+  ZegoUIKitPrebuiltCallInvitationConfig *config = [[ZegoUIKitPrebuiltCallInvitationConfig alloc] initWithNotifyWhenAppRunningInBackgroundOrQuit:YES isSandboxEnvironment:YES certificateIndex:ZegoSignalingPluginMultiCertificateFirstCertificate];
+  // Change the language to Chinese
+  ZegoTranslationText *text = [[ZegoTranslationText alloc] initWithLanguage:ZegoUIKitLanguageCHS];
+  config.translationText = text;
+
+  [[ZegoUIKitPrebuiltCallInvitationService shared] initWithAppID:YOUR_APPID appSign:YOUR_APP_SIGN userID:YOUR_USER_ID userName:YOUR_USER_NAME config:config];
+}
+```
+</CodeGroup>
 
 #### Parameters of ZegoUIKitPrebuiltCallInvitationConfig class
 | Parameter                              | Type          | Required | Description                                                                                                                                                                                                               |
 | :------------------------------------- | :------------ | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | incomingCallRingtone                   | String        | No       | This parameter has been deprecated.                                                                                                                                                                                       |
 | outgoingCallRingtone                   | String        | No       | If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `incomingCallRingtone` and `outgoingCallRingtone`.                                     |
+| showDeclineButton                      | Bool          | No       | This parameter has been deprecated.                                                                                                                                                                                       |
 | notifyWhenAppRunningInBackgroundOrQuit | Bool          | No       | Change `notifyWhenAppRunningInBackgroundOrQuit` to false if you don't need to receive a call invitation notification while your app running in the background or quit.                                                    |
 | isSandboxEnvironment                   | Bool          | No       | To publish your app to TestFlight or App Store, set the `isSandboxEnvironment` to false before starting building. To debug locally, set it to true. Ignore this when the notifyWhenAppRunningInBackgroundOrQuit is false. |
 | certificateIndex                       | Enum          | No       | To configure different certificates for different bunldle ID applications. The `certificateIndex` can be set as `firstCertificate` or `secondCertificate`, defaults to `firstCertificate`.                                |
-| showDeclineButton                      | Bool          | No       | This parameter has been deprecated.                                                                                                                                                                                       |
-| innerText                              | ZegoInnerText | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                      |
-
+| translationText                        | ZegotranslationText | No       | To modify the UI text, use this property. For more details, see [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).                                                                                                      |
+| videoConfig | ZegoPrebuiltCallVideoConfig | .PRESET_360P | This parameter is used to configure the push-pull flow resolution. |
 
 #### Parameters of ZegoUIKitPrebuiltCallInvitationService class
 | Parameter | Type                                  | Required | Description                                                                                                                                         |
@@ -79,13 +104,13 @@ class ViewController: UIViewController {
 | config    | ZegoUIKitPrebuiltCallInvitationConfig | Yes      | This can be used to set up call invitation related configurations.                                                                                  |
 
 
-### Add the button for making call invitation当然，我会尽力帮您将待翻译的文本翻译成中文。请提供您需要翻译的内容。s
+### Add the button for making call invitation
 
 You can customize the position of the `ZegoSendCallInvitationButton` accordingly, pass in the ID of the user you want to call.
 
 1. Set up a button for making a voice call.
-
-```swift
+<CodeGroup>
+```swift title="swift"
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,11 +127,28 @@ class ViewController: UIViewController {
         self.view.addSubview(sendVoiceCallButton)
     }
 }
+```objc title="objc"
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Create Voice Call invitation Button
+    ZegoUIKitUser *callTargetUser = [[ZegoUIKitUser alloc] initWithUserID:@"TargetUserID" userName:@"TargetUserName"];
+    ZegoSendCallInvitationButton *sendVoiceCallButton = [[ZegoSendCallInvitationButton alloc] initWithInvitationType:ZegoInvitationTypeVoiceCall];
+    [sendVoiceCallButton setText:@"voice"];
+    [sendVoiceCallButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [sendVoiceCallButton.inviteeList addObject:callTargetUser];
+    sendVoiceCallButton.resourceID = @"zegouikit_call";
+    sendVoiceCallButton.frame = CGRectMake(100, 100, 150, 40);
+    // Add the button to your view
+    [self.view addSubview:sendVoiceCallButton];
+}
 ```
+</CodeGroup>
 
 2. Set up a button for making a video call.
 
-```swift
+<CodeGroup>
+```swift title="swift"
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,7 +166,23 @@ class ViewController: UIViewController {
     }
 }
 ```
+```objc title="objc"
+@implementation ViewController
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    ZegoUIKitUser *user = [[ZegoUIKitUser alloc] initWithUserID:@"user id" userName:@"user nickname" isCameraOn:YES isMicrophoneOn:YES];
 
+    // Create video call invitation button.
+    self.sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] initWithInvitationType:ZegoInvitationTypeVideoCall];
+    self.sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
+    [self.sendVideoCallButton setText:@"Video"];
+    self.sendVideoCallButton.resourceID = @"xxx";
+    self.sendVideoCallButton.inviteeList = @[user];
+    // Add the button to your view.
+    [self.view addSubview:self.sendVideoCallButton];
+}
+```
+</CodeGroup>
 #### Parameters of ZegoSendCallInvitationButton class
 | Parameter   | Type   | Required | Description                                                                                                                                                                                                                                                                                |
 | :---------- | :----- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -135,14 +193,16 @@ class ViewController: UIViewController {
 
 
 For more parameters, go to [Custom prebuilt UI](./04-Calling%20config/01-Overview.mdx).
-#### customer call button
+
 Now, you can make call invitations by simply clicking on the buttons you set.
+
+#### Customer call button
 <Accordion title="Custom Call Button" defaultOpen="false">
 If the user does not want to use the ZegoSendCallInvitationButton provided by CallKit internally and wants to use a custom button instead, CallKit provides a method to initiate a call.
 
 This feature is supported in versions 2.12.0 and later.
 
-1. Edit the `Podfile` file and add the basic dependencies.：
+1. Edit the `Podfile` file and add the basic dependencies.:
     ```ruby
     pod 'ZegoUIKitPrebuiltCall' '>= 2.12.1'
     ```
@@ -150,7 +210,7 @@ This feature is supported in versions 2.12.0 and later.
     ```bash
     pod install
     ```
-3. Call the following method in the click event of the custom audio/video call button.：
+3. Call the following method in the click event of the custom audio/video call button.:
     ```swift
     let user: ZegoPluginCallUser = ZegoPluginCallUser(userID: "userID", userName: "userName")
     let notificationConfig: ZegoPluginCallNotificationConfig = ZegoSignalingPluginNotificationConfig(resourceID: "resourceID")
@@ -164,7 +224,7 @@ This feature is supported in versions 2.12.0 and later.
 <Accordion title="sendInvitationWithUIChange" defaultOpen="false">
 ```swift
 /// Initiate an audio or video call
-/// - ParametersSure, I can help you translate the text into English. Please provide the text you would like me to translate.:
+/// - ParametersSure
 ///   - invitees: List of users to invite to the call
 ///   - invitationType: Type of call. Audio or video
 ///   - customData: Custom data

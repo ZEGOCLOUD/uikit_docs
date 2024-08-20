@@ -28,6 +28,7 @@ import EnviromentRequiremenZh from "/snippets/uikit/iOSEnviromentRequiremenZh.md
     ```ruby
     pod 'ZegoUIKitPrebuiltCall'
     pod 'ZegoUIKitSignalingPlugin'
+    pod 'ZegoUIKitAppleCallKitPlugin'
     ```
 3. 在终端中运行以下命令，使用 Cocoapods 下载所有必需的依赖项和 SDK：
     ```bash
@@ -88,12 +89,15 @@ class ViewController: UIViewController {
 
 | 参数 | 类型 | 是否必需 | 描述 |
 | :-- | :-- | :-- | :-- | 
-| notifyWhenAppRunningInBackgroundOrQuit | Bool | 否 | 当 App 在后台运行或用户已退出 App 时，如果不需要接收呼叫邀请通知，请将 `notifyWhenAppRunningInBackgroundOrQuit` 设置为false。 |
 | incomingCallRingtone | String | 否 | 用于设置接收呼叫邀请时的铃声。 |
 | outgoingCallRingtone | String | 否 | 用于设置发送呼叫邀请时的铃声。 |
+| showDeclineButton | Bool | true | 用于设置拒绝按钮的显示、隐藏。 |
+| notifyWhenAppRunningInBackgroundOrQuit | Bool | 否 | 当 App 在后台运行或用户已退出 App 时，如果不需要接收呼叫邀请通知，请将 `notifyWhenAppRunningInBackgroundOrQuit` 设置为false。 |
 | isSandboxEnvironment | Bool | 否 | 是否为沙盒环境，默认值为 <code>true</code>。如需将您的应用程序发布到 TestFlight 或 App Store，请在开始构建之前将 <code>isSandboxEnvironment</code> 设置为 <code>false</code>。如需进行本地调试，请将其设置为 <code>true</code>。当 <code>notifyWhenAppRunningInBackgroundOrQuit</code> 为 <code>false</code> 时，请忽略此设置。 |
 | certificateIndex | Int | 否 | 如需使用同一个 AppID 实现两个不同工程之间的离线推送互通，请在 [ZEGO 控制台] 需要配置此字段，传入适用于当前项目的离线推送证书。 |
 | translationText | ZegotranslationText | 否 | 使用此属性修改 UI 文本。有关详细信息，请参见 [基础功能](./Calling%20config/Overview.mdx)。 |
+| videoConfig | ZegoPrebuiltCallVideoConfig | .PRESET_360P | 用于配置推拉流分辨率。 |
+
 
 
 #### ZegoUIKitPrebuiltCallInvitationService 类参数
@@ -104,6 +108,7 @@ class ViewController: UIViewController {
 | appSign | String | 是 | 您从 [ZEGOC 控制台](https://console.zego.im) 获取的AppSign。 |
 | userID | String | 是 | `userID` 可以是电话号码或您用户系统中的用户ID。userID 只能包含数字、字母和下划线(_)。 |
 | userName | String | 是 | `userName`可以是任意字符或您自己的用户系统中的用户名。 |
+| config    | ZegoUIKitPrebuiltCallInvitationConfig | Yes      | 这可以用来设置呼叫邀请相关的配置。|                                                                                 |
 
 
 ### 添加呼叫邀请按钮
@@ -174,11 +179,11 @@ class ViewController: UIViewController {
       ZegoUIKitUser *user = [[ZegoUIKitUser alloc] init:@"用户id" userName:@"用户昵称" isCameraOn:YES isMicrophoneOn:YES];
 
       // 创建视频通话邀请按钮
-      self. sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVideoCall];
-      self. sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
-      [self. sendVideoCallButton setText:@"视频"];
+      self.sendVideoCallButton = [[ZegoSendCallInvitationButton alloc] init:ZegoInvitationTypeVideoCall];
+      self.sendVideoCallButton.frame = CGRectMake(100, 100, 100, 30);
+      [self.sendVideoCallButton setText:@"视频"];
       self.sendVideoCallButton.resourceID = @"xxx" // 用于通话的离线通知
-      self. sendVideoCallButton.inviteeList = @[user];
+      self.sendVideoCallButton.inviteeList = @[user];
       // 将按钮添加到您的视图中。
       [self.view addSubview:self. sendVideoCallButton];
   }
@@ -191,12 +196,15 @@ class ViewController: UIViewController {
 | :-- | :-- | :-- | :-- | 
 | inviteeList | Array | 是 | 被叫用户列表。必须包含 userID 和 userName。例如：[\{ userID: inviteeID, userName: inviteeName \}] |
 | type | int | 是 | 如果`type`设置为`ZegoInvitationType.videoCall.rawValue`，则按下按钮时进行视频通话。如果设置为其他值，则进行语音通话。 |
+| resourceID  | String | No       | `resourceID` 可以指定离线呼叫邀请的铃声，必须设置为与[ZEGOCLOUD管理控制台](https://console.zegocloud.com)中的推送资源ID相同的值。这只在notifyWhenAppRunningInBackgroundOrQuit为true时生效 |
 | timeout | UInt32 | 否 | 超时持续时间，默认为 60 秒。 |
 
 
-如需了解更多参数，请查看 [基础功能](./Calling%20config/Overview.mdx)。
+如需了解更多参数，请查看 [基础功能](./Calling%20config/Overview.mdx)。 
 
 现在，您可以通过简单点击设置的按钮发起呼叫邀请。
+
+#### 自定义按钮呼叫
 <Accordion title="自定义呼叫按钮" defaultOpen="false">
 如果用户不想使用CallKit内部的ZegoSendCallInvitationButton 按钮，需要使用自定义的按钮，CallKit 内部提供了发起呼叫的方法
 此功能 2.12.0 以后的版本才支持。

@@ -84,14 +84,15 @@ class ViewController: UIViewController {
 
 " defaultOpen="false">
 
-To customize the button on the bottom toolbar, you can use it`smallButtons` `expandButtons` Configuration:
+To customize the button on the bottom toolbar, you can use the `smallButtons` and `expandButtons` Configuration:
 
 The following is the reference code:
 
 ```swift
 // smallButtons The bottom toolbar button configuration
 config.bottomConfig.smallButtons.append(.takePhoto)      
-// More expanded button configurations, to take effect smallButtons must contain .expand
+// smallButtons by default includes .expand. If you modify smallButtons and also want to display the configuration UI for expandButtons, please make sure that .expand is included in smallButtons.
+// config.bottomConfig.smallButtons.append(.expand)
 config.bottomConfig.expandButtons.append(.voiceCall)  
 ```
 

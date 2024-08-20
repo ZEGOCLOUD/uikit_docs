@@ -83,14 +83,15 @@ class ViewController: UIViewController {
 
 <Accordion title="自定义底部工具栏按钮" defaultOpen="false">
 
-要自定义底部工具栏上的按钮，您可以使用`smallButtons` `expandButtons` 进行配置：
+要自定义底部工具栏上的按钮，您可以使用`smallButtons` 和 `expandButtons` 进行配置：
 
 以下是参考代码：
 
 ```swift
 // smallButtons 底部工具栏按钮配置
-config.bottomConfig.smallButtons.append(.takePhoto)      
-// 更多展开的按钮配置,想要生效 smallButtons必须包含 .expand
+config.bottomConfig.smallButtons.append(.takePhoto)   
+// smallButtons 默认是包括.expand的，如果修改了smallButtons，同时也想要展示expandButtons的配置UI，请确认smallButtons中包含.expand 
+// config.bottomConfig.smallButtons.append(.expand)
 config.bottomConfig.expandButtons.append(.voiceCall)  
 ```
 

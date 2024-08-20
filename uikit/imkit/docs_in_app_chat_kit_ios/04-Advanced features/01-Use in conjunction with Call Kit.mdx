@@ -1,4 +1,4 @@
-# Use in conjunction with Call Kit
+# Use Call Kit
 
 This doc will introduce how to use In-app Chat Kit with [Call Kit](https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start). 
 
@@ -21,7 +21,7 @@ Please refer to the [Call Kit Quick start](/callkit-ios/quick-start-(with-call-i
 ```Ruby
 pod 'ZegoUIKitPrebuiltCall', '>= 2.12.1'
 ```
-- Edit `Info.plist` File and add the following：
+- Edit `Info.plist` file and add the following：
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let userName: String = YOUR_USER_NAME
         let resourceID: String = "resourceID" 
         let config = ZIMKitConfig()
+        // The production environment `isSandboxEnvironment` is set to false
         let call:ZegoUIKitPrebuiltCallInvitationConfig = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: true, certificateIndex: .firstCertificate)
         let callConfig: ZegoCallPluginConfig = ZegoCallPluginConfig(invitationConfig: call, resourceID: resourceID)
 
@@ -92,9 +93,7 @@ The above content only introduces the basic configuration required for integrati
 
 <CardGroup cols={2}>
   
-  <Card title="Call Kit - Quick start" href="https://zegocloud.com/docs/uikit/callkit-ios/quick-start/quick-start" target="_blank">
-    Steps in this doc helps you to make a call quickly.
-  </Card>
+  <Card title="Call Kit - Quick start" href="https://www.zegocloud.com/docs/uikit/callkit-ios/quick-start-(with-call-invitation)</Card>
 
   <Card title="Call Kit - Custom prebuilt UI" href="https://zegocloud.com/docs/uikit/callkit-ios/calling-config/overview" target="_blank">
     This article guides you on how to further customize the features and UI of the call.

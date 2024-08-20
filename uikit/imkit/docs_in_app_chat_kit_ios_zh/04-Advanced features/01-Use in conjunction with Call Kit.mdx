@@ -13,13 +13,13 @@
 请参考[快速开始](../02-Quick%20start.mdx)来集成 IMKit。如果已经集成了，可以忽略这一步骤。
 </Step>
 <Step title="集成 音视频通话 UIKit">
-请参考[音视频通话 UIKit 快速开始](https://doc-zh.zego.im/article/20192)来集成 音视频通话 UIKit 。
+请参考[音视频通话 UIKit 快速开始](https://www.zegocloud.com/docs/uikit/zh/callkit-ios/quick-start-(with-call-invitation))来集成 音视频通话 UIKit 。
 </Step>
 <Step title="初始化 音视频通话 UIKit">
 
 - 编辑 `Podfile` 文件添加基本依赖项：
-```swift
-pod 'ZegoUIKitPrebuiltCall'
+```Ruby
+pod 'ZegoUIKitPrebuiltCall', '>= 2.12.1'
 ```
 - 打开 `Info.plist` 文件并添加以下内容：
 ```xml
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let userName: String = YOUR_USER_NAME
         let resourceID: String = "resourceID" 
         let config = ZIMKitConfig()
-        // 生产环境isSandboxEnvironment设置为false
+        // 生产环境`isSandboxEnvironment`设置为false
         let call:ZegoUIKitPrebuiltCallInvitationConfig = ZegoUIKitPrebuiltCallInvitationConfig(notifyWhenAppRunningInBackgroundOrQuit: true, isSandboxEnvironment: true, certificateIndex: .firstCertificate)
         let callConfig: ZegoCallPluginConfig = ZegoCallPluginConfig(invitationConfig: call, resourceID: resourceID)
 
