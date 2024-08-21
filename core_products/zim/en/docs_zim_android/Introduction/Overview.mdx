@@ -1,1 +1,117 @@
-hello
+export const getPlatformData = (props, data)=>{
+    const platform = props.platform ?? "Android";
+    return platform in data ? data[platform] : data["Android"]
+}
+export const typeVoiceCallDoc={
+    "Android": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=android&language=java" target="_blank">Voice Call</a>,
+    "iOS": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=ios&language=objective-c" target="_blank">Voice Call</a>,
+    "rn": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=react-native&language=javascript" target="_blank">Voice Call</a>,
+    "macOS": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=macos&language=objective-c" target="_blank">Voice Call</a>,
+    "Flutter": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=flutter&language=dart" target="_blank">Voice Call</a>,
+    "Web": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=web&language=javascript" target="_blank">Voice Call</a>,
+    "Windows": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=windows&language=cpp" target="_blank">Voice Call</a>,
+    "u3d": <a href="https://www.zegocloud.com/docs/voice-call/overview?platform=unity3d&language=cs" target="_blank">Voice Call</a>,
+}
+
+export const typeVideoCallDoc={
+    "Android": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=android&language=java" target="_blank">Video Call</a>,
+    "iOS": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=ios&language=objective-c" target="_blank">Video Call</a>,
+    "rn": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=react-native&language=javascript" target="_blank">Video Call</a>,
+    "macOS": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=macos&language=objective-c" target="_blank">Video Call</a>,
+    "Flutter": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=flutter&language=dart" target="_blank">Video Call</a>,
+    "Web": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=web&language=javascript" target="_blank">Video Call</a>,
+    "Windows": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=windows&language=cpp" target="_blank">Video Call</a>,
+    "u3d": <a href="https://www.zegocloud.com/docs/video-call/overview?platform=unity3d&language=cs" target="_blank">Video Call</a>,
+}
+export const typeLiveStreamingDoc={
+    "Android": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=android&language=java" target="_blank">Live Streaming</a>,
+    "iOS": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=ios&language=objective-c" target="_blank">Live Streaming</a>,
+    "rn": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=react-native&language=javascript" target="_blank">Live Streaming</a>,
+    "macOS":<a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=macos&language=objective-c" target="_blank">Live Streaming</a>,
+    "Flutter": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=flutter&language=dart" target="_blank">Live Streaming</a>,
+    "Web": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=web&language=javascript" target="_blank">Live Streaming</a>,
+    "Windows": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=windows&language=cpp" target="_blank">Live Streaming</a>,
+    "u3d": <a href="https://www.zegocloud.com/docs/live-streaming/overview?platform=unity3d&language=cs" target="_blank">Live Streaming</a>,
+}
+
+# Overview
+
+ZEGOCLOUD In-app Chat provides an interactive messaging service with high reliability, high concurrency, and ultra-low latency. You can simply and quickly implement real-time messaging scenarios, such as large-scale live streaming, live audio room, online customer service system, and more.
+
+And In-app Chat's great compatibility also provides a full-package solution that is compatible with ZEGOCLOUD's {getPlatformData(props, typeVoiceCallDoc)}, {getPlatformData(props, typeVideoCallDoc)}, and {getPlatformData(props, typeLiveStreamingDoc)}, which helps you to build exactly what you want fast.
+
+
+
+
+## Why ZEGOCLOUD's In-app Chat
+
+### Global reach with ultra-low latency
+ZEGOCLOUD's real-time communications network covers 200+ countries and regions. With an excellent global network scheduling strategy, it delivers real-time messages to users with an ultra-low latency as lower as 200 ms.
+
+### Massive concurrency
+
+Supports handling hundreds of millions of concurrent messages easily, meeting the needs of large-scale live communication events.
+
+
+### Message deliverability
+
+With ZEGOCLOUD's in-app chat, the priority of messages can be set to make sure all messages with higher priorities are transmitted. 
+
+### Optimized performance under weak networks
+
+With ZEGOCLOUD's sophisticated QoS strategies, messages are delivered reliably even when under the 90% of packet loss rate of network conditions, so you can provide users with a smooth communication experience at all times.
+
+
+## Features
+
+| Module/Feature| Description |
+|-----|-----|
+| Monitor the login status | Supports the periodic heartbeat mechanism to monitor online status and update the login status in real time. |
+| Conversation module  | Supports obtaining the conversation list, and sending messages to the specified user, group, and chatroom.|
+| [Room\|_blank](./Basic%20concepts.mdx#room) module | Create a chatroom, destroy a chatroom, and obtain the chatroom list, which can be applied to the temporary chat events, such as live streaming and live audio room.  |
+| [Group\|_blank](./Basic%20concepts.mdx#group-chat) module | Create a group, ungroup, and save the relation chain of the group members.  |
+| Message module | Send text, image, file, audio, and other messages to users and to chatrooms.  |
+| Message priority | Message priorities can be set to ensure that messages with higher priorities are transmitted. |
+| Store message history| Supports storing historical messages. |
+| Push system notifications | Supports push system notifications with the server. |
+| Call invitation | Supports implementing the basic control logic of the call invitation: sending, canceling, accepting, and refusing the call invitation. |
+| Offline messages | Support for saving messages while offline and receiving complete offline messages after logging in. <Note title="Note"><p>Users can send messages to offline users through the following platforms: **iOS, Android, macOS, Windows, Linux, Web**.</p></Note> |
+| Offline notifications|  Support for sending message notifications to users when the app is not open, displayed in the notification bar. <Note title="Note"><p>Supports offline users on: **iOS, Android, Web**.</p></Note> |
+
+## Use cases
+
+| Scenario | Description |
+|-----|-----|
+| Online shopping | Build real-time purchasing-related communications with text, images, order information, and more. |
+| Social interactions | Offer one-on-one chatting or room chatting capabilities, also provide signaling for real-time audio or video call invitations, which is the best addition to any app. |
+| Interactive live streaming | Support sending bullet messages, sending virtual gifts, commenting live to, and managing room seats enhance the live streaming with interactivity. |
+| Online education | Use internal signaling to build interactive features that help students learn, such as text, images, media files, and more. |
+| Online consulting | With one-to-one chat or group chat capabilities, text message history, voice and video call recordings can be retrieved anytime for online consulting scenarios. |
+| Work collaborations | Build more efficient office collaborations with the inclusion of files, images, call invitations, or other rich media in messages.  |
+| Online games | Provide various chatting modes, such as everyone, team-only to enhance the game experience with real-time communication, and support interactive gaming operations with customizable messages. |
+| IoT devices| Monitor and message control between apps and devices like smartwatches, home security cameras, and other IoT devices. |
+
+
+## Compatibility
+
+| Platform | Version compatibility|
+|-----|-----|
+| Android | Android 4.1 or later, supports JDK 1.6 or later.  |
+| iOS | iOS 11.0  or later. |
+| Windows | Windows 7  or later (32/64 bit). |
+| macOS | macOS 10.13  or later. x64 and ARM64 Framework. |
+| Web | <ul><li>Chrome 58 or later</li><li>Firefox 56 or later</li><li>Safari 11 or later</li><li>Opera 45 or later</li></ul>  |
+| Flutter | <ul><li>Any version of Flutter</li><li>The Dart version is [2.12.0, 3.0.0).</li><li>iOS 11.0 or later</li><li>Android 4.1 or later, supports JDK 1.6 or later.</li><li>Web:<ul><li>Chrome 58 or later</li><li>Firefox 56 or later</li><li>Safari 11 or later</li><li>Opera 45 or later</li></ul> </li></ul> |
+| React Native| <ul><li>React Native 0.60.0 or later</li><li>iOS 11.0 or later</li><li>Android 4.0.3 or later</li></ul> |
+| Unity | <ul><li>Unity version 2021.3.18f1c1 or above LTS stable version (it is recommended to download the latest LTS version through [Unity Hub\|_blank](https://unity.cn/releases/lts/2021)).</li><li>iOS 11.0 or above.</li><li>Android 4.1 or above, with support for JDK 1.6 or above.</li><li>Supports macOS 10.13 or above, with support for x64 and ARM64 architectures.</li><li>Supports Windows 7 or above, with support for both 32-bit and 64-bit. Also, install Visual Studio 2015 or above.</li></ul>|
+
+## Increment size
+
+After integrating the ZIM SDK into the App, the incremental sizes of the App are as follows:
+
+| Platform | Incremental Size |
+| -- | -- |
+| Android | <ul><li>arm: 4.22 MB</li><li>arm64: 4.71 MB</li><li>x64: 5.32 MB</li><li>x86: 5.24 MB</li></ul> |
+| iOS | <ul><li>arm64: 4.22 MB</li><li>arm64-catalyst: 4.3 MB</li><li>arm64-simulator: 4.3 MB</li><li>x64-catalyst: 4.55 MB</li><li>x64-simulator: 4.73 MB</li></ul> |
+| macOS | <ul><li>arm64: 5.24 MB</li><li>x64: 5.82 MB</li></ul> |
+| Windows | <ul><li>x64: 5.91 MB</li><li>x86: 4.88 MB</li></ul> |
