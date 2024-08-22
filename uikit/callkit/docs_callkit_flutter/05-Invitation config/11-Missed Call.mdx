@@ -1,0 +1,145 @@
+# Missed Call
+
+<Warning title="Incompatible with older versions">
+
+If you need the redial feature for missed calls,(when **enableReCall** is true.), the invitation feature will no longer be compatible with versions before v4.12.0. This means that invitations sent by users of versions before v4.12.0 will not be received by users of version 4.12.0 or later, and vice versa.
+
+Therefore, when releasing the app, it is important to implement a force upgrade for users to avoid issues with call reception.
+
+Of course, if this feature is not used (that is, when **enableReCall** is set to false), the above problem will not exist.
+</Warning>
+
+## Effects
+
+- group call, online/offline missed-call & redial
+
+<Frame width="auto" height="600" caption="">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/05259eb350.gif" alt="group_missed_call.gif"/>
+</Frame>
+
+- 1v1 call, online missed-call & redial
+
+<Frame width="auto" height="600" caption="">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/d23501e916.gif" alt="oneonone_missed_call.gif"/>
+</Frame>
+
+## Configurations 
+
+- ZegoCallInvitationConfig
+
+  - bool `endCallWhenInitiatorLeave`:
+
+    >  whether the entire call should end when the initiator leaves the call(will causing other participants can't enter the call anymore).
+    >
+    >  Default value is false.
+    >
+    >  If set to false, other participants can enter the call after the initiator leaves.
+
+- ZegoCallInvitationMissedCallConfig
+
+  - bool `enabled`
+
+      > whether to allow popup the missed notification
+      >
+      >  Default value is true.
+
+  - bool `enableReCall`
+
+      > whether to allow redial the missed when click notification
+      >
+      > Default value is true.
+      >
+      > Please note that if allowed, it will be incompatible with versions before v4.12.0,
+      >
+      > which means mutual invitations cannot be made between the old and new versions of zego_uikit_prebuilt_call.
+
+  - String? `resourceID`
+
+      > The [resource id] for notification which same as [Zego Console](https://console.zegocloud.com/)
+
+  - String? Function()? `notificationTitle`
+
+      > The title for the notification.
+
+  - String? Function()? `notificationMessage`
+
+      > The message for the notification.
+
+  - int `timeoutSeconds`
+
+      > The timeout duration in seconds for the redial invitation.
+
+### How to disable missed call pop-up notifications
+
+```dart {6}
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    config: ZegoCallInvitationConfig(
+      endCallWhenInitiatorLeave: true,
+      missedCall: ZegoCallInvitationMissedCallConfig(
+        enabled: false,
+      ),
+    ),
+  );
+```
+
+### How to disable missed call redial
+
+```dart {6}
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    config: ZegoCallInvitationConfig(
+      endCallWhenInitiatorLeave: true,
+      missedCall: ZegoCallInvitationMissedCallConfig(
+        enableReCall: false,
+      ),
+    ),
+  );
+```
+
+
+## Events
+
+- ZegoUIKitPrebuiltCallInvitationEvents
+
+  - Future\<void\> Function( \
+    String `callID`, \
+    ZegoCallUser `caller`, \
+    ZegoCallInvitationType `callType`, \
+    List\<ZegoCallUser\> `callees`, \
+    String `customData`, \
+    /// defaultAction is redial the missed call \
+    Future\<void\> Function() `defaultAction`, \
+  )? `onIncomingMissedCallClicked` : 
+  
+      > This callback will be triggered to **callee** when callee click the missed call notification
+
+  - Function()? `onIncomingMissedCallReCallFailed`: 
+  
+      > missed call redial failed
+  
+```dart {4-21}
+  ZegoUIKitPrebuiltCallInvitationService().init(
+    ...
+    invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
+      onIncomingMissedCallClicked: (
+        String callID,
+        ZegoCallUser caller,
+        ZegoCallInvitationType callType,
+        List<ZegoCallUser> callees,
+        String customData,
+
+        /// defaultAction is redial the missed call
+        Future<void> Function() defaultAction,
+      ) async {
+        /// do some other logic
+
+        await defaultAction.call();
+      },
+      onIncomingMissedCallReCallFailed: () {
+
+      },
+    ),
+    ...
+  );
+```
