@@ -1,0 +1,109 @@
+import Content from '/snippets/Reuse/ZIM_BasicPrerequisites_AppSign-en.md'
+import Content1 from '/snippets/Reuse/ZIM_AppSign-en.md'
+import Content2 from '/snippets/Reuse/ZIMSampleAppIntro-en.md'
+
+# Sample app
+
+<Content2 />
+
+## Prepare the enviroment
+
+* Android Studio 2.1 or later.
+    <Note title="Note">
+    - When you compile the sample code for the first time, if you do not have the corresponding dependent library or build tool, Android Studio will automatically download the sample code. This may take a while for you to wait. 
+    - We recommend you download the specified `gradle` and required dependencies. To download, go to [Gradle Services](https://services.gradle.org). The `gradle` we use in the sample code are as follows: 
+        - gradle: 4.6 (check it in the `project/gradle/wrapper/gradle-wrapper.properties` file).
+        - gradle Android plug-in: 3.2.1 (check it in the `project/build.gradle` file).
+    </Note>
+* Android SDK Packages: Android SDK 28, Android SDK Platform-Tools 28.x.x or later.
+* An Android device or Simulator that is running on Android 4.1 or later and supports audio and video. We recommend you use a real device (Remember to enable the **USB debugging**).
+* The Android device is connected to the internet.
+
+## Prerequisites
+
+<Content />
+<Content1 />
+
+## Get the sample code
+
+Download the [sample code package](https://storage.zego.im/zim/example/android/ZIMExampleJava.zip) and extract it. The following structure shows the subdirectory structure of the sample code:
+
+```bash
+.
+├── app
+│   ├── agconnect-services.json
+│   ├── build
+│   │   ├── generated
+│   │   ├── intermediates
+│   │   ├── outputs
+│   │   └── tmp
+│   ├── build.gradle
+│   ├── libs
+│   │   ├── MiPush_SDK_Client_4_9_1.jar
+│   │   ├── VERSION.txt
+│   │   ├── ZIM.jar
+│   │   ├── arm64-v8a
+│   │   ├── armeabi-v7a
+│   │   ├── pushOpenClient_v3.0.0.4_484_81c1f83_release.jar
+│   │   ├── x86
+│   │   ├── x86_64
+│   │   └── zpns-release.aar
+│   ├── proguard-rules.pro
+│   ├── src
+│   │   └── main
+│   └── zim_example_key.jks
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── local.properties
+└── settings.gradle
+```
+
+## Run the sample code
+
+1. In Android Studio, click **Open an Existing Project**.
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/SampleRunningGuide/as_pre_ui.png" />
+    </Frame>
+
+2. Open the `ZIMExampleJava` folder in the unzipped sample code package. 
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Android/demo.png" />
+    </Frame>
+
+3. Go to the [SDK downloads](./Client%20SDKs/SDK%20downloads.mdx) to download the latest version of SDK, copy the unzipped SDK package file to the `app/jniLibs/release/` directory.
+
+4. Modify the `KeyCenter.java` file under the `ZIMExample/app/src/main/java/im/zego/zimexample` folder with the appID and appSign (remember to add a "L" after the AppID) that you get in the Prerequisites steps. 
+
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Android/fill_appid_appSign_in_android_demo_new2_appsign.png" />
+    </Frame>
+
+5. Connect the Android device to your computer, after you enabled the **developer mode** and **USB debugging** on the device, the option box in the upper place of Android Studio changes like the following, which means you are ready to run the sample code on the Android device.
+
+    Before:
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Android/as_no_device_new.png" />
+    </Frame>
+ 
+    After:
+
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Android/as_connected_device_new.png" />
+    </Frame> 
+
+    <Note title="Note">    
+
+    - When you connect your PC to an Android device, a message will pop up on most devices. The message varies according to Android vendors. You can select USB mode according to the actual situation.
+    -  After the Android device is connected to your computer, you will need to enable the **developer mode** and **USB debugging** on the device based on the actual situation. You can search for specific enabling methods by yourself.
+    </Note>
+
+6. Click the **Run** button to run the sample code and experience the In-app Chat service.
+   <Frame width="512" height="auto" caption="">
+   <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Android/run_android_demo_new.png" />
+   </Frame>
