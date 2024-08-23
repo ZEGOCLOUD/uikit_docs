@@ -1,0 +1,76 @@
+import Content from '/snippets/Reuse/ZIM_BasicPrerequisites_AppSign-en.md'
+import Content1 from '/snippets/Reuse/ZIM_AppSign-en.md'
+import Content2 from '/snippets/Reuse/ZIMSampleAppIntro-en.md'
+
+# Sample app
+
+<Content2 />
+
+## Prepare the environment
+
+- React Native 0.60.0 or later
+- A real iOS device that is running on iOS 11.0 or later and supports audio and video.
+-  An Android device or Simulator that is running on Android 4.1 or later and supports audio and video. We recommend you use a real device (enable the "USB Debugging" option).
+- Your device is connected to the internet.
+- Configure Visual Studio Code, search for the "React Native Tools" extension and install it.
+
+## Prerequisites
+
+<Content />
+<Content1 />
+
+## Get the sample code
+
+Download the [sample code package](https://storage.zego.im/zim/example/react-native/ZIMReactNativeExample.zip) and extract it. The following structure shows the subdirectory structure of the sample code:
+
+```bash
+.
+├── App.js
+├── Gemfile
+├── __tests__
+├── android
+├── app.json
+├── babel.config.js
+├── index.js
+├── ios
+├── main.js
+├── metro.config.js
+├── package-lock.json
+├── package.json
+├── react-native.config.js
+├── src
+│   ├── assets
+│   │   └── js
+│   │       ├── config.js
+│   ├── components
+│   ├── hooks
+│   │   └── zim.js
+│   └── pages
+│       ├── action
+│       ├── chat
+│       ├── group
+│       ├── home
+│       └── login
+├───────
+```
+
+### Run the sample code
+
+1. In Visual Studio Code, import the sample code package file.
+
+2. Modify the `config.js` file under the `src/assets/js` folder with the AppID and AppSign that you get in the Prerequisites steps. 
+
+    ```javascript
+    export const appConfig = {
+        appID: , // Fill in the AppID you get. 
+        appSign: , // Fill in the AppSign you get. 
+    }; 
+    ```
+    
+    **If your project uses the "Token-based authentication mode", please go to the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/) to get a temporary Token for debugging.**
+
+3. Enter the root directory of the project, and run the `yarn install` to install dependencies. (for iOS devices, run the `pod install` command instead.)
+
+4. If running the program on an iOS device, please navigate to the root directory of the project and execute the command `cd ios && pod install` to install dependencies.
+
+5. In the root directory, run the `yarn ios` or the `yarn android` command to run the sample code.

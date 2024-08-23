@@ -1,0 +1,146 @@
+import Content from '/snippets/Reuse/ZIM_BasicPrerequisites_AppSign-en.md'
+import Content1 from '/snippets/Reuse/ZIM_AppSign-en.md'
+import Content2 from '/snippets/Reuse/ZIMSampleAppIntro-en.md'
+
+# Sample app
+
+<Content2 />
+
+## Prepare the environment
+
+- The Dart version is [2.12.0, 3.0.0).
+- An iOS device or iOS Simulator that is running on iOS 11.0 or later and supports audio and video. We recommend you use a real device.
+- An Android device or Simulator that is running on Android 4.1 or later and supports audio and video. We recommend you use a real device (Remember to enable the **USB debugging**).
+- Windows: Windows 10 or higher (64-bit operating system based on x86-64).
+- macOS: macOS 10.13 or higher.
+- Web browsers:
+    - Chrome 58 or higher.
+    - Firefox 56 or higher.
+    - Safari 11 or higher.
+    - Opera 45 or higher.
+- Your device is connected to the internet.
+
+### Configure the Flutter environment 
+
+Your development environment should meet one of the following requirements:
+* Android Studio: select **Preferences > Plugins**, search and download the `Flutter` plugin, and add the Flutter SDK path.
+* Visual Studio Code: search and download the `Flutter` extension in the app store.
+
+After all the above is configured, run the `flutter doctor` command in the terminal, and follow the prompts to install corresponding dependencies. 
+
+## Prerequisites
+
+<Content />
+<Content1 />
+
+## Get the sample code
+
+Get the <a href="https://github.com/zegoim/zim_flutter_sdk/tree/main/example" target="_blank">sample code package</a>. The following structure shows the subdirectory structure of the sample code:
+
+```bash
+.
+├── CHANGELOG.md                            
+├── LICENSE                                 
+├── README.md                               
+├── android                                
+├── example                                 # Sample project directory
+│   ├── ...                           
+│   ├── android                             # Android sample project
+│   ├── ios                                 # iOS sample project
+│   ├── lib                                 # Main logic directory of the sample project
+│   │   ├── ...
+│   │   ├── main.dart                       # Entry of the sample project
+│   │   └── topics                          # Themes of the sample project
+│   │       ├── chat                        # Chat logic
+│   │       ├── items                       # Components used in the sample project
+│   │       │   ├── ...
+│   │       │   ├── key_center
+│   │       │   │   ├── ...
+│   │       │   │   └── key_center.dart     # Please enter your AppID in this file
+│   │       │   └── msg_items               # Message logic
+│   │       ├── login                       # Login logic
+│   │       ├── menu                        # Menu logic
+│   │       └── splash                      # Splash screen logic
+│   ├── macos
+│   ├── pubspec.lock
+│   ├── pubspec.yaml                        # Dependency description file for the sample project
+│   ├── web                                 # Web sample project
+│   ├── windows                             # Windows sample project
+│   └── ...
+├── ios                                     # iOS plugin      
+├── lib                                     # Implementation and header files of the Flutter plugin
+├── macos                                   # macOS plugin
+├── pubspec.yaml                            # Dependency description file for the plugin
+├── windows                                 # Windows plugin
+└── ...
+```
+
+## Run the sample code
+
+The following shows how to run the Flutter sample code on iOS and Android devices:
+
+
+### Android Studio
+
+1. In Android Studio, select **Open an existing Android Studio project**, and open the `zim_flutter_sdk` file you get when downloading the sample app package file.
+
+
+2. Modify the `example/lib/topics/items/key_center/key_center.dart` file with the AppID and AppSIgn you get in the previous prerequisites steps.
+
+3. Connect your test devices to the computer. 
+
+4. Click the **Run** button in "Android Studio" to run the sample app. 
+
+    <Frame width="512" height="auto" caption="">
+    <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/flutter/run_example_demo_0.png" />
+    </Frame>
+
+
+### Visual Studio Code
+
+1. In Visual Studio Code, select **File > Open**, open the `zim_flutter_sdk` file you get when downloading the sample code. 
+
+2. Modify the `example/lib/topics/items/key_center/key_center.dart` file with the AppID and AppSign you get in the previous prerequisites step.
+
+3. Connect your test devices to the computer. 
+
+4. Click the **Run > Run without Debugging** to run the sample app. 
+  
+## Notes for running the sample app on iOS devices 
+
+If you're running the sample app on a real iOS device, you'll need to use your own Apple developer certificate.
+
+1. In Xcode, open the `example/ios/Runner.xcworkspace` file you get.
+
+2. Log in to your Apple developer account. 
+
+    1. In Xcode, select **Xcode > Preferences...**, click **Accounts**, and click the "+" in the lower left to add your Apple ID, and click **continue**.
+
+        <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/iOS/ZegoExpressEngine/Common/xcode-account.png" />
+        </Frame>
+
+    2. Log in with the Apple ID and Password.
+
+        <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/iOS/ZegoExpressEngine/Common/xcode-login-apple-id.png" />
+        </Frame>
+
+3. Modify the Bundle Identifier and the certificate. 
+
+    1. In Xcode, select the **Runner** in the left pane.
+
+        <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/Flutter/ZegoExpressEngine/flutter-xcode-select-project.png" />
+        </Frame>
+
+    2. Select your target project, click **General**, and modify the Bundle Identifier.
+
+        <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/flutter/run_example_demo_2.png" />
+        </Frame>
+
+    3. Click the **Signing & Capabilities** to select your certificate. 
+        <Frame width="512" height="auto" caption="">
+        <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/flutter/run_example_demo_3.png" />
+        </Frame>
