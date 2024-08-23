@@ -9,6 +9,10 @@ Therefore, when releasing the app, it is important to implement a force upgrade 
 Of course, if this feature is not used (that is, when **enableReCall** is set to false), the above problem will not exist.
 </Warning>
 
+<Warning title="Android Only">
+Notification and Re-Dail features are currently only supported on Android.
+</Warning>
+
 ## Effects
 
 - group call, online/offline missed-call & redial
@@ -101,6 +105,10 @@ Of course, if this feature is not used (that is, when **enableReCall** is set to
 ## Events
 
 - ZegoUIKitPrebuiltCallInvitationEvents
+
+  - Function(String callID, ZegoCallUser caller)? `onIncomingCallTimeout`:
+  
+      > missed call callback, the **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
 
   - Future\<void\> Function( \
     String `callID`, \
