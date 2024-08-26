@@ -17,41 +17,43 @@ However, if this feature is not enabled (when **enableReCall** is `false`), the 
 
 ## Effects
 
-- group call, online/offline missed-call & redial
+- Group chat, online/offline missed-call and redial
   <Video src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/7d82acd364.mp4" />
 
-- 1v1 call, online missed-call & redial
+- One-to-one chat, online missed-call and redial
   <Video src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/3433ee1152.mp4" />
+
+## Parameters and configurations
+
+The following parameters and configurations are used for the notification and redial. 
 
 - ZegoCallInvitationConfig
 
   - bool `endCallWhenInitiatorLeave`:
 
-    >  Whether the entire call should end when the initiator leaves the call(will causing other participants can't enter the call anymore).
+    >  Whether the entire call should end when the initiator leaves the call, causing other participants can not join the call.
     >
-    >  Default value is `false`.
-    >
-    >  If set to false, other participants can enter the call after the initiator leaves.
+    >  The default value is `false` meaning that the call can continue even after the initiator leaves.
 
 - ZegoCallInvitationMissedCallConfig
 
   - bool `enabled`
 
-      > Whether to allow popup the missed notification
+      > Used to enable the pop-up notification for missed calls.
       >
-      > Default value is `true`.
+      > The default value is `true`.
 
   - bool `enableReCall`
 
       > Whether to allow redial the missed when click notification
       >
-      > Default value is true.
+      > Default value is `true`.
       >
       > Please note that if allowed, it will be incompatible with versions before v4.12.0, meaning that mutual invitations can not be made between the old and new versions of zego_uikit_prebuilt_call.
 
   - String? `resourceID`
 
-      > The [resource id] for notification which same as [Zego Console](https://console.zegocloud.com/)
+      > The resource ID for notification. It is the same as the one configured on the [ZEGOCLOUD Console](https://console.zegocloud.com/)
 
   - String? Function()? `notificationTitle`
 
@@ -67,6 +69,8 @@ However, if this feature is not enabled (when **enableReCall** is `false`), the 
 
 ### How to disable missed call pop-up notifications
 
+When you initialize the call invitation service, set the `ZegoCallInvitationMissedCallConfig > enabled` to be `false`.
+
 ```dart {6}
 ZegoUIKitPrebuiltCallInvitationService().init(
   ...
@@ -81,6 +85,8 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 
 ### How to disable missed call redial
 
+When you initialize the call invitation service, set the `ZegoCallInvitationMissedCallConfig > enableReCall` to be `false`.
+
 ```dart {6}
 ZegoUIKitPrebuiltCallInvitationService().init(
   ...
@@ -93,35 +99,29 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 );
 ```
 
-
 ## Events
 
-- ZegoUIKitPrebuiltCallInvitationEvents
+Listen to the following event callbacks related to the missed call notification and redial:
 
-  - Function(String callID, ZegoCallUser caller)? `onIncomingCallTimeout`:
-  
-      > missed call callback, the **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+- `onIncomingCallTimeout`: The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
+- `onIncomingMissedCallClicked`: This callback will be triggered to **callee** when **callee** click the missed call notification.
+- `onIncomingMissedCallReDialFailed`: This callback will be triggered when the redial of missed call is failed.
 
-  - Future\<void\> Function( \
-    String `callID`, \
-    ZegoCallUser `caller`, \
-    ZegoCallInvitationType `callType`, \
-    List\<ZegoCallUser\> `callees`, \
-    String `customData`, \
-    /// defaultAction is redial the missed call \
-    Future\<void\> Function() `defaultAction`, \
-  )? `onIncomingMissedCallClicked` : 
-  
-      > This callback will be triggered to **callee** when callee click the missed call notification
+> ​Please refer to the [API reference](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoUIKitPrebuiltCallInvitationEvents-class.html) for complete parameters.
 
-  - Function()? `onIncomingMissedCallReCallFailed`: 
-  
-      > missed call redial failed
-  
-```dart {4-21}
+```dart {5-30}
 ZegoUIKitPrebuiltCallInvitationService().init(
   ...
   invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
+
+    onIncomingCallTimeout: (
+      String callID, 
+      ZegoCallUser caller
+    ) {
+
+      ///  Add your custom logic here.
+    },
+
     onIncomingMissedCallClicked: (
       String callID,
       ZegoCallUser caller,
@@ -129,16 +129,19 @@ ZegoUIKitPrebuiltCallInvitationService().init(
       List<ZegoCallUser> callees,
       String customData,
 
-      /// defaultAction is redial the missed call
+      /// The default action is to redial the missed call
       Future<void> Function() defaultAction,
     ) async {
-      /// do some other logic
+      /// Add your custom logic here.
 
       await defaultAction.call();
     },
-    onIncomingMissedCallReCallFailed: () {
 
+    onIncomingMissedCallReDialFailed: () {
+      /// Add your custom logic here.
     },
+
+    ...
   ),
   ...
 );
