@@ -1,14 +1,14 @@
-# Missed call notification and redial
+# Missed call notification and dial-back
 
 <Warning title="Android only">
-Notification and redial features are only supported on Android.
+Notification and dial-back features are only supported on Android.
 </Warning>
 
 By default, Call Kit supports users to get the notifications of a missed call and call back automatically by click the notification. However, if users do not want to use the the features, Call Kit also provides disabling methods.
 
 <Warning title="Incompatible with older versions">
 
-If you need the redial feature for missed calls (when **enableReCall** is `true`), the invitation feature will no longer be compatible with versions before v4.12.0. This means that invitations sent by users of versions before v4.12.0 will not be received by users of version 4.12.0 or later, and vice versa.
+If you need the dial-back feature for missed calls (when **enableReCall** is `true`), the invitation feature will no longer be compatible with versions before v4.12.0. This means that invitations sent by users of versions before v4.12.0 will not be received by users of version 4.12.0 or later, and vice versa.
 
 Therefore, when releasing the app, it is important to implement a force upgrade for users to avoid issues with call reception.
 
@@ -17,15 +17,15 @@ However, if this feature is not enabled (when **enableReCall** is `false`), the 
 
 ## Effects
 
-- Group chat, online/offline missed-call and redial
+- Group chat, online/offline missed-call and dial-back
   <Video src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/7d82acd364.mp4" />
 
-- One-to-one chat, online missed-call and redial
+- One-to-one chat, online missed-call and dial-back
   <Video src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/3433ee1152.mp4" />
 
 ## Parameters and configurations
 
-The following parameters and configurations are used for the notification and redial. 
+The following parameters and configurations are used for the notification and the dial-back. 
 
 - ZegoCallInvitationConfig
 
@@ -45,7 +45,7 @@ The following parameters and configurations are used for the notification and re
 
   - bool `enableReCall`
 
-      > Whether to allow redial the missed when click notification
+      > Whether to allow dial-back the missed when click notification
       >
       > Default value is `true`.
       >
@@ -65,7 +65,7 @@ The following parameters and configurations are used for the notification and re
 
   - int `timeoutSeconds`
 
-      > The timeout duration in seconds for the redial invitation.
+      > The timeout duration in seconds for the dial-back invitation.
 
 ### How to disable missed call pop-up notifications
 
@@ -83,7 +83,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 );
 ```
 
-### How to disable missed call redial
+### How to disable missed call dial-back
 
 When you initialize the call invitation service, set the `ZegoCallInvitationMissedCallConfig > enableReCall` to be `false`.
 
@@ -101,11 +101,11 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 
 ## Events
 
-Listen to the following event callbacks related to the missed call notification and redial:
+Listen to the following event callbacks related to the missed call notification and dial-back:
 
 - `onIncomingCallTimeout`: The **callee** will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
 - `onIncomingMissedCallClicked`: This callback will be triggered to **callee** when **callee** click the missed call notification.
-- `onIncomingMissedCallReDialFailed`: This callback will be triggered when the redial of missed call is failed.
+- `onIncomingMissedCallDialBackFailed`: This callback will be triggered when the dial-back of missed call is failed.
 
 > ​Please refer to the [API reference](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoUIKitPrebuiltCallInvitationEvents-class.html) for complete parameters.
 
@@ -129,7 +129,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
       List<ZegoCallUser> callees,
       String customData,
 
-      /// The default action is to redial the missed call
+      /// The default action is to dial back the missed call
       Future<void> Function() defaultAction,
     ) async {
       /// Add your custom logic here.
@@ -137,7 +137,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
       await defaultAction.call();
     },
 
-    onIncomingMissedCallReDialFailed: () {
+    onIncomingMissedCallDialBackFailed: () {
       /// Add your custom logic here.
     },
 
