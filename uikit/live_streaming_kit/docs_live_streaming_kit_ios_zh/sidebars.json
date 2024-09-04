@@ -79,6 +79,11 @@
           "type": "doc",
           "label": "连麦时默认关闭摄像头",
           "id": "customize-the-livestream/turn-off-camera-during-co-hosting"
+        },
+        {
+            "type": "doc",
+            "label": "设置用户头像",
+            "id": "customize-the-livestream/set-avatar-for-users"
         }
       ]
     },

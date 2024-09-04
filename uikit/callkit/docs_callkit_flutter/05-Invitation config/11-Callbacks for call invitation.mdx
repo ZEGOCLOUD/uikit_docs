@@ -15,6 +15,8 @@ The following are supported event callbacks:
 * `onOutgoingCallRejectedCauseBusy`: The caller will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
 * `onOutgoingCallTimeout`: The caller will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
 * `onInvitationUserStateChanged`: This callback will be triggered to **caller** or **callee** in current calling inviting when the other calling member accepts, rejects, or exits, or the response times out. If the user is not the inviter who initiated this call invitation or is not online, the callback will not be received.
+* `onIncomingMissedCallClicked`: This callback will be triggered to **callee** when **callee** click the missed call notification.
+* `onIncomingMissedCallDialBackFailed`: This callback will be triggered when the dial-back of missed call is failed.
 
 Here is the reference code:
 
@@ -82,6 +84,23 @@ ZegoUIKitPrebuiltCallInvitationService().init(
         bool isVideoCall,
       ) {
         ///  Add your custom logic here.
+      },
+      onIncomingMissedCallClicked: (
+        String callID,
+        ZegoCallUser caller,
+        ZegoCallInvitationType callType,
+        List<ZegoCallUser> callees,
+        String customData,
+
+        /// The default action is to dial back the missed call
+        Future<void> Function() defaultAction,
+      ) async {
+        /// Add your custom logic here.
+
+        await defaultAction.call();
+      },
+      onIncomingMissedCallDialBackFailed: () {
+        /// Add your custom logic here.
       },
     ),
   );

@@ -1,0 +1,35 @@
+# Set avatar for users
+
+
+Live Streaming Kit does not know the real profile picture of each user, so it uses the first letter of the username to draw the user avatars by default. However, the UIKit also supports users to set their own avatars.
+
+To configure the custom user avatars, you can use the `userAvatarUrl ` in `ZegoUIKitPrebuiltLiveStreamingConfig`to set a user avatar.
+
+Here is the reference code:
+
+```swift
+class ViewController: UIViewController {
+    
+    let selfUserID: String = "userID" 
+    let selfUserName: String = "userName"
+    let yourAppID: UInt32 = YourAppID
+    let yourAppSign: String = YourAppSign
+    let liveID: String = "testLiveID"
+    
+    var liveVC: ZegoUIKitPrebuiltLiveStreamingVC?
+    
+    @IBAction func makeNewLive(_ sender: Any) {
+        
+        // Modify your custom configurations here.
+        let config: ZegoUIKitPrebuiltLiveStreamingConfig = ZegoUIKitPrebuiltLiveStreamingConfig.host()
+        // The total length of userAvatarUrl does not exceed 144 bytes
+        config.userAvatarUrl = "http://avatarUrl"
+
+        self.liveVC = ZegoUIKitPrebuiltLiveStreamingVC.init(yourAppID, appSign: yourAppSign, userID: selfUserID, userName: self.selfUserName ?? "", liveID: liveID, config: config)
+        
+        self.liveVC!.modalPresentationStyle = .fullScreen
+        self.liveVC!.delegate = self
+        self.present(self.liveVC!, animated: true, completion: nil)
+    }
+}
+```

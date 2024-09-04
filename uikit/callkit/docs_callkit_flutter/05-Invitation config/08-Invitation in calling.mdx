@@ -18,28 +18,35 @@ Of course, if this feature is not used (that is, when **canInvitingInCalling** i
 
 - ZegoCallInvitationConfig
 
+  - bool `endCallWhenInitiatorLeave`:
+
+    >  Whether the entire call should end when the initiator leaves the call, causing other participants can not join the call.
+    >
+    >  The default value is `false` meaning that the call can continue even after the initiator leaves.
+
+- ZegoCallInvitationInCallingConfig
+
   -  bool `canInvitingInCalling`:
       
       >  Whether to allow invitations in calling.   
+      >
       >  Default value is false.   
+      >
       >  Please note that if allowed, it will be incompatible with versions before v4.12.0, which means mutual invitations cannot be made.
 
-    - bool `onlyInitiatorCanInvite`:
+  - bool `onlyInitiatorCanInvite`:
 
       >  whether only the call initiator has the permission to invite others to join the call.   
+      >
       >  Default value is false.   
+      >
       >  If set to false, all participants in the call can invite others.
-
-    - bool `endCallWhenInitiatorLeave`:
-
-      >  whether the entire call should end when the initiator leaves the call(will causing other participants to leave together).
-      >  Default value is false.
-      >  If set to false, the call can continue even after the initiator leaves.
 
 - ZegoCallAudioVideoViewConfig:
 
   - bool `showWaitingCallAcceptAudioVideoView`:
     > When inviting in calling, the invited user window will appear on the invitation side, if you want to hide this view, set it to false.
+    >
     > you can cancel the invitation in this view.
 
   - [ZegoAudioVideoViewForegroundBuilder](https://pub.dev/documentation/zego_uikit_prebuilt_call/latest/zego_uikit_prebuilt_call/ZegoAudioVideoViewForegroundBuilder.html)?`waitingCallAcceptForegroundBuilder`:
@@ -60,7 +67,7 @@ Here, we only display the key code, the complete example can be found on [GitHub
 
 - Active by config
 
-  ```dart 
+  ```dart {6}
   ZegoUIKitPrebuiltCallInvitationService().init(
     ...
     plugins: [ZegoUIKitSignalingPlugin()],
@@ -74,7 +81,7 @@ Here, we only display the key code, the complete example can be found on [GitHub
 
 - Set up the **ZegoSendCallingInvitationButton** button.
 
-  ```dart 
+  ```dart {18-36,50-53}
   // During the call, the invite button allows us to instantly access current group members who have not yet joined the call, and display them for selection in the list.
   final sendCallingInvitationButton = StreamBuilder(
     stream: ZegoUIKit().getUserListStream(),
