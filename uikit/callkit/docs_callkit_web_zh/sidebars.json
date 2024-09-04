@@ -135,6 +135,11 @@
           "type": "doc",
           "label": "向离线应用发送呼叫邀请",
           "id": "call-invitation/send-a-call-invitation-to-offline-apps"
+        },
+        {
+          "type": "doc",
+          "label": "通话中发送呼叫邀请",
+          "id": "call-invitation/invitation-in-calling"
         }
       ]
     }

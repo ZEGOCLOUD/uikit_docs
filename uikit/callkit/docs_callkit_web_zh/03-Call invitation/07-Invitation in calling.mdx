@@ -1,0 +1,51 @@
+# 通话中发送呼叫邀请
+
+
+## 介绍
+
+当您已经在通话中，并希望邀请其他人加入讨论时，就需要用到此功能。
+
+<Note title="提示">
+仅 v2.9.0 及以上版本支持。
+</Note>
+
+## 启用通话中呼叫邀请
+
+当您的 Web 应用需要在通话中发起呼叫邀请。请参考以下内容：
+
+```typescript
+
+interface CallingInvitationListConfig {
+    waitingSelectUsers: ZegoUser[]; // 等待选择的成员列表
+    defaultChecked?: boolean; // 是否默认选中， 默认true
+}
+
+// for example
+zp.setCallInvitationConfig({
+    canInvitingInCalling: true,
+    endCallWhenInitiatorLeave: true,
+    onlyInitiatorCanInvite: true,
+    onSetRoomConfigBeforeJoining() {
+        return {
+            showWaitingCallAcceptAudioVideoView: true,
+            // 定义邀请列表
+            callingInvitationListConfig: {
+                waitingSelectUsers: [{userID:'123',userName:'U_123'}],
+                defaultChecked: true,
+            },
+        }
+    }
+})
+
+// 或者调用updateCallingInvitationListConfig更新邀请列表
+zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
+```
+
+## 参数说明
+
+| 参数                                 | 类型    | 是否必填 | 默认值  | 描述               |
+| :---------------------------------- | :-------| :----- | :----- | :----------------- |
+| canInvitingInCalling                | boolean | 否     | false   | 是否允许在通话中发送邀请。 |
+| onlyInitiatorCanInvite              | boolean | 否     | false   | 是否只有呼叫发起者有权限邀请其他人加入通话。如果为false，则通话中的所有参与者都可以邀请其他人。 |
+| endCallWhenInitiatorLeave           | boolean | 否     | false   | 当呼叫发起者离开通话时，整个通话是否应该结束（导致其他参与者一起离开）。如果为false，则即使发起者离开，通话仍然可以继续。 |
+| showWaitingCallAcceptAudioVideoView | boolean | 否     | true   | 通话中邀请用户时，邀请用户窗口将出现在邀请方，如果您想隐藏此视图，请将其设置为false。 您可以在此视图中取消对此用户的邀请。 |
