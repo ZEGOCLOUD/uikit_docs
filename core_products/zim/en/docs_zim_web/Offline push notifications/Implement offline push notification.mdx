@@ -1,0 +1,245 @@
+---
+articleID: 14837
+---
+
+# Implement offline push notification
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications. 
+That is, in one-on-one chat or group chat, if your app is frozen, killed by the system or a user in the backend, and get disconnected with the ZEGOCLOUD service backend due to timeout, with the offline push notification feature, the ZEGOCLOUD backend will send offline push notifications to the target users.
+
+You can integrate the ZPNs SDK and use it together with the ZIM SDK to implement the offline push notification feature.
+
+
+<Warning title="Warning">
+For Web apps to use this feature: 
+- only Chrome and Edge browsers are supported because its implementation depends on the Google FCM.
+- The ZPNs SDK needs to be used together with a ZIM SDK 2.3.0 or later. 
+</Warning>
+
+
+## Solution
+
+The solution we provide is as follows: 
+
+
+1. The receiver (the client user that receives the offline push notifications) enables Google's push notification channel, and sends a request to get the Token from the Google Server. 
+2. Google Server returns the Token to the receiver. 
+3. The receiver generates a PushID, and sends it to the ZIM Server for binding the client user and PushID.   
+   
+    You need to use the ZPNs SDK together with the ZIM SDK, the SDK will automatically bind the client user to PushID, and you don't need to do other operations; **Note: Before switching the userID on the same device, remember to call the [`logout`](@logout) method to remove the PushID that userID is binding.**
+
+
+4. The sender starts sending messages, and the messages are stored in the ZIM Server.
+5. The ZIM Server checks whether the receiver is online. 
+6. If the receiver is offline, then the messages will be transferred to the ZPNs Server.
+7. The ZPNs Server sends offline push notifications to the Google Server.
+8. Google Server pushes the offline push notifications to the receiver. The receiver receives the offline messages when gets back online. 
+
+
+## Implementation steps
+
+### Integrate Google push notification channel 
+
+Integrate Google's push notification channel by referring to the [Integrate Google FCM push notification (Web)](./Integrate%20FCM.mdx).
+
+### Integrate the ZPNs SDK 
+ 
+1. Download the latest version of the [ZPNs SDK](./../Client%20SDKs/SDK%20downloads.mdx).
+2. Extract the downloaded SDK package to your project folder, such as the `zego-zpns-web` folder.
+3. Import the SDK.
+
+    1. Modify the project's `index.html` file and add the following code: 
+    
+    ```html
+    <script src="./zego-zpns-web/index.js"></script>
+    ```
+
+    2. Copy the `zego-zpns-web/firebase-messaging-sw.js` file to your project's root directory. 
+
+### Set up the offline push notification feature using the ZPNs SDK 
+
+1. Set up the offline push notification feature. 
+
+    ```JavaScript
+    var appID = 0; // Your Application ID of ZEGO ZIM
+    var zim = ZIM.create({ appID: appID });
+
+    var config = {
+        // From firebaseConfig
+        apiKey: '',
+        authDomain: '',
+        projectId: '',
+        storageBucket: '',
+        messagingSenderId: '',
+        appId: '',
+        measurementId: '',
+
+        // From Web Push certificates
+        vapidKey: '',
+    }
+    ZPNs.getInstance().register(config, zim);
+    ```
+
+2. After finishing using this feature, call the [`unregister`](@unregister) method to cancel this feature. Users can't receive any notifications after it is canceled successfully. 
+
+    ```JavaScript
+    ZPNs.getInstance().unregister();
+    ```
+
+
+### Implement the offline push notification feature with the ZIM SDK 
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications for one-on-one or group chats, and call invitations .
+
+<Warning title="Warning">
+Before implementing offline push, you should:
+- refer to [Send and receive messages](./../Send%20and%20receive%20messages.mdx) to send one-on-one/group chat messages.
+- refer to [Call invitation](./../Guides/Call%20invitation%20signaling.mdx) to send and receive call invitations.
+</Warning>
+
+#### Send one-on-one messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```JavaScript
+    var pushConfig = {
+        title = "offline push notification title";
+        content = "offline push notification content";
+        // extendedData = "Customizable field, optional."; //  applicable when ZIM version < 2.5.0
+        // payload = "Customizable field, optional.";  // applicable when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object. 
+
+    ```JavaScript
+    var sendConfig = {
+        priority: 2,
+        pushConfig: pushConfig
+    };
+    ```
+
+3. The message sender calls the [`sendMessage`](@sendMessage) method with the `sendConfig` to send one-to-one messages. 
+
+    ```javascript
+    var toUserID = '';
+    var messageTextObj = { type: 1, message: 'content' };
+    zim.sendMessage(messageTextObj, toUserID, 0, sendConfig)
+    .then(function ({ message }) {
+        // Operation succeeded
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+    ```
+
+
+4. The offline receiver will receive the offline messages when gets back online. 
+
+#### Send group messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```JavaScript
+    var pushConfig = {
+        title = "offline push notification title";
+        content = "offline push notification content";
+        // extendedData = "Customizable field, optional."; //  applicable when ZIM version < 2.5.0
+        // payload = "Customizable field, optional.";  // applicable when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object.  
+
+    ```JavaScript
+    var sendConfig = {
+        priority: 2,
+        pushConfig: pushConfig
+    };
+    ```
+
+3. The message sender calls the [`sendMessage`](@sendMessage) method with the `sendConfig` to send group messages. 
+
+    ```javascript
+    var toGroupID = '';
+    var messageTextObj = { type: 1, message: 'content' };
+    zim.sendMessage(messageTextObj, toGroupID, 2, sendConfig)
+    .then(function ({ message }) {
+        // operation succeeded
+    })
+    .catch(function (err) {
+        // operation failed
+    });
+    ```
+
+4. The group members who are offline can receive offline messages when getting back online in the group.
+
+#### Send call invitations with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```JavaScript
+    var pushConfig = {
+        title = "offline push notification title";
+        content = "offline push notification content";
+        // extendedData = "Customizable field, optional."; //  applicable when ZIM version < 2.5.0
+        // payload = "Customizable field, optional.";  // applicable when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMCallInviteConfig`](@-ZIMCallInviteConfig) object.  
+
+    ```javascript
+    var callInviteConfig = {
+        timeout: 90,
+        pushConfig: pushConfig
+    }
+    ```
+
+3. The message sender calls the [`callInvite`](@callInvite) method with the `callInviteConfig` to send group messages. 
+
+    ```javascript
+    var invitees = ['xxxx'];  // Invitee ID list
+    zim.callInvite(invitees, callInviteConfig)
+        .then(function({ callID, timeout, errorInvitees }){
+            // Operation succeeded
+            // The callID here is the ID generated internally by the SDK after the user initiates a call, which is used to uniquely identify a call invitation. Afterwards, when the initiator cancels the call or the invitee accepts/rejects the call, this callID will be used.
+        })
+        .catch(function(err){
+            // Operation failed
+        })
+    ```
+
+4. The invitees who are offline can receive an offline push notification. Once they come online, if the call invitation is still ongoing, they will receive the callback [callInvitationReceived](@callInvitationReceived).
+
+### Unregister Offline Push
+
+If you want a device to stop receiving offline push notifications, you can unregister by calling the [unRegisterPush](@unRegisterPush) interface. After unregistering, popup push notifications and silent push notifications will no longer take effect.
+
+```js
+ZPNs.getInstance().unregisterPush();
+```
+
+## More Features
+
+### Get Additional Information
+
+The offline push sender sends additional information to the recipient through the `payload` (`extendedData` for versions before 2.5.0) of the [ZIMPushConfig](@-ZIMPushConfig). When the recipient uses the ZPNs SDK, the user can retrieve this information from the payload field in the extras of the service provider channel.
+
+1. Download version 2.5.0 or above of the ZPNs SDK from [SDK downloads](./../Client%20SDKs/SDK%20downloads.mdx) and copy the `firebase-messaging-sw.js` file to the root directory of your project.
+
+2. Open the `firebase-messaging-sw.js` file and rewrite the following methods as needed, then save the file.
+
+```javascript
+self.onNotificationArrived = function onNotificationArrived(message) {
+    // Get the payload field
+    console.log(message.extra ? message.extra.payload : message.extra);
+}
+self.onNotificationClicked = function onNotificationClicked(message) {
+    // Get the payload field
+    console.log(message.extra ? message.extra.payload : message.extra);
+}
+```

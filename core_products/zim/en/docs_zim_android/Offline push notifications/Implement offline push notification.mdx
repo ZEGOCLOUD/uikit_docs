@@ -1,0 +1,306 @@
+---
+articleID: 14253
+---
+
+# Implement offline push notification
+
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications. 
+That is, in one-on-one chat or group chat, if your app is frozen, killed by the system or a user in the backend, and get disconnected with the ZEGOCLOUD service backend due to timeout, with the offline push notification feature, the ZEGOCLOUD backend will send offline push notifications to the target users.
+
+You can integrate the ZPNs SDK and use it together with the ZIM SDK to implement the offline push notifications feature.
+
+<Warning title="Warning">
+The ZPNs SDK must be used with ZIM SDK 2.0.0 or later.
+</Warning>
+
+## Solution
+
+The solution we provide is as follows: 
+
+1. The receiver (i.e., the user receiving offline messages) enables the push channels of Google FCM, sends requests to the Google FCM push server, and obtains tokens.
+2. The push servers return tokens. 
+3. The receiver generates a PushID, and sends it to the ZIM Server for binding the client user and PushID.
+    
+    If you use the ZPNs SDK together with the ZIM SDK, the SDK will automatically bind the client user to PushID, you don't need to do other operations; If you use the ZPNs SDK alone, you will need to connect to the ZPNs server and implement the binding logic. **Note: Before switching the userID on the same device, remember to call the [`logout`\|_blank](@logout) method to remove the PushID that userID is binding.**
+
+4. The sender starts sending messages, and the messages are stored in the ZIM Server.
+5. The ZIM Server checks whether the receiver is online. 
+6. If the receiver is offline, then the messages will be transferred to the ZPNs Server.
+7. The ZPNs Server sends offline push notifications to the Google FCM push server.
+8. The Google FCM service pushes the offline push notifications to the receiver. The receiver receives the offline messages when gets back online. 
+
+## Access Google FCM
+
+To implement the offline push notification feature, you need to access Google FCM. For more, refer to [Integrate Google FCM push notification (Android)](./Integrate%20FCM.mdx).
+
+## Integrate the ZPNs SDK 
+
+### Import the ZPNs SDK
+
+When developers are automatically integrating the SDK:
+
+- For SDK versions **2.2.0 and later**, you can integrate using Method 1.
+- For SDK versions **2.1.0 and earlier**, please integrate using Method 2.
+
+
+##### Method 1: Automatically Integrate SDK Using Maven Central (Available for versions `2.2.0 and later`)
+
+1. Navigate to the project's root directory and open the "build.gradle" file. Add the following code within the "allprojects" block.
+
+    ```gradle
+    ...
+    allprojects {
+        repositories {
+            mavenCentral()
+            google()
+            jcenter()
+        }
+    }
+    ```
+
+2. Enter the "app" directory and open the "build.gradle" file. Add `implementation 'im.zego:zpns:x.y.z'` to the "dependencies" block. Replace "x.y.z" with the version number of the SDK. Refer to the release history in the [release log](#11594) for the version number.
+
+    ```gradle
+    ...
+    dependencies {
+        ...
+        implementation 'im.zego:zpns:2.7.0'
+
+        //The following is for the ZPNS package supporting Google FCM
+        implementation 'im.zego:zpns-fcm:2.7.0'
+    }
+    ```
+
+##### Method 2: Manual Integration by Copying SDK Files
+
+1. Download the latest version of the [ZPNs SDK](./../Client%20SDKs/SDK%20downloads.mdx).
+
+2. Extract the downloaded SDK package to the `app/libs` folder.
+
+3. Import the SDK. Go to the `app` directory, open the `build.gradle` file.   
+    
+    Introduce the AAR file from the "libs" directory under the "dependencies" node.
+
+    ```gradle
+    implementation files('libs/zpns-release.aar')
+
+    //The following are for the ZPNS package supporting Google FCM
+    implementation files('libs/fcm/zpns-android-plugin-fcm-release.aar')
+    ```
+
+### Set permissions
+
+Permissions can be set as needed. 
+
+Navigate to the `app/src/main` directory, open the `AndroidManifest.xml` file to add permissions.  
+ 
+```java
+<!-- Permissions required by the ZPNs SDK. -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.GET_TASKS" />
+```
+
+## Set up the offline push notification feature using the ZPNs SDK 
+
+1. Create a new Java class `MyZIMPushReceiver` that extends the [`ZPNsMessageReceiver`](@-ZPNsMessageReceiver) broadcast class in ZPNs, used for receiving push messages from Google FCM.
+
+    <a name="HowToGetPushID"></a>
+
+    ```xml
+    <receiver
+        android:name=".MyZPNsReceiver"
+        android:enabled="true"
+        android:exported="true">
+            <intent-filter>
+                <action android:name="im.zego.zim.zpns.intent.action.MESSAGE" />
+            </intent-filter>
+        </receiver>
+    ```
+
+2. Implement the callbacks in the `receiver` that has inherited the class `ZPNsMessageReceiver`, which can be used to send related notifications to Google FCM. 
+
+    - [`onThroughMessageReceived`](@onThroughMessageReceived): Callback for passing the notifications directly. For Google FCM, The callback can only be received when the APP is in the foreground or background.
+
+    - [`onRegistered`](@onRegistered): Callback for the results of setting up the offline push notifications, this can be used to get the Push ID.
+
+    ```java
+    public class MyZPNsReceiver extends ZPNsMessageReceiver {
+        // Callback for passing the notifications directly. 
+        @Override
+        protected void onThroughMessageReceived(Context context, ZPNsMessage message) {
+            Log.e("MyZPNsReceiver", "onThroughMessageReceived message:" + message.toString());
+        }
+
+        // Callback for the results of set up the offline push notifications, this can be used to get the Push ID.
+        @Override
+        protected void onRegistered(Context context, ZPNsRegisterMessage message) {
+            Log.e("MyZPNsReceiver", "onRegistered: message:" + message.getCommandResult());
+        }
+    }
+    ```
+
+    <Accordion title="Expand to learn how to retrieve the payload passthrough field" defaultOpen="false">
+        Refer to the following code to retrieve the payload field from the [ZPNsMessage](@-ZPNsMessage) object when the ZPNsMessageReceiver callback method is triggered.
+
+        ```java
+        static public String getZPNsMessagePayload(ZPNsMessage message){
+            String payload = "";
+            switch (message.getPushSource()){
+                case FCM:
+                    com.google.firebase.messaging.RemoteMessage remoteMessage = (com.google.firebase.messaging.RemoteMessage)message.getExtras();
+                    payload = remoteMessage.getData().get("payload");
+                    break;
+            }
+            return payload;
+        }
+        ```
+    </Accordion>
+
+3. Configure the Google FCM push notification channel.
+
+    After access the Google FCM SDK as described above, call the [`enableFCMPush`](@enableFCMPush) method to enable the Google FCM push notification service, and then call the [`setPushConfig`](@setPushConfig) method to configure the push notification channel.
+
+    ```java
+    ZPNsConfig zpnsConfig = new ZPNsConfig();
+    zpnsConfig.enableFCMPush(); // FCM
+    zpnsManager.setPushConfig(zpnsConfig);
+    ```
+
+4. Set up the offline push notification feature. 
+
+    ```JAVA
+    ZPNsManager.getInstance().registerPush(this.getApplication());
+    ```
+
+    After setting up the offline push notification feature, inherit the callback [`onRegistered`](@onRegistered) of the class [`ZPNsMessageReceiver`](@-ZPNsMessageReceiver), and get the `pushID` to push offline push notifications to specified devices.
+
+5. After finishing using this feature, call the [unregisterPush](@unregisterPush) method to cancel this feature. Users can't receive any notifications after it is canceled successfully. 
+
+    ```java
+    ZPNsManager.getInstance().unregisterPush();
+    ```
+
+## Implement the offline push notification feature with the ZIM SDK 
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications for one-on-one or group chats, and call invitations.
+
+<Warning title="Warning">
+Before implementing offline push, you should:
+- refer to [Send and receive messages](./../Send%20and%20receive%20messages.mdx) to send one-on-one/group chat messages.
+- refer to [Call invitation](./Call%20invitation%20signaling.mdx) to send and receive call invitations.
+</Warning>
+
+
+### Send one-on-one messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```java
+    ZIMTextMessage textMessage = new ZIMTextMessage();
+    ZIMPushConfig pushConfig = new ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional";
+    pushConfig.resourcesID = "Resource ID, optional";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object.  
+
+    ```java
+    ZIMMessageSendConfig sentConfig = new ZIMMessageSendConfig();
+    sentConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendMessage `](@sendMessage) method with the `sendConfig` to send one-to-one messages. 
+
+    ```java
+    zim. sendMessage(textMessage, "myUserID", ZIMConversationType.PEER, sentConfig, new ZIMMessageSentCallback() {
+         @Override
+         public void onMessageSent(ZIMMessage message, ZIMError errorInfo) {
+
+         }
+
+         @Override
+         public void onMessageAttached(ZIMMessage message) {
+
+         }
+    });
+    ```
+
+4. The receiver will receive the offline messages when gets back online. 
+
+
+### Send group messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```java
+    ZIMTextMessage textMessage = new ZIMTextMessage();
+    ZIMPushConfig pushConfig = new ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional";
+    pushConfig.resourcesID = "Resource ID, optional";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object.  
+
+    ```java
+    ZIMMessageSendConfig sentConfig = new ZIMMessageSendConfig();
+    sentConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendMessage`](@sendMessage) method with the `sendConfig` to send group messages. 
+
+    ```java
+    zim.sendMessage(textMessage, "myGroupID", ZIMConversationType.GROUP, sentConfig, new ZIMMessageSentCallback() {
+         @Override
+         public void onMessageSent(ZIMMessage message, ZIMError errorInfo) {
+
+         }
+         
+         @Override
+         public void onMessageAttached(ZIMMessage message) {
+
+         }
+    });
+    ```
+
+4. The group members who are offline can receive offline messages when getting back online in the group.
+
+#### Send call invitations with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```java
+    ZIMPushConfig pushConfig = new ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional";
+    pushConfig.resourcesID = "Resource ID, optional";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMCallInviteConfig`](@-ZIMCallInviteConfig) object.  
+
+    ```java
+    ZIMCallInviteConfig callInviteConfig = new ZIMCallInviteConfig();
+    callInviteConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`callInvite`](@callInvite) method with the `callInviteConfig` to send group messages. 
+
+    ```java
+    ArrayList<String> invitees = new ArrayList<>();
+    invitees.add("userA");
+    invitees.add("userB");
+    zim.callInvite(invitees, callInviteConfig, new ZIMCallInvitationSentCallback() {
+        @Override
+        public void onCallInvitationSent(String callID, ZIMCallInvitationSentInfo info, ZIMError errorInfo) {
+        }
+    });
+    ```
+
+4. The invitees who are offline can receive an offline push notification. Once they come online, if the call invitation is still ongoing, they will receive the callback [onCallInvitationReceived](@onCallInvitationReceived).
