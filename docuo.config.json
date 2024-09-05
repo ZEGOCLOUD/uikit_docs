@@ -86,7 +86,7 @@
       "id": "callkit_android",
       "label": "Call Kit(Android)",
       "path": "uikit/callkit/docs_callkit_android",
-      "routeBasePath": "callkit-android",
+      "routeBasePath": "uikit/callkit-android",
       "locale": "en",
       "navigationInfo": {
         "group": {
