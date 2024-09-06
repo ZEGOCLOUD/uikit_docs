@@ -130,36 +130,12 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-## Listen for call invitation event callbacks
+## Custom Configuration for Call
 
-You can implement further business logic by listening for event callbacks related to the call invitation.
+When using the call invitation feature, you can customize the configuration of ZegoUIKitPrebuiltCallConfig by setting ZegoUIKitPrebuiltCallConfigProvider. The code reference is as follows:
 
-
-The following are supported event callbacks:
-
-- `void onIncomingCallDeclineButtonPressed()`: This callback will be triggered when the Decline button is pressed (the callee declines the call invitation). 
-
-- `void onIncomingCallAcceptButtonPressed()`: This callback will be triggered when the Accept button is pressed (the callee accepts the call invitation). 
-
-- `void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees)`: This callback will be triggered when receiving call invitations.
-
-- `void onIncomingCallCanceled(String callID, ZegoCallUser caller)`: This callback will be triggered when the caller cancels the call invitation.
-
--  `void onIncomingCallTimeout(String callID, ZegoCallUser caller)`: The callee will receive a notification through this callback when the callee doesn't respond to the call invitation after a timeout duration.
-
-- `void onOutgoingCallCancelButtonPressed()`: This callback will be triggered when the Cancel button is pressed (the caller cancels the call invitation).
-
-- `void onOutgoingCallAccepted(String callID, ZegoCallUser callee)`: The caller will receive a notification through this callback when the callee accepts the call invitation.
-
-- `void onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)`: The caller will receive a notification through this callback when the callee rejects the call invitation (the callee is busy).
-
-- `void onOutgoingCallDeclined(String callID, ZegoCallUser callee)`: The caller will receive a notification through this callback when the callee declines the call invitation actively.
-
-- `void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees)`: The caller will receive a notification through this callback when the call invitation didn't get responses after a timeout duration.
-
-<Accordion title="Here is the reference code:" defaultOpen="false">
-
-```java title="With call invitation"
+<CodeGroup>
+```java title="Call with Invitation"
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -174,66 +150,90 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initCallInviteService() {
-      ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-      ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
 
-      ZegoUIKitPrebuiltCallService.addIncomingCallButtonListener(new IncomingCallButtonListener() {
-            @Override
-            public void onIncomingCallDeclineButtonPressed() {
-                
-            }
-
-            @Override
-            public void onIncomingCallAcceptButtonPressed() {
-
-            }
-        });
-
-        ZegoUIKitPrebuiltCallService.addOutgoingCallButtonListener(new OutgoingCallButtonListener() {
-            @Override
-            public void onOutgoingCallCancelButtonPressed() {
-                
-            }
-        });
-
-        ZegoUIKitPrebuiltCallService.addInvitationCallListener(new ZegoInvitationCallListener() {
-            @Override
-            public void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees) {
-                
-            }
-
-            @Override
-            public void onIncomingCallCanceled(String callID, ZegoCallUser caller) {
-
-            }
-
-            @Override
-            public void onIncomingCallTimeout(String callID, ZegoCallUser caller) {
-
-            }
-
-            @Override
-            public void onOutgoingCallAccepted(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallRejected(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallDeclined(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees) {
-
-            }
-        });
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+        @Override
+        public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+              ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
+                    invitationData);
+            // Modify the config settings here according to your business needs
+        }
     }
 }
 ```
-</Accordion>
+</CodeGroup>
 
+
+## Customizing Call Configuration
+
+When using the call invite feature, you can customize the configuration of `ZegoUIKitPrebuiltCallConfig` by setting up the `ZegoUIKitPrebuiltCallConfigProvider`. Here is a reference code:
+
+<CodeGroup>
+```java title="Customizing Call Configuration"
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+        @Override
+        public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+              ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
+                    invitationData);
+            // Modify the config settings here according to your business requirements.
+        }
+    }
+}
+```
+</CodeGroup>
+
+
+## Using the Calling Invite Feature
+
+You can enable the calling invite feature by setting up the `ZegoCallInvitationInCallingConfig`. In this mode, you can invite new users to join the call during the conversation.Here is a reference code:
+
+<CodeGroup>
+```java title="Using the Calling Invite Feature"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+
+callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
+// Whether to enable the calling invite feature.
+callInvitationConfig.callingConfig.canInvitingInCalling = true;
+// Whether only the person who created the call can calling invite.
+callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
+
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+
+```
+</CodeGroup>
+
+### Whether to End the Call When the Initiator Leaves
+
+You can set whether to end the call when the initiator leaves by using `endCallWhenInitiatorLeave`.
+
+<CodeGroup>
+```java title="End the Call When the Initiator Leaves"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+
+callInvitationConfig.endCallWhenInitiatorLeave = true;
+
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+
+```
+</CodeGroup>

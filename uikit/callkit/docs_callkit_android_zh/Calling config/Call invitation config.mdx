@@ -152,36 +152,12 @@ public class MainActivity extends AppCompatActivity {
 ```
 </CodeGroup>
 
-## 监听呼叫邀请事件回调
+## 自定义Call的配置
 
-您可以通过监听与呼叫邀请相关的事件回调来实现进一步的业务逻辑。
-
-支持以下事件回调：
-
-- `void onIncomingCallDeclineButtonPressed()`：当拒绝按钮被按下时（被叫用户拒绝呼叫邀请），将触发此回调。
-
-- `void onIncomingCallAcceptButtonPressed()`：当接受按钮被按下时（被叫用户接受呼叫邀请），将触发此回调。
-
-- `void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees)`：当接收到呼叫邀请时，将触发此回调。
-
-- `void onIncomingCallCanceled(String callID, ZegoCallUser caller)`：当主叫用户取消呼叫邀请时，将触发此回调。
-
--  `void onIncomingCallTimeout(String callID, ZegoCallUser caller)`：当被叫用户在超时时间内未响应呼叫邀请时，将通过此回调接收到通知。
-
-- `void onOutgoingCallCancelButtonPressed()`：当取消按钮被按下时（主叫用户取消呼叫邀请），将触发此回调。
-
-- `void onOutgoingCallAccepted(String callID, ZegoCallUser callee)`：当被叫用户接受呼叫邀请时，主叫用户将通过此回调接收到通知。
-
-- `void onOutgoingCallRejectedCauseBusy(String callID, ZegoCallUser callee)`：当被叫用户拒绝呼叫邀请时（被呼叫者忙碌），主叫用户将通过此回调接收到通知。
-
-- `void onOutgoingCallDeclined(String callID, ZegoCallUser callee)`：当被叫用户主动拒绝呼叫邀请时，主叫用户将通过此回调接收到通知。
-
-- `void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees)`：当呼叫邀请在超时时间内未收到响应时，主叫用户将通过此回调接收到通知。
-
-代码参考如下：
+在使用呼叫邀请功能的时候，您可以通过设置 ZegoUIKitPrebuiltCallConfigProvider 来自定义 ZegoUIKitPrebuiltCallConfig 的配置，代码参考如下：
 
 <CodeGroup>
-```java title="携带邀请的呼叫"
+```java title="自定义Call的配置"
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -199,62 +175,50 @@ public class MainActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
         ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
 
-        ZegoUIKitPrebuiltCallService.addIncomingCallButtonListener(new IncomingCallButtonListener() {
-            @Override
-            public void onIncomingCallDeclineButtonPressed() {
-                
-            }
-
-            @Override
-            public void onIncomingCallAcceptButtonPressed() {
-
-            }
-        });
-
-        ZegoUIKitPrebuiltCallService.addOutgoingCallButtonListener(new OutgoingCallButtonListener() {
-            @Override
-            public void onOutgoingCallCancelButtonPressed() {
-                
-            }
-        });
-
-        ZegoUIKitPrebuiltCallService.addInvitationCallListener(new ZegoInvitationCallListener() {
-            @Override
-            public void onIncomingCallReceived(String callID, ZegoCallUser caller, ZegoCallType callType, List<ZegoCallUser> callees) {
-                
-            }
-
-            @Override
-            public void onIncomingCallCanceled(String callID, ZegoCallUser caller) {
-
-            }
-
-            @Override
-            public void onIncomingCallTimeout(String callID, ZegoCallUser caller) {
-
-            }
-
-            @Override
-            public void onOutgoingCallAccepted(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallRejected(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallDeclined(String callID, ZegoCallUser callee) {
-
-            }
-
-            @Override
-            public void onOutgoingCallTimeout(String callID, List<ZegoCallUser> callees) {
-
-            }
-        });
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+        @Override
+        public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+              ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
+                    invitationData);
+            // 根据你的业务需求修改这里的 config 的配置
+        }
     }
 }
+```
+</CodeGroup>
+
+
+## 使用通话中邀请的功能
+
+您可以通过设置  ZegoCallInvitationInCallingConfig 来启用通话中邀请的功能，在此模式下，你可以在通话中邀请新的用户加入进来，代码参考如下：
+
+<CodeGroup>
+```java title="使用通话中邀请的功能"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+
+callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
+// 是否开启通话中邀请的功能
+callInvitationConfig.callingConfig.canInvitingInCalling = true;
+// 是否只有创建通话的人才能邀请
+callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
+
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+
+```
+</CodeGroup>
+
+### 创建通话的人离开的时候是否结束通话
+你可以通过 `endCallWhenInitiatorLeave` 来设置创建通话的人离开的时候是否要结束通话
+
+<CodeGroup>
+```java title="创建通话的人离开的时候是否结束通话"
+//....
+ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+
+callInvitationConfig.endCallWhenInitiatorLeave = true;
+
+ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+
 ```
 </CodeGroup>
