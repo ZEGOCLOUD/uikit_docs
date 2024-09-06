@@ -1,0 +1,50 @@
+# 11-Customize the empty area contents
+
+There is a empty area between the seats area and the bottom menu bar. Starting from version 2.8.0, you can display content in this empty area by configuring the `ZegoUIKitPrebuiltLiveAudioRoomConfig.emptyArea` to return a view.
+
+```js
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+export default function HostPage(props) {
+    const {route} = props;
+    const {params} = route;
+    const {userID, userName, roomID} = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    emptyArea: () => {
+                        return (
+                            <View style={[{marginLeft: 20, marginTop: 20}]}>
+                            <Text>empty area</Text>
+                            </View>
+                        )
+                    }
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 1,
+    zIndex: 0,
+  }
+});
+```

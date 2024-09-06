@@ -1,0 +1,71 @@
+# 11-Display audience co-host request list
+
+Starting from version 2.8.0, you can use the `CohostRequestList` component to display a list of audience requests to become a co-host, allowing the host to approve or reject their requests from the list. 
+
+You can import the `CohostRequestList` component and configure `ZegoUIKitPrebuiltLiveAudioRoomConfig.onSeatTakingRequestListChange` to trigger a refresh of the list whenever there is a change in the request information.
+
+The `CohostRequestList` component is not included in the SDK. You can find it on GitHub at: https://xxx. After that, copy it into your project and adjust the display style according to your needs.
+
+Below is an example of displaying the request list in the empty area. For information on configuring the `emptyArea`, you can refer to this documentation: https://xxx.
+
+
+
+```js
+import React, { useRef } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+import CohostRequestList from './CohostRequestList';
+
+export default function HostPage(props) {
+    const prebuiltRef = useRef();
+    const cohostRequestListRef = useRef();
+
+    const {route} = props;
+    const {params} = route;
+    const {userID, userName, roomID} = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                ref={prebuiltRef}
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    emptyArea: () => {
+                        return <CohostRequestList
+                            ref={cohostRequestListRef}
+                            acceptSeatTakingRequest={ (userID) => {
+                                prebuiltRef.current.acceptSeatTakingRequest(userID)
+                            }}
+                            rejectSeatTakingRequest={ (userID) => {
+                                prebuiltRef.current.rejectSeatTakingRequest(userID)
+                            }}
+                        />
+                    },
+                    onSeatTakingRequestListChange: (requestInfoList) => {
+                        cohostRequestListRef.current.onSeatTakingRequestListChange(requestInfoList)
+                    }
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 1,
+    zIndex: 0,
+  }
+});
+```
