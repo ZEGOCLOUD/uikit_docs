@@ -73,6 +73,8 @@ declare interface ZegoCloudRoomConfig {
     showAvatarWhenCameraOff?: boolean; // 摄像头关闭时是否显示用户头像，默认true
   }[];
   backgroundUrl?: string; // 背景图
+  liveNotStartedTextForAudience?: string; // 自定义观众端直播开始前展示的文本
+  startLiveButtonText?: string; // 自定义开始直播按钮文本
 
   // 1.4 离开房间页面
   showLeavingView?: boolean; // 是否显示离开房间页面。默认显示。
