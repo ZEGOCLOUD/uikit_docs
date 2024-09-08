@@ -1,5 +1,5 @@
 import UIKitCreateAccountAndServicesZh from "/snippets/uikit/UIKitCreateAccountAndServicesZh.md";
-import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md";
+import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.mdx";
 
 # 快速开始
 
@@ -15,15 +15,15 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 
 <UIKitCreateAccountAndServicesZh />
 
-## 实现流程
+## 引入 SDK
 
-### 引入SDK
-
-1. 若您已有项目，则跳过该步骤。若尚无项目，则按照 [创建 uni-app](https://uniapp.dcloud.net.cn/quickstart-hx.html) 快速创建项目。
-
-2. 若您已经创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
-
-<Frame width="400px" height="400px">
+<Steps>
+<Step title="创建项目">
+若您已有 uni-app 项目，则跳过此步骤。若尚无 uni-app 项目，请参考 uni-app 开发者文档 [创建 uni-app](https://uniapp.dcloud.net.cn/quickstart-hx.html) 快速创建项目。
+</Step>
+<Step title="创建自定义基座">
+若您已创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
+<Frame width="400px">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/47d08e1b29.png" alt="run_with_custom.png"/>
 </Frame>
 
@@ -31,38 +31,53 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/02f56f8dad.png" alt="config_custom.png"/>
 </Frame>
 
-> 注意：IOS 需要苹果开发者证书。为方便测试，可以暂时只勾选安卓端。
+<Note title="说明">
+由于 iOS 项目需要 Apple 开发者证书。为方拜年测试，您可以暂时只勾选 Android 端。
+</Note>
 
-3. 将插件市场的 [ZEGO 即构实时音视频 SDK](https://ext.dcloud.net.cn/plugin?id=3617) SDK 引入到项目中，并找到 manifest.json 中的 App 原生插件配置。
+</Step>
+
+<Step title="引入实时音视频">
+在插件市场购买 [ZEGO 即构实时音视频 SDK](https://ext.dcloud.net.cn/plugin?id=3617)。
 
 <Frame width="100%">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/fc005e6051.png" alt="free_buy_for_cloud_build.png"/>
 </Frame>
 
+单击项目目录的 “manifest.json” 文件后，单击 “App 原生插件配置 > 云端插件 [选择云端插件]”。
+
 <Frame width="100%">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/65c125a799.png" alt="choose_native_plugins.png" />
 </Frame>
 
-勾选上面购买的 ZEGO 即构实时音视频 SDK 并确认。
+在“云端插件选择”弹窗勾选上面购买的 ZEGO 即构实时音视频 SDK 并确认。
 <Frame height="300px">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/2a4289a346.png" alt="check_and_confirm.png" />
 </Frame>
+</Step>
 
-4. 将插件市场的 [ZEGOUIKitPrebuiltCall 插件](https://ext.dcloud.net.cn/plugin?id=19688) 下载并导入 HBuilderX。
+<Step title="引入 ZEGOUIKitPrebuiltCall">
+在插件市场下载 [ZEGOUIKitPrebuiltCall](https://ext.dcloud.net.cn/plugin?id=19688) 插件并导入 HBuilderX。
 
 <Frame width="100%">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8fbac5726a.png" alt="download_and_import.png"/>
 </Frame>
 
-由于 zego-PrebuiltCall 中包含了 zego-UIKitCore，因此，导入完成后，你的 uni_modules 会包含两个插件。
+由于 zego-PrebuiltCall 中包含了 zego-UIKitCore，因此，导入完成后，您的 uni_modules 会包含两个插件。
 
 <Frame height="120px">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/84e2c5cda7.png" alt="imported.png"/>
 </Frame>
+</Step>
 
-5. 在业务页面中引入插件。
+<Step title="在业务页面中引入插件">
 
-在 vue 的 js 部分引用 zego-PrebuiltCall 带 ui 组件，生成选择对应的场景预设配置，除了预设配置，也可以自定义其他的配置。
+在 vue 的 JS 部分引用 ZegoUIKitPrebuiltCall，根据所需场景生成预设配置。
+
+<Note title="说明">
+
+除了预设配置，也可以自定义其他的配置。
+</Note>
 ```js
 import keyCenter from "@/common/KeyCenter";
 import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
@@ -75,24 +90,23 @@ const userName = ref(keyCenter.getUserID() + '_Nick');
 const callID = ref(keyCenter.getCallID());
 
 const config: ZegoUIKitPrebuiltCallConfig = {
-    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 预设配置
+    ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 一对一视频通话的预设配置
     // 其他配置
 };
 ```
 
-在 vue 的 template 中使用 zego-PrebuiltCall 带 ui 组件，并将配置传入组件。
-```vue
+在 vue 的 template 中使用 ZegoUIKitPrebuiltCall，并将上述配置传入组件。
+```HTML
 <template>
     <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
         :config="config">
     </ZegoUIKitPrebuiltCall>
 </template>
 ```
-
-6. 配置入口与页面路由
-
-根据业务场景为通话页配置入口。
-```vue
+</Step>
+<Step title="配置入口与页面路由">
+根据您的业务场景为通话页配置入口。
+```HTML
 <template>
     <view v-for="item in list" :key="item.name" @click="navigateTo(item.url)">
         {{ item.name }}
@@ -114,7 +128,7 @@ const navigateTo = (url: string) => {
 ```
 
 打开 pages.json，添加 pages 配置
-```
+```json
 {
 	"pages": [
         // 新增基础通话页
@@ -127,6 +141,8 @@ const navigateTo = (url: string) => {
 	],
 }
 ```
+</Step>
+</Steps>
 
 ## 运行和测试
 
