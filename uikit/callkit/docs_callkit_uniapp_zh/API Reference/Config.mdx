@@ -78,6 +78,14 @@
 | spacingBetweenSmallViews            | Int                               | 小视图之间的间距。默认为 `8`。                          |
 | removeViewWhenAudioVideoUnavailable | Bool                                  | 当音频和视频不可用的时候是否移除 view。默认为 `true`。  |
 
+## ZegoCallDurationConfig
+通话时长配置类
+
+| 属性                   | 类型                       | 描述                                  |
+| ---------------------- | ----------------------    | ------------------------------------- |
+| showDuration           | boolean                   | 是否显示通话时间时长，默认值为 true。 |
+| onDurationUpdate       | (seconds: number) => void | 通话时长更新的回调。每隔 1s 触发一次，不建议运行耗时任务。  |
+
 ## ZegoHangUpConfirmInfo
 
 离开通话确认对话框信息配置类
@@ -88,15 +96,6 @@
 | message           | String | 确认消息文本。 |
 | cancelButtonName  | String | 取消按钮文本。 |
 | confirmButtonName | String | 确认按钮文本。 |
-
-## ZegoCallDurationConfig
-通话时长配置类
-
-| 属性                   | 类型                       | 描述                                  |
-| ---------------------- | ----------------------    | ------------------------------------- |
-| showDuration           | boolean                   | 是否显示通话时间时长，默认值为 true。 |
-| onDurationUpdate       | (seconds: number) => void | 通话时长更新的回调。每隔1s触发一次，不建议运行耗时任务。  |
-
 
 ## ZegoLayoutMode
 
