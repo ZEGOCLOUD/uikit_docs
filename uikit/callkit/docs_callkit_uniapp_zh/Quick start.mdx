@@ -3,7 +3,7 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 
 # 快速开始
 
-这份文档将指导您如何在 uni-app 项目集成 `音视频通话 UIKit` uniapp SDK 并快速开始音视频通话。
+这份文档将指导您如何在 uni-app 项目集成 `音视频通话 UIKit` uni-app SDK 并快速开始音视频通话。
 
 ## 准备环境
 
@@ -43,6 +43,11 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 
 <Step title="创建自定义基座">
 若您已创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
+<Note>
+
+uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调试基座及使用说明](https://uniapp.dcloud.net.cn/tutorial/run/run-app.html#customplayground)。 
+</Note>
+
 <Frame width="400px">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/47d08e1b29.png" alt="run_with_custom.png"/>
 </Frame>
@@ -64,7 +69,7 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8fbac5726a.png" alt="download_and_import.png"/>
 </Frame>
 
-由于 zego-PrebuiltCall 中包含了 zego-UIKitCore，因此，导入完成后，您的 uni_modules 会包含以下插件。
+由于 zego-PrebuiltCall 中包含了 zego-UIKitCore 和 zego-ExpressUniAppzego-ExpressUniApp-JSs，因此，导入完成后，您的 uni_modules 会包含以下插件。
 
 <Frame height="120px">
     <img src="https://media-resource.spreading.io/docuo/workspace733/92cf2c578a7f03194465a905bb923c76/9276069cc7.png" alt="screenshot-20240909-101238.png"/>
@@ -162,11 +167,5 @@ const navigateTo = (url: string) => {
 <CardGroup cols={2}>
     <Card title="示例代码" href="https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_call_uniapp" target="_blank">
     获取完整示例代码。
-    </Card>
-</CardGroup>
-
-## 常见问题
-<CardGroup cols={2}>
-    <Card title="如何处理接入错误" href="https://doc-zh.zego.im/faq?product=Call_Kit&platform=uni-app" target="_blank">
     </Card>
 </CardGroup>
