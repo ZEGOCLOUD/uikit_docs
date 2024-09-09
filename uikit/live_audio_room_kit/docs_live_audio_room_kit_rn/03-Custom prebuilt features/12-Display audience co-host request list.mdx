@@ -1,16 +1,37 @@
-# 11-Display audience co-host request list
+# Display audience co-host request list
 
 Starting from version 2.8.0, you can use the `CohostRequestList` component to display a list of audience requests to become a co-host, allowing the host to approve or reject their requests from the list. 
 
 You can import the `CohostRequestList` component and configure `ZegoUIKitPrebuiltLiveAudioRoomConfig.onSeatTakingRequestListChange` to trigger a refresh of the list whenever there is a change in the request information.
 
-The `CohostRequestList` component is not included in the SDK. You can find it on GitHub at: https://xxx. After that, copy it into your project and adjust the display style according to your needs.
+<Frame width="auto" height="400">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8d7409b485.jpeg" alt="cohostlist.jpeg"/>
+</Frame>
 
-Below is an example of displaying the request list in the empty area. For information on configuring the `emptyArea`, you can refer to this documentation: https://xxx.
+## Get the component
 
+The `CohostRequestList` component is not included in Call Kit. You can find it on this [GitHub repository](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_rn/blob/master/example/src/CohostRequestList.tsx), copy it into the "./src" directory of your project, and if you want, adjust the display style.
 
+## Display the list in the empty area
 
-```js
+<Steps>
+<Step title="Import the component">
+</Step>
+<Step title="Create a Ref const">
+Create a `cohostRequestListRef` const, which will be used to call interfaces of the CohostRequestList component.
+</Step>
+<Step title="Listen to onSeatTakingRequestListChange">
+Listen to the `onSeatTakingRequestListChange` callback, so that when ZegoUIKitPrebuiltLiveAudioRoom detects the co-host request list needs to be changed, the hostpage will refresh to show the latest request information.
+</Step>
+<Step title="Configure the emptyArea">
+Return the CohostRequestList component in `emptyArea`, and implement the `acceptSeatTakingRequest` and `rejectSeatTakingRequest` callbacks. These two callbacks will be called when the host clicks on "Agree" or "Disgree" in the list.   
+For information on configuring the `emptyArea`, you can refer to [Display content in the empty area](./11-Display%20content%20in%20the%20empty%20area.mdx).
+</Step>
+</Steps>
+
+Below is an example of displaying the request list in the empty area. 
+
+```js .src/HomePage.js {8,12,31-44}
 import React, { useRef } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import KeyCenter from './KeyCenter';
@@ -41,6 +62,9 @@ export default function HostPage(props) {
                 // Modify your custom configurations here.
                 config={{
                     ...HOST_DEFAULT_CONFIG,
+                    onSeatTakingRequestListChange: (requestInfoList) => {
+                        cohostRequestListRef.current.onSeatTakingRequestListChange(requestInfoList)
+                    },
                     emptyArea: () => {
                         return <CohostRequestList
                             ref={cohostRequestListRef}
@@ -51,9 +75,6 @@ export default function HostPage(props) {
                                 prebuiltRef.current.rejectSeatTakingRequest(userID)
                             }}
                         />
-                    },
-                    onSeatTakingRequestListChange: (requestInfoList) => {
-                        cohostRequestListRef.current.onSeatTakingRequestListChange(requestInfoList)
                     }
                 }}
             />
