@@ -78,16 +78,14 @@ uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调�
 
 <Step title="在业务页面中引入插件">
 
-在 Vue 的 JS 部分引用 ZegoUIKitPrebuiltCall，根据所需场景生成预设配置。
+在 Vue 的 script 中使用引入 ZegoUIKitPrebuiltCall 组件与 ZegoUIKitPrebuiltCallConfig 预设配置，生成一份一对一视频通话的预设配置，在 template 中使用 ZegoUIKitPrebuiltCall 组件，并将配置传入组件。
 
 <Note title="说明">
 
 除了预设配置，也可以自定义其他的配置。
 </Note>
 
-在 Vue 的 script 中使用引入 ZegoUIKitPrebuiltCall 组件与 ZegoUIKitPrebuiltCallConfig 预设配置，生成一份一对一视频通话的预设配置，在 template 中使用 ZegoUIKitPrebuiltCall 组件，并将配置传入组件。
-
-```vue title="pages/base-call/index.vue"
+```vue title="pages/base-call/index.vue" 
 <template>
     <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
         :config="config">
@@ -114,7 +112,7 @@ const config: ZegoUIKitPrebuiltCallConfig = {
 </Step>
 <Step title="配置入口与页面路由">
 根据您的业务场景为通话页配置入口。
-```vue title="pages/index/index.vue"
+```vue title="pages/index/index.vue" {8-11}
 <template>
     <view v-for="item in list" :key="item.name" @click="navigateTo(item.url)">
         {{ item.name }}
