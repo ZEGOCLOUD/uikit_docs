@@ -10,7 +10,7 @@
 | turnOnMicrophoneWhenJoining | Bool                                                  | 默认是否启用麦克风，默认值为 true。                                                                      |
 | useSpeakerWhenJoining       | Bool                                                  | 默认是否启用扬声器，默认值为 true。                                                                      |
 | audioVideoViewConfig        | [ZegoAudioVideoViewConfig](#zegoaudiovideoviewconfig) | 音频和视频视图的配置。如麦克风和摄像头状态图标、是否显示用户名、声浪效果和视频显示模式。                 |
-| layout                      | [ZegoLayout](#zegolayout)                             | 配置通话页面音视频窗口的显示布局，包括画中画布局、宫格式布局。                                           |
+| layout                      | [ZegoLayout](#zegolayout)                             | 配置通话页面音视频窗口的显示布局，包括画中画布局局。                                           |
 | bottomMenuBarConfig         | [ZegoBottomMenuBarConfig](#zegobottommenubarconfig)   | 通话页面底部栏的配置参数，如底部的栏按钮、按钮数量限制、是否自动隐藏、点击其他区域是否隐藏以及颜色风格。 |
 | hangUpConfirmInfo           | [ZegoHangUpConfirmInfo](#zegohangupconfirminfo)       | 点击挂断按钮时，是否显示离开房间的对话框信息。如果没有设置，则不显示，反之亦然。                         |
 | videoConfig                 | [ZegoPrebuiltVideoConfig](#zegoprebuiltvideoconfig)   | 视频分辨率配置，默认值为 ZegoPrebuiltVideoConfig(resolution: ZegoPresetResolution.Preset360p)。          |
@@ -40,14 +40,14 @@
 | hideByClick       | Bool                                              | 用户是否可以点击屏幕非响应区域的位置，收起菜单栏。默认值为 true。                                                                                                |
 
 
-## ZegoPrebuiltCallVideoConfig
+## ZegoPrebuiltVideoConfig
 
 视频分辨率配置类
 
 | 属性       | 类型                                          | 描述                                                              |
 | ---------- | --------------------------------------------- | ----------------------------------------------------------------- |
-| resolution | [ZegoPresetResolution](#zegopresetresolution) | 自定义视频分辨率。默认为 PRESET_360P。                            |
-| config     | [ZegoVideoConfig](#zegovideoconfig)           | 详细的视频参数配置，可选，如果配置了改参数，则忽略 `resolution`。 |
+| resolution | [ZegoPresetResolution](#zegopresetresolution) | 自定义视频分辨率。默认为 Preset360p。                            |
+| config     | [ZegoVideoConfig](#zegovideoconfig)           | 详细的视频参数配置，可选，如果配置了该参数，则忽略 `resolution`。 |
 
 ## ZegoLayout
 
@@ -96,7 +96,6 @@
 | 枚举             | 描述                     |
 | :--------------- | :----------------------- |
 | PictureInPicture | 画中画布局。             |
-| Gallery          | 宫格式布局（暂不支持）。 |
 
 ## ZegoMenuBarButtonName
 
@@ -108,7 +107,7 @@
 | ToggleCameraButton      | 摄像头开关按钮。     |
 | ToggleMicrophoneButton  | 麦克风开关按钮。     |
 | SwitchCameraButton      | 前后摄像头切换按钮。 |
-| SwitchAudioOutputButton | 音频外放开关按钮。   |
+| SwitchAudioOutputButton | 音频外放切换按钮。   |
 
 ## ZegoPresetResolution
 
