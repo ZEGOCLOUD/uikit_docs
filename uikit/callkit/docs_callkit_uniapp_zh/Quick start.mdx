@@ -45,7 +45,7 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 若您已创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
 <Note>
 
-uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调试基座及使用说明](https://uniapp.dcloud.net.cn/tutorial/run/run-app.html#customplayground)。 
+uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调试基座及使用说明](https://uniapp.dcloud.net.cn/tutorial/run/run-app.html#customplayground)。
 </Note>
 
 <Frame width="400px">
@@ -84,7 +84,17 @@ uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调�
 
 除了预设配置，也可以自定义其他的配置。
 </Note>
-```js
+
+在 Vue 的 script 中使用引入 ZegoUIKitPrebuiltCall 组件与 ZegoUIKitPrebuiltCallConfig 预设配置，生成一份一对一视频通话的预设配置，在 template 中使用 ZegoUIKitPrebuiltCall 组件，并将配置传入组件。
+
+```vue title="pages/base-call/index.vue"
+<template>
+    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
+        :config="config">
+    </ZegoUIKitPrebuiltCall>
+</template>
+
+<script>
 import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
 import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
 
@@ -98,20 +108,13 @@ const config: ZegoUIKitPrebuiltCallConfig = {
     ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 一对一视频通话的预设配置
     // 其他配置
 };
+</script>
 ```
 
-在 Vue 的 template 中使用 ZegoUIKitPrebuiltCall，并将上述配置传入组件。
-```HTML
-<template>
-    <ZegoUIKitPrebuiltCall :appID="appID" :callID="callID" :appSign="appSign" :userID="userID" :userName="userName"
-        :config="config">
-    </ZegoUIKitPrebuiltCall>
-</template>
-```
 </Step>
 <Step title="配置入口与页面路由">
 根据您的业务场景为通话页配置入口。
-```HTML
+```vue title="pages/index/index.vue"
 <template>
     <view v-for="item in list" :key="item.name" @click="navigateTo(item.url)">
         {{ item.name }}
@@ -133,9 +136,16 @@ const navigateTo = (url: string) => {
 ```
 
 打开 pages.json，添加 pages 配置
-```json
+```json title="pages.json"
 {
 	"pages": [
+        // 首页
+		{
+		    "path": "pages/index/index",
+		    "style": {
+		        "navigationBarTitleText": "首页"
+		    }
+		}
         // 新增基础通话页
 		{
 		    "path": "pages/base-call/index",
