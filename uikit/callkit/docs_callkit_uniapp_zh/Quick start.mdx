@@ -21,24 +21,9 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 <Step title="创建项目">
 若您已有 uni-app 项目，则跳过此步骤。若尚无 uni-app 项目，请参考 uni-app 开发者文档 [创建 uni-app](https://uniapp.dcloud.net.cn/quickstart-hx.html) 快速创建项目。
 </Step>
-<Step title="创建自定义基座">
-若您已创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
-<Frame width="400px">
-    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/47d08e1b29.png" alt="run_with_custom.png"/>
-</Frame>
-
-<Frame width="100%">
-    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/02f56f8dad.png" alt="config_custom.png"/>
-</Frame>
-
-<Note title="说明">
-由于 iOS 项目需要 Apple 开发者证书。为方拜年测试，您可以暂时只勾选 Android 端。
-</Note>
-
-</Step>
 
 <Step title="引入实时音视频">
-在插件市场购买 [ZEGO 即构实时音视频 SDK](https://ext.dcloud.net.cn/plugin?id=3617)。
+在插件市场购买 [ZEGO 即构实时音视频 SDK](https://ext.dcloud.net.cn/plugin?id=3617)。购买时填入的 AppID 必须和后面需要运行的 AppID 一致。
 
 <Frame width="100%">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/fc005e6051.png" alt="free_buy_for_cloud_build.png"/>
@@ -56,6 +41,22 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 </Frame>
 </Step>
 
+<Step title="创建自定义基座">
+若您已创建好了基座，则跳过该步骤。若尚未创建，则创建自定义基座，填入 AppID。
+<Frame width="400px">
+    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/47d08e1b29.png" alt="run_with_custom.png"/>
+</Frame>
+
+<Frame width="100%">
+    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/02f56f8dad.png" alt="config_custom.png"/>
+</Frame>
+
+<Note title="说明">
+由于 iOS 项目需要 Apple 开发者证书。为方便测试，您可以暂时只勾选 Android 端。
+</Note>
+
+</Step>
+
 <Step title="引入 ZEGOUIKitPrebuiltCall">
 在插件市场下载 [ZEGOUIKitPrebuiltCall](https://ext.dcloud.net.cn/plugin?id=19688) 插件并导入 HBuilderX。
 
@@ -63,10 +64,10 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8fbac5726a.png" alt="download_and_import.png"/>
 </Frame>
 
-由于 zego-PrebuiltCall 中包含了 zego-UIKitCore，因此，导入完成后，您的 uni_modules 会包含两个插件。
+由于 zego-PrebuiltCall 中包含了 zego-UIKitCore，因此，导入完成后，您的 uni_modules 会包含以下插件。
 
 <Frame height="120px">
-    <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/84e2c5cda7.png" alt="imported.png"/>
+    <img src="https://media-resource.spreading.io/docuo/workspace733/92cf2c578a7f03194465a905bb923c76/9276069cc7.png" alt="screenshot-20240909-101238.png"/>
 </Frame>
 </Step>
 
@@ -79,15 +80,14 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 除了预设配置，也可以自定义其他的配置。
 </Note>
 ```js
-import keyCenter from "@/common/KeyCenter";
 import ZegoUIKitPrebuiltCall from "@/uni_modules/zego-PrebuiltCall/components/ZegoUIKitPrebuiltCall.nvue"
 import { ZegoUIKitPrebuiltCallConfig } from "@/uni_modules/zego-PrebuiltCall"
 
-const appID = ref(keyCenter.getAppID());
-const appSign = ref(keyCenter.getAppSign());
-const userID = ref(keyCenter.getUserID());
-const userName = ref(keyCenter.getUserID() + '_Nick');
-const callID = ref(keyCenter.getCallID());
+const appID = ref('您在 zego 控制台获取的 appID');
+const appSign = ref('您在 zego 控制台获取的 appSign');
+const userID = ref('您的 userID');
+const userName = ref('您的昵称');
+const callID = ref('您要加入的通话 ID');
 
 const config: ZegoUIKitPrebuiltCallConfig = {
     ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 一对一视频通话的预设配置
