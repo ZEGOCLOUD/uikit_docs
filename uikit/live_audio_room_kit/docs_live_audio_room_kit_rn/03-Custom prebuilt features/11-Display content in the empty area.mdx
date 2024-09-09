@@ -33,11 +33,11 @@ export default function HostPage(props) {
                     ...HOST_DEFAULT_CONFIG,
                     emptyArea: () => {
                         return (
-                            <View style={[{marginLeft: 20, marginTop: 20}]}>
-                            <Text>empty area</Text>
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{fontSize: 30, color: 'blue'}}>emptyArea</Text>
                             </View>
                         )
-                    }
+                    },
                 }}
             />
         </View>
