@@ -4,7 +4,7 @@
 在默认情况下，当用户点击“结束通话”按钮时，音视频通话 UIKit 会直接结束通话。但是您也可以设置**确认对话框**来双重确认用户是否要挂断通话。
 
 <Frame width="256" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/hangup_confirm.gif" />
+  <img src="https://media-resource.spreading.io/docuo/workspace733/92cf2c578a7f03194465a905bb923c76/d76f37b751.jpeg" alt="hang-up-confirm.jpeg"/>
 </Frame>
 
 ## 实现流程
@@ -35,10 +35,10 @@ const callID = ref(keyCenter.getCallID());
 const config: ZegoUIKitPrebuiltCallConfig = {
     ...ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(), // 预设配置
     hangUpConfirmInfo: {
-        title: "提醒",
-        message: "真的要离开吗?",
-        cancelButtonName: "不是",
-        confirmButtonName: "是的"
+        title: "离开房间",
+        message: "你确定要离开房间吗?",
+        cancelButtonName: "取消",
+        confirmButtonName: "确定"
     },
     onHangUp: () => {
         // 挂断后返回上一页
@@ -86,11 +86,11 @@ const config: ZegoUIKitPrebuiltCallConfig = {
     onHangUpConfirmation: () => {
         return new Promise((resolve, reject) => {
             uni.showModal({
-                title: "警告",
-                content: "确定退出吗?",
+                title: "离开房间",
+                content: "你确定要离开房间吗?",
                 showCancel: true,
-                confirmText: "是的",
-                cancelText: "不是",
+                confirmText: "确定",
+                cancelText: "取消",
                 success: function (res) {
                     if (res.confirm) {
                         resolve(true)
