@@ -1,12 +1,17 @@
 # Display content in the empty area
 
-There is a empty area between the seat area and the bottom menu bar. Starting from version 2.8.0, you can display content in this empty area by configuring the `ZegoUIKitPrebuiltLiveAudioRoomConfig.emptyArea` to return a view.
+There is a empty area between the seat area and the bottom menu bar. You can display content in this empty area by configuring the `ZegoUIKitPrebuiltLiveAudioRoomConfig.emptyArea` to return a view.
+
+<Note title="Note">
+
+To use this feature, please upgrade the Live Audio Room Kit to 2.8.0 or later.
+</Note>
 
 <Frame width="auto" height="400">
   <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/414d0fbbe1.jpeg" alt="EmptyArea1.jpeg"/>
 </Frame>
 
-```js .src/HomePage.js {25-31}
+```js src/HostPage.js {25-31}
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import KeyCenter from './KeyCenter';

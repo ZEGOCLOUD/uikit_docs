@@ -1,6 +1,11 @@
 # Display audience co-host request list
 
-Starting from version 2.8.0, you can use the `CohostRequestList` component to display a list of audience requests to become a co-host, allowing the host to approve or reject their requests from the list. 
+You can use the `CohostRequestList` component to display a list of audience requests to become a co-host, allowing the host to approve or reject their requests from the list. 
+
+<Note title="Note">
+
+To use this feature, please upgrade the Live Audio Room Kit to 2.8.0 or later.
+</Note>
 
 You can import the `CohostRequestList` component and configure `ZegoUIKitPrebuiltLiveAudioRoomConfig.onSeatTakingRequestListChange` to trigger a refresh of the list whenever there is a change in the request information.
 
@@ -10,15 +15,16 @@ You can import the `CohostRequestList` component and configure `ZegoUIKitPrebuil
 
 ## Get the component
 
-The `CohostRequestList` component is not included in Live Audio Room Kit. You can find it on this [GitHub repository](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_rn/blob/master/example/src/CohostRequestList.tsx), copy it into the "./src" directory of your project, and if you want, adjust the display style.
+The `CohostRequestList` component is not included in Live Audio Room Kit. You can find the `CohostRequestList.tsx` on this [GitHub repository](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_rn/blob/master/example/src/CohostRequestList.tsx), copy it into the "src" directory of your project, and if you want, adjust the display style.
 
 ## Display the list in the empty area
 
 <Steps>
 <Step title="Import the component">
+Import the CohostRequestList component in the "src/HostPage.js" file.
 </Step>
-<Step title="Create a Ref const">
-Create a `cohostRequestListRef` const, which will be used to call interfaces of the CohostRequestList component.
+<Step title="Create a Ref">
+Create a `cohostRequestListRef` using useRef, which will be used to access and interact with the methods of the CohostRequestList component.
 </Step>
 <Step title="Listen to onSeatTakingRequestListChange">
 Listen to the `onSeatTakingRequestListChange` callback, so that when ZegoUIKitPrebuiltLiveAudioRoom detects the co-host request list needs to be changed, the hostpage will refresh to show the latest request information.
@@ -31,7 +37,7 @@ For information on configuring the `emptyArea`, you can refer to [Display conten
 
 Below is an example of displaying the request list in the empty area. 
 
-```js .src/HomePage.js {8,12,31-44}
+```js src/HostPage.js {8,12,31-44}
 import React, { useRef } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import KeyCenter from './KeyCenter';
