@@ -16,6 +16,8 @@
 | showDeclineButton                   | boolean                             | 收到在线来电呼叫的时候，是否显示拒绝按钮。                                                                                                                                                                                    |
 | notificationConfig                  | ZegoNotificationConfig              | 离线呼相关配置，具体请参考离线[向离线应用发送呼叫邀请](./../Implement%20offline%20call/Offline%20call.mdx)文档。                                                                                                              |
 | translationText                     | ZegoTranslationText                 | 呼叫邀请相关的文案。请参考[切换语言](./../Calling%20config/Switch%20language.mdx)。                                                                                                                                        |
+| callingConfig                       | ZegoCallInvitationInCallingConfig                                     | 通话中邀请的相关配置。  |
+| endCallWhenInitiatorLeave           | boolean                                                               | 是否因发起者离开而自动结束通话，默认为 false。       |
 
 
 ## ZegoUIKitPrebuiltCallConfig
@@ -41,9 +43,6 @@
 | avatarViewProvider          | ZegoAvatarViewProvider                                                | 可自定义用户头像。                                                                                       |
 | leaveCallListener           | LeaveCallListener                                                     | 自己离开通话的回调。                                                                                     |
 | zegoCallText                | ZegoCallText                                                          | 通话相关文案。|   
-| callingConfig                |  通话中邀请的相关配置                                                                                                                           | ZegoCallInvitationInCallingConfig                                                          |
-| endCallWhenInitiatorLeave                | 创建通话的人离开房时是否结束通话                                                                                                 | boolean                                           |                                                                                        |
-
 
 ## ZegoPrebuiltAudioVideoViewConfig
 视图配置类

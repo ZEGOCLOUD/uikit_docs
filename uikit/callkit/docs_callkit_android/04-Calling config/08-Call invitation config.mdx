@@ -6,13 +6,16 @@
 
 If you want to set the call ringtone for receiving incoming call invitations or sending outgoing call invitations, you can use the `incomingCallRingtone` and `outgoingCallRingtone` config in the `ZegoUIKitPrebuiltCallService`.
 
-Note:
-1. To set the ringtone, put the audio files in the directory `[your_project]/app/src/main/res/raw`. (If there is no raw folder in the res directory, manually create a raw folder first.)
-2. Remove the audio file suffix when you specify the file path in the code. (e.g., specify the path as "incomingCallRingtone" if the file name is incomingCallRingtone.mp3, just like the reference code below.) 
+<Note title="Note">
+- To set the ringtone, put the audio file in the directory `[your_project]/app/src/main/res/raw`.   
+     (If there is no raw folder in the res directory, create a raw folder.)
+- Remove the audio file suffix when you specify the file path in the code.
+     (E.g., specify the path as "incomingCallRingtone" if the file name is incomingCallRingtone.mp3, just like the reference code below.) 
+</Note>
 
 Here is the reference code:
 
-```java title="With call invitation"
+```java title="With call invitation" {19-20}
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 To hide the Decline button when receiving incoming call invitations, set the `showDeclineButton` to `false`.
 
-```java title="With call invitation"
+```java title="With call invitation" {16}
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -72,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-## Customizing the background of the call incoming or outgoing page
+## Customize the background of the call incoming or outgoing page
 
 To customize the background of the call incoming or outgoing page, use `outgoingCallBackground` and `incomingCallBackground` in `ZegoUIKitPrebuiltCallInvitationConfig`.
 
 
-```java title="With call invitation"
+```java title="With call invitation" {16-17}
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -101,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 
-## Modify User Interface text
+## Modify user interface text
 
-Call Kit (ZegoUIKitPrebuiltCallInvitationConfig)'s UI text provided by the internal components is editable, to modify those, use the `innerText` config.
+Call Kit (ZegoUIKitPrebuiltCallInvitationConfig)'s UI text provided by the internal components is editable, to modify those, use the `translationText` config.
 
 Here is the reference code:
 
-```java title="With call invitation"
+```java title="With call invitation" {16-17}
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -123,20 +126,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void initCallInviteService() {
       ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-      callInvitationConfig.innerText.incomingCallPageDeclineButton = "Decline";
-      callInvitationConfig.innerText.incomingCallPageAcceptButton = "Accept";
+      callInvitationConfig.translationText.incomingCallPageDeclineButton = "Decline";
+      callInvitationConfig.translationText.incomingCallPageAcceptButton = "Accept";
       ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
     }
 }
 ```
 
-## Custom Configuration for Call
+## Customize the call configuration
 
-When using the call invite feature, you can customize the configuration of `ZegoUIKitPrebuiltCallConfig` by setting up the `ZegoUIKitPrebuiltCallConfigProvider`. Here is a reference code:
+When using the call invitation feature, if the default call configuration (`ZegoUIKitPrebuiltCallInvitationConfig`) does not your needs, you can customize the configuration of `ZegoUIKitPrebuiltCallConfig` by setting up the `ZegoUIKitPrebuiltCallConfigProvider`. Here is a reference code:
 
 
 <CodeGroup>
-```java title="Call with Invitation"
+```java title="With call invitation" {18-24}
 public class MainActivity extends AppCompatActivity {
     long appID = YourAppID;
     String appSign = YourAppSign;
@@ -155,50 +158,28 @@ public class MainActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
 
         callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
-        @Override
-        public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
-              ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
-                    invitationData);
-            // Modify the config settings here according to your business needs
+            @Override
+            public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
+                        invitationData);
+                // Modify the config settings here according to your business needs
+            }
         }
     }
 }
 ```
 </CodeGroup>
 
+## Set the call automatically ends when initiator leaves
 
-## Using the Calling Invite Feature
-
-You can enable the calling invite feature by setting up the `ZegoCallInvitationInCallingConfig`. In this mode, you can invite new users to join the call during the conversation.Here is a reference code:
-
-<CodeGroup>
-```java title="Using the Calling Invite Feature"
-//....
-ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-
-callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
-// Whether to enable the calling invite feature.
-callInvitationConfig.callingConfig.canInvitingInCalling = true;
-// Whether only the person who created the call can calling invite.
-callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
-
-ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
-
-```
-</CodeGroup>
-
-## Whether to End the Call When the Initiator Leaves
-
-You can set whether to end the call when the initiator leaves by using `endCallWhenInitiatorLeave`.
+By default, a call continues after the initiator leaves. To configure the call to automatically end when the initiator exits, set the `ZegoUIKitPrebuiltCallInvitationConfig.endCallWhenInitiatorLeave` property to true.
 
 <CodeGroup>
-```java title="End the Call When the Initiator Leaves"
-//....
+```java title="With call invitation" {3}
 ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
 
 callInvitationConfig.endCallWhenInitiatorLeave = true;
 
 ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
-
 ```
 </CodeGroup>

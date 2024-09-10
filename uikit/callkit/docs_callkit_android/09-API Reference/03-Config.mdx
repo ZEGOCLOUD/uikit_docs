@@ -13,6 +13,9 @@ Call invitation configuration class
 | showDeclineButton                   | Specifies whether to display the decline button when receiving an incoming online call.                                                                                                                                                                                                                                                                        | boolean                             |
 | notificationConfig                  | Offline call related configuration.                                                                                                                                                                                                                                                                                                                            | ZegoNotificationConfig              |
 | translationText                     | Text related to call invitations.                                                                                                                                                                                                                                                                                                                              | ZegoTranslationText                 |
+| callingConfig                       | Configurations related to inviting users to an ongoing call.       | ZegoCallInvitationInCallingConfig                                                          |
+| endCallWhenInitiatorLeave           | Whether the call automatically ends when the initiator leaves. The default value is false.      | boolean                                           |
+
 ## ZegoUIKitPrebuiltCallConfig
 Call configuration class
 
@@ -36,8 +39,6 @@ Call configuration class
 | avatarViewProvider          | Customizable user avatars.                                                                                                                                          | ZegoAvatarViewProvider                                                |
 | leaveCallListener           | Callback when leaving the call.                                                                                                                                     | LeaveCallListener                                                     |
 | zegoCallText                | Text related to the call.                                                                                                                                           | ZegoCallText                                                          |
-| callingConfig                | calling invite feature configure                                                                                                                                       | ZegoCallInvitationInCallingConfig                                                          |
-| endCallWhenInitiatorLeave                | Whether to End the Call When the Initiator Leaves                                                                                                                                        | boolean                                           |
 
 ## ZegoPrebuiltAudioVideoViewConfig
 View configuration class

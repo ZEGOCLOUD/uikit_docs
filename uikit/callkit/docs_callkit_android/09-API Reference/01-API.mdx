@@ -1,25 +1,5 @@
 # API
 
-
-- [ZegoUIKitPrebuiltCallFragment](#zegouikitprebuiltcallfragment)
-- [ZegoUIKitPrebuiltCallService](#zegouikitprebuiltcallservice)
-    - [init](#init)
-    - [initWithToken](#initwithtoken)
-    - [uninit](#uninit)
-    - [endCall](#endcall)
-    - [minimizeCall](#minimizecall)
-    - [getPrebuiltCallFragment](#getprebuiltcallfragment)
-    - [sendInvitationWithUIChange](#sendinvitationwithuichange)
-    - [sendInvitation](#sendInvitation)
-    - [openCamera](#opencamera)
-    - [openMicrophone](#openmicrophone)
-    - [isMicrophoneOn](#ismicrophoneon)
-    - [isCameraOn](#iscameraon)
-    - [setAudioOutputToSpeaker](#setaudiooutputtoSpeaker)
-    - [getAudioRouteType](#getaudioroutetype)
-    - [resetAllBeautiesToDefault](#resetallbeautiestodefault)
-
-
 ## ZegoUIKitPrebuiltCallFragment
 
  You can add this Fragment into any Activity of your project to integrate the functionality of a call.
@@ -150,7 +130,7 @@ public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitU
 
 ### sendInvitation
 
-//Use this method to send call invitations to other users, which can typically be used to add new users to an ongoing call.
+Use this method to send call invitations to other users, which can typically be used to add new users to an ongoing call.
 
 ```java
 public static void sendInvitation(List<ZegoUIKitUser> invitees, ZegoInvitationType invitationType,String customData, int timeout, String callID, ZegoSignalingPluginNotificationConfig notificationConfig,PluginCallbackListener callbackListener)
