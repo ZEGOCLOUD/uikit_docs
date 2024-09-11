@@ -190,31 +190,6 @@ public class MainActivity extends AppCompatActivity {
 ```
 </CodeGroup>
 
-
-## 在呼叫中邀请
-
-默认情况下，当呼叫邀请发出后，就不能再添加新的被叫用户了。如果您想实现在通话中邀请用户的功能，您可以将 `ZegoCallInvitationInCallingConfig.canInvitingInCalling` 属性配置为 `true`。
-
-此外，如果您希望允许通话中的所有用户邀请其他用户，而不仅仅是发起者，您可以将 `ZegoCallInvitationInCallingConfig.onlyInitiatorCanInvite` 属性配置为 `false`。
-
-代码参考如下：
-
-<CodeGroup>
-```java title="携带邀请的呼叫" {4-8}
-//....
-ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
-
-callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
-// 是否开启通话中邀请的功能
-callInvitationConfig.callingConfig.canInvitingInCalling = true;
-// 是否只有创建通话的人才能邀请
-callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
-
-ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
-
-```
-</CodeGroup>
-
 ## 设置因发起者离开而自动结束通话
 
 默认情况下，通话在发起者离开后仍将继续。如需因发起者退出而自动结束通话，请将 `ZegoUIKitPrebuiltCallInvitationConfig.endCallWhenInitiatorLeave` 属性设置为 `true`。
