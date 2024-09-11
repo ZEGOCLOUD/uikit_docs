@@ -33,7 +33,7 @@ mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-pre
 </Step>
 <Step title="在 uni-app 的 pages.json 文件中添加跳转至 UIKit 的页面配置项。">
 其中 path 指向上一个步骤中从 SDK 拷贝出来的页面路径。
-```js
+```js pages.json
 {
     "path": "ZegoUIKitPrebuiltCall/src/pages/call_invitation/ZegoCallInviterPage",
     "style": {
@@ -56,18 +56,23 @@ mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-pre
 </Step>
 <Step title="初始化带有呼叫邀请功能的 Call Kit。">
 在您的首页或其他页面中，参考以下代码初始化 ZegoUIKitPrebuiltCall。
-```js YourInitPage.vue
+
+<Warning title="Warning">设置房间配置的 mode 参数为 ZegoCallScenario.CALL_INTIVATION 后才能发起呼叫和接受呼叫。</Warning>
+```js YourInitPage.vue {10,14}
 <script setup>
-import { ZegoUIKitPrebuiltCall } from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
+import { ZegoUIKitPrebuiltCall, ZegoCallScenario }  from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
 
 const appID = 0; // 您从控制台获取的 AppID
 const server = ""; // 您从控制台获取的 Server 地址
 const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
 const userName = "user1_name"; // userName 用户名
 const token = ""; // 您从服务端生成的 Token
+const config = {
+    mode: ZegoCallScenario.CALL_INTIVATION, // 设置 mode 为 ZegoCallScenario.CALL_INTIVATION 后才能发起呼叫和接受呼叫
+}; // 房间配置
 
 onMounted(() => {
-	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token);
+	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token, config);
 })
 </script>
 ```
@@ -75,7 +80,7 @@ onMounted(() => {
 <Step title="添加呼叫邀请按钮。">
 
 在您的其他页面中，参考以下代码导入 ZegoSendCallInvitationButton 组件，当点击组件后，就会发起呼叫邀请。
-```js YourPage.vue
+```js YourPage.vue {3-10,14}
 <template>
     <view class="button-container">
         <ZegoSendCallInvitationButton 

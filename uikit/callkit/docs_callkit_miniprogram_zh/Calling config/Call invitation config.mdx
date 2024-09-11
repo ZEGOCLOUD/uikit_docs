@@ -24,14 +24,13 @@
 
 - `onOutgoingCallAccepted?: (callID: string, calleeID: string) => void`：当被叫用户接受呼叫邀请时，主叫用户将通过此回调接收到通知。
 
-- `onOutgoingCallRejectedCauseBusy?: (callID: string, calleeID: string, customData?: string) => void`：当被叫用户拒绝呼叫邀请时（被呼叫者忙碌），主叫用户将通过此回调接收到通知。
+- `onOutgoingCallRejectedCauseBusy?: (callID: string, calleeID: string, customData: string) => void`：当被叫用户拒绝呼叫邀请时（被呼叫者忙碌），主叫用户将通过此回调接收到通知。
 
 - `onOutgoingCallDeclined?: (callID: string, calleeID: string) => void`：当被叫用户主动拒绝呼叫邀请时，主叫用户将通过此回调接收到通知。
 
-- `onOutgoingCallTimeout?: (callID: string, calleeID: string, customData?: string) => void`：当呼叫邀请在超时时间内未收到响应时，主叫用户将通过此回调接收到通知。
+- `onOutgoingCallTimeout?: (callID: string, calleeID: string, customData: string) => void`：当呼叫邀请在超时时间内未收到响应时，主叫用户将通过此回调接收到通知。
 
-代码参考如下：
-```js
+```js 回调设置示例代码
 <script setup>
 import { ZegoUIKitPrebuiltCall, ZegoCallScenario } from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
 
