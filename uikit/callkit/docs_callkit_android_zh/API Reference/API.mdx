@@ -129,13 +129,24 @@ public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
 ```java
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, PluginCallbackListener callbackListener);
+
+// 此方法可以额外指定 resourceID
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
+
+// 此方法可以额外指定 callID，如果你需要进入自己的业务房间号可以使用这个方法
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, String customData, String callID,
     ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
 ```
 
+### sendInvitation
+
+使用此方法向其他用户发送呼叫邀请，通常可以用于在通话中增加呼叫新用户的情况。
+
+```java
+public static void sendInvitation(List<ZegoUIKitUser> invitees, ZegoInvitationType invitationType,String customData, int timeout, String callID, ZegoSignalingPluginNotificationConfig notificationConfig,PluginCallbackListener callbackListener)
+```
 
 
 ### openCamera

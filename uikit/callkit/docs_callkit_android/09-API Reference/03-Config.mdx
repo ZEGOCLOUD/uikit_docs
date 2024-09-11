@@ -1,5 +1,8 @@
 # Config
 
+- - -
+
+
 ## ZegoUIKitPrebuiltCallInvitationConfig
 Call invitation configuration class
 
@@ -13,6 +16,9 @@ Call invitation configuration class
 | showDeclineButton                   | Specifies whether to display the decline button when receiving an incoming online call.                                                                                                                                                                                                                                                                        | boolean                             |
 | notificationConfig                  | Offline call related configuration.                                                                                                                                                                                                                                                                                                                            | ZegoNotificationConfig              |
 | translationText                     | Text related to call invitations.                                                                                                                                                                                                                                                                                                                              | ZegoTranslationText                 |
+| callingConfig                       | Configurations related to inviting users to an ongoing call.       | [ZegoCallInvitationInCallingConfig](#zegocallinvitationincallingconfig)                                                          |
+| endCallWhenInitiatorLeave           | Whether the call automatically ends when the initiator leaves. The default value is false.      | boolean                                           |
+
 ## ZegoUIKitPrebuiltCallConfig
 Call configuration class
 
@@ -124,3 +130,13 @@ Menu bar button configuration class
 | screenSharingToggleButtonOnImage  | Icon for the screen sharing toggle button when it is turned on.  | Drawable |
 | screenSharingToggleButtonOffImage | Icon for the screen sharing toggle button when it is turned off. | Drawable |
 | beautyButtonImage                 | Icon for the face beautification button.                         | Drawable |
+
+
+## ZegoCallInvitationInCallingConfig
+
+Configurations related to inviting users to an ongoing call
+
+| Property                   | Description                   | type                                  |
+| ---------------------- | ---------------------- | ------------------------------------- |
+| canInvitingInCalling   |     Whether to allow inviting users to an ongoing call. The default value is false.         | boolean  |
+| onlyInitiatorCanInvite | Only the person who initiated the call can invite others. The default value is false. | boolean  |

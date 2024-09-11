@@ -1,0 +1,72 @@
+# Invite users to an ongoing call
+
+By default, participants can only be set when the initiator sends the call invitation. However, Call Kit also supports you to invite users to an ongoing call.
+
+<Steps>
+<Step title="Enable the feature">
+If you want to enable the feature to invite users to an ongoing call, you can configure the `ZegoCallInvitationInCallingConfig.canInvitingInCalling` property to `true`. 
+
+Additionally, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `ZegoCallInvitationInCallingConfig.onlyInitiatorCanInvite` property to `false`. 
+</Step>
+<Step title="Add a button">
+You need to add a new button on the call page for call participants to send invitations to external users. The button should call the [sendInvitation](./../09-API%20Reference/01-API.mdx#sendinvitation) method.
+
+Because the default call configuration (`ZegoUIKitPrebuiltCallInvitationConfig`) does not support you to change the bottom menu bar, you should add the button by setting up the `ZegoUIKitPrebuiltCallConfigProvider` property. For more information, please see [Call invitation config - Customize the call configuration](./Call%20invitation%20config.md#customize-the-call-configuration)
+</Step>
+</Steps>
+
+<CodeGroup>
+```java title="With call invitation" {17-21,23-45}
+public class MainActivity extends AppCompatActivity {
+    long appID = YourAppID;
+    String appSign = YourAppSign;
+    String userID = "userID";
+    String userName = "userName";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCallInviteService();
+    }
+
+    public void initCallInviteService() {
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+
+        callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
+        // Whether to enable the feature of inviting users to an ongoing call
+        callInvitationConfig.callingConfig.canInvitingInCalling = true;
+        // Whether only the person who created the call can invite users to the ongoing call.
+        callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
+
+        callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
+            @Override
+            public ZegoUIKitPrebuiltCallConfig requireConfig(ZegoCallInvitationData invitationData) {
+                ZegoUIKitPrebuiltCallConfig config = ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
+                        invitationData);
+
+                Button button = new Button(context);
+                button.setOnClickListener(v -> {
+                    // The callee's user ID and name are both 1.
+                    List<ZegoUIKitUser> uiKitUsers = Collections.singletonList(new ZegoUIKitUser("1", "1"));
+                    // Invite the callee to a video call
+                    ZegoUIKitPrebuiltCallService.sendInvitation(uiKitUsers, ZegoInvitationType.VIDEO_CALL, "", 60, null, null,
+                        new PluginCallbackListener() {
+                            @Override
+                            public void callback(Map<String, Object> result) {
+                                Log.d(TAG, "callback() called with: result = [" + result + "]");
+                            }
+                        });
+                });
+
+                config.bottomMenuBarConfig.extendButtons.add(button);
+            }
+        }
+
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appID, appSign, userID, userName,callInvitationConfig);
+    }
+}
+```
+</CodeGroup>
+
+When the above steps are completed, Call Kit will display an invitation button on the call page.
