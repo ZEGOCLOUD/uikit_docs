@@ -1,0 +1,98 @@
+# Display audience co-host request list
+
+You can use the `CohostRequestList` component to display a list of audience requests to become a co-host, allowing the host to approve or reject their requests from the list. 
+
+<Note title="Note">
+
+To use this feature, please upgrade the Live Audio Room Kit to 2.8.0 or later.
+</Note>
+
+You can import the `CohostRequestList` component and configure `ZegoUIKitPrebuiltLiveAudioRoomConfig.onSeatTakingRequestListChange` to trigger a refresh of the list whenever there is a change in the request information.
+
+<Frame width="auto" height="400">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8d7409b485.jpeg" alt="cohostlist.jpeg"/>
+</Frame>
+
+## Get the component
+
+The `CohostRequestList` component is not included in Live Audio Room Kit. You can find the `CohostRequestList.tsx` on this [GitHub repository](https://github.com/ZEGOCLOUD/zego_uikit_prebuilt_live_audio_room_rn/blob/master/example/src/CohostRequestList.tsx), copy it into the "src" directory of your project, and if you want, adjust the display style.
+
+## Display the list in the empty area
+
+<Steps>
+<Step title="Import the component">
+Import the CohostRequestList component in the "src/HostPage.js" file.
+</Step>
+<Step title="Create a Ref">
+Create a `cohostRequestListRef` using useRef, which will be used to access and interact with the methods of the CohostRequestList component.
+</Step>
+<Step title="Listen to onSeatTakingRequestListChange">
+Listen to the `onSeatTakingRequestListChange` callback, so that when ZegoUIKitPrebuiltLiveAudioRoom detects the co-host request list needs to be changed, the hostpage will refresh to show the latest request information.
+</Step>
+<Step title="Configure the emptyArea">
+Return the CohostRequestList component in `emptyArea`, and implement the `acceptSeatTakingRequest` and `rejectSeatTakingRequest` callbacks. These two callbacks will be called when the host clicks on "Agree" or "Disgree" in the list.   
+For information on configuring the `emptyArea`, you can refer to [Display content in the empty area](./11-Display%20content%20in%20the%20empty%20area.mdx).
+</Step>
+</Steps>
+
+Below is an example of displaying the request list in the empty area. 
+
+```js src/HostPage.js {8,12,31-44}
+import React, { useRef } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import KeyCenter from './KeyCenter';
+import ZegoUIKitPrebuiltLiveAudioRoom, {
+  HOST_DEFAULT_CONFIG,
+} from '@zegocloud/zego-uikit-prebuilt-live-audio-room-rn';
+
+import CohostRequestList from './CohostRequestList';
+
+export default function HostPage(props) {
+    const prebuiltRef = useRef();
+    const cohostRequestListRef = useRef();
+
+    const {route} = props;
+    const {params} = route;
+    const {userID, userName, roomID} = params;
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveAudioRoom
+                ref={prebuiltRef}
+                appID={KeyCenter.appID}
+                appSign={KeyCenter.appSign}
+                userID={userID}
+                userName={userName}
+                roomID={roomID}
+                
+                // Modify your custom configurations here.
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    onSeatTakingRequestListChange: (requestInfoList) => {
+                        cohostRequestListRef.current.onSeatTakingRequestListChange(requestInfoList)
+                    },
+                    emptyArea: () => {
+                        return <CohostRequestList
+                            ref={cohostRequestListRef}
+                            acceptSeatTakingRequest={ (userID) => {
+                                prebuiltRef.current.acceptSeatTakingRequest(userID)
+                            }}
+                            rejectSeatTakingRequest={ (userID) => {
+                                prebuiltRef.current.rejectSeatTakingRequest(userID)
+                            }}
+                        />
+                    }
+                }}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 1,
+    zIndex: 0,
+  }
+});
+```
