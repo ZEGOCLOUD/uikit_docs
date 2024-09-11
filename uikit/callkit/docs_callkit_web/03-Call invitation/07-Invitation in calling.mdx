@@ -23,7 +23,6 @@ interface CallingInvitationListConfig {
 // for example
 zp.setCallInvitationConfig({
     canInvitingInCalling: true,
-    endCallWhenInitiatorLeave: true,
     onlyInitiatorCanInvite: true,
     onSetRoomConfigBeforeJoining() {
         return {
@@ -47,5 +46,4 @@ zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
 | :------------------------ | :-------| :----- | :----- | :----------------- |
 | canInvitingInCalling      | boolean | No     | false   | Whether to allow invitations to be sent during a call. |
 | onlyInitiatorCanInvite    | boolean | No     | false   | Whether only the call initiator has the permission to invite others to join the call. If it is set to false, all participants in the call can invite others. |
-| endCallWhenInitiatorLeave | boolean | No     | false   | Whether the whole call should end when the call originator leaves the call (causing other participants to leave together). If it is set to false, the call can continue even if the initiator leaves. |
 | showWaitingCallAcceptAudioVideoView | boolean | No     | true   | When a user is invited during a call, the Invite User window appears on the inviting party. If you want to hide this view, set it to false. You can cancel the invitation to this user in this view. |

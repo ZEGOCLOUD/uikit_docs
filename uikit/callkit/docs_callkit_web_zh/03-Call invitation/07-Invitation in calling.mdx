@@ -23,7 +23,6 @@ interface CallingInvitationListConfig {
 // for example
 zp.setCallInvitationConfig({
     canInvitingInCalling: true,
-    endCallWhenInitiatorLeave: true,
     onlyInitiatorCanInvite: true,
     onSetRoomConfigBeforeJoining() {
         return {
@@ -47,5 +46,4 @@ zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
 | :---------------------------------- | :-------| :----- | :----- | :----------------- |
 | canInvitingInCalling                | boolean | 否     | false   | 是否允许在通话中发送邀请。 |
 | onlyInitiatorCanInvite              | boolean | 否     | false   | 是否只有呼叫发起者有权限邀请其他人加入通话。如果为false，则通话中的所有参与者都可以邀请其他人。 |
-| endCallWhenInitiatorLeave           | boolean | 否     | false   | 当呼叫发起者离开通话时，整个通话是否应该结束（导致其他参与者一起离开）。如果为false，则即使发起者离开，通话仍然可以继续。 |
 | showWaitingCallAcceptAudioVideoView | boolean | 否     | true   | 通话中邀请用户时，邀请用户窗口将出现在邀请方，如果您想隐藏此视图，请将其设置为false。 您可以在此视图中取消对此用户的邀请。 |

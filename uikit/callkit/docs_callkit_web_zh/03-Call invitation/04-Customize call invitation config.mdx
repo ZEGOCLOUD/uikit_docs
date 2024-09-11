@@ -86,3 +86,18 @@ export enum CallInvitationEndReason {
     LeaveRoom = "LeaveRoom",
 }
 ```
+
+## 设置因发起者离开而自动结束通话
+
+默认情况下，通话在发起者离开后仍将继续。如需因发起者退出而自动结束通话，请将 CallInvitationConfig.endCallWhenInitiatorLeave 属性设置为 true。
+
+<Note title="提示">
+仅 v2.9.0 及以上版本支持。
+</Note>
+
+
+```javascript
+zp.setCallInvitationConfig({
+    endCallWhenInitiatorLeave: true
+})
+```

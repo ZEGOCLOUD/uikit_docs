@@ -90,3 +90,17 @@ export enum CallInvitationEndReason {
   LeaveRoom = "LeaveRoom",
 }
 ```
+
+## Set the call automatically ends when initiator leaves
+
+By default, a call continues after the initiator leaves. To configure the call to automatically end when the initiator exits, set the CallInvitationConfig.endCallWhenInitiatorLeave property to true.
+
+<Note title="Note">
+Supported only by v2.9.0 or later.
+</Note>
+
+```javascript
+zp.setCallInvitationConfig({
+    endCallWhenInitiatorLeave: true
+})
+```
