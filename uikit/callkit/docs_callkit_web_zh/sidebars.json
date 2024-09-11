@@ -138,8 +138,8 @@
         },
         {
           "type": "doc",
-          "label": "通话中发送呼叫邀请",
-          "id": "call-invitation/invitation-in-calling"
+          "label": "通话中邀请",
+          "id": "call-invitation/invite-users-to-an-ongoing-call"
         }
       ]
     }
