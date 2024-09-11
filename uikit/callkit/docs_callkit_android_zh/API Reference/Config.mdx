@@ -16,7 +16,7 @@
 | showDeclineButton                   | boolean                             | 收到在线来电呼叫的时候，是否显示拒绝按钮。                                                                                                                                                                                    |
 | notificationConfig                  | ZegoNotificationConfig              | 离线呼相关配置，具体请参考离线[向离线应用发送呼叫邀请](./../Implement%20offline%20call/Offline%20call.mdx)文档。                                                                                                              |
 | translationText                     | ZegoTranslationText                 | 呼叫邀请相关的文案。请参考[切换语言](./../Calling%20config/Switch%20language.mdx)。                                                                                                                                        |
-| callingConfig                       | ZegoCallInvitationInCallingConfig                                     | 通话中邀请的相关配置。  |
+| callingConfig                       | [ZegoCallInvitationInCallingConfig](#ZegoCallInvitationInCallingConfig)   | 通话中邀请的相关配置。  |
 | endCallWhenInitiatorLeave           | boolean                                                               | 是否因发起者离开而自动结束通话，默认为 false。       |
 
 
@@ -137,3 +137,12 @@
 | screenSharingToggleButtonOnImage  | Drawable | 屏幕共享切换按钮开启状态的图标。 |
 | screenSharingToggleButtonOffImage | Drawable | 屏幕共享切换按钮关闭状态的图标。 |
 | beautyButtonImage                 | Drawable | 美颜按钮的图标。                 |
+
+## ZegoCallInvitationInCallingConfig
+通话中邀请的相关配置
+
+| 属性                   | 类型                   | 描述                                  |
+| ---------------------- | ---------------------- | ------------------------------------- |
+| canInvitingInCalling              | boolean                | 是否开启呼叫中邀请模式 |
+| onlyInitiatorCanInvite | boolean | 只有创建通话的人才能邀请别人加入  |
+
