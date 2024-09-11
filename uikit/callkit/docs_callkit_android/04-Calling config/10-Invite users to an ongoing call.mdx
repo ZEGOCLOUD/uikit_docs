@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
 
         callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
-        // Whether to enable the calling invite feature.
+        // Whether to enable the feature of inviting users to an ongoing call
         callInvitationConfig.callingConfig.canInvitingInCalling = true;
-        // Whether only the person who created the call can calling invite.
+        // Whether only the person who created the call can invite users to the ongoing call.
         callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
 
         callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {

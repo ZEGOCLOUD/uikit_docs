@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
 
         callInvitationConfig.callingConfig = new ZegoCallInvitationInCallingConfig();
-        // Whether to enable the calling invite feature.
+        // 是否启用呼叫中邀请功能。        
         callInvitationConfig.callingConfig.canInvitingInCalling = true;
-        // Whether only the person who created the call can calling invite.
+        // 是否仅有呼叫发起用户可以在呼叫中邀请其他用户。
         callInvitationConfig.callingConfig.onlyInitiatorCanInvite = false;
 
         callInvitationConfig.provider = new ZegoUIKitPrebuiltCallConfigProvider() {
@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Button button = new Button(context);
                 button.setOnClickListener(v -> {
-                    // The callee's user ID and name are both 1.
+                    // 被邀请用户的 ID 和名称均为 1
                     List<ZegoUIKitUser> uiKitUsers = Collections.singletonList(new ZegoUIKitUser("1", "1"));
-                    // Invite the callee to a video call
+                    // 邀请用户加入一个视频通话。
                     ZegoUIKitPrebuiltCallService.sendInvitation(uiKitUsers, ZegoInvitationType.VIDEO_CALL, "", 60, null, null,
                         new PluginCallbackListener() {
                             @Override
