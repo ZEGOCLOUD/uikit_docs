@@ -78,6 +78,11 @@
           "type": "doc",
           "label": "计算通话时长",
           "id": "calling-config/calculate-call-duration"
+        },
+        {
+          "type": "doc",
+          "label": "呼叫中邀请",
+          "id": "calling-config/invite-users-to-an-ongoing-call"
         }
       ]
     },

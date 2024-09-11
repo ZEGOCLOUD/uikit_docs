@@ -1,24 +1,5 @@
 # API
 
-
-- [ZegoUIKitPrebuiltCallFragment](#zegouikitprebuiltcallfragment)
-- [ZegoUIKitPrebuiltCallService](#zegouikitprebuiltcallservice)
-    - [init](#init)
-    - [initWithToken](#initwithtoken)
-    - [uninit](#uninit)
-    - [endCall](#endcall)
-    - [minimizeCall](#minimizecall)
-    - [getPrebuiltCallFragment](#getprebuiltcallfragment)
-    - [sendInvitationWithUIChange](#sendinvitationwithuichange)
-    - [openCamera](#opencamera)
-    - [openMicrophone](#openmicrophone)
-    - [isMicrophoneOn](#ismicrophoneon)
-    - [isCameraOn](#iscameraon)
-    - [setAudioOutputToSpeaker](#setaudiooutputtoSpeaker)
-    - [getAudioRouteType](#getaudioroutetype)
-    - [resetAllBeautiesToDefault](#resetallbeautiestodefault)
-
-
 ## ZegoUIKitPrebuiltCallFragment
 
  You can add this Fragment into any Activity of your project to integrate the functionality of a call.
@@ -133,18 +114,27 @@ public static ZegoUIKitPrebuiltCallFragment getPrebuiltCallFragment();
   Use this method to sendInvitation to other users and navigate to call waiting page.
 
 
-
 ```java  title="function prototype"
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, PluginCallbackListener callbackListener);
 
+// This method allows you to additionally specify a resourceID.
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, String resourceID, PluginCallbackListener callbackListener) ;
 
+// This method allows you to additionally specify a callID. If you need to enter your own business room number, you can use this method.
 public static void sendInvitationWithUIChange(Activity activity, List<ZegoUIKitUser> invitees,
     ZegoInvitationType type, String customData, String callID,
     ZegoSignalingPluginNotificationConfig notificationConfig, PluginCallbackListener callbackListener) 
  ```
+
+### sendInvitation
+
+Use this method to send call invitations to other users, which can typically be used to add new users to an ongoing call.
+
+```java
+public static void sendInvitation(List<ZegoUIKitUser> invitees, ZegoInvitationType invitationType,String customData, int timeout, String callID, ZegoSignalingPluginNotificationConfig notificationConfig,PluginCallbackListener callbackListener)
+```
 
 
 ### openCamera
