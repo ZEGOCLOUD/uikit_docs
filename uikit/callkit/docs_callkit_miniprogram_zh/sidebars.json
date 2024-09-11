@@ -9,6 +9,11 @@
       "type": "doc",
       "label": "快速开始",
       "id": "quick-start"
+    },
+    {
+      "type": "doc",
+      "label": "快速开始（包含呼叫邀请）",
+      "id": "quick-start-(with-call-invitation)"
     }
   ]
 }

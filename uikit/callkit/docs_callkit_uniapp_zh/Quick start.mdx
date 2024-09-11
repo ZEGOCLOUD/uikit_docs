@@ -15,14 +15,14 @@ import EnviromentRequiremenZh from "/snippets/uikit/UniEnviromentRequiremenZh.md
 
 <UIKitCreateAccountAndServicesZh />
 
-## 引入 SDK
+## 集成 SDK
 
 <Steps>
 <Step title="创建项目">
 若您已有 uni-app 项目，则跳过此步骤。若尚无 uni-app 项目，请参考 uni-app 开发者文档 [创建 uni-app](https://uniapp.dcloud.net.cn/quickstart-hx.html) 快速创建项目。
 </Step>
 
-<Step title="引入实时音视频">
+<Step title="导入 ZEGO 即构实时音视频 SDK">
 在插件市场购买 [ZEGO 即构实时音视频 SDK](https://ext.dcloud.net.cn/plugin?id=3617)。购买时填入的 AppID 必须和后面需要运行的 AppID 一致。
 
 <Frame width="100%">
@@ -62,23 +62,23 @@ uni-app 官方自定义调试基座使用说明请参考 [什么是自定义调�
 
 </Step>
 
-<Step title="引入 ZEGOUIKitPrebuiltCall">
+<Step title="导入 ZEGOUIKitPrebuiltCall">
 在插件市场下载 [ZEGOUIKitPrebuiltCall](https://ext.dcloud.net.cn/plugin?id=19688) 插件并导入 HBuilderX。
 
 <Frame width="100%">
     <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8fbac5726a.png" alt="download_and_import.png"/>
 </Frame>
 
-由于 zego-PrebuiltCall 中包含了 zego-UIKitCore 和 zego-ExpressUniAppzego-ExpressUniApp-JSs，因此，导入完成后，您的 uni_modules 会包含以下插件。
+由于 zego-PrebuiltCall 中包含了 zego-UIKitCore 和 zego-ExpressUniAppzego-ExpressUniApp-JS，因此，导入完成后，您的 uni_modules 会包含以下插件。
 
 <Frame height="120px">
     <img src="https://media-resource.spreading.io/docuo/workspace733/92cf2c578a7f03194465a905bb923c76/9276069cc7.png" alt="screenshot-20240909-101238.png"/>
 </Frame>
 </Step>
 
-<Step title="在业务页面中引入插件">
+<Step title="在业务页面中导入插件">
 
-在 Vue 的 script 中使用引入 ZegoUIKitPrebuiltCall 组件与 ZegoUIKitPrebuiltCallConfig 预设配置，生成一份一对一视频通话的预设配置，在 template 中使用 ZegoUIKitPrebuiltCall 组件，并将配置传入组件。
+在 Vue 的 script 中使用导入 ZegoUIKitPrebuiltCall 组件与 ZegoUIKitPrebuiltCallConfig 预设配置，生成一份一对一视频通话的预设配置，在 template 中使用 ZegoUIKitPrebuiltCall 组件，并将配置传入组件。
 
 <Note title="说明">
 
