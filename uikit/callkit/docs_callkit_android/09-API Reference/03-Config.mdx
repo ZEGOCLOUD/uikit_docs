@@ -1,5 +1,8 @@
 # Config
 
+- - -
+
+
 ## ZegoUIKitPrebuiltCallInvitationConfig
 Call invitation configuration class
 
@@ -13,7 +16,7 @@ Call invitation configuration class
 | showDeclineButton                   | Specifies whether to display the decline button when receiving an incoming online call.                                                                                                                                                                                                                                                                        | boolean                             |
 | notificationConfig                  | Offline call related configuration.                                                                                                                                                                                                                                                                                                                            | ZegoNotificationConfig              |
 | translationText                     | Text related to call invitations.                                                                                                                                                                                                                                                                                                                              | ZegoTranslationText                 |
-| callingConfig                       | Configurations related to inviting users to an ongoing call.       | [ZegoCallInvitationInCallingConfig](#ZegoCallInvitationInCallingConfig)                                                          |
+| callingConfig                       | Configurations related to inviting users to an ongoing call.       | [ZegoCallInvitationInCallingConfig](#zegocallinvitationincallingconfig)                                                          |
 | endCallWhenInitiatorLeave           | Whether the call automatically ends when the initiator leaves. The default value is false.      | boolean                                           |
 
 ## ZegoUIKitPrebuiltCallConfig
@@ -135,5 +138,5 @@ Configurations related to inviting users to an ongoing call
 
 | Property                   | Description                   | type                                  |
 | ---------------------- | ---------------------- | ------------------------------------- |
-| canInvitingInCalling   |     Whether to enable inviting users to an ongoing call          | boolean  |
-| onlyInitiatorCanInvite | Only the person who initiated the call can invite others to join | boolean  |
+| canInvitingInCalling   |     Whether to allow inviting users to an ongoing call. The default value is false.         | boolean  |
+| onlyInitiatorCanInvite | Only the person who initiated the call can invite others. The default value is false. | boolean  |
