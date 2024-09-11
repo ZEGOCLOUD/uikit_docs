@@ -6,20 +6,24 @@ By default, participants can only be set when the initiator sends the call invit
 To use this feature, please upgrade Call Kit to v2.9.0 or later.
 </Note>
 
-## Enable call invitation during a call
+## Enable the feature
 
 If you want to enable the feature to invite users to an ongoing call, you can configure the `canInvitingInCalling` property to true.
 
 After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `onlyInitiatorCanInvite` property to false.
 
-```typescript {7-8,11}
+```typescript {7-12,15}
 interface CallingInvitationListConfig {
     waitingSelectUsers: ZegoUser[]; // Waiting for selected members
     defaultChecked?: boolean; // Whether the users are selected by default, the default value is true
 }
 
 zp.setCallInvitationConfig({
+    // Whether to enable the feature of inviting users to an ongoing call. 
+    // The default value is false
     canInvitingInCalling: true,
+    // Whether only the person who created the call can invite users to the ongoing call.
+    // The default value is false
     onlyInitiatorCanInvite: true,
     onSetRoomConfigBeforeJoining() {
         return {
