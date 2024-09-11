@@ -54,14 +54,16 @@ mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-pre
     </view>
 </template>
 <script setup>
-import ZegoUIKitPrebuiltCall from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
+import { ZegoUIKitPrebuiltCall, ZegoCallScenario } from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
 
 const appID = 0; // 您从控制台获取的 AppID
 const server = ""; // 您从控制台获取的 Server 地址
 const token = ""; // 您从服务端生成的 Token
 const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
 const userName = "user1_name"; // userName 用户名
-const config = {}; // 房间配置
+const config = {
+    mode: ZegoCallScenario.CALL_INTIVATION,
+}; // 房间配置
 
 onMounted(() => {
 	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token, config);

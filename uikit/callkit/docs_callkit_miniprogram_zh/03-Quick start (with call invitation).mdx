@@ -65,10 +65,9 @@ const server = ""; // 您从控制台获取的 Server 地址
 const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
 const userName = "user1_name"; // userName 用户名
 const token = ""; // 您从服务端生成的 Token
-const config = {}; // 房间配置
 
 onMounted(() => {
-	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token, config, events);
+	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token);
 })
 </script>
 ```
