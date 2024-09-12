@@ -12,12 +12,7 @@ If you want to enable the feature to invite users to an ongoing call, you can co
 
 After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `onlyInitiatorCanInvite` property to false.
 
-```typescript {7-12,15}
-interface CallingInvitationListConfig {
-    waitingSelectUsers: ZegoUser[]; // Waiting for selected members
-    defaultChecked?: boolean; // Whether the users are selected by default, the default value is true
-}
-
+```typescript {2-7}
 zp.setCallInvitationConfig({
     // Whether to enable the feature of inviting users to an ongoing call. 
     // The default value is false
@@ -25,8 +20,28 @@ zp.setCallInvitationConfig({
     // Whether only the person who created the call can invite users to the ongoing call.
     // The default value is false
     onlyInitiatorCanInvite: true,
+})
+```
+
+## Define users to invite
+
+During the call, when you invite others, you need to customize the invitation list first, and then you can invite other users from the room's invitation list.
+
+Before joining the room, you can define the list of users to be invited by calling `callingInvitationListConfig.waitingSelectUsers`.
+
+After joining the room, you can also update the invitation list by calling the `updateCallingInvitationListConfig` interface.
+
+
+```typescript {9-15}
+interface CallingInvitationListConfig {
+    waitingSelectUsers: ZegoUser[]; // user members waiting to be invited
+    defaultChecked?: boolean; // Whether to select the members to be invited by default. The default value is true
+}
+// before join room
+zp.setCallInvitationConfig({
     onSetRoomConfigBeforeJoining() {
         return {
+            // Whether to display the invite view
             showWaitingCallAcceptAudioVideoView: true,
             // Define invitation list
             callingInvitationListConfig: {
@@ -37,8 +52,11 @@ zp.setCallInvitationConfig({
     }
 })
 
-// Call updateCallingInvitationListConfig update invitation list
-zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
+// after join room
+zp.updateCallingInvitationListConfig({
+    waitingSelectUsers: [{userID:'456',userName:'U_456'}],
+    defaultChecked: true,
+})
 ```
 
 ## Parameter description

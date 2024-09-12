@@ -12,12 +12,7 @@
 
 当通话中邀请功能启用后，如果您希望允许通话中的所有用户邀请其他用户，而不仅仅是发起者，您可以将 `onlyInitiatorCanInvite` 属性配置为 false。
 
-```typescript {7-12,15}
-interface CallingInvitationListConfig {
-    waitingSelectUsers: ZegoUser[]; // 等待选择的成员列表
-    defaultChecked?: boolean; // 是否默认选中， 默认 true
-}
-
+```typescript {2-7}
 zp.setCallInvitationConfig({
     // 是否启用通话中邀请功能。
     // 默认为 false        
@@ -25,8 +20,25 @@ zp.setCallInvitationConfig({
     // 是否仅有呼叫发起用户可以在呼叫中邀请其他用户。
     // 默认为 false        
     onlyInitiatorCanInvite: true,
+})
+```
+
+## 定义需要邀请的用户列表
+
+在开启通话中邀请功能后，您需要自定义邀请列表，之后才可以在房间的邀请列表中邀请其他用户。
+在加入房间之前，您可以通过callingInvitationListConfig.waitingSelectUsers定义需要邀请的用户列表。
+在加入房间之后，您也可以通过调用updateCallingInvitationListConfig接口更新邀请列表。
+
+```typescript {9-15}
+interface CallingInvitationListConfig {
+    waitingSelectUsers: ZegoUser[]; // 等待邀请的成员列表
+    defaultChecked?: boolean; // 是否默认勾选待邀请的成员， 默认 true
+}
+// before join room
+zp.setCallInvitationConfig({
     onSetRoomConfigBeforeJoining() {
         return {
+            // 是否显示邀请视图
             showWaitingCallAcceptAudioVideoView: true,
             // 定义邀请列表
             callingInvitationListConfig: {
@@ -37,8 +49,11 @@ zp.setCallInvitationConfig({
     }
 })
 
-// 调用 updateCallingInvitationListConfig 更新邀请列表
-zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
+// after join room
+zp.updateCallingInvitationListConfig({
+    waitingSelectUsers: [{userID:'456',userName:'U_456'}],
+    defaultChecked: true,
+})
 ```
 
 ## 参数说明
@@ -48,3 +63,5 @@ zp.updateCallingInvitationListConfig(config: CallingInvitationListConfig)
 | canInvitingInCalling                | boolean | 否     | false   | 是否允许在通话中发送邀请。 |
 | onlyInitiatorCanInvite              | boolean | 否     | false   | 是否只有呼叫发起者有权限邀请其他人加入通话。如果为false，则通话中的所有参与者都可以邀请其他人。 |
 | showWaitingCallAcceptAudioVideoView | boolean | 否     | true   | 通话中邀请用户时，邀请用户窗口将出现在邀请方，如果您想隐藏此视图，请将其设置为false。 您可以在此视图中取消对此用户的邀请。 |
+
+
