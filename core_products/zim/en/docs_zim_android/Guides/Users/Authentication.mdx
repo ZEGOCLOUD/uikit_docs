@@ -1,0 +1,391 @@
+---
+articleID: 14733
+---
+
+{/* 区分不同平台返回对应的链接 */}
+export const getPlatformData = (props, data) => {
+  const platform = props.platform ?? "Android";
+  return platform in data ? data[platform] : data["Android"]
+}
+
+export const onTokenWillExpireMap = {
+  'Android': <a href="@onTokenWillExpire" target="_blank">onTokenWillExpire</a>,
+  'iOS': <a href="https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-token-will-expire" target="_blank">tokenWillExpire</a>,
+  'MacOS': <a href="https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-token-will-expire" target="_blank">tokenWillExpire</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onTokenWillExpire.html" target="_blank">onTokenWillExpire</a>
+}
+
+export const renewTokenMap = {
+  'Android': <a href="@renewToken" target="_blank">renewToken</a>,
+  'iOS': <a href="@renewToken" target="_blank">renewToken</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/renewToken.html" target="_blank">onTokenWillExpire</a>
+}
+
+# Authentication
+- - -
+
+## Overview
+
+> To avoid unauthorized service access or operations, ZEGOCLOUD uses digital Tokens to control and validate users' login privileges.
+
+
+
+## The validation process
+
+
+Before you log in to a room, your app clients request Tokens from your app server and provide the Token for privilege validation when logging in to a room.
+
+The following diagram shows the process of room login privilege validation:
+
+![/Pics/ZIMChatRoom/en/tokenvalidation_EN.png](http://doc.oa.zego.im/Pics/ZIMChatRoom/en/tokenvalidation_EN.png)
+
+
+
+## Generate a Token
+
+<Warning title="Warning">
+
+For business security, you must generate Tokens on your app server.
+</Warning>
+
+
+1. Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+    - Create a project, get the AppID and AppSign.
+    - Subscribe to the In-app Chat service.
+
+2. Use the `token generator` plug-in provided by ZEGOCLOUD to generate Tokens on your app server.
+
+
+Take Go language as an example, you can do the following steps to generate a Token：
+
+1. go get github.com/ZEGOCLOUD/zego_server_assistant
+2. import "github.com/ZEGOCLOUD/zego_server_assistant/token/go/src/token04"
+3. Call the `GenerateToken04` method to generate a Token.
+
+The following code shows how to generate a user identity Token:
+
+<table>
+  <tbody><tr>
+    <th rowspan="2">Language</th>
+    <th rowspan="2">Supported version</th>
+    <th rowspan="2">Core function</th>
+    <th rowspan="2">Code base</th>
+    <th colspan="2">Sample code</th>
+  </tr>
+  <tr>
+    <th>User identity Token</th>
+    <th>User privilege Token</th>
+  </tr>
+  <tr>
+    <td>Go</td>
+    <td>Go 1.14.15 or later</td>
+    <td>GenerateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample.go">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>C++</td>
+    <td>C++ 11&nbsp; or later</td>
+    <td>GenerateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B">GitHub</a></li></ul></td>
+    <td colspan="2"><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/c%2B%2B/sample/demo/main.cc">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>Java</td>
+    <td>Java 1.8&nbsp; or later</td>
+    <td>generateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleBase.java">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/java/token04/src/im/zego/serverassistant/sample/Token04SampleForRtcRoom.java">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>Python</td>
+    <td>Python 3.6.8&nbsp; or later</td>
+    <td>generate_token04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/base_sample.py">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/python/token04/test/rtcroom_sample.py">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>PHP</td>
+    <td>PHP 7.0&nbsp; or later</td>
+    <td>generateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/test.php">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/php/token04/test/testForRtcRoom.php">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>.NET</td>
+    <td>.NET Framework 3.5&nbsp; or later</td>
+    <td>GenerateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net">GitHub</a></li></ul></td>
+    <td colspan="2"><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/.net/demo/WindowsFormsApp1/Form1.cs">GitHub</a></li></ul></td>
+  </tr>
+  <tr>
+    <td>Node.js</td>
+    <td>Node.js 8&nbsp; or later</td>
+    <td>generateToken04</td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-base.js">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-rtc-room.js">GitHub</a></li></ul></td>
+  </tr>
+</tbody></table>
+
+<CodeGroup>
+```go
+var appId uint32 = <Your AppId>   // type: uint32
+userId := <Your userID>  // type: string
+secret := <ServerSecret>  // type: 32 byte length string
+var effectiveTimeInSeconds int64 = <Your token effectiveTime> //type: int64; unit: s
+
+token, err := zsa.GenerateToken04(appId, userId, secret, effectiveTimeInSeconds)
+if err != nil {
+    fmt.Println(err)
+    return
+}
+fmt.Println(token)
+```
+</CodeGroup>
+
+
+
+## Use the Token 
+
+When logging in to a room, you need to pass the Token for validation. Otherwise, the login will fail.
+
+
+:::if{props.platform=undefined}
+
+<CodeGroup>
+```java
+ZIMUserInfo userInfo = new ZIMUserInfo();
+userInfo.userID = "YOUR_USER_ID";
+userInfo.userName = "YOUR_USER_NAME";
+
+String token = "xxxxxxxxxx"; // The token you get from your app server. 
+
+zim.login(userInfo, token, new ZIMLoggedInCallback() {
+    @Override
+    public void onLoggedIn(ZIMError error) {
+        // You can tell by the ZIMErrorCode whether the room login is successful.
+        ......        
+    }
+ });
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+try{
+    ZIMLoginConfig loginConfig = ZIMLoginConfig();
+    // The user's nickname, leave it blank if you don't want to modify the nickname
+    loginConfig.userName = 'userName';
+    // If using token as the authentication method, please fill in this parameter, otherwise no need to fill in
+    loginConfig.token = '';
+    // Whether this login is an offline login, please refer to the offline login documentation for details
+    loginConfig.isOfflineLogin = false;
+    await ZIM.getInstance()?.login('zego', loginConfig);
+    // Login successful, write the business logic for successful login
+} on PlatformException catch(onError){
+    // Login failed
+    // Error code for login failure, please refer to the error code table in the integration documentation for handling
+    onError.code;
+    // Error message for login failure
+    onError.message;
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
+userInfo.userID = @"YOUR_USER_ID";
+userInfo.userName = @"YOUR_USER_NAME";
+
+NSString *token = @"xxxxxxxx"; // Obtain the token from the server.
+
+[zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
+        // Check whether the login is successful based on the `ZIMErrorCode`.
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="MacOS"}
+<CodeGroup>
+```objc
+ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
+userInfo.userID = @"YOUR_USER_ID";
+userInfo.userName = @"YOUR_USER_NAME";
+
+NSString *token = @"xxxxxxxx"; // Obtain the token from the server.
+
+[zim loginWithUserInfo:userInfo token:token callback:^(ZIMError * _Nonnull errorInfo) {
+        // Check whether the login is successful based on the `ZIMErrorCode`.
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="U3D"}
+
+<CodeGroup>
+```c#
+ZIMUserInfo userInfo = new ZIMUserInfo();
+userInfo.userID = "userID";
+userInfo.userName = "userName";
+string token = "xxxxxxx"; // The Token you get from your app server. 
+zim.Login(userInfo, token, (ZIMError errorInfo) =>
+{
+    if(errorInfo.code == ZIMErrorCode.Success)
+    {
+        // Login successful.
+    }
+    else 
+    {
+        // Login failed.
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+ZIMUserInfo userInfo;
+userInfo.userID = 'YOUR_USER_ID';
+userInfo.userName = 'YOUR_USER_NAME';
+
+std::string token = 'xxxxxxxxxx'; // The Token you get from your app server. 
+
+zim->login(userInfo, token, [=](zim::ZIMError errorInfo) {
+    // You can tell by the ZIMError errorInfo whether the room login is successful.
+    ......
+});
+```
+</CodeGroup>
+:::
+
+## Renew the Token
+
+- 30 seconds before a Token expires, the SDK sends out a notification through the {getPlatformData(props,onTokenWillExpireMap)} callback.
+(If the period of validity of the Token is less than 30 seconds after a successful room login, the callback triggers immediately. )
+
+- Upon receiving this callback, you need to get a new Token from your app server first, and then pass the new Token to the {getPlatformData(props,renewTokenMap)} method.
+
+
+:::if{props.platform=undefined}
+
+<CodeGroup>
+```java
+@Override
+public void onTokenWillExpire(int second){
+    String token = getToken(); // Request a new Token from app server.
+    engine.renewToken(token, new ZIMTokenRenewedCallback {
+        @Override
+        public void onTokenRenewed(String token, ZIMError error) {
+            // You can tell by the ZIMErrorCode whether the Token is renewed successfully.
+        } 
+    });
+}
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+ZIMEventHandler.onTokenWillExpire = (zim, second) {
+    ZIM.getInstance().renewToken('new token');
+};
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+- (void)zim:(ZIM *)zim tokenWillExpire:(unsigned int)second {
+    NSString *token = [MyToken getToken]; // Obtain a new token from the server.
+    [self.zim renewToken:token callback:^(ZIMError * _Nonnull errorInfo) {
+        // Check whether the token is updated successfully based on the `ZIMErrorCode`.
+        ......
+    }];
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="MacOS"}
+<CodeGroup>
+```objc
+- (void)zim:(ZIM *)zim tokenWillExpire:(unsigned int)second {
+    NSString *token = [MyToken getToken]; // Obtain a new token from the server.
+    [self.zim renewToken:token callback:^(ZIMError * _Nonnull errorInfo) {
+        // Check whether the token is updated successfully based on the `ZIMErrorCode`.
+        ......
+    }];
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="U3D"}
+<CodeGroup>
+```c#
+// zim is the instance you created.
+zim.onTokenWillExpire = (ZIM zim, uint second) =>
+{
+    zim.RenewToken("new token", (string token, ZIMError errorInfo) => 
+    {
+        // You can tell by the ZIMErrorCode whether the Token is renewed successfully.
+    });
+};
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+void onTokenWillExpire(ZIM * zim, unsigned int second) override {
+    std::string token = getToken(); // Request a new Token from app server.
+    zim->renewToken(token, [=](const std::string &token, zim::ZIMError errorInfo) {
+        // You can tell by the ZIMError errorInfo whether the room login is successful.
+        ......
+    });
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform=undefined}
+
+## API Reference
+
+| Method | Description |
+|-------|--------|
+| [login](@login) | Log in to ZIM service. |
+| [renewToken](@renewToken) | Renew authentication token. |
+| [onTokenWillExpire](@onTokenWillExpire) | Token expiration callback. |
+
+:::
+
+
+
+
+
+
+
+
+
+
