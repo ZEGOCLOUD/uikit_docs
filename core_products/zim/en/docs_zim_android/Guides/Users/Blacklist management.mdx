@@ -1,0 +1,395 @@
+---
+articleID: 17621
+---
+
+
+export const getPlatformData = (props, data) => {
+  const platform = props.platform ?? "Android";
+  return platform in data ? data[platform] : data["Android"]
+}
+
+export const messageMap = {
+  // 错误链接
+  'Android': <a href="!Implementation_of_sending_and_receiving" target="_blank">Send and receive messages</a>,
+
+}
+export const queryBlacklistMap = {
+  
+  'Android': <a href="@queryBlacklist" target="_blank">queryBlacklist</a>,
+  'iOS': <a href="@queryBlacklistWithConfig" target="_blank">queryBlacklistWithConfig</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryBlacklist.html" target="_blank">queryBlacklist</a>
+}
+export const ZIMBlacklistQueriedCallbackMap = {
+  'Android': <a href="@-ZIMBlacklistQueriedCallback" target="_blank">ZIMBlacklistQueriedCallback</a>,
+  'iOS': <a href="@ZIMBlacklistQueriedCallback" target="_blank">ZIMBlacklistQueriedCallback</a>,
+  'windows': <a href="@ZIMBlacklistQueriedCallback" target="_blank">ZIMBlacklistQueriedCallback</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMBlacklistQueriedResult-class.html" target="_blank">ZIMBlacklistQueriedCallback</a>,
+}
+export const addUsersToBlacklistMap = {
+  'Android' : <a href="@addUsersToBlacklist" target="_blank">addUsersToBlacklist</a>,
+  'iOS' : <a href="@addUsersToBlacklistWithUserIDs" target="_blank">addUsersToBlacklistWithUserIDs</a>,
+  'Flutter' : <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/addUsersToBlacklist.html" target="_blank">addUsersToBlacklist</a>,
+}
+export const ZIMBlacklistUsersAddedCallbackMap = {
+  'Android': <a href="@-ZIMBlacklistUsersAddedCallback" target="_blank">ZIMBlacklistUsersAddedCallback</a>,
+  'iOS': <a href="@ZIMBlacklistUsersAddedCallback" target="_blank">ZIMBlacklistUsersAddedCallback</a>,
+  'windows': <a href="@ZIMBlacklistUsersAddedCallback" target="_blank">ZIMBlacklistUsersAddedCallback</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMBlacklistUsersAddedResult-class.html" target="_blank">ZIMBlacklistUsersAddedResult</a>,
+}
+export const removeUsersFromBlacklistMap = {
+  'Android': <a href='@removeUsersFromBlacklist' target='_blank'>removeUsersFromBlacklist</a>,
+  'iOS': <a href='@removeUsersFromBlacklistWithUserIDs' target='_blank'>removeUsersFromBlacklistWithUserIDs</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/removeUsersFromBlacklist.html' target='_blank'>removeUsersFromBlacklist</a>,
+}
+export const ZIMBlacklistUsersRemovedCallbackMap = {
+  'Android': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~java_android~class~ZIM#remove-users-from-blacklist' target='_blank'>ZIMBlacklistUsersRemovedCallback</a>,
+  'iOS': <a href='@ZIMBlacklistUsersRemovedCallback' target='_blank'>ZIMBlacklistUsersRemovedCallback</a>,
+  'windows': <a href='@ZIMBlacklistUsersRemovedCallback' target='_blank'>ZIMBlacklistUsersRemovedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMBlacklistUsersRemovedResult-class.html' target='_blank'>ZIMBlacklistUsersRemovedResult</a>,
+
+}
+export const checkUserIsInBlacklistMap = {
+  'Android': <a href='@checkUserIsInBlacklist' target='_blank'>checkUserIsInBlacklist</a>,
+  'iOS': <a href='@checkUserIsInBlackListByUserID' target='_blank'>checkUserIsInBlackListByUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/checkUserIsInBlacklist.html' target='_blank'>checkUserIsInBlacklist</a>,
+}
+export const ZIMBlacklistCheckedCallbackMap = {
+  'Android': <a href='@-ZIMBlacklistCheckedCallback' target='_blank'>ZIMBlacklistCheckedCallback</a>,
+  'iOS': <a href='@ZIMBlacklistCheckedCallback' target='_blank'>ZIMBlacklistCheckedCallback</a>,
+  'windows': <a href='@ZIMBlacklistCheckedCallback' target='_blank'>ZIMBlacklistCheckedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMBlacklistCheckedResult-class.html' target='_blank'>ZIMBlacklistCheckedResult</a>,
+}
+
+
+# Blacklist management
+
+- - -
+
+<Note title="Note">
+
+Blacklisting and friend operations do not affect each other. Taking user A and B as friends as an example:
+1. User A can blacklist user B, but they will still be friends.
+2. If at this point, user A and user B end their friendship, user B will still be on user A's blacklist.
+3. Afterwards, if user A removes user B from the blacklist, user B will still not be user A's friend.
+
+
+</Note>
+
+## Function Introduction
+
+You can check your blacklist, blacklist a specified user (no longer receiving messages from that user), move out of the blacklist, and check if a specified user is in the blacklist.
+
+## Prerequisites
+
+Before implementing the `Blacklist` feature, please make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](./../../Send%20and%20receive%20messages.mdx).
+
+
+## Implementation Process
+
+### Query Blacklist
+
+After logging in to the ZIM SDK, users can query the blacklist by using the {getPlatformData(props,queryBlacklistMap)} interface.
+
+The query result is returned through the {getPlatformData(props,ZIMBlacklistQueriedCallbackMap)}.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+// Query blacklist
+ZIMBlacklistQueryConfig config = new ZIMBlacklistQueryConfig();
+// Fill in the number of user information to be obtained at one time
+config.count = 100; 
+// Fill in the pagination flag
+config.nextFlag = 0;
+zim.queryBlacklist(config, new ZIMBlacklistQueriedCallback() {
+    @Override
+        public void onBlacklistQueried(ArrayList<ZIMUserInfo> blacklist, int nextFlag,
+                                    ZIMError zimError) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Developers can get the blacklist from the blacklist.
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+// Query the blacklist
+ZIMBlacklistQueryConfig config = ZIMBlacklistQueryConfig();
+// Fill in the number of user information obtained at one time
+config.count = 100;
+// Fill in the paging pull flag
+config.nextFlag = 0;
+ZIM zim = ZIM.getInstance()!;
+zim.queryBlacklist(config).then((ZIMBlacklistQueriedResult result) => {
+    // Developers can get the blacklist from result.blacklist.
+}).catchError((onError){
+    // Handle according to the SDK error code document
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+// Query the blocklist.
+ZIMBlacklistQueryConfig *config = [[ZIMBlacklistQueryConfig alloc] init];
+// Enter the number of blocked users to be queried per time.
+config.count = 100;
+// Enter the flag for a paginated pull.
+config.nextFlag = 0;
+[[ZIM getInstance] queryBlacklistWithConfig:config callback:^(NSArray<ZIMUserInfo *> * _Nonnull blacklist, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Obtain the blocklist from the `blacklist` field.
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+// Query blacklist list
+zim::ZIMBlacklistQueryConfig config;
+// Fill in the number of blacklist user information obtained at one time
+config.count = 100;
+// Fill in the pagination pull flag
+config.nextFlag = 0;
+
+zim_sdk_->queryBlacklist(
+    config, [=](const std::vector<zim::ZIMUserInfo> &blacklist, unsigned int nextFlag,
+                const zim::ZIMError &errorInfo) {
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Developers can get the blacklist list from blacklist.
+        }
+    });
+});
+```
+</CodeGroup>
+:::
+
+### Block Users
+
+After logging in to the ZIM SDK, users can call the {getPlatformData(props,addUsersToBlacklistMap)} interface to add specified users to the blacklist.
+
+The result of blocking users is returned through the {getPlatformData(props,ZIMBlacklistUsersAddedCallbackMap)}.
+
+<Warning title="Warning">
+
+- Up to 20 users can be blocked with one API call. Exceeding the limit will cause the API call to fail.
+- The default maximum number of blacklisted users is 1000. If you need to increase it, please contact ZEGOCLOUD technical support.
+</Warning>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+// Add user "zego" to the blacklist
+ArrayList<String> userIDs = new ArrayList();
+userIDs.add("zego");
+zim.addUsersToBlacklist(userIDs, new ZIMBlacklistUsersAddedCallback() {
+    @Override
+    public void  onBlacklistUsersAdded(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError error) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // errorUserList returns the information of users that failed to be added.
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+// Add user "zego" to the blacklist
+try{
+    ZIMBlacklistUsersAddedResult result = await ZIM.getInstance()!.addUsersToBlacklist(['zego']);
+    // result.errorUserList returns the information of users that failed to be added.
+} on PlatformException catch (onError){
+    // Handle according to the SDK error code document
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+// Block user "zegocloud".
+NSArray *userIDs = @[@"zegocloud"];
+[[ZIM getInstance] addUsersToBlacklistWithUserIDs:userIDs callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // The information of users who fail to be blocked is returned in the `errorUserList` field.
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+// Add user "zegocloud" to the blacklist
+std::vector<std::string> user_id_list;
+user_id_list.push_back("zegocloud");
+
+zim_sdk_->addUsersToBlacklist(
+    user_id_list,
+    [=](const std::vector<zim::ZIMErrorUserInfo> &errorUserList, const zim::ZIMError &errorInfo) {
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Developers can retrieve the blacklist from the "blacklist" variable.
+        }
+    });
+```
+</CodeGroup>
+:::
+
+### Unblock Users
+
+After logging in to the ZIM SDK, users can call the {getPlatformData(props,removeUsersFromBlacklistMap)} interface to remove specified users from the blacklist.
+
+The unblock operation will be returned through the {getPlatformData(props,ZIMBlacklistUsersRemovedCallbackMap)} .
+
+<Warning title="Warning">
+
+Up to 20 users can be removed with one API call. Exceeding the limit will cause the API call to fail.
+</Warning>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+// Remove user "zego" from the blacklist
+ArrayList<String> userIDs = new ArrayList();
+userIDs.add("zego");
+zim.removeUsersFromBlacklist(userIDs, new ZIMBlacklistUsersRemovedCallback() {
+    @Override
+    public void  onBlacklistUsersRemoved(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError error) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // errorUserList returns the information of users that failed to be removed.
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+// Remove user "zego" from the blacklist
+try{
+    ZIMBlacklistUsersRemovedResult result = await ZIM.getInstance()!.removeUsersFromBlacklist(["zego"]);
+    // result.errorUserList returns the information of users that failed to be added.
+} on PlatformException catch (onError){
+    // Handle according to the SDK error code document
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+// Unblock user "zegocloud".
+NSArray *userIDs = @[@"zegocloud"];
+[[ZIM getInstance] removeUsersFromBlacklistWithUserIDs:userIDs callback:^(NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo)     {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // The information of users who fail to be unblocked is returned in the `errorUserList` field.
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+// Remove user "zegocloud" from the blacklist
+std::vector<std::string> user_id_list;
+user_id_list.push_back("zegocloud");
+
+zim_sdk_->removeUsersFromBlacklist(
+    user_id_list,
+    [=](const std::vector<zim::ZIMErrorUserInfo> &errorUserList, const zim::ZIMError &errorInfo) {
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Developers can retrieve the blacklist from the "blacklist" variable.
+        }
+    });
+```
+</CodeGroup>
+:::
+
+### Check if the user is in the blacklist
+
+After logging in to the ZIM SDK, users can call the {getPlatformData(props,checkUserIsInBlacklistMap)} interface to check if a specified user is in their blacklist.
+
+The result of the check operation is returned through the {getPlatformData(props,ZIMBlacklistCheckedCallbackMap)}.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+// Check if the user "zego" is in the blacklist
+zim.checkUserIsInBlackList("zego", new ZIMBlacklistCheckedCallback(){
+    @Override
+    public void  onBlacklistChecked(boolean isUserInBlacklist, ZIMError zimError) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+                // isUserInBlacklist indicates whether the user is in the blacklist, true means in the blacklist, false means not in the blacklist
+        }
+    }
+})
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart
+// Check if user "zego" is in the blacklist
+try{
+    ZIMBlacklistCheckedResult result = await ZIM.getInstance()!.checkUserIsInBlacklist("zego");
+    // result.isUserInBlacklist indicates whether the user is in the blacklist. true means in the blacklist, false means not in the blacklist
+} on PlatformException catch (onError){
+    // Handle according to the SDK error code document
+}
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+// Check whether user "zegocloud" is in the blocklist. 
+[[ZIM getInstance] checkUserIsInBlackListByUserID:@"zegocloud" callback:^(BOOL isUserInBlacklist, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+            // The `isUserInBlacklist` parameter indicates whether the user is in the blocklist. Valid values: `true`: yes; `false`: no.
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="windows"}
+<CodeGroup>
+```cpp
+zim_sdk_->checkUserIsInBlacklist(
+    "zegocloud", [=](bool isUserInBlacklist, const zim::ZIMError &errorInfo) {
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // The `isUserInBlacklist` parameter indicates whether the user is in the blocklist. Valid values: `true`: yes; `false`: no.
+        }
+    });
+})
+```
+</CodeGroup>
+:::
