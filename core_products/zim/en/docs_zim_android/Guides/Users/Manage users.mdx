@@ -142,15 +142,14 @@ zim_->updateUserExtendedData(new_user_extended_data, [=](const std::string &exte
 :::
 :::if{props.platform="Web"}
 ```js Example
-// 修改用户扩展字段
 var extendedData = JSON.stringify({ age: 18, birthdy: '2000-01-01' });
 
 zim.updateUserExtendedData(extendedData)
     .then(function ({ extendedData }) {
-        // 操作成功
+        // Operation successful
     })
     .catch(function (err) {
-        // 操作失败
+        // Operation failed
     });
 ```
 :::
@@ -335,13 +334,12 @@ try {
 :::
 :::if{props.platform="Windows"}
 ```cpp Example
-// 设置用户头像
-// URL 最大 500 字节，无特殊字符限制
+// URL maximum 500 bytes, no special character restrictions
 std::string user_avatar_url = "";
 
 zim_->updateUserAvatarUrl(user_avatar_url, [=](const std::string &userAvatarUrl, zim::ZIMError error_info){
     if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
-        // 设置成功
+         // Operation successful
     }
 });
 ```
@@ -440,21 +438,24 @@ try {
 :::
 :::if{props.platform="Windows"}
 ```cpp Example
-// 查询用户信息
-// 使用限制：单次调用接口，查询 UserID 不能超过 10 个；在 10 秒内,多次调用接口，所有查询的 UserID 累计总数不能超过 10 个。
+// Query user information
+// Usage restrictions: The number of UserID to be queried in a single call to the interface cannot exceed 10; 
+// within 10 seconds, the cumulative total number of UserID queried by multiple calls to the interface cannot exceed 10.
 std::string target_user_id = "user_id_1";
 
 std::vector<std::string> user_id_list;
 user_id_list.push_back(target_user_id);
 
 zim::ZIMUsersInfoQueryConfig config;
-// false 为本地查询，优先返回本地数据库中数据，当本地数据库没有对应用户信息，且未达到查询限频时，内部会自动升级为从服务器查询。
-// true 为服务器查询，优先从服务器拉取对应 user 的信息，当达到查询限频时，还未进行服务器查询的用户信息将会尝试从本地数据库中返回数据
+// false is for local query, which prioritizes returning data from the local database. 
+// If there is no corresponding user information in the local database and the query frequency limit has not been reached, it will automatically upgrade to query from the server.
+// true is for server query, which prioritizes pulling user information from the server. 
+// When the query frequency limit is reached, user information that has not been queried from the server will attempt to return data from the local database.
 config.isQueryFromServer = false; 
 
 zim_->queryUsersInfo(user_id_list, config, [=](const std::vector<zim::ZIMUserFullInfo> &userList, const std::vector<zim::ZIMErrorUserInfo> &errorUserList, const ZIM::ZIMError &errorInfo) {
     if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
-        // 查询成功
+        // Query succeeded
     }
 });
 ```
@@ -502,6 +503,3 @@ ZIM.GetInstance().QueryUsersInfo(userIDList, config, (ZIMUserFullInfo[] userList
 
 ```
 :::
-
-
-./content-parser.js
