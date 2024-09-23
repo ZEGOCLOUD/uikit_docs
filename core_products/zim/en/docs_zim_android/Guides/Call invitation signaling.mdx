@@ -1,1 +1,2305 @@
+---
+articleID: 14243
+---
 
+import { getPlatformData } from "../../../../../snippets/utils-content-parser"
+
+export const ZIMCallUserStateMap = {
+  'Android': <a href='@-ZIMCallUserState' target='_blank'>ZIMCallUserState</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallUserState.html' target='_blank'>ZIMCallUserState</a>,
+}
+export const onCallUserStateChangedMap = {
+  'Android': <a href='@onCallUserStateChanged' target='_blank'>onCallUserStateChanged</a>,
+  'Web': <a href='@callUserStateChanged' target='_blank'>callUserStateChanged</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-user-state-changed-call-id' target='_blank'>callUserStateChanged</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-user-state-changed-call-id' target='_blank'>callUserStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallUserStateChanged.html' target='_blank'>onCallUserStateChanged</a>,
+}
+export const onCallInvitationCreatedMap = {
+  'Android': <a href='@onCallInvitationCreated' target='_blank'>onCallInvitationCreated</a>,
+  'Web': <a href='@callInvitationCreated' target='_blank'>callInvitationCreated</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-created-call-id' target='_blank'>callInvitationCreated</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-invitation-created-call-id' target='_blank'>callInvitationCreated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationCreated.html' target='_blank'>onCallInvitationCreated</a>,
+}
+export const onCallInvitationReceivedMap = {
+  'Android': <a href='@onCallInvitationReceived' target='_blank'>onCallInvitationReceived</a>,
+  'Web': <a href='@callInvitationReceived' target='_blank'>callInvitationReceived</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-received-call-id' target='_blank'>callInvitationReceived</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-invitation-received-call-id' target='_blank'>callInvitationReceived</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationReceived.html' target='_blank'>onCallInvitationReceived</a>,
+}
+export const callInviteMap = {
+  'Android': <a href='@callInvite' target='_blank'>callInvite</a>,
+  'iOS,mac': <a href='@callInviteWithInvitees' target='_blank'>callInviteWithInvitees</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callInvite.html' target='_blank'>callInvite</a>,
+}
+export const queryCallInvitationListMap = {
+  'Android': <a href='@queryCallInvitationList' target='_blank'>queryCallInvitationList</a>,
+  'iOS,mac': <a href='@queryCallInvitationListWithConfig' target='_blank'>queryCallInvitationListWithConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryCallInvitationList.html' target='_blank'>queryCallInvitationList</a>,
+}
+export const callCancelMap = {
+  'Android': <a href='@callCancel' target='_blank'>callCancel</a>,
+  'iOS,mac': <a href='@callCancelWithInvitees' target='_blank'>callCancelWithInvitees</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callCancel.html' target='_blank'>callCancel</a>,
+}
+export const callInvitationCancelledMap = {
+  'Android': <a href='@onCallInvitationCancelled' target='_blank'>onCallInvitationCancelled</a>,
+  'Web': <a href='@callInvitationCancelled' target='_blank'>callInvitationCancelled</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-cancelled-call-id' target='_blank'>callInvitationCancelled</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-invitation-cancelled-call-id' target='_blank'>callInvitationCancelled</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationCancelled.html' target='_blank'>onCallInvitationCancelled</a>,
+}
+export const callAcceptMap = {
+  'Android': <a href='@callAccept' target='_blank'>callAccept</a>,
+  'iOS,mac': <a href='@callAcceptWithCallID' target='_blank'>callAcceptWithCallID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callAccept.html' target='_blank'>callAccept</a>,
+}
+export const callRejectMap = {
+  'Android': <a href='@callReject' target='_blank'>callReject</a>,
+  'iOS,mac': <a href='@callRejectWithCallID' target='_blank'>callRejectWithCallID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callReject.html' target='_blank'>callReject</a>,
+}
+export const onCallInvitationTimeoutMap = {
+  'Android': <a href='@onCallInvitationTimeout' target='_blank'>onCallInvitationTimeout</a>,
+  'Web': <a href='@callInvitationTimeout' target='_blank'>callInvitationTimeout</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-timeout' target='_blank'>callInvitationTimeout</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-invitation-timeout' target='_blank'>callInvitationTimeout</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationTimeout.html' target='_blank'>onCallInvitationTimeout</a>,
+}
+export const callEndMap = {
+  'Android': <a href='@callEnd' target='_blank'>callEnd</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callEnd.html' target='_blank'>callEnd</a>,
+}
+export const callingInviteMap = {
+  'Android': <a href='@callingInvite' target='_blank'>callingInvite</a>,
+  'iOS,mac': <a href='@callingInviteWithInvitees' target='_blank'>callingInviteWithInvitees</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callInvite.html' target='_blank'>callingInvite</a>,
+}
+export const callJoinMap = {
+  'Android': <a href='@callJoin' target='_blank'>callJoin</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callJoin.html' target='_blank'>callJoin</a>,
+}
+export const callQuitMap = {
+  'Android': <a href='@callQuit' target='_blank'>callQuit</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callQuit.html' target='_blank'>callQuit</a>,
+}
+export const callInvitationEndedMap = {
+  'Android': <a href='@onCallInvitationEnded' target='_blank'>onCallInvitationEnded</a>,
+  'Web': <a href='@callInvitationEnded' target='_blank'>callInvitationEnded</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-ended-call-id' target='_blank'>callInvitationEnded</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-invitation-ended-call-id' target='_blank'>callInvitationEnded</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationEnded.html' target='_blank'>onCallInvitationEnded</a>,
+}
+export const enableNotReceivedCheckMap = {
+  'Android': <a href='@enableNotReceivedCheck' target='_blank'>enableNotReceivedCheck</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallInviteConfig/enableNotReceivedCheck.html' target='_blank'>enableNotReceivedCheck</a>,
+}
+export const ZIMCallInviteConfigMap = {
+  'Android': <a href='@-ZIMCallInviteConfig' target='_blank'>ZIMCallInviteConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallInviteConfig-class.html' target='_blank'>ZIMCallInviteConfig</a>,
+}
+
+
+# Call invitation
+
+---
+
+## Overview
+
+ZEGO Instant Messaging (ZIM) SDK provides the call invitation feature that supports full service procedure control. For example, the feature allows a caller to send a call invitation to a called user and allows the called user to accept or refuse the invitation. In this case, the caller and the called user can be offline. A call invitation can be in a common mode or an advanced mode.
+
+In common mode, a user can initiate, cancel, accept, and reject a call invitation, and does not respond to a call invitation within the specified timeout period. On this basis, in advanced mode, a user can invite a new user during the call, and quit and terminate the call.
+
+The call invitation feature provides only basic capabilities for service procedure control. The service requirements for using this feature must be manually implemented. For example, the feature is commonly used in a chat tool for initiating a voice call invitation or a video call invitation.
+
+## User states
+
+{getPlatformData(props,ZIMCallUserStateMap)} specifies the state of a user in each call invitation procedure. This section describes how a user state changes, and the relationship among a state, an operation, and a callback.
+
+### State changes
+
+The following figure shows how a user state changes in an entire call invitation process from call initiation to call termination.
+![/Pics/in_app_chat/14243_1.jpg](//doc.oa.zego.im/Pics/in_app_chat/14243_1.jpg)
+
+<table>
+<tbody><tr>
+<th>State</th>
+<th>Description</th>
+<th>Triggering event</th>
+<th>Applicable mode</th>
+</tr>
+<tr>
+<td>Inviting</td>
+<td>Being invited.</td>
+<td>The user is being invited.</td>
+<td rowspan="6"><ul><li>Common mode</li><li>Advanced mode</li></ul></td>
+</tr>
+<tr>
+<td>Accepted</td>
+<td>Invitation accepted.</td>
+<td><ul><li>A user initiates a call invitation.</li><li>A user accepts a call invitation.</li></ul></td>
+</tr>
+<tr>
+<td>Rejected</td>
+<td>Invitation rejected.</td>
+<td>A user rejects a call invitation.</td>
+</tr>
+<tr>
+<td>Canceled</td>
+<td>Invitation canceled.</td>
+<td><ul><li>A user cancels a call invitation.</li><li>The called user does not respond to the invitation. The caller gets offline and the heartbeat times out.</li></ul></td>
+</tr>
+<tr>
+<td>Received</td>
+<td>Invitation received.</td>
+<td><ul><li>An online user receives a call invitation.</li><li>An offline user gets online within the specified timeout period.</li></ul></td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>Invitation times out.</td>
+<td>The called user fails to respond to the invitation within the specified timeout period.</td>
+</tr>
+<tr>
+<td>Quit</td>
+<td>Quit the call.</td>
+<td>A user in the call quit the call.</td>
+<td><ul><li>Advanced mode</li></ul></td>
+</tr>
+<tr>
+<td>Unknown</td>
+<td>Unknown</td>
+<td colspan="2">Contact ZEGOCLOUD technical support.</td>
+</tr>
+</tbody>
+</table>
+
+### States and corresponding operations and callbacks
+
+In a call invitation process, the call state of a user determines whether the user can call a specific operation or listen to a specific event.
+
+- The following table describes the correspondence between a call state and an operation.
+  
+
+<table>
+<tbody><tr>
+<th></th>
+<th>callInvite</th>
+<th>callCancel</th>
+<th>callAccept</th>
+<th>callReject</th>
+<th>callingInvite</th>
+<th>callQuit</th>
+<th>callEnd</th>
+</tr>
+<tr>
+<td>Inviting</td>
+<td rowspan="8">A user can call this operation when the user is in a call, regardless of the call state of the user.</td>
+<td rowspan="8">A user can call this operation when no response is given to a call invitation after the user initiates the call invitation, regardless of the user state.</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Accepted</td>
+<td>✖</td>
+<td>✖</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Rejected</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Canceled</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Received</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Quit</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Unknown</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+</tbody></table>
+
+- The following table describes the correspondence between a call state and a callback.
+  
+<table>
+<tbody><tr>
+<th></th>
+<th>onCallInvitationReceived</th>
+<th>onCallInvitationTimeout</th>
+<th>onCallInvitationCancelled</th>
+<th>onCallInvitationEnded</th>
+<th>onCallUserStateChanged</th>
+</tr>
+<tr>
+<td>Inviting</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Accepted</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Rejected</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Cancelled</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Received</td>
+<td>✖</td>
+<td>✖</td>
+<td>✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+<tr>
+<td>Quit</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>Unknown</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+<td>✖</td>
+</tr>
+</tbody></table>
+
+## Prerequisites
+
+Before you use the call invitation feature, make sure that the following prerequisites are satisfied:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+- (Optional) The offline push certificate of ZIM is configured in the [ZEGO console](https://console.zego.im). You need to configure the certificate when you want to send a call invitation to an offline user and push offline notifications. For more information about how to configure the certificate, see [Offline push configuration](#16233). If you fail to configure the certificate, contact ZEGO technical support.
+
+## Common mode
+
+In common mode, the lifecycle of a call invitation ends after all invitees respond to the invitation. To be specific, a call invitation is terminated after all invitees accept or refuse the invitation, or the invitation times out. The following example shows that a client A initiates a call invitation to a client B in common mode.
+
+
+<a id="onCallUserStateChanged"></a>
+
+### 1\. Listen to the state changes of call invitation users
+
+You can invoke the {getPlatformData(props,onCallUserStateChangedMap)} callback to listen to the state changes of an invitee.
+
+:::if{props.platform=undefined}
+```java
+// Listen to the state changes of users related to the call invitation.
+@Override
+public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
+    super.onCallUserStateChanged(zim, info, callID);
+
+    for(ZIMCallUserInfo userInfo : info.callUserList){
+
+        // the userID whose state has changed
+        String userID = userInfo.userID;
+
+        // the current latest state of the user
+        ZIMCallUserState state = userInfo.state;
+
+        // Passthrough field, consistent with the extended data content carried by the user when calling the accept, reject, and exit interfaces.
+        String extendedData = userInfo.extendedData;
+    }
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Listen to the state changes of users related to the call invitation.
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    for(ZIMCallUserInfo userInfo in callUserStateChangeInfo.callUserList){
+
+        // the userID whose state has changed
+        String userID = userInfo.userID;
+        // the current latest state of the user
+        ZIMCallUserState state = userInfo.state;
+
+        // Passthrough field, consistent with the extended data content carried by the user when calling the accept, reject, and exit interfaces.
+        String extendedData = userInfo.extendedData;
+    }
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen to the state changes of users related to the call invitation.
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+    for (ZIMCallUserInfo *userInfo in info.callUserList) {
+        // The userID whose user state has changed.
+        NSString *userID = userInfo.userID;
+        
+        // The latest user state of the user.
+        ZIMCallUserState state = userInfo.state;
+        
+        // Transmitted field, consistent with the extended data content carried by the user when calling the accept, reject, or exit interface.
+        NSString *extendedData = userInfo.extendedData;
+    }
+}
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Listen to the state changes of users related to the call invitation.
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+    for (ZIMCallUserInfo *userInfo in info.callUserList) {
+        // The userID whose user state has changed.
+        NSString *userID = userInfo.userID;
+        
+        // The latest user state of the user.
+        ZIMCallUserState state = userInfo.state;
+        
+        // Transmitted field, consistent with the extended data content carried by the user when calling the accept, reject, or exit interface.
+        NSString *extendedData = userInfo.extendedData;
+    }
+}
+```
+
+:::
+:::if{props.platform="window"}
+```Cpp
+// Listen to the state changes of users related to the call invitation.
+void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo & info, const std::string & callID){
+    for (const ZIMCallUserInfo &userInfo: info.callUserList) {
+        // the userID whose state has changed
+        std::string userID = userInfo.userID;
+        // the current latest state of the user
+        ZIMCallUserState state = userInfo.state;
+        // Passthrough field, consistent with the extended data content carried by the user when calling the accept, reject, and exit interfaces.
+        std::string extendedData = userInfo.extendedData;
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Listen to the state changes of users related to the call invitation.
+zim.on('callUserStateChanged', (zim, info) => {
+    // the userID whose state has changed
+    const changeCallID = info.callID;
+    info.callUserList.forEach(userInfo => {
+        // The state-changed user's user ID, the latest user status, and the passthrough field (consistent with the extended data carried when the user accepts, rejects, or exits a call)
+        const { userID, state, extendedData } = userInfo;
+    });
+})
+```
+
+:::
+
+### 2\.  Initiate a call invitation
+
+The client A initiates a call invitation to the client B. The following figure shows the corresponding flowchart.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/14243.jpeg" /></Frame>
+
+
+1. Client A registers the {getPlatformData(props,onCallInvitationCreatedMap)} callback interface to receive notifications that a call invitation has been created; Client B registers the {getPlatformData(props,onCallInvitationReceivedMap)} callback interface to receive invitation notifications from client A.
+2. Client A initiates a call invitation by calling the {getPlatformData(props,callInviteMap)} interface. After receiving the invitation information, client B can choose to <a href="#callAccept">Accept</a> or <a href="#callReject">Reject</a>.
+
+<Note title="Note">
+
+If the client B is offline, the following two cases are involved:
+
+- The client B logs in before the invitation times out. In this case, the client B can invoke the {getPlatformData(props,onCallInvitationReceivedMap)} callback interface to receive the invitation notification.vitation notification.
+- The client B logs in after the invitation times out. In this case, the client B can call the {getPlatformData(props,queryCallInvitationListMap)} operation to <a href="#6">query the invitation list</a>.
+
+</Note>
+
+- Send a call invitation to an online user:
+
+:::if{props.platform=undefined}
+```java
+// Send a call invitation to an online user. 
+List<String> invitees = new ArrayList<String>(); //The List of the invitees.
+invitees.add("421234");    // The IDs of the invitees.
+ZIMCallInviteConfig config = new ZIMCallInviteConfig(); 
+config.timeout = 200; // The invitation timeout period, in seconds. Valid values: 1 to 600.   
+// (Optional) Fill in when it is necessary to initiate a call invitation to offline users and push related offline notifications.
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+pushConfig.payload = "your payload";
+config.pushConfig = pushConfig;
+
+zim.callInvite(invitees, config, new ZIMCallInvitationSentCallback() {
+    @Override
+    public void onCallInvitationSent(String callID, ZIMCallInvitationSentInfo info, ZIMError errorInfo) {
+    // The call invitation ID that is internally generated by ZIM SDK after the call invitation is initiated. The ID uniquely identifies a call invitation. The call invitation ID is required when the inviter wants to cancel the call invitation or when the invitee wants to accept or reject the invitation.
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Initiate call invitation
+List<String> invitees = []; // List of invitees
+invitees.add('1234'); // Invitee IDs
+ZIMCallInviteConfig callInviteConfig = ZIMCallInviteConfig();
+callInviteConfig.timeout = 200; // Invitation timeout period in seconds. The value ranges from 1 to 600.
+
+// (Optional) Fill in when sending a call invitation to an offline user.
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+pushConfig.payload = "your payload";
+config.pushConfig = pushConfig;
+
+ZIM
+    .getInstance()
+    !.callInvite(invitees, callInviteConfig)
+    .then((value) => {})
+    .catchError((onError) {});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Send a call invitation to an online user. 
+NSArray<NSString *> * invitees = @[@"421234"]; // List of invitees
+
+ZIMCallInviteConfig *callInviteConfig = [[ZIMCallInviteConfig alloc] init];
+// Set the timeout for the invitation
+callInviteConfig.timeout = 200;
+
+// (Optional) Fill in when you need to initiate a call invitation to an offline user and push related offline notifications
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"your title";
+pushConfig.content = @"your content";
+pushConfig.payload = @"your payload";
+callInviteConfig.pushConfig = pushConfig;
+
+[zim callInviteWithInvitees:invitees config:callInviteConfig callback:^(NSString *callID, ZIMCallInvitationSentInfo *info,ZIMError *errorInfo){
+    // Fill in the callback after sending the call invitation here
+    // The callID here is the ID generated internally by the SDK after the user initiates the call, which is used to uniquely identify a call invitation; the caller cancels the call and the invitee accepts/rejects the call, and this callID will be used.
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Send a call invitation to an online user. 
+NSArray<NSString *> * invitees = @[@"421234"]; // List of invitees
+
+ZIMCallInviteConfig *callInviteConfig = [[ZIMCallInviteConfig alloc] init];
+// Set the timeout for the invitation
+callInviteConfig.timeout = 200;
+
+// (Optional) Fill in when you need to initiate a call invitation to an offline user and push related offline notifications
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"your title";
+pushConfig.content = @"your content";
+pushConfig.payload = @"your payload";
+callInviteConfig.pushConfig = pushConfig;
+
+[zim callInviteWithInvitees:invitees config:callInviteConfig callback:^(NSString *callID, ZIMCallInvitationSentInfo *info,ZIMError *errorInfo){
+    // Fill in the callback after sending the call invitation here
+    // The callID here is the ID generated internally by the SDK after the user initiates the call, which is used to uniquely identify a call invitation; the caller cancels the call and the invitee accepts/rejects the call, and this callID will be used.
+}];
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+    auto callinvite_callback = [=](std::string callID, zim::ZIMCallInvitationSentInfo info, zim::ZIMError errorInfo) {
+        if (errorInfo.code != 0) {
+            ShowMsg(L"Failed to send a call invitation, callID: %s, error code: %d", callID, error_info.code);
+        }    
+        else {
+            ShowMsg(L"Successfully sent a call invitation, callID: %s", callID);
+        }
+    }
+
+    // Initiate call invitation
+    std::vector<std::string> invitees;  // List of invitees
+    invitees.push_back("421234");       // Invitee ID
+    zim::ZIMCallInviteConfig config;    
+
+    zim::ZIMPushConfig pushConfig;
+    // Offline push title, fill in this field when sending a call invitation to offline users
+    pushConfig.title = "win_push_title";
+    // Offline push content, fill in this field when sending a call invitation to offline users
+    pushConfig.content = "win_push_content";
+    // Offline push additional fields, fill in this field with additional information when sending call invitation to offline users
+    pushConfig.payload = "win_push_payload";
+    config.pushConfig = &pushConfig;
+
+    zim_->callInvite(invitees, config, callinvite_callback); // Send call invitation
+    ```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+/** Send a call invitation to online users */
+var invitees = ['xxxx'];  // List of invitees' IDs
+var config = { timeout: 200 }; // Invitation timeout period in seconds, ranging from 1 to 600
+zim.callInvite(invitees, config)
+    .then(({ callID, timeout, errorInvitees }) => {
+        // Operation succeeded. The call invitation ID that is internally generated by ZIM SDK after the call invitation is initiated. The ID uniquely identifies a call invitation. The call invitation ID is required when the inviter wants to cancel the call invitation or when the invitee wants to accept or reject the invitation.
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+- Send a call invitation to offline users.
+
+    ```javascript
+    /** Send a call invitation to offline users */
+    var invitees = ['xxxx'];  // List of invitees' IDs
+    // To push the offline messages about the call invitation to offline users, you should configure the pushConfig and integrated the ZPNs SDK 
+    var pushConfig = {
+        title: 'push title',
+        content: 'push content',
+        payload: 'push payload'
+    };
+
+    var config = { 
+        timeout: 200, // Invitation timeout period in seconds, ranging from 1 to 600
+        extendedData: 'your call invite extendedData',
+        pushConfig,
+    };
+    zim.callInvite(invitees, config)
+        .then(({ callID, timeout, errorInvitees }) => {
+            // Operation succeeded. The call invitation ID that is internally generated by ZIM SDK after the call invitation is initiated. The ID uniquely identifies a call invitation. The call invitation ID is required when the inviter wants to cancel the call invitation or when the invitee wants to accept or reject the invitation.
+        })
+        .catch(err => {
+            // Operation failed
+        })
+    ```
+
+:::
+
+
+- The invitation initiator receives a notification that the call invitation has been created.
+
+:::if{props.platform=undefined}
+```java
+/** Notification for the initiator of the call invitation that it has been created */
+zim.setEventHandler(new ZIMEventHandler() {
+      @Override
+    public void onCallInvitationCreated(ZIM zim, ZIMCallInvitationCreatedInfo info, String callID) {
+    
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}    
+```dart
+/** Notification for the initiator of the call invitation that it has been created */
+ZIMEventHandler.onCallInvitationCreated = (ZIM zim, ZIMCallInvitationCreatedInfo info, String callID){
+
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+/**  Invitation initiator receives notification that a call invitation has been created.*/
+- (void)zim:(ZIM *)zim
+    callInvitationCreated:(ZIMCallInvitationCreatedInfo *)info
+                callID:(NSString *)callID{
+    // Fill in the callback notification that the call invitation initiator received a successful invitation creation.
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+/**  Invitation initiator receives notification that a call invitation has been created.*/
+- (void)zim:(ZIM *)zim
+    callInvitationCreated:(ZIMCallInvitationCreatedInfo *)info
+                callID:(NSString *)callID{
+    // Fill in the callback notification that the call invitation initiator received a successful invitation creation.
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+/** Notification for the initiator of the call invitation that it has been created */
+virtual void onCallInvitationCreated(ZIM * /*zim*/,
+                                    const ZIMCallInvitationCreatedInfo & /*info*/,
+                                    const std::string & /*callID*/) {
+    // UI operations can be performed here
+}
+```
+:::
+:::if{props.platform="Web"}
+
+    ```javascript
+    /** Notification for the initiator of the call invitation that it has been created */
+    zim.on('callInvitationCreated', (zim, info) => {
+        // console.log('callInvitationCreated', info)
+    })
+    ```
+:::
+
+-  The callback notification after the invitee receives the invitation
+
+:::if{props.platform=undefined}
+```java
+//  The callback notification after the invitee receives the invitation
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    void onCallInvitationReceived(ZIM zim, ZIMCallInvitationReceivedInfo info, String callID) {
+
+    } 
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Callback notification for the call invitee after receiving the invitation
+ZIMEventHandler.onCallInvitationReceived = (zim, info, callID) {
+    
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Callback notification when the invitee receives the invitation.
+- (void)zim:(ZIM *)zim
+    callInvitationReceived:(ZIMCallInvitationReceivedInfo *)info
+                    callID:(NSString *)callID{
+    // Fill in the callback notification when the invitee receives the invitation.
+} 
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Callback notification when the invitee receives the invitation.
+- (void)zim:(ZIM *)zim
+    callInvitationReceived:(ZIMCallInvitationReceivedInfo *)info
+                    callID:(NSString *)callID{
+    // Fill in the callback notification when the invitee receives the invitation.
+} 
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Callback notification for the call invitee after receiving the invitation
+// The callID here is the ID generated by the SDK to uniquely identify a call invitation after the user initiates a call; this callID will be used when the initiator cancels the call, and when the invitee accepts/rejects the call
+void onCallInvitationReceived(zim::ZIM * zim, zim::ZIMCallInvitationReceivedInfo info, std::string callID) {
+    ShowMsg(L"Received invitation, inviter ID: %s, callID: %s", info.inviter, callID);
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+/** Callback notification for the invitee after receiving an invitation */
+zim.on('callInvitationReceived', (zim, { callID, inviter, timeout, extendedData }) => {
+    // console.log('callInvitationReceived', { callID, inviter, timeout, extendedData })
+})
+```
+:::
+
+### 3\. Cancel a call invitation
+
+The client A sends a call invitation to the client B and then cancels the call invitation. The following figure shows the corresponding flowchart.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/In_app_Chat/14243_3_1.png" /></Frame>
+
+
+1. After the client A initiates a call invitation, the client A can call the {getPlatformData(props,callCancelMap)} operation to cancel the call invitation.
+
+<Note title="Note">
+
+After a call invitation is successfully initiated and before it times out, if no callee accepts, and if the caller actively logs out or disconnects due to a heartbeat timeout, the call invitation will also be canceled.
+</Note>
+
+2. After the call invitation is canceled, the client B can receive a notification that is returned by the {getPlatformData(props,callInvitationCancelledMap)} callback.
+
+
+- Cancel a call invitation.
+
+:::if{props.platform=undefined}
+```java
+//  Cancel a call invitation.
+List<String> invitees;  // The list of the invitees.
+invitees.add("421234");       // The IDs of the invitees.
+String callid = "12352435";         // callid
+ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+ZIM.getInstance().callCancel(invitees, callid, config, new ZIMCallCancelSentCallback() {
+    @Override
+    public void onCallCancelSent(String callID, ArrayList<String> errorInvitees, ZIMError errorInfo) {
+                
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Cancel a call
+List<String> invitees;  // List of invitees
+invitees.add("421234");  // Invitee IDs
+String callid = "12352435";  // Call ID
+ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+ZIM
+    .getInstance()
+    !.callCancel(invitees, callID, callCancelConfig)
+    .then((value) => {})
+    .catchError((onError) {});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Cancel a call invitation.
+NSArray<NSString *> * invitees = @[@"421234"];   // The IDs of the invitees.
+NSString* callid = @"12352435";  // callid
+ZIMCallCancelConfig *callCancelConfig = [[ZIMCallCancelConfig alloc] init]; 
+
+[zim callCancelWithInvitees:invitees callID:self.callID config:callCancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    //Fill in the callback after canceling the call invitation.
+}];
+
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Cancel a call invitation.
+NSArray<NSString *> * invitees = @[@"421234"];   // The IDs of the invitees.
+NSString* callid = @"12352435";  // callid
+ZIMCallCancelConfig *callCancelConfig = [[ZIMCallCancelConfig alloc] init]; 
+
+[zim callCancelWithInvitees:invitees callID:self.callID config:callCancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    //Fill in the callback after canceling the call invitation.
+}];
+
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+auto callcancel_callback = [=](std::vector<std::string> errorInvitees, zim::ZIMError errorInfo) {
+    if (errorInfo.code != 0) {
+        ShowMsg(L"Failed to send cancel call invitation, error code: %d", error_info.code);
+    }    
+    else {
+        ShowMsg(L"Successfully sent cancel call invitation");
+    }
+}
+
+// Cancel call invitation
+std::vector<std::string> invitees;  // List of invitees
+invitees.push_back("421234");       // Invitee ID
+std::string callid = "12352435";        // call ID
+zim::ZIMCallCancelConfig config;
+
+zim_->callCancel(invitees, callid, config, callcancel_callback);
+```
+:::
+:::if{props.platform="Web"}
+ ```javascript
+    // Cancel the call invitation
+    var callID = 'xxxx';
+    var invitees = ['xxxx'];  // List of invitees' IDs
+    var config = { extendedData: 'xxxx' }; 
+    zim.callCancel(invitees, callID, config)
+        .then(res => {
+            // Operation successful
+        })
+        .catch(err => {
+            // Operation failed
+        })
+    ```
+:::
+
+- The callback notification received by the invitee after the call invitation is canceled.
+
+:::if{props.platform=undefined}
+```java
+// The callback notification received by the invitee after the call invitation is canceled.
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    void onCallInvitationCancelled(ZIM zim, ZIMCallInvitationCancelledInfo info, String callID) {
+
+    } 
+
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// The callback notification after the invitee receives the canceled invitation.
+- (void)zim:(ZIM *)zim
+callInvitationCancelled:(ZIMCallInvitationCancelledInfo *)info
+callID:(NSString *)callID{
+// Fill in the callback notification after the invitee receives the canceled invitation.
+}
+
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// The callback notification after the invitee receives the canceled invitation.
+- (void)zim:(ZIM *)zim
+callInvitationCancelled:(ZIMCallInvitationCancelledInfo *)info
+callID:(NSString *)callID{
+// Fill in the callback notification after the invitee receives the canceled invitation.
+}
+
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Callback notification for the invitee about the call invitation  being cancelled
+void onCallInvitationCancelled(zim::ZIM * zim, zim::ZIMCallInvitationCancelledInfo info, std::string callID) {
+    ShowMsg(L"Received cancelled invitation, inviter id: %s, callID: %s", info.inviter, callID);
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+    // Callback notification for the invitee after the invitation is cancelled
+    zim.on('callInvitationCancelled',(zim, { callID, inviter, extendedData }) => {
+        // console.log('callInvitationCancelled', { callID, inviter, extendedData })
+    })
+    ```
+
+:::
+
+
+### 4\. Accept a call invitation
+
+The client B receives a call invitation from the client A and then accepts the call invitation. The following figure shows the corresponding flowchart.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/In_app_Chat/14243_4_1.png" /></Frame>
+
+
+1. After the client B receives a call invitation from the client A, the client B can call the {getPlatformData(props,callAcceptMap)} operation to accept the call invitation.
+2. After the client B accepts the call invitation, the client A can receive a notification that is returned by the {getPlatformData(props,onCallUserStateChangedMap)} callback. If multiple users are involved in the call invitation, all involved users can receive the notification returned by this callback.
+
+- Accept a call invitation.
+
+:::if{props.platform=undefined}
+```java
+String callid = "12352435";        // callid
+ZIMCallAcceptConfig config = new ZIMCallAcceptConfig();
+ZIM.getInstance().callAccept(callid, config, new ZIMCallAcceptanceSentCallback() {
+    @Override
+    public void onCallAcceptanceSent(String callID, ZIMError errorInfo) {
+                
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMCallAcceptConfig callAcceptConfig = ZIMCallAcceptConfig();
+ZIM
+    .getInstance()
+    !.callAccept(callID, callAcceptConfig)
+    .then((value) => {})
+    .catchError((onError) {});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Accept a call invitation.
+NSString* callid = @"12352435";  // callid
+ZIMCallAcceptConfig*callAcceptConfig = [[ZIMCallAcceptConfig alloc] init]; 
+[zim callAcceptWithCallID:self.callID config:callAcceptConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+    // Fill in the callback after accepting the call invitation here.
+}];
+
+[zim callAcceptWithCallID:callid config:callAcceptConfig  callback:^(ZIMError *errorInfo){
+    // Fill in the callback after accepting the call invitation here.
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Accept a call invitation.
+NSString* callid = @"12352435";  // callid
+ZIMCallAcceptConfig*callAcceptConfig = [[ZIMCallAcceptConfig alloc] init]; 
+[zim callAcceptWithCallID:self.callID config:callAcceptConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+    // Fill in the callback after accepting the call invitation here.
+}];
+
+[zim callAcceptWithCallID:callid config:callAcceptConfig  callback:^(ZIMError *errorInfo){
+    // Fill in the callback after accepting the call invitation here.
+}];
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+    // Accept the call invitation
+    var callID = 'xxxx';
+    var config = { extendedData: 'xxxx' }; 
+    zim.callAccept(callID, config)
+        .then(res => {
+            // Operation succeeded
+        })
+        .catch(err => {
+            // Operation failed
+        })
+    ```
+:::
+
+-  The callback notification returned after the invitee accepts the call invitation.
+
+:::if{props.platform=undefined}
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
+    // Users with the states "Inviting", "Accepted", and "Received" will receive notifications here when someone accepts a call invitation.
+    }
+
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// The callback received by users in the call after an invitee accepts the call invitation.
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    // Users with states of "Inviting", "Received", and "Accepted" will receive the notification when a user accepts a call invitation
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with user state of "Inviting", "Accepted" and "Received" can receive notifications that a user has accepted a call invitation here.
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with user state of "Inviting", "Accepted" and "Received" can receive notifications that a user has accepted a call invitation here.
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+// Accept a call invitation
+
+auto callaccept_callback = [=](zim::ZIMError errorInfo) {
+    if (errorInfo.code != 0) {
+        ShowMsg(L"Failed to accept the call invitation, error code: %d", error_info.code);
+    }    
+    else {
+        ShowMsg(L"Succeeded to accept the call invitation");
+    }
+}
+
+std::string callid = "12352435";        // call ID
+zim::ZIMCallAcceptConfig config;
+zim_->callAccept(callid, config, callaccept_callback);
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+    // Callback received by the inviter after an invitee accepts the invitation
+    zim.on('callUserStateChanged', (zim, info) => {
+        // Related callID
+        const changeCallID = info.callID;
+        info.callUserList.forEach(userInfo => {
+            // The state-changed user's user ID, the latest user status, and the passthrough field (consistent with the extended data carried when the user accepts, rejects, or exits a call)
+            const { userID, state, extendedData } = userInfo;
+            // state = 1 indicates acceptance, please refer to the ZIMCallUserState enumeration for details
+            if (state == 1) {
+                // Your logic
+            } 
+        });
+    })
+    ```
+:::
+
+
+### 5\. Reject a call invitation
+
+The client B receives a call invitation from the client A and then rejects the call invitation. The following figure shows the corresponding flowchart.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/In_app_Chat/14243_5_1.png" /></Frame>
+
+
+1. After the client B receives a call invitation from the client A, the client B can call the {getPlatformData(props,callRejectMap)} operation to reject the call invitation.
+2. After the client B rejects the call invitation, the client A can receive a notification that is returned by the {getPlatformData(props,onCallUserStateChangedMap)} callback.
+
+
+-  Reject a call invitation.
+
+:::if{props.platform=undefined}
+```java
+String callid = "12352435";        // callid
+ZIMCallRejectConfig config = new ZIMCallRejectConfig();
+ZIM.getInstance().callReject(callid, config, new ZIMCallRejectionSentCallback() {
+    @Override
+    public void onCallRejectionSent(String callID, ZIMError errorInfo) {
+                
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+String callID = "12352435";        // callID
+ZIMCallRejectConfig rejectConfig = ZIMCallRejectConfig();
+ZIM.getInstance()!.callReject(callID, rejectConfig).then((value) => {}).catchError((onError){});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Reject a call invitation.
+NSString* callid = @"12352435";  // callid
+ZIMCallRejectConfig* callRejectConfig = [[ZIMCallRejectConfig alloc] init]; 
+
+[zim callRejectWithCallID:self.callID config:callRejectConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+    // Fill in the callback after rejecting the call invitation.
+}];
+
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Reject a call invitation.
+NSString* callid = @"12352435";  // callid
+ZIMCallRejectConfig* callRejectConfig = [[ZIMCallRejectConfig alloc] init]; 
+
+[zim callRejectWithCallID:self.callID config:callRejectConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+    // Fill in the callback after rejecting the call invitation.
+}];
+
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+    // Reject call invitation
+    auto callreject_callback = [=](zim::ZIMError errorInfo) {
+        if (errorInfo.code != 0) {
+            ShowMsg(L"Failed to reject call invitation, error code: %d", error_info.code);
+        }    
+        else {
+            ShowMsg(L"Successfully rejected call invitation");
+        }
+    }
+
+    std::string callid = "12352435";        // call ID
+    zim::ZIMCallRejectConfig config;
+    zim_->callAccept(callid, config, callreject_callback );
+    ```
+:::
+:::if{props.platform="Web"}
+ ```javascript
+    // Reject a call invitation
+    var callID = 'xxxx';
+    var config = { extendedData: 'xxxx' }; 
+    zim.callReject(callID, config)
+        .then(res => {
+            // Operation succeeded
+        })
+        .catch(err => {
+            // Operation failed
+        })
+    ```
+:::
+
+-  The callback notification returned after the invitee rejects the call invitation.
+
+:::if{props.platform=undefined}
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
+        // Users with the states "Inviting", "Accepted", and "Received" will receive notifications here when someone rejects a call invitation.
+    }
+
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    // Users with states of "Inviting", "Received", and "Accepted" will receive the notification when a user rejects a call invitation
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with user state of "Inviting", "Accepted" and "Received" can receive notifications that a user has rejected a call invitation here.
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with user state of "Inviting", "Accepted" and "Received" can receive notifications that a user has rejected a call invitation here.
+}
+```
+:::
+:::if{props.platform="window"}
+ ```cpp
+    // The callback received by users in the call after an invitee rejects the call invitation.
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo & info,
+                                const std::string & callID){
+        // Users with states "Inviting", "Received", and "Accepted" will receive a notification here when a user rejects a call invitation
+    }
+    ```
+:::
+:::if{props.platform="Web"}
+```javascript
+    // Callback received by the inviter after an invitee rejects the invitation
+    zim.on('callUserStateChanged', (zim, info) => {
+        // Related callID
+        const changeCallID = info.callID;
+        info.callUserList.forEach(userInfo => {
+            // The state-changed user's user ID, the latest user status, and the passthrough field (consistent with the extended data carried when the user accepts, rejects, or exits a call)
+            const { userID, state, extendedData } = userInfo;
+            // state = 2 indicates rejection, please refer to the ZIMCallUserState enumeration for details
+            if (state == 2) {
+                // Your logic
+            }
+        });
+    })
+    ```
+
+:::
+
+### 6\. A call invitation times out
+
+The client B receives a call invitation from the client A, but does not respond to the call invitation within the timeout period. The following figure shows the corresponding flowchart.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/In_app_Chat/14243_6_1.png" /></Frame>
+
+
+1. The client A, namely, the inviter, can invoke the {getPlatformData(props,onCallUserStateChangedMap)} callback to receive a notification indicating that the call invitation times out because the client B does not respond to the invitation. If multiple users are involved in the call invitation, all involved users can receive the notification returned by this callback.
+2. The client B, namely, the invitee, can invoke the {getPlatformData(props,onCallInvitationTimeoutMap)} callback to receive a notification indicating that the call invitation times out because the client B itself does not respond to the invitation.
+
+:::if{props.platform=undefined}
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID){
+        // Users with the state "Inviting", "Accepted", and "Received" will receive notifications here when a call invitation times out.    }
+
+    @Override
+    public void onCallInvitationTimeout(ZIM zim, String callID) {
+    // After the invitee's response timeout, the "invitee" will receive a callback notification. The timeout duration is measured in seconds.
+    }     
+});
+```
+:::
+:::if{props.platform="Flutter"}
+- Callback received by the inviter after the invitee did not response within the timeout period.
+
+```dart
+// Callback received by the inviter after the invitee did not response within the timeout period. The unit of timeout period: second
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    // Users with states of "Inviting", "Received", and "Accepted" will receive the notification when a user rejects a call invitation
+};
+```
+- Callback received by the invitee after the invitee did not response within the timeout period.
+
+  ```dart
+  // Callback received by the invitee after the invitee did not response within the timeout period. The unit of timeout period: second
+  ZIMEventHandler.onCallInvitationTimeout = (ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID) {
+      
+  };
+  ```
+:::
+:::if{props.platform="iOS"}
+
+- The callback notification received by the "inviter" after the invitee responds for a timeout.
+
+```objc
+// The callback notification received by the "invitee" after the invitee responds for a timeout.
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with the user state of "Inviting", "Accepted" and "Received" can receive notifications of users accepting call invitations here.
+}
+```
+
+- The callback notification received by the "invitee" after the invitee responds for a timeout.
+
+```objc
+// The callback notification received by the "invitee" after the invitee responds for a timeout.
+-(void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID {
+// Fill in the callback notification received by the "invitee" after the invitee responds for a timeout, the timeout unit is: seconds.
+}
+```
+
+:::
+:::if{props.platform="mac"}
+- The callback notification received by the "inviter" after the invitee responds for a timeout.
+
+```objc
+// The callback notification received by the "invitee" after the invitee responds for a timeout.
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users with the user state of "Inviting", "Accepted" and "Received" can receive notifications of users accepting call invitations here.
+}
+```
+
+- The callback notification received by the "invitee" after the invitee responds for a timeout.
+
+```objc
+// The callback notification received by the "invitee" after the invitee responds for a timeout.
+-(void)zim:(ZIM *)zim callInvitationTimeout:(NSString *)callID {
+// Fill in the callback notification received by the "invitee" after the invitee responds for a timeout, the timeout unit is: seconds.
+}
+```
+
+:::
+:::if{props.platform="window"}
+
+    ```Cpp
+    // Callback received by the inviter after the invitee did not response within the timeout period. The unit of timeout period: second
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo & info,
+                                const std::string & callID){
+    }
+    ```
+
+- Callback received by the invitee after the invitee did not response within the timeout period.
+
+    ```cpp
+    // Callback notification received by the invitee after the invitee did not response within the timeout period. The unit of timeout period: second
+    void onCallInvitationTimeout(zim::ZIM * zim,std::string callID) {
+        ShowMsg(L"Call invitation timeout, callID: %s",callID);
+    }
+    ```
+
+:::
+:::if{props.platform="Web"}
+
+- Callback received by the inviter:
+    ```javascript
+    zim.on('callUserStateChanged', (zim, info) => {
+        // Related callID
+        const changeCallID = info.callID;
+        info.callUserList.forEach(userInfo => {
+            // The state-changed user's user ID, the latest user status, and the passthrough field (consistent with the extended data carried when the user accepts, rejects, or exits a call)
+            const { userID, state, extendedData } = userInfo;
+            // state = 6 indicates timeout, please refer to the enumeration ZIMCallUserState for details
+            if (state == 6) {
+                // Your business logic
+            }
+        });
+    })
+    ```
+- Callback received by the invitee:
+    ```javascript
+    // Callback notification received by the "invitee" after the invitee's response timeout, timeout time unit: seconds
+    zim.on('callInvitationTimeout', (zim, { callID }) => {
+        // console.log('callInvitationTimeout', { callID })
+    })
+    ```
+:::
+
+## Advanced mode
+
+You can initiate a call invitation in advanced mode in a call invitation scenario involving a plurality of users, such as a multi-invitee call invitation scenario.
+
+After a call invitation is initiated in advanced mode, the lifecycle of the call invitation ends when a user calls the {getPlatformData(props,callEndMap)} operation to terminate the call. Before the call is terminated, a user in the call can invite a new user or quit the call.
+
+
+### Initiate a call invitation in advanced mode
+
+To initiate a call invitation in advanced mode, you must specify the mode when you call the {getPlatformData(props,callInviteMap)} operation.
+
+:::if{props.platform=undefined}
+```java
+/** Send a call invitation to an online user in advanced mode. */
+// Send a call invitation.
+List<String> invitees;  // The list of the invitees.
+invitees.add("421234");       // The IDs of the invitees.
+ZIMCallInviteConfig config = new ZIMCallInviteConfig(); 
+config.timeout = 200; // The invitation timeout period, in seconds. Valid values: 1 to 600.
+//  The mode is set to call invitation mode, and ADVANCED represents advanced mode.
+config.mode = ADVANCED;
+
+// (Optional) Fill in when initiating a call invitation to an offline user.
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+pushConfig.payload = "your payload";
+config.pushConfig = pushConfig;
+  
+zim.callInvite(invitees, config, new ZIMCallInvitationSentCallback() {
+    @Override
+    public void onCallInvitationSent(String callID, ZIMCallInvitationSentInfo info, ZIMError errorInfo) {
+
+        // The call invitation ID that is internally generated by ZIM SDK after the call invitation is initiated. The ID uniquely identifies a call invitation. The call invitation ID is required when the inviter wants to cancel the call invitation or when the invitee wants to accept or reject the invitation.
+    }
+ });
+```
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+// Send a call invitation to online users - Advanced mode
+
+List<String> invitees = ["421234"];  // List of invitee IDs
+  
+ZIMCallInviteConfig config = ZIMCallInviteConfig();
+config.timeout = 200; // Invitation timeout in seconds. The range of value is [1, 600].
+// mode represents the call invitation mode
+config.mode = ZIMCallInvitationMode.advanced;
+
+// (Optional) Fill in when sending a call invitation to an offline user.
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+pushConfig.payload = "your payload";
+config.pushConfig = pushConfig;
+
+ZIM.getInstance()!.callInvite(invitees, config).then((ZIMCallInvitationSentResult result){
+    // The callID here is the ID generated by the SDK internally after the user initiates the call, used to uniquely identify a call invitation; this callID will be used when the initiator cancels the call, and when the invitee accepts/rejects the call.
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Send a call invitation to an online user in advanced mode.
+
+NSArray<NSString *> * invitees = @[@"421234"];  // The IDs of the invitees.
+
+ZIMCallInviteConfig *callInviteConfig = [[ZIMCallInviteConfig alloc] init]; 
+// mode is the call invitation mode, ZIMCallInvitationModeAdvanced indicates the advanced mode.
+callInviteConfig.mode = ZIMCallInvitationModeAdvanced;
+// Set the invitation timeout
+callInviteConfig.timeout = 200;
+
+// (Optional) Fill in when you need to initiate a call invitation to an offline user and push related offline notifications.
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"your title";
+pushConfig.content = @"your content";
+pushConfig.payload = @"your payload";
+callInviteConfig.pushConfig = pushConfig;
+
+[zim callInviteWithInvitees:invitees config:callInviteConfig callback:^(NSString *callID, ZIMCallInvitationSentInfo *info,ZIMError *errorInfo){
+// Fill in the callback after sending the call invitation here.
+// The callID here is the ID generated internally by the SDK after the user initiates the call, which is used to uniquely identify a call invitation; this callID will be used when the initiator cancels the call and the invitee accepts/rejects the call.
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Send a call invitation to an online user in advanced mode.
+
+NSArray<NSString *> * invitees = @[@"421234"];  // The IDs of the invitees.
+
+ZIMCallInviteConfig *callInviteConfig = [[ZIMCallInviteConfig alloc] init]; 
+// mode is the call invitation mode, ZIMCallInvitationModeAdvanced indicates the advanced mode.
+callInviteConfig.mode = ZIMCallInvitationModeAdvanced;
+// Set the invitation timeout
+callInviteConfig.timeout = 200;
+
+// (Optional) Fill in when you need to initiate a call invitation to an offline user and push related offline notifications.
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"your title";
+pushConfig.content = @"your content";
+pushConfig.payload = @"your payload";
+callInviteConfig.pushConfig = pushConfig;
+
+[zim callInviteWithInvitees:invitees config:callInviteConfig callback:^(NSString *callID, ZIMCallInvitationSentInfo *info,ZIMError *errorInfo){
+// Fill in the callback after sending the call invitation here.
+// The callID here is the ID generated internally by the SDK after the user initiates the call, which is used to uniquely identify a call invitation; this callID will be used when the initiator cancels the call and the invitee accepts/rejects the call.
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Send a call invitation to online users - Advanced mode
+
+vector<std::string> invitees; // List of invitee IDs
+
+// Invitation timeout in seconds. The range of value is [1, 600].
+// mode represents the call invitation mode, ZIM_INVITATION_MODE_ADVANCED indicates advanced mode.
+ZIMCallInviteConfig config = ZIMCallInviteConfig();
+config.mode = ZIM_INVITATION_MODE_ADVANCED;
+config.timeout = 90;
+ZIM::getInstance()->callInvite(invitees, config, [](const std::string &callID, const ZIMCallInvitationSentInfo &info, const ZIMError &errorInfo){
+    if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+        // Operation Succeeded
+        // The callID here is the ID generated by the SDK internally after the user initiates the call, used to uniquely identify a call invitation; this callID will be used when the initiator cancels the call, and when the invitee accepts/rejects the call.
+    }else{
+        // Operation Failed
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+/**Send a call invitation to an online user in advanced mode.**/
+var invitees = ['xxxx'];  // List of invitees' IDs
+// Timeout for the invitation in seconds, ranging from 1 to 600
+// mode represents the call invitation mode, 1 represents the advanced mode.
+var config = { timeout: 200, mode: 1 };
+zim.callInvite(invitees, config)
+    .then(({ callID, timeout, errorInvitees }) => {
+        // Operation succeeded. 
+        // The call invitation ID that is internally generated by ZIM SDK after the call invitation is initiated. The ID uniquely identifies a call invitation. The call invitation ID is required when the inviter wants to cancel the call invitation or when the invitee wants to accept or reject the invitation.
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+:::
+
+<Note title="Note">
+
+The advanced mode is the same as the common mode in call invitation cancellation, acceptance, rejection, and timeout. The only difference between the two modes lies in call invitation initiation.
+
+</Note>
+
+### Invite a user during a call
+
+After a call invitation is initiated in advanced mode, a user in the `Accepted` state can call the {getPlatformData(props,callingInviteMap)} operation to invite a new user. Note that a maximum of 10 users(including the invitation initiator) are allowed in a call.
+
+ 
+
+- Invite a user during a call
+
+:::if{props.platform=undefined}
+```java
+//Invite a user during a call
+ArrayList<String> inviteesList = new ArrayList<>();
+inviteesList.add("inviteesA");
+inviteesList.add("inviteesB");
+ZIMCallingInviteConfig inviteConfig = new ZIMCallingInviteConfig();
+// callID obtained through the callback of creating an advanced mode call invitation
+ZIM.getInstance().callingInvite(inviteesList, callID, inviteConfig, new ZIMCallingInvitationSentCallback() {
+    @Override
+    public void onCallingInvitationSent(String callID, ZIMCallingInvitationSentInfo info, ZIMError errorInfo) {
+        if(errorInfo.code != ZIMErrorCode.SUCCESS){
+            //Handle according to the official website's error code table.
+        }
+        //The business logic after a successful invitation.
+    }
+});
+```
+
+- Call members receive notification that other users are being invited
+
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID){
+        //All users whose user state is "Calling" and "Accepted" can receive notifications here that users are being called.
+    }
+});
+```
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+// Invite users during a call 
+List<String> inviteesList = ["A","B"]; 
+ZIMCallingInviteConfig inviteConfig = ZIMCallingInviteConfig();
+// Get callID through the callback of creating an advanced mode call invitation.
+ZIM.getInstance()!.callingInvite(inviteesList, "callID", inviteConfig).then((value) {
+    // Logic after the successful invitaiton
+}).catchError((onError) {
+    // Handle errors according to the official error code table
+});
+```
+
+- Call members receive notification that other users are being invited.
+
+```dart
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    // All users whose user state is "Calling" and "Accepted" can receive notifications here that users are being called.
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+    // Invite a user during a call
+    ZIMCallingInviteConfig *config = [[ZIMCallingInviteConfig alloc] init];
+
+    // callID is obtained by creating a callback for advanced call invitation.
+    [[ZIM getInstance] callingInviteWithInvitees:@[@"invitees"] callID:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+if(errorInfo.code != ZIMErrorCodeSuccess){
+            // Handle according to the error code table on the official website.
+            return;
+}
+        // Business logic after successful invitation.
+    }];
+    
+```
+
+- Call members receive notifications that they are inviting other users.
+
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users whose user state is "Inviting" and "Accepted" can receive notifications that they are calling to invite a user here.
+}
+
+```
+:::
+:::if{props.platform="mac"}
+```objc
+    // Invite a user during a call
+    ZIMCallingInviteConfig *config = [[ZIMCallingInviteConfig alloc] init];
+
+    // callID is obtained by creating a callback for advanced call invitation.
+    [[ZIM getInstance] callingInviteWithInvitees:@[@"invitees"] callID:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallingInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+if(errorInfo.code != ZIMErrorCodeSuccess){
+            // Handle according to the error code table on the official website.
+            return;
+}
+        // Business logic after successful invitation.
+    }];
+    
+```
+
+- Call members receive notifications that they are inviting other users.
+
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+// All users whose user state is "Inviting" and "Accepted" can receive notifications that they are calling to invite a user here.
+}
+
+```
+:::
+:::if{props.platform="window"}
+```cpp
+    // Invite users during a call 
+
+    vector<std::string> invitees; // List of invitees' IDs
+    ZIMCallingInviteConfig config = ZIMCallingInviteConfig();
+    ZIM::getInstance()->callingInvite(invitees, "callID", config, [](const std::string &callID, const ZIMCallingInvitationSentInfo &info,const ZIMError &errorInfo){
+        if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+            // Logic after successful invitation
+        }else{
+            // Solution according to the official error code table
+        }
+    });
+    ```
+    - Call members receive notification that other users are being invited.
+
+    ```cpp
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo & info,
+                                            const std::string & callID){
+        // All users whose user state is "Calling" and "Accepted" can receive notifications here that users are being called.
+    }
+    ```
+:::
+
+:::if{props.platform="Web"}
+```javascript
+//Invite a user during a call
+const config = { timeout: 60, extendedData: 'callingInvite extendedData' };
+const userList = [];
+// The callID is obtained through the callback of creating an advanced mode call invitation.
+zim.callingInvite(userList, 'callID', config)
+    .then(res => {
+        // Operation successful
+    }).catch(err => {
+        // Operation failed
+    });
+```
+:::
+
+### Actively join a call or switch devices
+After implementing the advanced mode call invitation, the {getPlatformData(props,callJoinMap)} interface can be called in the following two situations:
+- A user who has not joined the call wishes to join the call.
+- After a multi-terminal login user uses device A to initiate or accept an invitation, he or she wants to make other devices the **new primary device**.
+
+<Note title="Note">
+
+- The main device refers to the device that actively calls the interface to initiate, accept or join the call to participate in the call.
+- Only the main device can detect changes in call invitations, and other devices can only obtain the data in the call invitations by querying the call invitation list.
+</Note>
+
+For the scenario where the user outside the call joins successfully, the user's state will flow to `accepted`. At this time, all users in the call will receive the notification callback of {getPlatformData(props,onCallUserStateChangedMap)}
+
+For the scenario of switching devices, other users in the call will not be aware of it.
+
+ 
+:::if{props.platform=undefined}
+```java
+// Join the call
+
+ZIMCallJoinConfig config = new ZIMCallJoinConfig();
+config.extendedData = "extendedData";
+ZIM.getInstance().callJoin(callID, config, new ZIMCallJoinSentCallback() {
+    @Override
+    public onCallJoinSent(String callID, ZIMCallJoinSentInfo info, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS){
+            // The business logic after the successful joining.
+        } else{
+            // Handle according to the official website's error code table.
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Join a call or switch the device
+ZIMCallJoinConfig joinConfig = ZIMCallJoinConfig();
+joinConfig.extendedData = "extendedData";
+ZIM.getInstance()?.callJoin('callID',joinConfig).then((result) => {
+    // Logic after successfully joining the call
+}).catchError((onError){
+    // Handle errors accroding to the official error code table
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Actively join a call or switch devices.
+
+ZIMCallJoinConfig *callJoinConfig = [[ZIMCallJoinConfig alloc] init];
+callJoinConfig.extendedData = @"extendedData";
+[[ZIM getInstance] callJoin:@"callID" config:callJoinConfig callback:^(NSString * _Nonnull callID, ZIMCallJoinSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+          
+    }else{
+        // Handle according to the error code table on the official website.
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Actively join a call or switch devices.
+
+ZIMCallJoinConfig *callJoinConfig = [[ZIMCallJoinConfig alloc] init];
+callJoinConfig.extendedData = @"extendedData";
+[[ZIM getInstance] callJoin:@"callID" config:callJoinConfig callback:^(NSString * _Nonnull callID, ZIMCallJoinSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+          
+    }else{
+        // Handle according to the error code table on the official website.
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Join a call or switch the device
+zim::ZIMCallJoinConfig config;
+config.extendedData = "extendedData";
+
+ZIM::getInstance()->callJoin("callID", config, [=](const std::string &callID, const ZIMCallJoinSentInfo &info, const ZIMError &errorInfo){
+    if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+        // Logic after operation succeeded
+    }else{
+        // Handle the failure according the official error code table
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Join a call or switch the device
+
+const config = { extendedData: 'callJoin extendedData' };
+zim.callJoin('callID', config)
+    .then(res => {
+        // Operation succeeded
+    }).catch(err => {
+        // Operation failed
+    });
+```
+:::
+
+### Quit a call
+
+After a call invitation is initiated in advanced mode, a user in the `Accepted` state can call the {getPlatformData(props,callQuitMap)} operation to quit the call. After the user quits the call, the state of the user is changed to `quit`. Then, the user and other users who still stay in the call receive a notification returned by the {getPlatformData(props,onCallUserStateChangedMap)} callback.
+
+:::if{props.platform=undefined}
+- Quit a call.
+  
+```java
+// Quit a call.
+ZIMCallQuitConfig config = new ZIMCallQuitConfig();
+// callID obtained through the callback of creating an advanced mode call invitation
+ZIM.getInstance().callQuit(callID, config, new ZIMCallQuitSentCallback() {
+    @Override
+    public void onCallQuitSent(String callID, ZIMCallQuitSentInfo info, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS){
+            // The business logic after a successful logout.
+        }else {
+            // The business logic after a successful logout.
+        }
+    }
+});
+```
+
+- The users in the call receive a notification indicating that a user quits the call.
+  
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID){
+        // The user who quits the call and other users that are in the `Inviting`, `Received`, and `Accept` states receive a notification indicating that a user quits the call.
+    }
+});  
+```
+:::
+:::if{props.platform="Flutter"}
+- Quit a call.
+```dart
+// Quit a call
+ZIMCallQuitConfig config = ZIMCallQuitConfig();
+// Get callID through the callback of creating an advanced mode call invitation.
+ZIM.getInstance()!.callQuit("callID", config).then((value) {
+    // Logic after successfully quitting a call
+}).catchError((onError){
+    // Handle errors according to the official error code table
+});
+
+- The users in the call receive a notification indicating that a user quits the call.
+
+```dart
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    // The user who quits the call and other users that are in the `Inviting`, `Received`, and `Accept` states receive a notification indicating that a user quits the call。 
+}; 
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Quit a call.
+ZIMCallQuitConfig *config = [[ZIMCallQuitConfig alloc] init];
+
+[[ZIM getInstance] callQuit:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallQuitSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Business logic after successful exit.                                                    
+    }else{
+        // Handle errors according to the official website error code table.
+    }
+}];
+```
+- The users in the call receive a notification indicating that a user quits the call.
+
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+    // The user who quits the call and other users that are in the `Inviting`, `Received`, and `Accept` states receive a notification indicating that a user quits the call.      
+}
+:::
+:::if{props.platform="iOS"}
+- Quit Call
+
+```objc
+// Quit Call
+ZIMCallQuitConfig *config = [[ZIMCallQuitConfig alloc] init];
+
+[[ZIM getInstance] callQuit:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallQuitSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Business logic after successful quit
+    }else{
+        // Handle errors according to the official error code table
+    }
+}];
+```
+
+- Call members receive notification of user quitting call
+
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+    // Users who quit the call and users with "Inviting", "Accepted", and "Received" status can receive notifications here
+}
+```
+:::
+:::if{props.platform="mac"}
+- Quit Call
+
+```objc
+// Quit Call
+ZIMCallQuitConfig *config = [[ZIMCallQuitConfig alloc] init];
+
+[[ZIM getInstance] callQuit:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallQuitSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Business logic after successful quit
+    }else{
+        // Handle errors according to the official error code table
+    }
+}];
+```
+
+- Call members receive notification of user quitting call
+
+```objc
+-(void)zim:(ZIM *)zim callUserStateChanged:(ZIMCallUserStateChangeInfo *)info callID:(nonnull NSString *)callID{
+    // Users who quit the call and users with "Inviting", "Accepted", and "Received" status can receive notifications here
+}
+```
+:::
+:::if{props.platform="window"}
+- Quit a call.
+  
+    ```cpp
+    // Quit a call
+    ZIMCallQuitConfig config = ZIMCallQuitConfig();
+    ZIM::getInstance()->callQuit("callID", config, [](const std::string &callID, const ZIMCallQuitSentInfo &info, const ZIMError &errorInfo){
+        if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+            // Logic after a successful quit
+        }else{
+            // Handle errors according to the official error code table
+        }
+    });
+    ```
+
+- The users in the call receive a notification indicating that a user quits the call.
+  
+    ```cpp
+    void onCallUserStateChanged(ZIM * zim, const ZIMCallUserStateChangeInfo & info,
+                                    const std::string & callID){
+        // The user who quits the call and other users that are in the `Inviting`, `Received`, and `Accept` states receive a notification indicating that a user quits the call。 
+    }  
+    ```
+:::
+:::if{props.platform="Web"}
+- Quit a call.
+    
+    ```javascript
+    // Quit a call
+    const config = { extendedData: 'callQuit extendedData' };
+    zim.callQuit('callID', config).then(res => {
+        // Operation successful
+    }).catch(err => {
+        // Operation failed
+    });
+    ```
+
+- The users in the call receive a notification indicating that a user quits the call.
+  
+    ```javascript
+    // Other users whose user state are "inviting", "received", and "accept" and the quitting user can receive notifications that a user exits the call
+    zim.on('callUserStateChanged', (zim, info) => {
+        // callID obtained through the callback of creating an advanced mode call invitation
+        const changeCallID = info.callID;
+        info.callUserList.forEach(userInfo => {
+            // The state-changed user's user ID, the latest user status, and the passthrough field (consistent with the extended data carried when the user accepts, rejects, or exits a call)
+            const { userID, state, extendedData } = userInfo;
+            // state = 7 indicates exit, please refer to the enumeration ZIMCallUserState for details
+            if (state == 7) {
+                // Your logic
+            }
+            
+        });
+    })
+    ```
+:::
+
+
+### Terminate a call
+
+After a call invitation is initiated in advanced mode, a user in the `Accepted` state can call the {getPlatformData(props,callEndMap)} operation to terminate the call. Subsequently, states of all users remain unchanged, and the call state is changed to `end`. The users in the `Iniviting`, `Accepted`, and `Received` states receive a notification returned by the {getPlatformData(props,callInvitationEndedMap)} callback.
+
+- Terminate a call.
+
+:::if{props.platform=undefined}
+```java
+//Terminate a call.
+ZIMCallEndConfig endConfig = new ZIMCallEndConfig();
+// callID obtained through the callback of creating an advanced mode call invitation
+ZIM.getInstance().callEnd(callID, endConfig, new ZIMCallEndSentCallback() {
+    @Override
+    public void onCallEndSent(String callID, ZIMCallEndSentInfo info, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS){
+            // The business logic after the successful completion.
+        }else{
+                    // Handle according to the official website's error code table.
+                }
+            }
+        });
+```
+
+- The users in the call receive a notification indicating that the call is terminated.
+
+```java
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onCallInvitationEnded(ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
+        super.onCallInvitationEnded(zim, info, callID);
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Terminate a call.
+ZIMCallEndConfig config = ZIMCallEndConfig();
+// Get callID through the callback of creating an advanced mode call invitation.
+ZIM.getInstance()!.callEnd("callID", config).then((value) {
+    // Logic after the successful termination
+}).catchError((onError){
+    // Handle errors according to the official error code table
+});
+```
+
+- The users in the call receive a notification indicating that the call is terminated.
+
+```dart
+ZIMEventHandler.onCallInvitationEnded = (ZIM zim, ZIMCallInvitationEndedInfo info, String callID) {
+    
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Terminate a call.
+ZIMCallEndConfig *config = [[ZIMCallEndConfig alloc] init];
+
+[[ZIM getInstance] callEnd:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallEndedSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Business logic after successful completion.
+    }else{
+        // Handle errors according to the official website error code table.
+    }
+}];
+```
+
+- The users in the call receive a notification indicating that the call is terminated.
+
+```objc
+- (void)zim:(ZIM *)zim callInvitationEnded:(ZIMCallInvitationEndedInfo *)info callID:(NSString *)callID{
+    // All users whose state is “Inviting”, “Accepted” and “Received” will receive a notification that the call has ended.
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Terminate a call.
+ZIMCallEndConfig *config = [[ZIMCallEndConfig alloc] init];
+
+[[ZIM getInstance] callEnd:self.callID config:config callback:^(NSString * _Nonnull callID, ZIMCallEndedSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // Business logic after successful completion.
+    }else{
+        // Handle errors according to the official website error code table.
+    }
+}];
+```
+
+- The users in the call receive a notification indicating that the call is terminated.
+
+```objc
+- (void)zim:(ZIM *)zim callInvitationEnded:(ZIMCallInvitationEndedInfo *)info callID:(NSString *)callID{
+    // All users whose state is “Inviting”, “Accepted” and “Received” will receive a notification that the call has ended.
+}
+```
+:::
+:::if{props.platform="window"}
+ ```cpp
+    // Terminate a call.
+    ZIMCallEndConfig config = ZIMCallEndConfig();
+    ZIM::getInstance()->callEnd("callID", config, [](const std::string &callID, const ZIMCallEndedSentInfo &info, const ZIMError &errorInfo){
+        if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+            // Logic after the successful termination
+        }else{
+            // Handle errors according to the official error code table
+        }
+    });
+    ```
+
+- The users in the call receive a notification indicating that the call is terminated.
+  
+    ```cpp
+    void onCallInvitationEnded(ZIM * /*zim*/, const ZIMCallInvitationEndedInfo & /*info*/,
+    const std::string & /*callID*/) {
+        // Members with the state of "Inviting", "Received", and "Accepted" will receive notifications here when a call ends.
+    }
+    ```
+:::
+:::if{props.platform="Web"}
+ ```javascript
+    //Terminate a call.
+    const config = { extendedData: 'callEnd extendedData' };
+    // callID obtained through the callback of creating an advanced mode call invitation
+    zim.callEnd('callID', config).then(res => {
+        // Operation succeeded
+    }).catch(err => {
+        // Operation failed
+    });
+    ```
+
+- The users in the call receive a notification indicating that the call is terminated.
+
+    ```javascript
+    zim.on('callInvitationEnded', (zim, info) => {
+        // console.log('callInvitationEnded', info)
+    })
+    ```
+:::
+
+
+## What's more
+
+### Check whether the invitation has been delivered
+
+If you want to let the online users in the invitation know whether other users have received the invitation, so as to implement related business logic, please change {getPlatformData(props,enableNotReceivedCheckMap)} in {getPlatformData(props,ZIMCallInviteConfigMap)} to `YES` when initiating a call invitation, so as to start checking whether the invitation has been delivered.
+
+:::if{props.platform=undefined}
+```java
+ZIMCallInviteConfig config = new ZIMCallInviteConfig();
+//Enable not yet delivered detection
+config.enableNotReceivedCheck = true;
+
+//Initiate call invitation related code
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMCallInviteConfig inviteConfig;
+// Enable checking whether the invitation is delivered or not
+inviteConfig.enableNotReceivedCheck = true;
+
+// Code of call invitation initiation 
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMCallInviteConfig *inviteConfig = [[ZIMCallInviteConfig alloc] init];
+//Enable not yet delivered detection
+inviteConfig.enableNotReceivedCheck = YES;
+
+//Initiate call invitation related code
+```
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMCallInviteConfig *inviteConfig = [[ZIMCallInviteConfig alloc] init];
+//Enable not yet delivered detection
+inviteConfig.enableNotReceivedCheck = YES;
+
+//Initiate call invitation related code
+```
+:::
+:::if{props.platform="window"}
+```c++
+ZIMCallInviteConfig inviteConfig;
+// Enable checking whether the invitation is delivered or not
+inviteConfig.enableNotReceivedCheck = true;
+
+// Code of call invitation initiation 
+```
+:::
+:::if{props.platform="Web"}
+```JavaScript
+/** Send call invitation to users */
+var invitees = ['xxxx'];  // List of user IDs to be invited
+var config = { 
+    timeout: 200, // Invitation timeout in seconds, ranging from 1 to 600  
+    enableNotReceivedCheck: true // Enable not received check
+};  
+zim.callInvite(invitees, config)
+    .then(({ callID, timeout, errorInvitees }) => {
+        // Operation successful, the callID here is the ID generated by the SDK internally to uniquely identify a call invitation; this callID will be used when the initiator cancels the call or the invitee accepts/rejects the call
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+:::
+
+After the caller initiates a call invitation, if the called party does not receive this invitation within 5 seconds (you can contact ZEGOCLOUD Technical Support to adjust the interval to 3 seconds or 4 seconds) due to **network disconnection**, **offline**, etc.:
+
+- If the called party client uses the ZIM SDK version 2.14.0 or later, its user state will flow to `ZIMCallUserStateNotYetReceived`, indicating that the invitation has not yet been delivered. At this time, the business logic can be implemented to display UI prompts such as "This user may be offline and cannot receive call invitations temporarily" to online users in the call invitation.
+- If the called client uses ZIM SDK version 2.14.0 or earlier, its user state remains `ZIMCallUserStateInviting`. If this state remains for more than 5 seconds, the above business logic can also be implemented.
+
+<Note title="Note">
+
+Please refer to <a href="#onCallUserStateChanged">listen to the state changes of call invitation users</a> for more information.
+</Note>
+
+Afterwards, if the called user goes online and accepts the invitation before the invitation times out, the user state of the member will flow to `ZIMCallUserStateReceived`.
+
+### Query the list of call invitations
+
+A user can call the {getPlatformData(props,queryCallInvitationListMap)} operation to query the list of call invitations related to the user. The maximum entries for a single query is 100, and any number exceeding 100 will be processed as 100.
+
+:::if{props.platform=undefined}
+```java
+//Query the list of call invitations.
+ZIMCallInvitationQueryConfig queryCallListConfig = new ZIMCallInvitationQueryConfig();
+queryCallListConfig.count = 20;
+queryCallListConfig.nextFlag = 0;
+ZIM.getInstance(). queryCallInvitationList(queryCallListConfig, new ZIMCallInvitationListQueriedCallback() {
+    @Override
+    public void onCallListQueried(ArrayList<ZIMCallInfo> callList, long nextFlag, ZIMError errorInfo) {
+        if(errorInfo.code != ZIMErrorCode.SUCCESS){
+            // Handle according to the official website's error code table.
+            return;
+        }
+        if(nextFlag != 0){
+            // If the nextFlag returned by the callback is not 0, it means that the query for all call invitation information is not completed. The next time you query, you can pass the nextFlag returned by the callback to continue querying the remaining call invitation information.
+            queryCallListConfig.nextFlag = nextFlag;
+        }
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+//Query the list of call invitations.
+
+ZIMCallInvitationQueryConfig queryCallListConfig = ZIMCallInvitationQueryConfig();
+// Query 20 entries of call invitation data at a time
+// If the count is more than 100, ZIM SDK will query for 100 entries.
+queryCallListConfig.count = 20;
+queryCallListConfig.nextFlag = 0;
+
+ZIM.getInstance()!.queryCallInvitationList(queryCallListConfig).then((ZIMCallInvitationListQueriedResult result) {
+    if(result.nextFlag != 0){
+        // If the nextFlag returned by the callback is not 0, it means that the query for all call invitation information is not complete. Next time, you can pass the nextFlag returned by the callback to continue querying the remaining call invitation information.        
+        queryCallListConfig.nextFlag = result.nextFlag;
+    }
+}).catchError((onError){
+    // Handle errors accroding to the official error code table
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Query the list of call invitations.
+
+ZIMCallInvitationQueryConfig *config = [[ZIMCallInvitationQueryConfig alloc] init];
+// Query 20 call invitation data at a time
+// If count exceeds 100, treat it as 100
+config.count = 20;
+// For the first query, fill in 0 for nextFlag, which means starting from the latest call invitation (the one with the latest creation time)
+config.nextFlag = 0;
+[[ZIM getInstance] queryCallInvitationListWithConfig:config callback:^(NSArray<ZIMCallInfo *> * _Nonnull callList, long long nextFlag, ZIMError * _Nonnull errorInfo) {
+if(errorInfo.code != ZIMErrorCodeSuccess){
+// Handle the error according to the error code table on the official website
+return;
+}
+if(nextFlag != 0){
+// If the nextFlag returned by callback is not 0, it means that all call invitation information has not been queried. The next time you query, you can pass in the nextFlag returned by callback to continue querying the remaining call invitation information
+config.nextFlag = nextFlag;
+}
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Query the list of call invitations.
+
+ZIMCallInvitationQueryConfig *config = [[ZIMCallInvitationQueryConfig alloc] init];
+// Query 20 call invitation data at a time
+// If count exceeds 100, treat it as 100
+config.count = 20;
+// For the first query, fill in 0 for nextFlag, which means starting from the latest call invitation (the one with the latest creation time)
+config.nextFlag = 0;
+[[ZIM getInstance] queryCallInvitationListWithConfig:config callback:^(NSArray<ZIMCallInfo *> * _Nonnull callList, long long nextFlag, ZIMError * _Nonnull errorInfo) {
+if(errorInfo.code != ZIMErrorCodeSuccess){
+// Handle the error according to the error code table on the official website
+return;
+}
+if(nextFlag != 0){
+// If the nextFlag returned by callback is not 0, it means that all call invitation information has not been queried. The next time you query, you can pass in the nextFlag returned by callback to continue querying the remaining call invitation information
+config.nextFlag = nextFlag;
+}
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+//Query the list of call invitations.
+
+ZIMCallInvitationQueryConfig config = ZIMCallInvitationQueryConfig();
+// Query 20 entries of call invitation data at a time
+// If the count is more than 100, ZIM SDK will query for 100 entries.
+config.count = 20;
+// Set nextFlag to 0 for the first query, indicating to start from the latest call invitation (with the latest creation time).
+config.nextFlag = 0;
+
+ZIM::getInstance()->queryCallInvitationList(config, [](const std::vector<ZIMCallInfo> &callList, long long nextFlag, const ZIMError &errorInfo){
+    if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS){
+        if(nextFlag != 0){
+            // If the nextFlag returned by the callback is not 0, it means that the query for all call invitation information is not complete. Next time, you can pass the nextFlag returned by the callback to continue querying the remaining call invitation information.        
+        }
+    }else{
+        // Handle errors accroding to the official error code table
+    }
+});
+```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+/**
+  * Query the call invitation list
+  * 1. Query the user's own call invitation list, with 20 call invitation data per query
+  * 2. Fill in nextFlag as 0 for the first query, indicating starting from the latest call invitation (the one with the latest creation time)
+  */
+const config = { count: 20, nextFlag: 0 };
+zim.queryCallInvitationList(config).then(res => {
+    const { callList, nextFlag } = res;
+    // next page
+    config.nextFlag = nextFlag;
+    zim.queryCallInvitationList(config);
+});
+```
+
+:::
