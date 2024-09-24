@@ -325,6 +325,11 @@
         },
         {
           "type": "doc",
+          "label": "Implement VoIP notification",
+          "id": "offline-push-notifications/implement-voip-notification"
+        },
+        {
+          "type": "doc",
           "label": "Customize notification sound",
           "id": "offline-push-notifications/customize-notification-sound"
         },
@@ -345,8 +350,8 @@
         },
         {
           "type": "doc",
-          "label": "Implement VoIP notification",
-          "id": "offline-push-notifications/implement-voip-notification"
+          "label": "Implement silent push notifications",
+          "id": "offline-push-notifications/implement-silent-push-notifications"
         },
         {
           "type": "category",

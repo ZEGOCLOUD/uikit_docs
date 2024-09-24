@@ -330,6 +330,11 @@
         },
         {
           "type": "doc",
+          "label": "Implement VoIP notification",
+          "id": "offline-push-notifications/implement-voip-notification"
+        },
+        {
+          "type": "doc",
           "label": "Customize notification sound",
           "id": "offline-push-notifications/customize-notification-sound"
         },
@@ -369,8 +374,8 @@
             },
             {
               "type": "doc",
-              "label": "CallKit user guide",
-              "id": "offline-push-notifications/best-practices/callkit-user-guide"
+              "label": "CalKit user guide",
+              "id": "offline-push-notifications/best-practices/calkit-user-guide"
             },
             {
               "type": "doc",

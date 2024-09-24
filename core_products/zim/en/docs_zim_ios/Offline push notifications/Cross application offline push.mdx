@@ -1,0 +1,36 @@
+---
+articleID: 17537
+---
+# Cross-application offline push
+
+
+## Overview
+
+This document can be a reference if you want to use a ZEGOCLOUD AppID to implement offline push communication between two APPs. This function is commonly used between teacher and student APPs, the teacher sends messages to the student and the student can receive offline push notifications.
+
+## Prerequisites
+
+- Before implementing cross-application offline push interoperability, please make sure both projects have integrated ZIM SDK and ZPNs SDK and have implemented offline push, please refer to [Implement offline push notification](./Implement%20offline%20push%20notification.mdx) for details.
+## Usage Steps
+
+1. Refer to [Integrate APNs](./Integrate%20APNs.mdx) to get 2 offline push certificates for each of the 2 projects.
+2. Refer to [How to configure Offline Push Certificates](https://www.zegocloud.com/docs/admin-console/offline-push-certificates?platform=all&language=all) to configure the 2 push certificates obtained above on the ZEGOCLOUD console.
+
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17537.jpeg" /></Frame>
+
+3. Call the [`setPushConfig`](@setPushConfig) interface and fill in the corresponding configured appType for the current project.
+
+<Warning title="Warning">
+This step needs to be completed before calling the [registerAPNs](@registerAPNs) interface to register with APNs.
+</Warning>
+
+```objc
+ZPNsConfig *zpnsConfig = [[ZPNsConfig alloc] init];
+// appType is the Certificate index.
+// If the Certificate index is index1, then it should be appType = 1.
+zpnsConfig.appType = 1;
+[[ZPNs shared] setPushConfig:zpnsConfig];
+```
+
+After completing the above configuration, cross-application offline push interoperability can be implemented.
