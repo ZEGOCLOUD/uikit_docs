@@ -1,0 +1,524 @@
+---
+articleID: 14207
+---
+
+import { getPlatformData } from '../../../../../../snippets/utils-content-parser.js'
+
+export const createRoomMap = {
+  'Android': <a href='@createRoom' target='_blank'>createRoom</a>,
+}
+export const ZIMRoomInfoMap = {
+  'Android': <a href='@-ZIMRoomInfo' target='_blank'>ZIMRoomInfo</a>,
+  'iOS': <a href='@-ZIMRoomInfo' target='_blank'>ZIMRoomInfo *</a>,
+}
+export const ZIMRoomAdvancedConfigMap = {
+  'Android': <a href='@-ZIMRoomAdvancedConfig' target='_blank'>ZIMRoomAdvancedConfig</a>,
+  'iOS': <a href='@-ZIMRoomAdvancedConfig' target='_blank'>ZIMRoomAdvancedConfig *</a>,
+}
+export const ZIMRoomCreatedCallbackMap = {
+  'Android': <a href='@-ZIMRoomCreatedCallback' target='_blank'>ZIMRoomCreatedCallback</a>,
+  'iOS,window,U3d': <a href='@ZIMRoomCreatedCallback' target='_blank'>ZIMRoomCreatedCallback</a>,
+}
+export const ZIMRoomAttributesSetConfigMap = {
+  'Android': <a href='@-ZIMRoomAttributesSetConfig' target='_blank'>ZIMRoomAttributesSetConfig</a>,
+  'iOS': <a href='@-ZIMRoomAttributesSetConfig' target='_blank'>ZIMRoomAttributesSetConfig *</a>,
+}
+export const ZIMRoomAttributesOperatedCallbackMap = {
+  'Android': <a href='@-ZIMRoomAttributesOperatedCallback' target='_blank'>ZIMRoomAttributesOperatedCallback</a>,
+  'iOS,window,U3d': <a href='@ZIMRoomAttributesOperatedCallback' target='_blank'>ZIMRoomAttributesOperatedCallback</a>,
+}
+export const ZIMRoomAttributesDeleteConfigMap = {
+  'Android': <a href='@-ZIMRoomAttributesDeleteConfig' target='_blank'>ZIMRoomAttributesDeleteConfig</a>,
+  'iOS': <a href='@-ZIMRoomAttributesDeleteConfig' target='_blank'>ZIMRoomAttributesDeleteConfig *</a>,
+}
+export const ZIMRoomAttributesQueriedCallbackMap = {
+  'Android': <a href='@-ZIMRoomAttributesQueriedCallback' target='_blank'>ZIMRoomAttributesQueriedCallback</a>,
+  'iOS,window,U3d': <a href='@ZIMRoomAttributesQueriedCallback' target='_blank'>ZIMRoomAttributesQueriedCallback</a>,
+}
+export const beginRoomAttributesBatchOperationMap = {
+  'Android': <a href='@beginRoomAttributesBatchOperation' target='_blank'>beginRoomAttributesBatchOperation</a>,
+  'iOS': <a href='@beginRoomAttributesBatchOperationWithRoomID' target='_blank'>beginRoomAttributesBatchOperationWithRoomID</a>,
+}
+export const ZIMRoomAttributesBatchOperationConfigMap = {
+  'Android': <a href='@-ZIMRoomAttributesBatchOperationConfig' target='_blank'>ZIMRoomAttributesBatchOperationConfig</a>,
+  'iOS': <a href='@-ZIMRoomAttributesBatchOperationConfig' target='_blank'>ZIMRoomAttributesBatchOperationConfig *</a>,
+}
+export const endRoomAttributesBatchOperationMap = {
+  'Android': <a href='@endRoomAttributesBatchOperation' target='_blank'>endRoomAttributesBatchOperation</a>,
+  'iOS': <a href='@endRoomAttributesBatchOperationWithRoomID' target='_blank'>endRoomAttributesBatchOperationWithRoomID</a>,
+}
+export const ZIMRoomAttributesBatchOperatedCallbackMap = {
+  'Android': <a href='@-ZIMRoomAttributesBatchOperatedCallback' target='_blank'>ZIMRoomAttributesBatchOperatedCallback</a>,
+  'iOS,window,U3d': <a href='@ZIMRoomAttributesBatchOperatedCallback' target='_blank'>ZIMRoomAttributesBatchOperatedCallback</a>,
+}
+export const HashMap = {
+  'Android': "HashMap<String, String>",
+  'U3d': "Dictionary<string, string>",
+  'iOS': "NSDictionary<NSString *, NSString *> *",
+  'window': "std::unordered_map",
+}
+export const StringMap = {
+  'Android': "String",
+  'U3d': "string",
+  'iOS': "NSString *",
+  'window': "std::string",
+}
+export const ListMap = {
+  'Android': "List",
+  'U3d': "List<string>",
+  'iOS': "NSArray<NSString *> *",
+  'window': "std::vector",
+}
+
+
+# Manage room properties
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room property management, allowing you to customize the properties of a specified room.
+
+With this feature, you can build your app to meet different requirements of various scenarios: customize the in-room properties in a live audio streaming or live chatroom, manage your speaker seats in a live audio room, mark player role and the latest facts and figures in an online Werewolf and other online board games.
+
+<Video src="https://www.youtube.com/embed/ga-wHRhsbvE"/>
+
+## Prerequisites 
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Set room properties
+
+To set room properties, set them when you call the {getPlatformData(props,createRoomMap)} method to create a room.
+
+:::if{props.platform=undefined}
+```java
+public abstract void createRoom(ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config, ZIMRoomCreatedCallback callback)
+```
+:::
+
+:::if{props.platform="iOS"}
+```objc
+- (void)createRoom:(ZIMRoomInfo *)roomInfo
+            config:(ZIMRoomAdvancedConfig *)config
+          callback:(ZIMRoomCreatedCallback)callback;
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void CreateRoom(const ZIMRoomInfo& roomInfo, const ZIMRoomAdvancedConfig& config, ZIMRoomCreatedCallback callback)
+```
+:::
+:::if{props.platform="U3d"}
+```C#
+public abstract void CreateRoom(ZIMRoomInfo roomInfo, ZIMRoomAdvancedConfig config, ZIMRoomCreatedCallback callback)
+```
+:::
+
+<Warning title="Warning">
+
+- Up to 20 room properties can be set in a room. The room property is stored in the format of `Key-Value`. The maximum length of `Key` is 16 bytes, the maximum length of `Value` is 1024 bytes, and the total length of all properties must not exceed 5120 bytes. For more customizable room properties, contact ZEGOCLOUD Technical Support. 
+- The customized room properties you set will be cleared after the room is destroyed.
+</Warning>
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomInfo | {getPlatformData(props,ZIMRoomInfoMap)}| Yes | Basic room properties, such as roomID, roomName. |
+| advancedinfo | {getPlatformData(props,ZIMRoomAdvancedConfigMap)} | Yes | Advanced room propertiies.|
+| callback | {getPlatformData(props,ZIMRoomCreatedCallbackMap)} | Yes | Callback for creating a room. |
+
+
+#### Sample code
+
+:::if{props.platform=undefined}
+```java
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+zimRoomInfo.roomID = roomID;
+zimRoomInfo.roomName = "roomName" + roomID;
+HashMap<String, String> hashMap = new HashMap<>();
+hashMap.put("test1", "test2");
+ZIMRoomAdvancedConfig zimRoomAdvancedInfo = new ZIMRoomAdvancedConfig();
+zimRoomAdvancedInfo.roomAttributes = hashMap;
+zim.createRoom(zimRoomInfo, zimRoomAdvancedInfo, new ZIMRoomCreatedCallback() {
+    @Override
+    public void onRoomCreated(ZIMRoomFullInfo roomInfo, ZIMError errorCode) {
+          assertSame(errorCode.code, SUCCESS);
+    }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMRoomInfo *zimRoomInfo = [[ZIMRoomInfo alloc] init];        
+//Create a ZIMRoomInfo object.
+ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
+NSMutableDictionary *roomAttributes = [[NSMutableDictionary alloc] init];
+NSString *myValue = @"room_info_value"
+NSString *myKey = @"room_info";
+       
+[roomAttributes setObject:myValue forKey:myKey];
+        
+config.roomAttributes = roomAttributes;
+        
+[zim createRoom:zimRoomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim::ZIMRoomInfo room_info;
+
+room_info.roomID = "room_id";
+room_info.roomName = "room_name";
+
+zim::ZIMRoomAdvancedConfig advanced_info;
+advanced_info.roomAttributes.emplace("key", "value");
+
+zim_->createRoom(
+    room_info, advanced_info, [=](zim::ZIMRoomFullInfo roomInfo,
+                                 zim::ZIMError errorInfo) {
+});
+```
+:::
+:::if{props.platform="U3d"}
+```C#
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+// roomID is a string with a maximum length of 32 bytes. It only supports numbers, English characters, and the following special characters: '~', '!', ' '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
+zimRoomInfo.roomID = "roomID";
+// roomName is a string with a maximum length of 64 bytes, with no special character restrictions.
+zimRoomInfo.roomName = "roomName";
+Dictionary<string, string> roomAttributes = new Dictionary<string, string>();
+roomAttributes.Add("test1", "test2");
+ZIMRoomAdvancedConfig zimRoomAdvancedInfo = new ZIMRoomAdvancedConfig();
+zimRoomAdvancedInfo.roomAttributes = roomAttributes;
+ZIM.GetInstance().CreateRoom(zimRoomInfo, zimRoomAdvancedInfo, (ZIMRoomFullInfo roomInfo, ZIMError errorCode) =>
+    {
+        if (errorCode.code == ZIMErrorCode.Success)
+        {
+            // Successfully created
+        }
+    }
+);
+```
+:::
+
+### Modify room properties
+
+The room properties you set are stored as `key-value`.
+
+- When Key does not exist: Setting room property means adding room property.
+- When the Key already exists: Setting the room property means updating the value of the existing room property.
+
+:::if{props.platform="U3d"}
+```C#
+public abstract void SetRoomAttributes(Dictionary<string, string> roomAttributes, string roomID, ZIMRoomAttributesSetConfig config, ZIMRoomAttributesOperatedCallback callback);
+```
+:::
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomAttributes | {getPlatformData(props,HashMap)} | Yes | The target room property. |
+| roomID | {getPlatformData(props,StringMap)} | Yes | The ID of the room that you want to set the room properties. |
+| config | {getPlatformData(props,ZIMRoomAttributesSetConfigMap)} | No | <p>Configurations of room properties: </p><ul><li>isForce: whether to make a mandatory change. </li><li>isUpdateOwner: whether change the owner of the room property. </li><li>isDeleteAfterOwnerLeft: whether the room properties are automatically deleted after the owner leaves the room. <b>This feature can only be set by the owner of the room property.</b></li></ul><Warning title="Warning">If the `config` is not set, the room properties are not set by default. The room property owner and other configurations are not updated.</Warning> |
+| callback | {getPlatformData(props,ZIMRoomAttributesOperatedCallbackMap)} | Yes | Callback for setting room properties. |
+
+#### Sample code
+
+:::if{props.platform=undefined}
+```java
+ZIMRoomAttributesSetConfig config = new ZIMRoomAttributesSetConfig();
+config.isUpdateOwner = false;
+config.isForce = false;
+config.isDeleteAfterOwnerLeft = false;
+zim.setRoomAttributes(hashMap, roomID, config, new ZIMRoomAttributesOperatedCallback() {
+            @Override
+            public void onRoomAttributesOperated(String roomID, ArrayList<String> errorKeys, ZIMError errorInfo) {
+
+            }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+NSString *key = @"room_info";
+NSString *value = @"room_info_value";
+NSMutableDictionary *roomAttributes = [[NSMutableDictionary alloc] init];
+[roomAttributes setObject:value forKey:key];
+ZIMRoomAttributesSetConfig *setConfig = [[ZIMRoomAttributesSetConfig alloc] init];
+setConfig.isDeleteAfterOwnerLeft = true;
+setConfig.isForce = false;
+[zim setRoomAttributes:roomAttributes roomID:roomID config:setConfig callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+std::unordered_map<std::string, std::string> roomAttributes;
+roomAttributes.emplace("key", "value");
+    
+zim->setRoomAttributes(roomAttributes, room_id, nullptr, [=](const std::string &roomID, const std::vector<std::string> &errorKeyList,const ZIMError &errorInfo){});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIMRoomAttributesSetConfig config = new ZIMRoomAttributesSetConfig();
+config.isUpdateOwner = false;
+config.isForce = false;
+config.isDeleteAfterOwnerLeft = false;
+Dictionary<string, string> roomAttributes = new Dictionary<string, string>();
+roomAttributes.Add("test1", "test2");
+
+ZIM.GetInstance().SetRoomAttributes(roomAttributes, "roomID", config, (string roomID, List<string> errorKeys, ZIMError errorInfo) =>
+    {
+        if(errorInfo.code == ZIMErrorCode.Success)
+        {
+           // Set successfully.
+       }
+   }
+);
+```
+:::
+
+## Delete room properties
+
+Generally, you can only delete the room properties that you own. You can also delete the room properties created by others by setting the `isForce` value in `config`.
+
+:::if{props.platform="U3d"}
+```c#
+public abstract void DeleteRoomAttributes(List<string> keys, string roomID, ZIMRoomAttributesDeleteConfig config, ZIMRoomAttributesOperatedCallback callback);
+```
+:::
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| keys  | {getPlatformData(props,ListMap)} | Yes | The key of the room property that you want to delete.|
+| roomID | {getPlatformData(props,StringMap)} |  Yes | The ID of the room that you want to delete the room properties. |
+| config | {getPlatformData(props,ZIMRoomAttributesDeleteConfigMap)} | No  | Delete room properties. `isForce` indicates whether to make a mandatory change. <Warning title="Warning">If the `config` is not set, the room properties won't be deleted by default. </Warning> |
+| callback  | {getPlatformData(props,ZIMRoomAttributesOperatedCallbackMap)} | Yes  | Callback for deleting room properties. |
+
+
+#### Sample code
+
+:::if{props.platform=undefined}
+```java
+ArrayList<String> attributeList = new ArrayList<>();
+attributeList.add("xxxx");
+ZIMRoomAttributesDeleteConfig config = new ZIMRoomAttributesDeleteConfig();
+config.isForce = true;
+zim.deleteRoomAttributes(keys, roomID, config, new ZIMRoomAttributesOperatedCallback() {
+            @Override
+            public void onRoomAttributesOperated(String roomID, ArrayList<String> errorKeys, ZIMError errorInfo) {
+
+            }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+NSString *key = [NSString stringWithFormat:@"seat_%d",targetIndex];
+NSMutableArray *keys = [[NSMutableArray alloc] init];
+[keys addObject:key];
+ZIMRoomAttributesDeleteConfig *config = [[ZIMRoomAttributesDeleteConfig alloc] init];
+config.isForce = true;
+[zim deleteRoomAttributesByKeys:keys roomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+std::vector<std::string> keys;
+keys.push_back("key");
+
+zim->deleteRoomAttributes(keys, room_id, nullptr, [=](const std::string &roomID, const std::vector<std::string> &errorKeyList,const ZIMError &errorInfo){});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+List<string> attributeKeyList = new List<string>();
+attributeKeyList.Add("xxxx");
+ZIMRoomAttributesDeleteConfig config = new ZIMRoomAttributesDeleteConfig();
+config.isForce = true;
+ZIM.GetInstance().DeleteRoomAttributes(attributeKeyList, "roomID", config, (string roomID, List<string> errorKeys, ZIMError errorInfo) =>
+    {
+
+    }
+);
+```
+:::
+
+## Get room properties
+:::if{props.platform="U3d"}
+By calling the [QueryRoomAllAttributes\|_blank](@QueryRoomAllAttributes), you can retrieve all the attributes of a room.
+
+```c#
+public abstract void QueryRoomAllAttributes(string roomID, ZIMRoomAttributesQueriedCallback callback);
+```
+:::
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomID | {getPlatformData(props,StringMap)} | Yes | The ID of the room that you want to query the room properties. |
+| callback | {getPlatformData(props,ZIMRoomAttributesQueriedCallbackMap)}  | Yes | Callback for query room properties. A successful query returns all room properties of the current room.|
+
+<Warning title="Warning">
+
+When logging into a room, the latest room attributes will be returned through the [OnRoomAttributesUpdated\|_blank](@OnRoomAttributesUpdated), and there is no need to call [QueryRoomAllAttributes\|_blank](@QueryRoomAllAttributes).
+</Warning>
+
+
+#### Sample code
+
+:::if{props.platform=undefined}
+```java
+zim.queryRoomAllAttributes(roomID, new ZIMRoomAttributesQueriedCallback() {
+            @Override
+            public void onRoomAttributesQueried(String roomID, HashMap<String, String> roomAttributes, ZIMError errorInfo) {
+
+            }
+});
+```
+
+:::
+
+:::if{props.platform="iOS"}
+```objc
+[zim queryRoomAllAttributesByRoomID:roomID callback:^(NSString * _Nonnull roomID, NSDictionary<NSString *,NSString *> * _Nonnull roomAttributes, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim->queryRoomAllAttributes(room_id,[=](const std::string &roomID, const std::unordered_map<std::string, std::string> &roomAttributes,const ZIMError &errorInfo){});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIM.GetInstance().QueryRoomAllAttributes("roomID", (string roomID, Dictionary<string, string> roomAttributes, ZIMError errorInfo) =>
+    {
+        if(errorInfo.code == ZIMErrorCode.Success)
+        {
+            // Operation successful.
+        }
+    }
+);
+```
+:::
+
+## Combined room properties operation
+
+
+Combined operation means you can combine multiple operations in the same room into one operation. It is usually used when you want to perform continuous operations without being inserted by other users' operations.
+
+#### Parameter description for the {getPlatformData(props,beginRoomAttributesBatchOperationMap)} method
+
+:::if{props.platform="U3d"}
+```c#
+public abstract void BeginRoomAttributesBatchOperation(string roomID, ZIMRoomAttributesBatchOperationConfig config);
+```
+:::
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomID | {getPlatformData(props,StringMap)} | Yes | The ID of the room that you want to set the room properties. |
+| config  | {getPlatformData(props,ZIMRoomAttributesBatchOperationConfigMap)}  | No | <p>Configurations of room properties: </p><ul><li>isForce: whether to make a mandatory change. </li><li>isUpdateOwner: whether change the owner of the room property.</li><li>isDeleteAfterOwnerLeftwhether the room properties are automatically deleted after the owner leaves the room.<b>This feature can only be set by the owner of the room property.</b></li></ul> |
+
+#### Parameter description for the {getPlatformData(props,endRoomAttributesBatchOperationMap)} method
+
+:::if{props.platform="U3d"}
+```c#
+public abstract void EndRoomAttributesBatchOperation(string roomID, ZIMRoomAttributesBatchOperatedCallback callback);
+```
+:::
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomID | {getPlatformData(props,StringMap)} | Yes | The ID of the room that you want to set the room properties. |
+| callback  | {getPlatformData(props,ZIMRoomAttributesBatchOperatedCallbackMap)} | No | Callback for execute results of the room properties. ​|
+
+
+#### Sample code
+
+:::if{props.platform=undefined}
+```java
+ZIMRoomAttributesBatchOperationConfig operationConfig = new ZIMRoomAttributesBatchOperationConfig();
+operationConfig.isForce = false;
+operationConfig.isDeleteAfterOwnerLeft = true;
+zim.beginRoomAttributesBatchOperation(mRoomID, operationConfig);
+
+zim.endRoomAttributesBatchOperation(roomID, new ZIMRoomAttributesBatchOperatedCallback() {
+            @Override
+            public void onRoomAttributesBatchOperated(String roomID, ZIMError errorInfo) {
+
+            }
+});
+```
+
+:::
+
+:::if{props.platform="iOS"}
+```objc
+//Combined operation 
+NSMutableDictionary *roomAttributes = [[NSMutableDictionary alloc] init];
+NSString *key = @"key";
+NSString *value = @"value";
+[roomAttributes setObject:value forKey:key];
+//Set the configurations for adding a new room property.
+ZIMRoomAttributesSetConfig *config = [[ZIMRoomAttributesSetConfig alloc] init];
+config.isForce = false;
+config.isDeleteAfterOwnerLeft = true;
+//Delete related configurations of room properties.
+NSString *deleteKey = @"key";
+NSMutableArray *keys = [[NSMutableArray alloc] init];
+[keys addObject:deleteKey];
+ZIMRoomAttributesDeleteConfig *deleteConfig = [[ZIMRoomAttributesDeleteConfig alloc] init];
+//Set a combined room properties operation.
+ZIMRoomAttributesBatchOperationConfig *setConfig = [[ZIMRoomAttributesBatchOperationConfig alloc] init];
+setConfig.isDeleteAfterOwnerLeft = true;
+setConfig.isForce = false;
+setConfig.isUpdateOwner = true;
+[zim beginRoomAttributesBatchOperationWithRoomID:roomID config:setConfig];
+
+//Modify room properties
+   
+//Add a room property first.
+[zim setRoomAttributes:roomAttributes roomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {}];
+    
+//Then delete a room property.
+[zim deleteRoomAttributesByKeys:keys roomID:roomID config:config callback:^(NSString * _Nonnull roomID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {}];
+    
+//Combine the two operations.
+[zim endRoomAttributesBatchOperationWithRoomID:roomID callback:^(NSString * _Nonnull roomID, ZIMError * _Nonnull errorInfo) {}];
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+std::unordered_map<std::string, std::string> roomAttributes;
+std::vector<std::string> keys;
+
+auto config = zim::ZIMRoomAttributesBatchOperationConfig{true, true, true};
+zim_->BeginRoomAttributesBatchOperation(utf8_room_id, &config);
+
+zim_->BeginRoomAttributesBatchOperation(room_id, &config);
+zim->setRoomAttributes(roomAttributes, room_id, nullptr, [=](const std::string &roomID, const std::vector<std::string> &errorKeyList,const ZIMError &errorInfo){});
+zim->deleteRoomAttributes(keys, room_id, nullptr, [=](const std::string &roomID, const std::vector<std::string> &errorKeyList,const ZIMError &errorInfo){});
+zim->endRoomAttributesBatchOperation(room_id,[=](const std::string &roomID, const ZIMError &errorInfo){});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIMRoomAttributesBatchOperationConfig operationConfig = new ZIMRoomAttributesBatchOperationConfig();
+operationConfig.isForce = false;
+operationConfig.isDeleteAfterOwnerLeft = true;
+ZIM.GetInstance().BeginRoomAttributesBatchOperation("RoomID", operationConfig);
+
+ZIM.GetInstance().EndRoomAttributesBatchOperation("roomID", (string roomID, ZIMError errorInfo) => { } );
+```
+:::
