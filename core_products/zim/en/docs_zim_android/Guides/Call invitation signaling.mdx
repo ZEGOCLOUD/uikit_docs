@@ -352,8 +352,6 @@ Before you use the call invitation feature, make sure that the following prerequ
 In common mode, the lifecycle of a call invitation ends after all invitees respond to the invitation. To be specific, a call invitation is terminated after all invitees accept or refuse the invitation, or the invitation times out. The following example shows that a client A initiates a call invitation to a client B in common mode.
 
 
-<a id="onCallUserStateChanged"></a>
-
 ### 1\. Listen to the state changes of call invitation users
 
 You can invoke the {getPlatformData(props,onCallUserStateChangedMap)} callback to listen to the state changes of an invitee.
@@ -2169,7 +2167,7 @@ After the caller initiates a call invitation, if the called party does not recei
 
 <Note title="Note">
 
-Please refer to <a href="#onCallUserStateChanged">listen to the state changes of call invitation users</a> for more information.
+Please refer to <a href="#1-listen-to-the-state-changes-of-call-invitation-users">listen to the state changes of call invitation users</a> for more information.
 </Note>
 
 Afterwards, if the called user goes online and accepts the invitation before the invitation times out, the user state of the member will flow to `ZIMCallUserStateReceived`.
