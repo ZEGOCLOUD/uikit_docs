@@ -1,4 +1,6 @@
-# Minimize audio room window
+# Minimize audio room window(Overlay)
+
+in-app minimization, is a window displayed on top of the application. 
 
 With only two simple steps, you can achieve the effect of minimizing the audio room window within the application. Ideally, the final effect will look like this:
 
@@ -214,3 +216,57 @@ With only two simple steps, you can achieve the effect of minimizing the audio r
 </Steps>
 
 After completing the above two steps, you can now minimize the audio room window within the application.
+
+# Picture In Picture(PIP)
+
+PIP, also known as out-of-app minimization, is a window displayed when the application is in background. 
+
+In addition, interactive operations are not allowed at this time, so it is only in viewing mode.
+
+we will enable PIP by default, which means **enableWhenBackground** default value is true. If you don't want to enable it, you can modify it to false through **ZegoLiveAudioRoomPIPConfig**. 
+
+In addition, if you want to control it through buttons, you can add **ZegoLiveAudioRoomMenuBarButtonName.pipButton** in **topMenuBar.buttons**.
+
+
+Ideally, the final effect will look like this:
+
+<Frame width="400" height="auto" caption="">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/40d9a4b8b4.gif" alt="ezgif-6-ecee9ad8fe.gif"/>
+</Frame>
+
+## Integrate with button
+
+```dart {11}
+ZegoUIKitPrebuiltLiveAudioRoom(
+  appID: YourAppID,
+  appSign: YourAppSign,
+  userID: userID,
+  userName: userName,
+  roomID: roomID,
+  config: isHost
+      ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+      : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+    ..topMenuBar.buttons = [
+      ZegoLiveAudioRoomMenuBarButtonName.pipButton
+    ],
+),
+```
+
+## Config
+
+- ZegoLiveAudioRoomPIPConfig
+
+ | Attribute | Description | Type |
+ | --------- | --------- | --------- |
+ | aspectWidth  | aspect width | int |
+ | aspectHeight     | aspect height  | int |
+ | enableWhenBackground | android: only available on SDK higher than 31(>=31) | bool |
+ | android | android config | ZegoLiveAudioRoomPIPAndroidConfig |
+
+- ZegoLiveAudioRoomPIPAndroidConfig
+
+ | Attribute | Description | Type |
+ | --------- | --------- | --------- |
+ | background  | background widget, default is a black widget | Widget? |
+ | showUserName | show user name or not | bool |
+ | userNameTextColor | text color of user name, default is white | Color? | 

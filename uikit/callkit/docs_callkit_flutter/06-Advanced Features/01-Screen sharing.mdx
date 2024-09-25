@@ -29,7 +29,7 @@ Meanwhile, the full-screen mode button is customizable, you can decide the way h
 ### Add/customize the buttons
 
 
-To start the screen sharing, add the `ZegoMenuBarButtonName.toggleScreenSharingButton` config to the `bottomMenuBarConfig` to let the screen sharing button show.
+To start the screen sharing, add the `ZegoCallMenuBarButtonName.toggleScreenSharingButton` config to the `bottomMenuBarConfig` to let the screen sharing button show.
 
 ```dart
 class CallPage extends StatelessWidget {
@@ -52,10 +52,10 @@ class CallPage extends StatelessWidget {
                 showNewScreenSharingViewInFullscreenMode:
                     false) // Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
             ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(buttons: [
-              ZegoMenuBarButtonName.toggleCameraButton,
-              ZegoMenuBarButtonName.toggleMicrophoneButton,
-              ZegoMenuBarButtonName.hangUpButton,
-              ZegoMenuBarButtonName.toggleScreenSharingButton
+              ZegoCallMenuBarButtonName.toggleCameraButton,
+              ZegoCallMenuBarButtonName.toggleMicrophoneButton,
+              ZegoCallMenuBarButtonName.hangUpButton,
+              ZegoCallMenuBarButtonName.toggleScreenSharingButton
             ]) // Add a screen sharing toggle button.
           ),
     );
