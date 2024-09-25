@@ -1,0 +1,297 @@
+---
+articleID: 17472
+---
+# Send and receive audio messages
+
+
+This topic describes how to use the ZIM SDK and ZIM Audio SDK to send and receive audio messages.
+
+<Warning title="Warning">
+Before using this feature, please make sure you have [logged in to ZIM](./../Send%20and%20receive%20messages.mdx).
+</Warning>
+
+## Usage steps
+
+The whole process mainly includes audio recording, sending, receiving, and playback. In this example, an audio message is sent from client A to client B:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17472.png" /></Frame>
+
+### 1. Import the header file
+Import the `ZIMAudio.h` header file to your project.
+```objective-c
+#import <ZIMAudio/ZIMAudio.h>
+```
+
+### 2. Initialize the ZIM Audio SDK
+
+
+Call the [initWithLicense](@initWithLicense) method to initialize the ZIM Audio SDK before calling other methods of this SDK.
+
+To only implement audio message sending and receiving, you can pass in an empty string for the parameter in this method.
+
+To implement more features, pass in a license. For more information about how to obtain a license, see [Implement online authentication](./Implement%20online%20authentication.mdx).
+
+```objc
+// Initialize the ZIM Audio SDK.
+// In this scenario, no license is required.
+[[ZIMAudio sharedInstance] initWithLicense:@""];
+```
+
+### 3. Listen for the callback
+
+1. Create a class named [ZIMAudioEventHandler](@-ZIMAudioEventHandler) and implement the method in the [ZIMAudioEventHandler](@-ZIMAudioEventHandler) class.
+   
+   ```objc
+   #import <ZIMAudio/ZIMAudio.h>
+   
+   @interface ZIMAudioEventHandler : NSObject<ZIMAudioEventHandler>
+   
+   + (instancetype)sharedInstance;
+   
+   @end
+   
+   @implementation ZIMAudioEventHandler
+   
+   + (instancetype)sharedInstance {
+       static ZIMAudioEventHandler *instance = nil;
+       static dispatch_once_t onceToken;
+       dispatch_once(&onceToken, ^{
+           instance = [[ZIMAudioEventHandler alloc] init];
+       });
+       return instance;
+   }
+   
+   - (void)onError:(ZIMAudioError *)errorInfo{
+       // Write the business logic.
+   }
+   @end
+   ```
+
+2. Call the [setEventHandler](@setEventHandler-ZIMAudio) class to listen for one of its instances.
+   
+   ```objc
+   [[ZIMAudio sharedInstance] setEventHandler:[ZIMAudioEventHandler sharedInstance]];
+   ```
+
+### 4. Record an audio file
+
+#### 4.1 Start the recording
+
+1. Call the [startRecordWithConfig](@startRecordWithConfig) method on the sending client to define the audio duration and the local absolute path to store the audio file, which must contain the filename and extension, for example, `xxx/xxx/xxx.m4a`. Only M4A and MP3 files are supported.
+   
+   ```objc
+   ZIMAudioRecordConfig *config = [[ZIMAudioRecordConfig alloc] init];
+   config.filePath = @""; // The local absolute path to store the audio file, with the extension, for example, `xxx/xxx/xxx.m4a`. Only M4A and MP3 files are supported.
+   config.maxDuration = 10 * 1000; // The maximum duration (ms) of the recorded audio.
+                                   // The default duration is 60,000 ms, that is, 60 seconds. The maximum duration is 120,000 ms, that is, 120 seconds.
+                                   // In this example, the duration is 10 x 1,000 ms, that is, 10 seconds.
+   [[ZIMAudio sharedInstance] startRecordWithConfig:config];
+   ```
+
+2. Trigger the callback.
+   
+   - After the recording starts, listen for the [onRecorderStarted](@onRecorderStarted) callback on the sending client to update the UI.
+     
+     ```objc
+     - (void)onRecorderStarted;
+     ```
+   
+   - The ZIM Audio SDK updates the recording progress once every 500 ms in the [onRecorderProgress](@onRecorderProgress) callback, indicating the duration of the recorded audio file, which can be used to update the UI.
+     
+     ```objc
+     - (void)onRecorderProgress:(int)currentDuration;
+     ```
+   
+   - If the recording fails due to an error, the ZIM Audio SDK sends a notification in the [onRecorderFailed](@onRecorderFailed) callback, and you can handle the failure based on this callback and the error codes specified in [ZIM Audio SDK error codes](./../SDK%20Error%20Codes/ZIM%20Audio.mdx).
+     
+     ```objc
+     - (void)onRecorderFailed:(ZIMAudioErrorCode)errorCode;
+     ```
+
+#### 4.2 Complete the recording
+
+1. To complete the recording, call the [completeRecord](@completeRecord) method.
+   
+<Note title="Note">
+- Make sure that you have received the [onRecorderStarted](@onRecorderStarted) callback before calling the [completeRecord](@completeRecord) method; otherwise, the recording is canceled, and an error is reported, indicating that the duration is too short.
+- If the recording is not <a href="#complete">completed</a> or <a href="#cancel">canceled</a>, the ZIM Audio SDK automatically completes it when the duration reaches the maximum and triggers the [onRecorderCompleted](@onRecorderCompleted) callback.
+</Note>
+   
+```objc
+[[ZIMAudio sharedInstance] completeRecord];
+```
+   
+2. After receiving the [onRecorderCompleted](@onRecorderCompleted) callback, you can find the specified absolute audio file path.
+
+   ```objc
+   - (void)onRecorderCompleted:(int)totalDuration; // `totalDuration` indicates the total duration (ms) of the audio file.
+   ```
+
+#### 4.3 (Optional) Cancel the recording
+
+1. To cancel the recording and delete the recorded audio, call the [cancelRecord](@cancelRecord) method.
+   
+   ```objc
+   [[ZIMAudio sharedInstance] cancelRecord];
+   ```
+
+2. Calling the [cancelRecord](@cancelRecord) method triggers the [onRecorderCancelled](@onRecorderCancelled) callback to the sending client, which uses the callback to update the UI.
+   
+   ```objc
+   - (void)onRecorderCancelled;
+   ```
+
+#### 4.4 (Optional) Check whether the recording is in progress
+
+To obtain the recording status, call the [isRecording](@isRecording) method.
+
+```objc
+BOOL isRecording = [[ZIMAudio sharedInstance] isRecording];   
+```
+
+### 5. Send the audio message
+
+After the [onRecorderCompleted](@onRecorderCompleted) callback is triggered, build the [ZIMAudioMessage](@-ZIMAudioMessage) object (ZIM audio message) by using the specified absolute path and call the [sendMediaMessage](@sendMediaMessage) method to send the message. Below is the sample code for sending an audio message in a one-to-one chat.
+
+```objc
+// The callback for recording completion.
+- (void)onRecorderCompleted:(int)totalDuration{
+    // Create the audio message.
+    ZIMAudioMessage *audioMessage = [[ZIMAudioMessage alloc] initWithFileLocalPath:@"The absolute path of the recorded audio file" audioDuration:totalDuration];
+
+    // Send the audio message in a one-to-one chat.
+    ZIMMessageSendConfig *sendConfig = [[ZIMMessageSendConfig alloc] init];
+    [[ZIM getInstance] sendMediaMessage:audioMessage toConversationID:@"One-to-one chat ID" conversationType:ZIMConversationTypePeer config:sendConfig notification:nil callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+        if(errorInfo.code == ZIMErrorCodeSuccess){
+            // The message is sent successfully.
+        }else{
+            // Handle the error based on the corresponding error code table.
+        }
+    }];   
+}  
+```
+
+For more information about the sending progress, see [Callback for the sending progress of rich media content](./../Guides/Messaging/Send%20and%20receive%20messages.mdx#callback-for-the-sending-progress-of-rich-media-content).
+
+### 6. Receive the audio message
+
+
+Based on the conversation type (one-to-one chat, voice chatroom, or group chat), listen for the [receivePeerMessage](https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-peer-message-from-room-id), [receiveGroupMessage](https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-group-message-from-group-id), or [receiveRoomMessage](https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-room-message-from-room-id) callback on the receiving client to receive the audio message notification and then call the [downloadMediaFileWithMessage](@downloadMediaFileWithMessage) method to download the audio file to the local database.
+
+Below is the sample code for receiving and downloading an audio message in a one-to-one chat.
+
+```objc
+// The `receivePeerMessage` callback is triggered when a one-to-one message is received.
+ - (void)zim:(ZIM *)zim receivePeerMessage:(NSArray<ZIMMessage *> *)messageList fromUserID:(NSString *)fromUserID {
+    // Traverse the list of received messages.
+    for (ZIMMessage *message in messageList) {
+        // The message is an audio message.
+        if(message.type == ZIMMessageTypeAudio){
+            
+            ZIMAudioMessage *audioMessage = (ZIMAudioMessage *)message;
+
+            // If the local path of the audio message is an empty string, call the download method.
+            if([audioMessage.fileLocalPath isEqual:@""]){
+                // If no local path exits, the audio message has not been downloaded to the local database.
+                [[ZIM getInstance] downloadMediaFileWithMessage:audioMessage fileType:ZIMMediaFileTypeOriginalFile progress:^(ZIMMediaMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+                    // Obtain the audio file download progress.
+                } callback:^(ZIMMediaMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+                    if(errorInfo.code == ZIMErrorCodeSuccess){
+                         message.fileLocalPath; // Download succeeded. Obtain the local absolute path of the audio file.
+                    }else{
+                        // Download failed. Handle the error based on the corresponding error code table.
+                    }
+                }];
+            }
+            // If the local path of the audio file is not empty, use the local path.
+            else{
+                audioMessage.fileLocalPath; // The local absolute path of the audio file.
+            }
+        }
+    }
+}  
+```
+
+For more information about the download progress, see [Callback for the downloading progress of rich media content](./../Guides/Messaging/Send%20and%20receive%20messages.mdx#receive-rich-media-content).
+
+### 7. Play the audio file
+
+#### 7.1 Start the playback
+
+1. To play the audio file, call the [startPlayWithConfig](@startPlayWithConfig) method on the receiving client to pass in the local absolute path of the audio file and set the routing type for audio output.
+   
+   ```objc
+   // Play the audio.
+   
+   // Configure playback settings.
+   ZIMAudioPlayConfig *config = [[ZIMAudioPlayConfig alloc] init];
+   config.filePath = @"";// Enter the local path of the audio file.
+   config.routeType = ZIMAudioRouteTypeSpeaker; // `ZIMAudioRouteTypeSpeaker`: Play the audio from the loudspeaker.
+                                                // `ZIMAudioRouteTypeReceiver`: Play the audio from the headphone.
+   [[ZIMAudio sharedInstance] startPlayWithConfig:config];
+   ```
+
+2. Trigger the callback.
+   
+   - Listen for the [onPlayerStarted](@onPlayerStarted) callback to update the UI.
+     
+     ```objc
+     - (void)onPlayerStarted:(int)totalDuration; // `totalDuration` is the total duration (ms) of the audio file.
+     ```
+   
+   - The ZIM Audio SDK updates the playback progress once every 500 ms in the [onPlayerProgress](@onPlayerProgress) callback, indicating the playback duration of the audio file, which can be used to update the UI.
+     
+     ```objc
+     - (void)onPlayerProgress:(int)currentDuration;
+     ```
+   
+   - If the playback fails due to an error, the ZIM Audio SDK sends a notification in the [onPlayerFailed](@onPlayerFailed) callback, and you can handle the failure based on this callback and the error codes specified in [ZIM Audio SDK error codes](./../SDK%20Error%20Codes/ZIM%20Audio.mdx).
+     
+     ```objc
+     - (void)onPlayerFailed:(ZIMAudioErrorCode)errorCode;
+     ```
+   
+   - If the playback is interrupted by recording, an incoming call, or audio output device preemption, the ZIM Audio SDK sends the [onPlayerInterrupted](@onPlayerInterrupted) callback.
+     
+     ```objc
+     - (void)onPlayerInterrupted;
+     ```
+   
+   - When the playback ends, the ZIM Audio SDK sends the [onPlayerEnded](@onPlayerEnded) callback.
+     
+     ```objc
+     - (void)onPlayerEnded;
+     ```
+
+3. (Optional) To switch the audio output device (loudspeaker or headphone) during playback, call the [setAudioRouteType](@setAudioRouteType) method.
+   
+    <Warning title="Warning">
+   If the headphone is connected, this method does not take effect, and the audio is still output from the headphone.
+    </Warning>
+   
+```objc
+   // Set the output device to the loudspeaker.
+   [[ZIMAudio sharedInstance] setAudioRouteType:ZIMAudioRouteTypeSpeaker];
+   ```
+
+#### 7.2 (Optional) Stop the playback
+
+1. To stop the playback, call the [stopPlay](@stopPlay) method.
+   
+   ```objc
+   [[ZIMAudio sharedInstance] stopPlay];
+   ```
+
+2. Listen for the [onPlayerStopped](@onPlayerStopped) callback to update the UI. After the playback is stopped or ends, the ZIM Audio SDK releases the audio device.
+   
+   ```objc
+   - (void)onPlayerStopped;
+   ```
+
+### 8. Deinitialize the ZIM Audio SDK
+
+If the audio feature is no longer in use, call the [uninit](@uninit) method to release resources.
+
+```objc
+[[ZIMAudio sharedInstance] uninit];
+```

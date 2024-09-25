@@ -1,0 +1,185 @@
+# Integrate the ZIM Audio SDK
+
+
+This topic describes how to integrate the ZIM Audio SDK.
+
+
+
+## Prerequisites
+
+Before you integrate the ZIM Audio SDK, make sure that the following conditions are met:
+- Development environment:
+    - Android Studio 2020.3.1 or later is installed.
+    - Android SDK 25, Android SDK Build-Tools 25.0.2, Android SDK Platform-Tools 25.x.x or later is installed.
+    -Android 4.4 devices with voice functionality support.
+
+##  Import the ZIM Audio SDK
+
+The currently supported platform architectures include: armeabi-v7a, arm64-v8a, x86, and x86_64.
+
+You can integrate the SDK through any of the following methods.
+
+
+<Tabs>
+<Tab title="Integrate automatically">
+<Steps>
+<Step title="Configure the repositories source">
+
+- If your Android Gradle Plugin is v7.1.0 or above: Go to the root directory of your project, open the "settings.gradle" file, and add the following code in the "dependencyResolutionManagement" section.
+ 
+```groovy
+...
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url 'https://storage.zego.im/maven' }
+        mavenCentral()
+        google()
+    }
+}
+```
+
+<Warning title="Warning">
+If you can't find the above fields in “settings.gradle”, it may be because your Android Gradle Plugin version is lower than v7.1.0.
+For related information, please refer to [Android Gradle Plugin Release Note v7.1.0](https://developer.android.google.cn/build/releases/past-releases/agp-7-1-0-release-notes#settings-gradle).      
+</Warning>
+
+    
+   
+ -  If your Android Gradle Plugin is below v7.1.0: Go to the root directory of your project, open the "build.gradle" file, and add the following code in the "allprojects" section.
+
+
+        
+```groovy
+...
+allprojects {
+   repositories {
+       maven { url 'https://storage.zego.im/maven' }
+       mavenCentral()
+       google()
+   }
+}
+    
+```
+</Step>
+<Step title="Declare the dependency">
+Go to the `app` directory, open the `build.gradle` file, and add implementation `im.zego:zim_audio:x.y.z` in the `dependencies` section. Please check the [ZIM Audio release notes](./../Client%20SDKs/ZIM%20Audio%20release%20notes.mdx) to find the latest SDK version, and replace x.y.z with the specific version number.
+
+```groovy
+...
+dependencies {
+    ...
+    implementation 'im.zego:zim-audio:x.y.z'
+}
+
+```
+</Step>
+</Steps>
+</Tab>
+<Tab title="Integrate manually">
+
+<Steps>
+<Step title="Download the latest version of SDK">
+Please refer to [SDK downloads](./../Client%20SDKs/SDK%20downloads.mdx) to download the latest version of SDK.
+</Step>
+<Step title="Extract the SDK package">
+Extract the SDK package to the project directory, such as “app/libs”.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZIMAudio/android_studio_zimaudio_sdk.jpeg" /></Frame>
+</Step>
+<Step title="Add SDK reference">
+Add the "ndk" node to the "defaultConfig" node and specify the supported architecture.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_ndk_node.png" /></Frame>
+
+```groovy
+ndk {
+    abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+}
+```
+
+<Note title="Note">
+Decide on the architectures to support based on your needs. Typically, when publishing your app, you only need to retain "armeabi-v7a" and "arm64-v8a" to reduce the APK size.
+</Note>
+
+
+- Add the "sourceSets" node under the "android" node, and specify the location of the "libs" directory.
+
+<Note title="Note">
+The "libs" directory in the example code is for illustration purposes only. You can fill in the actual path. 
+</Note>
+
+        
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_sourceSets_node.png" /></Frame>
+
+```groovy
+sourceSets {
+    main {
+        jniLibs.srcDirs = ['libs']
+    }
+}
+```
+
+
+- Introduce all jars under "libs" in the "dependencies" node.
+
+```groovy
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    ......
+}
+```
+</Step>
+</Steps>
+</Tab>
+</Tabs>
+
+
+## Setting permissions
+
+You can set the required permissions for the application based on the actual application needs.
+
+Go to the "app/src/main" directory, open the "AndroidManifest.xml" file, and add the permissions.
+
+```xml
+<!-- Required permissions for the SDK -->
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+```
+
+<Warning title="Warning">
+Due to the requirement for Android 6.0 and higher versions to request dynamic permissions for some critical permissions, it is not enough to only apply for static permissions through the "AndroidManifest.xml" file. Therefore, you also need to refer to the following code, where "requestPermissions" is a method of the "Activity".
+</Warning>
+
+```java
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) !=
+            PackageManager.PERMISSION_GRANTED) {
+        String[] permissions = {Manifest.permission.RECORD_AUDIO};
+        requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+    }
+}
+```
+
+The specific permission details are as follows:
+
+<table>
+<tbody><tr>
+<th>Necessity</th>
+<th>Permission</th>
+<th> Description </th>
+<th>Reason for Request</th>
+</tr>
+<tr>
+<td>Required permission</td>
+<td>RECORD_AUDIO</td>
+<td>Audio recording permission.</td>
+<td>This permission is needed to send audio.</td>
+</tr>
+</tbody></table>
+
+## Prevent confusion
+
+In the "proguard-rules.pro" file, add the `-keep` class configuration for the SDK to prevent confusion with the SDK public class names.
+
+```txt
+-keep class **.zego.**{*;}
+```
