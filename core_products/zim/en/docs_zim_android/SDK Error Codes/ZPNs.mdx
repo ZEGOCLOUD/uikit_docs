@@ -1,0 +1,16 @@
+# ZPNs Error Codes
+
+
+If the `errorCode` field exists in the return result after calling the ZPNs interface, it indicates that the interface call has an exception. The example code is as follows:
+
+```java
+@Override
+protected void onRegistered(Context context, ZPNsRegisterMessage message) {
+    message.getErrorCode();
+    message.getMsg();
+}
+```
+
+import Content from '/core_products/zim/en/snippets/ZPNsAndroidErrorCode.mdx'
+
+<Content />
