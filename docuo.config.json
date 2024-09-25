@@ -86,7 +86,7 @@
       "id": "callkit_android",
       "label": "Call Kit(Android)",
       "path": "uikit/callkit/docs_callkit_android",
-      "routeBasePath": "callkit-android",
+      "routeBasePath": "uikit/callkit-android",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -105,7 +105,7 @@
       "id": "callkit_ios",
       "label": "Call Kit(iOS)",
       "path": "uikit/callkit/docs_callkit_ios",
-      "routeBasePath": "callkit-ios",
+      "routeBasePath": "uikit/callkit-ios",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -124,7 +124,7 @@
       "id": "callkit_flutter",
       "label": "Call Kit(Flutter)",
       "path": "uikit/callkit/docs_callkit_flutter",
-      "routeBasePath": "callkit-flutter",
+      "routeBasePath": "uikit/callkit-flutter",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -143,7 +143,7 @@
       "id": "callkit_rn",
       "label": "Call Kit(RN)",
       "path": "uikit/callkit/docs_callkit_rn",
-      "routeBasePath": "callkit-rn",
+      "routeBasePath": "uikit/callkit-rn",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -162,7 +162,7 @@
       "id": "callkit_web",
       "label": "Call Kit(Web)",
       "path": "uikit/callkit/docs_callkit_web",
-      "routeBasePath": "callkit-web",
+      "routeBasePath": "uikit/callkit-web",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -181,7 +181,7 @@
       "id": "callkit_android_zh",
       "label": "音视频通话 UIKit (Android)",
       "path": "uikit/callkit/docs_callkit_android_zh",
-      "routeBasePath": "zh/callkit-android",
+      "routeBasePath": "uikit/zh/callkit-android",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -200,7 +200,7 @@
       "id": "callkit_ios_zh",
       "label": "音视频通话 UIKit (iOS)",
       "path": "uikit/callkit/docs_callkit_ios_zh",
-      "routeBasePath": "zh/callkit-ios",
+      "routeBasePath": "uikit/zh/callkit-ios",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -219,7 +219,7 @@
       "id": "callkit_web_zh",
       "label": "音视频通话 UIKit (Web)",
       "path": "uikit/callkit/docs_callkit_web_zh",
-      "routeBasePath": "zh/callkit-web",
+      "routeBasePath": "uikit/zh/callkit-web",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -238,7 +238,7 @@
       "id": "callkit_miniprogram_zh",
       "label": "音视频通话 UIKit (小程序)",
       "path": "uikit/callkit/docs_callkit_miniprogram_zh",
-      "routeBasePath": "zh/callkit-miniprogram",
+      "routeBasePath": "uikit/zh/callkit-miniprogram",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -257,7 +257,7 @@
       "id": "callkit_uniapp_zh",
       "label": "音视频通话 UIKit (uni-app)",
       "path": "uikit/callkit/docs_callkit_uniapp_zh",
-      "routeBasePath": "zh/callkit-uniapp",
+      "routeBasePath": "uikit/zh/callkit-uniapp",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -276,7 +276,7 @@
       "id": "live_streaming_kit_android",
       "label": "Live Streaming Kit(Android)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android",
-      "routeBasePath": "live-streaming-kit-android",
+      "routeBasePath": "uikit/live-streaming-kit-android",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -295,7 +295,7 @@
       "id": "live_streaming_kit_ios",
       "label": "Live Streaming Kit(iOS)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios",
-      "routeBasePath": "live-streaming-kit-ios",
+      "routeBasePath": "uikit/live-streaming-kit-ios",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -314,7 +314,7 @@
       "id": "live_streaming_kit_flutter",
       "label": "Live Streaming Kit(Flutter)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_flutter",
-      "routeBasePath": "live-streaming-kit-flutter",
+      "routeBasePath": "uikit/live-streaming-kit-flutter",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -333,7 +333,7 @@
       "id": "live_streaming_kit_rn",
       "label": "Live Streaming Kit(RN)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_rn",
-      "routeBasePath": "live-streaming-kit-rn",
+      "routeBasePath": "uikit/live-streaming-kit-rn",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -352,7 +352,7 @@
       "id": "live_streaming_kit_web",
       "label": "Live Streaming Kit(Web)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web",
-      "routeBasePath": "live-streaming-kit-web",
+      "routeBasePath": "uikit/live-streaming-kit-web",
       "locale": "en",
       "navigationInfo": {
         "group": {
@@ -371,7 +371,7 @@
       "id": "live_streaming_kit_android_zh",
       "label": "互动直播 UIKit (Android)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android_zh",
-      "routeBasePath": "zh/live-streaming-kit-android",
+      "routeBasePath": "uikit/zh/live-streaming-kit-android",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -390,7 +390,7 @@
       "id": "live_streaming_kit_ios_zh",
       "label": "互动直播 UIKit (iOS)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios_zh",
-      "routeBasePath": "zh/live-streaming-kit-ios",
+      "routeBasePath": "uikit/zh/live-streaming-kit-ios",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -409,7 +409,7 @@
       "id": "live_streaming_kit_web_zh",
       "label": "互动直播 UIKit (Web)",
       "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web_zh",
-      "routeBasePath": "zh/live-streaming-kit-web",
+      "routeBasePath": "uikit/zh/live-streaming-kit-web",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -428,7 +428,7 @@
       "id": "live_audio_room_kit_android",
       "label": "Live Audio Room Kit(Android)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_android",
-      "routeBasePath": "live-audio-room-kit-android",
+      "routeBasePath": "uikit/live-audio-room-kit-android",
       "navigationInfo": {
         "group": {
           "id": "live_audio_room_kit",
@@ -446,7 +446,7 @@
       "id": "live_audio_room_kit_ios",
       "label": "Live Audio Room Kit(iOS)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_ios",
-      "routeBasePath": "live-audio-room-kit-ios",
+      "routeBasePath": "uikit/live-audio-room-kit-ios",
       "navigationInfo": {
         "group": {
           "id": "live_audio_room_kit",
@@ -464,7 +464,7 @@
       "id": "live_audio_room_kit_flutter",
       "label": "Live Audio Room Kit(Flutter)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_flutter",
-      "routeBasePath": "live-audio-room-kit-flutter",
+      "routeBasePath": "uikit/live-audio-room-kit-flutter",
       "navigationInfo": {
         "group": {
           "id": "live_audio_room_kit",
@@ -482,7 +482,7 @@
       "id": "live_audio_room_kit_rn",
       "label": "Live Audio Room Kit(RN)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_rn",
-      "routeBasePath": "live-audio-room-kit-rn",
+      "routeBasePath": "uikit/live-audio-room-kit-rn",
       "navigationInfo": {
         "group": {
           "id": "live_audio_room_kit",
@@ -500,7 +500,7 @@
       "id": "live_audio_room_kit_android_zh",
       "label": "语聊房 UIKit (Android)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_android_zh",
-      "routeBasePath": "zh/live-audio-room-kit-android",
+      "routeBasePath": "uikit/zh/live-audio-room-kit-android",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -519,7 +519,7 @@
       "id": "live_audio_room_kit_ios_zh",
       "label": "语聊房 UIKit (iOS)",
       "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_ios_zh",
-      "routeBasePath": "zh/live-audio-room-kit-ios",
+      "routeBasePath": "uikit/zh/live-audio-room-kit-ios",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -538,7 +538,7 @@
       "id": "in_app_chat_kit_android",
       "label": "In-app Chat Kit(Android)",
       "path": "uikit/imkit/docs_in_app_chat_kit_android",
-      "routeBasePath": "in-app-chat-kit-android",
+      "routeBasePath": "uikit/in-app-chat-kit-android",
       "navigationInfo": {
         "group": {
           "id": "imkit",
@@ -556,7 +556,7 @@
       "id": "in_app_chat_kit_ios",
       "label": "In-app Chat Kit(iOS)",
       "path": "uikit/imkit/docs_in_app_chat_kit_ios",
-      "routeBasePath": "in-app-chat-kit-ios",
+      "routeBasePath": "uikit/in-app-chat-kit-ios",
       "navigationInfo": {
         "group": {
           "id": "imkit",
@@ -574,7 +574,7 @@
       "id": "in_app_chat_kit_flutter",
       "label": "In-app Chat Kit(Flutter)",
       "path": "uikit/imkit/docs_in_app_chat_kit_flutter",
-      "routeBasePath": "in-app-chat-kit-flutter",
+      "routeBasePath": "uikit/in-app-chat-kit-flutter",
       "navigationInfo": {
         "group": {
           "id": "imkit",
@@ -592,7 +592,7 @@
       "id": "in_app_chat_kit_rn",
       "label": "In-app Chat Kit(RN)",
       "path": "uikit/imkit/docs_in_app_chat_kit_rn",
-      "routeBasePath": "in-app-chat-kit-rn",
+      "routeBasePath": "uikit/in-app-chat-kit-rn",
       "navigationInfo": {
         "group": {
           "id": "imkit",
@@ -610,7 +610,7 @@
       "id": "in_app_chat_kit_android_zh",
       "label": "IMKit (Android)",
       "path": "uikit/imkit/docs_in_app_chat_kit_android_zh",
-      "routeBasePath": "zh/in-app-chat-kit-android",
+      "routeBasePath": "uikit/zh/in-app-chat-kit-android",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -629,7 +629,7 @@
       "id": "in_app_chat_kit_ios_zh",
       "label": "IMKit (iOS)",
       "path": "uikit/imkit/docs_in_app_chat_kit_ios_zh",
-      "routeBasePath": "zh/in-app-chat-kit-ios",
+      "routeBasePath": "uikit/zh/in-app-chat-kit-ios",
       "locale": "zh",
       "navigationInfo": {
         "group": {
@@ -648,7 +648,7 @@
       "id": "video_conference_kit_android",
       "label": "Video Conference Kit(Android)",
       "path": "uikit/video_conference_kit/docs_video_conference_kit_android",
-      "routeBasePath": "video-conference-kit-android",
+      "routeBasePath": "uikit/video-conference-kit-android",
       "navigationInfo": {
         "group": {
           "id": "video_conference_kit",
@@ -666,7 +666,7 @@
       "id": "video_conference_kit_ios",
       "label": "Video Conference Kit(iOS)",
       "path": "uikit/video_conference_kit/docs_video_conference_kit_ios",
-      "routeBasePath": "video-conference-kit-ios",
+      "routeBasePath": "uikit/video-conference-kit-ios",
       "navigationInfo": {
         "group": {
           "id": "video_conference_kit",
@@ -684,7 +684,7 @@
       "id": "video_conference_kit_flutter",
       "label": "Video Conference Kit(Flutter)",
       "path": "uikit/video_conference_kit/docs_video_conference_kit_flutter",
-      "routeBasePath": "video-conference-kit-flutter",
+      "routeBasePath": "uikit/ui k i tvideo-conference-kit-flutter",
       "navigationInfo": {
         "group": {
           "id": "video_conference_kit",
@@ -702,7 +702,7 @@
       "id": "video_conference_kit_rn",
       "label": "Video Conference Kit(RN)",
       "path": "uikit/video_conference_kit/docs_video_conference_kit_rn",
-      "routeBasePath": "video-conference-kit-rn",
+      "routeBasePath": "uikit/video-conference-kit-rn",
       "navigationInfo": {
         "group": {
           "id": "video_conference_kit",
@@ -720,7 +720,7 @@
       "id": "video_conference_kit_web",
       "label": "Video Conference Kit(Web)",
       "path": "uikit/video_conference_kit/docs_video_conference_kit_web",
-      "routeBasePath": "video-conference-kit-web",
+      "routeBasePath": "uikit/video-conference-kit-web",
       "navigationInfo": {
         "group": {
           "id": "video_conference_kit",
