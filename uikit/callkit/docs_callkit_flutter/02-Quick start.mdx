@@ -1,7 +1,3 @@
-import UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION from "/snippets/uikit/UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION-en.mdx";
-import UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG from "/snippets/uikit/UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG-en.mdx";
-import UIKIT_IOS_PERMISSION_CONFIG_EN from "/snippets/uikit/UIKIT_IOS_PERMISSION_CONFIG-en.mdx";
-
 
 # Quick start
 
@@ -103,7 +99,18 @@ Now, you can make a new call by navigating to this `CallPage`.
       </Accordion>
 
       <Accordion title="Edit android/build.gradle" defaultOpen="false">
-  <UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG />
+
+Open the file `android/build.gradle`, and add the following:
+
+```gradle
+buildscript {
+  ext.kotlin_version = '1.8.0'
+}
+```
+<Frame width="800" height="auto" caption="">
+  <img src="images/android-config-buildgradle.jpeg" />
+</Frame>
+
       </Accordion>
 
       <Accordion title="Modify gradle-wrapper.properties" defaultOpen="false">
@@ -146,14 +153,64 @@ Now, you can make a new call by navigating to this `CallPage`.
       </Accordion>
 
       <Accordion title="Prevent code obfuscation" defaultOpen="false">
-<UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
+
+To prevent obfuscation of the SDK public class names, do the following:
+
+<Steps>
+  <Step title="In your project's 'your_project > android > app' folder, create a 'proguard-rules.pro' file with the following content as shown below">
+    ```gradle
+    -keep class **.zego.** { *; }
+    ```
+  </Step>
+  <Step title="Add the following config code to the 'release' part of the 'your_project/android/app/build.gradle' file">
+    ```gradle
+    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    ```
+
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/android_class_confusion.png" />
+    </Frame>
+  </Step>
+</Steps>
+
       </Accordion>
   </Tab>
   
   <Tab title="iOS">
     <Accordion title="Modify Permissions" defaultOpen="false">
 
-<UIKIT_IOS_PERMISSION_CONFIG_EN />
+<Steps>
+  <Step title="Open the 'your_project/ios/Podfile' file, and add the following to the 'post_install do |installer|' part">
+    ```plist
+    # Start of the permission_handler configuration
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_CAMERA=1',
+        'PERMISSION_MICROPHONE=1',
+      ]
+    end
+    # End of the permission_handler configuration
+    ```
+
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/permission_podfile.png" />
+    </Frame>
+  </Step>
+  <Step title="Open the 'your_project/ios/Runner/Info.plist' file, and add the following to the 'dict' part">
+    ```plist
+    <key>NSCameraUsageDescription</key>
+    <string>We require camera access to connect</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We require microphone access to connect</string>
+    ```
+
+    <Frame width="auto" height="auto" caption="">
+      <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/permission_ios.jpg" />
+    </Frame>
+  </Step>
+</Steps>
+
     </Accordion>
     <Accordion title="Disable 'Build Libraries for Distribution'" defaultOpen="false">
       Open the your_project > iOS > Runner.xcworkspace file.
