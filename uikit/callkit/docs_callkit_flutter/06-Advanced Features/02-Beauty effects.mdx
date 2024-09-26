@@ -65,7 +65,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 
     /// Add beauty effect button.
     config.bottomMenuBarConfig.buttons = [
-      ZegoMenuBarButtonName.beautyEffectButton,
+      ZegoCallMenuBarButtonName.beautyEffectButton,
       ...config.bottomMenuBarConfig.buttons,
     ];
     /// Set up the license obtained from ZEGOCLOUD.
@@ -88,7 +88,7 @@ Widget build(BuildContext context) {
   final config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
   /// Add beauty effect button.
   config.bottomMenuBarConfig.buttons = [
-    ZegoMenuBarButtonName.beautyEffectButton,
+    ZegoCallMenuBarButtonName.beautyEffectButton,
     ...config.bottomMenuBarConfig.buttons,
   ];
   /// Set up the license obtained from ZEGOCLOUD.
@@ -219,7 +219,7 @@ To customize the beauty effects, config the `beautyConfig` in `ZegoUIKitPrebuilt
 ```dart
 final config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall();
 config.bottomMenuBarConfig.buttons = [
-  ZegoMenuBarButtonName.beautyEffectButton,
+  ZegoCallMenuBarButtonName.beautyEffectButton,
   ...config.bottomMenuBarConfig.buttons,
 ];
 config.beautyConfig = ZegoBeautyPluginConfig();
