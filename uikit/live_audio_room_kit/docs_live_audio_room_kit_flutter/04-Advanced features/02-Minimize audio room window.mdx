@@ -1,14 +1,14 @@
-# Minimize audio room window(Overlay)
+# Minimize audio room window
 
-in-app minimization, is a window displayed on top of the application. 
+## In-app minimization
 
 With only two simple steps, you can achieve the effect of minimizing the audio room window within the application. Ideally, the final effect will look like this:
 
-<Frame width="auto" height="auto" caption="">
+<Frame width="300" height="auto" caption="">
   <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/audio_room/audio_room_mini.gif" />
 </Frame>
 
-## Integrate the minimize function into the app
+### Integrate in-app minimization
 
 <Steps> 
 
@@ -217,26 +217,26 @@ With only two simple steps, you can achieve the effect of minimizing the audio r
 
 After completing the above two steps, you can now minimize the audio room window within the application.
 
-# Picture In Picture(PIP)
+## Out-of-app minimization
 
-PIP, also known as out-of-app minimization, is a window displayed when the application is in background. 
+PIP, also known as Picture In Picture, is a window displayed when the application is in background. 
 
 In addition, interactive operations are not allowed at this time, so it is only in viewing mode.
 
-we will enable PIP by default, which means **enableWhenBackground** default value is true. If you don't want to enable it, you can modify it to false through **ZegoLiveAudioRoomPIPConfig**. 
+The default value of `ZegoLiveAudioRoomPIPConfig.enableWhenBackground` is true, which means the PIP feature is enabled by default. If you don't want to enable it, you can set it to false.
 
-In addition, if you want to control it through buttons, you can add **ZegoLiveAudioRoomMenuBarButtonName.pipButton** in **topMenuBar.buttons**.
+If you want to display the PIP window by clicking a button, you can achieve this by adding `ZegoCallMenuBarButtonName.pipButton` to `topMenuBar.buttons`.
 
 
-Ideally, the final effect will look like this:
+The final effect will look like this:
 
-<Frame width="400" height="auto" caption="">
+<Frame width="200" height="auto" caption="">
   <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/40d9a4b8b4.gif" alt="ezgif-6-ecee9ad8fe.gif"/>
 </Frame>
 
-## Integrate with button
+### Integrate with button
 
-```dart {11}
+```dart {10-13}
 ZegoUIKitPrebuiltLiveAudioRoom(
   appID: YourAppID,
   appSign: YourAppSign,
@@ -246,13 +246,14 @@ ZegoUIKitPrebuiltLiveAudioRoom(
   config: isHost
       ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
       : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+    ..pip.enableWhenBackground = true,
     ..topMenuBar.buttons = [
       ZegoLiveAudioRoomMenuBarButtonName.pipButton
     ],
 ),
 ```
 
-## Config
+### Config
 
 - ZegoLiveAudioRoomPIPConfig
 
@@ -270,13 +271,3 @@ ZegoUIKitPrebuiltLiveAudioRoom(
  | background  | background widget, default is a black widget | Widget? |
  | showUserName | show user name or not | bool |
  | userNameTextColor | text color of user name, default is white | Color? | 
-
-```dart {6}
-ZegoUIKitPrebuiltLiveAudioRoom(
-  ...
-  config: isHost
-      ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
-      : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
-    ..pip.enableWhenBackground = false,
-),
-```

@@ -1,6 +1,6 @@
-# Minimize call window(Overlay)
+# Minimize call window
 
-in-app minimization, is a window displayed on top of the application. 
+## In-app minimization
 
 With only two simple steps, you can achieve the effect of minimizing the video call window within the application.
 
@@ -11,7 +11,7 @@ Ideally, the final effect will look like this:
 </Frame>
 
 
-## Integrate the minimize function into the app
+### Integrate in-app minimization
 
 <Steps>
 
@@ -157,27 +157,27 @@ Ideally, the final effect will look like this:
 
 After completing the above two steps, you can now minimize the video call window within the application.
 
-# Picture In Picture(PIP)
+## Out-of-app minimization
 
-PIP, also known as out-of-app minimization, is a window displayed when the application is in background. 
+PIP, also known as Picture In Picture, is a window displayed when the application is in background. 
 
 In addition, interactive operations are not allowed at this time, so it is only in viewing mode.
 
-we will enable PIP by default, which means **enableWhenBackground** default value is true. If you don't want to enable it, you can modify it to false through **ZegoCallPIPConfig**. 
+The default value of `ZegoCallPIPConfig.enableWhenBackground` is true, which means the PIP feature is enabled by default. If you don't want to enable it, you can set it to false.
 
-In addition, if you want to control it through buttons, you can add **ZegoCallMenuBarButtonName.pipButton** in **topMenuBar.buttons**.
+If you want to display the PIP window by clicking a button, you can achieve this by adding `ZegoCallMenuBarButtonName.pipButton` to `topMenuBar.buttons`.
 
 
-Ideally, the final effect will look like this:
+The final effect will look like this:
 
-<Frame width="400" height="auto" caption="">
+<Frame width="200" height="auto" caption="">
   <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/430cfc06a4.gif" alt="ezgif-6-552b97a25f.gif"/>
 </Frame>
 
-## Integrate with button
+### Integrate with button
 
 <CodeGroup>
-```dart title="With call invitation" {17}
+```dart title="With call invitation" {17,18}
 ZegoUIKitPrebuiltCallInvitationService().init(
   appID: YourAppID,
   appSign: YourAppSign,
@@ -195,12 +195,13 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 
     /// show minimizing button
     config.topMenuBar.buttons.insert(0, ZegoCallMenuBarButtonName.pipButton);
+    config.pip.enableWhenBackground = true;
 
     return config;
   },
 );
 ```
-```dart  title="Basic call" {9}
+```dart  title="Basic call" {8-11}
     ZegoUIKitPrebuiltCall(
       appID: YourAppID,
       appSign: YourAppSign,
@@ -208,6 +209,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
       userName: userName,
       callID: callID,
       config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..pip.enableWhenBackground = true
         ..topMenuBar.buttons = [
           ZegoCallMenuBarButtonName.pipButton,
         ]
@@ -215,7 +217,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
 ```
 </CodeGroup>
 
-## Config
+### Config
 
 -  ZegoCallPIPConfig
 
@@ -231,32 +233,3 @@ ZegoUIKitPrebuiltCallInvitationService().init(
  | Attribute | Description | Type |
  | --------- | --------- | --------- |
  | background  | background widget, default is a black widget | Widget? |
-
-
-<CodeGroup>
-```dart title="With call invitation" {12}
-ZegoUIKitPrebuiltCallInvitationService().init(
-  ...
-  requireConfig: (ZegoCallInvitationData data) {
-    var config = (data.invitees.length > 1)
-        ? ZegoCallType.videoCall == data.type
-        ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
-        : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
-        : ZegoCallType.videoCall == data.type
-        ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-        : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
-
-    config.pip.enableWhenBackground = false;
-
-    return config;
-  },
-);
-```
-```dart  title="Basic call" {4}
-    ZegoUIKitPrebuiltCall(
-      ...
-      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-        ..pip.enableWhenBackground = false
-    )
-```
-</CodeGroup>

@@ -1,25 +1,18 @@
-# Minimize livestream window(Overlay)
+# Minimize livestream window
 
-in-app minimization, is a window displayed on top of the application. 
+## In-app minimization
 
 With only two simple steps, you can achieve the effect of minimizing the livestream window within the application. 
 
 Ideally, the final effect will look like this:
 
-- Normal livestream scene:
-
-<Frame width="512" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_mini.gif" />
-</Frame>
-
-- PK battle scene:
-
-<Frame width="512" height="auto" caption="">
-  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_pk_mini.gif" />
-</Frame>
+|Normal livestream scene|PK battle scene|
+|--|--|
+|<Frame width="256" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_mini.gif" /></Frame>|<Frame width="340" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_pk_mini.gif" /></Frame>|
 
 
-## 1. Integrate the minimize function into the app
+
+### Integrate in-app minimization
 
 <Steps> 
 
@@ -172,7 +165,7 @@ ElevatedButton(
 </Steps>
 
 
-## 2. How to correctly nest widgets within the livestream window
+### How to correctly nest widgets within the livestream window
 
 If you need to nest some widgets in `ZegoUIKitPrebuiltLiveStreaming`, please use `ZegoUIKitPrebuiltLiveStreamingConfig.foreground` nesting, otherwise these widgets will be lost when you minimize and restore the `ZegoUIKitPrebuiltLiveStreaming`.
 
@@ -223,26 +216,26 @@ class LivePageState extends State<LivePage> {
 }
 ```
 
-# Picture In Picture(PIP)
+## Out-of-app minimization
 
-PIP, also known as out-of-app minimization, is a window displayed when the application is in background. 
+PIP, also known as Picture In Picture(PIP), is a window displayed when the application is in background. 
 
 In addition, interactive operations are not allowed at this time, so it is only in viewing mode.
 
-we will enable PIP by default, which means **enableWhenBackground** default value is true. If you don't want to enable it, you can modify it to false through **ZegoLiveStreamingPIPConfig**. 
+The default value of `ZegoLiveStreamingPIPConfig.enableWhenBackground` is true, which means the PIP feature is enabled by default. If you don't want to enable it, you can set it to false.
 
-In addition, if you want to control it through buttons, you can add **ZegoLiveStreamingMenuBarButtonName.pipButton** in **topMenuBar.buttons**.
+If you want to display the PIP window by clicking a button, you can achieve this by adding `ZegoCallMenuBarButtonName.pipButton` to `topMenuBar.buttons`.
 
 
-Ideally, the final effect will look like this:
+The final effect will look like this:
 
-<Frame width="400" height="auto" caption="">
+<Frame width="200" height="auto" caption="">
   <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/ca91c7b844.gif" alt="ezgif-6-503ea90329.gif"/>
 </Frame>
 
-## Integrate with button
+### Integrate with button
 
-```dart {11}
+```dart {10-13}
 ZegoUIKitPrebuiltLiveStreaming(
   appID: YourAppID,
   appSign: YourAppSign,
@@ -252,13 +245,14 @@ ZegoUIKitPrebuiltLiveStreaming(
   config: isHost
       ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
       : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+    ..pip.enableWhenBackground = true,
     ..topMenuBar.buttons = [
       ZegoLiveStreamingMenuBarButtonName.pipButton
     ],
 ),
 ```
 
-## Config
+### Config
 
 - ZegoLiveStreamingPIPConfig
 
@@ -274,13 +268,3 @@ ZegoUIKitPrebuiltLiveStreaming(
  | Attribute | Description | Type |
  | --------- | --------- | --------- |
  | background  | background widget, default is a black widget | Widget? |
-
-```dart {6}
-ZegoUIKitPrebuiltLiveStreaming(
-  ...
-  config: isHost
-      ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
-      : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
-    ..pip.enableWhenBackground = false,
-),
-```
