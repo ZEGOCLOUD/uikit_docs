@@ -231,3 +231,32 @@ ZegoUIKitPrebuiltCallInvitationService().init(
  | Attribute | Description | Type |
  | --------- | --------- | --------- |
  | background  | background widget, default is a black widget | Widget? |
+
+
+<CodeGroup>
+```dart title="With call invitation" {12}
+ZegoUIKitPrebuiltCallInvitationService().init(
+  ...
+  requireConfig: (ZegoCallInvitationData data) {
+    var config = (data.invitees.length > 1)
+        ? ZegoCallType.videoCall == data.type
+        ? ZegoUIKitPrebuiltCallConfig.groupVideoCall()
+        : ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
+        : ZegoCallType.videoCall == data.type
+        ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
+
+    config.pip.enableWhenBackground = false;
+
+    return config;
+  },
+);
+```
+```dart  title="Basic call" {4}
+    ZegoUIKitPrebuiltCall(
+      ...
+      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..pip.enableWhenBackground = false
+    )
+```
+</CodeGroup>

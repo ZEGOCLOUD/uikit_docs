@@ -270,3 +270,13 @@ ZegoUIKitPrebuiltLiveAudioRoom(
  | background  | background widget, default is a black widget | Widget? |
  | showUserName | show user name or not | bool |
  | userNameTextColor | text color of user name, default is white | Color? | 
+
+```dart {6}
+ZegoUIKitPrebuiltLiveAudioRoom(
+  ...
+  config: isHost
+      ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
+      : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
+    ..pip.enableWhenBackground = false,
+),
+```

@@ -274,3 +274,13 @@ ZegoUIKitPrebuiltLiveStreaming(
  | Attribute | Description | Type |
  | --------- | --------- | --------- |
  | background  | background widget, default is a black widget | Widget? |
+
+```dart {6}
+ZegoUIKitPrebuiltLiveStreaming(
+  ...
+  config: isHost
+      ? ZegoUIKitPrebuiltLiveStreamingConfig.host()
+      : ZegoUIKitPrebuiltLiveStreamingConfig.audience()
+    ..pip.enableWhenBackground = false,
+),
+```
