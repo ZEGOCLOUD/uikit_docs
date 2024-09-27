@@ -2,7 +2,9 @@
 
 <Video src="https://www.youtube.com/embed/RowFWxNfQhc"/>					
 
-<Tip title="TIPS">If you need the call invitation feature, the integration method is different. Please refer to [this document](./03-Quick%20start%20(with%20call%20invitation).mdx).</Tip>
+<Note title="Note">
+If you need the call invitation feature, the integration method is different. Please refer to [this document](./03-Quick%20start%20(with%20call%20invitation).mdx).
+</Note>
 
 ## Integrate the SDK
 
@@ -12,7 +14,7 @@
 
 Run the following code in your project root directory :
 
-```plaintext 
+```bash 
 flutter pub add zego_uikit_prebuilt_call
 ```
 
@@ -88,13 +90,13 @@ Now, you can make a new call by navigating to this `CallPage`.
             </Frame>
           </Step>
         </Steps>
-        <Tip title="created with Flutter 2.x.x">
-          > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
+        <Note title="created with Flutter 2.x.x">
+          > If your project is created with **Flutter 2.x.x**, you will need to change the `compileSdkVersion` to **33**.
           
           <Frame width="800" height="auto" caption="">
             <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
           </Frame>
-        </Tip>
+        </Note>
       </Accordion>
 
       <Accordion title="Edit android/build.gradle" defaultOpen="false">
@@ -102,7 +104,7 @@ Now, you can make a new call by navigating to this `CallPage`.
       </Accordion>
 
       <Accordion title="Modify gradle-wrapper.properties" defaultOpen="false">
-        Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, modify the `distributionUrl` to `https://services.gradle.org/distributions/gradle-7.4-all.zip`.
+        Make the `gradle` version >= 7.0: In the `your_project/android/gradle/wrapper/gradle-wrapper.properties` file, change the `distributionUrl` to `https://services.gradle.org/distributions/gradle-7.4-all.zip`.
 
         ```xml gradle-wrapper.properties
         distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-all.zip
