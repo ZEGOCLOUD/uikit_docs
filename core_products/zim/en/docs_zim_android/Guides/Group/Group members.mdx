@@ -1,0 +1,998 @@
+---
+articleID: 14223
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const queryGroupMemberListMap = {
+  'Android': <a href='@queryGroupMemberList' target='_blank'>queryGroupMemberList</a>,
+  'iOS,mac': <a href='@queryGroupMemberListByGroupID' target='_blank'>queryGroupMemberListByGroupID</a>,
+}
+export const ZIMGroupMemberListQueriedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberListQueriedCallback' target='_blank'>ZIMGroupMemberListQueriedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberListQueriedResult' target='_blank'>ZIMGroupMemberListQueriedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberListQueriedCallback' target='_blank'>ZIMGroupMemberListQueriedCallback</a>,
+}
+export const queryGroupMemberInfoMap = {
+  'Android': <a href='@queryGroupMemberInfo' target='_blank'>queryGroupMemberInfo</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIM#query-group-member-info-by-user-id-group-id-callback' target='_blank'>queryGroupMemberInfoByGroupID</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIM#query-group-member-info-by-user-id-group-id-callback' target='_blank'>queryGroupMemberInfoByGroupID</a>,
+}
+export const ZIMGroupMemberInfoQueriedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberInfoQueriedCallback' target='_blank'>ZIMGroupMemberInfoQueriedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberInfoQueriedResult' target='_blank'>ZIMGroupMemberInfoQueriedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberInfoQueriedCallback' target='_blank'>ZIMGroupMemberInfoQueriedCallback</a>,
+}
+export const setGroupMemberNicknameMap = {
+  'Android': <a href='@setGroupMemberNickname' target='_blank'>setGroupMemberNickname</a>,
+}
+export const ZIMGroupMemberNicknameUpdatedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberNicknameUpdatedCallback' target='_blank'>ZIMGroupMemberNicknameUpdatedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberNicknameUpdatedResult' target='_blank'>ZIMGroupMemberNicknameUpdatedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberNicknameUpdatedCallback' target='_blank'>ZIMGroupMemberNicknameUpdatedCallback</a>,
+}
+export const setGroupMemberRoleMap = {
+  'Android': <a href='@setGroupMemberRole' target='_blank'>setGroupMemberRole</a>,
+}
+export const ZIMGroupMemberRoleUpdatedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberRoleUpdatedCallback' target='_blank'>ZIMGroupMemberRoleUpdatedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberRoleUpdatedResult' target='_blank'>ZIMGroupMemberRoleUpdatedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberRoleUpdatedCallback' target='_blank'>ZIMGroupMemberRoleUpdatedCallback</a>,
+}
+export const onGroupMemberInfoUpdatedMap = {
+  'Android': <a href='@onGroupMemberInfoUpdated' target='_blank'>onGroupMemberInfoUpdated</a>,
+  'Web': <a href='@groupMemberInfoUpdated' target='_blank'>groupMemberInfoUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-member-info-updated-operated-info-group-id' target='_blank'>groupMemberInfoUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-member-info-updated-operated-info-group-id' target='_blank'>groupMemberInfoUpdated</a>,
+}
+export const transferGroupOwnerMap = {
+  'Android': <a href='@transferGroupOwner' target='_blank'>transferGroupOwner</a>,
+  'iOS,mac': <a href='@transferGroupOwnerToUserID' target='_blank'>transferGroupOwnerToUserID</a>,
+}
+export const queryGroupMemberCountMap = {
+  'Android': <a href='@queryGroupMemberCount' target='_blank'>queryGroupMemberCount</a>,
+  'iOS,mac': <a href='@queryGroupMemberCountByGroupID' target='_blank'>queryGroupMemberCountByGroupID</a>,
+}
+export const ZIMGroupMemberCountQueriedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberCountQueriedCallback' target='_blank'>ZIMGroupMemberCountQueriedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberCountQueriedResult' target='_blank'>ZIMGroupMemberCountQueriedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberCountQueriedCallback' target='_blank'>ZIMGroupMemberCountQueriedCallback</a>,
+}
+export const searchLocalGroupMembersMap = {
+  'Android': <a href='@searchLocalGroupMembers' target='_blank'>searchLocalGroupMembers</a>,
+  'iOS,mac': <a href='@searchLocalGroupMembersByGroupID' target='_blank'>searchLocalGroupMembersByGroupID</a>,
+}
+export const ZIMGroupMembersSearchedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMembersSearchedCallback' target='_blank'>ZIMGroupMembersSearchedCallback</a>,
+  'Web': <a href='@-ZIMGroupMembersSearchedResult' target='_blank'>ZIMGroupMembersSearchedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMembersSearchedCallback' target='_blank'>ZIMGroupMembersSearchedCallback</a>,
+}
+export const ZIMGroupMembersMutedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMembersMutedCallback' target='_blank'>ZIMGroupMembersMutedCallback</a>,
+  'Web': <a href='@-ZIMGroupMembersMutedResult' target='_blank'>ZIMGroupMembersMutedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMembersMutedCallback' target='_blank'>ZIMGroupMembersMutedCallback</a>,
+}
+export const queryGroupMemberMutedListMap = {
+  'Android': <a href='@queryGroupMemberMutedList' target='_blank'>queryGroupMemberMutedList</a>,
+  'iOS,mac': <a href='@queryGroupMemberMutedListByGroupID' target='_blank'>queryGroupMemberMutedListByGroupID</a>,
+}
+export const ZIMGroupMemberMutedListQueriedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMemberMutedListQueriedCallback' target='_blank'>ZIMGroupMemberMutedListQueriedCallback</a>,
+  'Web': <a href='@-ZIMGroupMemberMutedListQueriedResult' target='_blank'>ZIMGroupMemberMutedListQueriedResult</a>,
+  'iOS,mac,window': <a href='@ZIMGroupMemberMutedListQueriedCallback' target='_blank'>ZIMGroupMemberMutedListQueriedCallback</a>,
+}
+export const mutedExpiredTimeMap = {
+  'Android': <a href="mutedExpiredTime-ZIMGroupConversation" target='_blank'>mutedExpiredTime</a>,
+}
+export const ZIMConversationMap = {
+  'Android': <a href='@-ZIMConversation' target='_blank'>ZIMConversation</a>,
+}
+
+
+
+# Manage group members
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group member management, allowing you to query the group member list and group member info, change the group owner, and more.
+
+
+## Prerequisites 
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+
+
+<Warning title="Warning">
+
+- Before you use the following features, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](!GroupManagement).
+</Warning>
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/14556.png" /></Frame>
+
+## Get group member list
+
+
+To know who is in the current group and get the group member list after login, call the {getPlatformData(props,queryGroupMemberListMap)} method. A single call to the interface can obtain up to 100 members. If the passed `count` exceeds 100, it will be processed as 100.
+
+You will receive a notification through the callback {getPlatformData(props,ZIMGroupMemberInfoQueriedCallbackMap)}  after the query succeeds. 
+
+<Note title="Note">
+
+As of the current version, when this interface is called for the first time to pull the list of group members, the avatars of group members can be retrieved. If you call this interface again, you can get the avatar information of new users, but the avatar information of existing users will not be updated.
+
+To get the latest avatars of group members, please call the interface {getPlatformData(props,queryGroupMemberInfoMap)}  <a href="#queryGroupMemberInfo">to query group member info</a>.
+</Note>
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Get group member list.
+ZIMGroupMemberQueryConfig config = new ZIMGroupMemberQueryConfig();
+// count over 100 is treated as 100
+config.count = 100;
+config.nextFlag = 0;
+zim.queryGroupMemberList(group_id, config, new ZIMGroupMemberListQueriedCallback() {
+    @Override
+    public void onGroupMemberListQueried(ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+    
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// Get group member list.
+int myNextFlag = 0;
+    ZIMGroupMemberQueryConfig *config = [[ZIMGroupMemberQueryConfig alloc] init];
+// If count exceeds 100, it will be treated as 100.
+    config.count = 20;
+    config.nextFlag = myNextFlag;
+    [zim queryGroupMemberListByGroupID:groupID config:config callback:^(NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        //ave the anchor points of the group members for the next paging query.
+            myNextFlag = nextFlag;
+            // Implement the event callback for querying the group member list.
+    }];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// Get group member list.
+int myNextFlag = 0;
+    ZIMGroupMemberQueryConfig *config = [[ZIMGroupMemberQueryConfig alloc] init];
+// If count exceeds 100, it will be treated as 100.
+    config.count = 20;
+    config.nextFlag = myNextFlag;
+    [zim queryGroupMemberListByGroupID:groupID config:config callback:^(NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+        //ave the anchor points of the group members for the next paging query.
+            myNextFlag = nextFlag;
+            // Implement the event callback for querying the group member list.
+    }];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Get group member list.
+var groupID = '';
+// If count exceeds 100, it will be treated as 100.
+var config = { count: 10, nextFlag: 0 };
+
+zim.queryGroupMemberList(groupID, config)
+    .then(function ({ groupID, userList, nextFlag }) {
+        // Query successful.
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Get group member list.
+zim::ZIMQueryGroupMemberConfig config;
+config.count = 100;
+config.nextFlag = 0;
+
+zim_->queryGroupMemberList(group_id, config, 
+    [=](const std::string &groupID, const std::vector<zim::ZIMGroupMemberInfo> userList,
+        unsigned int nextFlag, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+
+</CodeGroup>
+:::
+
+
+## Get group member info
+
+To know the info of a specified member after joining a group, call the {getPlatformData(props,queryGroupMemberInfoMap)} method.
+
+You will receive the specific info throught the callback {getPlatformData(props,ZIMGroupMemberInfoQueriedCallbackMap)}  after the query succeeds.
+
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java  SampleCode
+// Get group member info
+zim.queryGroupMemberInfo(user_id, group_id, new ZIMGroupMemberListQueriedCallback() {
+    @Override
+    public void onGroupMemberListQueried(ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// Get group member info.
+[zim queryGroupMemberInfo:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for querying the group member info.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// Get group member info.
+[zim queryGroupMemberInfo:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for querying the group member info.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+//  Get the info of a specified group member.
+var groupID = '';
+var userID = '';
+zim.queryGroupMemberInfo(userID, groupID)
+    .then(function ({ groupID, userInfo }) {
+        // Query successful.
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Get group member info
+zim_->queryGroupMemberInfo(user_id, group_id, 
+    [=](const std::string &groupID, const zim::ZIMGroupMemberInfo &userList, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+
+</CodeGroup>
+:::
+
+
+
+## Set an alias
+
+
+To set an alias after joining a group, call the {getPlatformData(props,setGroupMemberNicknameMap)} method.
+
+<Warning title="Warning">
+
+The group owner can set the alias of all group members. But the group members can only set their own aliases.
+</Warning>
+
+You will receive a notification through the callback {getPlatformData(props,ZIMGroupMemberNicknameUpdatedCallbackMap)} after the alias is set successfully. 
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Set an alias. Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
+zim.setGroupMemberNickname(member_new_nick_name, user_id, group_id, new ZIMGroupMemberNicknameUpdatedCallback() {
+    @Override
+    public void onGroupMemberNicknameUpdated(ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// Set an alias. 
+// Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
+[zim setGroupMemberNickname:nickName forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for setting the alias here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// Set an alias. 
+// Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
+[zim setGroupMemberNickname:nickName forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for setting the alias here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Set an alias. Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
+var groupID = '';
+var forUserID = '';
+var nickname = '';
+zim.setGroupMemberNickname(nickname, forUserID, groupID)
+    .then(function ({ groupID, forUserID, nickname }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Set up and listen for the callback groupMemberInfoUpdated.
+zim.on('groupMemberInfoUpdated', function (zim, { groupID, userList, operatedInfo }) {
+    console.log('groupMemberInfoUpdated', groupID, userList, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Set an alias. 
+// Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
+zim_->setGroupMemberNickname(member_new_nick_name, user_id, group_id, 
+    [=](const std::string &groupID, const std::string &userID,
+        const std::string &userNickame, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+
+
+
+
+## Set a role for a group member
+
+
+For a group owner to set a role for a group member, call the {getPlatformData(props,setGroupMemberRoleMap)} method. You can set the group member to a regular member or admin.
+
+After the setting is successful, the group owner can receive the setting result through {getPlatformData(props,ZIMGroupMemberRoleUpdatedCallbackMap)} .
+
+Group members can receive notifications of user role changes through {getPlatformData(props,onGroupMemberInfoUpdatedMap)}.
+   
+
+
+
+#### Description of group member roles and permissions
+The ZIM SDK supports setting users as group owners, administrators, and regular members by default. In a group, the group owner has all **client permissions** and can perform all group functions. Administrators have most **client permissions**, while regular members have the fewest **client permissions**. The specific client permissions for each role are shown in the table below:
+
+<table>
+
+<tbody>
+<tr>
+<th>Client Permissions</th>
+<th>Group Owner<br/>(corresponding enum value: 1)</th>
+<th>Administrator<br/>(corresponding enum value: 2)</th>
+<th>Regular Member<br/>(corresponding enum value: 3)</th>
+</tr>
+<tr>
+<th>Modify group avatar, group name, group notice</th>
+<td rowspan="2">Supported</td>
+<td rowspan="2">Supported</td>
+<td rowspan="2">Supported</td>
+</tr>
+<tr>
+<th>Modify group attributes</th>
+</tr>
+<tr>
+<th>Modify group member nickname</th>
+<td rowspan="9">Supported, can be used for all group role users</td>
+<td rowspan="5">Supported, can be used for all regular members</td>
+<td rowspan="2">Supported, can only be used for oneself</td>
+</tr>
+<tr>
+<th>Recall group member messages</th>
+</tr>
+<tr>
+<th>Kick out members</th>
+<td rowspan="7">Not supported</td>
+</tr>
+<tr>
+<th>Mute individual group members</th>
+</tr>
+<tr>
+<th>Mute specific group roles</th>
+</tr>
+<tr>
+<th>Set group member roles</th>
+<td rowspan="4">Not supported</td>
+</tr>
+<tr>
+<th>Transfer group ownership</th>
+</tr>
+<tr>
+<th>Dismiss the group</th>
+</tr>
+<tr>
+<th>Mute all members</th>
+</tr>
+</tbody>
+</table>
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// The group owner sets ordinary member users as administrators.
+zim.setGroupMemberRole(2, user_id, group_id, new ZIMGroupMemberRoleUpdatedCallback() {
+    @Override
+    public void onGroupMemberRoleUpdated(ZIMError errorInfo) {
+// Obtain the result of setting the role of group members through errorInfo.code.
+    }
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// Group owner sets ordinary members as administrators.
+[zim setGroupMemberRole:role forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement business code after setting the role here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// Group owner sets ordinary members as administrators.
+[zim setGroupMemberRole:role forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement business code after setting the role here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// The group owner sets ordinary member users as administrators.
+var groupID = '';
+var forUserID = '';
+var role = 2;
+zim.setGroupMemberRole(role, forUserID, groupID)
+    .then(function ({ groupID, forUserID, role }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Set up and listen for the callback groupMemberInfoUpdated.
+zim.on('groupMemberInfoUpdated', function (zim, { groupID, userList, operatedInfo }) {
+    console.log('groupMemberInfoUpdated', groupID, userList, operatedInfo);
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// The group owner sets ordinary member users as administrators.
+ int role = 2;
+ zim_->setGroupMemberRole(role, for_user_id, group_id, 
+     [=](int role, const std::string &forUserID, const std::string &groupID, zim::ZIMError errorInfo) {
+        int error_code = errorInfo.code;
+   });
+```
+</CodeGroup>
+:::
+
+
+## Transfer the group ownership
+
+
+For a group owner to transfer the group ownership, call the {getPlatformData(props,transferGroupOwnerMap)} method with the `toUserID` (the ID of the member you want to transfer the group ownership to).
+
+<Warning title="Warning">
+
+- Only the group owner has permission to change the group owner.
+- The member you want to transfer the group ownership to must be in the group; otherwise, the operation fails.
+</Warning>
+
+All group members will receive a notification through the callback {getPlatformData(props,onGroupMemberInfoUpdatedMap)}  after the group owner is changed. 
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Change the group owner.
+zim.transferGroupOwner(new_group_owner_id, group_id, new ZIMGroupOwnerTransferredCallback() {
+    @Override
+    public void onGroupOwnerTransferred(ZIMError errorInfo) {
+        // Get the result of transferring group owner identity through errorInfo.code. 
+    }
+});
+```
+</CodeGroup>
+
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// Change the group owner.
+[zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for changing the group owner here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// Change the group owner.
+[zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for changing the group owner here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Change the group owner.
+var groupID = '';
+var toUserID = '';
+zim.transferGroupOwner(toUserID, groupID)
+    .then(function ({ groupID, toUserID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Set up and listen for the callback groupMemberStateChanged.
+zim.on('groupMemberStateChanged', function (zim, { groupID, state, event, userList, operatedInfo }) {
+    console.log('groupMemberStateChanged', groupID, state, event, userList, operatedInfo);
+});
+
+// Set up and listen for the callback groupMemberInfoUpdated.
+zim.on('groupMemberInfoUpdated', function (zim, { groupID, userList, operatedInfo }) {
+    console.log('groupMemberInfoUpdated', groupID, userList, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Change the group owner.
+zim_->transferGroupOwner(new_group_owner_id, group_id, 
+    [=](const std::string &groupID, const std::string &toUserID, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+
+
+
+## Query the number of group members
+
+
+To query the number of group members after logging in and joining a group, call the {getPlatformData(props,queryGroupMemberCountMap)} method.
+
+You will receive the query results through the callback {getPlatformData(props,ZIMGroupMemberCountQueriedCallbackMap)}.
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// For an in-group member to query the number of group members.
+zim.queryGroupMemberCount("GROUP_ID", new ZIMGroupMemberCountQueriedCallback() {
+            @Override
+            public void onGroupMemberCountQueried(String groupID, int count, ZIMError errorInfo) {
+                // Get the number of group members.
+            }
+        });
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```oc SampleCode
+// For an in-group member to query the number of group members.
+[zim queryGroupMemberCountByGroupID:self.toGroupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```oc SampleCode
+// For an in-group member to query the number of group members.
+[zim queryGroupMemberCountByGroupID:self.toGroupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Query the number of group members.
+var groupID = '';
+zim.queryGroupMemberCount(groupID)
+    .then(function ({ groupID, count }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// For an in-group member to query the number of group members.
+zim_->queryGroupMemberCount(
+        group_id, [=](const std::string &groupID, unsigned int count,
+                          const zim::ZIMError &errorInfo) { 
+                int code = errorInfo.code; 
+    });
+```
+</CodeGroup>
+:::
+
+
+
+
+### Search group members
+
+After logging in to the ZIM SDK and joining a group, if you want to search for users within the group based on certain criteria, use the  {getPlatformData(props,searchLocalGroupMembersMap)} interface. By providing the groupID、config、callback, you can search for group members that meet the specified conditions.
+
+The search results will be returned through the {getPlatformData(props,ZIMGroupMembersSearchedCallbackMap)} interface.
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+// Search a group for members with "zego" in their name
+ZIM zim = getZIM();
+ZIMGroupMemberSearchConfig config = new ZIMGroupMemberSearchConfig();
+config.count = 10;
+config.nextFlag = nextFlag;
+config.isAlsoMatchGroupMemberNickname = true; // If a group member's nickname contains zego, the search results will include that member
+config.keywords.add("zego");
+zim.searchLocalGroupMembers(conversationID, config, new ZIMGroupMembersSearchedCallback() {
+    @Override
+    public void onGroupMembersSearched(String groupID, ArrayList<ZIMGroupMemberInfo> userList, int nextFlag, ZIMError errorInfo) {
+        // Developers can obtain group member information from userList
+}});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Search for group members in a specific group whose names contain “zego”
+ZIMGroupMemberSearchConfig *config = [[ZIMGroupMemberSearchConfig alloc] init];
+config.count = 10;
+config.isAlsoMatchGroupMemberNickname = true; // If the group member's nickname contains "zego", the search results will include that member.
+config.keywords = @[@"zego"];
+config.keywords = @[@"zego"];
+[[ZIM getInstance] searchLocalGroupMembersByGroupID:@"groupID" config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+  // Developers can retrieve group member information from the userList.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Search for group members in a specific group whose names contain “zego”
+ZIMGroupMemberSearchConfig *config = [[ZIMGroupMemberSearchConfig alloc] init];
+config.count = 10;
+config.isAlsoMatchGroupMemberNickname = true; // If the group member's nickname contains "zego", the search results will include that member.
+config.keywords = @[@"zego"];
+config.keywords = @[@"zego"];
+[[ZIM getInstance] searchLocalGroupMembersByGroupID:@"groupID" config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+  // Developers can retrieve group member information from the userList.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Search a group for members with "zego" in their name
+
+var config = {
+    count: 10, // number of search results
+    nextFlag: 0,
+    keywords: ['zego'], // Set the keywords to "zego", supports up to 5. When multiple keywords are set, the search results will only show local messages that contain all the keywords at the same time.
+    isAlsoMatchGroupMemberNickname: true, // If a group member has a nickname that includes zego, the search results will include that group member.
+};
+
+zim.searchLocalGroupMembers('groupID', config)
+    .then(function ({ groupID, userList, nextFlag }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Search a group for members with "zego" in their name
+auto searchConfig = zim::ZIMGroupMemberSearchConfig();
+searchConfig.count = 10;
+searchConfig.nextFlag = 0;
+// If a group member's nickname contains zego, the search results will include that member
+searchConfig.isAlsoMatchGroupMemberNickname = true;
+searchConfig.keywords.emplace_back("zego");
+
+zim_->searchLocalGroupMembers(groupID, searchConfig,
+                              [=](const std::string &groupID,
+                                  const std::vector<zim::ZIMGroupMemberInfo> &userList,
+                                  unsigned int nextFlag, const zim::ZIMError &errorInfo) {
+        // Developers can obtain group member information from userList
+}});
+```
+</CodeGroup>
+:::
+
+
+### Set Mute status for group members
+After logging into the ZIM SDK, you can mute or unmute specific members within the groups they manage. By calling the muteGroupMembers|_blank interface, you can modify the mute status of up to 100 group members in bulk. The mute duration can be permanent or up to a maximum of 604,800 seconds (7 days).
+
+<Note title="Note">
+
+- The group owner can prohibit all group members, including themselves, from speaking.
+- If you need to increase the number of operations per request or extend the maximum mute duration, please contact ZEGOCLOUD technical support team.
+</Note>
+
+After the settings are successfully applied, the operating user will receive notifications through {getPlatformData(props,ZIMGroupMembersMutedCallbackMap)} .
+
+Once a mute or unmute operation is successful, all group members will receive {getPlatformData(props,onGroupMemberInfoUpdatedMap)}, which informs them about the members who are unable to speak in the group or have had their mute status lifted.
+
+<Note title="Note">
+
+If you want to mute certain group members , please refer [Manage groups - Mute group](!zim-GroupManagement#muteGroup).
+</Note>
+
+:::if{props.platform=undefined}
+```java
+boolean isMute = true;
+
+ArrayList<String> userIDList;
+userIDList.add("user_1");
+userIDList.add("user_3");
+userIDList.add("user_2");
+
+String groupID = "group_id";
+
+ZIMGroupMemberMuteConfig config = new ZIMGroupMemberMuteConfig();
+ // Mute duration: 30 seconds
+config.duration = 30;
+
+zim.muteGroupMembers(isMute, userIDList, groupID, config,new ZIMGroupMembersMutedCallback() {
+    @Override
+    public void onGroupMembersMuted(String groupID, boolean isMute, int duration, ArrayList<String> mutedMemberIDs, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+     //  Developers can retrieve relevant mute information from the callback parameters.
+ }];
+ ```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+ ZIMGroupMemberMuteConfig *muteConfig = [[ZIMGroupMemberMuteConfig alloc] init];
+ // Mute duration: 30 seconds
+ muteConfig.duration = 30;
+ [[ZIM getInstance] muteGroupMembers:YES userIDs:@[@"user_1",@"user_2",@"user_3"] groupID:@"group_id" config:muteConfig callback:^(NSString * _Nonnull groupID, BOOL isMute, int duration, NSArray<NSString *> * _Nonnull mutedMemberIDs, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+     //  Developers can retrieve relevant mute information from the callback parameters.
+ }];
+ ```
+:::
+:::if{props.platform="mac"}
+```objc
+ ZIMGroupMemberMuteConfig *muteConfig = [[ZIMGroupMemberMuteConfig alloc] init];
+ // Mute duration: 30 seconds
+ muteConfig.duration = 30;
+ [[ZIM getInstance] muteGroupMembers:YES userIDs:@[@"user_1",@"user_2",@"user_3"] groupID:@"group_id" config:muteConfig callback:^(NSString * _Nonnull groupID, BOOL isMute, int duration, NSArray<NSString *> * _Nonnull mutedMemberIDs, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+     //  Developers can retrieve relevant mute information from the callback parameters.
+ }];
+ ```
+:::
+:::if{props.platform="Web"}
+```javascript
+var isMute = true;
+var userIDs = ["user_1", "user_2", "user_3"];
+var groupID = "group_id";
+var config = {
+    duration: 30,  // Set the mute time to 30 seconds.
+};
+
+zim.muteGroupMembers(isMute, userIDs, groupID, config)
+    .then(function ({ groupID, isMute, duration, mutedUserIDs, errorUserList }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp 
+bool is_mute = true;
+
+std::vector<std::string> user_id_list;
+user_id_list.push_back("user_1");
+user_id_list.push_back("user_3");
+user_id_list.push_back("user_2");
+
+std::string group_id = "group_id";
+
+zim::ZIMGroupMemberMuteConfig config;
+config.duration = 30;
+
+zim_->muteGroupMembers(is_mute, user_id_list, group_id, config,
+    [=](const std::string &groupID, bool is_muted, unsigned int duration,
+        const std::vector<std::string> &mutedMemberIDs,
+        const std::vector<zim::ZIMErrorUserInfo> &errorUserList,
+        const zim::ZIMError &errorInfo) {
+     //  Developers can retrieve relevant mute information from the callback parameters.
+ }];
+ ```
+</CodeGroup>
+:::
+
+### Query Muted Members in a Group
+
+After logging into the ZIM SDK, if you want to know the list of muted members in their group, you can use {getPlatformData(props,queryGroupMemberMutedListMap)} for querying.
+
+Upon a successful query, the operating user can obtain specific information through {getPlatformData(props,ZIMGroupMemberMutedListQueriedCallbackMap)}.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java
+ //  Query the member list of muted members in the group
+ZIMGroupMemberMutedListQueryConfig config = new ZIMGroupMemberMutedListQueryConfig();
+ // Get up to 100 members in one request
+config.count = 100;
+config.nextFlag = 0;
+zim.queryGroupMemberMutedList(
+    group_id, config, new ZIMGroupMemberMutedListQueriedCallback() {
+    @Override
+    public void onGroupMemberListQueried(String groupID, long nextFlag, ArrayList<ZIMGroupMemberInfo> userList, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+```objc
+ //  Query the member list of muted members in the group
+ ZIMGroupMemberMutedListQueryConfig *config = [[ZIMGroupMemberMutedListQueryConfig alloc] init];
+ // Get up to 100 members in one request
+ config.count = 100;
+ config.nextFlag = 0;
+
+ [[ZIM getInstance] queryGroupMemberMutedListByGroupID:@"groupID" config:config callback:^(NSString * _Nonnull groupID, unsigned long long nextFlag, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, ZIMError * _Nonnull errorInfo) {
+    // Developers can retrieve information about the muted group members from the userList.
+ }];
+ ```
+:::
+:::if{props.platform="mac"}
+```objc
+ //  Query the member list of muted members in the group
+ ZIMGroupMemberMutedListQueryConfig *config = [[ZIMGroupMemberMutedListQueryConfig alloc] init];
+ // Get up to 100 members in one request
+ config.count = 100;
+ config.nextFlag = 0;
+
+ [[ZIM getInstance] queryGroupMemberMutedListByGroupID:@"groupID" config:config callback:^(NSString * _Nonnull groupID, unsigned long long nextFlag, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, ZIMError * _Nonnull errorInfo) {
+    // Developers can retrieve information about the muted group members from the userList.
+ }];
+ ```
+:::
+:::if{props.platform="Web"}
+```javascript
+ //  Query the member list of muted members in the group
+var groupID = "group_id";
+var config = {
+    count: 100,
+    nextFlag: 0,
+}
+
+zim.queryGroupMemberMutedList(groupID, config)
+    .then(function ({ groupID, userList, nextFlag }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ //  Query the member list of muted members in the group
+zim::ZIMGroupMemberMutedListQueryConfig config;
+ // Get up to 100 members in one request
+ config.count = 100;
+ config.nextFlag = 0;
+
+zim_->queryGroupMemberMutedList(
+    group_id, config,
+    [=](const std::string &groupID, unsigned long long nextFlag,
+        const std::vector<zim::ZIMGroupMemberInfo> &info, const zim::ZIMError &errorInfo) {
+    // Developers can retrieve information about the muted group members from the userList.
+    });
+```
+:::
+
+### Get the mute status of current group members
+
+To actively retrieve the mute status of the current user in a group, please use any of the following methods:
+- Refer to [Manage sessions - Get the session list](!zim-Conversation_Management) to fetch the session list proactively.
+- Refer to [Manage sessions - Update session list](!zim-Conversation_Management) for session change callbacks and update the session list.
+
+Retrieve the {getPlatformData(props,mutedExpiredTimeMap)} from the {getPlatformData(props,ZIMConversationMap)} object in the returned result, which indicates the mute duration in seconds.
+
+The explanation of the {getPlatformData(props,mutedExpiredTimeMap)} value is as follows:
+- When it is -1, it means the current user cannot speak in that group permanently.
+- When it is 0, it means the current user can speak in that group.
+- When it is 0, it means the current user can speak in that group.
+
+<Note title="Note">
+
+
+If the current user is both muted due to group role restrictions (refer to [Manage groups - Mute or unmute group](!zim-GroupManagement), and individually muted（refer to the section <a href="#set-mute-status-for-group-members">Set mute status for group members</a> in this article）, the value of {getPlatformData(props,mutedExpiredTimeMap)} will be determined by taking the maximum value between the "group mute time" and the "individual mute time".
+
+</Note>

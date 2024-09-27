@@ -1,0 +1,493 @@
+---
+articleID: 14219
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const setGroupAttributesMap = {
+  'Android': <a href='@setGroupAttributes' target='_blank'>setGroupAttributes</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setGroupAttributes.html' target='_blank'>setGroupAttributes</a>,
+}
+export const ZIMGroupAttributesOperatedCallbackMap = {
+  'Android': <a href='@-ZIMGroupAttributesOperatedCallback' target='_blank'>ZIMGroupAttributesOperatedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupAttributesOperatedResult-class.html' target='_blank'>ZIMGroupAttributesOperatedCallback</a>,
+  'Web': <a href='@-ZIMGroupAttributesOperatedResult' target='_blank'>ZIMGroupAttributesOperatedResult</a>,
+  'iOS,window,U3d': <a href='@ZIMGroupAttributesOperatedCallback' target='_blank'>ZIMGroupAttributesOperatedCallback</a>,
+}
+export const deleteGroupAttributesMap = {
+  'Android': <a href='@deleteGroupAttributes' target='_blank'>deleteGroupAttributes</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteGroupAttributes.html' target='_blank'>deleteGroupAttributes</a>,
+  'iOS': <a href='@deleteGroupAttributesByKeys' target='_blank'>deleteGroupAttributesByKeys</a>,
+}
+export const queryGroupAttributesMap = {
+  'Android': <a href='@queryGroupAttributes' target='_blank'>queryGroupAttributes</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupAttributes.html' target='_blank'>queryGroupAttributes</a>,
+  'iOS': <a href='@queryGroupAttributesByKeys' target='_blank'>queryGroupAttributesByKeys</a>,
+}
+export const queryGroupAllAttributesMap = {
+  'Android': <a href='@queryGroupAllAttributes' target='_blank'>queryGroupAllAttributes</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupAllAttributes.html' target='_blank'>queryGroupAllAttributes</a>,
+  'iOS': <a href='@queryGroupAllAttributesByGroupID' target='_blank'>queryGroupAllAttributesByGroupID</a>,
+}
+
+# Manage group properties
+
+- - -
+
+:::if{props.platform="U3d"}
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+:::
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group properties management, allowing you to customize the group properties and fields, such as the group profile, group status, and more. 
+
+## Prerequisites 
+
+- **Create a project** in [ZEGOCLOUD Console\|_blank](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console\|_blank](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat\|_blank ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Get the token for SDK login. For details, see [Authentication\|_blank](!zim-token_authentication/token_authentication).
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages\|_blank](!Implementation_of_sending_and_receiving).
+
+
+
+<Warning title="Warning">
+
+- Before you use this feature, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups\|_blank](!GroupManagement).
+- All in-group members (group owner included) can use this feature.
+</Warning>
+
+
+
+## Set group properties
+
+To set group properties after joining a group, call the {getPlatformData(props,setGroupAttributesMap)} method.
+
+The group properties you set are stored as `key-value`.
+
+- When Key does not exist: Setting group property means adding room property.
+- When the Key already exists: Setting the group property means updating the value of the existing room property.
+- Leaves the `Key-Value` empty means no group properties to be set.
+
+<Warning title="Warning">
+
+- Up to 10 group properties can be set in a group. The group property is stored in the format of `Key-Value`. For more customizable group properties, contact ZEGOCLOUD Technical Support. 
+- The customized group properties you set will be cleared after the group is destroyed.
+</Warning>
+
+You can receive a notification through the callback {getPlatformData(props,ZIMGroupAttributesOperatedCallbackMap)} after the group properties set successfully. 
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Set group properties.
+HashMap<String, String> attributes = new HashMap<>();
+attributes.put("2", "0");
+attributes.put("3", "0");
+attributes.put("4", "0");
+
+zim.setGroupAttributes(attributes, group_id, new ZIMGroupAttributesOperatedCallback() {
+    @Override
+    public void onGroupAttributesOperated(ArrayList<String> errorKeys, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Set group properties.
+[zim setGroupAttributes:newAttributes groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for setting the group properties here. 
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Set group properties.
+var groupID = '';
+var groupAttributes = { key1: 'value1', key2: 'value2' };
+
+zim.setGroupAttributes(groupAttributes, groupID)
+    .then(function ({ groupID, errorKeys }) {
+        // Operation successful. 
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Set up and listen for the callback groupAttributesUpdated.
+zim.on('groupAttributesUpdated', function (zim, { groupID, infoList, operatedInfo }) {
+    console.log('groupAttributesUpdated', groupID, infoList, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Set group properties.
+std::unordered_map<std::string, std::string> attributes;
+attributes.emplace("2", "0");
+attributes.emplace("3", "0");
+attributes.emplace("4", "0");
+
+zim_->setGroupAttributes(attributes, group_id, 
+    [=] (const std::string &groupID, std::vector<std::string> &errorKeys, ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Set group properties.
+Map<String, String> groupAttributes = {'key': 'value'};
+ZIM
+    .getInstance()
+    .setGroupAttributes(groupAttributes, 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members set group attributes
+Dictionary<string, string> attributes = new Dictionary<string, string>();
+attributes.Add("2", "0");
+attributes.Add("3", "0");
+attributes.Add("4", "0");
+
+ZIM.GetInstance().SetGroupAttributes(attributes, "group_id", (string groupID, List<string> errorKeys,
+    ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of setting group attributes   
+    }
+);
+```
+</CodeGroup>
+:::
+
+## Delete group properties
+
+
+To delete group properties after joining a group, call the {getPlatformData(props,deleteGroupAttributesMap)} method.
+
+You can receive a notification through the callback {getPlatformData(props,ZIMGroupAttributesOperatedCallbackMap)} after the group properties are deleted successfully. 
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Delete group properties
+ArrayList<String> keys = new ArrayList<>();
+keys.add("key_0");
+keys.add("key_1");
+keys.add("key_2");
+zim.deleteGroupAttributes(keys, group_id, new ZIMGroupAttributesOperatedCallback() {
+    @Override
+    public void onGroupAttributesOperated(ArrayList<String> errorKeys, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Delete group properties
+[zim deleteGroupAttributesByKeys:deleteAttributesKeys groupID:groupID callback:^(NSString * _Nonnull groupID, NSArray<NSString *> * _Nonnull errorKeys, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for deleting the group properties here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Delete group properties.
+var groupID = '';
+var keys = ['key1'];
+
+zim.deleteGroupAttributes(keys, groupID)
+    .then(function ({ groupID, errorKeys }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Set up and listen for the callback groupAttributesUpdated.
+zim.on('groupAttributesUpdated', function (zim, { groupID, infoList, operatedInfo }) {
+    console.log('groupAttributesUpdated', groupID, infoList, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Delete group properties
+std::vector<std::string> keys;
+keys.push_back("key_0");
+keys.push_back("key_1");
+keys.push_back("key_2");
+zim_->deleteGroupAttributes(keys, group_id, 
+    [=] (const std::string &groupID, std::vector<std::string> &errorKeys, ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Delete group properties
+List<String> keys = ['key1', 'key2'];
+ZIM
+    .getInstance()
+    .deleteGroupAttributes(keys, 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members delete group attributes
+List<string> keys = new List<string>();
+keys.Add("key_0");
+keys.Add("key_1");
+keys.Add("key_2");
+
+ZIM.GetInstance().DeleteGroupAttributes(keys, "group_id", (string groupID, List<string> errorKeys,
+    ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of deleting group attributes   
+    }
+);
+```
+</CodeGroup>
+:::
+
+## Get a group property
+
+To query a group property after joining a group, call the {getPlatformData(props,queryGroupAttributesMap)} method.
+
+You can receive a notification through the callback {getPlatformData(props,ZIMGroupAttributesOperatedCallbackMap)} after the query succeeds. 
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Get a group property
+ArrayList<String> keys = new ArrayList<>();
+keys.add("0");
+keys.add("1");
+keys.add("2");
+keys.add("3");
+keys.add("4");
+keys.add("5");
+zim.queryGroupAttributes(keys, group_id, new ZIMGroupAttributesQueriedCallback() {
+    @Override
+    public void onGroupAttributesQueried(HashMap<String, String> groupAttributes, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Get a group property
+[zim queryGroupAttributesByKeys:attributesKeys groupID:groupID callback:^(NSString * _Nonnull groupID, NSDictionary<NSString *,NSString *> * _Nonnull groupAttributes, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for querying the group property here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Get a group property.
+var groupID = '';
+var keys = ['key1'];
+zim.queryGroupAttributes(keys, groupID)
+    .then(function ({ groupID, groupAttributes }) {
+        // Query successful. 
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Get a group property
+std::vector<std::string> keys;
+keys.push_back("0");
+keys.push_back("1");
+keys.push_back("2");
+keys.push_back("3");
+keys.push_back("4");
+keys.push_back("5");
+zim_->queryGroupAttributes(keys, group_id, 
+    [=](const std::string &groupID, std::unordered_map<std::string, std::string> &groupAttributes,
+    zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+//  Get a group property
+ZIM
+    .getInstance()
+    .queryGroupAttributes(keys, 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members query group attributes
+List<string> keys = new List<string>();
+keys.Add("0");
+keys.Add("1");
+keys.Add("2");
+keys.Add("3");
+keys.Add("4");
+keys.Add("5");
+
+ZIM.GetInstance().QueryGroupAttributes(keys, "group_id", (string groupID, Dictionary<string, string> groupAttributes,
+    ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of querying group attributes
+    }
+);
+```
+</CodeGroup>
+:::
+
+## Get all group properties
+
+To query all group properties after joining a group, call the {getPlatformData(props,queryGroupAllAttributesMap)} method.
+
+You can receive a notification through the callback {getPlatformData(props,ZIMGroupAttributesOperatedCallbackMap)} after the query succeeds. 
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Get all group properties.
+zim.queryGroupAttributes(group_id, new ZIMGroupAttributesQueriedCallback() {
+    @Override
+    public void onGroupAttributesQueried(HashMap<String, String> groupAttributes, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc
+// Get all group properties.
+[zim queryGroupAllAttributes:groupID callback:^(NSString * _Nonnull groupID, NSDictionary<NSString *,NSString *> * _Nonnull groupAttributes, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for querying all group properties here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript SampleCode
+// Get all group properties.
+var groupID = '';
+zim.queryGroupAllAttributes(groupID)
+    .then(function ({ groupID, groupAttributes }) {
+        // Query successful. 
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Get all group properties.
+zim_->queryGroupAllAttributes(group_id, 
+    [=](const std::string &groupID, std::unordered_map<std::string, std::string> &groupAttributes,
+    zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Get all group properties.
+ZIM
+    .getInstance()
+    .queryGroupAllAttributes('groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members query all group attributes
+ZIM.GetInstance().QueryGroupAllAttributes("group_id", (string groupID, Dictionary<string, string> groupAttributes,
+    ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of querying group attributes
+    }
+);
+```
+</CodeGroup>
+:::
+
+
