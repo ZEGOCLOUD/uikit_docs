@@ -1,0 +1,130 @@
+---
+articleID: 17828
+---
+
+
+# Overview
+
+- - -
+
+ZEGOCLOUD In-app Chat (ZIM) supports content moderation for messages. Currently, there are two ways to meet your moderation needs:
+
+- (**Recommended**) You can enable and use the <a href="#built-in-content-moderation-capability">built-in content moderation capability</a> in ZIM. This allows you to quickly moderate text messages, image messages, voice messages, and video messages without additional development. Additionally, ZIM supports <a href="#customize-sensitive-word-lists">custom sensitive word lists</a> to customize the text message moderation.
+
+- If you prefer to moderate messages by yourself or integrate with a third-party content moderation service, you can use the [Callback on message not sent yet\|_blank](!zim-callback_before_message_sent).
+
+
+## Built-in content moderation capability
+
+After contacting ZEGOCLOUD technical support to enable the content moderation service, you can obtain the content moderation capability without additional configuration. ZIM will return the moderation results based on the preset moderation level, and you only need to implement relevant business logic based on the results.
+
+The following table provides to an introduction to content moderation capability:
+
+<table>
+<tbody><tr>
+<th>Message Type</th>
+<th>Moderation Method</th>
+<th>Moderation Channel</th>
+<th>Moderation Tags</th>
+</tr>
+<tr>
+<td>Text Message</td>
+<td>Moderate before sending</td>
+<td><ul><li>One-on-one chat</li><li>Group chat</li><li>Room</li></ul></td>
+<td>Default detection of the following content: politics, terrorism, prohibition, erotic, abuse, advertisement, privacy, advertising law violations, etc. If adjustments are needed, please contact ZEGOCLOUD technical support.</td>
+</tr>
+<tr>
+<td>Image Message</td>
+<td><ul><li>Send before moderation (default)</li><li>Moderate before sending</li></ul>
+To adjust the method, please contact ZEGOCLOUD technical support.</td>
+<td><ul><li>One-on-one chat</li><li>Group chat</li><li>Room</li></ul></td>
+<td>Default detection of the following content: politics, pornography, terrorism, QR code, advertisement, etc. Additionally, it can support identifying whether the text in the image is in violation. If adjustments are needed, please contact ZEGOCLOUD technical support.</td>
+</tr>
+<tr>
+<td>Audio Message</td>
+<td>Moderate before sending</td>
+<td><ul><li>One-on-one chat</li><li>Group chat</li></ul></td>
+<td>Default detection of the following content: politics, pornography, terrorism, etc. Additionally, it can support identifying the following content: statesman voiceprints, advertisement, prohibition, abuse, etc. If adjustments are needed, please contact ZEGOCLOUD technical support.</td>
+</tr>
+<tr>
+<td>Video Message</td>
+<td>Moderate before sending</td>
+<td><ul><li>One-on-one chat</li><li>Group chat</li><li>Room</li></ul></td>
+<td>Video moderation includes the moderation of <strong>images</strong> and <strong>audio</strong> in the video.
+<ul><li>Images: Default detection of the following content: politics, pornography, terrorism, etc. Additionally, it can support identifying the following content: QR code, text in images, etc. If adjustments are needed, please contact ZEGOCLOUD technical support.</li>
+<li>Audio: Default detection of the following content: politics, pornography, terrorism, etc. Additionally, it can support identifying the following content: statesman voiceprints, advertisement, prohibition, abuse, etc. If adjustments are needed, please contact ZEGOCLOUD technical support.</li></ul></td>
+</tr>
+</tbody></table>
+
+<Note title="Note">
+
+- Explanation of Moderation Methods:
+    - Moderate before sending: ZIM moderates the message before sending it. If the moderation passes, the message is sent successfully; if the moderation fails, the message fails to be sent.
+    - Send before moderation: ZIM sends the message first and then moderates it. If the moderation passes, the message is displayed normally; if the moderation fails, the message is withdrawn.
+
+- When using the content moderation service, you can configure corresponding moderation tags and thresholds based on the moderation channels. For example, in some social scenarios, stricter thresholds and tags are used for group chats, while looser thresholds and tags are used for one-on-one chats.
+- Different moderation level can be configured based on the moderation results. The moderation results are divided into "pass," "uncertain," and "fail."
+    - If you set the moderation intensity to "Weak Moderation": When the result is "uncertain," ZIM will still send the message.
+    - If you set the moderation intensity to "Strong Moderation": When the result is "uncertain," ZIM will stop sending the message.
+</Note>
+
+To understand the full process including enabling and using the content moderation service, please refer to the [instruction](!zim-Censorship_Instruction).
+
+## Customize sensitive word lists
+
+If the default sensitive words used for the built-in text message moderation capability do not satisfy your demands, you can customize word lists.
+
+To use this feature, please provide ZEGOCLOUD technical support with custom lists of sensitive words and explain the processing strategy.
+
+After the configuration is completed by ZEGOCLOUD technical support, ZIM will process the content in user messages that matches the list. Currently, ZIM provides three processing strategies:
+
+<table>
+
+<tbody><tr>
+<th rowspan="2">Processing Strategy</th>
+<th rowspan="2">Description</th>
+<th colspan="3">Examples</th>
+</tr>
+<tr>
+<th>Sensitive Words</th>
+<th>Original Text</th>
+<th>Result</th>
+</tr>
+<tr>
+<td>Block Sensitive Words</td>
+<td>If a message contains sensitive words, the message will be blocked and the sending will fail.</td>
+<td>Hello</td>
+<td>Hello, welcome.</td>
+<td>Send failed.</td>
+</tr>
+<tr>
+<td>Replace Sensitive Words</td>
+<td>If a message contains sensitive words, ZIM will replace the sensitive words with other content and send the message. The receiving user will see the replaced content.</td>
+<td>Hello</td>
+<td>Hello, welcome.</td>
+<td>**, welcome.</td>
+</tr>
+<tr>
+<td>Send Original Text</td>
+<td>Even if a message contains sensitive words, ZIM will still send the message.</td>
+<td>Hello</td>
+<td>Hello, welcome.</td>
+<td>Hello, welcome.</td>
+</tr>
+</tbody></table>
+
+<Note title="Note">
+
+When providing lists of sensitive words, please follow these practices:
+- The list files should be in Excel format.
+- Classify the sensitive words according to the processing strategy, and then place them in separate list files.
+    - A sensitive word can only appear in one list file, which means only one processing strategy can be configured.
+    - If a sensitive word is configured with multiple strategies, ZIM will prioritize the processing of the word according to the following order: block > replace > send original text.
+- If the sensitive words contain vocabulary from different languages, please classify them according to the language and place them in separate list files.
+
+For example, if your custom sensitive words include both Chinese and English languages, and you need to use all the 3 processing strategies, you need to provide ZEGOCLOUD technical support with 6 sensitive word list files in Excel. 3 files should only contain Chinese vocabulary (file names: project_name_block_zh, project_name_replace_zh, project_name_send_zh), and the other 3 files should only contain English vocabulary (file names: project_name_block_en, project_name_replace_en, project_name_send_en).
+</Note>
+
+## Pricing
+
+Please contact ZEGOCLOUD business personnel for pricing details.
