@@ -32,7 +32,7 @@
         "dark": "image/logo_zego_dark.png",
         "light": "image/logo_zego_light.png"
       },
-      "iconRedirectUrl": "https://www.zegocloud.com/docs",
+      "iconRedirectUrl": "https://doc-zh.zego.im",
       "items": [
         {
           "type": "default",
