@@ -1,0 +1,614 @@
+---
+articleID: 16370
+---
+
+
+
+# Send & Receive messages
+
+- - -
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of message management, allowing you to send and receive one-to-one, group, in-room messages, query message history, delete messages, and more. With the message management feature, you can meet different requirements of various scenarios such as social entertainment, online shopping, online education, interactive live streaming, and more. 
+
+This document describes how to send and receive messages with the ZIM SDK. 
+
+## Message types
+
+Currently, the ZIM SDK supports the following message types:
+
+<table>
+<tbody><tr data-row-level="1">
+<th>Message type</th>
+<th>Description</th>
+<th>Details</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>Text message. Size limit: 32 KB. Rate limit: 10 requests/second.</td>
+<td>
+Enable messages to be more deliverable, and can be stored as message history. Suitable for one-on-one chat and group chat.
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message. Size limit: 5 KB. Rate limit: 10 requests/second.</td>
+<td>
+Supports massive concurrency. Suitable for live audio room, online classroom, the messages won't be stored after the room is destroyed.
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>In-room barrage message (bullet) screen message). Size limit: 5 KB. No specific rate limit.</td>
+<td>
+<p>The high-frequency messages that don't require 100% deliverability, this message type is often used to send bullet screen messages.</p><p>
+Supports massive concurrency, but the message deliverability can't be guaranteed.</p>
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports major image formats, including JPG, PNG, BMP, TIFF, and GIF, WebP. Size limit: 10 MB. Rate limit: 10 requests/second.</td>
+<td rowspan="4">
+Enable messages to be more deliverable, and can be stored as history messages (14 days by default). Suitable for one-on-one chat, room chat, and group chat.
+
+Relevant method: 
+[SendMediaMessage](@SendMediaMessage)
+</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. Supports files in any format. Size limit: 100 MB. Rate limit: 10 requests/second.</td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports voice messages in MP3, M4A format within 300 seconds. Size limit: 6 MB. Rate limit: 10 requests/second.</td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>
+Video message. Supports video messages in MP4 or MOV format. Size limit: 100 MB. Rate limit: 10 requests/second. Only video files encoded in H264 and H265 formats can obtain the width and height information of the first frame of the video after the message is sent successfully.
+</td>
+</tr>
+</tbody>
+</table>
+
+## Message types
+
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Send/Receive regular messages
+
+Regular messages refer to the messages of the following message types: ZIMTextMessage and ZIMBarrageMessage.
+
+<Warning title="Warning">
+
+- When receiving messages, you need to determine whether the message is a Text message ([ZIMTextMessage](@-ZIMTextMessage)) or a Command message ([ZIMCommandMessage](@-ZIMCommandMessage)) because these two message types are based on the basic message class ([ZIMMessage](@-ZIMMessage)). You need to convert the basic message class to a concrete message type and then retrieve the message content from the `message` field.
+- When a message is received, it can be sorted using the message's `orderKey`. The larger the `orderKey`, the newer the message. And the number of unread messages will be updated automatically upon receiving.
+</Warning>
+
+
+### Send/Receive messages
+
+The following process shows how Client A sends messages to Client B:
+
+1. Client A and Client B create their own ZIM SDK instances, and listen for the callback on the result of message sending [OnReceivePeerMessage](@OnReceivePeerMessage).
+2. Client A and Client B log in to the ZIM SDK.
+3. Client A calls the [SendMessage](@SendMessage) method, and set the `converversationType` to `ConversationType.Peer` to send a one-to-one message to Client B.
+4. Client B listens for the [OnReceivePeerMessage](@OnReceivePeerMessage) callback to receive Client A's messages.
+
+<Warning title="Warning">
+
+You can't send messages to yourself by calling the `sendMessage` method (when toConversationID = your ID). If you did so, the error code 6000001 will return. 
+
+</Warning>
+
+
+### Send messages
+
+```c#
+// 1. Create ZIM object and pass in appID and appSign
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace with the AppID you obtained from the ZEGO console, for more details, please refer to Console - Project Information.
+appConfig.appSign = "appSign";   // Replace with the AppSign you obtained from the ZEGO console, for more details, please refer to Console - Project Information.
+ZIM.Create(appConfig);
+
+// 2. Set callback for receiving one-on-one chat messages
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                    List<ZIMMessage> messageList,
+                    string fromUserID) =>{ };
+
+// 3. Login
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+ZIM.GetInstance().Login(zimUserInfo, (ZIMError errorInfo) =>
+    {
+        // Developers can determine whether the login is successful based on ZIMError.
+    }
+);
+
+string toConversationID = "xxxx1";
+
+ZIMTextMessage zimMessage = new ZIMTextMessage();
+zimMessage.message = "Message content";
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set message priority
+config.priority = ZIMMessagePriority.Low;
+// Set offline push configuration for the message
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "Offline push title";
+pushConfig.content = "Offline push content";
+pushConfig.payload = "Offline push extra information";
+config.pushConfig = pushConfig;
+
+// 4. Set conversation type for sending messages
+// Send one-on-one chat messages
+ZIMConversationType peerType = ZIMConversationType.Peer;
+
+// Send group chat messages
+// ZIMConversationType groupType = ZIMConversationType.Group;
+
+// Send room chat messages
+// ZIMConversationType roomType = ZIMConversationType.Room;
+
+
+ZIMMessageSendNotification notification = new ZIMMessageSendNotification();
+
+// 5. Send message
+ZIM.GetInstance().SendMessage(zimMessage, toConversationID, peerType, config, notification, (ZIMMessage message, ZIMError errorInfo) =>
+{
+    // Developers can use this callback to listen for successful message sending.
+});
+
+ZIM.GetInstance().onMessageSentStatusChanged = (
+    ZIM zim,
+    List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) =>
+{
+    // Developers can use this notification to listen for successful message sending.
+};
+```
+
+#### Receive messages
+
+<Note title="Note">
+
+- To send messages, call the [SendMessage](@SendMessage) method and set the `ZIMConversationType` accordingly.
+- To receive messages:
+    - One-on-one messages (Peer type), through the callback [OnReceivePeerMessage](@OnReceivePeerMessage).
+    - In-room messages (Room type), through the callback [OnReceiveRoomMessage](@OnReceiveRoomMessage).
+    - Group messages (Group type), through the callback [OnReceiveGroupMessage](@OnReceiveGroupMessage).
+</Note>
+
+
+```c#
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                            List<ZIMMessage> messageList,
+                            string fromUserID) =>
+{
+    // Received one-on-one chat messages
+};
+
+ZIM.GetInstance().onReceiveRoomMessage = (ZIM zim,
+                            List<ZIMMessage> messageList,
+                            string fromRoomID) =>
+{
+    // Received room chat messages
+};
+
+ZIM.GetInstance().onReceiveGroupMessage = (ZIM zim,
+                            List<ZIMMessage> messageList,
+                            string fromGroupID) =>
+{
+    // Received group chat messages
+};
+```
+
+
+## Send/Receive rich media content
+
+
+The ZIM SDK now supports sending and receiving messages of different rich media types, such as images, audio, video, and files. To send and receive rich media content, refer to the following:
+
+1. To send rich media content after login, you will need to specify the message type (image, file, audio, video) first and then the session type (one-on-one chat, room chat, group chat).
+2. For a receiver to receive and download the rich media content, set up and listen for related event callbacks based on the session type (one-on-one chat, room chat, group chat) after logging in.
+
+
+### Send rich media content
+
+
+To send rich media content after login, call the [SendMediaMessage](@SendMediaMessage) method, and specify the message type (image, file, audio, video), the session type (one-on-one chat, room chat, group chat), and message related configurations as needed.
+
+<Warning title="Warning">
+
+- When sending rich media content, the file path to be sent must be in `UTF-8` encoding format.
+- To send rich media content to a room/group, the sender must be in the room/group.
+</Warning>
+
+
+<details class="zg-primary">
+    <summary>Sample code - Sending image message</summary>
+
+```c#
+// Example of sending rich media message - Sending image message in one-on-one chat
+ZIMImageMessage message = new ZIMImageMessage("/picture/xxx.jpg");
+// If a network URL is filled in here, the SDK will pass the URL directly and bypass the ZIM backend service. If both a network URL and a local path are filled in, the SDK will prioritize the network URL.
+bool isUsingUrl = false;
+
+if(isUsingUrl == true)
+{
+    message.largeImageDownloadUrl = "url";
+    message.fileDownloadUrl = "url";
+    message.thumbnailDownloadUrl = "url";
+}
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set message priority
+config.priority = ZIMMessagePriority.Low;
+// Set offline push configuration for the message
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "Offline push title";
+pushConfig.content = "Offline push content";
+pushConfig.payload = "Offline push extra information";
+config.pushConfig = pushConfig;
+ZIMMediaMessageSendNotification notification = new ZIMMediaMessageSendNotification();
+notification.onMessageAttached = (ZIMMessage message) => { };
+notification.onMediaUploadingProgress = (ZIMMessage message,
+    ulong currentFileSize, ulong totalFileSize) => { };
+ZIM.GetInstance().SendMediaMessage(message, "toConversationID", ZIMConversationType.Peer, config, notification, (ZIMMessage message, ZIMError errorInfo) =>
+{
+
+});
+```
+</details>
+
+<details class="zg-primary">
+    <summary>Sample code - Sending file message</summary>
+
+```c#
+// Example of sending rich media message - Sending file message in one-on-one chat
+ZIMFileMessage message = new ZIMFileMessage("/picture/xxx.zip");
+// If a network URL is filled in here, the SDK will pass the URL directly and bypass the ZIM backend service. If both a network URL and a local path are filled in, the SDK will prioritize the network URL.
+bool isUsingUrl = false;
+if(isUsingUrl == true)
+{
+    message.fileDownloadUrl = "url";
+}
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+config.priority = ZIMMessagePriority.High;
+ZIMMediaMessageSendNotification notification = new ZIMMediaMessageSendNotification();
+notification.onMessageAttached = (ZIMMessage message) => { };
+notification.onMediaUploadingProgress = (ZIMMessage message,
+    ulong currentFileSize, ulong totalFileSize) => { };
+
+ZIM.GetInstance().SendMediaMessage(message, "conversationID", ZIMConversationType.Peer, config, notification, (ZIMMessage message, ZIMError errorInfo) => { });
+```
+</details>
+
+<details class="zg-primary">
+    <summary>Sample code - Sending audio message</summary>
+
+```c#
+// Example of sending rich media message - Sending audio message in one-on-one chat
+ZIMAudioMessage message = new ZIMAudioMessage("/picture/xxx.mp3", 300); // The 300 here is just an example, the unit is in seconds.
+// If a network URL is filled in here, the SDK will pass the URL directly and bypass the ZIM backend service. If both a network URL and a local path are filled in, the SDK will prioritize the network URL.
+bool isUsingUrl = false;
+if(isUsingUrl == true)
+{
+    message.fileDownloadUrl = "url";
+}
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+config.priority = ZIMMessagePriority.High;
+ZIMMediaMessageSendNotification notification = new ZIMMediaMessageSendNotification();
+notification.onMessageAttached = (ZIMMessage message) => { };
+notification.onMediaUploadingProgress = (ZIMMessage message,
+    ulong currentFileSize, ulong totalFileSize) => { };
+
+ZIM.GetInstance().SendMediaMessage(message, "conversationID", 
+    ZIMConversationType.Peer, config, notification, (ZIMMessage message, ZIMError errorInfo) => { });
+```
+</details>
+
+<details class="zg-primary">
+    <summary>Sample code - Sending video message</summary>
+
+```c#
+// Example of sending rich media message - Sending video message in one-on-one chat
+ZIMVideoMessage message = new ZIMVideoMessage("/picture/xxx.mp4", 300); // The unit here is in seconds.
+// If a network URL is filled in here, the SDK will pass the URL directly and bypass the ZIM backend service. If both a network URL and a local path are filled in, the SDK will prioritize the network URL.
+bool isUsingUrl = false;
+if(isUsingUrl == true)
+{
+    message.fileDownloadUrl = "url";
+    message.videoFirstFrameDownloadUrl = "url";
+}
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+config.priority = ZIMMessagePriority.High;
+ZIMMediaMessageSendNotification notification = new ZIMMediaMessageSendNotification();
+notification.onMessageAttached = (ZIMMessage message) => { };
+notification.onMediaUploadingProgress = (ZIMMessage message,
+    ulong currentFileSize, ulong totalFileSize) => { };
+
+ZIM.GetInstance().SendMediaMessage(message, "conversationID", 
+    ZIMConversationType.Peer, config, notification, (ZIMMessage message, ZIMError errorInfo) => { });
+```
+</details>
+
+
+#### Callback for the sending progress of rich media content
+
+
+You will be notified of the sending progress of rich media content through the callback [ZIMMediaUploadingProgress](@ZIMMediaUploadingProgress) .
+
+
+Among which:
+
+- message: The content of the message being sent.
+- currentFileSiz: The size of the message that has been sent.
+- totalFileSize: The overall size of the message sent.
+
+
+
+### Receive rich media content
+
+To receive the rich media content messages, do the following:
+1. Listen for the following callbacks based on the session type (one-on-one chat, room chat, group chat): [OnReceivePeerMessage](@OnReceivePeerMessage), [OnReceiveRoomMessage](@OnReceiveRoomMessage), [OnReceiveGroupMessage](@OnReceiveGroupMessage).
+2. Call the [DownloadMediaFile](@DownloadMediaFile) method to download the rich media content.
+
+When downloading rich media content, you need to specify the file type of the corresponding media messages first.
+
+- Image messages: You can choose to download the original file, large view, or thumbnail.
+- Files/Audio messages: Only original files/audio files can be downloaded.
+- Video messages: You can choose to download the original video file and the thumbnail of the first frame of the video.
+
+
+#### Sample code
+
+
+```c#
+// Example of receiving rich media message - Receiving rich media message in one-on-one chat
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                                 List<ZIMMessage> messageList,
+                                 string fromUserID) =>
+        {
+            foreach(var message in messageList)
+            {
+                if(message.type == ZIMMessageType.Image)
+                {
+                    ZIMImageMessage imageMessage = message as ZIMImageMessage;
+                    ZIM.GetInstance().DownloadMediaFile(imageMessage, ZIMMediaFileType.OriginalFile, (ZIMMediaMessage message,
+                           ulong currentFileSize, ulong totalFileSize) =>
+                    { 
+                    // Download progress callback
+                    },
+                    (ZIMMediaMessage message, ZIMError errorInfo) => {
+                    // Download completion callback
+                    });
+                }else if (message.type == ZIMMessageType.Video)
+                {
+                    ZIMVideoMessage videoMessage = message as ZIMVideoMessage;
+                    // Choose the type of download through ZIMMediaFileType, such as the video source file or the first frame of the video
+                    ZIMMediaFileType fileType = ZIMMediaFileType.VideoFirstFrame;
+                    ZIM.GetInstance().DownloadMediaFile(videoMessage, fileType, (ZIMMediaMessage message,
+                           ulong currentFileSize, ulong totalFileSize) =>
+                    {
+                        // Download progress callback
+                    },
+                    (ZIMMediaMessage message, ZIMError errorInfo) => {
+                        // Download completion callback
+                    });
+                }
+            }
+        };
+```
+
+
+#### Callback for the downloading progress of rich media content
+
+
+You will be notified of the downloading progress of rich media content through the callback [ZIMMediaDownloadingProgress](@ZIMMediaDownloadingProgress).
+
+
+Among which:
+
+- message: The message content you are downloading.
+- currentFileSize: The size of messages that have been downloaded.
+- totalFileSize: The overall size of the download message.
+
+
+
+## Send & Receive signaling messages
+
+ZIM SDK supports developers to implement sending and receiving signaling messages. Developers can define their own message types, such as location messages, using the [ZIMCommandMessage](@-ZIMCommandMessage) object.
+
+<Note title="Note">
+
+This message type does not support offline push and local storage.
+</Note>
+
+Here is an example of **sending a signaling message to a specific user**.
+
+### Send signaling messages
+
+#### Sample code
+
+```c#
+// Sending a signaling message to a specific user
+// 4. Send a signaling message
+string userID = "xxxx";
+
+ZIMCommandMessage customMessage = new ZIMCommandMessage();
+customMessage.message = new byte[] { 0x1, 0x2, 0x1, 0x2 };
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set the message priority
+config.priority = ZIMMessagePriority.Low;
+// Offline push configuration for messages is not supported in rooms. If you need to send offline messages, please contact ZEGO technical support to enable the relevant permissions.
+
+// Send one-on-one chat messages
+ZIMConversationType peerType = ZIMConversationType.Peer;
+
+// Send group chat messages
+// ZIMConversationType groupType = ZIMConversationType.Group;
+
+// Send room messages
+// ZIMConversationType roomType = ZIMConversationType.Room;
+
+ZIMMessageSendNotification notification = new ZIMMessageSendNotification();
+notification.onMessageAttached = (ZIMMessage message) => { };
+ZIM.GetInstance().SendMessage(customMessage, 
+    "toConversationID", peerType, config, notification, (ZIMMessage message, ZIMError errorInfo) => { });
+```
+
+### Receive signaling messages
+
+#### Sample code
+
+```c#
+// User receives signaling messages
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                        List<ZIMMessage> messageList,
+                        string fromUserID) =>
+{
+    foreach(var message in messageList)
+    {
+        if (message.type == ZIMMessageType.Command)
+        {
+            ZIMCommandMessage commandMessage = (ZIMCommandMessage)message;
+        }
+    }
+};
+```
+
+## Send/Receive custom messages
+
+
+The ZIM SDK now supports you to send and receive custom messages. To do that, you can call the [ZIMCustomMessage](@-ZIMCustomMessage) to define the message type you want to send, for example, your location information.
+
+The following shows how to send custom messages to a specified user.
+
+<Note title="Note">
+
+- Only ZIM SDK version 2.8.0 and above support sending and receiving custom message types.
+- If the SDK version of the receiving end is between [2.0.0, 2.8.0), it can receive custom messages, but the message type will be displayed as unknown and the message content cannot be obtained. If you need to retrieve this message, please upgrade the SDK to version 2.8.0 or above.
+- If the SDK version of the receiving end is version 1.x.x, it cannot receive custom messages and will not receive unknown messages.
+</Note>
+
+### Send custom messages
+
+#### Sample code
+
+
+The interface used to send custom messages is [SendMessage](@SendMessage), and it uses the[ZIMCustomMessage](@-ZIMCustomMessage) object to define custom message types,
+
+Here is an example code for sending custom messages in a one-on-one chat conversation:
+
+```c#
+// Send custom message to a specific user in a one-on-one chat conversation
+
+// 1. Create ZIM object, pass in appID, appSign, and Application in Android
+// Please refer to the relevant code in the previous section "Send Messages" for specific code.
+
+// 2. Log in
+// Please refer to the relevant code in the previous section "Send Messages" for specific code.
+
+// 3. Send custom message
+// Specify the user ID
+string userID = "xxxx";
+
+// The text content of the custom message
+string message = "";
+
+// The specific custom type
+int subType = 100;
+
+// The search field for the custom message
+string searchedContent = "";
+
+ZIMCustomMessage zimCustomMessage = new ZIMCustomMessage(message, subType);
+
+// Advanced configuration for sending messages
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set the message priority
+config.priority = ZIMMessagePriority.LOW;
+
+// Send a one-on-one chat message
+ZIMConversationType type = ZIMConversationType.Peer;
+
+// Send a group chat message
+// ZIMConversationType type = ZIMConversationType.Group;
+
+// Send a room message
+// ZIMConversationType type = ZIMConversationType.Room;
+
+ZIMMessageSendNotification notification = new ZIMMessageSendNotification();
+ZIM.GetInstance().SendMessage(zimCustomMessage, toConversationID, type, config, notification, (ZIMMessage message, ZIMError errorInfo) =>
+{
+    // Developers can use this callback to listen for whether the message is sent successfully.
+});
+
+ZIM.GetInstance().onMessageSentStatusChanged = (
+    ZIM zim,
+    List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) =>
+{
+    // Developers can use this notification to listen for whether the message is sent successfully.
+};
+```
+
+
+### Receive custom messages
+
+
+The callback interface for receiving custom messages is the same as the callback interface for receiving normal messages.
+
+Here is an example code for receiving custom messages in a one-on-one chat conversation:
+
+
+```c#
+// User receives custom messages
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                        List<ZIMMessage> messageList,
+                        string fromUserID) =>
+{
+    foreach(var message in messageList)
+    {
+        if (message.type == ZIMMessageType.Custom)
+        {
+            ZIMCustomMessage customMessage = (ZIMCustomMessage)message;
+        }
+    }
+};
+```
+
+
+## Listen for the message status 
+
+On a weak network condition, this may happen: the ZIM SDK doesn't receive the response from the server for some reason (e.g., packet loss), while the message is successfully sent. In this case, the ZIM SDK considers the message sending failed due to the reply timeout, but the message is actually sent successfully, which results in message status confusion.
+To solve this and Clarify the message status, the SDK 2.6.0 or later now allows you to listen for the [OnMessageSentStatusChanged](@OnMessageSentStatusChanged)callback to receive the changes of the message status.
+And we now have three different message statuses: Sending, Success, and Failed.
+You can know whether your message is sent successfully by the status, and implement your event handling logic as needed.
+
+
+```c#
+//  Listen for the message status 
+ ZIM.GetInstance().onMessageSentStatusChanged = (
+            ZIM zim,
+            List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) =>
+        {
+                // You can listen for the callback on the changes of message status here.
+        };
+```
