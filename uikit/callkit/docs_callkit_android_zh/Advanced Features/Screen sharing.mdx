@@ -14,6 +14,14 @@
 
 ## 实现流程
 
+### 添加权限
+为了实现屏幕共享功能，请在你的app模块的manifest文件中添加以下权限：
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+```
+注意：如果你的应用需要上传到 google play store，由于[google play store 的政策](https://support.google.com/googleplay/android-developer/answer/13392821?hl=en),你可能需要针对这两个权限作出相应的声明才可以避免被拒绝。
+
 ### 共享屏幕
 
 屏幕共享仅支持在宫格布局中使用，如需共享您的屏幕，您需要先将 `ZegoUIKitPrebuiltCallConfig` 内的 `layout` 设置为 `Gallery`。
