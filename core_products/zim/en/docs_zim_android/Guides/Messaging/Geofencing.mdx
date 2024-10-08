@@ -1,0 +1,230 @@
+---
+articleID: 17670
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const setGeofencingConfigMap = {
+  'Android': <a href='@setGeofencingConfig' target='_blank'>setGeofencingConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setGeofencingConfig.html' target='_blank'>setGeofencingConfig</a>,
+}
+export const createMap = {
+  'Android': <a href='@create' target='_blank'>create</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html' target='_blank'>create</a>,
+}
+
+# Geofencing
+
+---
+
+## Overview
+
+
+ZEGO Instant Messaging (ZIM) SDK provides the Geofencing feature to limit communication services to a certain region in compliance with regional regulations of data privacy and protection. For example, the following table shows that if the specified region is Europe, the accessible region of the SDK is Europe, regardless of the region of the app user.
+
+<table>
+<tbody><tr>
+<th>Specified region</th>
+<th>User region</th>
+<th>Access region</th>
+<th>Impact on user experience</th>
+</tr>
+<tr>
+<td>Europe</td>
+<td>Europe</td>
+<td>Europe</td>
+<td>No impact</td>
+</tr>
+<tr>
+<td>Europe</td>
+<td>China</td>
+<td>Europe</td>
+<td>May be significantly affected</td>
+</tr>
+</tbody></table>
+
+<Warning title="Warning">
+
+- If all servers in the specified region are unavailable, the SDK reports an error.
+- If an app user accesses the specified region from outside over the Internet, poor Internet connection may adversely affect the access experience.
+</Warning>
+
+
+![/Pics/in_app_chat/17549.jpeg](//doc.oa.zego.im/Pics/in_app_chat/17549.jpeg)
+
+The following table describes supported regions.
+
+<Note title="Note">
+
+To set other regions, contact ZEGOCLOUD Technical Support.
+</Note>
+
+
+| Region| Enumeration| Value|
+|----------|----------|----------|
+| Chinese mainland| CN| 2|
+| North America| NA| 3|
+| Europe, including the UK| EU| 4|
+| Asia, excluding the Chinese mainland and India| AS| 5|
+| India| IN| 6|
+
+
+## Prerequisites
+
+Before you implement the `geofencing` feature, make sure that the following conditions are met:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Procedure
+
+### 1\. Enable geofencing
+
+The geofencing feature is paid in some cases. To check the billing policy, contact ZEGOCLOUD business personnel. To enable this feature, contact ZEGOCLOUD Technical Support.
+
+
+
+### 2\. Configure geofencing
+
+Before creating the SDK, call the {getPlatformData(props,setGeofencingConfigMap)} method to configure geofencing.
+
+- Geofencing information: The geofencing type and list of supported regions.
+- Geofencing type: "Include" and "Exclude" are supported.
+    - "Include": All regions in the region list are included in the geofence.
+    - "Exclude": All regions in the region list are excluded from the geofence.
+
+
+<Warning title="Warning">
+
+Configure geofencing information before calling the {getPlatformData(props,createMap)} method; otherwise, the call does not take effect.
+</Warning>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+
+```java title="Union mode example"
+  // Example of setting union mode
+  // Set the region list information, at least 1 and no more than the number supported by the SDK
+  ArrayList<Integer> arrayList = new ArrayList<Integer>();
+  arrayList.add(2);
+  arrayList.add(3);
+  // This interface is called before create
+  ZIM.setGeofencingConfig(arrayList, ZIMGeofencingType.Include);
+  ```
+```java title="Exclude mode example"
+  // Example of setting exclude mode
+  // Set the region list information, at least 1 and no more than the number supported by the SDK
+  ArrayList<Integer> arrayList = new ArrayList<Integer>();
+  arrayList.add(2);
+  arrayList.add(3);
+  // This interface is called before create
+  ZIM.setGeofencingConfig(arrayList, ZIMGeofencingType.Exclude);
+  ```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+
+```objc title="Union mode example"
+// Example of setting union mode
+// Set union mode
+ZIMGeofencingType type = ZIMGeofencingTypeInclude;
+
+// Set the list of areas, at least 1 and no more than the number supported by the SDK
+NSMutableArray<NSNumber *> *arealist = [[NSMutableArray alloc] init];
+[arealist addObject:@ZIMZIMGeofencingAreaCN];
+[arealist addObject:@ZIMZIMGeofencingAreaNA];
+// Call this interface before createWithAppConfig
+[ZIM setGeofencingConfigWithAreaList:arealist type:type];
+```
+```objc title="Exclude mode example"
+// Example of setting exclude mode
+// Set exclude mode
+ZIMGeofencingType type = ZIMGeofencingTypeExclude;
+    
+// Set the list of areas, at least 1 and no more than the number supported by the SDK
+NSMutableArray<NSNumber *> *arealist = [[NSMutableArray alloc] init];
+[arealist addObject:@ZIMZIMGeofencingAreaCN];
+[arealist addObject:@ZIMZIMGeofencingAreaNA];
+// Call this interface before createWithAppConfig
+[ZIM setGeofencingConfigWithAreaList:arealist type:type];
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Web"}
+<CodeGroup>
+```JavaScript title="Union mode example"
+// Example of setting union mode
+var areaList = [3];
+ZIM.setGeofencingConfig(areaList, 1);
+```
+```JavaScript title="Exclude mode example"
+// Example of setting exclusion mode
+var areaList = [2];
+ZIM.setGeofencingConfig(areaList, 2);
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Union mode example"
+  // Example of setting union mode
+  // Set union mode
+  ZIMGeofencingType type = ZIMGeofencingType.include;
+  // Set the list of area information, at least 1 and no more than the maximum supported by the SDK
+  List<int> areaList = [ZIMGeofencingArea.CN,ZIMGeofencingArea.NA];
+  // Call this interface before create
+  ZIM.setGeofencingConfig(areaList, type);
+  ```
+```dart title="Exclude mode example"
+  // Example of setting exclude mode
+  // Set exclude mode
+  ZIMGeofencingType type = ZIMGeofencingType.exclude;
+  // Set the list of area information, at least 1 and no more than the maximum supported by the SDK
+  List<int> areaList = [ZIMGeofencingArea.CN,ZIMGeofencingArea.NA];
+  // Call this interface before create
+  ZIM.setGeofencingConfig(areaList, type);
+  ```
+</CodeGroup>
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Include mode"
+// Example of setting union mode
+// Set union mode
+ZIMGeofencingType type = ZIMGeofencingType::ZIM_GEOFENCING_TYPE_INCLUDE;
+// Set the area list information, at least 1, and no more than the number supported by the SDK
+std::vector<int> areaList;
+areaList.push_back(ZIMGeofencingArea::ZIM_GEOFENCING_AREA_CN);
+areaList.push_back(ZIMGeofencingArea::ZIM_GEOFENCING_AREA_NA);
+// This interface is called before create
+zim::ZIM::setGeofencingConfig(areaList, type);
+```
+
+```cpp title="Exclude mode example"
+// Example of setting exclusion mode
+// Set exclusion mode
+ZIMGeofencingType type = ZIMGeofencingType::ZIM_GEOFENCING_TYPE_EXCLUDE;
+
+// Set the area list information, at least 1, and no more than the number supported by the SDK
+std::vector<int> areaList;
+areaList.push_back(ZIMGeofencingArea::ZIM_GEOFENCING_AREA_CN);
+areaList.push_back(ZIMGeofencingArea::ZIM_GEOFENCING_AREA_NA);
+// This interface is called before create
+zim::ZIM::setGeofencingConfig(areaList, type);
+```
+</CodeGroup>
+:::
+
+
+
+### 3\. Other features
+
+You can enable other features after geofencing is configured.
+
