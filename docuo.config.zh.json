@@ -1,0 +1,319 @@
+{
+  "title": "",
+  "favicon": "image/favicon.ico",
+  "themeConfig": {
+    "colors": {
+      "primaryLight": "#0055FF",
+      "primaryDark": "#266EFF"
+    },
+    "colorMode": {
+      "defaultMode": "light",
+      "disableSwitch": false,
+      "respectPrefersColorScheme": false
+    },
+    "navbar": {
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zegocloud_dark.png",
+        "light": "image/logo_zegocloud_light.png"
+      },
+      "iconRedirectUrl": "https://www.zegocloud.com/docs",
+      "items": [
+        {
+          "type": "default",
+          "label": "Console",
+          "href": "https://console.zegocloud.com/"
+        }
+      ]
+    },
+    "navbar.zh": {
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zego_dark.png",
+        "light": "image/logo_zego_light.png"
+      },
+      "iconRedirectUrl": "https://doc-zh.zego.im",
+      "items": [
+        {
+          "type": "default",
+          "label": "控制台",
+          "href": "https://console.zego.im/"
+        }
+      ]
+    },
+    "footer": {
+      "logo": "",
+      "caption": "",
+      "links": [],
+      "socials": [
+        {
+          "logo": "Discord",
+          "href": "https://discord.gg/EtNRATttyp"
+        },
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/ZEGOCLOUD"
+        }
+      ]
+    },
+    "footer.zh": {
+      "logo": "",
+      "caption": "",
+      "links": [],
+      "socials": [
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/ZEGOCLOUD"
+        }
+      ]
+    }
+  },
+  "search": {
+    "algolia": {
+      "appId": "N61JOMLMAK",
+      "apiKey": "cc55591748c47b1e5e24d363cdf1d5eb",
+      "indexName": "zegocloud"
+    }
+  },
+  "instances": [
+    {
+      "id": "callkit_android_zh",
+      "label": "音视频通话 UIKit (Android)",
+      "path": "uikit/callkit/docs_callkit_android_zh",
+      "routeBasePath": "callkit-android",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "callkit_ios_zh",
+      "label": "音视频通话 UIKit (iOS)",
+      "path": "uikit/callkit/docs_callkit_ios_zh",
+      "routeBasePath": "callkit-ios",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "callkit_web_zh",
+      "label": "音视频通话 UIKit (Web)",
+      "path": "uikit/callkit/docs_callkit_web_zh",
+      "routeBasePath": "callkit-web",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Web: JS"
+      }
+    },
+    {
+      "id": "callkit_miniprogram_zh",
+      "label": "音视频通话 UIKit (小程序)",
+      "path": "uikit/callkit/docs_callkit_miniprogram_zh",
+      "routeBasePath": "callkit-miniprogram",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "小程序: JS"
+      }
+    },
+    {
+      "id": "callkit_uniapp_zh",
+      "label": "音视频通话 UIKit (uni-app)",
+      "path": "uikit/callkit/docs_callkit_uniapp_zh",
+      "routeBasePath": "callkit-uniapp",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit_zh",
+          "name": "音视频通话 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "uni-app: JS"
+      }
+    },
+    {
+      "id": "live_streaming_kit_android_zh",
+      "label": "互动直播 UIKit (Android)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android_zh",
+      "routeBasePath": "live-streaming-kit-android",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit_zh",
+          "name": "互动直播 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "live_streaming_kit_ios_zh",
+      "label": "互动直播 UIKit (iOS)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios_zh",
+      "routeBasePath": "live-streaming-kit-ios",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit_zh",
+          "name": "互动直播 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "live_streaming_kit_web_zh",
+      "label": "互动直播 UIKit (Web)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web_zh",
+      "routeBasePath": "live-streaming-kit-web",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit_zh",
+          "name": "互动直播 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Web: JS"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_android_zh",
+      "label": "语聊房 UIKit (Android)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_android_zh",
+      "routeBasePath": "live-audio-room-kit-android",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit_zh",
+          "name": "语聊房 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_ios_zh",
+      "label": "语聊房 UIKit (iOS)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_ios_zh",
+      "routeBasePath": "live-audio-room-kit-ios",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit_zh",
+          "name": "语聊房 UIKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_android_zh",
+      "label": "IMKit (Android)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_android_zh",
+      "routeBasePath": "in-app-chat-kit-android",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit_zh",
+          "name": "IMKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_ios_zh",
+      "label": "IMKit (iOS)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_ios_zh",
+      "routeBasePath": "in-app-chat-kit-ios",
+      "locale": "zh",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit_zh",
+          "name": "IMKit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    }
+  ],
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-PKWFYY4JH2"
+    }
+  },
+  "i18n": {
+    "defaultLocale": "zh",
+    "localeConfigs": {
+      "zh": "中文"
+    }
+  }
+}

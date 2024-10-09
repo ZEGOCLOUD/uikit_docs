@@ -1,0 +1,521 @@
+{
+  "title": "UIKit",
+  "favicon": "image/favicon.ico",
+  "themeConfig": {
+    "colors": {
+      "primaryLight": "#0055FF",
+      "primaryDark": "#266EFF"
+    },
+    "colorMode": {
+      "defaultMode": "light",
+      "disableSwitch": false,
+      "respectPrefersColorScheme": false
+    },
+    "navbar": {
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zegocloud_dark.png",
+        "light": "image/logo_zegocloud_light.png"
+      },
+      "iconRedirectUrl": "https://www.zegocloud.com/docs",
+      "items": [
+        {
+          "type": "default",
+          "label": "Console",
+          "href": "https://console.zegocloud.com/"
+        }
+      ]
+    },
+    "navbar.zh": {
+      "title": "",
+      "logo": {
+        "dark": "image/logo_zego_dark.png",
+        "light": "image/logo_zego_light.png"
+      },
+      "iconRedirectUrl": "https://doc-zh.zego.im",
+      "items": [
+        {
+          "type": "default",
+          "label": "控制台",
+          "href": "https://console.zego.im/"
+        }
+      ]
+    },
+    "footer": {
+      "logo": "",
+      "caption": "",
+      "links": [],
+      "socials": [
+        {
+          "logo": "Discord",
+          "href": "https://discord.gg/EtNRATttyp"
+        },
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/ZEGOCLOUD"
+        }
+      ]
+    },
+    "footer.zh": {
+      "logo": "",
+      "caption": "",
+      "links": [],
+      "socials": [
+        {
+          "logo": "GitHub",
+          "href": "https://github.com/ZEGOCLOUD"
+        }
+      ]
+    }
+  },
+  "search": {
+    "algolia": {
+      "appId": "N61JOMLMAK",
+      "apiKey": "cc55591748c47b1e5e24d363cdf1d5eb",
+      "indexName": "zegocloud"
+    }
+  },
+  "openapi": {
+    "petstore": {
+      "specPath": "docs/Using OpenAPI/OpenAPI Demo/petstore.yaml",
+      "outputDir": "docs/Using OpenAPI/OpenAPI Demo"
+    }
+  },
+  "instances": [
+    {
+      "id": "callkit_android",
+      "label": "Call Kit(Android)",
+      "path": "uikit/callkit/docs_callkit_android",
+      "routeBasePath": "uikit/callkit-android",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit",
+          "name": "Call Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "callkit_ios",
+      "label": "Call Kit(iOS)",
+      "path": "uikit/callkit/docs_callkit_ios",
+      "routeBasePath": "uikit/callkit-ios",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit",
+          "name": "Call Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "callkit_flutter",
+      "label": "Call Kit(Flutter)",
+      "path": "uikit/callkit/docs_callkit_flutter",
+      "routeBasePath": "uikit/callkit-flutter",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit",
+          "name": "Call Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Flutter: Dart"
+      }
+    },
+    {
+      "id": "callkit_rn",
+      "label": "Call Kit(RN)",
+      "path": "uikit/callkit/docs_callkit_rn",
+      "routeBasePath": "uikit/callkit-rn",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit",
+          "name": "Call Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "React Native: JS"
+      }
+    },
+    {
+      "id": "callkit_web",
+      "label": "Call Kit(Web)",
+      "path": "uikit/callkit/docs_callkit_web",
+      "routeBasePath": "uikit/callkit-web",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "callkit",
+          "name": "Call Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Web: JS"
+      }
+    },
+    {
+      "id": "live_streaming_kit_android",
+      "label": "Live Streaming Kit(Android)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_android",
+      "routeBasePath": "uikit/live-streaming-kit-android",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit",
+          "name": "Live Streaming Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "live_streaming_kit_ios",
+      "label": "Live Streaming Kit(iOS)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_ios",
+      "routeBasePath": "uikit/live-streaming-kit-ios",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit",
+          "name": "Live Streaming Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "live_streaming_kit_flutter",
+      "label": "Live Streaming Kit(Flutter)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_flutter",
+      "routeBasePath": "uikit/live-streaming-kit-flutter",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit",
+          "name": "Live Streaming Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Flutter: Dart"
+      }
+    },
+    {
+      "id": "live_streaming_kit_rn",
+      "label": "Live Streaming Kit(RN)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_rn",
+      "routeBasePath": "uikit/live-streaming-kit-rn",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit",
+          "name": "Live Streaming Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "React Native: JS"
+      }
+    },
+    {
+      "id": "live_streaming_kit_web",
+      "label": "Live Streaming Kit(Web)",
+      "path": "uikit/live_streaming_kit/docs_live_streaming_kit_web",
+      "routeBasePath": "uikit/live-streaming-kit-web",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming_kit",
+          "name": "Live Streaming Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Web: JS"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_android",
+      "label": "Live Audio Room Kit(Android)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_android",
+      "routeBasePath": "uikit/live-audio-room-kit-android",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit",
+          "name": "Live Audio Room Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_ios",
+      "label": "Live Audio Room Kit(iOS)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_ios",
+      "routeBasePath": "uikit/live-audio-room-kit-ios",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit",
+          "name": "Live Audio Room Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_flutter",
+      "label": "Live Audio Room Kit(Flutter)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_flutter",
+      "routeBasePath": "uikit/live-audio-room-kit-flutter",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit",
+          "name": "Live Audio Room Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Flutter: Dart"
+      }
+    },
+    {
+      "id": "live_audio_room_kit_rn",
+      "label": "Live Audio Room Kit(RN)",
+      "path": "uikit/live_audio_room_kit/docs_live_audio_room_kit_rn",
+      "routeBasePath": "uikit/live-audio-room-kit-rn",
+      "navigationInfo": {
+        "group": {
+          "id": "live_audio_room_kit",
+          "name": "Live Audio Room Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "React Native: JS"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_android",
+      "label": "In-app Chat Kit(Android)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_android",
+      "routeBasePath": "uikit/in-app-chat-kit-android",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit",
+          "name": "In-app Chat Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_ios",
+      "label": "In-app Chat Kit(iOS)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_ios",
+      "routeBasePath": "uikit/in-app-chat-kit-ios",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit",
+          "name": "In-app Chat Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_flutter",
+      "label": "In-app Chat Kit(Flutter)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_flutter",
+      "routeBasePath": "uikit/in-app-chat-kit-flutter",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit",
+          "name": "In-app Chat Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Flutter: Dart"
+      }
+    },
+    {
+      "id": "in_app_chat_kit_rn",
+      "label": "In-app Chat Kit(RN)",
+      "path": "uikit/imkit/docs_in_app_chat_kit_rn",
+      "routeBasePath": "uikit/in-app-chat-kit-rn",
+      "navigationInfo": {
+        "group": {
+          "id": "imkit",
+          "name": "In-app Chat Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "React Native: JS"
+      }
+    },
+    {
+      "id": "video_conference_kit_android",
+      "label": "Video Conference Kit(Android)",
+      "path": "uikit/video_conference_kit/docs_video_conference_kit_android",
+      "routeBasePath": "uikit/video-conference-kit-android",
+      "navigationInfo": {
+        "group": {
+          "id": "video_conference_kit",
+          "name": "Video Conference Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "video_conference_kit_ios",
+      "label": "Video Conference Kit(iOS)",
+      "path": "uikit/video_conference_kit/docs_video_conference_kit_ios",
+      "routeBasePath": "uikit/video-conference-kit-ios",
+      "navigationInfo": {
+        "group": {
+          "id": "video_conference_kit",
+          "name": "Video Conference Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "iOS: Swift"
+      }
+    },
+    {
+      "id": "video_conference_kit_flutter",
+      "label": "Video Conference Kit(Flutter)",
+      "path": "uikit/video_conference_kit/docs_video_conference_kit_flutter",
+      "routeBasePath": "uikit/video-conference-kit-flutter",
+      "navigationInfo": {
+        "group": {
+          "id": "video_conference_kit",
+          "name": "Video Conference Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Flutter: Dart"
+      }
+    },
+    {
+      "id": "video_conference_kit_rn",
+      "label": "Video Conference Kit(RN)",
+      "path": "uikit/video_conference_kit/docs_video_conference_kit_rn",
+      "routeBasePath": "uikit/video-conference-kit-rn",
+      "navigationInfo": {
+        "group": {
+          "id": "video_conference_kit",
+          "name": "Video Conference Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "React Native: JS"
+      }
+    },
+    {
+      "id": "video_conference_kit_web",
+      "label": "Video Conference Kit(Web)",
+      "path": "uikit/video_conference_kit/docs_video_conference_kit_web",
+      "routeBasePath": "uikit/video-conference-kit-web",
+      "navigationInfo": {
+        "group": {
+          "id": "video_conference_kit",
+          "name": "Video Conference Kit",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "ZEGO UIKits"
+        ],
+        "platform": "Web: JS"
+      }
+    }
+  ],
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-PKWFYY4JH2"
+    }
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "localeConfigs": {
+      "en": "English"
+    }
+  }
+}
