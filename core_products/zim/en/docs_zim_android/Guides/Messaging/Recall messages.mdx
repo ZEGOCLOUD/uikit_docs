@@ -1,0 +1,221 @@
+---
+articleID: 15099
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const ZIMMessageRevokeConfigMap = {
+  'Android': <a href='@-ZIMMessageRevokeConfig' target='_blank'>ZIMMessageRevokeConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageRevokeConfig-class.html' target='_blank'>ZIMMessageRevokeConfig</a>,
+}
+export const onMessageRevokeReceivedMap = {
+  'Android': <a href='@onMessageRevokeReceived' target='_blank'>onMessageRevokeReceived</a>,
+  'Web': <a href='@messageRevokeReceived' target='_blank'>messageRevokeReceived</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-revoke-received' target='_blank'>messageRevokeReceived</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-revoke-received' target='_blank'>messageRevokeReceived</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onMessageRevokeReceived.html' target='_blank'>onMessageRevokeReceived</a>,
+}
+export const setEventHandlerMap = {
+  'Android': <a href='@setEventHandler' target='_blank'>setEventHandler</a>,
+  'Web': <a href='@on' target='_blank'>on</a>,
+  'U3d': "setEventHandler",
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html' target='_blank'>setEventHandler</a>,
+}
+export const revokeMessageMap = {
+  'Android': <a href='@revokeMessage' target='_blank'>revokeMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/revokeMessage.html' target='_blank'>revokeMessage</a>,
+}
+export const ZIMMessageRevokedCallbackMap = {
+  'Android': <a href='@-ZIMMessageRevokedCallback' target='_blank'>ZIMMessageRevokedCallback</a>,
+  'Web': <a href='@-ZIMMessageRevokedResult' target='_blank'>ZIMMessageRevokedResult</a>,
+  'window,iOS,mac': <a href='@ZIMMessageRevokedCallback' target='_blank'>ZIMMessageRevokedCallback</a>,
+  'U3d': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~cs_unity3d~interface~ZIMDefines#zim-group-message-receipt-member-list-queried-callback' target='_blank'>ZIMMessageRevokedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageRevokedResult-class.html' target='_blank'>ZIMMessageRevokedResult</a>,
+}
+
+
+# Recall messages
+
+- - -
+
+## Overview
+
+The ZIM SDK supports the ability to recall messages sent by the local end in one-on-one or group chat sessions, as well as the ability for the group owner to recall messages sent by others in a group chat session.
+
+This document describes how to use the interfaces of the ZIM SDK to recall specified messages in a particular session.
+
+
+<Note title="Note">
+
+If the ZIM SDK version used by the message recipient is lower than 2.5.0, the following three situations may occur when a message is recalled:
+- If the user is online and receives the message, they will still see the message.
+- If the user is offline and receives the message, they will not see the message if they do not actively query the message history after logging in.
+- If the user is offline and receives the message, they will see the message with the message type displayed as "unknown" if they actively query the message history after logging in.
+</Note>
+
+
+## Prerequisites
+
+Before you implement the `recall messages` feature, ensure that the following conditions are met:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Implementation process
+
+The In-app Chat SDK supports recalling a specified message in a session. Developers can call {getPlatformData(props,ZIMMessageRevokeConfigMap)} to configure advanced attributes for recalling messages.
+
+Recalling a message sent from Client A to Client B is used as an example:
+
+
+1. Client A and Client B create their In-app Chat instances and register the {getPlatformData(props,onMessageRevokeReceivedMap)} callback API listened for by {getPlatformData(props,setEventHandlerMap)} to receive message recalling notifications.
+2. Client A and Client B log in to the In-app Chat service.
+3. Client A sends one-to-one messages to Client B and wants to recall a message.
+    (1) Client A calls the {getPlatformData(props,revokeMessageMap)} API and introduces the `message` and `config` parameters to recall the specified message.
+    (2) Client A obtains the recalling result through the {getPlatformData(props,ZIMMessageRevokedCallbackMap)} callback API.
+    (3) Client B obtains message recalling notifications through the {getPlatformData(props,onMessageRevokeReceivedMap)} callback API.
+
+### Configure the function of listening for message recalling
+
+After successful login, users can listen for message recalling notifications through the {getPlatformData(props,onMessageRevokeReceivedMap)} callback API. After other users recall a message, the SDK can obtain related information of the recalled message, including the recalling time and recalled message type.
+
+
+### Recall messages
+
+By default, users can call the {getPlatformData(props,revokeMessageMap)} API to recall a message sent in 2 minutes. The recalling result will be sent to the user through the {getPlatformData(props,ZIMMessageRevokedCallbackMap)} callback API.
+
+<Note title="Note">
+
+- To enable the group owner to revoke messages from other users, please integrate ZIM SDK version 2.9.0 or above.
+- Currently, ZIM SDK supports revoking messages within 2 minutes by default. If you need to modify the configuration (up to 24 hours maximum), please contact ZEGOCLOUD technical support.
+</Note>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.content = "A message is recalled.";
+pushConfig.title = messageInfo.getUserName();
+ZIMMessageRevokeConfig config = new ZIMMessageRevokeConfig();
+config.pushConfig = pushConfig;
+zim.revokeMessage(message, config, new ZIMMessageRevokedCallback() {
+    @Override
+    public void onMessageRevoked(ZIMMessage zimMessage, ZIMError zimError) {
+        if (zimError.code == ZIMErrorCode.SUCCESS) {
+            // Recalling successful.
+        } else {
+            toast("Message recalling failed," + zimError.code + "，" + zimError.message);
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Recall the specified message in a session.
+
+zim::ZIMMessageRevokeConfig revoke_config;
+revoke_config.config = nullptr;
+revoke_config.revokeExtendedData = "Revoke Content";
+zim_->revokeMessage(
+    last_message, revoke_config,
+    [=](const std::shared_ptr<zim::ZIMMessage> &message, const zim::ZIMError &errorInfo) {
+        if (message->getType() == zim::ZIMMessageType::ZIM_MESSAGE_TYPE_REVOKE) {
+            auto revoked_message = std::static_pointer_cast<zim::ZIMRevokeMessage>(message);
+        }
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+ZIMMessageRevokeConfig revokeConfig = ZIMMessageRevokeConfig();
+revokeConfig.revokeExtendedData = '';
+
+// pushConfig is Optional. Fill in if offline push is needed.
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = '$userName';
+pushConfig.content = 'A message is recalled.';
+
+ZIM
+    .getInstance()！
+    .revokeMessage(message, revokeConfig)
+    .then((result){
+      // Recalling successful.
+    })
+    .catchError((onError) {
+      // Message recalling failed
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# title="Sample code"
+ZIMMessage message = new ZIMMessage();
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.content = "content";
+pushConfig.title = "title";
+ZIMMessageRevokeConfig revokeConfigConfig = new ZIMMessageRevokeConfig();
+revokeConfigConfig.config = pushConfig;
+ZIM.GetInstance().RevokeMessage(message, revokeConfigConfig, (ZIMMessage message, ZIMError errorInfo) =>
+{
+    // Resule of the recall operation. 
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Recall the specified message in a session.
+var config = {
+    revokeExtendedData: "test"
+};
+
+zim.revokeMessage(message, config)
+    .then(function ({ message }) {
+        // The operation is successful. The recalled message is updated on the local message list.
+    })
+    .catch(function (err) {
+        // The operation fails.
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc title="Sample code"
+// Recall the specified message in a session.
+ZIMMessageRevokeConfig *revokeConfig = [[ZIMMessageRevokeConfig alloc] init];
+revokeConfig.revokeExtendedData = @"your extended data";
+
+[[ZIM getInstance] revokeMessage:message config:revokeConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Recall the specified message in a session.
+ZIMMessageRevokeConfig *revokeConfig = [[ZIMMessageRevokeConfig alloc] init];
+revokeConfig.revokeExtendedData = @"your extended data";
+
+[[ZIM getInstance] revokeMessage:message config:revokeConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+</CodeGroup>
+:::
