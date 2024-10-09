@@ -1,0 +1,26 @@
+Add the screen recording permission configuration to the **AndroidManifest.xml** file of your project.
+
+<Note title="Note">
+
+Before recording the screen, a dialog will prompt the user to allow the app to record the screen. 
+
+The user needs to manually grant permission.
+
+</Note>
+
+The screen recording feature relies on foreground service to keep the app alive. 
+
+Go to the **"app/src/main"** directory of your project and open the **"AndroidManifest.xml"** file to add the permission declaration.
+
+- If the target Android SDK version is **lower than version 34.0.0**, you need to set the **FOREGROUND_SERVICE** permission declaration.
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+```
+
+- If the target Android SDK version is **34.0.0 or later**, you need to set the **FOREGROUND_SERVICE** and **FOREGROUND_SERVICE_MEDIA_PROJECTION** permission declarations.
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"/>
+```
