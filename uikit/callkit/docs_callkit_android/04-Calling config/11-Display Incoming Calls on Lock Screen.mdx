@@ -1,0 +1,16 @@
+# Display Incoming Calls on Lock Screen
+
+This document describes how to display incoming calls in full screen on lock screen.
+
+To do so, navigate to the "app/src/main" directory, open the "AndroidManifest.xml" file, and add the following permissions:
+
+```xml app/src/main/AndroidManifest.xml
+<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT">
+```
+
+<Warning title="Warning">
+
+- If your app needs to upload you app to Google Play Store, due to [Google Play Store's policy](https://support.google.com/googleplay/android-developer/answer/13392821?hl=en), you may need to make corresponding declarations for the permission to avoid rejection.
+
+- If your device has additional settings for lock screen display, allow them for this feature to work properly.
+</Warning>

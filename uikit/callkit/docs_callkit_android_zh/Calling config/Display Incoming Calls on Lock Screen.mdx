@@ -1,0 +1,16 @@
+# 锁屏显示来电呼叫
+
+
+本文档描述了如何配置在锁屏时全屏显示来电呼叫。
+
+如需实现本功能，请进入 “app/src/main” 目录，打开 “AndroidManifest.xml” 文件，添加以下权限即可：
+```xml app/src/main/AndroidManifest.xml
+<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+```
+
+<Warning title="注意">
+
+- 如果您的应用需要上传到 Google Play Store，由于[Google Play Store 的政策](https://support.google.com/googleplay/android-developer/answer/13392821?hl=zh),你可能需要针对这两个权限作出相应的声明才可以避免被拒绝。
+
+- 如果您的设备有针对锁屏显示的额外设置，允许它们后此功能才能正常工作。
+</Warning>

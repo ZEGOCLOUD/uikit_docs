@@ -15,8 +15,9 @@ Screen sharing refers to the process of broadcasting the contents of one screen 
 
 ### Add Permissions
 
-To implement screen sharing functionality, please add the following permissions to your app module's manifest file:
-```xml
+To enable the screen sharing feature, navigate to the "app/src/main" directory, open the "AndroidManifest.xml" file, and add the following permissions:
+
+```xml app/src/main/AndroidManifest.xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 ```

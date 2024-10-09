@@ -15,12 +15,13 @@
 ## 实现流程
 
 ### 添加权限
-为了实现屏幕共享功能，请在你的app模块的manifest文件中添加以下权限：
-```xml
+为了实现屏幕共享功能，请进入 “app/src/main” 目录，打开 “AndroidManifest.xml” 文件，添加以下权限：
+
+```xml app/src/main/AndroidManifest.xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 ```
-注意：如果你的应用需要上传到 google play store，由于[google play store 的政策](https://support.google.com/googleplay/android-developer/answer/13392821?hl=en),你可能需要针对这两个权限作出相应的声明才可以避免被拒绝。
+注意：如果你的应用需要上传到 Google Play Store，由于 [Google Play Store 的政策](https://support.google.com/googleplay/android-developer/answer/13392821?hl=zh),你可能需要针对这两个权限作出相应的声明才可以避免被拒绝。
 
 ### 共享屏幕
 
