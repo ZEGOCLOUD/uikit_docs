@@ -10,29 +10,44 @@ To use this feature, please upgrade Call Kit to v2.9.0 or later.
 
 If you want to enable the feature to invite users to an ongoing call, you can configure the `canInvitingInCalling` property to true.
 
-After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `onlyInitiatorCanInvite` property to false.
+After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `onlyInitiatorCanInvite` property to `false`.
 
 ```typescript {2-7}
 zp.setCallInvitationConfig({
     // Whether to enable the feature of inviting users to an ongoing call. 
     // The default value is false
     canInvitingInCalling: true,
-    // Whether only the person who created the call can invite users to the ongoing call.
+    // Whether only the call initiator can invite users to the ongoing call.
     // The default value is false
     onlyInitiatorCanInvite: true,
 })
 ```
 
-## Define users to invite
+After enabling this feature, you can find the "Invite members" button by clicking the "..." button on the bottom menu bar of the call page. At this point, you will also need to define the invitee list. For more details, please refer to [Define the invitee list
+](./07-Invite%20users%20to%20an%20ongoing%20call.mdx#define-the-invitee-list).
 
-During the call, when you invite others, you need to customize the invitation list first, and then you can invite other users from the room's invitation list.
+<Frame width="auto" height="auto">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/a9c8c560d6.jpeg" alt="Call_button_en.jpeg" />
+</Frame>
 
-Before joining the room, you can define the list of users to be invited by calling `callingInvitationListConfig.waitingSelectUsers`.
+## Define the invitee list
 
-After joining the room, you can also update the invitation list by calling the `updateCallingInvitationListConfig` interface.
+After enabling the feature, if you want to invite others during the call, you need to customize the invitee list first, so that you can invite users from the list.
+
+Before joining the room, you can define the list by calling `callingInvitationListConfig.waitingSelectUsers`.
+
+After joining the room, you can also update the list by calling the `updateCallingInvitationListConfig` interface.
+
+<Note title="Note">`waitingSelectUsers` can include up to 9 users.</Note>
+
+After completing the above definition, click the "Invite members" button, expand the "Invitees" sidebar, and you can view the list of invitees. Check the users you want to invite and send them an invitation.
+
+<Frame width="auto" height="auto">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/ce2a263595.jpeg" alt="TargetUserList_en1.jpeg"/>
+</Frame>
 
 
-```typescript {9-15}
+```typescript {1-4,11-16,22-25}
 interface CallingInvitationListConfig {
     waitingSelectUsers: ZegoUser[]; // user members waiting to be invited
     defaultChecked?: boolean; // Whether to select the members to be invited by default. The default value is true
@@ -41,11 +56,13 @@ interface CallingInvitationListConfig {
 zp.setCallInvitationConfig({
     onSetRoomConfigBeforeJoining() {
         return {
-            // Whether to display the invite view
+            // Should the invitation view be displayed on the inviter's interface? This view allows the user to cancel the invitation.
             showWaitingCallAcceptAudioVideoView: true,
-            // Define invitation list
+            // Define the invitee list
+            // The list can include up to 9 users.
             callingInvitationListConfig: {
                 waitingSelectUsers: [{userID:'123',userName:'U_123'}],
+                // Whether the users in the list are checked by default
                 defaultChecked: true,
             },
         }
@@ -58,11 +75,3 @@ zp.updateCallingInvitationListConfig({
     defaultChecked: true,
 })
 ```
-
-## Parameter description
-
-| Parameter                 | Type    | Required | Default  | Description               |
-| :------------------------ | :-------| :----- | :----- | :----------------- |
-| canInvitingInCalling      | boolean | No     | false   | Whether to allow invitations to be sent during a call. |
-| onlyInitiatorCanInvite    | boolean | No     | false   | Whether only the call initiator has the permission to invite others to join the call. If it is set to false, all participants in the call can invite others. |
-| showWaitingCallAcceptAudioVideoView | boolean | No     | true   | When a user is invited during a call, the Invite User window appears on the inviting party. If you want to hide this view, set it to false. You can cancel the invitation to this user in this view. |
