@@ -1,0 +1,284 @@
+---
+articleID: 17650
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const ZIMCombineMessageMap = {
+  'Android': <a href='@-ZIMCombineMessage' target='_blank'>ZIMCombineMessage</a>,
+}
+export const ZIMMessageMap = {
+  'Android': <a href='@-ZIMMessage' target='_blank'>ZIMMessage</a>,
+}
+export const sendMessageMap = {
+  'Android': <a href='@sendMessage' target='_blank'>sendMessage</a>,
+}
+export const queryCombineMessageDetailMap = {
+  'Android': <a href='@queryCombineMessageDetail' target='_blank'>queryCombineMessageDetail</a>,
+  'iOS': <a href='@queryCombineMessageDetailByMessage' target='_blank'>queryCombineMessageDetail</a>,
+}
+export const ZIMCombineMessageDetailQueriedCallbackMap = {//错误链接
+  'Android': <a href='@-ZIMCombineMessageDetailQueriedCallback' target='_blank'>ZIMCombineMessageDetailQueriedCallback</a>,
+  'iOS': <a href='@ZIMCombineMessageDetailQueriedCallback' target='_blank'>ZIMCombineMessageDetailQueriedCallback</a>,
+}
+export const typeMap = {
+  'Android,Flutter': 'String',
+  'window': 'std::string',
+  'iOS': 'NSString *',
+}
+
+# Forward messages
+
+- - -
+
+        
+## Function overview
+
+ZIM SDK supports two forms of message forwarding:
+- Forwarding merged messages.
+- Forwarding messages one by one.
+
+## Prerequisites
+
+Before implementing the "Forward messages" function, please make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Forwarding Merged Messages
+
+<Note title="Note">
+
+- Only ZIM SDK version 2.14.0 and above supports sending and receiving merged messages.
+- If the SDK version of the receiving end is between [2.0.0, 2.14.0), the receiving end can receive merged messages, but the message type will be displayed as unknown and the message content cannot be obtained. To obtain this message, please upgrade the SDK to version 2.14.0 or above.
+- If the SDK version of the receiving end is version 1.x.x, it cannot receive merged messages.
+</Note>
+
+### Send merged messages
+
+The steps to send merged messages are as follows:
+
+1. Construct the merged message body using the {getPlatformData(props,ZIMCombineMessageMap)} object. The parameters include:
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| title | {getPlatformData(props,typeMap)} | Yes | The title of the merged message, with a default maximum length of 20 bytes. If you need to configure it, please contact ZEGOCLOUD technical support.|
+| summary | {getPlatformData(props,typeMap)} | Yes | The summary of the merged message, with a default maximum length of 100 bytes. If you need to configure it, please contact ZEGOCLOUD technical support.|
+| messageList | ArrayList< {getPlatformData(props,ZIMMessageMap)} > | Yes | The original message list to be merged and forwarded. It does not support merging and forwarding messages of signaling, barrage, recall, and system types, and does not support merging and forwarding unsuccessful messages.|
+
+<Note title="Note">
+
+ZIM SDK supports including other merged messages in a merged message.
+</Note>
+
+2. Call the {getPlatformData(props,sendMessageMap)} interface to send the merged message. For more information about this operation, see [Send & Receive messages - Send messages](!zim-sendMessages#4_1).
+
+The following is an example code for a user to send a merged message in a one-on-one conversation:
+
+:::if{props.platform=undefined}
+```java
+// Send a merged message in a one-on-one conversation
+
+ZIMConversationType type = PEER; // Conversation type, value: one-on-one: 0, room: 1, group: 2
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+
+// The original message list to be merged and forwarded, which can be obtained from the message history
+ArrayList<ZIMMessage> messageList = new ArrayList<>();
+messageList.add(message1);
+messageList.add(message2);
+
+ZIMCombineMessage combineMessage = new ZIMCombineMessage("Title", "Summary", messageList);
+
+zim.sendMessage(combineMessage,"conv_id", type, config, new ZIMMessageSentCallback() {
+    @Override
+    public void onMessageAttached(ZIMMessage zimMessage) {
+        // Developers can use this callback to listen for whether the message is ready to be sent. Only messages that pass the local basic parameter check will trigger this callback, otherwise errors will be thrown through the onMessageSent callback.               
+    }
+
+    @Override
+    public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
+        // Developers can use this callback to listen for whether the message is sent successfully.
+    }
+});
+```
+
+:::
+
+:::if{props.platform="iOS"}
+```oc
+// Send a merged message in a one-on-one chat session
+ZIMConversationType type = ZIMConversationTypePeer; // Conversation type, values: one-on-one: 0, room: 1, group: 2
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+
+// The original message list to be merged and forwarded, can be obtained from the message history
+NSMutableArray<ZIMMessage *> *messageList = [NSMutableArray array];
+[messageList addObject:message1];
+[messageList addObject:message2];
+
+ZIMCombineMessage *combineMessage = [[ZIMCombineMessage alloc] initWithTitle:@"Title" summary:@"Summary" messages:messageList];
+
+[zim sendMessage:combineMessage conversationId:@"conv_id" type:type config:config callback:^(ZIMMessage *zimMessage, ZIMError *error) {
+    if (error) {
+        // Developers can use this callback to listen for whether the message was sent successfully.
+    }
+}];
+
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+// Send a merged message in a one-on-one chat session
+ZIMConversationType type = ZIM_CONVERSATION_TYPE_PEER; //  Conversation type, values: one-on-one: 0, room: 1, group: 2
+ZIMMessageSendConfig config;
+
+// The original message list to be merged and forwarded, can be obtained from the message history
+std::vector<std::shared_ptr<ZIMMessage>> messageList;
+messageList.push_back(message1);
+messageList.push_back(message2);
+
+
+std::shared_ptr<ZIMCombineMessage> combineMessage = std::make_shared<ZIMCombineMessage>("Title", "Summary", messageList);
+
+if (message) {
+    // Developers can use this callback to listen for whether the message is ready to be sent. Only messages that pass the local basic parameter check will trigger this callback, otherwise errors will be thrown through the onMessageSent callback.
+}),
+[=](std::shared_ptr<zim::ZIMMessage> message, zim::ZIMError errorInfo) {
+    // Developers can use this callback to listen for whether the message is sent successfully.
+    if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+        
+    }
+});
+```
+:::
+
+
+
+
+### Receive merged messages
+
+The callback interface for receiving merged messages is the same as the callback interface for receiving normal messages. Please refer to [Send & Receive messages - Receive messages](!zim-sendMessages#4_2) for the specific interface.
+
+<Warning title="Warning">
+
+The receive message callback only returns the title, summary, and merge ID of the merged message. If you need to know the content of the merged message, please refer to <a href="#view-merged-message-details">View Merged Message Details.</a> 
+</Warning>
+
+The following is an example code for a user to receive merged messages in a one-on-one conversation:
+
+:::if{props.platform=undefined}
+```java
+// User receives merged messages in a one-on-one conversation
+@Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                        String fromUserID) {
+        for (ZIMMessage message : messageList) {
+            if (message.getType() == ZIMMessageType.COMBINE){
+                // Merged message
+            }
+        }
+    }
+```
+
+:::
+
+:::if{props.platform="iOS"}
+```oc
+// Send a merged message in a one-on-one chat session
+ZIMConversationType type = ZIMConversationTypePeer; // Conversation type, values: one-on-one: 0, room: 1, group: 2
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+
+// The original message list to be merged and forwarded, can be obtained from the message history
+NSMutableArray<ZIMMessage *> *messageList = [NSMutableArray array];
+[messageList addObject:message1];
+[messageList addObject:message2];
+
+ZIMCombineMessage *combineMessage = [[ZIMCombineMessage alloc] initWithTitle:@"Title" summary:@"Summary" messages:messageList];
+
+[zim sendMessage:combineMessage conversationId:@"conv_id" type:type config:config callback:^(ZIMMessage *zimMessage, ZIMError *error) {
+    if (error) {
+        // Developers can use this callback to listen for whether the message was sent successfully.
+    }
+}];
+
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+void onReceivePeerMessage(ZIM& zim, std::vector<ZIMMessage>& messageList, 
+                              std::string fromUserID) {
+    for (ZIMMessage& message : messageList) {
+        if (message.type == ZIMMessageType::ZIM_MESSAGE_TYPE_COMBINE) {
+            // Merge messages
+        }
+    }
+}
+```
+:::
+
+
+### View merged message details
+
+Operations on a combined message, for example, listening, adding, and historical message pulling, return only the title, summary, and ID of the combined message. To view sub-messages contained in the combined message, call the {getPlatformData(props,queryCombineMessageDetailMap)} operation.
+
+
+The result is returned in the {getPlatformData(props,ZIMCombineMessageDetailQueriedCallbackMap)} callback.
+
+:::if{props.platform=undefined}
+```java
+public abstract void queryCombineMessageDetail(ZIMCombineMessage message,
+                                                ZIMCombineMessageDetailQueriedCallback callback);
+```
+:::
+:::if{props.platform="iOS"}
+```oc
+- (void)queryCombineMessageDetailByMessage:(ZIMCombineMessage *)message
+                                  callback:(ZIMCombineMessageDetailQueriedCallback)callback
+```
+:::
+:::if{props.platform="window"}
+```cpp
+virtual void
+queryCombineMessageDetail(std::shared_ptr<ZIMCombineMessage> &message,
+                            const ZIMCombineMessageDetailQueriedCallback &callback) = 0;
+```
+:::
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+|message|{getPlatformData(props,ZIMCombineMessageMap)}| Yes|Merged message.|
+
+:::if{props.platform=undefined}
+
+```java
+zim.queryCombineMessageDetail(combineMessage, new ZIMCombineMessageDetailQueriedCallback() {
+            @Override
+            public void onCombineMessageDetailQueried(ZIMCombineMessage message, ZIMError error) {
+                // View the merged message, the specific sub-messages are in the messageList of the message in the callback.
+            }
+        });
+```
+:::
+:::if{props.platform="iOS"}
+
+```objc
+[zim queryCombineMessageDetailByMessage:combineMessage callback:^(ZIMCombineMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+        // View the merged message, the specific sub-messages are in the messageList of the message in the callback.
+    }];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim_->queryCombineMessageDetail(combineMessage, [=](const std::shared_ptr<ZIMCombineMessage> &message, ZIMError &errorInfo) {
+        // View the merged message, the specific sub-messages are in the messageList of the message in the callback.
+    }];
+```
+:::
+
+
+If one of the sub-messages is a combined message, you need to call the {getPlatformData(props,queryCombineMessageDetailMap)} operation to obtain the sub-messages of the combined message. If there are multiple nested combined messages, you need to call this operation multiple times accordingly.
+
+## Forward messages one by one
+
+Forwarding messages one by one is essentially sending messages that have been successfully sent as parameters to other conversations. It uses the same interface as sending normal messages. Developers can refer to [Send & Receive messages - Send messages](!zim-sendMessages#4_1) for details of this interface.
