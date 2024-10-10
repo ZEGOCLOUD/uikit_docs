@@ -71,7 +71,7 @@
   "search": {
     "algolia": {
       "appId": "OHAH1GCXFR",
-      "apiKey": "8716a0a35d038bd3ceaa9692e73ba37d",
+      "apiKey": "edb39b8b663b032fb3821ffceee85cfa",
       "indexName": "zh-zego"
     }
   },

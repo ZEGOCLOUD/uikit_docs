@@ -71,7 +71,7 @@
   "search": {
     "algolia": {
       "appId": "N61JOMLMAK",
-      "apiKey": "d524a4297449a1abd0ba88a4f14ad590",
+      "apiKey": "b7f8d11063687df8d51ba88b54ae4e5b",
       "indexName": "zegocloud"
     }
   },
