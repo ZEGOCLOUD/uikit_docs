@@ -16,6 +16,7 @@ jobs:
   # This workflow contains a single job called "build"
   MirrorForZHBuild:
     runs-on: ubuntu-latest
+    if: github.repository == 'ZEGOCLOUD/uikit_docs'
     steps:                                              # <-- must use actions/checkout before mirroring!
       - uses: actions/checkout@v4
         with:
