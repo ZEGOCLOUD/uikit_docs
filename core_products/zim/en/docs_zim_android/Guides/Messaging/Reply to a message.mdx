@@ -1,0 +1,946 @@
+---
+articleID: 17797
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const onReceivePeerMessageMap = {
+  'Android': <a href='@onReceivePeerMessage' target='_blank'>onReceivePeerMessage</a>,
+  'Web': <a href='@receivePeerMessage' target='_blank'>receivePeerMessage</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-peer-message-from-room-id' target='_blank'>receivePeerMessage</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-receive-peer-message-from-room-id' target='_blank'>receivePeerMessage</a>,
+}
+export const onReceiveGroupMessageMap = {
+  'Android': <a href='@onReceiveGroupMessage' target='_blank'>onReceiveGroupMessage</a>,
+  'Web': <a href='@receiveGroupMessage' target='_blank'>receiveGroupMessage</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-group-message-from-group-id' target='_blank'>onReceiveGroupMessage</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-receive-group-message-from-group-id' target='_blank'>onReceiveGroupMessage</a>,
+}
+export const queryHistoryMessageMap = {
+  'Android': <a href='@queryHistoryMessage' target='_blank'>queryHistoryMessage</a>,
+  'iOS,mac': <a href='@queryHistoryMessageByConversationID' target='_blank'>queryHistoryMessageByConversationID</a>,
+}
+export const replyMessageMap = {
+  'Android': <a href='@replyMessage' target='_blank'>replyMessage</a>,
+}
+export const ZIMMessageSentFullCallbackMap = {
+  'Android': <a href='@-ZIMMessageSentFullCallback' target='_blank'>ZIMMessageSentFullCallback</a>,
+  'Web': <a href='@-ZIMMessageSentFullResult' target='_blank'>ZIMMessageSentFullResult</a>,
+  'iOS,mac': <a href='@ZIMMessageSentFullCallback' target='_blank'>ZIMMessageSentFullCallback</a>,
+}
+export const onMessageSentMap = {
+  'Android': <a href='@onMessageSent' target='_blank'>onMessageSent</a>,
+}
+export const onMessageAttachedMap = {
+  'Android': <a href='@onMessageAttached' target='_blank'>onMessageAttached</a>,
+}
+export const onMediaUploadingProgressMap = {
+  'Android': <a href='@onMediaUploadingProgress' target='_blank'>onMediaUploadingProgress</a>,
+}
+export const repliedInfoMap = {
+  'Android': <a href='@repliedInfo' target='_blank'>repliedInfo</a>,
+}
+export const rootRepliedCountMap = {
+  'Android': <a href="@rootRepliedCount" target="_blank"> ZIMMessage {">"} rootRepliedCount</a>,
+}
+export const onMessageRepliedCountChangedMap = {
+  'Android': <a href='@onMessageRepliedCountChanged' target='_blank'>onMessageRepliedCountChanged</a>,
+  'Web': <a href='@messageRepliedCountChanged' target='_blank'>messageRepliedCountChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-replied-count-changed' target='_blank'>messageRepliedCountChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-replied-count-changed' target='_blank'>messageRepliedCountChanged</a>,
+}
+export const onMessageRepliedInfoChangedMap = {
+  'Android': <a href='@onMessageRepliedInfoChanged' target='_blank'>onMessageRepliedInfoChanged</a>,
+  'Web': <a href='@messageRepliedInfoChanged' target='_blank'>messageRepliedInfoChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-replied-info-changed' target='_blank'>messageRepliedInfoChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-replied-info-changed' target='_blank'>messageRepliedInfoChanged</a>,
+}
+export const ZIMMessageRepliedInfoMap = {
+  'Android': <a href='@messageSeq-ZIMMessageRepliedInfo' target='_blank'>repliedInfo.messageSeq</a>,
+}
+export const repliedInfoStateMap = {
+  'Android': <a href='@state-ZIMMessageRepliedInfo' target='_blank'>repliedInfo.state</a>,
+}
+export const ZIMMessageRepliedInfoStateMap = {
+  'Android': <a href='@deleted-ZIMMessageRepliedInfoState' target='_blank'>ZIMMessageRepliedInfoState.DELETED</a>,
+  'window': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~cpp_windows~enum~ZIMMessageRepliedInfoState#zim-message-replied-info-state-deleted' target='_blank'>ZIM_MESSAGE_REPLIED_INFO_STATE_DELETED</a>,
+  'iOS,mac': <a href='@ZIMMessageRepliedInfoStateDeleted' target='_blank'>ZIMMessageRepliedInfoStateDeleted</a>,
+}
+export const repliedInfoMessageInfoMap = {
+  'Android': <a href='@messageInfo-ZIMMessageRepliedInfo' target='_blank'>repliedInfo.messageInfo</a>,
+}
+export const queryMessageRepliedListMap = {
+  'Android': <a href='@queryMessageRepliedList' target='_blank'>queryMessageRepliedList</a>,
+  'iOS,mac': <a href='@queryMessageRepliedListByMessage' target='_blank'>queryMessageRepliedListByMessage</a>,
+}
+export const messageSeqZIMMessageMap = {
+  'Android': <a href='@messageSeq-ZIMMessage' target='_blank'>messageSeq</a>,
+}
+export const messageSeqMap = {
+  'Android': <a href='@messageSeq' target='_blank'>messageSeq</a>,
+}
+export const queryMessagesMap = {
+  'Android': <a href='@queryMessages' target='_blank'>queryMessages</a>,
+  'iOS,mac': <a href='@queryMessagesByMessageSeqs' target='_blank'>queryMessagesByMessageSeqs</a>,
+}
+export const ZIMMessageMap = {
+  'Android': <a href='@-ZIMMessage' target='_blank'>ZIMMessage</a>,
+}
+export const nextMessageMap = {
+  'Android': <a href='@nextMessage-ZIMMessageQueryConfig' target='_blank'>nextMessage</a>,
+}
+
+# Reply to a message
+
+- - -
+
+## Introduction
+
+The ZIM SDK supports the functionality of replying to messages within a session, which means quoting a received message to provide a targeted response and forming a tree-like structure of message replies starting from that message. With this feature, users can ask questions, provide feedback, or provide additional background information in response to a specific message.
+
+
+## Concepts
+
+This feature involves the following concepts:
+
+- Root message: The starting point of a reply tree, usually the initial message of a specific discussion.
+- Child message: A direct or indirect reply to a certain message.
+- Source message: The previous level message of a reply.
+- Reply count: The number of replies received by the root message.
+
+Using messages A, B, and C in group chat as examples:
+1. Message B replies to message A:
+   - Message A is the root message.
+   - Message A is the source message of message B.
+   - Message B is a child message of message A.
+2. Message C replies to message B:
+   - Message B is the source message of message C.
+   - Message C is a child message of message B.
+3. Both message B and message C are child messages of message A. 
+4. The reply count of message A is 2. Message B does not have a reply count.
+
+## Prerequisites
+
+Before implementing the "Reply to a message" feature, make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Reply to a message
+
+After logging in to ZIM, users can listen to the {getPlatformData(props,onReceivePeerMessageMap)} and {getPlatformData(props,onReceiveGroupMessageMap)} callback to receive new messages from one-on-one and group conversations, or call the {getPlatformData(props,queryHistoryMessageMap)} interface to fetch historical messages.
+
+At this point, users can choose a message to reply to by using that message as the `toOriginMessage` parameter and constructing a new message as the `message` parameter. Then, call the {getPlatformData(props,replyMessageMap)} interface.
+
+<Note title="Note">
+
+Only the following types are supported for the `toOriginMessage` and `message` parameters:
+- Text message: [ZIMTextMessage(1)](@-ZIMTextMessage)
+- Image message: [ZIMImageMessage(11)](@-ZIMImageMessage)
+- File message: [ZIMFileMessage(12)](@-ZIMFileMessage)
+- Audio message: [ZIMAudioMessage(13)](@-ZIMAudioMessage)
+- Video message: [ZIMVideoMessage(14)](@-ZIMVideoMessage)
+- Combined message: [ZIMCombineMessage(100)](@-ZIMCombineMessage)
+- Custom message: [ZIMCustomMessage(200)](@-ZIMCustomMessage)
+</Note>
+
+:::if{props.platform=undefined}
+The following information is returned through {getPlatformData(props,ZIMMessageSentFullCallbackMap)}:
+- {getPlatformData(props,onMessageSentMap)}: Message sending result, you can obtain details when the message sending fails through error code and error message.
+- {getPlatformData(props,onMessageAttachedMap)}: Before sending a reply, you can obtain a temporary ZIMMessage to add some logic.
+- {getPlatformData(props,onMediaUploadingProgressMap)}: When sending a message containing rich media, this callback provides updates on the progress of file uploading.
+
+:::
+
+:::if{props.platform="mac"}
+<div>
+In addition to the required parameters mentioned above, you can also construct a `notification` object based on your business needs and listen to the following callbacks:
+
+- [onMessageAttached](@onMessageAttached): This callback is triggered before sending the reply, allowing you to obtain a temporary ZIMMessage object. You can use this object to add some logic, such as displaying UI in advance.
+- [onMediaUploadingProgress](@onMediaUploadingProgress): This callback provides updates on the progress of file uploads when sending messages with rich media.
+
+The sending result will be returned through the [ZIMMessageSentCallback](@ZIMMessageSentCallback).
+</div>
+:::
+:::if{props.platform="iOS"}
+<div>
+In addition to the required parameters mentioned above, you can also construct a `notification` object based on your business needs and listen to the following callbacks:
+
+- [onMessageAttached](@onMessageAttached): This callback is triggered before sending the reply, allowing you to obtain a temporary ZIMMessage object. You can use this object to add some logic, such as displaying UI in advance.
+- [onMediaUploadingProgress](@onMediaUploadingProgress): This callback provides updates on the progress of file uploads when sending messages with rich media.
+
+The sending result will be returned through the [ZIMMessageSentCallback](@ZIMMessageSentCallback).
+</div>
+:::
+:::if{props.platform="window"}
+<div>
+In addition to the required parameters mentioned above, you can also construct a `notification` object based on your business needs and listen to the following callbacks:
+
+- [onMessageAttached](@onMessageAttached): This callback is triggered before sending the reply, allowing you to obtain a temporary ZIMMessage object. You can use this object to add some logic, such as displaying UI in advance.
+- [onMediaUploadingProgress](@onMediaUploadingProgress): This callback provides updates on the progress of file uploads when sending messages with rich media.
+
+The sending result will be returned through the [ZIMMessageSentCallback](@ZIMMessageSentCallback).
+</div>
+:::
+:::if{props.platform="Web"}
+<div>
+In addition to the required parameters mentioned above, you can also construct a `notification` object based on your business needs and listen to the following callbacks:
+
+- [onMessageAttached](@onMessageAttached): This callback is triggered before sending the reply, allowing you to obtain a temporary ZIMMessage object. You can use this object to add some logic, such as displaying UI in advance.
+- [onMediaUploadingProgress](@onMediaUploadingProgress): This callback provides updates on the progress of file uploads when sending messages with rich media.
+
+The sending result will be returned through the [ZIMMessageSentResult](@-ZIMMessageSentResult).
+</div>
+:::
+
+:::if{props.platform=undefined}
+```java
+// Reply content
+ZIMTextMessage textMessage = new ZIMTextMessage("Message content");
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set message priority
+config.priority = ZIMMessagePriority.LOW;
+
+// Reply to a message, where the toOriginMessage parameter refers to the source message obtained through queryHistoryMessage or receivePeerMessage and receiveGroupMessage.
+ZIM.getInstance().replyMessage(textMessage, toOriginMessage, config, new ZIMMessageSentFullCallback() {
+    @Override
+    public void onMessageAttached(ZIMMessage message) {
+        // Callback before sending, where you can get a temporary object that is the same as the zimMessage object created by you. You can use this feature to add some business logic, such as displaying UI in advance.
+    }
+
+    @Override
+    public void onMessageSent(ZIMMessage message, ZIMError errorInfo) {
+        // You can use this callback to listen for whether the message was sent successfully.
+    } 
+
+    @Override
+    public void onMediaUploadingProgress(ZIMMessage message, long currentFileSize, long totalFileSize) {
+        // If the reply message is a media message, you can listen to the upload progress of the media attachment.
+    }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Reply content
+ZIMTextMessage *textMessage = [[ZIMTextMessage alloc] init];
+textMessage.message = @"Message content";
+
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+// Set message priority
+config.priority = ZIMMessagePriorityLow;
+
+ZIMMessageSendNotification *notification = [[ZIMMessageSendNotification alloc] init];
+notification.onMessageAttached = ^(ZIMMessage * _Nonnull message) {
+    // Callback before sending, where you can get a temporary object that is the same as the zimMessage object created by you. You can use this feature to add some business logic, such as displaying UI in advance.
+};
+notification.onMediaUploadingProgress = ^(ZIMMediaMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+    // If the reply message is a media message, you can listen to the upload progress of the media attachment.
+};
+
+// Reply to a message, where the toOriginMessage parameter refers to the source message obtained through queryHistoryMessageByConversationID, receivePeerMessage, or receiveGroupMessage.
+[[ZIM getInstance] replyMessage:textMessage toOriginMessage:toOriginMessage config:config notification:notification callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+    // You can use this callback to listen for whether the message was sent successfully.
+}];
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Reply content
+ZIMTextMessage *textMessage = [[ZIMTextMessage alloc] init];
+textMessage.message = @"Message content";
+
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+// Set message priority
+config.priority = ZIMMessagePriorityLow;
+
+ZIMMessageSendNotification *notification = [[ZIMMessageSendNotification alloc] init];
+notification.onMessageAttached = ^(ZIMMessage * _Nonnull message) {
+    // Callback before sending, where you can get a temporary object that is the same as the zimMessage object created by you. You can use this feature to add some business logic, such as displaying UI in advance.
+};
+notification.onMediaUploadingProgress = ^(ZIMMediaMessage * _Nonnull message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+    // If the reply message is a media message, you can listen to the upload progress of the media attachment.
+};
+
+// Reply to a message, where the toOriginMessage parameter refers to the source message obtained through queryHistoryMessageByConversationID, receivePeerMessage, or receiveGroupMessage.
+[[ZIM getInstance] replyMessage:textMessage toOriginMessage:toOriginMessage config:config notification:notification callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+    // You can use this callback to listen for whether the message was sent successfully.
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Reply content
+auto textMessage = std::make_shared<ZIMTextMessage>();
+textMessage->message = "Message content";
+
+ZIMMessageSendConfig config;
+// Set message priority
+config.priority = ZIM_MESSAGE_PRIORITY_LOW;
+
+auto notification = std::make_shared<ZIMMessageSendNotification>();
+notification->onMessageAttached = [=](const std::shared_ptr<ZIMMessage> &message) {
+    // Callback before sending, where you can get a temporary object that is the same as the zimMessage object created by you. You can use this feature to add some business logic, such as displaying UI in advance.
+};
+notification->onMediaUploadingProgress = [=](std::shared_ptr<ZIMMediaMessage> &message, unsigned long long currentFileSize, unsigned long long totalFileSize) {
+    // If the reply message is a media message, you can listen to the upload progress of the media attachment.
+};
+
+// Reply to a message, where the toOriginMessage parameter refers to the source message obtained through queryHistoryMessage or onReceivePeerMessage and onReceiveGroupMessage.
+ZIM::getInstance()->replyMessage(textMessage, toOriginMessage, config, notification, [=](const std::shared_ptr<ZIMMessage> &message, const ZIMError &errorInfo) {
+    // You can use this callback to listen for whether the message was sent successfully.
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// The source message object, obtained through queryHistoryMessage or receivePeerMessage and receiveGroupMessage.
+var toOriginMessage = {};
+
+var config = { 
+    priority: 1, // Set message priority, values are low: 1 (default), medium: 2, high: 3
+};
+
+var messageTextObj = { type: 1, message: 'Reply message content' };
+var notification = {
+    onMessageAttached: function(message) {
+        // todo: Loading
+    },
+    onMediaUploadingProgress: (message, currentFileSize, totalFileSize) => {
+        // If the reply is a media message, you can use this to display the file upload progress.
+    },
+}
+
+zim.replyMessage(messageTextObj, toOriginMessage, config, notification)
+    .then(function ({ message }) {
+        // Sent successfully
+    })
+    .catch(function (err) {
+        // Failed to send
+    });
+```
+
+:::
+
+## Determine if a message is a reply to another message
+
+When receiving new messages in one-on-one and group conversations through the {getPlatformData(props,onReceivePeerMessageMap)} and {getPlatformData(props,onReceiveGroupMessageMap)} callbacks, you need to determine if the message has {getPlatformData(props,repliedInfoMap)} (basic information of the source message):
+- If it exists, it means that this message is a reply to another message.
+- If it doesn't exist, it means that this message is an independent message.
+
+When you have the {getPlatformData(props,repliedInfoMap)}, you can use it to display the sender, sending time, and message content of the source message.
+
+:::if{props.platform=undefined}
+```java
+// Register ZIMEventHander callback
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                             String fromUserID) {
+        for(ZIMMessage message : messageList) {
+            if(message.repliedInfo) {
+                // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+            }
+        }
+    }
+
+    @Override
+    public void onReceiveGroupMessage(ZIM zim, ArrayList<ZIMMessage> messageList,
+                                              String fromGroupID) {
+        for(ZIMMessage message : messageList) {
+            if(message.repliedInfo) {
+                // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+            }
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Callback for receiving one-on-one messages
+- (void)zim:(ZIM *)zim
+    receivePeerMessage:(NSArray<ZIMMessage *> *)messageList
+            fromUserID:(NSString *)fromUserID{
+    for(ZIMMessage *message in messageList) {
+        if(message.repliedInfo) {
+           // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }   
+}
+
+// Callback for receiving group messages
+- (void)zim:(ZIM *)zim
+    receiveGroupMessage:(NSArray<ZIMMessage *> *)messageList
+            fromGroupID:(NSString *)fromGroupID{
+    for(ZIMMessage *message in messageList) {
+         if(message.repliedInfo) {
+           // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }  
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Callback for receiving one-on-one messages
+- (void)zim:(ZIM *)zim
+    receivePeerMessage:(NSArray<ZIMMessage *> *)messageList
+            fromUserID:(NSString *)fromUserID{
+    for(ZIMMessage *message in messageList) {
+        if(message.repliedInfo) {
+           // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }   
+}
+
+// Callback for receiving group messages
+- (void)zim:(ZIM *)zim
+    receiveGroupMessage:(NSArray<ZIMMessage *> *)messageList
+            fromGroupID:(NSString *)fromGroupID{
+    for(ZIMMessage *message in messageList) {
+         if(message.repliedInfo) {
+           // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }  
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Register ZIMEventHander callback
+ZIM::getInstance()->setEventHandler(shared_from_this());
+
+// Callback for receiving peer messages
+void MyClass::onReceivePeerMessage(ZIM * zim, const std::vector<std::shared_ptr<ZIMMessage>> & messageList, const std::string & fromUserID) {
+    for(const auto &message : messageList) {
+        if(message->repliedInfo) {
+            // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }
+}
+
+// Callback for receiving group messages
+void MyClass::onReceiveGroupMessage(ZIM * zim, const std::vector<std::shared_ptr<ZIMMessage>> & messageList, const std::string & fromGroupID) {
+    for(const auto &message : messageList) {
+        if(message->repliedInfo) {
+            // Basic information of the source message referenced by this reply message, used to display the sender, sending time, and message content of the source message.
+        }
+    }
+}
+```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+// Receive a message in a one-to-one conversation
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    messageList.forEach((msg) => {
+        if (msg.repliedInfo) {
+            // Basic information of the source message referenced by this reply, used to display the sender, sending time, and message content of the source message.
+        }
+    });
+});
+
+// Receive a message in a group conversation
+zim.on('receiveGroupMessage', function (zim, { messageList, fromConversationID }) {
+    messageList.forEach((msg) => {
+        if (msg.repliedInfo) {
+            // Basic information of the source message referenced by this reply, used to display the sender, sending time, and message content of the source message.
+        }
+    });
+});
+```
+:::
+
+## Get the number of replies to a root message
+
+ZIM supports actively or passively obtaining the number of replies to a root message.
+
+### Active retrieval
+
+To actively retrieve the number of replies to a **root message**, you can directly use {getPlatformData(props,rootRepliedCountMap)} to get it.
+
+### Passive retrieval
+
+To get real-time updates on how many replies a root message has received, you can listen for the {getPlatformData(props,onMessageRepliedCountChangedMap)} event.
+
+:::if{props.platform=undefined}
+```java
+// Register ZIMEventHander callback
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    
+    // Listen for changes in the number of replies to a root message
+    // Event trigger: When a new message replied to another message successfully, the number of replies to the root message of its reply tree will increase by 1
+    @Override
+    public void onMessageRepliedCountChanged(
+        ZIM zim, ArrayList<ZIMMessageRootRepliedCountInfo> infos) {
+            // Update the rootRepliedCount of the corresponding messageID in the conversation
+        }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Listen for changes in the number of replies to a root message
+// Event trigger: When a new message replied to another message successfully, the number of replies to the root message of its reply tree will increase by 1
+- (void)zim:(ZIM *)zim messageRepliedCountChanged:(NSArray<ZIMMessageRootRepliedCountInfo *> *)infos {
+    // Update the rootRepliedCount of the corresponding messageID in the conversation
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Listen for changes in the number of replies to a root message
+// Event trigger: When a new message replied to another message successfully, the number of replies to the root message of its reply tree will increase by 1
+- (void)zim:(ZIM *)zim messageRepliedCountChanged:(NSArray<ZIMMessageRootRepliedCountInfo *> *)infos {
+    // Update the rootRepliedCount of the corresponding messageID in the conversation
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Register ZIMEventHander callback
+ZIM::getInstance()->setEventHandler(shared_from_this());
+
+// Listen for changes in the number of replies to a root message
+// Event trigger: When a new message replied to another message successfully, the number of replies to the root message of its reply tree will increase by 1
+void MyClass::onMessageRepliedCountChanged(ZIM * zim, const std::vector<ZIMMessageRootRepliedCountInfo> & infos) {
+    // Update the rootRepliedCount of the corresponding messageID in the conversation
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Listen for changes in the number of replies to a root message
+// Event trigger: When a new message replied to another message successfully, the number of replies to the root message of its reply tree will increase by 1
+zim.on('messageRepliedCountChanged', function (zim, { infos }) {
+    infos.forEach(({ count, messageID, conversationID, conversationType }) => {
+        // Update the rootRepliedCount of the corresponding messageID in the conversation
+    });
+});
+```
+:::
+p
+
+## Listen for the deletion or recall of the source message
+
+Listen for the {getPlatformData(props,onMessageRepliedInfoChangedMap)} callback to get the list of child messages of a message when it is deleted or recalled. You can display relevant prompts on the UI of the corresponding child messages.
+
+<Note title="Note">
+
+Even if the source message is deleted by the user on a device, causing the {getPlatformData(props,repliedInfoStateMap)} (the state of the source message) of its child message to be {getPlatformData(props,ZIMMessageRepliedInfoStateMap)}, you can still get the brief content of the source message in the {getPlatformData(props,repliedInfoMessageInfoMap)} of the child message. Therefore, you can choose whether to display the content of the source message on that device as needed.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// Register ZIMEventHander callback
+ZIM.getInstance().setEventHandler(new ZIMEventHandler() {
+    
+    // Listen for changes in the source message of a reply message
+    // Event trigger: When the source message is "deleted" or "recalled", the repliedInfo property of the reply referencing it will change
+    @Override
+    public void onMessageRepliedInfoChanged(ZIM zim, ArrayList<ZIMMessage> messageList) {
+        for(ZIMMessage message : messageList) {
+            if(message.repliedInfo.state == ZIMMessageRepliedInfoState.DELETED) {
+                // The source message referenced by this reply message has been deleted, you can display "Message deleted" at this time
+            } else if (message.repliedInfo.messageInfo.type == ZIMMessageType.REVOKE) {
+                // The source message referenced by this reply message has been recalled, you can display "Message recalled" at this time
+            }
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Listen for changes in the source message of a reply message
+// Event trigger: When the source message is "deleted" or "recalled", the repliedInfo property of the reply referencing it will change
+- (void)zim:(ZIM *)zim messageRepliedInfoChanged:(NSArray<ZIMMessage *> *)messageList {
+    for(ZIMMessage *message in messageList) {
+        if(message.repliedInfo.state == ZIMMessageRepliedInfoStateDeleted) {
+            // The source message referenced by this reply message has been deleted, you can display "Message deleted" at this time
+        } else if (message.repliedInfo.messageInfo.type == ZIMMessageTypeRevoke) {
+            // The source message referenced by this reply message has been recalled, you can display "Message recalled" at this time
+        }
+    }
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Register ZIMEventHander callback
+[zim setEventHandler:self];
+
+// Listen for changes in the source message of a reply message
+// Event trigger: When the source message is "deleted" or "recalled", the repliedInfo property of the reply referencing it will change
+- (void)zim:(ZIM *)zim messageRepliedInfoChanged:(NSArray<ZIMMessage *> *)messageList {
+    for(ZIMMessage *message in messageList) {
+        if(message.repliedInfo.state == ZIMMessageRepliedInfoStateDeleted) {
+            // The source message referenced by this reply message has been deleted, you can display "Message deleted" at this time
+        } else if (message.repliedInfo.messageInfo.type == ZIMMessageTypeRevoke) {
+            // The source message referenced by this reply message has been recalled, you can display "Message recalled" at this time
+        }
+    }
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Register ZIMEventHander callback
+ZIM::getInstance()->setEventHandler(shared_from_this());
+
+// Listen for changes in the source message of a reply message
+// Event trigger: When the source message is "deleted" or "recalled", the repliedInfo property of the reply referencing it will change
+void MyClass::onMessageRepliedInfoChanged(ZIM * zim, const std::vector<std::shared_ptr<ZIMMessage>> & messageList) {
+    for(const auto &message : messageList) {
+        if(message->repliedInfo->state == ZIM_MESSAGE_REPLIED_INFO_STATE_DELETED) {
+            // The source message referenced by this reply message has been deleted, you can display "Message deleted" at this time
+        } else if (message->repliedInfo->messageInfo->type == ZIM_MESSAGE_TYPE_REVOKE) {
+            // The source message referenced by this reply message has been recalled, you can display "Message recalled" at this time
+        }
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for changes in the source message of a reply message
+// Event trigger: When the source message is "deleted" or "recalled", the repliedInfo property of the reply referencing it will change
+zim.on('messageRepliedInfoChanged', function (zim, { messageList }) {
+    messageList.forEach((msg) => {
+        if (msg.repliedInfo) {
+            if (msg.repliedInfo.state != 0) {
+                // The source message referenced by this reply message has been deleted, you can display "Message deleted" at this time
+            } else if (msg.repliedInfo.messageInfo.type == 31) {
+                // The source message referenced by this reply message has been recalled, you can display "Message recalled" at this time
+            }
+        }
+    });
+});
+```
+:::
+
+## Query the reply list
+
+Call {getPlatformData(props,queryMessageRepliedListMap)} and pass in the root message or any reply to view the complete list of replies and get the complete message list related to the replies.
+
+The results returned by this interface will distinguish between the root message (`rootRepliedInfo`) and the reply list (`messageList`), and the reply list will be sorted in chronological order based on the sending time of the replies.
+
+:::if{props.platform=undefined}
+```java
+ZIMMessageRepliedListQueryConfig config = new ZIMMessageRepliedListQueryConfig();
+config.count = 10; // The number of queries, please do not exceed 100
+config.nextFlag = 0; // Pagination flag, fill in 0 for the first query, and subsequent queries will be based on the nextFlag returned by the query result
+
+// replyMessage can be a root message or any reply, generally obtained through the queryHistoryMessage interface or receivePeerMessage and receiveGroupMessage
+ZIM.getInstance().queryMessageRepliedList(replyMessage, config, new new ZIMMessageRepliedListQueriedCallback() {
+    @Override
+    public void onMessageRepliedListQueried(ArrayList<ZIMMessage> messageList, long nextFlag, ZIMMessageRootRepliedInfo rootRepliedInfo, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Query successful
+            // If nextFlag is not 0, it means there is more data to be queried
+            // rootRepliedInfo is the information of the root message
+            // messageList represents the reply list to the root message
+        } else {
+            // Query failed
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMMessageRepliedListQueryConfig *config = [[ZIMMessageRepliedListQueryConfig alloc] init];
+config.count = 10; // The number of queries, please do not exceed 100
+config.nextFlag = 0; // Pagination flag, fill in 0 for the first query, and subsequent queries will be based on the nextFlag returned by the query result
+
+// replyMessage can be a root message or any reply, generally obtained through the queryHistoryMessage interface or receivePeerMessage and receiveGroupMessage
+[[ZIM getInstance] queryMessageRepliedListByMessage:replyMessage config:config callback:^(NSArray<ZIMMessage *> * _Nonnull messageList, long long nextFlag, ZIMMessageRootRepliedInfo * _Nonnull rootRepliedInfo, ZIMError * _Nonnull errorInfo){
+        if(errorInfo.code == ZIMErrorCodeSuccess) {
+            // Query successful
+            // If nextFlag is not 0, it means there is more data to be queried
+            // rootRepliedInfo is the information of the root message
+            // messageList represents the reply list to the root message
+        } else {
+            // Query failed
+        }
+}];
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMMessageRepliedListQueryConfig *config = [[ZIMMessageRepliedListQueryConfig alloc] init];
+config.count = 10; // The number of queries, please do not exceed 100
+config.nextFlag = 0; // Pagination flag, fill in 0 for the first query, and subsequent queries will be based on the nextFlag returned by the query result
+
+// replyMessage can be a root message or any reply, generally obtained through the queryHistoryMessage interface or receivePeerMessage and receiveGroupMessage
+[[ZIM getInstance] queryMessageRepliedListByMessage:replyMessage config:config callback:^(NSArray<ZIMMessage *> * _Nonnull messageList, long long nextFlag, ZIMMessageRootRepliedInfo * _Nonnull rootRepliedInfo, ZIMError * _Nonnull errorInfo){
+        if(errorInfo.code == ZIMErrorCodeSuccess) {
+            // Query successful
+            // If nextFlag is not 0, it means there is more data to be queried
+            // rootRepliedInfo is the information of the root message
+            // messageList represents the reply list to the root message
+        } else {
+            // Query failed
+        }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMMessageRepliedListQueryConfig config;
+config.count = 10; // The number of queries, please do not exceed 100
+config.nextFlag = 0; // Pagination flag, fill in 0 for the first query, and subsequent queries will be based on the nextFlag returned by the query result
+
+// replyMessage can be a root message or any reply, generally obtained through the queryHistoryMessage interface or receivePeerMessage and receiveGroupMessage
+ZIM::getInstance()->queryMessageRepliedList(replyMessage, config, [=](const std::vector<std::shared_ptr<ZIMMessage>> &messageList, long long nextFlag,
+    const ZIMMessageRootRepliedInfo &rootRepliedInfo, const ZIMError &errorInfo){
+    if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+        // Query successful
+        // If nextFlag is not 0, it means there is more data to be queried
+        // rootRepliedInfo is the information of the root message
+        // messageList represents the reply list to the root message
+     } else {
+        // Query failed
+     }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var replyMessage = {}; // replyMessage can be a root message or any reply, generally obtained through the queryHistoryMessage interface or receivePeerMessage and receiveGroupMessage
+
+var config = {
+    count: 10, // The number of queries, please do not exceed 100
+    nextFlag: 0, // Pagination flag, fill in 0 for the first query, and subsequent queries will be based on the nextFlag returned by the query result
+};
+
+zim.queryMessageRepliedList(replyMessage, config)
+    .then(({ nextFlag, rootRepliedInfo, messageList }) => {
+        // Query successful
+        // If nextFlag is not 0, it means there is more data to be queried
+        // rootRepliedInfo is the information of the root message
+        // messageList represents the reply list to the root message
+    })
+    .catch((err) => {
+        // Query failed
+    });
+```
+:::
+
+## View the context of the source message
+
+Since the {getPlatformData(props,repliedInfoMap)} of a child message (i.e., a reply message) only contains basic source message data that can be used for UI display, users may need to go to the original location of the source message to read other messages near the source message.
+
+Therefore, to implement this scenario, you need to use the {getPlatformData(props,repliedInfoMessageInfoMap)} property of the child message (which is the sequence number of the source message in the conversation).
+
+<Note title="Note">
+
+The {getPlatformData(props,repliedInfoMessageInfoMap)} property of a child message (which is the sequence number of the source message in the conversation) corresponds to the {getPlatformData(props,messageSeqZIMMessageMap)} of the source message.
+</Note>
+
+Depending on whether the source message and its surrounding messages are cached in the application's memory, ZIM provides two options.
+
+### Both the source message and its surrounding messages are cached in the application's memory
+
+When a source message and its surrounding messages are saved in your application's memory (for example, by calling {getPlatformData(props,queryHistoryMessageMap)} to retrieve and cache the conversation's message history), you can search the {getPlatformData(props,messageSeqMap)} of the source message in the memory and implement the business logic to go to the original location of the source message to view the context.
+
+### The source message or its surrounding messages are not cached in the application's memory
+
+When the source message or its surrounding messages are not cached in the application's memory, if another user replies to the source message in the conversation, you can:
+1. From the {getPlatformData(props,repliedInfoMessageInfoMap)} of the reply, get the {getPlatformData(props,messageSeqMap)} of the source message. Pass it as a parameter to call the  {getPlatformData(props,queryMessagesMap)} interface to get the complete {getPlatformData(props,ZIMMessageMap)} object of the source message.
+
+:::if{props.platform=undefined}
+```java
+// messageSeq is the sequence number of the source message in the conversation
+ArrayList<Long> messageSeqs = new ArrayList<>();
+messageSeqs.add(messageSeq);
+ZIM.getInstance().queryMessages(messageSeqs, "YOUR_CONVERSATION_ID", conversationType, new ZIMMessageQueriedCallback() {
+    @Override
+    public void onMessageQueried(String conversationID, ZIMConversationType conversationType, ArrayList<ZIMMessage> messageList, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Query successful
+        } else {
+            // Query failed
+        }
+    }
+});    
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// messageSeq is the sequence number of the source message in the conversation
+NSArray *messageSeqs = @[@(messageSeq)];
+[[ZIM getInstance] queryMessagesByMessageSeqs:messageSeqs conversationID:@"YOUR_CONVERSATION_ID" conversationType:conversationType callback:^(NSString *conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> *messageList, ZIMError *errorInfo) {
+    if(error.code == ZIMErrorCodeSuccess) {
+        // Query successful
+    } else {
+        // Query failed
+    }
+}];
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// messageSeq is the sequence number of the source message in the conversation
+NSArray *messageSeqs = @[@(messageSeq)];
+[[ZIM getInstance] queryMessagesByMessageSeqs:messageSeqs conversationID:@"YOUR_CONVERSATION_ID" conversationType:conversationType callback:^(NSString *conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> *messageList, ZIMError *errorInfo) {
+    if(error.code == ZIMErrorCodeSuccess) {
+        // Query successful
+    } else {
+        // Query failed
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+  // messageSeq is the sequence number of the source message in the conversation
+  std::vector<long long> messageSeqs = {messageSeqs};
+  ZIM::getInstance()->queryMessages(messageSeqs, "YOUR_CONVERSATION_ID", conversationType, [=](const std::string &conversationID, ZIMConversationType conversationType, const std::vector<std::shared_ptr<ZIMMessage>> &messageList, const ZIMError &errorInfo) {
+      if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+              // Query successful
+      } else {
+              // Query failed
+      }
+  });
+  ```
+:::
+:::if{props.platform="Web"}
+```javascript
+var messageSeqs = []; // messageSeq is the sequence number of the source message in the conversation
+
+var conversationID = '';
+var conversationType = 0; // Conversation Type: ono-to-onr: 0; group: 2
+
+zim.queryMessages(messageSeqs, conversationID, conversationType)
+    .then(({ messageList }) => {
+        // Query successful
+    })
+    .catch((err) => {
+        // Query failed
+    });
+```
+:::
+
+2. Pass the source message object as the {getPlatformData(props,nextMessageMap)} parameter to {getPlatformData(props,queryHistoryMessageMap)}, so that you can use the source message as an anchor point to retrieve messages from the messages forward or backward. 
+
+:::if{props.platform=undefined}
+```java
+// This example demonstrates querying forward from the source message
+ZIMMessageQueryConfig config = new ZIMMessageQueryConfig();
+// originalMessage is the source message obtained through queryMessages
+config.nextMessage = originalMessage;
+config.count = 20;
+config.reverse = false;
+ZIM.getInstance().queryHistoryMessage("YOUR_CONVERSATION_ID", conversationType, config, new ZIMMessageQueriedCallback() {
+    @Override
+    public void onMessageQueried(String conversationID, ZIMConversationType conversationType, ArrayList<ZIMMessage> messageList, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Query successful
+        } else {
+            // Query failed
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// This example demonstrates querying forward from the source message
+ZIMMessageQueryConfig *config = [[ZIMMessageQueryConfig alloc] init];
+// originalMessage is the source message obtained through queryMessagesByMessageSeqs
+config.nextMessage = originalMessage;
+config.count = 20;
+config.reverse = NO;
+[[ZIM getInstance] queryHistoryMessageByConversationID:@"YOUR_CONVERSATION_ID" conversationType:conversationType config:config callback:^(NSString *conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> *messageList, ZIMError *errorInfo) {
+    if(error.code == ZIMErrorCodeSuccess) {
+        // Query successful
+    } else {
+        // Query failed
+    }
+}];
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// This example demonstrates querying forward from the source message
+ZIMMessageQueryConfig *config = [[ZIMMessageQueryConfig alloc] init];
+// originalMessage is the source message obtained through queryMessagesByMessageSeqs
+config.nextMessage = originalMessage;
+config.count = 20;
+config.reverse = NO;
+[[ZIM getInstance] queryHistoryMessageByConversationID:@"YOUR_CONVERSATION_ID" conversationType:conversationType config:config callback:^(NSString *conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> *messageList, ZIMError *errorInfo) {
+    if(error.code == ZIMErrorCodeSuccess) {
+        // Query successful
+    } else {
+        // Query failed
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// This example demonstrates querying forward from the source message
+ZIMMessageQueryConfig config;
+// originalMessage is the source message obtained through queryMessagesByMessageSeqs
+config.nextMessage = originalMessage;
+config.count = 20;
+config.reverse = false;
+ZIM::getInstance()->queryHistoryMessage("YOUR_CONVERSATION_ID", conversationType, config, [=](const std::string &conversationID, ZIMConversationType conversationType, const std::vector<std::shared_ptr<ZIMMessage>> &messageList, const ZIMError &errorInfo) {
+    if(errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+        // Query successful
+    } else {
+        // Query failed
+    }
+});
+```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+// This example demonstrates querying forward from the source message
+var originalMessage = {};
+var config = {
+    // originalMessage is the source message obtained through queryMessages
+    nextMessage: originalMessage,
+    count: 20,
+    reverse: false,
+};
+
+var conversationID = '';
+var conversationType = 0;
+
+zim.queryHistoryMessage(conversationID, conversationType, config)
+    .then((res) => {
+        // Query successful
+    })
+    .catch((err) => {
+        // Query failed
+    });
+```
+:::
