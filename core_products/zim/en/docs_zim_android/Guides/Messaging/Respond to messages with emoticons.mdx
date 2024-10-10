@@ -1,0 +1,556 @@
+---
+articleID: 16672
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const onMessageReactionsChangedMap = {
+  'Android': <a href='@onMessageReactionsChanged' target='_blank'>onMessageReactionsChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onMessageReactionsChanged.html' target='_blank'>onMessageReactionsChanged</a>,
+  'Web': <a href='@messageReactionsChanged' target='_blank'>messageReactionsChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-reactions-changed' target='_blank'>messageReactionsChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-reactions-changed' target='_blank'>messageReactionsChanged</a>,
+}
+export const ZIMEventHandlerMap = {
+  'Android': <a href='@-ZIMEventHandler' target='_blank'>ZIMEventHandler</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html' target='_blank'>ZIMEventHandler</a>,
+}
+export const addMessageReactionMap = {
+  'Android': <a href='@addMessageReaction' target='_blank'>addMessageReaction</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/addMessageReaction.html' target='_blank'>addMessageReaction</a>,
+}
+export const ZIMMessageReactionAddedCallbackMap = {
+  'Android': <a href='@-ZIMMessageReactionAddedCallback' target='_blank'>ZIMMessageReactionAddedCallback</a>,
+  'Web': <a href='@-ZIMMessageReactionAddedResult' target='_blank'>ZIMMessageReactionAddedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageReactionAddedResult-class.html' target='_blank'>ZIMMessageReactionAddedResult</a>,
+  'iOS,mac,window,U3d': <a href='@ZIMMessageReactionAddedCallback' target='_blank'>ZIMMessageReactionAddedCallback</a>,
+}
+export const deleteMessageReactionMap = {
+  'Android': <a href='@deleteMessageReaction' target='_blank'>deleteMessageReaction</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessageReaction.html' target='_blank'>deleteMessageReaction</a>,
+}
+export const ZIMMessageReactionDeletedCallbackMap = {
+  'Android': <a href='@-ZIMMessageReactionDeletedCallback' target='_blank'>ZIMMessageReactionDeletedCallback</a>,
+  'Web': <a href='@-ZIMMessageReactionDeletedResult' target='_blank'>ZIMMessageReactionDeletedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageReactionDeletedResult-class.html' target='_blank'>ZIMMessageReactionDeletedResult</a>,
+  'iOS,mac,window,U3d': <a href='@ZIMMessageReactionDeletedCallback' target='_blank'>ZIMMessageReactionDeletedCallback</a>,
+}
+export const queryMessageReactionUserListMap = {
+  'Android': <a href='@queryMessageReactionUserList' target='_blank'>queryMessageReactionUserList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageReactionUserList.html' target='_blank'>queryMessageReactionUserList</a>,
+  'iOS,mac': <a href='@queryMessageReactionUserListByMessage' target='_blank'>queryMessageReactionUserListByMessage</a>,
+}
+export const ZIMMessageReactionUserListQueriedCallbackMap = {
+  'Android': <a href='@-ZIMMessageReactionUserListQueriedCallback' target='_blank'>ZIMMessageReactionUserListQueriedCallback</a>,
+  'Web': <a href='@-ZIMMessageReactionUserListQueriedResult' target='_blank'>ZIMMessageReactionUserListQueriedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageReactionUserListQueriedResult-class.html' target='_blank'>ZIMMessageReactionUserListQueriedResult</a>,
+  'iOS,mac,window,U3d': <a href='@ZIMMessageReactionUserListQueriedCallback' target='_blank'>ZIMMessageReactionUserListQueriedCallback</a>,
+}
+
+# Respond to messages with emoticons
+
+---
+
+
+## Overview
+
+An emoticon response to a message indicates how a user responds to a message. The emoticon response feature is usually used to respond to a message in a private chat or group chat by adding an emoticon response to or removing an emoticon response from the message. Further, the emoticon response feature can be used in scenarios such as group voting and group voting result confirmation.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/InappChat/Respond_to_messages_with_emoticons.jpeg" /></Frame>
+
+<Note title="Note">
+
+The preceding figure shows merely a UI example of an emoticon response. ZEGO Instant Messaging (ZIM) SDK does not provide aesthetics resources for emoticon responses. You must add aesthetics resources as needed.
+
+</Note>
+
+
+## Prerequisites
+
+Before you use the emoticon response feature, make sure that the following prerequisites are met:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Procedure
+
+ZIM SDK allows you to respond to a specific message in a private chat or group chat. The procedure is described in the following figure, in which a client B responds to a message from a client A by adding an emoticon response to or removing an emoticon response from the message.
+
+
+![/Pics/In_app_Chat/16672.png](//doc.oa.zego.im/Pics/In_app_Chat/16672.png)
+
+1. The client A and the client B each create a ZIM instance and register the {getPlatformData(props,onMessageReactionsChangedMap)} callback of the {getPlatformData(props,ZIMEventHandlerMap)} class to listen to emoticon response changes.
+2. The client A and the client B log in to ZIM SDK.
+3. The client A sends a private-chat message to the client B, and the client B adds an emoticon response to the message.
+   1. The client B calls the {getPlatformData(props,addMessageReactionMap)} operation and set the `reactionType` and `message` parameters to specify the message to which an emoticon response is added.
+   2. The client B obtains the addition result by invoking the {getPlatformData(props,ZIMMessageReactionAddedCallbackMap)} callback.
+   3. The client A receives a notification about an emoticon response change by invoking the {getPlatformData(props,onMessageReactionsChangedMap)} callback.
+4. The client B removes the preceding emoticon response.
+   1. The client B calls the {getPlatformData(props,deleteMessageReactionMap)} operation and set the `reactionType` and `message` parameters to specify the message whose emoticon response is to be removed.
+   2. The client B obtains the removal result by invoking the {getPlatformData(props,ZIMMessageReactionDeletedCallbackMap)} callback.
+   3. The client A receives a notification about an emoticon response change by invoking the {getPlatformData(props,onMessageReactionsChangedMap)} callback.
+
+### 1. Listen to an emoticon response change
+
+After a user creates a ZIM instance, the user must register the {getPlatformData(props,onMessageReactionsChangedMap)} callback of the {getPlatformData(props,ZIMEventHandlerMap)} class to listen to emoticon response changes. This way, when other users add emoticon responses to or remove emoticon responses from a specific message, the user that registers the `onMessageReactionsChanged` callback can obtain relevant emoticon response information, such as the types of the emoticon responses and the number of users who add emoticon responses or remove emoticon responses. In general, this callback can return information about a maximum of five users. For more user information details, see the "Query details of emoticon responses" section of the <a href="#query-details-of-emoticon-responses">Respond to messages with emoticons</a> topic.
+
+:::if{props.platform=undefined}
+```java
+// Received message with emoticons callback.
+public void onMessageReactionsChanged(ZIM zim, ArrayList<ZIMMessageReaction> reactions) {
+    
+}
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Received message with emoticons callback.
+- (void)zim:(ZIM *)zim messageReactionsChanged:(NSArray<ZIMMessageReaction *> *)reactions;
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Received message with emoticons callback.
+- (void)zim:(ZIM *)zim messageReactionsChanged:(NSArray<ZIMMessageReaction *> *)reactions;
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Received message with emoticons callback.
+virtual void onMessageReactionsChanged(ZIM * /*zim*/,
+                                       const std::vector<ZIMMessageReaction> & /*reactions*/) {}
+```
+:::
+:::if{props.platform="U3d"}
+```C#
+// Receive message reaction callback
+ZIM.GetInstance().onMessageReactionsChanged += (
+    ZIM zim,
+    List<ZIMMessageReaction> reactionList) =>
+    {
+
+    };
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// The callback for listening to emoticon response changes
+ZIMEventHandler.onMessageReactionsChanged = (ZIM zim, List<ZIMMessageReaction> infos){
+        
+};
+```
+:::
+:::if{props.platform="Web"}
+```js
+//  Received message with emoticons callback.
+zim.on('messageReactionsChanged', function (zim, { reactions }) {
+    console.log(reactions);
+});
+```
+:::
+
+### 2. Add an emoticon response
+
+You can call the {getPlatformData(props,addMessageReactionMap)} operation to add an emoticon response to any message sent in a private chat or a group chat. You can obtain the addition result by invoking the {getPlatformData(props,ZIMMessageReactionAddedCallbackMap)} callback. In general, this `Result` can return information about a maximum of five users. For more user information details, see the "Query details of emoticon responses" section of the <a href="#query-details-of-emoticon-responses">Respond to messages with emoticons</a> topic.
+
+<Note title="Note">
+
+- If you repeatedly call this operation to add emoticon responses to the same message, an error may occur.
+
+- By default, a maximum of 100 types of emoticon responses can be given to a message. To expand the upper limit, contact ZEGO technical support.
+
+</Note>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// Add an emoticon response.
+String reactionType = "key";
+
+zim.addMessageReaction(reactionType, message, new ZIMMessageReactionAddedCallback() {
+    @Override
+    public void onMessageReactionAdded(ZIMMessageReaction reaction, ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS){
+        // The operation is successful.
+   }else {
+        // The operation fails.
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Add an emoticon response.
+NSString* reactionType = @"key";
+
+[zim addMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        // The operation is successful.
+    }
+    else{
+        // The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc title="Sample code"
+// Add an emoticon response.
+NSString* reactionType = @"key";
+
+[zim addMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        // The operation is successful.
+    }
+    else{
+        // The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title ="Sample code"
+// Add an emoticon response.
+auto reactionType = "key";
+zim->addMessageReaction(reactionType,messagePtr, [=](const ZIMMessageReaction &reaction, const ZIMError &errorInfo) {
+    if (errorInfo.code == 0) {
+        // The operation is successful.
+    }
+    else{
+        // The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+// Add a message reaction
+string reactionType = "key";
+ZIM.GetInstance().AddMessageReaction(reactionType, message, (ZIMMessageReaction reaction, ZIMError errorInfo) => 
+{
+    if (errorInfo.code == ZIMErrorCode.Success){
+        // Operation succeeded
+    }else {
+        // Operation failed
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Add an emoticon response.
+ZIM.getInstance()!.addMessageReaction('key', ZIMTextMessage(message: 'message')).then((value) {
+    // The emoticon response is added.
+}).catchError((onError){
+    // The emoticon response fails to be added.
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```js
+const reactionType = "key";
+
+zim.deleteMessageReaction(reactionType, message)
+    .then(function (reaction) {
+        // The operation is successful, and the status list of the message is updated on the UI.
+    })
+    .catch(function (err) {
+        // The operation fails.
+    });
+```
+</CodeGroup>
+:::
+
+### 3. Remove an emoticon response
+
+After you add an emoticon response to a message, you can call the {getPlatformData(props,deleteMessageReactionMap)} operation to remove the emoticon response. You can obtain the removal result by invoking the {getPlatformData(props,ZIMMessageReactionDeletedCallbackMap)} callback. In general, this `Callback` can return information about a maximum of five users. For more user information details, see the "Query details of emoticon responses" section of the <a href="#query-details-of-emoticon-responses">Respond to messages with emoticons</a> topic.
+
+<Note title="Note">
+You can call this operation to remove an emoticon response that you added.
+
+
+</Note>
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// Remove an emoticon response.
+String reactionType = "key";
+
+zim.deleteMessageReaction(reactionType, message, new ZIMMessageReactionDeletedCallback() {
+    @Override
+    public void onMessageReactionDeleted(ZIMMessageReaction reaction, ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS){
+        //  The operation is successful.
+        }else {
+        //  The operation fails.
+        }
+    }
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Remove an emoticon response.
+NSString* reactionType = @"key";
+
+[zim deleteMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        //  The operation is successful.
+    }
+    else{
+        //  The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc title="Sample code"
+// Remove an emoticon response.
+NSString* reactionType = @"key";
+
+[zim deleteMessageReaction:reactionType message:message callback:^(ZIMMessageReaction * _Nonnull reaction, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        //  The operation is successful.
+    }
+    else{
+        //  The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Remove an emoticon response.
+auto reactionType = "key";
+zim->deleteMessageReaction(reactionType,messagePtr, [=](const ZIMMessageReaction &reaction, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+        //  The operation is successful.
+    }
+    else{
+        //  The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+// Delete a message reaction
+string reactionType = "key";
+
+ZIM.GetInstance().DeleteMessageReaction(reactionType, message, (ZIMMessageReaction reaction, ZIMError errorInfo) =>
+{
+    if (errorInfo.code == ZIMErrorCode.Success){
+        // Operation succeeded
+    }else {
+        // Operation failed
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Remove an emoticon response.
+ZIM.getInstance()!.deleteMessageReaction('Key', ZIMTextMessage(message: 'message')).then((value) {
+    // The emoticon response is removed.
+}).catchError((onError){
+    // The emoticon response fails to be removed.
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```js title="Sample code"
+const reactionType = "key";
+
+zim.deleteMessageReaction(reactionType, message)
+    .then(function (reaction) {
+        //The operation is successful, and the status list of the message is updated on the UI.
+    })
+    .catch(function (err) {
+        //The operation fails.
+    });
+```
+</CodeGroup>
+:::
+
+## What's more
+
+
+### Query details of emoticon responses
+
+You can query only brief information about the users that listen to, add, and remove emoticon responses. By default, you can query information about a maximum of five users. To expand the upper limit, contact ZEGO technical support. To query specific users who give a specific type of emoticon responses to a specific message, call the {getPlatformData(props,queryMessageReactionUserListMap)} operation. You can obtain the operation result by invoking the {getPlatformData(props,ZIMMessageReactionUserListQueriedCallbackMap)} callback.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// Query details of emoticon responses.
+ZIMMessageReactionUserQueryConfig config =new ZIMMessageReactionUserQueryConfig();
+config.reactionType = "key";
+config.count = 10;
+config.nextFlag = 0;
+zim.queryMessageReactionUserList(message, config,new ZIMMessageReactionUserListQueriedCallback() {
+    @Override
+    public void onMessageReactionUserListQueried(ZIMMessage message, ArrayList<ZIMMessageReactionUserInfo> userList,
+                    String reactionType, long nextFlag, int totalCount,
+                    ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS){
+        // The operation is successful.
+        }else {
+        // The operation fails.
+        }
+    }
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Query details of emoticon responses.
+ZIMMessageReactionUserQueryConfig *config = [[ZIMMessageReactionUserQueryConfig alloc] init];
+config.nextFlag = 0;
+config.reactionType = @"key";
+config.count = 20;
+
+[zim queryMessageReactionUserListByMessage:message config:config callback:^(ZIMMessage * _Nonnull message, NSArray<ZIMMessageReactionUserInfo *> * _Nonnull userList, NSString * _Nonnull reactionType, long long nextFlag, int totalCount, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        // The operation is successful.
+    }
+    else{
+        // The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc title="Sample code"
+// Query details of emoticon responses.
+ZIMMessageReactionUserQueryConfig *config = [[ZIMMessageReactionUserQueryConfig alloc] init];
+config.nextFlag = 0;
+config.reactionType = @"key";
+config.count = 20;
+
+[zim queryMessageReactionUserListByMessage:message config:config callback:^(ZIMMessage * _Nonnull message, NSArray<ZIMMessageReactionUserInfo *> * _Nonnull userList, NSString * _Nonnull reactionType, long long nextFlag, int totalCount, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == 0){
+        // The operation is successful.
+    }
+    else{
+        // The operation fails.
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Query message reaction user details.
+ZIMMessageReactionUserQueryConfig config;
+config.nextFlag = 0;
+// If count exceeds 100, an error will be returned
+config.count = 10;
+config.reactionType = "key";
+
+zim->queryMessageReactionUserList(messagePtr, config, [=](const std::shared_ptr<ZIMMessage> &message,
+    const std::vector<ZIMMessageReactionUserInfo> &userList, const std::string &reactionType,
+    const long long nextFlag, const unsigned int totalCount, const ZIMError &errorInfo) {
+        if (errorInfo.code == 0) {
+            // Operation successful
+        }
+        else {
+            // Operation failed
+        }
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+// Query reaction details
+ZIMMessageReactionUserQueryConfig config = new ZIMMessageReactionUserQueryConfig();
+config.reactionType = "key";
+// An error will be returned if count exceeds 100
+config.count = 10;
+config.nextFlag = 0;
+
+ZIM.GetInstance().QueryConversationList(config, (List<ZIMConversation> conversationList, ZIMError errorInfo) =>
+{
+    if (errorInfo.code == ZIMErrorCode.SUCCESS){
+        // Operation succeeded
+    }else {
+        // Operation failed
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Query details of emoticon responses.
+ZIMMessageReactionUsersQueryConfig config = ZIMMessageReactionUsersQueryConfig(reactionType: "key");
+config.count = 20;
+config.nextFlag = 0;
+ZIM.getInstance()!.queryMessageReactionUserList(ZIMTextMessage(message: 'message'), config).then((value) {
+// The operation is successful. The details of the emoticon responses can be rendered on the UI.
+}).catchError((onError){
+// The operation fails.
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Web"}
+<CodeGroup>
+```js title="Sample code"
+const config = {
+    nextFlag: 0,
+    reactionType: "key",
+    count: 20,
+};
+
+zim.queryMessageReactionUserList(message, config)
+    .then(function (res) {
+        // The operation is successful, and the status list of the message is updated on the UI.
+    })
+    .catch(function (err) {
+        // The operation fails.
+
+    });
+```
+</CodeGroup>
+:::
