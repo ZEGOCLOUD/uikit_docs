@@ -8,9 +8,9 @@ To use this feature, please upgrade Call Kit to v2.11.0 or later.
 
 ## Enable the feature
 
-If you want to enable the feature to invite users to an ongoing call, you can configure the `canInvitingInCalling` property to true.
+If you want to enable the feature to invite users to an ongoing call, you can set the `canInvitingInCalling` property to true.
 
-After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can configure the `onlyInitiatorCanInvite` property to `false`.
+After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can set the `onlyInitiatorCanInvite` property to `false`.
 
 ```typescript {2-7}
 zp.setCallInvitationConfig({
