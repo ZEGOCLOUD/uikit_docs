@@ -1,0 +1,266 @@
+# Send and receive audio messages
+
+
+This topic describes how to use the ZIM SDK and ZIM Audio SDK to send and receive audio messages.
+
+<Warning title="Warning">
+Before using this feature, please make sure you have [logged in to ZIM](./../Send%20and%20receive%20messages.mdx).
+</Warning>
+
+## Usage steps
+
+The whole process mainly includes audio recording, sending, receiving, and playback. In this example, an audio message is sent from client A to client B:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17472.png" /></Frame>
+
+
+### 1. Initialize the ZIM Audio SDK
+
+
+Call the [init](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/init.html) method to initialize the ZIM Audio SDK before calling other methods of this SDK.
+
+To only implement audio message sending and receiving, you can pass in an empty string for the parameter in this method.
+
+To implement more features, pass in a license. For more information about how to obtain a license, see [Implement online authentication](./../../docs_zim_android/ZIM%20Audio/Implement%20online%20authentication.mdx).
+
+
+```dart
+// Initialize the ZIM Audio SDK.
+// In this scenario, no license is required.
+ZIMAudio.getInstance().init("");
+```
+
+### 2. Listen for the callback
+
+ Create a subclass that inherits the [ZIMAudioEventHandler](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler-class.html) abstract class and override the methods in it. Take [onError](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onError.html) as an example.
+   
+```dart
+ZIMAudioEventHandler.onError = (ZIMAudioError errorInfo){
+     //Write business code
+};
+```
+
+
+### 3. Record an audio file
+
+#### 3.1 Start the recording
+
+1. Call the [startRecord](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/startRecord.html) method on the sending client to define the audio duration and the local absolute path to store the audio file, which must contain the filename and extension, for example, `xxx/xxx/xxx.m4a`. Only M4A and MP3 files are supported.
+   
+
+```dart
+
+
+    ZIMAudio.getInstance().startRecord(ZIMAudioRecordConfig("path",maxDuration: 10 * 1000));
+        //The local absolute path to store the audio file, with the extension, for example, `xxx/xxx/xxx.m4a`. Only M4A and MP3 files are supported.
+        // maxDuration is the maximum recording duration of audio, in ms.
+        // The default duration is 60,000 ms, that is, 60 seconds. The maximum duration is 120,000 ms, that is, 120 seconds.
+        // In this example, the duration is 10 x 1,000 ms, that is, 10 seconds.
+       
+```
+
+
+2. Trigger the callback.
+   
+   - After the recording starts, listen for the [onRecorderStarted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderStarted.html) callback on the sending client to update the UI.
+     
+        ```dart
+        static void Function()? onRecorderStarted;
+        ```
+
+
+   - The ZIM Audio SDK updates the recording progress once every 500 ms in the [onRecorderProgress](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderProgress.html) callback, indicating the duration of the recorded audio file, which can be used to update the UI.
+        ```dart
+        static void Function(int currentDuration)? onRecorderProgress;
+        ```
+   
+   - If the recording fails due to an error, the ZIM Audio SDK sends a notification in the [onRecorderFailed](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderFailed.html) callback, and you can handle the failure based on this callback and the error codes specified in [ZIM Audio SDK error codes](./../SDK%20Error%20Codes/ZIM%20Audio.mdx).
+     
+        ```dart
+        static void Function(int errorCode)? onRecorderFailed;
+        ```
+
+
+#### 3.2 Complete the recording
+
+1. To complete the recording, call the [completeRecord](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/completeRecord.html) method.
+   
+   <Note title="Note">
+   - Make sure that you have received the [onRecorderStarted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderStarted.html) callback before calling the [completeRecord](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/completeRecord.html) method; otherwise, the recording is canceled, and an error is reported, indicating that the duration is too short.
+   - If the recording is not completed or canceled, the ZIM Audio SDK automatically completes it when the duration reaches the maximum and triggers the [onRecorderCompleted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCompleted.html) callback.
+    </Note>
+
+    ```dart
+    ZIMAudio.getInstance().completeRecord();
+    ```
+   
+2. After receiving the [onRecorderCompleted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCompleted.html) callback, you can find the specified absolute audio file path.
+
+    ```dart
+    static void Function(int totalDuration)? onRecorderCompleted;// `totalDuration` indicates the total duration (ms) of the audio file.
+   ```
+
+#### 3.3 (Optional) Cancel the recording
+
+1. To cancel the recording and delete the recorded audio, call the [cancelRecord](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/cancelRecord.html) method.
+   
+    ```dart
+    ZIMAudio.getInstance().cancelRecord();
+    ```
+
+2. Calling the [cancelRecord](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/cancelRecord.html) method triggers the [onRecorderCancelled](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCancelled.html) callback to the sending client, which uses the callback to update the UI.
+   
+    ```dart
+    static void Function()? onRecorderCancelled;
+    ```
+
+#### 3.4 (Optional) Check whether the recording is in progress
+
+To obtain the recording status, call the [isRecording](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/isRecording.html) method.
+
+```dart
+bool isRecording = await ZIMAudio.getInstance().isRecording();
+```
+
+### 4. Send the audio message
+
+
+After the [onRecorderCompleted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCompleted.html) callback is triggered, build the [ZIMAudioMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMAudioMessage-class.html) object (ZIM audio message) by using the specified absolute path and call the [sendMediaMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMediaMessage.html) method to send the message. Below is the sample code for sending an audio message in a one-to-one chat.
+
+```dart
+ // The callback for recording completion.
+ZIMAudioEventHandler.onRecorderCompleted = (int totalDuration) async{
+        // Convert audio duration in milliseconds to ZIM seconds
+    int second = totalDuration ~/ 1000;
+        // Create the audio message.
+    ZIMAudioMessage audioMessage  = ZIMAudioMessage('xxx/xxx.mp3');//Absolute path of recording audio file
+    audioMessage.audioDuration = second;
+    ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+    ZIMMediaMessageSendNotification notification = ZIMMediaMessageSendNotification(onMessageAttached: (message){
+        // Developers can listen to this callback to execute business logic before sending the message.
+    },onMediaUploadingProgress: (message,currentFileSize,totalFileSize){
+        // Developers can listen to this callback to obtain the progress of multimedia uploading
+    });
+        // Send the audio message in a one-to-one chat.
+    ZIM.getInstance()!.sendMediaMessage(
+        audioMessage,
+        'toConversationID',
+    ZIMConversationType.peer,
+    ZIMMessageSendConfig(), notification)
+        .then((value) => {
+        // Successfully triggered here
+    })
+        .catchError((onError) {
+        // Failure triggered here
+    });
+};  
+```
+
+For more information about the sending progress, see [Callback for the sending progress of rich media content](./../Guides/Messaging/Send%20and%20receive%20messages.mdx#callback-for-the-sending-progress-of-rich-media-content).
+
+### 5. Receive the audio message
+
+
+Based on the conversation type (one-to-one chat, voice chatroom, or group chat), listen for the [onReceivePeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceivePeerMessage.html)、[onReceiveGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveGroupMessage.html)、[onReceiveRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveRoomMessage.html) callback on the receiving client to receive the audio message notification and then call the [downloadMediaFile](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/downloadMediaFile.html) method to download the audio file to the local database.
+
+Below is the sample code for receiving and downloading an audio message in a one-to-one chat.
+
+```dart
+ZIMEventHandler.onReceivePeerMessage = (zim, messageList, fromUserID) async{
+    //The `receivePeerMessage` callback is triggered when a one-to-one message is received.
+    for (ZIMMessage message in messageList) {
+        // When a message is received, you can judge what type of message was received by the Type of the message.
+        switch (message.type) {
+            case ZIMMessageType.audio:
+                message as ZIMAudioMessage;
+                try{
+                    var result = await ZIM.getInstance()!.downloadMediaFile(message,ZIMMediaFileType.originalFile,null);
+                    ZIMAudioMessage resultMsg = result.message as ZIMAudioMessage;
+                    resultMsg.fileLocalPath;   // Download succeeded. Obtain the local absolute path of the audio file.
+                }catch(error){
+                    // Download failed. Handle the error based on the corresponding error code table.
+                }
+                break;
+            default:
+        }
+    }
+};
+```
+
+For more information about the download progress, see [Callback for the downloading progress of rich media content](./../Guides/Messaging/Send%20and%20receive%20messages.mdx#receive-rich-media-content).
+
+### 6. Play the audio file
+
+#### 6.1 Start the playback
+
+1. To play the audio file, call the [startPlay](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/startPlay.html) method on the receiving client to pass in the local absolute path of the audio file and set the routing type for audio output.
+
+```dart
+// Start playing audio
+await ZIMAudio.getInstance().startPlay(ZIMAudioPlayConfig('Fill in the local absolute path of the audio file', routeType: ZIMAudioRouteType.speaker));
+```
+
+2. Trigger the callback.
+   
+   - Listen for the [onPlayerStarted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerStarted.html) callback to update the UI.
+     
+        ```dart
+        static void Function(int totalDuration)? onPlayerStarted; // `totalDuration` is the total duration (ms) of the audio file.
+        ```
+   
+   - The ZIM Audio SDK updates the playback progress once every 500 ms in the [onPlayerProgress](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerProgress.html) callback, indicating the playback duration of the audio file, which can be used to update the UI.
+     
+        ```dart
+        static void Function(int currentDuration)? onPlayerProgress;
+        ```
+   
+   - If the playback fails due to an error, the ZIM Audio SDK sends a notification in the [onPlayerFailed](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerFailed.html) callback, and you can handle the failure based on this callback and the error codes specified in [ZIM Audio SDK error codes](./../SDK%20Error%20Codes/ZIM%20Audio.mdx).
+     
+        ```dart
+        static void Function(int errorCode)? onPlayerFailed;
+        ```
+
+   - If the playback is interrupted by recording, an incoming call, or audio output device preemption, the ZIM Audio SDK sends the [onPlayerInterrupted](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerInterrupted.html) callback.
+     
+        ```dart
+        static void Function()? onPlayerInterrupted;
+        ```
+   
+   - When the playback ends, the ZIM Audio SDK sends the [onPlayerEnded](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerEnded.html) callback.
+     
+        ```dart
+        static void Function()? onPlayerEnded;
+        ```
+
+3. (Optional) To switch the audio output device (loudspeaker or headphone) during playback, call the [setAudioRouteType](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/setAudioRouteType.html) method.
+   
+    <Warning title="Warning">
+   If the headphone is connected, this method does not take effect, and the audio is still output from the headphone.
+    </Warning>
+   
+      ```dart
+    // Set the output device to the loudspeaker.
+     ZIMAudio.getInstance().setAudioRouteType(ZIMAudioRouteType.SPEAKER);
+     
+    ```
+#### 6.2 (Optional) Stop the playback
+
+1. To stop the playback, call the [stopPlay](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/stopPlay.html) method.
+   
+    ```dart
+    await ZIMAudio.getInstance().stopPlay();
+    ```
+
+2. Listen for the [onPlayerStopped](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerStopped.html) callback to update the UI. After the playback is stopped or ends, the ZIM Audio SDK releases the audio device.
+   
+    ```dart
+    static void Function()? onPlayerStopped;
+    ```
+
+### 7. Deinitialize the ZIM Audio SDK
+
+If the audio feature is no longer in use, call the [uninit](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/uninit.html) method to release resources.
+
+```dart
+ZIMAudio.getInstance().uninit();
+```

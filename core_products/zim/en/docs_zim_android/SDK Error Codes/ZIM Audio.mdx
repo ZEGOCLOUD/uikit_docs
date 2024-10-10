@@ -1,0 +1,162 @@
+# ZIM Audio SDK error codes
+
+
+
+We recommend that you use the ZIM Audio SDK of the latest version for better experience.
+
+## Overview
+
+This topic describes solutions to network and media errors that cannot be automatically fixed in the ZIM Audio SDK of the **latest version**.
+
+If the `errorCode` field exists in the return result after an API is called, the API call is abnormal. The sample code is as follows:
+
+:::if{props.platform=undefined}
+```java
+ZIMAudio.getInstance().setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onError(ZIMAudioError errorInfo) {
+        errorInfo.code; // Error code for this error, please refer to the official website error code table for handling.
+        errorInfo.message; // Error message for this error.
+    }
+}
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMAudioEventHandler.onError = (ZIMAudioError errorInfo){
+       errorInfo.code; //Error code for this error, please refer to the official website error code table for handling.
+       errorInfo.message; //Error message for this error.
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)onError:(ZIMAudioError *)errorInfo{
+    NSLog(@"errorCode%lu,%@",(unsigned long)errorInfo.code,errorInfo.message);
+}
+```
+:::
+:::if{props.platform="RN"}
+```js
+ZIMAudio.getInstance().on("onError",function( onError){
+    console.log('onError,code:'+onError.code+"message:"+onError.message);
+});
+```
+:::
+
+## Error codes
+
+<table>
+<tbody><tr>
+<th>Error code</th>
+<th>Description</th>
+<th>Solution</th>
+</tr>
+<tr>
+<td>0</td>
+<td>Success. </td>
+<td>None. </td>
+</tr>
+<tr>
+<td>1</td>
+<td>Unknown error.</td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>2</td>
+<td>Other APIs of the ZIM Audio SDK are called before the SDK is initialized. </td>
+<td>Initialize the SDK. </td>
+</tr>
+<tr>
+<td>3</td>
+<td>Invalid path. </td>
+<td>Make sure that the input parameters are valid. </td>
+</tr>
+<tr>
+<td>4</td>
+<td>Invalid parameter. </td>
+<td>Make sure that the input parameters are valid. </td>
+</tr>
+<tr>
+<td>5</td>
+<td>The target file cannot be opened, possibly because the file format or content is invalid. </td>
+<td>Make sure that the file format and content is valid. </td>
+</tr>
+<tr>
+<td>6</td>
+<td>Insufficient space for file writing. </td>
+<td>Make sure that the disk has sufficient space to use the SDK. </td>
+</tr>
+<tr>
+<td>7</td>
+<td>No read/write permission on the path. </td>
+<td>Check the permission configuration. </td>
+</tr>
+<tr>
+<td>8</td>
+<td>I/O error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>11</td>
+<td>Encoding error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>12</td>
+<td>Decoding error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>13</td>
+<td>API call error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>14</td>
+<td>Internal logic error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>15</td>
+<td>Internal log module error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>31</td>
+<td>General recorder error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>32</td>
+<td>Recording duration too short. </td>
+
+<td>Record again after the onRecorderStarted callback is received. </td>
+
+</tr>
+<tr>
+<td>51</td>
+<td>General player error. </td>
+<td>Contact ZEGOCLOUD technical support for troubleshooting. </td>
+</tr>
+<tr>
+<td>81</td>
+<td>Invalid license. </td>
+<td>Make sure that the license is valid. </td>
+</tr>
+<tr>
+<td>82</td>
+<td>Expired license. </td>
+<td>Apply for another license and re-initialize the SDK. </td>
+</tr>
+<tr>
+<td>83</td>
+<td>Features are unavailable because the service is not activated. </td>
+<td>Contact ZEGOCLOUD technical support to activate the service. </td>
+</tr>
+</tbody></table>
+
+
+
+
+

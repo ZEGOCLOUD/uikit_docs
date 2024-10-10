@@ -1,0 +1,54 @@
+---
+articleID: 17660
+---
+# Modify a notification badge
+
+
+## Overview
+
+ZPNs supports offline push notification receiver app to update the app icon badge with the number of unread messages, reminding users of the unread message count.
+
+## Prerequisites
+
+- ZPNs SDK version 2.6.0 or above has been integrated and the function of offline push notification has been implemented. For details, please refer to this document [Implement offline push notification](./../Implement%20offline%20push%20notification.mdx).
+- iOS device running iOS 11.0 or above.
+
+## Report the badge number
+
+When the receiving end is online, it needs to call the [setBadge](@setBadge) method to report the current badge number to the ZPNs server. When it receives a offline push notification, ZPNs will automatically update the badge number on the receiving end based on this value.
+
+<Note title="Note">
+The badge value must not be less than 0.
+</Note>
+
+```objc
+// Report the badge number of the app as 1 to the ZPNs server.
+[[ZPNs shared] setBadge:1];
+```
+
+## Send offline push notifications with badge information
+
+When sending messages or call invitations, the sender can modify the badge-related parameters in [ZIMPushConfig](@-ZIMPushConfig) to determine the changes in the badge on the receiving end.
+
+```objc
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+// Whether the push notification carries badge information, default is NO.
+pushConfig.enableBadge = YES;
+// The badge increment for the target of this push notification. Set it as 1 here, which will increase the badge number of the receiving end app by 1.
+pushConfig.badgeIncrement = 1;
+```
+
+## Update the badge automatically
+
+After receiving offline push notifications, the ZPNs SDK will automatically adjust the app icon badge based on the badge information in the notifications.
+
+## More Information
+
+### Modify the local badge
+
+To modify the local badge when the user is online, you can call the iOS system interface `setApplicationIconBadgeNumber`. Then, you need to promptly call [setBadge](@setBadge) to report the operation, as mentioned in [the previous section](#update-the-badge-automatically).
+
+```objc
+// Modify the local badge number of the app as 1.
+[[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
+```

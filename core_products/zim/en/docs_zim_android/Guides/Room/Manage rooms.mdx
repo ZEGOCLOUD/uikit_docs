@@ -1,0 +1,678 @@
+---
+articleID: 14198
+---
+
+import { getPlatformData } from "./../../../../../../snippets/utils-content-parser.js"
+
+export const createRoomMap = {
+  'Android': <a href='@createRoom' target='_blank'>createRoom</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createRoom.html' target='_blank'>createRoom</a>,
+}
+export const ZIMRoomInfoMap = {
+  'Android': <a href='@-ZIMRoomInfo' target='_blank'>ZIMRoomInfo</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomInfo-class.html' target='_blank'>ZIMRoomInfo</a>,
+}
+export const joinRoomMap = {
+  'Android': <a href='@joinRoom' target='_blank'>joinRoom</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/joinRoom.html' target='_blank'>joinRoom</a>,
+}
+export const enterRoomMap = {
+  'Android': <a href='@enterRoom' target='_blank'>enterRoom</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/enterRoom.html' target='_blank'>enterRoom</a>,
+}
+export const sendRoomMessageMap = {
+  'Android': <a href='@sendRoomMessage' target='_blank'>sendRoomMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendRoomMessage.html' target='_blank'>sendRoomMessage</a>,
+}
+export const setEventHandlerMap = {
+  'Android': <a href='@setEventHandler' target='_blank'>setEventHandler</a>,
+  'Web': <a href='@on' target='_blank'>on</a>,
+  'Flutter': "",
+}
+export const onRoomMemberJoinedMap = {
+  'Android': <a href='@onRoomMemberJoined' target='_blank'>onRoomMemberJoined</a>,
+  'Web': <a href='@roomMemberJoined' target='_blank'>roomMemberJoined</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-member-joined-room-id' target='_blank'>roomMemberJoined</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-member-joined-room-id' target='_blank'>roomMemberJoined</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberJoined.html' target='_blank'>onRoomMemberJoined</a>,
+}
+export const leaveRoomMap = {
+  'Android': <a href='@leaveRoom' target='_blank'>leaveRoom</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/leaveRoom.html' target='_blank'>leaveRoom</a>,
+}
+export const onRoomMemberLeftMap = {
+  'Android': <a href='@onRoomMemberLeft' target='_blank'>onRoomMemberLeft</a>,
+  'Web': <a href='@roomMemberLeft' target='_blank'>roomMemberLeft</a>,
+  'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-member-left-room-id' target='_blank'>roomMemberLeft</a>,
+  'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-member-left-room-id' target='_blank'>roomMemberLeft</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberLeft.html' target='_blank'>onRoomMemberLeft</a>,
+}
+export const leaveAllRoomMap = {
+  'Android': <a href='@leaveAllRoom' target='_blank'>leaveAllRoom</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/leaveAllRoom.html' target='_blank'>leaveAllRoom</a>,
+}
+export const onRoomStateChangedMap = {
+  'Android': <a href='@onRoomStateChanged' target='_blank'>onRoomStateChanged</a>,
+  'Web': <a href='@roomStateChanged' target='_blank'>roomStateChanged</a>,
+  'iOS': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
+  'mac': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html' target='_blank'>onRoomStateChanged</a>,
+}
+export const ZIMRoomStateMap = {
+  'Android': <a href='@-ZIMRoomState' target='_blank'>ZIMRoomState</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomState.html' target='_blank'>ZIMRoomState</a>,
+}
+export const ZIMRoomEventMap = {
+  'Android': <a href='@-ZIMRoomEvent' target='_blank'>ZIMRoomEvent</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomEvent.html' target='_blank'>ZIMRoomEvent</a>,
+}
+
+# Manage rooms
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room messaging, allows multiple users to send text or custom messages to a room, and chat and share ideas in real time.
+
+With the room messaging feature, you can build your app to meet different requirements of various scenarios, such as one-to-many classes, online conferences, and more. 
+
+
+## Prerequisites 
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Join a room 
+
+Now, we provide two methods to join a room:
+
+- <b>[Method 1: Manually create a room & Join a room ](!Room_Management#2_1)</b>: Call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info to manually create a room first. And other client users call the {getPlatformData(props,joinRoomMap)}  with the roomID to join the room.
+
+- <b>[Method 2: Join a room directly (room will be created automatically)](!Room_Management#2_2)</b>: Call the {getPlatformData(props,enterRoomMap)}  method with  {getPlatformData(props,ZIMRoomInfoMap)} info to join a room directly (if the room doesn't exist, the room will be created automatically). Other client users can call the {getPlatformData(props,enterRoomMap)} method with the roomID to join the room.
+
+For in-room users to send messages to a room, call the {getPlatformData(props,sendRoomMessageMap)} method. For details, see [Send & Receive messages](!sendMessages#6).
+
+<Note title="Note">
+
+If the room (roomID) already exists:
+
+- Call the {getPlatformData(props,createRoomMap)}  method: returns an error code. For details, see [Error codes](!Error_Codes#6).
+- Call the {getPlatformData(props,enterRoomMap)} method: you will join the room directly. 
+
+If the room (roomID) doesn't exist:
+
+- Call the {getPlatformData(props,createRoomMap)} method: you can create a room, and you will join the room upon creation. 
+- Call the {getPlatformData(props,enterRoomMap)} method: a room will be created automatically, and you will join the room directly. 
+</Note>
+
+### Method 1: Manually create a room & Join a room 
+
+#### Manually create a room
+
+Let's suppose we have Client A and Client B. The following shows how Client A creates a room, how Client B and other client users join the room. 
+
+For Client A to create a room after login, he can call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info. And he can be told whether the room is created successfully by the `ZIMError` parameter. For related error codes, see [Error codes](!Error_Codes).
+
+
+<Warning title="Warning">
+
+- You can customize the **roomID** and **roomName**, and we recommend you set the **roomID** to a meaningful value and associate them with the account system of your application.
+- After creating a room by calling the {getPlatformData(props,createRoomMap)}  method, you will directly join the room you just created, you don't need to call the {getPlatformData(props,joinRoomMap)}  method to join the room.
+</Warning>
+
+:::if{props.platform=undefined}
+```java
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+zimRoomInfo.roomID = roomID;
+zimRoomInfo.roomName = roomName;
+zim.createRoom(zimRoomInfo, new ZIMRoomCreatedCallback() {
+    @Override
+    public void onRoomCreated(ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS) {
+            // Room created successfully.            
+        } else {
+            // Failed to create a room.        
+        }                                
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Set the room configurations.
+ZIMRoomInfo roomInfo = ZIMRoomInfo();
+roomInfo.roomID = 'roomID';
+roomInfo.roomName = 'roomName';
+
+//Creates a room.
+ZIM
+    .getInstance()
+    .createRoom(roomInfo)
+    .then((value) {
+        //This will be triggered when room created successfully.
+    })
+    .catchError((onError) {
+        //This will be triggered when room creation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Set the room configurations.
+ZIMRoomInfo *roomInfo = [[ZIMRoomInfo alloc]init];
+roomInfo.roomID = @"" ;
+roomInfo.roomName = @"" ;
+
+//Creates a room.
+[zim createRoom:roomInfo callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for creating a room here. 
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Set the room configurations.
+ZIMRoomInfo *roomInfo = [[ZIMRoomInfo alloc]init];
+roomInfo.roomID = @"" ;
+roomInfo.roomName = @"" ;
+
+//Creates a room.
+[zim createRoom:roomInfo callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for creating a room here. 
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMRoomInfo room_info;
+room_info.roomID = room_id;
+room_info.roomName = room_name;
+
+zim_->createRoom(room_info, [=](ZIMRoomFullInfo room_info, zim::ZIMError error_info) {
+    global_main_dialog_->PostUiThread([=] {});
+    if (error_info.code != 0)
+    {
+        ShowMsg(L"Create room failed, roomID: %s, error code: %d", room_info.baseInfo.roomID, error_info.code);
+    }
+    else
+    {
+        ShowMsg(L"Create room successfully, roomID: %s", room_info.baseInfo.roomID);
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var roomInfo = { roomID: '', roomName: '' };
+zim.createRoom(roomInfo)
+    .then(function ({ roomInfo }) {
+        // Operation successful. 
+    })
+    .catch(function (err) {
+        // Operation failed. 
+    });
+```
+
+:::
+
+
+#### Join a room 
+
+For Client B and other client users to join the room created by Client A, call the {getPlatformData(props,joinRoomMap)}  method with the roomID of client A's room. And Client B and other client users can be told whether they joined the room successfully by the `ZIMError` parameter. For related error codes, see [Error codes](!Error_Codes).
+
+:::if{props.platform=undefined}
+```java
+zim.joinRoom(roomID, new ZIMRoomJoinedCallback() {
+    @Override
+    public void onRoomJoined(ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS) {
+            // Room joined successfully.
+        } else {
+            // Failed to join the room.
+        }     
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIM
+    .getInstance()
+    .joinRoom('roomID')
+    .then((value) {
+        //This will be triggered when room joined successfully. 
+    })
+    .catchError((onError) {
+        //This will be triggered when failed to join room.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim joinRoom:RoomID callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for joining a room here. 
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+[zim joinRoom:RoomID callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for joining a room here. 
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim_->joinRoom(roomId, [=](ZIMRoomFullInfo room_info, zim::ZIMError error_info) {
+    global_main_dialog_->PostUiThread([=] {});
+    if (error_info.code != 0)
+    {
+        ShowMsg(L"Join room failed, roomID: %s, error code: %d", room_info.baseInfo.roomID, error_info.code);
+    }
+    else
+    {
+        ShowMsg(L"Join room successfully, roomIDID: %s, roomName: %s", room_info.baseInfo.roomID, room_info.baseInfo.roomName);
+    }
+});
+```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+var roomID = '';
+zim.joinRoom(roomID)
+    .then(function ({ roomInfo }) {
+        // Operation successful. 
+    })
+    .catch(function (err) {
+        // Operation failed. 
+    });
+```
+
+:::
+
+
+To receive notifications when a new room member joins the room, call the {getPlatformData(props,setEventHandlerMap)} method to set up the callback {getPlatformData(props,onRoomMemberJoinedMap)}. 
+
+The following shows Client A receives the callback notification when Client B joins the room created by Client A:
+
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onRoomMemberJoined(ZIM zim, ArrayList<ZIMUserInfo> memberList, final String roomID) {
+    // Implement the event callback for new room members join the room.    
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onRoomMemberJoined = (memberList, roomID) {
+    //Implement the event callback for new room members join the room. 
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+    roomMemberJoined:(NSArray<ZIMUserInfo *> *)memberList
+              roomID:(NSString *)roomID{
+    //Implement the event callback for new room members join the room. 
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+- (void)zim:(ZIM *)zim
+    roomMemberJoined:(NSArray<ZIMUserInfo *> *)memberList
+              roomID:(NSString *)roomID{
+    //Implement the event callback for new room members join the room. 
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void onRoomMemberJoined(ZIM* zim, const std::vector<ZIMUserInfo>& member_list, const std::string& room_id)
+{
+    for (auto member : member_list)
+    {
+        ShowMsg(L"User: (%s%s), enter the room: %s", member.userID, member.userName, room_id);
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Callback for receiving event notification when new room members join the room. And it also returns the information of the user who just joined the room. 
+zim.on('roomMemberJoined', function (zim, { roomID, memberList }) {
+    console.log(roomID, memberList);
+});
+```
+:::
+
+### Method 2: Join a room directly (room will be created automatically)
+
+Let's suppose we have Client A and Client B. The following shows how Client A joins the room without creating a room manually, and how Client B and other client users join the room.
+
+1. After logs in, Client A calls the {getPlatformData(props,enterRoomMap)}  method with the {getPlatformData(props,ZIMRoomInfoMap)} information. The room will be created automatically when the passed roomID doesn't exist.
+
+2. Client B and other client users call the {getPlatformData(props,enterRoomMap)}  method with the roomID to join the room created by Client A. 
+
+3. For in-room client users to receive notifications when a new room member joins the room, call the {getPlatformData(props,setEventHandlerMap)}  method to set up the callback {getPlatformData(props,onRoomMemberJoinedMap)}.
+
+:::if{props.platform=undefined}
+```java
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+zimRoomInfo.roomID = roomID;
+zimRoomInfo.roomName = roomName;
+
+ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
+
+zim.enterRoom(zimRoomInfo, config, new ZIMRoomEnteredCallback() {
+    @Override
+    public void onRoomEntered(ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) {
+        if (error.code == ZIMErrorCode.SUCCESS) {
+            // Room joined successfully.            
+        } else {
+            // Failed to join the room.            
+        }                                
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Set up the configuration of a room.
+ZIMRoomInfo roomInfo = ZIMRoomInfo();
+roomInfo.roomID = 'roomID';
+roomInfo.roomName = 'roomName';
+ZIMRoomAdvancedConfig advancedConfig = ZIMRoomAdvancedConfig();
+
+//Join a room directly.
+ZIM.getInstance().enterRoom(roomInfo, advancedConfig).then((value) {
+        // enter This will be triggered when operation successful.
+    }).catchError((onError){
+        // enter This will be triggered when operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Set up the configuration of a room.
+ZIMRoomInfo *roomInfo = [[ZIMRoomInfo alloc]init];
+roomInfo.roomID = @"" ;
+roomInfo.roomName = @"" ;
+
+ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
+
+//Join a room directly.
+[zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for join a room. 
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Set up the configuration of a room.
+ZIMRoomInfo *roomInfo = [[ZIMRoomInfo alloc]init];
+roomInfo.roomID = @"" ;
+roomInfo.roomName = @"" ;
+
+ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
+
+//Join a room directly.
+[zim enterRoom:roomInfo config:config callback:^(ZIMRoomFullInfo * _Nonnull roomInfo, ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for join a room. 
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMRoomInfo room_info;
+room_info.roomID = room_id;
+room_info.roomName = room_name;
+
+ZIMRoomAdvancedConfig config;
+
+zim_->enterRoom(room_info, config, [=](ZIMRoomFullInfo room_info, zim::ZIMError error_info) {
+    global_main_dialog_->PostUiThread([=] {});
+    if (error_info.code != 0)
+    {
+        ShowMsg(L"Failed to join room. roomID: %s, Error code: %d", room_info.baseInfo.roomID, error_info.code);
+    }
+    else
+    {
+        ShowMsg(L"Room joined successfully. roomID: %s", room_info.baseInfo.roomID);
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var roomInfo = { roomID: '', roomName: '' };
+zim.enterRoom(roomInfo)
+    .then(function ({ roomInfo }) {
+        // Operation successful. 
+    })
+    .catch(function (err) {
+        // Operation failed. 
+    });
+
+// Callback for receiving event notification when new room members join the room. And it also returns the information of the user who just joined the room. 
+zim.on('roomMemberJoined', function (zim, { roomID, memberList }) {
+    console.log(roomID, memberList);
+});
+```
+:::
+
+## Leave the room 
+
+For Client B to leave the room, call the {getPlatformData(props,leaveRoomMap)}  method with `roomID`.
+And Client A and other client users in the room will receive notifications through the callback {getPlatformData(props,onRoomMemberLeftMap)}  of the {getPlatformData(props,setEventHandlerMap)} method. 
+
+Room members who leave the room cannot receive messages in the room anymore.
+
+
+:::if{props.platform=undefined}
+```java
+zim.leaveRoom(roomID, new ZIMRoomLeftCallback() {
+     @Override
+     public void onRoomLeft(String roomID, ZIMError errorInfo) {
+                
+     }
+});
+```
+
+```java
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onRoomMemberLeft(ZIM zim, ArrayList<ZIMUserInfo> memberList, final String roomID) {
+    // Implement the event callback for exisiting users leave the room. 
+    }
+});
+```
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+ ZIM
+    .getInstance()
+    .leaveRoom('roomID')
+    .then((value) {
+        //This will be triggered when leave a room successfully. 
+    })
+    .catchError((onError) {
+        //This will be triggered when failed to leave a room.
+    });
+```
+
+```dart
+ZIMEventHandler.onRoomMemberLeft = (memberList, roomID) {
+    //Fill in your custom code here when room members leave.
+};
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim leaveRoom:roomID callback:^(ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for exisiting users leave the room.
+}];
+```
+
+```objc
+- (void)zim:(ZIM *)zim 
+    roomMemberLeft:(NSArray<ZIMUserInfo *> *)memberList
+            roomID:(NSString *)roomID{
+	//Fill in your custom code here when room members leave.
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+[zim leaveRoom:roomID callback:^(ZIMError * _Nonnull errorInfo) {
+    //Implement the event callback for exisiting users leave the room.
+}];
+```
+
+```objc
+- (void)zim:(ZIM *)zim 
+    roomMemberLeft:(NSArray<ZIMUserInfo *> *)memberList
+            roomID:(NSString *)roomID{
+	//Fill in your custom code here when room members leave.
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim_->leaveRoom(room_id, [=](zim::ZIMError error_info) {
+    global_main_dialog_->PostUiThread([=] {
+        ShowMsg(L"Logout result：%d", error_info.code);
+    });
+});
+```
+
+```cpp
+void onRoomMemberLeft(ZIM* zim, const std::vector<ZIMUserInfo>& member_list, const std::string& room_id)
+{
+    for (auto member : member_list)
+    {
+        ShowMsg(L"User: (%s,%s), logout the room: %s", member.userID, member.userName, room_id);
+    }
+}
+```
+
+:::
+:::if{props.platform="Web"}
+```javascript
+var roomID = '';
+zim.leaveRoom(roomID)
+    .then(function ({ roomID }) {
+        // Operation successful. 
+    })
+    .catch(function (err) {
+        // Operation failed. 
+    });
+```
+
+```javascript
+// Callback for receiving event notification when existing room members leave the room. And it also returns the information of the user who just left the room. 
+zim.on('roomMemberLeft', function (zim, { roomID, memberList }) {
+    console.log(roomID, memberList);
+});
+```
+:::
+
+
+<Note title="Note">
+The room will be automatically destroyed after all room members left the room. You can also delay the destruction with the room settings.
+</Note>
+
+
+### Leave all rooms
+
+Call the {getPlatformData(props,leaveAllRoomMap)}  method to leave all joined rooms and obtain a list of the rooms. If a user logs in to multiple platforms, calling this method on a platform lets the user leave rooms on the that platform only. Other platforms are not affected.
+
+:::if{props.platform=undefined}
+```java
+ZIM.getInstance().leaveAllRoom(new ZIMRoomAllLeftCallback() {
+    @Override
+    public void onRoomAllLeft(ArrayList<String> roomIDList, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS){
+        // `roomIDList` contains the IDs of all rooms that the user have left from.
+    }else{
+        // Handle the error based on the corresponding error code table.
+    }
+}];
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMRoomAllLeftResult result = await ZIM.getInstance()!.leaveAllRoom();
+    result.roomIDs; // List of rooms left
+} on PlatformException catch (onError) {
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[[ZIM getInstance] leaveAllRoom:^(NSArray<NSString *> * _Nonnull roomIDList, ZIMError * _Nonnull errorinfo) {
+    if(errorinfo.code == ZIMErrorCodeSuccess){
+        // `roomIDList` contains the IDs of all rooms that the user have left from.
+    }else{
+        // Handle the error based on the corresponding error code table.
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+[[ZIM getInstance] leaveAllRoom:^(NSArray<NSString *> * _Nonnull roomIDList, ZIMError * _Nonnull errorinfo) {
+    if(errorinfo.code == ZIMErrorCodeSuccess){
+        // `roomIDList` contains the IDs of all rooms that the user have left from.
+    }else{
+        // Handle the error based on the corresponding error code table.
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim->leaveAllRoom([](const std::vector<std::string>& roomIDList, const ZIMError& errorInfo) {
+    if (errorInfo.errorCode == 0) {
+        // `roomIDList` contains the IDs of all rooms that the user have left from.
+    }else{
+        // Handle the error based on the corresponding error code table.
+    }
+}];
+```
+:::
+:::if{props.platform="Web"}
+```js
+var roomIDs = [];
+zim.leaveAllRoom(roomIDs)
+    .then(function ({ roomIDs }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+
+Other users in the room receive the member change notification in the {getPlatformData(props,setEventHandlerMap)}  callback of the {getPlatformData(props,onRoomMemberLeftMap)}  method.
+
+After leaving all rooms, the user receives the {getPlatformData(props,onRoomStateChangedMap)} callback multiple times based on the number of rooms. The value of {getPlatformData(props,ZIMRoomStateMap)} is `DISCONNECTED`, and the value of {getPlatformData(props,ZIMRoomEventMap)} is `SUCCESS`.
+
+After leaving a room, the user no longer receives messages in the room.
+

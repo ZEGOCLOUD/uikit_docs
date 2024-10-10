@@ -1,0 +1,2233 @@
+---
+articleID: 14211
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js'
+
+export const createGroup1Map = {
+  'Android': <a href='@createGroup__1' target='_blank'>createGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createGroup.html' target='_blank'>createGroup</a>,
+}
+export const ZIMGroupCreatedCallbackMap = {
+  'Android': <a href='@-ZIMGroupCreatedCallback' target='_blank'>ZIMGroupCreatedCallback</a>,
+  'window,iOS,mac': <a href='@ZIMGroupCreatedCallback' target='_blank'>ZIMGroupCreatedCallback</a>,
+  'Web': <a href='@-ZIMGroupCreatedResult' target='_blank'>ZIMGroupCreatedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupCreatedResult-class.html' target='_blank'>ZIMGroupCreatedCallback</a>,
+}
+export const createGroupMap = {
+  'Android': <a href='@createGroup' target='_blank'>createGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createGroup.html' target='_blank'>createGroup</a>,
+}
+export const joinGroupMap = {
+  'Android': <a href='@joinGroup' target='_blank'>joinGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/joinGroup.html' target='_blank'>joinGroup</a>,
+}
+export const onGroupMemberStateChangedMap = {
+  'Android': <a href='@onGroupMemberStateChanged' target='_blank'>onGroupMemberStateChanged</a>,
+  'Web': <a href='@groupMemberStateChanged' target='_blank'>groupMemberStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-group-member-state-changed-event-user-list-operated-info-group-id' target='_blank'>groupMemberStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_macos~protocol~ZIMEventHandler#zim-group-member-state-changed-event-user-list-operated-info-group-id' target='_blank'>groupMemberStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMemberStateChanged.html' target='_blank'>onGroupMemberStateChanged</a>,
+}
+export const onGroupStateChangedMap = {
+  'Android': <a href='@onGroupStateChanged' target='_blank'>onGroupStateChanged</a>,
+  'Web': <a href='@groupStateChanged' target='_blank'>groupStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-state-changed-operated-info-group-id' target='_blank'>groupStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-state-changed-operated-info-group-id' target='_blank'>groupStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupStateChanged.html' target='_blank'>onGroupStateChanged</a>,
+}
+export const joinModeMap = {
+  'Android': <a href='@joinMode' target='_blank'>joinMode</a>,
+}
+export const sendGroupJoinApplicationMap = {
+  'Android': <a href='@sendGroupJoinApplication' target='_blank'>sendGroupJoinApplication</a>,
+  'iOS,mac': <a href='@sendGroupJoinApplicationToGroupID' target='_blank'>sendGroupJoinApplicationToGroupID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupJoinApplication.html' target='_blank'>sendGroupJoinApplication</a>,
+}
+export const onGroupApplicationListChangedMap = {
+  'Android': <a href='@onGroupApplicationListChanged' target='_blank'>onGroupApplicationListChanged</a>,
+  'Web': <a href='@groupApplicationListChanged' target='_blank'>groupApplicationListChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-group-application-list-changed' target='_blank'>groupApplicationListChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_macos~protocol~ZIMEventHandler#zim-group-application-list-changed' target='_blank'>groupApplicationListChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupApplicationListChanged.html' target='_blank'>onGroupApplicationListChanged</a>,
+}
+export const acceptGroupJoinApplicationMap = {
+  'Android': <a href='@acceptGroupJoinApplication' target='_blank'>acceptGroupJoinApplication</a>,
+  'iOS,mac': <a href='@acceptGroupJoinApplicationFromUserID' target='_blank'>acceptGroupJoinApplicationFromUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/acceptGroupJoinApplication.html' target='_blank'>acceptGroupJoinApplication</a>,
+}
+export const rejectGroupJoinApplicationMap = {
+  'Android': <a href='@rejectGroupJoinApplication' target='_blank'>rejectGroupJoinApplication</a>,
+  'iOS,mac': <a href='@rejectGroupJoinApplicationFromUserID' target='_blank'>rejectGroupJoinApplicationFromUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/rejectGroupJoinApplication.html' target='_blank'>rejectGroupJoinApplication</a>,
+}
+export const onGroupApplicationUpdatedMap = {
+  'Android': <a href='@onGroupApplicationUpdated' target='_blank'>onGroupApplicationUpdated</a>,
+  'Web': <a href='@groupApplicationUpdated' target='_blank'>groupApplicationUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-group-application-updated' target='_blank'>groupApplicationUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_macos~protocol~ZIMEventHandler#zim-group-application-updated' target='_blank'>groupApplicationUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupApplicationUpdated.html' target='_blank'>onGroupApplicationUpdated</a>,
+}
+export const loginMap = {
+  'Android': <a href='@login__2' target='_blank'>login</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIM#login-with-user-id-config-callback-2' target='_blank'>loginWithUserID</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIM#login-with-user-id-config-callback-2' target='_blank'>login</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html' target='_blank'>login</a>,
+}
+export const inviteUsersIntoGroupMap = {
+  'Android': <a href='@inviteUsersIntoGroup' target='_blank'>inviteUsersIntoGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/inviteUsersIntoGroup.html' target='_blank'>inviteUsersIntoGroup</a>,
+}
+export const loginWithUserInfoMap = {
+  'Android': <a href='@login' target='_blank'>login</a>,
+  'iOS,mac': <a href='@loginWithUserInfo' target='_blank'>loginWithUserInfo</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html' target='_blank'>login</a>,
+}
+export const sendGroupInviteApplicationsMap= {
+  'Android': <a href='@sendGroupInviteApplications' target='_blank'>sendGroupInviteApplications</a>,
+  'iOS,mac': <a href='@sendGroupJoinApplicationToGroupID' target='_blank'>sendGroupJoinApplicationToGroupID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupInviteApplications.html' target='_blank'>sendGroupInviteApplications</a>,
+}
+export const inviteModeMap = {
+  'Android': <a href='@inviteMode' target='_blank'>inviteMode</a>,
+  'Flutter': "inviteMode",
+}
+export const beInviteModeMap = {
+  'Android': <a href='@beInviteMode' target='_blank'>beInviteMode</a>,
+  'Flutter': "beInviteMode",
+}
+export const acceptGroupInviteApplicationMap = {
+  'Android': <a href='@acceptGroupInviteApplication' target='_blank'>acceptGroupInviteApplication</a>,
+  'iOS,mac': <a href='@acceptGroupJoinApplicationFromUserID' target='_blank'>acceptGroupJoinApplicationFromUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/acceptGroupInviteApplication.html' target='_blank'>acceptGroupInviteApplication</a>,
+}
+export const rejectGroupInviteApplicationMap = {
+  'Android': <a href='@rejectGroupInviteApplication' target='_blank'>rejectGroupInviteApplication</a>,
+  'iOS,mac': <a href='@rejectGroupJoinApplicationFromUserID' target='_blank'>rejectGroupJoinApplicationFromUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/rejectGroupInviteApplication.html' target='_blank'>rejectGroupInviteApplication</a>,
+}
+export const leaveGroupMap = {
+  'Android': <a href='@leaveGroup' target='_blank'>leaveGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/leaveGroup.html' target='_blank'>leaveGroup</a>,
+}
+export const kickGroupMembersMap = {
+  'Android': <a href='@kickGroupMembers' target='_blank'>kickGroupMembers</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/kickGroupMembers.html' target='_blank'>kickGroupMembers</a>,
+}
+export const dismissGroupMap = {
+  'Android': <a href='@dismissGroup' target='_blank'>dismissGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/dismissGroup.html' target='_blank'>dismissGroup</a>,
+}
+export const queryGroupListMap = {
+  'Android': <a href='@queryGroupList' target='_blank'>queryGroupList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupList.html' target='_blank'>queryGroupList</a>,
+}
+export const searchLocalGroupsMap = {
+  'Android': <a href='@searchLocalGroups' target='_blank'>searchLocalGroups</a>,
+  'iOS,mac': <a href='@searchLocalGroupsWithConfig' target='_blank'>searchLocalGroupsWithConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalGroups.html' target='_blank'>searchLocalGroups</a>,
+}
+export const ZIMGroupsSearchedCallbackMap = {
+  'Android': <a href='@-ZIMGroupsSearchedCallback' target='_blank'>ZIMGroupsSearchedCallback</a>,
+  'window,iOS,mac': <a href='@ZIMGroupsSearchedCallback' target='_blank'>ZIMGroupsSearchedCallback</a>,
+  'Web': <a href='@-ZIMGroupsSearchedResult' target='_blank'>ZIMGroupsSearchedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupsSearchedResult-class.html' target='_blank'>ZIMGroupsSearchedResult</a>,
+}
+export const muteGroupMap = {
+  'Android': <a href='@muteGroup' target='_blank'>muteGroup</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/muteGroup.html' target='_blank'>muteGroup</a>,
+}
+export const ZIMGroupMutedCallbackMap = {
+  'Android': <a href='@-ZIMGroupMutedCallback' target='_blank'>ZIMGroupMutedCallback</a>,
+  'window,iOS,mac': <a href='@ZIMGroupMutedCallback' target='_blank'>ZIMGroupMutedCallback</a>,
+  'Web': <a href='@-ZIMGroupMutedResult' target='_blank'>ZIMGroupMutedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMutedResult-class.html' target='_blank'>ZIMGroupMutedResult</a>,
+}
+export const onGroupMutedInfoUpdatedMap = {
+  'Android': <a href='@onGroupMutedInfoUpdated' target='_blank'>onGroupMutedInfoUpdated</a>,
+  'Web': <a href='@groupMutedInfoUpdated' target='_blank'>groupMutedInfoUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-muted-info-updated-operated-info-group-id' target='_blank'>groupMutedInfoUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-muted-info-updated-operated-info-group-id' target='_blank'>groupMutedInfoUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMutedInfoUpdated.html' target='_blank'>onGroupMutedInfoUpdated</a>,
+}
+export const isDisabledMap = {
+  'Android': <a href='@isDisabled-ZIMGroupConversation' target='_blank'>isDisabled</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupConversation/isDisabled.html' target='_blank'>isDisabled</a>,
+}
+export const ZIMGroupConversationMap = {
+  'Android': <a href='@-ZIMGroupConversation' target='_blank'>ZIMGroupConversation</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupConversation-class.html' target='_blank'>ZIMGroupConversation</a>,
+}
+export const updateGroupJoinModeMap = {
+  'Android': <a href='@updateGroupJoinMode' target='_blank'>updateGroupJoinMode</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupJoinMode.html' target='_blank'>updateGroupJoinMode</a>,
+}
+export const updateGroupInviteModeMap = {
+  'Android': <a href='@updateGroupInviteMode' target='_blank'>updateGroupInviteMode</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupInviteMode.html' target='_blank'>updateGroupInviteMode</a>,
+}
+export const onGroupVerifyInfoUpdatedMap = {
+  'Android': <a href='@onGroupVerifyInfoUpdated' target='_blank'>onGroupVerifyInfoUpdated</a>,
+  'Web': <a href='@groupVerifyInfoUpdated' target='_blank'>groupVerifyInfoUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-group-verify-info-updated-operated-info-group-id' target='_blank'>groupVerifyInfoUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_macos~protocol~ZIMEventHandler#zim-group-verify-info-updated-operated-info-group-id' target='_blank'>groupVerifyInfoUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupVerifyInfoUpdated.html' target='_blank'>onGroupVerifyInfoUpdated</a>,
+}
+export const updateGroupBeInviteModeMap = {
+  'Android': <a href='@updateGroupBeInviteMode' target='_blank'>updateGroupBeInviteMode</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupBeInviteMode.html' target='_blank'>updateGroupBeInviteMode</a>,
+}
+export const queryGroupApplicationListMap = {
+  'Android': <a href='@queryGroupApplicationList' target='_blank'>queryGroupApplicationList</a>,
+  'iOS,mac': <a href='@queryGroupApplicationListWithConfig' target='_blank'>queryGroupApplicationListWithConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupApplicationList.html' target='_blank'>queryGroupApplicationList</a>,
+}
+
+# Manage groups
+
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group management, allowing you to create a group, ungroup, join and leave a group, and maintain the group relation chain.
+
+With the group management feature, you can create different types of group chats as needed, such as colleague groups, social groups, fan groups, and more.
+
+
+## Prerequisites 
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Create a group 
+
+After user A logs in to the ZIM SDK on a client, the user can call the {getPlatformData(props,createGroup1Map)} method to create a group with advanced settings. In this case, user A logged on this client is the group owner, and users on other clients can join this group using the `groupID`.
+
+You can check whether the group is created through the {getPlatformData(props,ZIMGroupCreatedCallbackMap)} callback. For more information about error codes, see [Error codes](!zim-Error_Codes).
+
+
+
+<Warning title="Warning">
+- You can specify custom rules for `groupID` generation. A group ID can contain only digits, letters, and the following characters: {"'!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~',"} and cannot start with a pound sign (#). If this parameter is empty, the ZIM server automatically generates a value. We recommend that you set a meaningful group ID generation rule. You can associate the group ID with your business account system.
+- If a user calls the {getPlatformData(props,createGroupMap)} method to create a group, the user automatically joins the group without calling the {getPlatformData(props,joinGroupMap)} method.
+- The user creating a group is the group owner. For more information about group ownership transfer, see [Transfer the group ownership](!zim-TransferGroupOwner#3_5).
+:::if{props.platform=undefined}
+<div>
+- To specify the maximum number of group members and the group joining mode (including the approval mode, invitation mode, and whether the invitation needs to be approved by the invitee), integrate ZIM SDK 2.15.0 or later.
+</div>
+:::
+:::if{props.platform="Flutter"}
+<div>
+- After creating a group, the group owner can use the [sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html) interface to send messages to the group. For details, please refer to [Send and Receive Group Messages](!sendMessages#4_2).
+</div>
+:::
+</Warning>
+
+
+:::if{props.platform=undefined}
+```java
+// Create a group.
+// The groupID parameter can contain up to 32 bytes in length, including digits, letters, and the following characters: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'. It cannot start with a pound sign (#).
+// The groupName parameter can contain up to 50 bytes in length, with no limit on characters.
+ZIMGroupInfo groupInfo = new ZIMGroupInfo();
+groupInfo.groupID = "group_id";
+groupInfo.groupName = "groupName";
+groupInfo.groupAvatarUrl = "groupAvatarUrl";
+
+ZIMGroupAdvancedConfig config = new ZIMGroupAdvancedConfig();
+HashMap<String, String> attributes = new HashMap<>();
+attributes.put("key_0", "value_0");
+attributes.put("key_1", "value_1");
+attributes.put("key_2", "value_2");
+config.groupAttributes = attributes;
+// // The mode where a user sends a group joining application.
+config.joinMode = ZIMGroupJoinMode.ANY;
+// The mode where a group member invites a user to a group.
+config.inviteMode = ZIMGroupInviteMode.ANY;
+// The mode where a user is invited to a group.
+config.beInviteMode = ZIMGroupBeInviteMode.NONE;
+// The maximum number of members in the group.
+config.maxMemberCount = 300;
+
+ArrayList<String> userList = new ArrayList<>();
+userList.add("user_1");
+userList.add("user_2");
+
+zim.createGroup(groupInfo, userList, config, new ZIMGroupCreatedCallback() {
+    @Override
+    public void onGroupCreated(ZIMGroupFullInfo groupInfo, ArrayList<ZIMGroupMemberInfo> userIDs, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        // Get the result of creating a group through errorInfo.code
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Create a group
+// groupID is a string with a maximum of 32 bytes. Only numbers, English characters, and the following special characters are supported: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'. It cannot start with '#'.
+// groupName is a string with a maximum of 50 bytes, no special character restrictions
+ZIMGroupInfo groupInfo = ZIMGroupInfo();
+groupInfo.groupID = 'groupID';
+groupInfo.groupName = 'groupName';
+List<String> inviteUserIDs = ['userID1', 'userID2'];
+ZIMGroupAdvancedConfig advancedConfig = ZIMGroupAdvancedConfig();
+// Active joining mode
+advancedConfig.joinMode = ZIMGroupJoinMode.any;
+// Invitation verification mode
+advancedConfig.inviteMode = ZIMGroupInviteMode.any;
+// Be invited verification mode
+advancedConfig.beInviteMode = ZIMGroupBeInviteMode.none;
+// Member count limit
+advancedConfig.maxMemberCount = 300;
+try{
+    await ZIM.getInstance()!.createGroup(groupInfo, inviteUserIDs,advancedConfig);
+    // Write your business logic after creating the group here
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+// Create a group.
+// The groupID parameter can contain up to 32 bytes in length, including digits, letters, and the following characters: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'. It cannot start with a pound sign (#).
+// The groupName parameter can contain up to 50 bytes in length, with no limit on characters.
+zim::ZIMGroupInfo group_info;
+group_info.groupID = "group_id";
+group_info.groupName = "groupName";
+group_info.groupAvatarUrl = "groupAvatarUrl";
+zim::ZIMGroupAdvancedConfig config;
+config.groupAttributes.emplace("key_0", "value_0");
+config.groupAttributes.emplace("key_1", "value_1");
+config.groupAttributes.emplace("key_2", "value_2");
+
+/**
+* Group entry verification mode, only supports ZIM SDK version 2.15.0 and above
+* ZIM_GROUP_JOIN_MODE_ANY: 0, default value, anyone can join the group directly.
+* ZIM_GROUP_JOIN_MODE_AUTH: 1, group owner or administrator approval is required to join the group.
+* ZIM_GROUP_JOIN_MODE_FORBID: 2, prohibit other users from joining the group.
+*/
+config.joinMode = zim::ZIMGroupJoinMode::ZIM_GROUP_JOIN_MODE_AUTH;
+/**
+* Invite mode, only supports ZIM SDK version 2.15.0 and above
+* ZIM_GROUP_INVITE_MODE_ANY: 0, default value, any group member can invite external members to join the group.
+* ZIM_GROUP_INVITE_MODE_ADMIN: 1, only group owners or administrators can invite external members to join the group
+*/
+config.inviteMode = zim::ZIMGroupInviteMode::ZIM_GROUP_INVITE_MODE_ADMIN;
+/**
+* Invite target user verification mode, only supports ZIM SDK version 2.15.0 and above
+* ZIM_GROUP_BEINVITE_MODE_NONE: 0, default value, no need for the invitee's consent, the user automatically becomes a group member.
+* ZIM_GROUP_BEINVITE_MODE_AUTH: 1, the invitee becomes a group member after consent.
+*/
+config.beInviteMode = zim::ZIMGroupBeInviteMode::ZIM_GROUP_BE_INVITE_MODE_AUTH;
+/**
+* The upper limit of the number of group members, only supports ZIM SDK version 2.15.0 and above
+* Value range: [0, the default maximum number of group members for the package].
+*/
+config.maxMemberCount = 100;
+
+std::vector<std::string> user_list;
+user_list.push_back("user_1");
+user_list.push_back("user_2");
+
+zim_->createGroup(group_info, user_list, config,
+[=](const zim::ZIMGroupFullInfo &groupInfo,
+const std::vector<zim::ZIMGroupMemberInfo> &userList,
+const std::vector<zim::ZIMErrorUser> &errorUserList,
+zim::ZIMError errorInfo {
+
+int error_code = errorInfo.code;
+
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// The groupID parameter can contain up to 32 bytes in length, including digits, letters, and the following characters: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'. It cannot start with a pound sign (#).
+// The groupName parameter can contain up to 50 bytes in length, with no limit on characters.
+var groupInfo = { groupID: '', groupName: '', groupAvatarUrl: '' };
+var userIDs = [];
+// Set the group joining mode and the upper limit of the group number
+var config1 = {
+/**
+* Group joining verification mode, only supports ZIM SDK version 2.15.0 and above
+* 0: (Default) Anyone can join the group directly.
+* 1: Group owner or administrator approval is required to join the group.
+* 2: Other users are prohibited from joining the group.
+*/
+joinMode: 1,
+/**
+* Invite mode, only supports ZIM SDK version 2.15.0 and above
+* 0: (Default) Any group member can invite external members to join the group.
+* 1: Only group owners or administrators can invite external members to join the group.
+*/
+inviteMode: 1,
+/**
+* Invite target user verification mode, only supports ZIM SDK version 2.15.0 and above
+* 0: (Default) The user automatically becomes a group member without the consent of the invitee.
+* 1: The invitee becomes a group member after consent.
+*/
+beInviteMode: 1,
+/**
+* Group member limit, only supports ZIM SDK version 2.15.0 and above
+* Value range: [0, the default maximum number of group members for the package].
+*/
+maxMemberCount: 100 // Limit the total number of group members to 100
+};
+zim.createGroup(groupInfo, userIDs, config1)
+.then(function ({ groupInfo, userList, errorUserList }) {
+// Operation successful.
+})
+.catch(function (err) {
+// Operation failed.
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Create a group.
+// The groupID parameter can contain up to 32 bytes in length, including digits, letters, and the following characters: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'. It cannot start with a pound sign (#).
+// The groupName parameter can contain up to 50 bytes in length, with no limit on characters.
+ZIMGroupInfo *groupInfo = [[ZIMGroupInfo alloc] init];
+groupInfo.groupID = @"groupID";
+groupInfo.groupName = @"groupName";
+groupInfo.groupAvatarUrl = @"groupAvatarUrl";
+
+ZIMGroupAdvancedConfig *advancedConfig = [[ZIMGroupAdvancedConfig alloc] init];
+// The mode where a user sends a group joining application.
+advancedConfig.joinMode = ZIMGroupJoinModeAny;
+// The mode where a group member invites a user to a group.
+advancedConfig.inviteMode = ZIMGroupInviteModeAny;
+// The mode where a user is invited to a group.
+advancedConfig.beInviteMode = ZIMGroupBeInviteModeNone;
+
+// The maximum number of members in the group.
+advancedConfig.maxMemberCount = 300;
+
+[[ZIM getInstance] createGroup:groupInfo userIDs:@[@"userID1",@"userID2"] config:advancedConfig callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    // The business logic after the group is created.
+}];
+```
+:::
+
+
+## Join a group
+
+<Note title="Note">
+
+If you want users to automatically obtain group history messages after joining a group, please contact the ZEGOCLOUD technical support team for configuration.
+</Note>
+
+After logging in to the ZIM SDK, users can apply to join or be invited to join a group created by user A.
+
+If a user successfully joins the group, all group members (including the user) receive the {getPlatformData(props,onGroupMemberStateChangedMap)}  and {getPlatformData(props,onGroupStateChangedMap)} callbacks.
+
+:::if{props.platform=undefined}
+```java
+//    Listen for onGroupMemberStateChanged and onGroupStateChanged
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupMemberStateChanged(ZIM zim, ZIMGroupMemberState state, ZIMGroupMemberEvent event, ArrayList<ZIMGroupMemberInfo> userList, ZIMGroupOperatedInfo operatedInfo, String groupID) {
+          // Callback notification of group member status change.
+    }
+
+    public void onGroupStateChanged(ZIM zim, ZIMGroupState state, ZIMGroupEvent event, ZIMGroupOperatedInfo operatedInfo, ZIMGroupFullInfo groupInfo) {
+          // Callback notification of group status change.
+    }
+
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Callback for group member state change
+ZIMEventHandler.onGroupMemberStateChanged = (
+    ZIM zim,
+    ZIMGroupMemberState state,
+    ZIMGroupMemberEvent event,
+    List<ZIMGroupMemberInfo> userList,
+    ZIMGroupOperatedInfo operatedInfo,
+    String groupID
+){};
+
+// Callback for group state change
+ZIMEventHandler.onGroupStateChanged = (
+    ZIM zim,
+    ZIMGroupState state,
+    ZIMGroupEvent event,
+    ZIMGroupOperatedInfo operatedInfo,
+    ZIMGroupFullInfo groupInfo
+){};
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+void onGroupMemberStateChanged(zim::ZIM *zim, zim::ZIMGroupMemberState state,
+                                        zim::ZIMGroupMemberEvent event,
+                                        const std::vector<zim::ZIMGroupMemberInfo> &userList,
+                                        const zim::ZIMGroupOperatedInfo &operatedInfo,
+                                        const std::string &groupID) override {
+    ......
+}
+
+void onGroupStateChanged(zim::ZIM *zim, zim::ZIMGroupState state,
+                                    zim::ZIMGroupEvent event,
+                                    const zim::ZIMGroupOperatedInfo &operatedInfo,
+                                    const zim::ZIMGroupFullInfo &groupInfo) override {
+    ......
+}
+```
+
+:::
+:::if{props.platform="Web"}
+```js
+
+// Callback notification of group member status change.
+zim.on('groupMemberStateChanged', function (zim, { groupID, state, event, userList, operatedInfo }) {
+    console.log('groupMemberStateChanged', groupID, state, event, userList, operatedInfo);
+});
+          
+
+// Callback notification of group status change.
+zim.on('groupStateChanged', function (zim, { state, event, groupInfo, operatedInfo }) {
+    console.log('groupStateChanged', state, event, groupInfo, operatedInfo);
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+    groupMemberStateChanged:(ZIMGroupMemberState)state
+                      event:(ZIMGroupMemberEvent)event
+                   userList:(NSArray<ZIMGroupMemberInfo *> *)userList
+               operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+}
+- (void)zim:(ZIM *)zim
+    groupStateChanged:(ZIMGroupState)state
+                event:(ZIMGroupEvent)event
+         operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+  groupInfo:(ZIMGroupFullInfo *)groupInfo{
+}
+```
+:::
+
+### Method 1: Apply to join a group
+
+The user calls the corresponding method to apply to join a group based on the {getPlatformData(props,joinModeMap)} of the group.
+
+- If the `joinMode` is set to `0` (`ANY`), the user calls the {getPlatformData(props,joinGroupMap)} method and passes in the `groupID` to join the group without approval. If the `groupID` does not exist, the operation fails.
+
+:::if{props.platform="Flutter"}
+Developers can determine whether the user successfully joins the group through [ZIMGroupJoinedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupJoinedResult-class.html).
+:::
+
+:::if{props.platform=undefined}
+```java
+// Join the group on another client.
+zim.joinGroup("groupID", new ZIMGroupJoinedCallback() {
+    @Override
+    public void onGroupJoined(ZIMGroupFullInfo groupInfo, ZIMError errorInfo) {
+        //Get the result of joining the group through errorInfo.code.
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+    // Other clients join the group directly
+    ZIM.getInstance()
+    !.joinGroup('groupID')
+    .then((value){
+        // Triggered when successful
+    })
+    .catchError((onError) {
+        // Triggered when failed
+    });
+    ```
+:::
+:::if{props.platform="window"}
+```cpp
+// Join the group on another client.
+zim_->joinGroup(group_id,
+                [=](const zim::ZIMGroupFullInfo &groupInfo, zim::ZIMError errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var groupID = '';
+
+// Join the group on another client.
+zim.joinGroup(groupID)
+    .then(function ({ groupInfo }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Join the group on another client.
+[zim joinGroup:GroupID callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
+    // The business logic after the joinGroup method is called.
+}];
+```
+:::
+
+- If the `joinMode` is set to `1` (`AUTH`):
+1. The user calls the {getPlatformData(props,sendGroupJoinApplicationMap)}  method to send an application.
+
+:::if{props.platform=undefined}
+```java
+ZIMGroupJoinApplicationSendConfig config = new ZIMGroupJoinApplicationSendConfig();
+config.wording = @"Let me join the group.";
+zim.sendGroupJoinApplication("groupID", config, new ZIMGroupJoinApplicationSentCallback() {
+    @Override
+    public void onGroupJoinApplicationSent(String groupID, ZIMError errorInfo){     
+      // The callback for sending the group joining application.     
+}];
+``` 
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMGroupJoinApplicationSendConfig sendConfig = ZIMGroupJoinApplicationSendConfig();
+sendConfig.wording = 'Please let me join the group';
+try{
+    var result = await ZIM.getInstance()!.sendGroupJoinApplication('groupID', sendConfig);
+} on PlatformException catch (onError){
+    onError.code;
+    onError.message;
+}
+``` 
+:::
+:::if{props.platform="window"}
+```cpp
+zim::ZIMGroupJoinApplicationSendConfig config;
+config.wording = "wording";
+
+zim_->sendGroupJoinApplication(
+    group_id, config,
+    [=](const std::string &groupID, const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Apply to join the group
+var groupID = '';
+var config = {
+    wording: 'XXXX applies to join the group' // Application message
+};
+zim.sendGroupJoinApplication(groupID, config)
+    .then(function ({ groupID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMGroupJoinApplicationSendConfig *config = [[ZIMGroupJoinApplicationSendConfig alloc] init];
+config.wording = @"Let me join the group.";
+[zim sendGroupJoinApplicationToGroupID:groupID config:config callback:^(NSString * _Nonnull groupID, ZIMError *errorInfo) {        
+      // The callback for sending the group joining application.     
+}];
+``` 
+:::
+
+
+2. The group owner or administrator receives the application notification by listening for the {getPlatformData(props,onGroupApplicationListChangedMap)} event.
+
+:::if{props.platform=undefined}
+```java
+// Listen for groupApplicationListChanged event.
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupApplicationListChanged(ZIM zim, ArrayList<ZIMGroupApplicationInfo> applicationList, ZIMGroupApplicationListChangeAction action) {
+    // Group application list update callback notification.  
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onGroupApplicationListChanged = (ZIM zim,
+    List<ZIMGroupApplicationInfo> applicationList,
+    ZIMGroupApplicationListChangeAction action){}; 
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void onGroupApplicationListChanged(
+    zim::ZIM * /*zim*/, const std::vector<zim::ZIMGroupApplicationInfo> & /*applicationList*/,
+    zim::ZIMGroupApplicationListChangeAction /*action*/) override {
+        ......
+}
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupApplicationListChanged event.
+zim.on('groupApplicationListChanged', (zim, { action, applicationList }) => {
+    // Added group application, you can now update the group application list UI.
+    console.log(action, applicationList);
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen for groupApplicationListChanged event.
+- (void)zim:(ZIM *)zim
+groupApplicationListChanged:(NSArray<ZIMGroupApplicationInfo *> *)applicationList
+      action:(ZIMGroupApplicationListChangeAction)action{
+}      
+```
+:::
+
+3. The group owner or administrator handles the application.
+- The group owner or administrator calls the {getPlatformData(props,acceptGroupJoinApplicationMap)}  method to approve the application.
+
+:::if{props.platform=undefined}
+```java
+// Approve the application.
+ZIMGroupJoinApplicationAcceptConfig config = new ZIMGroupJoinApplicationAcceptConfig();
+zim.acceptGroupJoinApplication("userID", "groupID", config, new ZIMGroupJoinApplicationAcceptedCallback(){
+    public void onGroupJoinApplicationAccepted(String groupID, String userID, ZIMError errorInfo){
+        // The callback for application approval.
+}];
+```
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+// Approve the application
+try{
+    ZIMGroupJoinApplicationAcceptConfig acceptConfig = ZIMGroupJoinApplicationAcceptConfig();
+    var result = await ZIM.getInstance()!.acceptGroupJoinApplication('userID', 'groupID', acceptConfig);    
+} on PlatformException catch (onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Approve the application.
+zim::ZIMGroupJoinApplicationAcceptConfig config;
+
+zim_->acceptGroupJoinApplication(
+    user_id, group_id, config,
+    [=](const std::string &groupID, const std::string &userID,
+        const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+var userID = '';
+var groupID = '';
+var config = {};
+zim.acceptGroupJoinApplication(userID, groupID, config)
+    .then(function ({ groupID, userID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Approve the application.
+[zim acceptGroupJoinApplicationFromUserID:userID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull userID, ZIMError * _Nonnull errorInfo) {
+        // The callback for application approval.
+}];
+```
+:::
+
+- The group owner or administrator calls the {getPlatformData(props,rejectGroupJoinApplicationMap)} method to reject the application.
+
+:::if{props.platform=undefined}
+```java
+// Reject the application.
+ZIMGroupJoinApplicationRejectConfig config = new ZIMGroupJoinApplicationRejectConfig();
+zim.rejectGroupJoinApplication("userID", "groupID", config, new ZIMGroupJoinApplicationRejectedCallback(){
+    public void onGroupJoinApplicationRejected(String groupID, String userID, ZIMError errorInfo) {                // The callback for application rejection.
+}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Reject the application
+try{
+    ZIMGroupJoinApplicationRejectConfig rejectConfig = ZIMGroupJoinApplicationRejectConfig();
+    var result = await ZIM.getInstance()!.rejectGroupJoinApplication('userID', 'groupID', rejectConfig);
+} on PlatformException catch (onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Reject the application.
+zim::ZIMGroupJoinApplicationRejectConfig config;
+
+zim_->rejectGroupJoinApplication(
+    user_id, group_id, config,
+    [=](const std::string &groupID, const std::string &userID, const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+var userID = '';
+var groupID = '';
+var config = {};
+zim.rejectGroupJoinApplication(userID, groupID, config)
+    .then(function ({ groupID, userID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Reject the application.
+[zim rejectGroupJoinApplicationFromUserID:userID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull userID, ZIMError * _Nonnull errorInfo) {
+    // The callback for application rejection.
+}];
+```
+:::
+
+4. The user applying to join the group, the group owner or administrator, and the method caller receive the {getPlatformData(props,onGroupApplicationUpdatedMap)} callback.
+
+:::if{props.platform=undefined}
+```java
+// Listen for onGroupApplicationUpdated event.
+zim.setEventHandler(new ZIMEventHandler(){
+        public void onGroupApplicationUpdated(ZIM zim, ArrayList<ZIMGroupApplicationInfo> applicationList){
+        //  Group application information update callback.
+        }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Listen to the onGroupApplicationUpdated event
+ZIMEventHandler.onGroupApplicationUpdated = (ZIM zim,
+    List<ZIMGroupApplicationInfo> applicationList){
+
+};
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void onGroupApplicationUpdated(
+    zim::ZIM * /*zim*/,
+    const std::vector<zim::ZIMGroupApplicationInfo> & /*applicationList*/) override {
+    ......
+}
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupApplicationUpdated event.
+zim.on('groupApplicationUpdated', (zim, { applicationList }) => {
+    // The group application has changed. You can update the group application list UI at this time
+    console.log(applicationList);
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen for groupApplicationUpdated event.
+- (void)zim:(ZIM *)zim groupApplicationUpdated:(NSArray<ZIMGroupApplicationInfo *> *)applicationList{
+
+}
+```
+:::
+
+### Method 2: Invite a user to a group
+   
+1. A group member can invite a user to the group by calling one of the following methods.
+
+<Warning title="Warning">
+
+Make sure that the invitee has been registered by calling the {getPlatformData(props,loginMap)}  method; otherwise, the operation fails.
+</Warning>
+
+- {getPlatformData(props,inviteUsersIntoGroupMap)}: Invite a user to a group.
+
+:::if{props.platform=undefined}
+```java
+// A group member invites a user to the group.
+ArrayList<String> userList = new ArrayList<>();
+userList.add("user_1");
+userList.add("user_2");
+zim.inviteUsersIntoGroup(userList, "group_id", new ZIMGroupUsersInvitedCallback() {
+    @Override
+    public void onGroupUsersInvited(ArrayList<ZIMGroupMemberInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        // Get the result of adding to the group through errorInfo.code.  
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+Developers can use [ZIMGroupUsersInvitedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupUsersInvitedResult-class.html) to determine whether the user has been successfully added to the group.
+```dart
+        // Add members to the group from within the group
+        List<String> userIDs = ['userID1', 'userID2'];
+        ZIM.getInstance()
+        !.inviteUsersIntoGroup(userIDs, 'groupID')
+        .then((value) => {
+            // Call this if successful
+        })
+        .catchError((onError) {
+            // Call this if failed
+        });
+        ```
+:::
+:::if{props.platform="window"}
+```cpp
+// A group member invites a user to the group.
+std::vector<std::string> user_list;
+user_list.push_back("user_1");
+user_list.push_back("user_2");
+zim_->inviteUsersIntoGroup(user_list, group_id, callback);
+```
+:::
+:::if{props.platform="Web"}
+```js
+var groupID = '';
+
+// Added to the group by group members.
+var userIDs = [];
+zim.inviteUsersIntoGroup(userIDs, groupID)
+    .then(function ({ groupID, userList, errorUserList }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// A group member invites a user to the group.
+[zim inviteUsersIntoGroup:userIDs groupID:groupID callback:^(NSArray<ZIMGroupMemberInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+    // The business logic after the inviteUsersIntoGroup method is called.
+}];
+```
+:::
+
+<Warning title="Warning">
+
+If a group member calls the {getPlatformData(props,inviteUsersIntoGroupMap)}  method to invite a user to the group:
+- The invitee joins the group without approval.
+- The invitee has registered a valid `userID` by calling the {getPlatformData(props,loginWithUserInfoMap)}  method; otherwise, the operation fails.
+</Warning>
+
+- {getPlatformData(props,sendGroupInviteApplicationsMap)}: Send the group invitation to the user.
+
+:::if{props.platform=undefined}
+```java
+// Send the group invitation.
+ZIMGroupInviteApplicationSendConfig config = new ZIMGroupInviteApplicationSendConfig();
+config.wording = @"xxx invited you to join the group.";
+List<String> userIDs = new ArrList<String>();
+userIDs.add("user1");
+userIDs.add("user2");
+zim.sendGroupInviteApplications(userIDs, "groupID", config, new ZIMGroupInviteApplicationsSentCallback(){
+    public void onGroupInviteApplicationsSent(String groupID, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo){
+        // Initiate group invitation result callback.
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Send an invitation to join the group
+ZIMGroupInviteApplicationSendConfig config = ZIMGroupInviteApplicationSendConfig();
+config.wording = 'xxx invites you to join the group chat';
+ZIMGroupInviteApplicationSendConfig applicationSendConfig = ZIMGroupInviteApplicationSendConfig();
+try{
+    var result = await ZIM.getInstance()!.sendGroupInviteApplications(['userID1','userID2'], 'groupID', config);
+} on PlatformException catch (onError) {
+    onError.code;
+    onError.message;
+}
+```
+:::
+
+:::if{props.platform="window"}
+```cpp
+// Send the group invitation.
+std::vector<std::string> user_list;
+user_list.push_back("user_1");
+user_list.push_back("user_2");
+
+zim::ZIMGroupInviteApplicationSendConfig config;
+config.wording = "wording";
+
+zim_->sendGroupInviteApplications(
+    user_list, group_id, config,
+    [=](const std::string &groupID, const std::vector<zim::ZIMErrorUserInfo> &errorUserList,
+        const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Send an invitation application.
+var userIDs = [];
+var groupID = '';
+var config = {
+    wording: 'Invite to join the group' // Application message.
+};
+zim.sendGroupInviteApplications(userIDs, groupID, config)
+    .then(function ({ groupID, errorUserList }) {
+        // The operation is successful, and the users who failed to invite are obtained through errorUserList.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Send the group invitation.
+ZIMGroupInviteApplicationSendConfig *config = [[ZIMGroupInviteApplicationSendConfig alloc] init];
+config.wording = @"xxx invited you to join the group.";
+[zim sendGroupInviteApplicationsToUserIDs:@[@"userID1",@"userID2"] groupID:@"groupID" config:config callback:^(NSString * _Nonnull groupID, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+
+}];   
+```
+:::
+
+The following table describes the operation results of different methods called by different roles in a group in {getPlatformData(props,inviteModeMap)} and {getPlatformData(props,beInviteModeMap)} modes.
+  
+<table>
+<tbody><tr>
+<th>beInviteMode</th>
+<th>inviteMode</th>
+<th>Method</th>
+<th>Caller</th>
+<th>Result</th>
+</tr>
+<tr>
+<td rowspan="6">0: None</td>
+<td rowspan="2">0: Any</td>
+<td>inviteUsersIntoGroup</td>
+<td rowspan="2">All group members</td>
+<td>The invitee joins the group without approval. </td>
+</tr>
+<tr>
+<td>sendGroupInviteApplicationsToUserIDs</td>
+<td>The invitee joins the group without approval, with no application generated. </td>
+</tr>
+<tr>
+<td rowspan="4">1: Admin</td>
+<td rowspan="2">inviteUsersIntoGroup</td>
+<td>Ordinary members</td>
+<td>Failed. </td>
+</tr>
+<tr>
+<td>Group owner or administrator</td>
+<td>The invitee joins the group without approval. </td>
+</tr>
+<tr>
+<td rowspan="2">sendGroupInviteApplicationsToUserIDs</td>
+<td>Ordinary members</td>
+<td>Failed. </td>
+</tr>
+<tr>
+<td>Group owner or administrator</td>
+<td>The invitee joins the group without approval, with no application generated. </td>
+</tr>
+<tr>
+<td rowspan="6">1: Auth</td>
+<td rowspan="2">0: Any</td>
+<td>inviteUsersIntoGroup</td>
+<td rowspan="2">All group members</td>
+<td>An application is generated and sent to the invitee for approval. </td>
+</tr>
+<tr>
+<td>sendGroupInviteApplicationsToUserIDs</td>
+<td>An application is generated and sent to the invitee for approval. If the caller is the group owner or administrator, the `groupApplicationListChanged` callback is generated. </td>
+</tr>
+<tr>
+<td rowspan="4">1: Admin</td>
+<td rowspan="2">inviteUsersIntoGroup</td>
+<td>Ordinary members</td>
+<td>Failed. </td>
+</tr>
+<tr>
+<td>Group owner or administrator</td>
+<td>An application is generated and sent to the invitee for approval. </td>
+</tr>
+<tr>
+<td rowspan="2">sendGrsendGroupInviteApplicationsToUserIDsoupInviteApplications</td>
+<td>Ordinary members</td>
+<td>Failed. </td>
+</tr>
+<tr>
+<td>Group owner or administrator</td>
+<td>An application is generated and sent to the invitee for approval. If the caller is the group owner or administrator, the `groupApplicationListChanged` callback is generated. </td>
+</tr>
+</tbody></table> 
+
+2. **If the `beInviteMode` is set to `1` (`AUTH`)**, the invitee and inviter (the group owner or administrator) receive the notification in the {getPlatformData(props,onGroupApplicationListChangedMap)} callback. The invitee can perform the following operations on the application:
+
+- Calls the {getPlatformData(props,acceptGroupInviteApplicationMap)}  method to approve the application and join the group.
+
+:::if{props.platform=undefined}
+```java
+// Agree to join the group invitation.
+ZIMGroupInviteApplicationAcceptConfig config = new ZIMGroupInviteApplicationAcceptConfig();
+zim.acceptGroupInviteApplication("inviterUserID", "groupID", config, new ZIMGroupInviteApplicationAcceptedCallback(){
+
+    public void onGroupInviteApplicationAccepted(ZIMGroupFullInfo groupInfo, String inviterUserID, ZIMError errorInfo){
+        // Callback for agree group invitation result.
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMGroupInviteApplicationAcceptConfig acceptConfig = ZIMGroupInviteApplicationAcceptConfig();
+    var result = await ZIM.getInstance()!.acceptGroupInviteApplication('inviterUserID', 'groupID', acceptConfig); 
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Agree to join the group invitation.
+zim::ZIMGroupInviteApplicationAcceptConfig config;
+
+zim_->acceptGroupInviteApplication(
+    user_id, group_id, config,
+    [=](const zim::ZIMGroupFullInfo &group, const std::string &inviterUserID,
+        const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+var inviterUserID = '';
+var groupID = '';
+// Agree to join the group invitation.
+var config = {};
+zim.acceptGroupInviteApplication(inviterUserID, groupID, config)
+    .then(function ({ groupInfo, inviterUserID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    }); 
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim acceptGroupInviteApplicationFromInviterUserID:inviterUserID groupID:groupID config:config callback:^(ZIMGroupFullInfo * _Nonnull groupInfo, NSString * _Nonnull inviterUserID, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+:::
+
+- Calls the {getPlatformData(props,rejectGroupInviteApplicationMap)} method to reject the application.
+
+:::if{props.platform=undefined}
+```java
+// Refuse to join the group invitation. 
+ZIMGroupInviteApplicationRejectConfig config = new ZIMGroupInviteApplicationRejectConfig();
+zim.rejectGroupInviteApplication("inviterUserID", "groupID", config, new ZIMGroupInviteApplicationRejectedCallback(){
+    public void onGroupInviteApplicationRejected(String groupID, String inviterUserID, ZIMError errorInfo) {
+            //  Reject group invitation result callback.
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMGroupInviteApplicationRejectConfig rejectConfig = ZIMGroupInviteApplicationRejectConfig();
+    var reuslt = await ZIM.getInstance()!.rejectGroupInviteApplication('inviterUserID', 'groupID', rejectConfig);
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+Refuse to join the group invitation. 
+zim::ZIMGroupInviteApplicationRejectConfig config;
+
+zim_->rejectGroupInviteApplication(
+      user_id, group_id, config,
+    [=](const std::string &groupID, const std::string &inviterUserID,
+        const zim::ZIMError &errorInfo) {
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+var inviterUserID = '';
+var groupID = '';
+
+// Refuse to join the group invitation. 
+var config = {};
+zim.rejectGroupInviteApplication(inviterUserID, groupID, config)
+    .then(function ({ groupID, inviterUserID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim rejectGroupInviteApplicationFromInviterUserID:inviterUserID groupID:groupID config:config callback:^(NSString * _Nonnull groupID, NSString * _Nonnull inviterUserID, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+:::
+
+
+
+3. **If the `beInviteMode` is set to `1` (`AUTH`)**, the invitee and inviter (the group owner or administrator) receive the approval notification in the {getPlatformData(props,onGroupApplicationUpdatedMap)} callback.
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler(){
+  public void onGroupApplicationUpdated(ZIM zim,
+                                      ArrayList<ZIMGroupApplicationInfo> applicationList) {
+          // Group application update callback notification.         }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onGroupApplicationUpdated = (ZIM zim,
+List<ZIMGroupApplicationInfo> applicationList){
+
+};
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Listen for onGroupApplicationUpdated
+void onGroupApplicationUpdated(
+    zim::ZIM * /*zim*/,
+    const std::vector<zim::ZIMGroupApplicationInfo> & /*applicationList*/) override {
+    ......
+}
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupApplicationUpdated event.
+zim.on('groupApplicationUpdated', (zim, { applicationList }) => {
+    // If there is a change in the group application, you can update the group application list UI at this time.
+    console.log(applicationList);
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim groupApplicationUpdated:(NSArray<ZIMGroupApplicationInfo *> *)applicationList{
+        
+}
+```
+:::
+
+
+## Leave a group
+
+A group member can leave a group or be removed from a group.
+
+<Warning title="Warning">
+   
+After a group member leaves a group, the local list of conversations is retained, and historical group messages can be viewed.
+</Warning>
+
+### Method 1: A group member leaves the group
+
+After logging in to the ZIM SDK, the group member calls the {getPlatformData(props,leaveGroupMap)}  method and passes in the `groupID`. If the `groupID` does not exist, the operation fails. After the group member leaves the group, all group members receive the {getPlatformData(props,onGroupMemberStateChangedMap)} callback.
+
+<Note title="Note">
+
+If the group owner leaves the group, the group ownership is automatically transferred to the first group member. If all group members leave the group, the group is automatically disbanded.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// Leave a group.
+zim.leaveGroup("groupID", new ZIMGroupLeftCallback() {
+    @Override
+    public void onGroupLeft(ZIMError errorInfo) {
+        // Get the result of actively exiting the group through errorInfo.code. 
+    }
+});
+```
+:::
+
+:::if{props.platform="Flutter"}
+Developers can use [ZIMGroupLeftResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupLeftResult-class.html) to determine whether the member successfully left the group.
+```dart
+// Voluntarily leave a group
+ZIM.getInstance()
+  !.leaveGroup('groupID')
+   .then((value){
+       // Triggered on success
+   })
+   .catchError((onError) {
+       // Triggered on failure
+   });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Leave a group.
+zim_->leaveGroup(group_id, [=](const std::string &groupID, zim::ZIMError errorInfo){
+
+    int error_code = errorInfo.code;
+    
+});
+```
+:::
+:::if{props.platform="Web"}
+```js
+var groupID = '';
+
+// Leave a group.
+zim.leaveGroup(groupID)
+    .then(function ({ groupID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Leave a group.
+[zim leaveGroup:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        // The business logic after the leaveGroup method is called.
+}];
+```
+:::
+
+### Method 2: The group owner removes a group member from the group
+
+The group owner calls the {getPlatformData(props,kickGroupMembersMap)}  method and passes in the `groupID` and `userIDList` (list of users to be removed). If the `groupID` does not exist, the operation fails. After one or more group members are removed, all group members (including the group owner and the removed group members) receive the {getPlatformData(props,onGroupMemberStateChangedMap)} callback.
+
+:::if{props.platform="Flutter"}
+Developers can use [ZIMGroupMemberKickedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberKickedResult-class.html) to determine whether the user has been successfully removed.
+:::
+<Warning title="Warning">
+
+- Only the group owner or administrator can call the  {getPlatformData(props,kickGroupMembersMap)} method to remove a group member, who does not need to be logged in or approve the removal.
+- The `userID` of the user to be removed must be in the list of group members; otherwise, the operation fails.
+</Warning>
+
+:::if{props.platform=undefined}
+```java
+// The group owner removes one or more group members from the group.
+ArrayList<String> user_list = new ArrayList<>();
+user_list.add("user_1");
+user_list.add("user_2");
+zim.kickGroupMembers(user_list, "groupID", new ZIMGroupMemberKickedCallback() {
+    @Override
+    public void onGroupMemberKicked(ArrayList<String> kickedUserIDList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        // Get the result of actively exiting the group through errorInfo.code.   
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Remove members from the group by the group owner
+ZIM.getInstance()
+  !.kickGroupMembers(userIDs, 'groupID')
+   .then((value){
+       // Triggered when successful
+   })
+   .catchError((onError) {
+       // Triggered when failed
+   });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// The group owner removes one or more group members from the group.
+std::vector<std::string> user_list;
+user_list.push_back("user_1");
+user_list.push_back("user_2");
+zim_->kickGroupMembers(user_list, group_id, 
+    [=](const std::string &groupID, const std::vector<std::string> &kickedMemberIDs,
+    const std::vector<ZIMErrorUser> &errorUserList, zim::ZIMError errorInfo) {
+
+        int error_code = errorInfo.code;
+
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+var groupID = '';
+
+// The group owner removes one or more group members from the group.
+var userIDs = [];
+zim.kickGroupMembers(userIDs, groupID)
+    .then(function ({ groupID, kickedUserIDs, errorUserList }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// The group owner removes one or more group members from the group.
+[zim kickGroupMembers:userIDs groupID:groupID callback:^(NSArray<NSString *> * _Nonnull kickedUserIDList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+        // The business logic after the group owner calls the kickGroupMembers method. 
+}];
+```
+:::
+
+## Disband a group
+
+After logging in to the ZIM SDK, the group owner calls the {getPlatformData(props,dismissGroupMap)} method to disband a group. After the group is disbanded, all group members receive the {getPlatformData(props,onGroupStateChangedMap)} callback.
+
+:::if{props.platform="Flutter"}
+Developers can use [ZIMGroupDismissedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupDismissedResult-class.html) to determine whether the group has been successfully dissolved.
+:::
+
+<Note title="Note">
+
+- Only the group owner can call the {getPlatformData(props,dismissGroupMap)} method to disband a group.
+- If all group members leave a group, the group is automatically disbanded.
+- After a group is disbanded, the local list of conversations is retained, and historical messages can be viewed.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// The group owner disbands the group.
+zim.dismissGroup("groupID", new ZIMGroupDismissedCallback() {
+    @Override
+    public void onGroupDismissed(ZIMError errorInfo) {
+        // Get the result of actively exiting the group through errorInfo.code.
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Dismiss group by group owner
+ZIM.getInstance()
+  .dismissGroup('groupID')
+   .then((value){
+       // Triggered when successful
+   })
+   .catchError((onError) {
+       // Triggered when failed
+   });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// The group owner disbands the group.
+zim_->dismissGroup(group_id, [=](const std::string &groupID, zim::ZIMError errorInfo) {
+    int error_code = errorInfo.code;
+});
+```
+:::
+:::if{props.platform="Web"}
+```js
+var groupID = '';
+zim.dismissGroup(groupID)
+    .then(function ({ groupID }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+
+// Register a callback to monitor "group status change".
+zim.on('groupStateChanged', function (zim, { state, event, groupInfo, operatedInfo }) {
+    console.log('groupStateChanged', state, event, groupInfo, operatedInfo);
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// The group owner disbands the group.
+[zim dismissGroup:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        // The business logic after the dismissGroup method is called.
+ }];
+```
+:::
+
+## More features
+
+### Query the list of joined groups
+
+After logging in to the ZIM SDK, a user calls the {getPlatformData(props,queryGroupListMap)}  method to query the list of joined groups.
+
+:::if{props.platform=undefined}
+```java
+// The user queries the list of joined groups.
+zim.queryGroupList(new ZIMGroupListQueriedCallback() {
+    @Override
+    public void onGroupListQueried(ArrayList<ZIMGroupInfo> groupList, ZIMError errorInfo) {
+        // Get the result of actively exiting the group through errorInfo.code.
+    }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+Developers can get the query result through [ZIMGroupListQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupListQueriedResult-class.html).
+```dart
+// User queries the groups they have joined
+ZIM.getInstance()
+  .queryGroupList()
+   .then((value){
+       // Triggered when successful
+   })
+   .catchError((onError) {
+       // Triggered when failed
+   });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// The user queries the list of joined groups.
+zim_->queryGroupList(
+    [=](const std::vector<ZIMGroupInfo> &groupList, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.queryGroupList()
+    .then(function ({ groupList }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// The user queries the list of joined groups.
+[zim queryGroupListByGroupID:^(NSArray<ZIMGroupInfo *> * _Nonnull groupList, ZIMError * _Nonnull errorInfo) {
+    // The business logic after the queryGroupListByGroupID method is called.
+}];
+```
+:::
+
+
+### Search for joined groups
+
+After logging in to the ZIM SDK, a user calls the {getPlatformData(props,searchLocalGroupsMap)}  method and passes in the `config` and `callback` parameters to search for joined groups by condition.
+
+The search result is returned in the {getPlatformData(props,ZIMGroupsSearchedCallbackMap)} callback.
+
+:::if{props.platform=undefined}
+```java
+// Search for joined groups that contain a member named "zego".
+ZIM zim = getZIM();
+ZIMGroupMemberSearchConfig config = new ZIMGroupMemberSearchConfig();
+config.count = 10;
+config.nextFlag = 0;
+config.isAlsoMatchGroupMemberNickname = true; //  If the nickname of a group member contains "zego", the group is returned in the search result.
+config.isAlsoMatchGroupMemberUserName = true; // If the username of a group member contains "zego", the group is returned in the search result.
+config.keywords.add("zego");
+zim.searchLocalGroups(config, new ZIMGroupsSearchedCallback() {
+    @Override
+    public void onGroupsSearched(ArrayList<ZIMGroupSearchInfo> groupSearchInfoList, int nextFlag, ZIMError errorInfo) {
+        // You can obtain the group information in the groupSearchInfoList field.
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Search for joined groups that contain "zego" in the name
+ZIMGroupSearchConfig config =  ZIMGroupSearchConfig();
+config.count = 10;
+config.nextFlag = 0;
+config.isAlsoMatchGroupMemberNickname = true; // If the group member nickname contains "zego", the search result will include that group.
+config.isAlsoMatchGroupMemberUserName = true; // If the group member username contains "zego", the search result will include that group.
+config.keywords.add("zego");
+ZIM.getInstance()!.searchLocalGroups(config).then((result){
+    // Developers can get the group information from groupSearchInfoList    
+}).catchError((onError){
+    // Handle according to the official error code table
+});
+```
+:::
+
+:::if{props.platform="window"}
+```cpp
+// Search for joined groups that contain a member named "zego".
+
+auto searchConfig = zim::ZIMGroupSearchConfig();
+searchConfig.count = 10;
+searchConfig.nextFlag = 0;
+// If the nickname of a group member contains "zego", the group is returned in the search result.
+searchConfig.isAlsoMatchGroupMemberNickname = true;
+// If the username of a group member contains "zego", the group is returned in the search result.
+searchConfig.isAlsoMatchGroupMemberUserName = true;
+searchConfig.keywords.emplace_back("zego");
+
+zim_->searchLocalGroups(searchConfig,
+                        [=](const std::vector<zim::ZIMGroupSearchInfo> &groupSearchInfoList,
+                            unsigned int nextFlag, const zim::ZIMError &errorInfo) {
+        // You can obtain the group information in the groupSearchInfoList field.
+                        });
+```
+
+:::
+:::if{props.platform="Web"}
+```js
+// Search for joined groups with names containing "zego".
+
+var config = {
+    count: 10, // Number of search results.
+    nextFlag: 0,
+    keywords: ['zego'], // et the keyword to "zego", up to 5 keywords are supported. When multiple keywords are set, the search results will only display local messages that contain all keywords at the same time.
+    isAlsoMatchGroupMemberUserName: true, // // Search for joined groups with names containing "zego".
+
+var config = {
+count: 10, // Number of search results
+nextFlag: 0,
+keywords: ['zego'], // Set the keyword to "zego", up to 5 keywords are supported. When multiple keywords are set, the search results will only display local messages that contain all keywords at the same time
+isAlsoMatchGroupMemberUserName: true, // If the group member user name contains "zego", the search results will include the group member
+    isAlsoMatchGroupMemberNickname: false,
+};
+
+zim.searchLocalGroups(config)
+    .then(function ({ groupSearchInfoList, nextFlag }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Search for joined groups that contain a member named "zego".
+ZIMGroupSearchConfig *config = [[ZIMGroupSearchConfig alloc] init];
+config.count = 10;
+config.nextFlag = 0;
+config.isAlsoMatchGroupMemberNickname = true; // If the nickname of a group member contains "zego", the group is returned in the search result.
+config.isAlsoMatchGroupMemberUserName = true; // If the username of a group member contains "zego", the group is returned in the search result.
+config.keywords = @[@"zego"];
+[[ZIM getInstance] searchLocalGroupsWithConfig:config callback:^(NSArray<ZIMGroupSearchInfo *> * _Nonnull groupSearchInfoList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess){
+        // You can obtain the group information in the groupSearchInfoList field.
+    }else{
+        // Handle the error based on the error code table.
+    }
+}];
+```
+:::
+
+<a id="muteGroup"></a>
+### Mute or unmute a group
+
+If a group is muted, group members cannot send messages to the group.
+
+After logging in to the ZIM SDK, a user can mute or unmute a group on which the user has management permission by calling the {getPlatformData(props,muteGroupMap)}  method and passing in parameters to specify the group ID, mute mode, duration, and role.
+
+The ZIM SDK supports three mute modes:
+- All group members are muted.
+- All ordinary group members (whose `role` value is `3`) are muted.
+- Group members of specified roles are muted.
+
+The result is returned in the {getPlatformData(props,ZIMGroupMutedCallbackMap)} callback.
+
+<Note title="Note">
+
+If you want to block specific group members from posting, please refer to [Set mute status for group members - Manage group members](!zim-Group_Members#muteGroupMembers).
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// Configure group muting.
+ZIMGroupMuteConfig config = new ZIMGroupMuteConfig();
+// Group members of specified roles are muted.
+config.mode = ZIMGroupMuteMode.Custom;
+// These members are muted for 30 seconds.
+config.duration = 30;
+// Group members whose `role` value is `3` or `5` are muted.
+config.roles.add(3);
+config.roles.add(5);
+
+
+// Enable muting
+boolean isMute = true;
+
+zim.muteGroup(isMute, "group_id", config, new ZIMGroupMutedCallback() {
+     @Override
+     public void onGroupMuted(String groupID, boolean isMute, ZIMGroupMuteInfo info, ZIMError errorInfo) {
+                
+     }
+});
+
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Set the group mute configuration
+try {
+    // Set the group mute configuration
+    ZIMGroupMuteConfig config = ZIMGroupMuteConfig();
+    // Set the mute mode to mute group members with specified roles
+    config.mode = ZIMGroupMuteMode.custom;
+    // Set the mute duration to 30 seconds
+    config.duration = 30;
+    // Mute group members with roles 3 and 5
+    config.roles = [3,5];
+    // Enable mute
+    bool isMute = true;
+    ZIMGroupMutedResult result = await ZIM.getInstance()!.muteGroup(isMute, 'group_id', config);
+} on PlatformException catch (onError){
+    onError.code;// Handle according to the error code table
+    onError.message;// Error message
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Configure group muting.
+zim::ZIMGroupMuteConfig config;
+// Group members of specified roles are muted.
+config.mode = zim::ZIMGroupMuteMode::ZIM_GROUP_MUTE_MODE_CUSTOM;
+// These members are muted for 30 seconds.
+config.duration = 30;
+// Group members whose `role` value is `2` or `3` are muted.
+config.roles.push_back(2);
+config.roles.push_back(3);
+
+
+// Enable muting
+bool is_mute = true;
+
+zim_->muteGroup(is_mute, group_id, config,
+[=](const std::string &groupID, bool is_muted,
+const zim::ZIMGroupMuteInfo &info,
+const zim::ZIMError &errorInfo) {
+// Developers can get group muting information from info
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Configure group muting.
+const config = {
+    mode: 3, //Group members of specified roles are muted.
+    duration: 30, //hese members are muted for 30 seconds.
+    roles:[3,5],//Group members whose `role` value is `3` or `5` are muted.
+};
+
+// Enable mutingvar isMute = true;
+var groupID = 'group';
+
+zim.muteGroup(isMute, groupID, config)
+    .then(function ({ groupID, isMute, mutedInfo }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Configure group muting.
+ZIMGroupMuteConfig *muteConfig = [[ZIMGroupMuteConfig alloc] init];
+// Group members of specified roles are muted.
+muteConfig.mode = ZIMGroupMuteModeCustom;
+// These members are muted for 30 seconds.
+muteConfig.duration = 30;
+// Group members whose `role` value is `3` or `5` are muted.
+muteConfig.roles = @[@3,@5];
+
+[[ZIM getInstance] muteGroup:YES groupID:@"groupID" config:muteConfig callback:^(NSString * _Nonnull groupID, BOOL isMute, ZIMGroupMuteInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+    // You can obtain the group muting information in the `info` field.
+}];
+```
+:::
+
+After a group is muted or unmuted, all group members receive the {getPlatformData(props,onGroupMutedInfoUpdatedMap)} callback and know which roles are muted or unmuted.
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler(){
+
+    public void onGroupMutedInfoUpdated(ZIM zim, ZIMGroupMuteInfo muteInfo,
+                                       ZIMGroupOperatedInfo operatedInfo, String groupID) {
+    // Listen for the group muting status change and handle the change by inheriting the ZIMEventHandler method.
+   }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onGroupMutedInfoUpdated = (ZIM zim, ZIMGroupMuteInfo groupMuteInfo, ZIMGroupOperatedInfo operatedInfo, String groupID){
+    // Listen to the information of group mute status changes here and handle accordingly
+};
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void zim_event_handler::onGroupMutedInfoUpdated(zim::ZIM *, const zim::ZIMGroupMuteInfo &info,
+                                               const zim::ZIMGroupOperatedInfo &operatedInfo,
+                                               const std::string &groupID) {
+    // Listen for the group muting status change and handle the change by inheriting the ZIMEventHandler method.
+   }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('groupMutedInfoUpdated', function (zim, { groupID, mutedInfo, operatedInfo}) {
+    console.log('groupMutedInfoUpdated', groupID, mutedInfo, event, userList, operatedInfo);
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+
+- (void)zim:(ZIM *)zim
+    groupMutedInfoUpdated:(ZIMGroupMuteInfo *)muteInfo
+            operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+                 groupID:(NSString *)groupID{
+    // Listen for the group muting status change and handle the change by inheriting the ZIMEventHandler method.
+}
+```
+:::
+
+
+### Check whether a user is in a group
+
+To check whether a user is in a group, call any of the following methods:
+- Pull the conversation list. For more information, see [Pull the conversation list](!zim-Conversation_Management).
+- Listen for the conversation change callback and update the conversation list. For more information, see [Update the conversation list](!zim-Conversation_Management#).
+
+For group chats, the result is indicated by the {getPlatformData(props,isDisabledMap)}  property of {getPlatformData(props,ZIMGroupConversationMap)}.
+
+Valid values of {getPlatformData(props,isDisabledMap)}:
+- `true`: The user is not in the group. If the user leaves the group or is removed from the group, or the group is disbanded, the value of `isDisabled` is `false`.
+- `false`: The user is in the group.
+
+
+### Update the group joining mode
+
+After logging in to the ZIM SDK, the group owner or administrator calls the {getPlatformData(props,updateGroupJoinModeMap)}  method to update the group joining mode.
+
+After the mode is updated, all group members receive the {getPlatformData(props,onGroupVerifyInfoUpdatedMap)} callback.
+
+:::if{props.platform=undefined}
+```java
+// Listen for onGroupVerifyInfoUpdated event.
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupVerifyInfoUpdated(ZIM zim, ZIMGroupVerifyInfo verifyInfo,
+                                         ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        // Update joinMode of a group.
+     }
+
+   });
+
+// Update the verification mode for others to join the group
+zim.updateGroupJoinMode(ZIMGroupJoinMode.AUTH, "groupID", new ZIMGroupJoinModeUpdatedCallback(){
+public void onGroupJoinModeUpdated(String groupID, ZIMGroupJoinMode mode, ZIMError errorInfo){
+// Update verification mode result callback notification
+}
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Listen to the onGroupVerifyInfoUpdated event
+ZIMEventHandler.onGroupVerifyInfoUpdated = (ZIM zim,
+    ZIMGroupVerifyInfo verifyInfo,
+    ZIMGroupOperatedInfo operatedInfo,
+    String groupID){};
+
+// Update the group join mode
+try{
+    var result = await ZIM.getInstance()!.updateGroupJoinMode(ZIMGroupJoinMode.auth, 'groupID');
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Update the verification mode for inviting others to join the group
+zim_->updateGroupJoinMode(
+zim::ZIMGroupJoinMode::ZIM_GROUP_JOIN_MODE_AUTH, group_id,
+[=](const std::string &groupID, zim::ZIMGroupJoinMode mode,
+const zim::ZIMError &errorInfo) {
+// Business code
+});
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupVerifyInfoUpdated event.
+zim.on('groupVerifyInfoUpdated', (zim, { groupID, verifyInfo, operatedInfo }) => {
+    console.log(groupID, verifyInfo.joinMode);
+});
+
+var groupID = '';
+
+// Update the verification mode for others to join the group
+var joinMode = 1;
+zim.updateGroupJoinMode(joinMode, groupID)
+    .then(function ({ groupID, mode }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen for groupVerifyInfoUpdated event.
+- (void)zim:(ZIM *)zim
+    groupVerifyInfoUpdated:(ZIMGroupVerifyInfo *)verifyInfo
+            operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+
+}
+
+// Update joinMode of a group.
+[zim updateGroupJoinMode:ZIMGroupJoinModeAuth groupID:@"groupID" callback:^(NSString * _Nonnull groupID, ZIMGroupJoinMode mode, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+:::
+
+### Update inviteMode of a group
+
+After logging in to the ZIM SDK, the group owner or administrator calls the {getPlatformData(props,updateGroupInviteModeMap)}  method to update inviteMode of the group.
+
+After the mode is updated, all group members receive the {getPlatformData(props,onGroupVerifyInfoUpdatedMap)}  callback.
+
+:::if{props.platform=undefined}
+```java
+// Listen for onGroupVerifyInfoUpdated event.
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupVerifyInfoUpdated(ZIM zim, ZIMGroupVerifyInfo verifyInfo,
+                                         ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        // Invite mode update callback notification.
+     }
+
+   });
+
+// Updated verification mode for inviting others to join the group.
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupVerifyInfoUpdated(ZIM zim, ZIMGroupVerifyInfo verifyInfo,
+                                         ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        // Update inviteMode of the group.
+     }
+
+   });
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Listen to the onGroupVerifyInfoUpdated event
+ZIMEventHandler.onGroupVerifyInfoUpdated = (ZIM zim,
+    ZIMGroupVerifyInfo verifyInfo,
+    ZIMGroupOperatedInfo operatedInfo,
+    String groupID){};
+
+// Update the group invite mode
+try{
+    var result = await ZIM.getInstance()!.updateGroupInviteMode(ZIMGroupInviteMode.any, 'groupID');
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Listen for onGroupVerifyInfoUpdated event.
+void onGroupVerifyInfoUpdated(zim::ZIM * /*zim*/,
+                                const zim::ZIMGroupVerifyInfo & /*verifyInfo*/,
+                                const zim::ZIMGroupOperatedInfo & /*operatedInfo*/,
+                                const std::string & /*groupID*/) override {
+    ......
+}
+
+
+// Updated verification mode for inviting others to join the group.
+zim_->updateGroupInviteMode(
+    zim::ZIMGroupInviteMode::ZIM_GROUP_INVITE_MODE_ADMIN, group_id,
+    [=](const std::string &groupID, zim::ZIMGroupInviteMode mode,
+        const zim::ZIMError &errorInfo) {
+        // 业务代码
+    });
+```
+
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupVerifyInfoUpdated event.
+zim.on('groupVerifyInfoUpdated', (zim, { groupID, verifyInfo, operatedInfo }) => {
+    console.log(groupID, verifyInfo.inviteMode);
+});
+
+var groupID = '';
+
+// Updated verification mode for inviting others to join the group.
+var inviteMode = 1;
+zim.updateGroupInviteMode(inviteMode, groupID)
+    .then(function ({ groupID, mode }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen for onGroupVerifyInfoUpdated event.
+- (void)zim:(ZIM *)zim
+    groupVerifyInfoUpdated:(ZIMGroupVerifyInfo *)verifyInfo
+              operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+
+}
+
+// Update inviteMode of the group.
+[zim updateGroupInviteMode:ZIMGroupInviteModeNone groupID:@"groupID" callback:^(NSString * _Nonnull groupID, ZIMGroupInviteMode mode, ZIMError * _Nonnull errorInfo) {
+
+}];
+```
+:::
+
+
+### Update beInviteMode
+
+After logging in to the ZIM SDK, the group owner or administrator calls the {getPlatformData(props,updateGroupBeInviteModeMap)}  method to update beInviteMode.
+
+After the mode is updated, all group members receive the {getPlatformData(props,onGroupVerifyInfoUpdatedMap)}  callback.
+
+:::if{props.platform=undefined}
+```java
+// Listen for onGroupVerifyInfoUpdated event.
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onGroupVerifyInfoUpdated(ZIM zim, ZIMGroupVerifyInfo verifyInfo,
+                                         ZIMGroupOperatedInfo operatedInfo, String groupID) {
+        // Invite mode update callback notification.
+     }
+
+   });
+
+
+// Update beInviteMode.
+zim.updateGroupInviteMode(ZIMGroupInviteMode.ADMIN, "groupID", new ZIMGroupInviteModeUpdatedCallback(){
+    public void onGroupInviteModeUpdated(String groupID, ZIMGroupInviteMode mode, ZIMError errorInfo){
+        // Update the callback notification of the verification mode result of inviting others to join the group.
+    }
+});
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Listen to the onGroupVerifyInfoUpdated event
+ZIMEventHandler.onGroupVerifyInfoUpdated = (ZIM zim,
+    ZIMGroupVerifyInfo verifyInfo,
+    ZIMGroupOperatedInfo operatedInfo,
+    String groupID){};
+
+// Update the mode for verifying the target user when being invited to a group
+try{
+    var result = await ZIM.getInstance()!.updateGroupBeInviteMode(ZIMGroupBeInviteMode.auth, 'groupID');
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Listen for onGroupVerifyInfoUpdated event.
+void onGroupVerifyInfoUpdated(zim::ZIM * /*zim*/,
+                                const zim::ZIMGroupVerifyInfo & /*verifyInfo*/,
+                                const zim::ZIMGroupOperatedInfo & /*operatedInfo*/,
+                                const std::string & /*groupID*/) override {
+    ......
+}
+
+
+// Update beInviteMode.
+zim_->updateGroupBeInviteMode(
+    zim::ZIMGroupBeInviteMode::ZIM_GROUP_BE_INVITE_MODE_AUTH, group_id,
+    [=](const std::string &groupID, zim::ZIMGroupBeInviteMode mode,
+        const zim::ZIMError &errorInfo) {
+        // Business code
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Listen for groupVerifyInfoUpdated event.
+zim.on('groupVerifyInfoUpdated', (zim, { groupID, verifyInfo, operatedInfo }) => {
+    console.log(groupID, verifyInfo.beInviteMode);
+});
+
+var groupID = '';
+
+// Update beInviteMode.
+var beInviteMode = 1;
+zim.updateGroupBeInviteMode(beInviteMode, groupID)
+    .then(function ({ groupID, mode }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Listen for onGroupVerifyInfoUpdated event.
+- (void)zim:(ZIM *)zim
+    groupVerifyInfoUpdated:(ZIMGroupVerifyInfo *)verifyInfo
+              operatedInfo:(ZIMGroupOperatedInfo *)operatedInfo
+    groupID:(NSString *)groupID{
+    
+    }
+
+// Update beInviteMode.
+  [zim updateGroupBeInviteMode:ZIMGroupBeInviteModeAuth groupID:@"groupID" callback:^(NSString * _Nonnull groupID, ZIMGroupBeInviteMode mode, ZIMError * _Nonnull errorInfo) {
+
+  }];
+```
+:::
+
+### Query the list of group joining applications
+
+After logging in to the ZIM SDK, a user calls the {getPlatformData(props,queryGroupApplicationListMap)}  method to query the list of group joining applications. The query result contains applications sent to the user.from and to the user.
+
+:::if{props.platform=undefined}
+```java
+
+ZIMGroupApplicationListQueryConfig config = new ZIMGroupApplicationListQueryConfig();
+config.count = 10;
+// Fill in 0 for the first query.
+conifg.nextFlag = 0; 
+zim.queryGroupApplicationList(config,  new ZIMGroupApplicationListQueriedCallback() {
+     public void onGroupApplicationListQueried(ArrayList<ZIMGroupApplicationInfo> applicationList, int nextFlag, ZIMError errorInfo) {
+            // Query group application list result callback.
+     }
+})
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMGroupApplicationListQueryConfig queryConfig = ZIMGroupApplicationListQueryConfig();
+    queryConfig.count = 100;
+    queryConfig.nextFlag = 0;
+    var result = await ZIM.getInstance()!.queryGroupApplicationList(queryConfig);
+} on PlatformException catch(onError){
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim::ZIMGroupApplicationListQueryConfig config;
+config.count = 100;
+config.nextFlag = 0;
+
+zim_->queryGroupApplicationList(
+    config, [=](const std::vector<zim::ZIMGroupApplicationInfo> &applicationList,
+                unsigned long long nextFlag, const zim::ZIMError &errorInfo) {
+        // Business code
+    });
+```
+:::
+:::if{props.platform="Web"}
+```js
+// Query the group application list.
+var config = {
+    count: 30, // Single query number.
+    nextFlag: 0 // Anchor point, fill in 0 for the first query, and use the nextFlag returned by the current query as the anchor point for the next query.
+};
+
+zim.queryGroupApplicationList(config)
+    .then(function ({ nextFlag, applicationList }) {
+        // Operation successful, use nextFlag as the anchor point for the next query.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMGroupApplicationListQueryConfig *config = [[ZIMGroupApplicationListQueryConfig alloc] init];
+config.count = 20;
+[zim queryGroupApplicationListWithConfig:config callback:^(NSArray<ZIMGroupApplicationInfo *> * _Nonnull applicationList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    
+}];
+```
+:::

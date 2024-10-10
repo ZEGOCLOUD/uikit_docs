@@ -1,0 +1,366 @@
+
+
+# Send and receive messages
+
+
+This document describes how to use the ZIM SDK (In-app Chat) to send and receive messages.
+
+
+## Solution
+
+The following shows the access solution that the ZIM SDK provides.
+
+![/Pics/InappChat/im_solution_en.png](/Pics/InappChat/im_solution_en.png)
+
+In this solution, you will need to implement the following business logic based on your actual business requirements:
+
+- The logic for managing the users on the client, and the logic for distributing user ID for users to log in.
+
+## Prerequisites
+
+Before you begin, make sure:
+
+@@@ZIM_BasicPrerequisites@@@
+
+- Android Studio 2020.3.1 or later
+- Android SDK Packages: Android SDK 25, Android SDK Build-Tools 25.0.2, Android SDK Platform-Tools 25.x.x or later.
+- An Android device or Simulator that is running on Android 4.4 or later and supports audio and video. We recommend you use a real device.
+
+@@@ZIM_AppSign@@@
+
+## Integrate the SDK
+
+### Optional: Create a new project
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+1. Open Android Studio, select **File > New > Project**.
+
+    <img src="/Pics/Android/ExpressSDK/Integration/android_new_project.png">
+
+2. Configure your new project with **Application name** and **Project location**.
+
+    <img src="/Pics/Android/ExpressSDK/Integration/android_new_project_finish.png">
+
+3. All other items in the panel can be left as their defaults, click **Next** and then click **Finish**.
+
+</details>
+
+### Import the SDK
+
+> The Android ABIs are currently supported by the SDK: armeabi-v7a, arm64-v8a, x86, x86_64.
+
+Choose either of the following methods to integrate the SDK into your project.
+
+#### Method 1: Integrate the SDK automatically
+
+1. Set up repositories
+
+    - If your Android Gradle Plugin is **v7.1.0 or later**: go to the root directory of your project, open the `settings.gradle` file, and add the following line to the `dependencyResolutionManagement`:
+
+        ```groovy
+        ...
+        dependencyResolutionManagement {
+            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+            repositories {
+                maven { url 'https://storage.zego.im/maven' }
+                mavenCentral()
+                google()
+            }
+        }
+        ```
+
+        <div class="mk-warning">
+
+        If you can not find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0.
+
+        For more details, see [Android Gradle Plugin Release Note v7.1.0\|_blank](https://developer.android.com/build/releases/past-releases/agp-7-1-0-release-notes#settings-gradle).
+        </div>
+
+    - If your Android Gradle Plugin is **earlier than 7.1.0**: go to the root directory of your project, open the `build.gradle` file, and add the following line to the `allprojects`:
+
+        ```groovy
+        ...
+        allprojects {
+            repositories {
+                maven { url 'https://storage.zego.im/maven' }
+                mavenCentral()
+                google()
+            }
+        }
+        ```
+
+2. Declare dependencies:
+
+    Go to the `app` directory, open the `build.gradle` file, and add the following line to the `dependencies`. (**x.y.z** is the SDK version number, to obtain the latest version number, see [Release Note\|_blank](#14167))
+
+    ```groovy
+    ...
+    dependencies {
+        ...
+        implementation 'im.zego:zim:x.y.z'
+    }
+    ```
+
+#### Method 2: Manually add the SDK to the project
+
+1. Download the latest version of SDK from [SDK downloads\|_blank](!Download_SDK).
+
+2. Extract the files from the SDK packages into your project directory, for example, `app/libs`.
+
+    ![/Pics/Android/ZIM/android_studio_im_sdk.jpg](http://doc.oa.zego.im/Pics/Android/ZIM/android_studio_im_sdk.jpg)
+
+3. Add SDK Import Statements. Open the file `app/build.gradle`, and add the following contents:
+
+    1. Add the `ndk` node inside the `defaultConfig` node to specify the supported ABIs.
+
+        <img src="/Pics/Android/ExpressSDK/Integration/add_ndk_node.png" width="80%" height="10%">
+
+        ```groovy
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+        ```
+
+    2. Add the `sourceSets` node inside the `android` node to specify the directory containing the SDK files.
+
+        <div class="mk-hint">
+
+        The directory **libs** is only an example for illustration, you can fill in based on the actual situation.
+        </div>
+
+        <img src="/Pics/Android/ExpressSDK/Integration/add_sourceSets_node.png" width="80%" height="10%">
+
+        ```groovy
+        sourceSets {
+            main {
+                jniLibs.srcDirs = ['libs']
+            }
+        }
+        ```
+
+    3. Add the following code in the `dependencies` node.
+
+        ```groovy
+        dependencies {
+            implementation fileTree(dir: 'libs', include: ['*.jar'])
+            ......
+        }
+        ```
+
+## Add permissions
+
+Permissions can be set as needed.
+
+Go to the directory `app/src/main`, open the `AndroidManifest.xml` file, and add the following code:
+
+```xml
+<!-- Permissions required by the SDK -->
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+
+## Prevent class name obfuscation
+
+To prevent the ZEGO SDK public class names from being obfuscated, you can add the following code in the file `proguard-rules.pro`.
+
+```txt
+-keep class **.zego.**{*;}
+```
+
+## Implementation steps
+
+### Get the sample code
+
+To download and run the sample code, see [Sample app\|_blank](!Sample_Codes).
+
+For the sample code related to this feature, check out the source files in the `app/src/main/java/im/zego/zimexample/ui/room/ZIMPeerSessionActivity` directory in the SDK sample code package.
+
+### Import the class file
+
+Import the class file to your project:
+
+```java
+import im.zego.zim.ZIM
+```
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
+
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [`create`\|_blank](@create) method with the AppID and AppSign you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+```java
+// Create a ZIM SDK object and pass the AppID, AppSign, and Application in Android.
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;
+appConfig.appSign = "appSign";
+zim = ZIM.create(appConfig, application);
+```
+
+<details class="zg-primary">
+    <summary>The sample code to create a ZIM SDK singleton</summary>
+
+For most cases, you will only need to create the ZIM SDK instance once. We recommend you create a singleton and save it.
+
+Create an `SDKManager` class, declare and implement a `sharedInstance` static method in this class, which will create and return an `SDKManager` object the first time it is called.
+Then, when you import the `SDKManager` class anywhere in the project and call the `SDKManager.sharedInstance().zim`, a ZIM object will be returned.
+
+```java
+public class SDKManager {
+    private static SDKManager sdkManager;
+    public ZIM zim;
+
+    public static SDKManager sharedInstance() {
+        if (sdkManager == null) {
+            synchronized (SDKManager.class) {
+                if (sdkManager == null) {
+                    sdkManager = new SDKManager();
+                }
+            }
+        }
+        return sdkManager;
+    }
+
+    public void create(Application application) {
+        ZIMAppConfig appConfig = new ZIMAppConfig();
+        appConfig.appID = 12345;
+        appConfig.appSign = "appSign";
+        zim = ZIM.create(appConfig, application);
+    }
+}
+```
+</details>
+
+
+### Set an event handler object
+
+
+Before a client user's login, you will need to call the [`setEventHandler`\|_blank](@setEventHandler) method to implement an event handler object, and customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message related callback notifications.
+
+```java
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+        // Implement the callback for receiving the one-to-one messages.
+    }
+});
+```
+For more details about related callbacks, see [`onReceivePeerMessage`\|_blank](@onReceivePeerMessage), [`onReceiveGroupMessage`\|_blank](@onReceiveGroupMessage), and [`onReceiveRoomMessage`\|_blank](@onReceiveRoomMessage).
+
+### Log in to the ZIM SDK
+
+For client A and client B to send and receive messages after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
+
+To log in, Clients A and B both need to do the following:
+1. Call the [`ZIMUserInfo`\|_blank](@-ZIMUserInfo)  method to create a user object.
+2. Then, call the [`login`\|_blank](@login) method with their own user information.
+
+
+@@@ZIM_login_warning@@@
+
+```java
+// userID must be within 32 bytes, and can only contain letters, numbers, and the following special characters: '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
+// userName must be within 256 bytes, no special characters limited.
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = userID;
+zimUserInfo.userName = userName;
+
+// When logging in:
+// If you are using the Token-based authentication mode, you will need to fill in the Token which you generated by referring to the [Authentication] doc.
+// If you are using the AppSign mode for authentication (the default auth mode for v2.3.0 or later), leave the Token parameter blank.
+
+zim.login(zimUserInfo, new ZIMLoggedInCallback() {
+    @Override
+    public void onLoggedIn(ZIMError error) {
+          // You can know whether the login is successful according to the ZIMError.
+    }
+ });
+```
+
+### Send one-to-one messages
+
+Client A can send messages to client B after logging in successfully.
+
+@@@ZIM_Message_Type@@@
+
+To send one-to-one messages, for example, client A wants to send a message to client B, then client A needs to call the [`sendMessage`\|_blank](@sendMessage) method with client B's userID, message content, and message type [`ZIMConversationType`\|_blank](@-ZIMConversationType).
+And client A can be notified whether the message is delivered successfully through the callback [`onMessageSent`\|_blank](@onMessageSent).
+
+
+- [onMessageAttached\|_blank](@onMessageAttached-ZIMMediaMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage\|_blank](@-ZIMMessage) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
+
+```java
+// The following shows how to send one-to-one message, the [conversationType] needs to be set to [ZIMConversationTypePeer].
+String conversationID = "xxxx";
+
+ZIMTextMessage zimMessage = new ZIMTextMessage();
+zimMessage.message = "Message content";
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set priority for the message. 1: Low (by default). 2: Medium. 3: High.
+config.priority = ZIMMessagePriority.LOW;
+// Set the offline push notificaition config.
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "Title of the offline push";
+pushConfig.content= "Content of the offline push";
+pushConfig.extendedData = "Extended info of the offline push";
+config.pushConfig = pushConfig;
+
+// In 1-on-1 chats, the conversationID is the peer user ID. In group chats, the conversationID is the groupID. In the chat room, the conversationID is the roomID.
+zim.sendMessage(zimMessage, conversationID, ZIMConversationType.Peer,config, new ZIMMessageSentCallback() {
+    @Override
+    public void onMessageAttached(ZIMMessage zimMessage){
+         // The callback on the message not sent yet. You can get a temporary object here and this object must be the same as that created zimMessage object. You can make your own business logic using this as needed, for example, display a UI ahead of time.
+    }
+    @Override
+    public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
+        // Implement the event callback on message sent.
+    }
+});
+```
+
+
+### Receive one-to-one messages
+
+After client B logs in, he will receive client A's message through the callback [`onReceivePeerMessage`\|_blank](@onReceivePeerMessage) which is already set in the [`setEventHandler`\|_blank](@setEventHandler) method.
+
+
+<div class = 'mk-warning'>
+
+When a message is received, you need to determine the message is a Text message or a Command message because these two message types are based on the basic message. You need to convert the basic message class to a concrete message type and then retrieve the message content from the `Message` field.
+</div>
+
+```java
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+
+      for (ZIMMessage zimMessage : messageList) {
+          if (zimMessage instanceof ZIMTextMessage)
+          {
+            ZIMTextMessage zimTextMessage = (ZIMTextMessage) zimMessage;
+            Log.e(TAG, "Received message:"+ zimTextMessage.message);
+          }
+      }
+   }
+});
+```
+
+### Log out
+
+For a client to log out, call the [`logout`\|_blank](@logout) method.
+
+```java
+zim.logout();
+```
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [`destroy`\|_blank](@destroy) method.
+
+```java
+zim.destroy();
+```

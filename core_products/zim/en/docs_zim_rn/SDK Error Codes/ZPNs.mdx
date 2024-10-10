@@ -1,0 +1,25 @@
+
+
+
+# ZPNs Error Codes
+
+If the `errorCode` field exists in the return result after calling the ZPNs interface, it indicates that the interface call has encountered an exception. Example code is as follows:
+
+```js
+ZPNs.getInstance().on('registered', function(message) {
+    console.log("[ZPNs] registered. pushID: " + message.pushID + ", error: " + message.errorCode)
+});
+```
+
+Based on the operating device, the ZPNs React Native SDK will return different error codes.
+
+## iOS Error Codes
+
+The ZPNs React Native SDK passes through the error codes and messages returned by APNs. For more details, please refer to the [Apple Official Documentation](https://developer.apple.com/documentation/watchkit/wkapplicationdelegate/3946536-didfailtoregisterforremotenotifi?language=objc).
+
+## Android
+
+import Content from '/core_products/zim/en/snippets/ZPNsAndroidErrorCode.mdx'
+
+<Content />
+

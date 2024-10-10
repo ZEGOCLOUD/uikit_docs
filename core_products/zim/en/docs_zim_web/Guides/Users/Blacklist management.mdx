@@ -1,0 +1,104 @@
+---
+articleID: 17622
+---
+
+# Blacklist management
+
+- - -
+
+<Note title="Note">
+
+Blacklisting and friend operations do not affect each other. Taking user A and B as friends as an example:
+1. User A can blacklist user B, but they will still be friends.
+2. If at this point, user A and user B end their friendship, user B will still be on user A's blacklist.
+3. Afterwards, if user A removes user B from the blacklist, user B will still not be user A's friend.
+
+
+</Note>
+
+## Function Introduction
+
+You can check your blacklist, blacklist a specified user (no longer receiving messages from that user), move out of the blacklist, and check if a specified user is in the blacklist.
+
+## Prerequisites
+
+Before implementing the `Blacklist` feature, please make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Implementation Process
+
+### Query Blacklist
+
+After logging in to the ZIM SDK, users can query the blacklist by using the <a href="@queryBlacklist" target="_blank">queryBlacklist</a> interface.
+
+The query result is returned through <a href="@-ZIMBlacklistQueriedResult" target="_blank">ZIMBlacklistQueriedResult</a>.
+
+<CodeGroup>
+```js
+// Query the blacklist
+zim.queryBlacklist({ count: 100, nextFlag: 0 }).then(res => {
+    const blacklist = res.blacklist;
+})
+```
+</CodeGroup>
+
+### Block Users
+
+After logging in to the ZIM SDK, users can call the  <a href="@addUsersToBlacklist" target="_blank">addUsersToBlacklist</a> interface to add specified users to the blacklist.
+
+The result of blocking users is returned through the <a href="@-ZIMBlacklistUsersAddedResult" target="_blank">ZIMBlacklistUsersAddedResult</a>.
+
+<Warning title="Warning">
+
+- Up to 20 users can be blocked with one API call. Exceeding the limit will cause the API call to fail.
+- The default maximum number of blacklisted users is 1000. If you need to increase it, please contact ZEGOCLOUD technical support.
+</Warning>
+
+<CodeGroup>
+```js
+// Add user "zego" to the blacklist
+const userIDs = ['zego'];
+zim.addUsersToBlacklist(userIDs).then(res => {
+    // Added successfully
+});
+```
+</CodeGroup>
+
+### Unblock Users
+
+After logging in to the ZIM SDK, users can call the <a href="@removeUsersFromBlacklist" target="_blank">removeUsersFromBl</a> interface to remove specified users from the blacklist.
+
+The unblock operation will be returned through the <a href="@-ZIMBlacklistUsersRemovedResult" target="_blank">ZIMBlacklistUsersRemovedResult</a>.
+
+<Warning title="Warning">
+
+Up to 20 users can be removed with one API call. Exceeding the limit will cause the API call to fail.
+</Warning>
+
+<CodeGroup>
+```js
+// Remove user "zego" from the blacklist
+const userIDs = ['zego'];
+zim.removeUsersFromBlacklist(userIDs).then(res => {
+    // Removed successfully
+});
+```
+</CodeGroup>
+### Check if the user is in the blacklist
+
+After logging in to the ZIM SDK, users can call the <a href="@checkUserIsInBlacklist" target="_blank">checkUserIsInBlacklist</a> interface to check if a specified user is in their blacklist.
+
+The result of the check operation is returned through the  <a href="@-ZIMBlacklistCheckedResult" target="_blank">ZIMBlacklistCheckedResult</a>.
+
+
+<CodeGroup>
+```js
+// Check if user "zego" is in the blacklist
+zim.checkUserIsInBlacklist('zego').then(res => {
+    const isUserInBlacklist = res.isUserInBlacklist;
+});
+```
+</CodeGroup>

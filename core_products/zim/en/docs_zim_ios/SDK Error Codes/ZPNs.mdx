@@ -1,0 +1,9 @@
+# ZPNs Error Codes
+
+
+The ZPNs iOS error codes are provided directly by Apple. Please pay attention to the delegate method `didFailToRegisterForRemoteNotificationsWithError:`. For more details, refer to the [Apple Official Documentation](https://developer.apple.com/documentation/watchkit/wkapplicationdelegate/3946536-didfailtoregisterforremotenotifi?language=objc).
+
+```objc
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error API_AVAILABLE(ios(3.0)){
+    // Handle the NSError accordingly
+}

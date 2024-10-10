@@ -1,0 +1,1002 @@
+---
+articleID: 17433
+---
+
+export const getPlatformData = (props, data) => {
+  let platform = props.platform ?? "Android";
+  if(props.special){// 有特殊值先使用特殊值,在使用platform
+    platform = props.special
+    if(data[props.platform]) return platform in data ? data[platform] : data[props.platform]
+  }
+  return platform in data ? data[platform] : data["Android"]
+}
+
+export const loginMap = {
+  'Android': <a href='@login__2' target='_blank'>login</a>,
+  'iOS': <a href='@loginWithUserID' target='_blank'>loginWithUserID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html' target='_blank'>login</a>,
+}
+export const onConnectionStateChangedMap = {
+  'Android': <a href='@onConnectionStateChanged' target='_blank'>onConnectionStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
+  'Web': <a href='@connectionStateChanged' target='_blank'>connectionStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html' target='_blank'>onConnectionStateChanged</a>,
+}
+export const logoutMap = {
+  'Android': <a href='@logout' target='_blank'>logout</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/logout.html' target='_blank'>logout</a>,
+}
+export const updateUserNameMap = {
+  'Android': <a href='@updateUserName' target='_blank'>updateUserName</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserName.html' target='_blank'>updateUserName</a>,
+}
+export const updateUserAvatarUrlMap = {
+  'Android': <a href='@updateUserAvatarUrl' target='_blank'>updateUserAvatarUrl</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserName.html' target='_blank'>updateUserAvatarUrl</a>,
+}
+export const updateUserExtendedDataMap = {
+  'Android': <a href='@updateUserExtendedData' target='_blank'>updateUserExtendedData</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserExtendedData.html' target='_blank'>updateUserExtendedData</a>,
+}
+export const onUserInfoUpdatedMap = {
+  'Android': <a href='@onUserInfoUpdated' target='_blank'>onUserInfoUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-user-info-updated' target='_blank'>userInfoUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-user-info-updated' target='_blank'>userInfoUpdated</a>,
+  'Web': <a href='@userInfoUpdated' target='_blank'>userInfoUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onUserInfoUpdated.html' target='_blank'>onUserInfoUpdated</a>,
+}
+export const deleteConversationMap = {
+  'Android': <a href='@deleteConversation' target='_blank'>deleteConversation</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteConversation.html' target='_blank'>deleteConversation</a>,
+}
+export const isAlsoDeleteServerConversationMap = {
+  'Android': <a href='@isAlsoDeleteServerConversation' target='_blank'>isAlsoDeleteServerConversation</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationDeleteConfig/isAlsoDeleteServerConversation.html' target='_blank'>isAlsoDeleteServerConversation</a>,
+}
+export const onConversationChangedMap = {
+  'Android': <a href='@onConversationChanged' target='_blank'>onConversationChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+  'Web': <a href='@conversationChanged' target='_blank'>conversationChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationChanged.html' target='_blank'>onConversationChanged</a>,
+}
+export const deleteAllConversationsMap = {
+  'Android': <a href='@deleteAllConversations' target='_blank'>deleteAllConversations</a>,
+  'iOS': <a href='@deleteAllConversationsWithConfig' target='_blank'>deleteAllConversationsWithConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversations.html' target='_blank'>deleteAllConversations</a>,
+}
+export const onConversationsAllDeletedMap = {
+  'Android': <a href='@onConversationsAllDeleted' target='_blank'>onConversationsAllDeleted</a>,
+  'iOS': <a href='@conversationsAllDeleted' target='_blank'>conversationsAllDeleted</a>,
+  'Web': <a href='@conversationsAllDeleted' target='_blank'>conversationsAllDeleted</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationsAllDeleted.html' target='_blank'>onConversationsAllDeleted</a>,
+}
+export const clearConversationTotalUnreadMessageCountMap = {
+  'Android': <a href='@clearConversationTotalUnreadMessageCount' target='_blank'>clearConversationTotalUnreadMessageCount</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/clearConversationTotalUnreadMessageCount.html' target='_blank'>clearConversationTotalUnreadMessageCount</a>,
+}
+export const onConversationTotalUnreadMessageCountUpdatedMap = {
+  'Android': <a href='@onConversationTotalUnreadMessageCountUpdated' target='_blank'>onConversationTotalUnreadMessageCountUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'Web': <a href='@conversationTotalUnreadMessageCountUpdated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationTotalUnreadMessageCountUpdated.html' target='_blank'>onConversationTotalUnreadMessageCountUpdated</a>,
+}
+export const queryHistoryMessageMap = {
+  'Android': <a href='@queryHistoryMessage' target='_blank'>queryHistoryMessage</a>,
+  'iOS': <a href='@queryHistoryMessageByConversationID' target='_blank'>queryHistoryMessageByConversationID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html' target='_blank'>queryHistoryMessage</a>,
+}
+export const deleteMessagesMap = {
+  'Android': <a href='@deleteMessages' target='_blank'>deleteMessages</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessages.html' target='_blank'>deleteMessages</a>,
+}
+export const deleteAllMessageMap = {
+  'Android': <a href='@deleteAllMessage' target='_blank'>deleteAllMessage</a>,
+  'iOS': <a href='@deleteAllMessageByConversationID' target='_blank'>deleteAllMessageByConversationID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllMessage.html' target='_blank'>deleteAllMessage</a>,
+}
+export const isAlsoDeleteServerMessageMap = {
+  'Android': <a href='@isAlsoDeleteServerMessage' target='_blank'>isAlsoDeleteServerMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageDeleteConfig/isAlsoDeleteServerMessage.html' target='_blank'>isAlsoDeleteServerMessage</a>,
+}
+export const onMessageDeletedMap = {
+  'Android': <a href='@onMessageDeleted' target='_blank'>onMessageDeleted</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-deleted' target='_blank'>messageDeleted</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-deleted' target='_blank'>messageDeleted</a>,
+  'Web': <a href='@messageDeleted' target='_blank'>messageDeleted</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onMessageDeleted.html' target='_blank'>onMessageDeleted</a>,
+}
+export const sendMessageReceiptsReadMap = {
+  'Android': <a href='@sendMessageReceiptsRead' target='_blank'>sendMessageReceiptsRead</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessageReceiptsRead.html' target='_blank'>sendMessageReceiptsRead</a>,
+}
+export const sendConversationMessageReceiptReadMap = {
+  'Android': <a href='@sendConversationMessageReceiptRead' target='_blank'>sendConversationMessageReceiptRead</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendConversationMessageReceiptRead.html' target='_blank'>sendConversationMessageReceiptRead</a>,
+}
+export const onMessageReceiptChangedMap = {
+  'Android': <a href='@onMessageReceiptChanged' target='_blank'>onMessageReceiptChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-message-receipt-changed' target='_blank'>messageReceiptChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-message-receipt-changed' target='_blank'>messageReceiptChanged</a>,
+  'Web': <a href='@messageReceiptChanged' target='_blank'>messageReceiptChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onMessageReceiptChanged.html' target='_blank'>messageReceiptChanged</a>,
+}
+export const onConversationMessageReceiptChangedMap = {
+  'Android': <a href='@onConversationMessageReceiptChanged' target='_blank'>onConversationMessageReceiptChanged</a>,
+  'iOS': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-message-receipt-changed' target='_blank'>conversationMessageReceiptChanged</a>,
+  'mac': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-message-receipt-changed' target='_blank'>conversationMessageReceiptChanged</a>,
+  'Web': <a href='@conversationMessageReceiptChanged' target='_blank'>conversationMessageReceiptChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationMessageReceiptChanged.html' target='_blank'>onConversationMessageReceiptChanged</a>,
+}
+export const onRoomStateChangedMap = {
+  'Android': <a href='@onRoomStateChanged' target='_blank'>onRoomStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
+  'Web': <a href='@roomStateChanged' target='_blank'>roomStateChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html' target='_blank'>onRoomStateChanged</a>,
+}
+export const callAcceptMap = {
+  'Android': <a href='@callAccept' target='_blank'>callAccept</a>,
+  'iOS': <a href='@callAcceptWithCallID' target='_blank'>callAcceptWithCallID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callAccept.html' target='_blank'>callAccept</a>,
+}
+export const callRejectMap = {
+  'Android': <a href='@callReject' target='_blank'>callReject</a>,
+  'iOS': <a href='@callRejectWithCallID' target='_blank'>callRejectWithCallID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callReject.html' target='_blank'>callReject</a>,
+}
+export const ZIMCallAcceptanceSentCallbackMap = {
+  'Android': <a href='@-ZIMCallAcceptanceSentCallback' target='_blank'>ZIMCallAcceptanceSentCallback</a>,
+  'Web': <a href='@-ZIMCallAcceptanceSentResult' target='_blank'>ZIMCallAcceptanceSentResult</a>,
+  'window': <a href='@ZIMCallAcceptanceSentCallback' target='_blank'>ZIMCallAcceptanceSentCallback</a>,
+  'iOS': <a href='@ZIMCallAcceptanceSentCallback' target='_blank'>ZIMCallAcceptanceSentCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallAcceptanceSentResult-class.html' target='_blank'>ZIMCallAcceptanceSentResult</a>,
+}
+export const ZIMCallRejectionSentCallbackMap = {
+  'Android': <a href='@-ZIMCallRejectionSentCallback' target='_blank'>ZIMCallRejectionSentCallback</a>,
+  'Web': <a href='@-ZIMCallRejectionSentResult' target='_blank'>ZIMCallRejectionSentResult</a>,
+  'window': <a href='@ZIMCallRejectionSentCallback' target='_blank'>ZIMCallRejectionSentCallback</a>,
+  'iOS': <a href='@ZIMCallRejectionSentCallback' target='_blank'>ZIMCallRejectionSentCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallRejectionSentResult-class.html' target='_blank'>ZIMCallRejectionSentResult</a>,
+}
+export const ZIMCallUserStateMap = {
+  'Android': <a href='@-ZIMCallUserState' target='_blank'>ZIMCallUserState</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallUserState.html' target='_blank'>ZIMCallUserState</a>,
+}
+export const onCallUserStateChangedMap = {
+  'Android': <a href='@onCallUserStateChanged' target='_blank'>onCallUserStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-user-state-changed-call-id' target='_blank'>callUserStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-call-user-state-changed-call-id' target='_blank'>callUserStateChanged</a>,
+  'Web': <a href='@callUserStateChanged' target='_blank'>callUserStateChanged</a>,
+  'FLutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallUserStateChanged.html' target='_blank'>onCallUserStateChanged</a>,
+}
+export const deleteAllConversationMessagesMap = {// Flutter特有的api
+  'Android': <a href='' target='_blank'></a>,
+  "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversationMessages.html" target="_blank">deleteAllConversationMessages</a>
+}
+
+# Multi-device login
+
+- - -
+
+## Function introduction
+
+ZIM SDK supports the configuration of custom multi-device logins, which means that users can log in to multiple devices simultaneously with the same account, ensuring that the user's sessions, messages, groups and other data communicate with each other.
+<Note title="Note">
+
+- To use this feature, please subscribe to the Professional or Ultimate package, and contact the technical support team to activate the service and configure the login policy.
+- This feature only supports SDK version 2.11.0 and above.
+</Note>
+
+## Common login policies
+
+Multi-device login supports configuration on eight devices including Windows, Mac, Linux, Android, iOS, iPad, Web, and Mini Program. Among them, multi-device login is supported on Windows, Mac, Linux, Android, iOS, and iPad devices, with a maximum of 2 devices. Multi-instance login is supported on the Web device, with a maximum of 5 login instances.
+
+The following are the three login policies supported by the ZIM SDK: single-device login, dual-device login, and multi-device login.
+
+| Single device login (by default) | Only supports users logging into the account on one device at a time. If the account is logged into another device, the account on the original device will be logged out. |
+| :-- | :-- | 
+| Dual-device login | Allows users to log in to their accounts on any of the Windows, Mac, Linux, Android, iOS, and iPad devices while keeping their accounts online on the web device. |
+| Multi-device login | Allows users to simultaneously log in to their accounts on multiple devices, including Windows, Mac, Linux, Android, iOS, iPad, Web, and Mini program. The following configurations are supported:<br/><ul><li>Multiple device and instance login on the same device at the same time.</li><li>Configure the logic for kicking each other offline; currently only supports offline kicking between Android and iOS devices, and offline kicking between Windows and Mac devices.</li></ul> |
+
+
+
+## Prerequisites
+Before implementing the "multi-device login" function, please make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of {<a href="!zim-Implementation_of_sending_and_receiving" target="_blank">Send and receive messages</a>}.
+
+
+
+## Implementation process
+
+Contact ZEGOCLOUD technical support team to activate the multi-terminal login service. After configuring the multi-device login, you can call {getPlatformData(props,loginMap)} on multiple devices to log in to the ZIM SDK. The implementation process is the same as a single-terminal login. For details on how to log in, please refer to the "Logging in ZIM" section in {<a href="!zim-Implementation_of_sending_and_receiving" target="_blank">Send and receive messages</a>}.
+
+When the number of login devices reaches the limit set by the policy, if you log in to the account on a new device, the account that was logged in the earliest on the original device will be kicked offline. You will be notified of this through the {getPlatformData(props,onConnectionStateChangedMap)} callback with the event set to `KickedOut`. For example, if the login specifies a maximum of 3 devices to be logged in, and the account has already been logged in on devices A, B, and C (in chronological order), logging in to the account on device D will kick the account on device A offline.
+
+When the account is kicked offline, it is recommended to call the {getPlatformData(props,logoutMap)} interface to log out of the ZIM service and switch the user interface to the login interface.
+
+## The impact of multi-device login on other functions
+
+The codes for the following functions must also be changed after configuring multi-device login.
+
+### User information management
+
+ZIM SDK provides user information synchronization function for multi-device login users.After a user updates his or her information through {getPlatformData(props,updateUserNameMap)}, {getPlatformData(props,updateUserAvatarUrlMap)}, {getPlatformData(props,updateUserExtendedDataMap)} interfaces on one device, other online clients can register the {getPlatformData(props,onUserInfoUpdatedMap)}  event to listen for user information being modified.
+
+#### onUserInfoUpdated processing example
+
+:::if{props.platform=undefined}
+```java
+public class ZIMEventHandler {
+    public void onUserInfoUpdated(ZIM zim, ZIMUserFullInfo info) {
+        // Can be obtained in info: user ID, user name, user avatar, user additional fields
+        String userID = info.baseInfo.userID;
+        String userName = info.baseInfo.userName;
+        String userAvatarUrl = info.userAvatarUrl;
+        String extendedData = info.extendedData;
+    }
+}
+```
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onUserInfoUpdated = (ZIM zim, ZIMUserFullInfo info){
+    // You can obtain the following information from info: user ID, username, user avatar, user additional fields
+    String userID = info.baseInfo.userID;
+    String userName = info.baseInfo.userName;
+    String userAvatarUrl = info.userAvatarUrl;
+    String extendedData = info.extendedData;
+};
+```
+:::
+
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim userInfoUpdated:(ZIMUserFullInfo *)info{
+         // Can be obtained in info: user ID, user name, user avatar, user additional fields
+         NSString *userID = info.baseInfo.userID;
+         NSString *userName = info.baseInfo.userName;
+         NSString *userAvatarUrl = info.userAvatarUrl;
+         NSString *userExtendedData = info.extendedData;
+}
+```
+:::
+
+:::if{props.platform="window"}
+
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onUserInfoUpdated(zim::ZIM * zim, const zim::ZIMUserFullInfo & info) override {
+        // Can be obtained in info: user ID, user name, user avatar, user additional fields
+        auto user_id = info.baseInfo.userID;
+        auto user_name = info.baseInfo.userName;
+        auto user_avatar_url = info.userAvatarUrl;
+        auto user_extended_data = info.extendedData;
+    }
+
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('userInfoUpdated', (zim, { info }) => {
+    console.log(info.baseInfo.userName, info.userAvatarUrl, info.extendedData);
+});
+```
+:::
+
+### Conversation management
+
+#### Delete a single server conversation
+
+When the user deletes the server conversation on one device through the {getPlatformData(props,deleteConversationMap)} interface（that is, {getPlatformData(props,isAlsoDeleteServerConversationMap)} set to true）, other online clients can register {getPlatformData(props,onConversationChangedMap)} event to listen for the deletion of the conversation.
+
+#### onConversationChanged example
+
+
+:::if{props.platform=undefined}
+```java
+public class ZIMEventHandler{
+...
+    public void onConversationChanged(ZIM zim, ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList){
+        for (ZIMConversationChangeInfo convInfo : conversationChangeInfoList) {
+            if (convInfo.event == ZIMConversationEvent.DELETED) {
+                // The conversation is deleted
+            }
+        }
+    }
+
+...
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onConversationChanged = (ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList){
+    for (ZIMConversationChangeInfo convInfo : conversationChangeInfoList) {
+        if (convInfo.event == ZIMConversationEvent.delete) {
+        // The conversation has been deleted
+        }
+    }
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+    conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{
+        for(ZIMConversationChangeInfo *convInfo in conversationChangeInfoList){
+            if(convInfo.event == ZIMConversationEventDeleted){
+                // The conversation is deleted
+            }
+        }
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onConversationChanged(zim::ZIM *zim, 
+                                       const std::vector<zim::ZIMConversationChangeInfo> &conversationChangeInfoList) override {
+        for (const auto &conv_info : conversationChangeInfoList) {
+            if (conv_info.event == zim::ZIMConversationEvent::ZIM_CONVERSATION_EVENT_DELETED) {
+                // The conversation is deleted
+            }
+        }
+    }
+
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('conversationChanged', (zim, { infoList }) => {
+    infoList.forEach((info) => {
+        if (info.event == 3) {
+            //The conversation is deleted
+        }
+    });
+});
+```
+:::
+
+#### Delete all server conversations
+
+When the user deletes all server conversations on one device through the {getPlatformData(props,deleteAllConversationsMap)} interface（that is, {getPlatformData(props,isAlsoDeleteServerConversationMap)} set to true）, other clients can use {getPlatformData(props,onConversationsAllDeletedMap)} event to listen for the deletion of the.
+
+#### onConversationsAllDeleted processing example
+
+:::if{props.platform=undefined}
+```java
+@Override
+public void onConversationsAllDeleted(ZIM zim, ZIMConversationsAllDeletedInfo info) {
+        // The other end deleted all sessions
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onConversationChanged = (ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList){
+    for (ZIMConversationChangeInfo convInfo : conversationChangeInfoList) {
+        if (convInfo.event == ZIMConversationEvent.delete) {
+        // The conversation has been deleted
+        }
+    }
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+    conversationsAllDeleted:(ZIMConversationsAllDeletedInfo *)info{
+        // The other end deleted all sessions
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onConversationsAllDeleted(zim::ZIM *zim, 
+                                       const ZIMConversationsAllDeletedInfo &info) override {
+        // The other end deleted all sessions
+   }
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('conversationsAllDeleted', (zim, { count }) => {
+    console.log('Number of deleted conversations', count);
+});
+```
+:::
+
+#### Clear all unread conversations
+
+When the user clears all unread conversations on one device through {getPlatformData(props,clearConversationTotalUnreadMessageCountMap)}. Other clients can listen for the notification of all conversations having their unread message count cleared through the {getPlatformData(props,onConversationTotalUnreadMessageCountUpdatedMap)} event.
+
+#### onConversationTotalUnreadMessageCountUpdated processing example
+
+:::if{props.platform=undefined}
+```java
+@Override
+public void onConversationTotalUnreadMessageCountUpdated(ZIM zim, int totalUnreadMessageCount) {
+        //After clearing all unread messages in all conversations on other devices, the value of totalUnreadMessageCount in the current device will be 0
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onConversationsAllDeleted = (
+      ZIM zim, ZIMConversationsAllDeletedInfo info){
+        // All conversations have been deleted by another client
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+conversationTotalUnreadMessageCountUpdated:(unsigned int)totalUnreadMessageCount{
+    //After clearing all unread messages in all conversations on other devices, the value of totalUnreadMessageCount in the current device will be 0
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onConversationTotalUnreadMessageCountUpdated(zim::ZIM *zim, 
+                                       unsigned int totalUnreadMessageCount) override {
+        //After clearing all unread messages in all conversations on other devices, the value of totalUnreadMessageCount in the current device will be 0
+   }
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('conversationTotalUnreadMessageCountUpdated', (zim, { totalUnreadMessageCount }) => {
+    //After clearing all unread messages in all conversations on other devices, the value of `totalUnreadMessageCount` in the current device will be 0
+});
+```
+:::
+
+### Message management
+
+#### Message Synchronization
+
+When a user logs in to a new device, the SDK does not automatically synchronize the existing messages from the old device to the new device. Users need to actively call the  {getPlatformData(props,queryHistoryMessageMap)} interface to retrieve the messages stored on the ZIM server. For more details, please refer to {<a href="!zim-query_Message_Records" target="_blank">Get message history</a>} . As for the local messages stored on the old device, they cannot be retrieved.
+
+####  Deleting server message
+
+When a user deletes server messages in a conversation through the {getPlatformData(props,deleteMessagesMap)}, {getPlatformData(props,deleteAllMessageMap)} ,{getPlatformData(props,deleteAllConversationMessagesMap)} with （that is {getPlatformData(props,isAlsoDeleteServerMessageMap)} set to true）, other online clients can listen for the {getPlatformData(props,onMessageDeletedMap)} to be notified of the deleted messages.
+
+#### Example of calling the interface
+
+:::if{props.platform=undefined}
+```java
+public class ZIMEventHandler{
+...
+    public void onMessageDeleted(ZIM zim, ZIMMessageDeletedInfo deletedInfo){
+
+if (deletedInfo.messageDeleteType == ZIMMessageDeleteType.MESSAGE_LIST_DELETED)
+        {
+            // Multiple messages in a session are deleted
+            for (ZIMMessage message : messageList) {
+             // Iterate through each deleted message
+            }
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteType.CONVERSATION_ALL_MESSAGES_DELETED)
+        {
+            // all current messages for a session are deleted
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteType.ALL_CONVERSATION_MESSAGES_DELETED)
+        {
+            // all messages for all sessions are deleted
+        }
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onMessageDeleted = (ZIM zim, ZIMMessageDeletedInfo deletedInfo){
+    if (deletedInfo.messageDeleteType == ZIMMessageDeleteType.messageListDeleted)
+        {
+            // Multiple messages in a conversation have been deleted
+            for (var message in messageList) {
+                // Iterate through each deleted message
+            }
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteType.conversationAllMessagesDeleted)
+        {
+            // All messages in a conversation have been deleted
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteType.allConversationMessagesDeleted)
+        {
+            // All messages in all conversations have been deleted
+        }
+}
+```
+:::
+:::if{props.platform="iOS"}
+
+```objc
+- (void)zim:(ZIM *)zim messageDeleted:(ZIMMessageDeletedInfo *)deletedInfo{
+        if (deletedInfo.messageDeleteType == ZIMMessageDeleteTypeMessageListDeleted)
+        {
+            // Multiple messages in a session are deleted
+            for (ZIMMessage *message in messageList) {
+             // Iterate through each deleted message
+            }
+
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteTypeConversationAllMessagesDeleted)
+        {
+            // all current messages for a session are deleted
+        } else if (deletedInfo.messageDeleteType ==
+                   ZIMMessageDeleteTypeAllConversationMessagesDeleted)
+        {
+            // all messages for all sessions are deleted
+        }
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onMessageDeleted(zim::ZIM * /*zim*/, const zim::ZIMMessageDeletedInfo &deletedInfo) override {
+        if (deletedInfo.messageDeleteType == zim::ZIM_MESSAGE_DELETE_TYPE_MESSAGE_LIST_DELETED)
+        {
+            // Multiple messages in a session are deleted
+            for (const auto& message : deletedInfo.messageList)
+            {
+             // Iterate through each deleted message
+            }
+        } else if (deletedInfo.messageDeleteType ==
+                   zim::ZIM_MESSAGE_DELETE_TYPE_CONVERSATION_ALL_MESSAGES_DELETED)
+        {
+            // All current messages for a session are deleted
+        } else if (deletedInfo.messageDeleteType ==
+                   zim::ZIM_MESSAGE_DELETE_TYPE_ALL_CONVERSATION_MESSAGES_DELETED)
+        {
+            // all messages for all sessions are deleted
+        }
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('messageDeleted', (zim, { conversationID, conversationType, isDeleteConversationAllMessage, messageList }) => {
+    if (messageDeleteType == 2 ) {
+        // All messages in the conversation are deleted
+     } else if (messageDeleteType == 1 ) {
+        // All current messages in the conversation are deleted
+    } else if (messageDeleteType == 0) {
+        // The specified message in the conversation is deleted
+    }
+});
+```
+:::
+
+#### Set message receipt as read
+
+When a user sets a message receipt as read through the {getPlatformData(props,sendMessageReceiptsReadMap)}, {getPlatformData(props,sendConversationMessageReceiptReadMap)} interface on one device, other online clients can listen for the {getPlatformData(props,onMessageReceiptChangedMap)} and {getPlatformData(props,onConversationMessageReceiptChangedMap)} event to be notified that the account has set the message receipt as read.
+
+#### Example of calling the interface
+
+:::if{props.platform=undefined}
+```java
+public class ZIMEventHandler {
+...
+
+    public void onMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
+        for (ZIMMessageReceiptInfo info : infos) {
+            if (info.isSelfOperated) {
+                // Message receipt set as read by the user
+            }
+        }
+    }
+
+    public void onConversationMessageReceiptChanged(ZIM zim, ArrayList<ZIMMessageReceiptInfo> infos) {
+        for (ZIMMessageReceiptInfo info : infos) {
+            if (info.isSelfOperated) {
+                // Conversation receipt set as read by the user
+            }
+        }
+    }
+...
+}
+```
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onMessageReceiptChanged = (ZIM zim, List<ZIMMessageReceiptInfo> infos){
+    for (ZIMMessageReceiptInfo info : infos) {
+        if (info.isSelfOperated) {
+            // The user has set the message receipt as read
+        }
+    }
+};
+
+ZIMEventHandler.onConversationMessageReceiptChanged = (ZIM zim, List<ZIMMessageReceiptInfo> infos){
+    for (ZIMMessageReceiptInfo info : infos) {
+        if (info.isSelfOperated) {
+            // The user has set the message receipt as read
+        }
+    }
+};
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim messageReceiptChanged:(NSArray<ZIMMessageReceiptInfo *> *)infos{
+        for(ZIMMessageReceiptInfo *info in infos){
+            if (info.isSelfOperated) {
+                // Message receipt set as read by the user
+            }
+        }
+
+}
+
+- (void)zim:(ZIM *)zim conversationMessageReceiptChanged:(NSArray<ZIMMessageReceiptInfo *> *)infos{
+        for (ZIMMessageReceiptInfo *info in infos) {
+            if (info.isSelfOperated) {
+                // Conversation receipt set as read by the user
+            }
+        }
+}
+```
+:::
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onMessageReceiptChanged(zim::ZIM * /*zim*/,
+                const std::vector<zim::ZIMMessageReceiptInfo> & infos) override {
+        for (const auto &info : infos) {
+            if (info.isSelfOperated) {
+                // Message receipt set as read by the user
+            }
+        }
+    }
+
+    virtual void onConversationMessageReceiptChanged(zim::ZIM *zim, 
+                const std::vector<zim::ZIMMessageReceiptInfo> &infos) override {
+        for (const auto &info : infos) {
+            if (info.isSelfOperated) {
+                // Conversation receipt set as read by the user
+            }
+        }
+    }
+
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('messageReceiptChanged', (zim, { infos }) => {
+    infos.forEach((info) => {
+        if (info.isSelfOperated) {
+            // Message receipt set as read by the user
+        }
+    });
+});
+
+zim.on('conversationMessageReceiptChanged', (zim, { infos }) => {
+    infos.forEach((info) => {
+        if (info.isSelfOperated) {
+            // Conversation receipt set as read by the user
+        }
+    });
+});
+```
+:::
+
+### Room management
+
+The room module's related interfaces and events do not support multi-device login. When a user joins a room on device A, and then joins the same room on device B, device A will be kicked out of the room. Device A will receive the `event` as `KickedOutByOtherDevice` through the {getPlatformData(props,onRoomStateChangedMap)}.
+
+:::if{props.platform=undefined}
+```java
+public class ZIMEventHandler {
+...
+    public void onRoomStateChanged(ZIM zim, ZIMRoomState state, ZIMRoomEvent event, JSONObject extendedData, String roomID) {
+        if (state == ZIMRoomState.DISCONNECTED &&
+            event == ZIMRoomEvent.KICKED_OUT) {
+            // Kicked out of the room due to multi-device login
+        }
+    }
+...
+}
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onRoomStateChanged = (ZIM zim, ZIMRoomState state, ZIMRoomEvent event,
+    Map extendedData, String roomID){
+        if (state == ZIMRoomState.disconnected &&
+            event == ZIMRoomEvent.kickedOut) {
+        // Kicked out of the room due to multi-device login
+        }
+    };
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+- (void)zim:(ZIM *)zim
+    roomStateChanged:(ZIMRoomState)state
+               event:(ZIMRoomEvent)event
+        extendedData:(NSDictionary *)extendedData
+              roomID:(NSString *)roomID{
+        if (state == ZIMConnectionStateDisconnected &&
+            event == ZIMRoomEventKickedOutByOtherDevice) {
+            // Kicked out of the room due to multi-device login
+        }
+}
+
+```
+:::
+
+:::if{props.platform="window"}
+```Cpp
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onRoomStateChanged(zim::ZIM *zim, zim::ZIMRoomState state, zim::ZIMRoomEvent event,
+                                    const std::string &extendedData,
+                                    const std::string &roomID) override {
+        if (state == zim::ZIMRoomState::ZIM_ROOM_STATE_DISCONNECTED &&
+            event == zim::ZIMRoomEvent::ZIM_ROOM_EVENT_KICKED_OUT_BY_OTHER_DEVICE) {
+            // Kicked out of the room due to multi-device login
+        }
+    }
+...
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// When a user joins a room on device A, and then joins the same room on device B, device A will be kicked out of the room
+zim.on('roomStateChanged', (zim, { roomID, state, event }) => {
+    if (state == 0 && event == 10) {
+        // Kicked out of the room due to multi-device login
+    }
+});
+```
+:::
+
+### Group management
+
+After enabling the multi-device login service, ZIM SDK will automatically synchronize group-related data between multiple devices.
+
+### Call invitation management
+
+When the user is logged in on both device A and device B, and receives a call invitation, if the user accepts the invitation on device A（calling {getPlatformData(props,callAcceptMap)}）or after rejecting the invitation（calling {getPlatformData(props,callRejectMap)}) ：
+1. Device A can know the result of the operation through the callbacks（{getPlatformData(props,ZIMCallAcceptanceSentCallbackMap)} or {getPlatformData(props,ZIMCallRejectionSentCallbackMap)}）, and close the invitation popup window to perform other business operations.
+2. Device B should use the {getPlatformData(props,onCallUserStateChangedMap)} callback to know the call user state of the current user（{getPlatformData(props,ZIMCallUserStateMap)}）as `Accepted` or `Rejected`，and close the invitation popup window to perform other business operations.
+
+Each device can receive user state change events within the call invitation, as shown in the following table:
+
+| callUserState | Device A | Device B |
+|-|-|-|
+| Inviting | ✔️ | ✔️ |
+| Received | ✔️ | ✔️ |
+| Accepted | ✔️ | ✔️ |
+| Rejected | ✔️ | ✔️ |
+| Timeout | ✖ | ✖ |
+| Cancelled | ✖ | ✖ |
+| Quit | ✔️ | ✖ |
+
+#### Example of calling the interface
+
+
+:::if{props.platform=undefined}
+```java
+String selfUserID = "user_id";
+String currentCallID = "call_id";
+
+ZIMCallAcceptConfig acceptConfig;
+acceptConfig.extendedData = "extra_1";
+
+ZIMCallRejectConfig rejectConfig;
+rejectConfig.extendedData = "extra_1";
+
+// Device A accepts the invitation
+zim.callAccept(currentCallID, acceptConfig, new ZIMCallAcceptanceSentCallback() {
+     @Override
+     public void onCallAcceptanceSent(String callID, ZIMError errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+ }];
+
+// Device A rejects the invitation
+zim.callReject(currentCallID, rejectConfig, new ZIMCallRejectionSentCallback() {
+     @Override
+     public void onCallRejectionSent(String callID, ZIMError errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+ }];
+
+// Device B listens for callUserStateChanged
+
+- (void)zim:(ZIM *)zim
+-
+public class ZIMEventHandler {
+...
+    public void onCallUserStateChanged(ZIM zim, ZIMCallUserStateChangeInfo info, String callID) {
+         if (currentCallID == callID) {
+
+                 // When Device A has accepted or rejected, close the popup box for call waiting operation.
+            }
+        });
+    }
+...
+}
+```
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+String selfUserID = "user_id";
+String currentCallID = "call_id";
+
+ZIMCallAcceptConfig acceptConfig;
+acceptConfig.extendedData = "extra_1";
+
+ZIMCallRejectConfig rejectConfig;
+rejectConfig.extendedData = "extra_1";
+
+// Device A accepts the invitation
+ZIM.getInstance()!.callAccept(currentCallID, acceptConfig).then((value) {
+    // Close the popup for call waiting operation.
+}).catchError((onError){
+    // Handle exceptions
+});
+
+// Device A rejects the invitation
+ZIM.getInstance()!.callReject(currentCallID, rejectConfig).then((value) {
+    // Close the popup for call waiting operation.
+}).catchError((onError){
+    // Handle exceptions
+});
+
+// Device B listens to onCallUserStateChanged
+ZIMEventHandler.onCallUserStateChanged = (ZIM zim, ZIMCallUserStateChangeInfo callUserStateChangeInfo, String callID){
+    if (currentCallID == callID) {
+         // Close the popup for call waiting operation when Device A has accepted or rejected.
+    }
+};
+```
+:::
+
+:::if{props.platform="iOS"}
+
+```objc
+NSString *selfUserId = @"user_id";
+NSString *currentCallId = @"call_id";
+
+ZIMCallAcceptConfig *acceptConfig = [[ZIMCallAcceptConfig alloc] init];
+acceptConfig.extendedData = @"extra_1";
+
+ZIMCallRejectConfig *rejectConfig = [[ZIMCallRejectConfig alloc] init];
+rejectConfig.extendedData = @"extra_1";
+
+// Device A accepts the invitation
+[[ZIM getInstance] callAcceptWithCallID:currentCallId config:acceptConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+ }];
+// Device A rejects the invitation
+[[ZIM getInstance] callRejectWithCallID:currentCallId config:rejectConfig callback:^(NSString * _Nonnull callID, ZIMError * _Nonnull errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+ }];
+
+// Device B listens for callUserStateChanged
+- (void)zim:(ZIM *)zim
+    callUserStateChanged:(ZIMCallUserStateChangeInfo *)info
+                  callID:(NSString *)callID{
+        for(ZIMCallUserInfo *userInfo in info.callUserList){
+            if(userInfo.userID == selfUserId && (userInfo.state == ZIMCallUserStateAccepted ||  userInfo.state == ZIMCallUserStateRejected)){
+                 // When Device A has accepted or rejected, close the popup box for call waiting operation.
+            }
+            }
+        }
+}
+
+```
+:::
+
+:::if{props.platform="window"}
+```Cpp
+const std::string self_user_id = "user_id";
+const std::string current_call_id = "call_id";
+
+zim::ZIMCallAcceptConfig accept_config;
+accept_config.extendedData = "extra_1";
+
+zim::ZIMCallRejectConfig reject_config;
+reject_config.extendedData = "extra_1";
+
+// Device A accepts the invitation
+zim_->callAccept(current_call_id, accept_config, [=] (const std::string &callID, const ZIMError &errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+});
+// Device A rejects the invitation
+zim_->callReject(current_call_id, reject_config, [=] (const std::string &callID, const ZIMError &errorInfo) {
+        // Close the popup box for call waiting operation. Call ends.
+ }];
+
+// Device B listens for callUserStateChanged
+
+class zim_event_handler : public zim::ZIMEventHandler {
+...
+
+    virtual void onCallUserStateChanged(zim::ZIM * /*zim*/,
+                                               const zim::ZIMCallUserStateChangeInfo &info,
+                                               const std::string &callID) override {
+        for (const auto &user_info : callUserList) {
+            if (user_info.userID == self_user_id &&
+                (user_info.state == zim::ZIMCallUserState::ZIM_CALL_USER_STATE_ACCEPTED ||
+                 user_info.state == zim::ZIMCallUserState::ZIM_CALL_USER_STATE_REJECTED)) {
+                 // When Device A has accepted or rejected, close the popup box for call waiting operation.
+            }
+        });
+    }
+...
+}
+```
+:::
+
+:::if{props.platform="Web"}
+
+```javascript
+var selfUserID = '';
+var curCallID = '';
+
+// Device A accepts the invitation
+zim.callAccept(curCallID, { extendedData: 'Device A accepts the invitation' }).then((res) => {
+    //  Close the popup box for call waiting operation. Start stream publishing and  playing, proceed with audio and video call.
+});
+// Device A rejects the invitation
+zim.callReject(curCallID, { extendedData: 'Device A rejects the invitation' }).then((res) => {
+    // Close the popup box for call waiting operation. Call ends.
+});
+
+// Device B listens for callUserStateChanged
+zim.on('callUserStateChanged', (zim, { callID, callUserList }) => {
+    if (curCallID == callID) {
+        callUserList.forEach((item) => {
+            if (item.userID == selfUserID && (item.state == 1 || item.state == 2)) {
+                // When Device A has accepted or rejected, close the popup box for call waiting operation.
+            }
+        });
+    }
+});
+```
+:::
