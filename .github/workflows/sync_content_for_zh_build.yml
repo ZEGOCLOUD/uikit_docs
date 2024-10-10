@@ -14,21 +14,15 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  sync-contents-to-other-repo:
-    # The type of runner that the job will run on
+  MirrorForZHBuild:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    steps:                                              # <-- must use actions/checkout before mirroring!
       - uses: actions/checkout@v4
-
-      # Push the changes to the target repository
-      - name: Deploy
-        uses: manzoorwanijk/action-deploy-to-repo@v3
         with:
-          src_dir: ./
-          target_repo: ZEGOCLOUD/docs_zh
-          target_dir: ./
-          target_branch: main # default
-          access_token: ${{ secrets.TARGET_ACCESS_TOKEN }}
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            git@github.com:ZEGOCLOUD/docs_zh.git
+          ssh_private_key:                              # <-- use 'secrets' to pass credential information.
+            ${{ secrets.SSH_PRIVATE_KEY }}
