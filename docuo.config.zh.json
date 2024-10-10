@@ -70,9 +70,9 @@
   },
   "search": {
     "algolia": {
-      "appId": "N61JOMLMAK",
-      "apiKey": "cc55591748c47b1e5e24d363cdf1d5eb",
-      "indexName": "zegocloud"
+      "appId": "OHAH1GCXFR",
+      "apiKey": "8716a0a35d038bd3ceaa9692e73ba37d",
+      "indexName": "zh-zego"
     }
   },
   "instances": [
