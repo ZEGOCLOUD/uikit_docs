@@ -145,10 +145,12 @@ Only the following types are supported for the `toOriginMessage` and `message` p
 </Note>
 
 :::if{props.platform=undefined}
+<div>
 The following information is returned through {getPlatformData(props,ZIMMessageSentFullCallbackMap)}:
 - {getPlatformData(props,onMessageSentMap)}: Message sending result, you can obtain details when the message sending fails through error code and error message.
 - {getPlatformData(props,onMessageAttachedMap)}: Before sending a reply, you can obtain a temporary ZIMMessage to add some logic.
 - {getPlatformData(props,onMediaUploadingProgressMap)}: When sending a message containing rich media, this callback provides updates on the progress of file uploading.
+</div>
 
 :::
 

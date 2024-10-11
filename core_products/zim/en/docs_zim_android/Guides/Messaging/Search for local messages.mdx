@@ -1,0 +1,592 @@
+---
+articleID: 17668
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const searchLocalMessagesMap = {
+  'Android': <a href='@searchLocalMessages' target='_blank'>searchLocalMessages</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalMessages.html' target='_blank'>searchLocalMessages</a>,
+  'iOS': <a href='@searchLocalMessagesByConversationID' target='_blank'>searchLocalMessagesByConversationID</a>,
+}
+export const ZIMMessagesSearchedCallbackMap = {
+  'Android': <a href='@-ZIMMessagesSearchedCallback' target='_blank'>ZIMMessagesSearchedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessagesSearchedResult-class.html' target='_blank'>ZIMMessagesSearchedResult</a>,
+  'Web': <a href='@-ZIMMessagesSearchedResult' target='_blank'>ZIMMessagesSearchedResult</a>,
+  'iOS,window,U3d': <a href='@ZIMMessagesSearchedCallback' target='_blank'>ZIMMessagesSearchedCallback</a>,
+}
+export const searchGlobalLocalMessagesMap = {
+  'Android': <a href='@searchGlobalLocalMessages' target='_blank'>searchGlobalLocalMessages</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchGlobalLocalMessages.html' target='_blank'>searchGlobalLocalMessages</a>,
+  'iOS': <a href='@searchGlobalLocalMessagesWithConfig' target='_blank'>searchGlobalLocalMessagesWithConfig</a>,
+}
+export const ZIMMessagesGlobalSearchedCallbackMap = {
+  'Android': <a href='@-ZIMMessagesGlobalSearchedCallback' target='_blank'>ZIMMessagesGlobalSearchedCallback</a>,
+  'Web': <a href='@-ZIMMessagesGlobalSearchedResult' target='_blank'>ZIMMessagesGlobalSearchedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessagesGlobalSearchedResult-class.html' target='_blank'>ZIMMessagesGlobalSearchedResult</a>,
+  'iOS,window,U3d': <a href='@ZIMMessagesGlobalSearchedCallback' target='_blank'>ZIMMessagesGlobalSearchedCallback</a>,
+}
+export const searchLocalConversationsMap = {
+  'Android': <a href='@searchLocalConversations' target='_blank'>searchLocalConversations</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalConversations.html' target='_blank'>searchLocalConversations</a>,
+  'iOS': <a href='@searchLocalConversationsWithConfig' target='_blank'>searchLocalConversationsWithConfig</a>,
+}
+export const ZIMConversationsSearchedCallbackMap = {
+  'Android': <a href='@-ZIMConversationsSearchedCallback' target='_blank'>ZIMConversationsSearchedCallback</a>,
+  'Web': <a href='@-ZIMConversationsSearchedResult' target='_blank'>ZIMConversationsSearchedResult</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationsSearchedResult-class.html' target='_blank'>ZIMConversationsSearchedResult</a>,
+  'iOS,window,U3d': <a href='@ZIMConversationsSearchedCallback' target='_blank'>ZIMConversationsSearchedCallback</a>,
+}
+
+# Search for local messages
+
+- - -
+
+## Overview
+
+With the ZIM SDK, you can search for local messages of individual or group conversations by keywords, user ID, and other conditions. You can also search for conversations based on local messages.
+
+
+## Prerequisites
+
+Before implementing the "Search for local messages" feature, please make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Search local messages of a specific conversation
+
+After creating a ZIM object and logging in, call the {getPlatformData(props,searchLocalMessagesMap)} interface, pass in the parameters conversationID, conversationType, and config, and set the search conditions (such as keywords) to get the list of local messages that meet the conditions in a specific conversation.
+
+The list of messages that meet the conditions will be returned through the {getPlatformData(props,ZIMMessagesSearchedCallbackMap)} callback interface and classified by the corresponding conversation.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title= "Sample code"
+// Search for local text messages containing "zego" in a single conversation within the last 7 days.
+long startTimestamp = System.currentTimeMillis(); 
+// Calculate the timestamp of 7 days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = System.currentTimeMillis();
+String conversationID = "xxxx"; // Conversation ID
+                                // For one-on-one conversations, the conversationID is the userID of the other party.
+                                // For group conversations, the conversationID is the groupID of the group.
+
+ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrder.DESCENDING;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords.add("zego");  // Set the keyword as "zego", supports up to 5 keywords. When multiple keywords are set, the search results will only show local messages that contain all the keywords at the same time.
+config.messageTypes.add(ZIMMessageType.TEXT); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp; // End time of the search
+
+ZIMMessagesSearchedCallback callback = new ZIMMessagesSearchedCallback() {
+    @Override
+    public void onMessagesSearched(String conversationID, ZIMConversationType conversationType, ArrayList<ZIMMessage> messageList, ZIMMessage nextMessage, ZIMError errorInfo) {
+        // Developers can use this callback to listen for the searched message list.
+    }
+}
+zim.searchLocalMessages(conversationID, ZIMConversationType.Peer, config, callback);
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Search for local text messages containing "zego" in a single conversation within 7 days.
+NSDate *currentDate = [NSDate date];
+NSTimeInterval currentTimestamp = [currentDate timeIntervalSince1970];
+    
+long long startTimestamp = currentTimestamp - (7 * 24 * 60 * 60 * 1000);
+    
+NSString *conversationID = @"xxxx"; // Conversation ID
+                                    // For one-on-one conversations, the conversationID is the userID of the other party.
+                                    // For group conversations, the conversationID is the groupID of the group.
+
+ZIMMessageSearchConfig *config =  [[ZIMMessageSearchConfig alloc] init];
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrderDescending;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords = @[@"zego"];  // Set the keyword as "zego", up to 5 keywords are supported. When multiple keywords are set, the search result will only display local messages that contain all the keywords at the same time
+config.messageTypes = @[[NSNumber numberWithInt:ZIMMessageTypeText]]; // Specify the message type as text
+config.startTime = startTimestamp; // The start time of the search
+config.endTime = currentTimestamp; // The end time of the search
+
+    
+[[ZIM getInstance] searchLocalMessagesByConversationID:conversationID conversationType:ZIMConversationTypePeer config:config callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, NSArray<ZIMMessage *> * _Nonnull messageList, ZIMMessage * _Nullable nextMessage, ZIMError * _Nonnull errorInfo) {
+    // Developers can use this callback to listen for the searched message list.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Search for local text messages containing "zegocloud" in a single session within 7 days.
+auto endTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::system_clock::now().time_since_epoch())
+                        .count();
+auto startTimestamp = endTimestamp - (7 * 24 * 60 * 60 * 1000);
+
+// Conversation ID
+// For one-on-one conversations, the conversationID is the userID of the other party.
+// For group conversations, the conversationID is the groupID of the group.
+std::string conversationID = "conv";
+auto conversationType = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_PEER;
+
+auto searchConfig = zim::ZIMMessageSearchConfig();
+// Number of search results
+searchConfig.count = 20;
+// Specify the search order as descending from the last (time) message stored locally
+searchConfig.order = zim::ZIMMessageOrder::ZIM_MESSAGE_ORDER_DESCENDING;
+// Set the keyword to "zegocloud", supports up to 5 keywords. When multiple keywords are set, the search results only show local messages that contain all the keywords at the same time.
+searchConfig.keywords.emplace_back("zegocloud");
+// Specify the message type as text
+searchConfig.messageTypes.emplace_back(zim::ZIMMessageType::ZIM_MESSAGE_TYPE_TEXT);
+// Start time of the search
+searchConfig.startTime = startTimestamp;
+// End time of the search
+searchConfig.endTime = endTimestamp;
+
+zim_->searchLocalMessages(
+    conversationID, conversationType, searchConfig,
+    [=](const std::string &conversationID, zim::ZIMConversationType conversationType,
+        const std::vector<std::shared_ptr<zim::ZIMMessage>> &messageList,
+        const std::shared_ptr<zim::ZIMMessage> &nextMessage,
+        const zim::ZIMError &errorInfo) {
+        // Developers can listen to this callback to get the searched message list.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+// Search for local text messages containing "zegocloud" in a single conversation within 7 days.
+long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+// Calculate the timestamp of seven days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+string conversationID = "xxxx"; // Conversation ID
+                                // For one-on-one conversations, the conversationID is the userID of the other party.
+                                // For group conversations, the conversationID is the groupID of the group.
+
+ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrder.Descending;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords.Add("zegocloud");  // Set the keyword as "zegocloud", supports up to 5 keywords. When multiple keywords are set, the search results only show local messages that contain all the keywords at the same time
+config.messageTypes.Add(ZIMMessageType.Text); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp; // End time of the search
+
+ZIM.GetInstance().SearchLocalMessages(conversationID, ZIMConversationType.Single, config, (string conversationID, ZIMConversationType conversationType,
+            List<ZIMMessage> messageList,
+            ZIMMessage nextMessage, ZIMError errorInfo) =>
+    {
+        // Developers can listen for the callback to get the searched message list.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Search for local text messages containing "zegocloud" of the last seven days from a conversation.
+
+var endTime = Date.now();
+// Calculate the timestamp seven days ago.
+var startTime = endTime - 7 * 24 * 3600 * 1000;
+// The conversation ID.
+// In a one-to-one chat, set `conversationID` to the ID of the other user.
+// In a group chat, set `conversationID` to the ID of the group.
+var conversationID = 'xxxx';
+var conversationType = 0;
+
+var config = {
+    count: 20, // The number of messages in the search result.
+    order: 0, // Specify to search for messages in local storage in reverse chronological order.
+    keywords: ['zegocloud'], // Pass in the keyword `zegocloud`. Up to five keywords can be passed in. If you pass in multiple keywords, only local messages containing all these keywords are displayed in the search result.
+    messageTypes: [1], // Specify the message type to text message.
+    startTime, // Specify the start time of the search.
+    endTime, // Specify the end time of the search.
+};
+
+zim.searchLocalMessages(conversationID, conversationType, config)
+    .then(function ({ messageList }) {
+        // Operation succeeded.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Search for local text messages containing "zego" in a single conversation within the last 7 days.
+
+// Calculate the timestamp of 7 days ago
+int startTimestamp = DateTime.now().millisecondsSinceEpoch - (7 * 24 *60 *60 *1000);
+int endTimestamp = DateTime.now().millisecondsSinceEpoch;
+String conversationID = "xxx";// Conversation ID
+                              // For one-on-one conversations, the conversationID is the userID of the other party.
+                              // For group conversations, the conversationID is the groupID of the group.
+
+ZIMMessageSearchConfig config = ZIMMessageSearchConfig();
+config.count = 20;
+config.order = ZIMMessageOrder.descending;
+config.keywords.add("zego");
+config.startTime = startTimestamp;
+config.endTime = endTimestamp;
+
+ZIM.getInstance()!.searchLocalMessages("conversationID", ZIMConversationType.peer, config).then((value) {
+    // Developers can listen to this callback to get the list of searched messages.
+}).catchError((onError){
+
+});
+```
+
+</CodeGroup>
+:::
+
+## Search for global local messages
+
+### Search results categorized by conversation
+
+After creating a ZIM object and logging in, call the {getPlatformData(props,searchGlobalLocalMessagesMap)} interface, pass in the `config` parameter to set the search conditions (such as keywords), and globally search for local messages that meet the conditions.
+
+The list of matched messages will be returned and categorized by conversation through the {getPlatformData(props,ZIMMessagesGlobalSearchedCallbackMap)} callback interface.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// Globally search for local text messages within 7 days that contain "zego".
+
+long startTimestamp = System.currentTimeMillis(); 
+// Calculate the timestamp of seven days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = System.currentTimeMillis();
+
+ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrder.DESCENDING;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords.add("zego");  // Set the keyword as "zego", supports up to 5 keywords. When multiple keywords are set, the search results will only show local messages that contain all the keywords at the same time
+config.messageTypes.add(ZIMMessageType.TEXT); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp; // End time of the search
+ZIMMessagesGlobalSearchedCallback callback = new ZIMMessagesGlobalSearchedCallback() {
+    @Override
+    public void onMessagesSearched(ArrayList<ZIMMessage> messageList, ZIMMessage nextMessage, ZIMError errorInfo) {
+        // Developers can use this callback to listen for the searched message list.
+    }
+}
+zim.searchGlobalLocalMessages(config, callback);
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Globally search for local text messages within 7 days that contain "zego".
+
+NSDate *currentDate = [NSDate date];
+NSTimeInterval currentTimestamp = [currentDate timeIntervalSince1970];
+    
+long long startTimestamp = currentTimestamp - (7 * 24 * 60 * 60 * 1000);
+
+ZIMMessageSearchConfig *config = [[ZIMMessageSearchConfig alloc] init];
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrderDescending;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords = @[@"zego"];  // Set the keyword as "zego", up to 5 keywords are supported. When multiple keywords are set, the search result will only display local messages that contain all the keywords at the same time
+config.messageTypes = @[[NSNumber numberWithInt:ZIMMessageTypeText]]; // Specify the message type as text
+config.startTime = startTimestamp; // The start time of the search
+config.endTime = currentTimestamp; // The end time of the search
+[[ZIM getInstance] searchGlobalLocalMessagesWithConfig:config callback:^(NSArray<ZIMMessage *> * _Nonnull messageList, ZIMMessage * _Nullable nextMessage, ZIMError * _Nonnull errorInfo) {
+    // Developers can use this callback to listen for the searched message list.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Globally search for local text messages containing "zegocloud" within 7 days.
+auto endTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::system_clock::now().time_since_epoch())
+                        .count();
+auto startTimestamp = endTimestamp - (7 * 24 * 60 * 60 * 1000);
+
+auto searchConfig = zim::ZIMMessageSearchConfig();
+// Number of search results
+searchConfig.count = 20;
+// Specify the search order as descending from the last (time) message stored locally
+searchConfig.order = zim::ZIMMessageOrder::ZIM_MESSAGE_ORDER_DESCENDING;
+// Set the keyword to "zegocloud", supports up to 5 keywords. When multiple keywords are set, the search results only show local messages that contain all the keywords at the same time.
+searchConfig.keywords.emplace_back("zegocloud");
+// Specify the message type as text
+searchConfig.messageTypes.emplace_back(zim::ZIMMessageType::ZIM_MESSAGE_TYPE_TEXT);
+// Start time of the search
+searchConfig.startTime = startTimestamp;
+// End time of the search
+searchConfig.endTime = endTimestamp;
+
+zim_->searchGlobalLocalMessages(
+    searchConfig, [=](const std::vector<std::shared_ptr<zim::ZIMMessage>> &messageList,
+                        const std::shared_ptr<zim::ZIMMessage> &nextMessage,
+                        const zim::ZIMError &errorInfo) {
+        // Developers can listen to this callback to get the searched conversation list.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+// Search for local text messages containing "zegocloud" within 7 days.
+
+long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+// Calculate the timestamp of seven days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+ZIMMessageSearchConfig config = new ZIMMessageSearchConfig();
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrder.Descending;  // Specify the search order as querying from the last (time) message stored locally
+config.keywords.Add("zegocloud");  // Set the keyword as "zegocloud", supports up to 5 keywords. When multiple keywords are set, the search results only show local messages that contain all the keywords at the same time
+config.messageTypes.Add(ZIMMessageType.Text); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp; // End time of the search
+ZIM.GetInstance().SearchGlobalLocalMessages(config, (List<ZIMConversation> conversationList,
+        ZIMError errorInfo) =>
+    {
+        // Developers can listen for the callback to get the searched message list.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Search for local text messages containing "zegocloud" of the last seven days from all conversations.
+
+var endTime = Date.now();
+// Calculate the timestamp seven days ago.
+var startTime = endTime - 7 * 24 * 3600 * 1000;
+
+var config = {
+    count: 20, // The number of messages in the search result.
+    order: 0, // Specify to search for messages in local storage in reverse chronological order.
+    keywords: ['zegocloud'], // Pass in the keyword `zegocloud`. Up to five keywords can be passed in. If you pass in multiple keywords, only local messages containing all these keywords are displayed in the search result.
+    messageTypes: [1], // Specify the message type to text message.
+    startTime, // Specify the start time of the search.
+    endTime, // Specify the end time of the search.
+};
+
+zim.searchGlobalLocalMessages(config)
+    .then(function ({ messageList }) {
+        // Operation succeeded.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Globally search for local text messages within 7 days that contain "zego".
+
+int startTimestamp = DateTime.now().millisecondsSinceEpoch - (7 * 24 *60 *60 *1000);
+int endTimestamp = DateTime.now().millisecondsSinceEpoch;
+
+ZIMMessageSearchConfig config = ZIMMessageSearchConfig();
+config.count = 20;  // Number of search results
+config.order = ZIMMessageOrder.descending;  // Specify the search order as descending from the last (time) message stored locally
+config.keywords.add('zego'); // Set the keyword as "zego", supports up to 5 keywords. When multiple keywords are set, the search results will only show local messages that contain all the keywords at the same time
+config.messageTypes.add(ZIMMessageType.text); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp;  // End time of the search
+
+ZIM.getInstance()!.searchGlobalLocalMessages(config).then((value) {
+    // Developers can listen to this callback to get the list of searched messages.
+}).catchError((onError){
+
+});
+```
+</CodeGroup>
+:::
+
+
+## Search for conversations Based on Local Messages
+
+After creating a ZIM object and logging in, call the {getPlatformData(props,searchLocalConversationsMap)} interface, pass in the `config` parameter to set the search conditions related to local messages, and globally search for conversations that meet the conditions.
+
+The list of matched conversations will be returned through the {getPlatformData(props,ZIMConversationsSearchedCallbackMap)} callback interface.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+long startTimestamp = System.currentTimeMillis(); 
+// Calculate the timestamp of seven days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = System.currentTimeMillis();
+
+// Search for local text messages within 7 days that contain the keyword "zego" to obtain the corresponding conversation list
+ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
+config.totalConversationCount = 10;
+config.conversationMessageCount = 3;
+config.nextFlag = 0;
+config.keywords.add("zego");
+config.messageTypes.add(ZIMMessageType.TEXT);
+config.startTime = startTimestamp;
+config.endTime = endTimestamp;
+
+ZIMConversationsSearchedCallback callback = new ZIMConversationsSearchedCallback() {
+    @Override
+    public void onConversationsSearched(ArrayList<ZIMConversationMessageGlobalSearchInfo> globalMessageInfoList, int nextFlag,
+        ZIMError errorInfo) {
+        // Developers can use this callback to listen for the searched conversation information
+    }
+}
+zim.searchLocalConversations(config, callback);
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Search for local text messages within the last 7 days that contain the keyword "zego" to get the corresponding conversation list
+
+NSDate *currentDate = [NSDate date];
+NSTimeInterval currentTimestamp = [currentDate timeIntervalSince1970];
+
+long long startTimestamp = currentTimestamp - (7 * 24 * 60 * 60 * 1000);
+ZIMConversationSearchConfig *config = [[ZIMConversationSearchConfig alloc] init];
+config.totalConversationCount = 10;
+config.conversationMessageCount = 3;
+config.nextFlag = 0;
+config.keywords = @[@"zego"];  // Set the keyword as "zego", supports up to 5 keywords
+config.messageTypes = @[[NSNumber numberWithInt:ZIMMessageTypeText]]; // Specify the message type as text
+config.startTime = startTimestamp;
+config.endTime = currentTimestamp;
+
+[[ZIM getInstance] searchLocalConversationsWithConfig:config callback:^(NSArray<ZIMConversationSearchInfo *> * _Nonnull conversationSearchInfoList, unsigned int nextFlag, ZIMError * _Nonnull errorInfo) {
+    // Developers can use this callback to listen for the searched conversation information
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+auto endTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::system_clock::now().time_since_epoch())
+                        .count();
+auto startTimestamp = endTimestamp - (7 * 24 * 60 * 60 * 1000);
+
+// Search for local text messages containing the keyword "zegocloud" within 7 days to obtain the corresponding conversation list
+auto searchConfig = zim::ZIMConversationSearchConfig();
+searchConfig.totalConversationCount = 10;
+searchConfig.conversationMessageCount = 3;
+searchConfig.nextFlag = 0;
+searchConfig.keywords.emplace_back("zegocloud");
+searchConfig.messageTypes.emplace_back(zim::ZIMMessageType::ZIM_MESSAGE_TYPE_TEXT);
+searchConfig.startTime = startTimestamp;
+searchConfig.endTime = endTimestamp;
+
+zim_->searchLocalConversations(
+    searchConfig,
+    [=](const std::vector<zim::ZIMConversationSearchInfo> &conversationSearchInfoList,
+        unsigned int nextFlag, const zim::ZIMError &errorInfo) {
+        // Developers can listen to this callback to get the searched conversation information
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+// Calculate the timestamp of seven days ago
+startTimestamp = startTimestamp - (7 * 24 * 60 * 60 * 1000);
+long endTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+// Search for local text messages containing the keyword "zegocloud" within 7 days to obtain the corresponding conversation list
+ZIMConversationSearchConfig config = new ZIMConversationSearchConfig();
+config.totalConversationCount = 10;
+config.conversationMessageCount = 3;
+config.nextFlag = 0;
+config.keywords.Add("zegocloud");
+config.messageTypes.Add(ZIMMessageType.Text);
+config.startTime = startTimestamp;
+config.endTime = endTimestamp;
+ZIM.GetInstance().SearchLocalConversations(conversationSearchConfig, (List<ZIMConversationSearchInfo> conversationSearchInfoList,
+        uint nextFlag, ZIMError errorInfo) =>
+    {
+        // Developers can use this callback to listen for the searched conversation information
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Search for local text messages containing "zegocloud" of the last seven days and have the result returned as a conversation list.
+
+var endTime = Date.now();
+// Calculate the timestamp seven days ago.
+var startTime = endTime - 7 * 24 * 3600 * 1000;
+
+var config = {
+    totalConversationCount: 20, // The number of messages in the search result.
+    conversationMessageCount: 3, // The latest three messages from each conversation are hit.
+    nextFlag: 0,
+    keywords: ['zegocloud'], // Pass in the keyword `zegocloud`. Up to five keywords can be passed in. If you pass in multiple keywords, only local messages containing all these keywords are displayed in the search result.
+    messageTypes: [1], // Specify the message type to text message.
+    startTime, // Specify the start time of the search.
+    endTime, // Specify the end time of the search.
+};
+
+zim.searchLocalConversations(config)
+    .then(function ({ conversationSearchInfoList, nextFlag }) {
+        // Operation succeeded.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Search for local text messages containing the keyword "zego" within the past 7 days to obtain the corresponding conversation list
+
+// Calculate the timestamp of seven days ago
+int startTimestamp = DateTime.now().millisecondsSinceEpoch - (7 * 24 *60 *60 *1000);
+int endTimestamp = DateTime.now().millisecondsSinceEpoch;
+
+ZIMConversationSearchConfig config = ZIMConversationSearchConfig();
+config.totalConversationCount = 20; 
+config.conversationMessageCount = 3;  
+config.keywords.add('zego'); // Set the keyword as "zego", supports up to 5 keywords. When multiple keywords are set, the search result will only display local messages that contain all the keywords simultaneously
+config.messageTypes.add(ZIMMessageType.text); // Specify the message type as text
+config.startTime = startTimestamp; // Start time of the search
+config.endTime = endTimestamp;  // End time of the search
+  
+ZIM.getInstance()!.searchLocalConversations(config).then((value) {
+
+}).catchError((onError){
+
+});
+```
+</CodeGroup>
+:::
+
