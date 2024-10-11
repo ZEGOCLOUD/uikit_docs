@@ -1,0 +1,409 @@
+---
+articleID: 14248
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const setEventHandlerMap = {
+  'Android': <span>call the <a href="@setEventHandler" target="_blank">setEventHandler</a> method to</span>,
+  'U3d': " ",
+  'Web':<a href="@on" target="_blank">on</a>,
+  'Flutter':<a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html" target="_blank">ZIMEventHandler</a>,
+}
+export const onConversationChangedMap = {
+  'Android': <a href='@onConversationChanged' target='_blank'>onConversationChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationChanged.html' target='_blank'>onConversationChanged</a>,
+  'Web': <a href='@conversationChanged' target='_blank'>conversationChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+}
+export const queryConversationListMap = {
+  'Android': <a href='@queryConversationList' target='_blank'>queryConversationList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html' target='_blank'>queryConversationList</a>,
+  'iOS,mac': <a href='@queryConversationListWithConfig' target='_blank'>queryConversationListWithConfig</a>,
+}
+export const ZIMConversationQueryConfigMap = {
+  'Android': <a href='@-ZIMConversationQueryConfig' target='_blank'>ZIMConversationQueryConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationQueryConfig-class.html' target='_blank'>ZIMConversationQueryConfig</a>,
+}
+
+# Get the conversation list
+
+---
+
+## Overview
+
+`Conversation` is the logic automatically established by the ZIM SDK for users sending one-to-one or group messages(only text message ore rich media messages, excluding custom messages). 
+
+ZIM supports users to listen for conversation changes and get a conversation list from the local database. It also supports developers to retrieve the complete conversation list of a specific user from the ZIM server.
+
+You can obtain and display the one-on-one and group chat conversation lists in scenarios such as chats, gaming communities, and online consulting.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/Conversation.jpeg" /></Frame>
+
+
+## Prerequisites
+
+Before getting the conversation list, make sure that the following conditions are met:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Listen for conversation changes
+
+Before logging in, users should  {getPlatformData(props,setEventHandlerMap)} listen for the callback {getPlatformData(props,onConversationChangedMap)}, After login, the users will receive notifications of conversation changes when the following events happen: 
+
+<table>
+<tbody><tr>
+<th>Category</th>
+<th>Event</th>
+<th>Event Value</th>
+<th>ZIMConversation Property</th>
+</tr>
+<tr>
+<td rowspan="4">Basic Conversation Properties</td>
+<td>Change conversation name.</td>
+<td rowspan="11"><code>Updated</code></td>
+</tr>
+<tr>
+<td>Change conversation avatar URL.</td>
+<td><code>conversationAvatarUrl</code></td>
+</tr>
+<tr>
+<td><ul><li>When a user sets a remark (friendAlias) for a friend, the ZIM SDK synchronously modifies the corresponding <strong>alias of the one-on-one conversation</strong>.</li><li>When a user sets a remark (groupAlias) for a group, the ZIM SDK will synchronize and modify the corresponding conversation <strong>alias for the group chat</strong>.</li></ul></td>
+<td><code>conversationAlias</code></td>
+</tr>
+<tr>
+<td>Change unread message count.</td>
+<td><code>unreadMessageCount</code></td>
+</tr>
+<tr>
+<td rowspan="4">Additional Conversation Properties</td>
+<td>User sets/cancels a conversation as pinned.</td>
+<td><code>isPinned</code></td>
+</tr>
+<tr>
+<td>User sets notification status for a conversation.</td>
+<td><code>notificationStatus</code></td>
+</tr>
+<tr>
+<td>User saves a conversation draft.</td>
+<td><code>draft</code></td>
+</tr>
+<tr>
+<td>User is mentioned in a conversation.</td>
+<td><code>mentionedInfoList</code></td>
+</tr>
+<tr>
+<td rowspan="3">Last Message in Conversation Changes</td>
+<td>User receives a new message.</td>
+<td rowspan="3"><code>lastMessage</code></td>
+</tr>
+<tr>
+<td>User sends a new message.</td>
+</tr>
+<tr>
+<td>Last message status or content changes.</td>
+</tr>
+<tr>
+<td rowspan="6">Conversation Status Changes</td>
+<td>User has a new conversation.</td>
+<td><code>Added</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td>
+User voluntarily leaves/is kicked out of a group conversation.
+<Note title="Note">
+
+This assumes that the group conversation already exists (i.e., there are messages in the conversation).
+</Note>
+</td>
+<td rowspan="4"><code>Disabled</code></td>
+<td rowspan="4">-</td>
+</tr>
+<tr>
+<td>
+Group conversation is dissolved.
+<Note title="Note">
+This assumes that the group conversation already exists (i.e., there are messages in the conversation).
+</Note>
+</td>
+</tr>
+<tr>
+<td>Recipient user does not exist when sending a one-on-one message.</td>
+</tr>
+<tr>
+<td>User sends a message to a group they have not joined.</td>
+</tr>
+<tr>
+<td>User deletes a conversation.</td>
+<td><code>Deleted</code></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+
+At this time, you can <a href="#get-the-conversation-list">get the conversation list</a> based on your demands.
+
+<Note title="Note">
+
+Currently, the callback {getPlatformData(props,onConversationChangedMap)} only supports notification of incremental changes of the conversation list in the local database and the conversation list on the ZIM server.    
+
+You need to maintain the array of conversation lists retrieved from the {getPlatformData(props,queryConversationListMap)} method, and based on current conversation updates, perform property changes, inserts, and sorted displays .
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// Set up the event handler
+zim.setEventHandler(this);
+
+...
+
+public void onConversationChanged(ZIM zim, ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList) {
+    super.onConversationChanged(zim, conversationChangeInfoList);
+
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Set up the event handler
+[self.zim setEventHandler:self];
+
+...
+
+- (void)zim:(ZIM *)zim conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList {
+    // Get the conversation change list.
+    for (ZIMConversationChangeInfo *info in conversationChangeInfoList) {
+        if (info.event == ZIMConversationEventAdded) {
+            // Add to your self-maintained list and set up a UI fresh here.
+        } else if (info.event == ZIMConversationEventUpdated) {
+           // Edit the conversation properties, and set up a UI fresh here.
+        }
+    }
+}
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Set up the event handler
+[self.zim setEventHandler:self];
+
+...
+
+- (void)zim:(ZIM *)zim conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList {
+    // Get the conversation change list.
+    for (ZIMConversationChangeInfo *info in conversationChangeInfoList) {
+        if (info.event == ZIMConversationEventAdded) {
+            // Add to your self-maintained list and set up a UI fresh here.
+        } else if (info.event == ZIMConversationEventUpdated) {
+           // Edit the conversation properties, and set up a UI fresh here.
+        }
+    }
+}
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Set up the event handler and listen for related event callbacks. 
+zim.setEventHandler(shared_from_this());
+
+...
+
+void onConversationChanged(ZIM * zim, const std::vector<ZIMConversationChangeInfo> & conversationChangeInfoList) {
+    // Get the conversation change list.
+    for (auto &info : conversationChangeInfoList) {
+        if (info.event == ZIMConversationEventAdded) {
+        // Add to your self-maintained list and set up a UI fresh here.
+        } else if (info.event == ZIMConversationEventUpdated) {
+        // UI Edit the conversation properties, and set up a UI fresh here.
+        }
+    }
+}
+```
+
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIM.GetInstance().onConversationChanged = (
+    ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList) =>
+{
+    // Notification of the conversation changes.
+};
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('conversationChanged', function(zim, { infoList }){
+    console.log('conversationChanged', infoList)
+})
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMEventHandler.onConversationChanged = (conversationChangeInfoList) {
+    
+};
+```
+
+:::
+
+
+## Get the conversation list
+
+ZIM supports developers to call SDK interfaces to retrieve the current user's conversation list from the local database. It also supports making requests to the ZIM server to retrieve the complete conversation list of a specific user.
+
+After fetching the conversation list, developers can use it to customize the UI display of the conversation list.
+
+### From the local database
+
+<Note title="Note">
+
+- The ZIM SDK currently only supports fetching one-to-one and group conversation lists, and does not support fetching the room conversation list.
+- The conversation list is stored in the local database, and when getting the conversation list, relevant data will be retrieved from the local database.
+- It is recommended for you to use this feature on the first screen of the conversation page.
+</Note>
+
+After login, if users want to know what conversations they have joined, they can call the {getPlatformData(props,queryConversationListMap)} method to query the conversation list.
+
+To avoid the problem of pulling too many conversations at the same time, which takes a long time and causes slow loading of the conversation interface, you can customize the number of conversations by setting the {getPlatformData(props,ZIMConversationQueryConfigMap)} object for paging query when pulling conversations.
+
+:::if{props.platform=undefined}
+```java
+ZIMConversationQueryConfig config = new ZIMConversationQueryConfig();
+// conversation query anchor. Empty indicates that the query starts from the latest.
+config.nextConversation = null;
+// The number of queries per page.
+config.count = 20;
+
+// Get the conversation list.
+zim.queryConversationList(config, new ZIMConversationListQueriedCallback() {
+    @Override
+    public void onConversationListQueried(ArrayList<ZIMConversation> conversationList, ZIMError errorInfo) {
+        // Get the results of query the conversation list.
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+          // You will need to save and maintain the conversation objects in the array.
+        } else {
+          // ......
+        }      
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
+// conversation query anchor. Empty indicates that the query starts from the latest.
+config.nextConversation = nil;
+// The number of queries per page.
+config.count = 20;
+
+// Get the conversation list.
+[self.zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+    // Get the results of query the conversation list.
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+        // You will need to save and maintain the conversation objects in the array.
+    } else {
+        // ......
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
+// conversation query anchor. Empty indicates that the query starts from the latest.
+config.nextConversation = nil;
+// The number of queries per page.
+config.count = 20;
+
+// Get the conversation list.
+[self.zim queryConversationListWithConfig:config callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+    // Get the results of query the conversation list.
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+        // You will need to save and maintain the conversation objects in the array.
+    } else {
+        // ......
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMConversationQueryConfig config;
+// conversation anchor point. Empty indicates that the query starts from the latest.
+config.nextConversation = nullptr;
+// The number of queries per page.
+config.count = 20;
+
+// Get the conversation list.
+zim.queryConversationList(config, [=](std::vector<std::shared_ptr<ZIMConversation>> conversationList, ZIMError errorInfo) {
+    // Get the results of query the conversation list.
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+    // You will need to save and maintain the conversation objects in the array.
+    } else {
+    // ......
+    }
+});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIMConversationQueryConfig config = new ZIMConversationQueryConfig();
+// Conversation anchor, pass null to start querying from the latest
+config.nextConversation = null;
+// Number of conversations to query at a time
+config.count = 20;
+
+// Retrieve the conversation list
+ZIM.GetInstance().QueryConversationList(config, (List<ZIMConversation> conversationList,
+                   ZIMError errorInfo) => 
+{
+        // Callback of the retrieval result
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var config = {
+    // The conversation flag. If it is set to `null`, the flag is the latest conversation.
+    nextConversation: null,
+    // The number of conversations queried per page.
+    count: 20
+};
+
+// Pull the conversation list.
+zim.queryConversationList(config)
+    .then(function({ conversationList }){
+        // Query succeeded. You need to store and maintain the conversation objects in the array.
+    })
+    .catch(function(err){
+        // Query failed.
+    })
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMConversationQueryConfig conversationQueryConfig =
+    ZIMConversationQueryConfig();
+conversationQueryConfig.nextConversation = null;
+// The number of queries per page.
+conversationQueryConfig.count = 20;
+
+//Get the conversation list.
+ZIM
+    .getInstance()
+    .queryConversationList(conversationQueryConfig)
+    .then((value) => {
+      // You will need to save and maintain the conversation objects in the array.
+    })
+    .catchError((onError) {});
+```
+:::
+
+### From the ZIM server
+
+You can get a user's conversation list by calling the server API. For more details, please refer to the server API documentation [Query conversation list](!zim-QueryConversationList).
