@@ -2,7 +2,7 @@
 articleID: 15513
 ---
 
-import { getPlatformData } from "../../../../../../snippets/utils-content-parser.js"
+import { getPlatformData } from "/snippets/utils-content-parser.js"
 
 export const setRoomMembersAttributesMap = {
   'Android': <a href='@setRoomMembersAttributes' target='_blank'>setRoomMembersAttributes</a>,
@@ -111,19 +111,11 @@ public abstract void SetRoomMembersAttributes(Dictionary<string, string> attribu
 ```
 :::
 
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| attributes | {getPlatformData(props,HashMap)} | Yes | The configured user attribute. |
-| roomID | {getPlatformData(props,stringMap)} | Yes | The ID of the room in which user attributes need to be configured. |
-| userIDs | {getPlatformData(props,listMap)} | Yes | The IDs of the users whose attributes need to be configured. |
-| config | {getPlatformData(props,ZIMRoomMemberAttributesSetConfigMap)} | Yes | <p>The configuration of a user attribute. `isDeleteAfterOwnerLeft` indicates whether the user attribute involved in this operation is automatically deleted after the owner leaves the room.</p><p><b> **If `config` is not configured, the user attribute is automatically deleted after the owner leaves the room by default.**</b></p> |
-| callback |  {getPlatformData(props,ZIMRoomMemberAttributesListQueriedCallbackMap)} | Yes | The result callback of the user attribute operation. |
 
-#### Sample code
 :::if{props.platform=undefined}
-```java
+<CodeGroup>
+```java title = "Sample code"
 HashMap<String,String> attributes = new HashMap<>();
 attributes.put("key1","value1");
 ArrayList<String> userIDs = new ArrayList<>();
@@ -137,24 +129,29 @@ ZIM.getInstance().setRoomMembersAttributes(attributes, "roomID", userIDs, setCon
      }
 });
 ```
-
+</CodeGroup>
 :::
 :::if{props.platform="iOS"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 [[ZIM getInstance] queryRoomMembersAttributesByUserIDs:@[@"userID1",@"userID2"] roomID:@"roomID" callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, ZIMError * _Nonnull errorInfo) {
         // The service logic after the query result is returned. 
 }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="mac"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 [[ZIM getInstance] queryRoomMembersAttributesByUserIDs:@[@"userID1",@"userID2"] roomID:@"roomID" callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, ZIMError * _Nonnull errorInfo) {
         // The service logic after the query result is returned. 
 }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="U3d"}
-```c#
+<CodeGroup>
+```c# title="Sample code"
 Dictionary<string, string> attributes = new Dictionary<string, string>();
 attributes.Add("key1", "value1");
 List<string> userIDs = new List<string>();
@@ -169,6 +166,7 @@ ZIM.GetInstance().SetRoomMembersAttributes(attributes, userIDs, "roomID",
     }
 );
 ```
+</CodeGroup>
 :::
 
 ### Query user attributes of some users
@@ -179,16 +177,10 @@ Users in a room can call the {getPlatformData(props,queryRoomMembersAttributesMa
 public abstract void QueryRoomMembersAttributes(List<string> userIDs, string roomID, ZIMRoomMembersAttributesQueriedCallback callback);
 ```
 :::
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| userIDs | {getPlatformData(props,listMap)} | Yes | The IDs of the users whose user attributes need to be queried. |
-| roomID | {getPlatformData(props,stringMap)} | Yes | The ID of the room in which the user attributes need to be queried. |
-| callback | {getPlatformData(props,ZIMRoomAttributesQueriedCallbackMap)} | Yes | The result callback for querying user attributes. |
-#### Sample code
 :::if{props.platform=undefined}
-```java
+<CodeGroup>
+```java title="Sample code"
 ArrayList<String> userIDs = new ArrayList<>();
 userIDs.add("userID1");
 ZIM.getInstance().queryRoomMembersAttributes(userIDs, "roomID", new ZIMRoomMembersAttributesQueriedCallback() {
@@ -198,27 +190,33 @@ ZIM.getInstance().queryRoomMembersAttributes(userIDs, "roomID", new ZIMRoomMembe
     }
 });
 ```
+</CodeGroup>
 :::
 :::if{props.platform="iOS"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 ZIMRoomMemberAttributesQueryConfig *queryConfig = [[ZIMRoomMemberAttributesQueryConfig alloc] init];
 queryConfig.count = 100;
 [[ZIM getInstance] queryRoomMemberAttributesListByRoomID:@"roomID" config:queryConfig callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
       // The service logic after the query result is returned.  
  }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="mac"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 ZIMRoomMemberAttributesQueryConfig *queryConfig = [[ZIMRoomMemberAttributesQueryConfig alloc] init];
 queryConfig.count = 100;
 [[ZIM getInstance] queryRoomMemberAttributesListByRoomID:@"roomID" config:queryConfig callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
       // The service logic after the query result is returned.  
  }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="U3d"}
-```c#
+<CodeGroup>
+```c# title="Sample code"
 List<string> userIDs = new List<string>();
 userIDs.Add("userID1");
 ZIM.GetInstance().QueryRoomMembersAttributes(userIDs, "roomID", (string roomID, List<ZIMRoomMemberAttributesInfo> infos, ZIMError errorInfo) =>
@@ -227,6 +225,7 @@ ZIM.GetInstance().QueryRoomMembersAttributes(userIDs, "roomID", (string roomID, 
     }
 );
 ```
+</CodeGroup>
 :::
 
 
@@ -241,16 +240,11 @@ public abstract void QueryRoomMemberAttributesList(string roomID, ZIMRoomMemberA
 
 :::
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| roomID | {getPlatformData(props,stringMap)} | Yes | The ID of the room in which the user attributes need to be configured. |
-| config | {getPlatformData(props,ZIMRoomMemberAttributesQueryConfigMap)} | Yes | <p>The configuration of a user attribute. </p><ul><li>`nextFlag`: During the first query, a null character string is passed. During second and subsequent queries, `nextFlag` returned in the callback is passed. If `nextflag` returned in the callback is null, the query is completed.</li> <li>`count`: The number of users on one page during the page-based query.</li> </ul> |
-| callback  | {getPlatformData(props,ZIMRoomMemberAttributesListQueriedCallbackMap)} | Yes | The result callback for querying user attributes of all users. After a successful query, user attributes of all users in the room are returned. |
 
-#### Sample code
 
 :::if{props.platform=undefined}
-```java
+<CodeGroup>
+```java title="Sample code"
 ZIMRoomMemberAttributesQueryConfig queryConfig = new ZIMRoomMemberAttributesQueryConfig();
 queryConfig.count = 100;
 queryConfig.nextFlag = "";
@@ -266,28 +260,33 @@ ZIM.getInstance().queryRoomMemberAttributesList(
      }
 });
 ```
-
+</CodeGroup>
 :::
 :::if{props.platform="iOS"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 ZIMRoomMemberAttributesQueryConfig *queryConfig = [[ZIMRoomMemberAttributesQueryConfig alloc] init];
 queryConfig.count = 100;
 [[ZIM getInstance] queryRoomMemberAttributesListByRoomID:@"roomID" config:queryConfig callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
       // The service logic after the query result is returned.  
  }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="mac"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 ZIMRoomMemberAttributesQueryConfig *queryConfig = [[ZIMRoomMemberAttributesQueryConfig alloc] init];
 queryConfig.count = 100;
 [[ZIM getInstance] queryRoomMemberAttributesListByRoomID:@"roomID" config:queryConfig callback:^(NSString * _Nonnull roomID, NSArray<ZIMRoomMemberAttributesInfo *> * _Nonnull infos, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
       // The service logic after the query result is returned.  
  }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="U3d"}
-```c#
+<CodeGroup>
+```c# title="Sample code"
 ZIMRoomMemberAttributesQueryConfig queryConfig = new ZIMRoomMemberAttributesQueryConfig();
 queryConfig.count = 100;
 queryConfig.nextFlag = "";
@@ -305,6 +304,7 @@ ZIM.GetInstance().QueryRoomMemberAttributesList(
         }
 );
 ```
+</CodeGroup>
 :::
 
 ### User attribute change notification

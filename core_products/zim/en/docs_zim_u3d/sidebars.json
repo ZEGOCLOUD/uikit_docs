@@ -212,11 +212,6 @@
           ]
         },
         {
-          "type": "doc",
-          "label": "Cache management",
-          "id": "guides/cache-management"
-        },
-        {
           "type": "category",
           "label": "Content Moderation",
           "items": [

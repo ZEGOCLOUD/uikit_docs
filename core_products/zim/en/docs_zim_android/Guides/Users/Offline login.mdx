@@ -45,104 +45,10 @@ We recommend that you cache user information for each login. If the app is opene
 </Note>
 
 #### Login method definition
-:::if{props.platform=undefined}
-```java
-// This login method is new, and the original method is no longer maintained since ZIM SDK 2.13.0.
-public abstract void login(String userID, ZIMLoginConfig config, ZIMLoggedInCallback callback);
-```
-
-:::
-:::if{props.platform="iOS"}
-```objc
-// This login method is new, and the original method is no longer maintained since ZIM SDK 2.13.0.
-- (void)loginWithUserID:(NSString *)userID
-                 config:(ZIMLoginConfig *)config
-               callback:(ZIMLoggedInCallback)callback;
-```
-:::
-:::if{props.platform="window"}
-```cpp
-// This login method is new, and the original method is no longer maintained since ZIM SDK 2.13.0.
-virtual void login(const std::string &userID, const ZIMLoginConfig &config,
-                    ZIMLoggedInCallback callback) = 0;
-```
-:::
-:::if{props.platform="Flutter"}
-```dart
-// This Login interface is the new login interface. The original login interface has been deprecated since version 2.13.0 and is no longer maintained.
-  Future<void> login(String userID,ZIMLoginConfig config);
-```
-:::
-
-:::if{props.platform="Web"}
-```TypeScript
-// This Login interface is the new login interface. The original login interface has been deprecated since version 2.13.0 and is no longer maintained.
-login(userID: string, config: ZIMLoginConfig): Promise<void>;
-```
-:::
-
-<table>
-
-<tbody><tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>userID</td>
-<td>String</td>
-<td>Yes</td>
-<td>The user ID for the previous online login. It can contain up to 32 bytes in length, including digits, letters, and the following characters: &apos;!&apos;, &apos;#&apos;, &apos;$&apos;, &apos;%&apos;, &apos;&amp;&apos;, &apos;(&apos;, &apos;)&apos;, &apos;+&apos;, &apos;-&apos;, &apos;:&apos;, &apos;;&apos;, &apos;< &apos;, &apos;= &apos;, &apos;. &apos;, &apos;> &apos;, &apos;?&apos;, &apos;@&apos;, &apos;[&apos;, &apos;]&apos;, &apos;^&apos;, &apos;_&apos;, { "'{'" },{"'}'"} &apos;|&apos;, &apos;~&apos;.</td>
-</tr>
-<tr>
-<td>config</td>
-<td>[ZIMLoginConfig](@-ZIMLoginConfig) </td>
-<td>Yes</td>
-<td>Login configuration.</td>
-</tr>
-<tr>
-<td>callback</td>
-<td>[ZIMLoggedInCallback](@ZIMLoggedInCallback)</td>
-<td>Yes</td>
-<td>The login operation callback.</td>
-</tr>
-</tbody></table>
-
-The following table describes the parameters in the `ZIMLoginConfig` class that are used to configure the `config` parameter.
-
-<table>
-
-<tbody><tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>userName</td>
-<td>String</td>
-<td>No</td>
-<td>The username, which can contain up to 256 bytes in length. If the value is empty, the `UserName` for the previous login is used.</td>
-</tr>
-<tr>
-<td>token</td>
-<td>String</td>
-<td>No</td>
-<td>The token.<ul><li>This parameter is required for token-based authentication.</li><li>Do not specify it for AppSign-based authentication.</li></ul></td>
-</tr>
-<tr>
-<td>isOfflineLogin</td>
-<td>Boolean</td>
-<td>No</td>
-<td>Specifies whether this login is offline login. If the value is empty, the login is online login.</td>
-</tr>
-</tbody></table>
-
-#### Sample call
 
 :::if{props.platform=undefined}
-```java
+<CodeGroup>
+```java title="Sample code"
 ZIMLoginConfig config;
 config.userName = user_name;
 // Do not specify this parameter for AppSign-based authentication.
@@ -156,11 +62,12 @@ zim.login("userID", config, new ZIMLoggedInCallback() {
     }
 }];
 ```
-
+</CodeGroup>
 :::
 
 :::if{props.platform="iOS"}
-```objc
+<CodeGroup>
+```objc title="Sample code"
 ZIMLoginConfig *config = [[ZIMLoginConfig alloc] init];
 config.userName = @"usserName";
 // Do not specify this parameter for AppSign-based authentication.
@@ -172,9 +79,11 @@ config.isOfflineLogin = YES;
     }
 }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="window"}
-```cpp
+<CodeGroup>
+```cpp title="Sample code"
 zim::ZIMLoginConfig config;
 config.userName = user_name;
 // Do not specify this parameter for AppSign-based authentication.
@@ -187,9 +96,11 @@ zim_sdk->login("user_id", config, [=](const zim::ZIMError &errorInfo) {
     }
 }];
 ```
+</CodeGroup>
 :::
 :::if{props.platform="Flutter"}
-```dart
+<CodeGroup>
+```dart title="Sample code"
 ZIMLoginConfig loginConfig = ZIMLoginConfig();
 loginConfig.userName = 'username';
 // This parameter is not required when using AppSign authentication
@@ -204,9 +115,11 @@ try {
     // Login failed
 }
 ```
+</CodeGroup>
 :::
 :::if{props.platform="Web"}
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var userID = '';
 var config = {
     token: '', // The validity period cannot exceed 24 days. Request the developer server to obtain it.
@@ -223,6 +136,7 @@ zim.login(userID, config)
         // Login failed
     });
 ```
+</CodeGroup>
 :::
 
 ### 2\. Access local data of the SDK
