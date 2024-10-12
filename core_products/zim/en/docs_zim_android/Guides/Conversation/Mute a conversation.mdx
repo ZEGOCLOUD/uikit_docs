@@ -1,0 +1,135 @@
+---
+articleID: 17748
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const setConversationNotificationStatusMap = {
+  'Android': <a href='@setConversationNotificationStatus' target='_blank'>setConversationNotificationStatus</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationNotificationStatus.html' target='_blank'>setConversationNotificationStatus</a>,
+}
+
+# Mute a conversation
+
+- - -
+
+## Introduction
+
+Mute a conversation: A user can mute any conversation, and when the ZIM SDK receives a message for the conversation, it does not send a push notification, and **the total count of unread messages does not increase**.
+
+## Prerequisites
+
+Before muting a conversation, make sure:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+## Procedure
+
+To mute a conversation, call the {getPlatformData(props,setConversationNotificationStatusMap)} method with the `conversationID` parameter.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// Mute a conversation
+// Take a group conversation as example
+zim.setConversationNotificationStatus(ZIMConversationNotificationStatus.DO_NOT_DISTURB, "CONV_ID", ZIMConversationType.PEER, new ZIMConversationNotificationStatusSetCallback() {
+    @Override
+    public void onConversationNotificationStatusSet(ZIMError errorInfo) {
+        // Set the callback for the results of mute notifications.
+        if(errorInfo.code == ZIMErrorCodeSuccess) {
+          // ......
+        } else {
+          // ......
+        }  
+    }
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Mute a conversation
+// Take a group conversation as example
+[self.zim setConversationNotificationStatus:ZIMConversationNotificationStatusDoNotDisturb conversationID:@"CONV_ID" conversationType:ZIMConversationTypePeer callback:^(ZIMError * _Nonnull errorInfo) {
+    // Set the callback for the mute result.
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Mute notifications for specified conversations.
+// Mute a conversation
+// Take a group conversation as example
+zim. setConversationNotificationStatus(ZIMConversationNotificationStatusDoNotDisturb, "CONV_ID", ZIMConversationTypePeer, [=](ZIMError errorInfo) {
+    // Set the callback for the results of mute notifications.
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Mute the notifications for a group chat.
+// Take a group chat as an example
+var status = 2;
+var conversationID = '';
+var conversationType = 2; // The conversation type is group chat
+zim.setConversationNotificationStatus(status, conversationID, conversationType)
+    .then(function(res){
+        // Operation succeeded.
+    })
+    .catch(function(err){
+        // Operation failed.
+    })
+```
+
+</CodeGroup>
+:::
+
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# title="Sample code"
+// Set a conversation to the "Do Not Disturb" notification status
+ZIM.GetInstance().SetConversationNotificationStatus(ZIMConversationNotificationStatus.DoNotDisturb, "CONV_ID",
+    ZIMConversationType.Group, (string conversationID, ZIMConversationType conversationType,
+        ZIMError errorInfo) =>
+    {
+        // Result of setting the "Do Not Disturb" notification status
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Mute notifications for specified conversations.
+ZIM
+    .getInstance()
+    .setConversationNotificationStatus(
+        ZIMConversationNotificationStatus.doNotDisturb,
+        'conversationID',
+        ZIMConversationType.group)
+    .then((value) {})
+    .catchError((onError) {});
+```
+</CodeGroup>
+:::
