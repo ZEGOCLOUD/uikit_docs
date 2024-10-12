@@ -83,6 +83,82 @@
   },
   "instances": [
     {
+      "id": "real_time_video",
+      "label": "Video Call",
+      "path": "https://www.zegocloud.com/docs/video-call/overview?platform=android&language=java",
+      "routeBasePath": "real-time-video",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "real_time_video",
+          "name": "Video Call",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Cloud Communications Products"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "real_time_voice",
+      "label": "Video Call",
+      "path": "https://www.zegocloud.com/docs/voice-call/overview?platform=android&language=java",
+      "routeBasePath": "real-time-voice",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "real_time_voice",
+          "name": "Voice Call",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Cloud Communications Products"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "live_streaming",
+      "label": "Video Call",
+      "path": "https://www.zegocloud.com/docs/live-streaming/overview?platform=android&language=java",
+      "routeBasePath": "live-streaming",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "live_streaming",
+          "name": "Live Streaming",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Cloud Communications Products"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "zim_android",
+      "label": "In-app Chat",
+      "path": "https://docs.zegocloud.com/article/13919",
+      "routeBasePath": "zim-android",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "zim",
+          "name": "In-app Chat",
+          "tag": "New"
+        },
+        "category": [
+          "Products",
+          "Cloud Communications Products"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
       "id": "callkit_android",
       "label": "Call Kit(Android)",
       "path": "uikit/callkit/docs_callkit_android",
@@ -92,7 +168,7 @@
         "group": {
           "id": "callkit",
           "name": "Call Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -111,7 +187,7 @@
         "group": {
           "id": "callkit",
           "name": "Call Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -130,7 +206,7 @@
         "group": {
           "id": "callkit",
           "name": "Call Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -149,7 +225,7 @@
         "group": {
           "id": "callkit",
           "name": "Call Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -168,7 +244,7 @@
         "group": {
           "id": "callkit",
           "name": "Call Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -187,7 +263,7 @@
         "group": {
           "id": "live_streaming_kit",
           "name": "Live Streaming Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -206,7 +282,7 @@
         "group": {
           "id": "live_streaming_kit",
           "name": "Live Streaming Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -225,7 +301,7 @@
         "group": {
           "id": "live_streaming_kit",
           "name": "Live Streaming Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -244,7 +320,7 @@
         "group": {
           "id": "live_streaming_kit",
           "name": "Live Streaming Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -263,7 +339,7 @@
         "group": {
           "id": "live_streaming_kit",
           "name": "Live Streaming Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -281,7 +357,7 @@
         "group": {
           "id": "live_audio_room_kit",
           "name": "Live Audio Room Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -299,7 +375,7 @@
         "group": {
           "id": "live_audio_room_kit",
           "name": "Live Audio Room Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -317,7 +393,7 @@
         "group": {
           "id": "live_audio_room_kit",
           "name": "Live Audio Room Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -335,7 +411,7 @@
         "group": {
           "id": "live_audio_room_kit",
           "name": "Live Audio Room Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -353,7 +429,7 @@
         "group": {
           "id": "imkit",
           "name": "In-app Chat Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -371,7 +447,7 @@
         "group": {
           "id": "imkit",
           "name": "In-app Chat Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -389,7 +465,7 @@
         "group": {
           "id": "imkit",
           "name": "In-app Chat Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -407,7 +483,7 @@
         "group": {
           "id": "imkit",
           "name": "In-app Chat Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -425,7 +501,7 @@
         "group": {
           "id": "video_conference_kit",
           "name": "Video Conference Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -443,7 +519,7 @@
         "group": {
           "id": "video_conference_kit",
           "name": "Video Conference Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -461,7 +537,7 @@
         "group": {
           "id": "video_conference_kit",
           "name": "Video Conference Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -479,7 +555,7 @@
         "group": {
           "id": "video_conference_kit",
           "name": "Video Conference Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
@@ -497,13 +573,126 @@
         "group": {
           "id": "video_conference_kit",
           "name": "Video Conference Kit",
-          "tag": "New"
+          "tag": ""
         },
         "category": [
           "Products",
           "ZEGO UIKits"
         ],
         "platform": "Web: JS"
+      }
+    },
+    {
+      "id": "supper_board",
+      "label": "Super Board",
+      "path": "https://docs.zegocloud.com/article/13884",
+      "routeBasePath": "super-board",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "supper_board",
+          "name": "Super Board",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Supporting Services"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "ai_effects",
+      "label": "AI Effects",
+      "path": "https://docs.zegocloud.com/article/9896",
+      "routeBasePath": "ai-effects",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "ai_effects",
+          "name": "AI Effects",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Supporting Services"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "cloud_recording",
+      "label": "Cloud Recording",
+      "path": "https://docs.zegocloud.com/article/7403",
+      "routeBasePath": "cloud-recording",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "cloud_recording",
+          "name": "Cloud Recording",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Supporting Services"
+        ],
+        "platform": "Server"
+      }
+    },
+    {
+      "id": "mini-game-android",
+      "path": "https://www.zegocloud.com/docs/game-engine/overview?platform=android&language=java",
+      "routeBasePath": "mini-game",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "mini-game",
+          "name": "Mini Game Engine",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Supporting Services"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+    {
+      "id": "admin-console",
+      "path": "https://www.zegocloud.com/docs/admin-console/overview?platform=all&language=all",
+      "routeBasePath": "admin-console",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "admin-console",
+          "name": "Admin Console",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "Supporting Services"
+        ],
+        "platform": "Android: Java"
+      }
+    },
+
+    {
+      "id": "aigc_digital_human",
+      "label": "Digital Human",
+      "path": "https://docs.zegocloud.com/article/16678",
+      "routeBasePath": "aigc-digital-human",
+      "locale": "en",
+      "navigationInfo": {
+        "group": {
+          "id": "aigc_digital_human",
+          "name": "Digital Human PaSS",
+          "tag": ""
+        },
+        "category": [
+          "Products",
+          "AIGC"
+        ],
+        "platform": "Server"
       }
     }
   ],
