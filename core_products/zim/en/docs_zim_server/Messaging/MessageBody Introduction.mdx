@@ -1,0 +1,321 @@
+# MessageBody Introduction
+
+
+ZIM server supports developers to send different types of messages to the session through the server API, and the supported types are shown in the table below:
+
+| Message Type | MessageType Value | Applicable Session Type | Supports Broadcast to All Members |
+| :-- | :-- | :-- | :-- | 
+| Text| 1 | <ul><li>One-on-one Chat</li><li>Group chat</li><li>Room</li></ul> | ✔️ |
+| Command | 2 | ✖ |
+| Image | 11 | ✔️ |
+| File | 12 | ✔️ |
+| Audio | 13 | ✔️ |
+| Video| 14 | ✔️ |
+| Custom | 200 | ✔️ |
+| Pop-up | 20 | Room | ✖ |
+
+
+When you call the ZIM server interface to send messages, you need to pass the message content through the parameter `MessageBody`. The format of MessageBody varies depending on the message type. This article will introduce the corresponding parameters for each message type.
+
+
+## Text message, custom message and pop-up message
+
+### MessageBody structure 
+
+The MessageBody structure is the same for text messages, custom messages and pop-up messages, as described below:
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | The message content, by default, is 2 KB. If necessary, please contact ZEGO technical support for configuration, with a maximum capacity of up to 32 KB. |
+| ExtendedData | String | No | Extended field with a maximum length of 1 KB. |
+| OfflinePush | Object | No | Offline Push, see <a href="#offlinepush-introduction-inapplicable-for-room-messages"> OfflinePush introduction</a> for more information. |
+| HasReceipt | Number | No | Message includes a receipt:  <ul> <li>0: No.</li> <li>1: Yes.</li> </ul> <Warning title="Warning"> <p>Pop-up message does not support receipts.</p> </Warning> |
+
+
+
+
+### OfflinePush introduction (inapplicable for room messages)
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Enable | Number | No | <p>Whether to enable offline push:</p> <ul><li>0：Not to push (default).</li><li>1：Push.</li></ul> |
+| Title | String | No | The title of the offline push display. |
+| Content | String | No | Offline Push Displayed Content |
+| Payload | String | No | Extended fields allow developers to customise the behaviour after receiving an offline push message. |
+| PushStrategyId | String | No | The customized push strategy, which should be configured by ZEGOCLOUD techinical support. <Warning title="Warning">This parameter only support when requesting to [push message to all users](./Push%20message%20to%20all%20users.mdx).</Warning> |
+| PushImageInfo | Object | No | Image push information. <Warning title="Warning">This parameter only support when requesting to [push message to all users](./Push%20message%20to%20all%20users.mdx).</Warning> |
+| Apns | Object | No | Apple push extra information. |
+| Image | String | No | This field is used to identify the image URL pushed by APNs. When the client receives this field, the client can download the image and display it in a pop-up window. |
+| FCM | Object | No | Google FCM configuration. |
+| Image | String | No | Image URL. The image size should be no more than 1 MB (megabyte). |
+| Icon | String | No | Icon URL. |
+
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"hello world",
+        "ExtendedData":"extendedData",
+        "OfflinePush" :{
+            "Enable":0, 
+            "Title":"Title",
+            "Content":"Content", 
+            "Payload":"data"
+        },
+        "HasReceipt": 1
+    }
+}
+```
+
+## Command message
+
+### MessageBody structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | <p>The content of signaling messages is by default limited to 2 KB. If necessary, please contact ZEGO technical support for configuration, and the maximum limit can be extended to 32 KB.</p><Warning title="Warning">If the message is base64 encoded, the length limit here refers to the original message length before base64 encoding.</Warning> |
+| ExtendedData | String | No | Extended field, up to 1 KB in length. |
+| IsBase64 | Number | No | Whether the message is base64 encoded.<ul><li>0： No (default). </li><li>1：Yes. After receiving this message, the ZIM server will perform base64 decoding to obtain the actual message content, and then send it to the ZIM SDK.</li></ul> |
+
+
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"hello world",
+        "ExtendedData":"extendedData",
+        "IsBase64":0
+    }
+}
+```
+
+
+## Picture message
+
+### MessageBody structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | <p>Picture message content, a JSON byte string generated according to `Message structure` , defaults to 2 KB. Please contact ZEGO technical support for configurations up to 32 KB if needed.</p> |
+| ExtendedData | String | No | Extended field, up to 1 KB in length. |
+| OfflinePush | Object | No | Offline Push, see <a href="#offlinepush-introduction-inapplicable-for-room-messages"> OfflinePush introduction</a> for more information. |
+| HasReceipt | Number | No | Message includes a receipt: <ul><li>0: No.</li><li>1: Yes.</li></ul> |
+
+
+### Message structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Uid | String | Yes | The unique ID of the image, whihc is generated by the developer. |
+| Origin | Object | Yes | Original image. |
+| Url | String | Yes | The URL address of the image, with a maximum length of 500 bytes. |
+| Width | Number | Yes | Picture width in pixels（px). |
+| Height | Number | Yes | Picture heightin pixels（px). |
+| FileName | String | Yes | File name in the recommended format "xxx.file extension" with a maximum length of 150 bytes. |
+| Size | Number | No | Image data size in bytes. |
+
+
+### Message example
+
+```json
+{
+    "Uid":"343649807833778782", 
+    "Origin": {
+        "Url":"https:xxx", 
+        "Width":100,
+        "Height":200
+    },
+    "FileName":"FileName.jpg", 
+    "Size":1024
+}
+```
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"", // The content of the image message is a JSON byte string generated according to the Message structure of the image message.
+        "ExtendedData":"extendedData",
+        "OfflinePush" :{
+                "Enable":0, 
+                "Title":"Title",
+                "Content":"Content", 
+                "Payload":"data"
+        },
+        "HasReceipt": 1
+    }
+}
+```
+
+## File message
+
+### MessageBody structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | <p>The content of the file message, a JSON byte string generated according to the `Message structure` of the file message, defaults to 2 KB. Please contact ZEGOCLOUD technical support for configurations up to 32 KB if needed. </p> |
+| ExtendedData | String | No | Extended field with a maximum length of 1 KB. |
+| OfflinePush | Object | No | Offline Push, see <a href="#offlinepush-introduction-inapplicable-for-room-messages"> OfflinePush introduction</a> for more information. |
+| HasReceipt | Number | No | Message includes a receipt: <ul><li>0: No.</li><li>1: Yes.</li></ul> |
+
+
+### Message structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Uid | String | Yes | The unique ID of the file. generated by the developer. |
+| Url | String | Yes | The URL address of the file, and the maximum length is 500 bytes. |
+| FileName | String | Yes | File name in the recommended format "xxx.file extension" with a maximum length of 150 bytes |
+| Size | Number | No | File data size in bytes. |
+
+
+### Message example
+
+```json
+{
+      "Uid":"343649807833778782", 
+      "Url":"https:xxx", 
+      "FileName":"FileName.txt", 
+      "Size":1024
+}
+```
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"", // The content of the file message, which is a JSON byte string generated according to the Message structure of the file message.
+        "ExtendedData":"extendedData",
+        "OfflinePush" :{
+            "Enable":0, 
+            "Title":"Title",
+            "Content":"Content", 
+            "Payload":"data"
+        },
+        "HasReceipt": 1
+    }
+}
+```
+
+## Audio message
+
+### MessageBody structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | <p>The content of the video message, a JSON byte string generated according to the `Message structure` of the audio message, defaults to 2 KB. Please contact ZEGO technical support for configurations up to 32 KB if needed. </p> |
+| ExtendedData | String | No | Extended field with a maximum length of 1 KB. |
+| OfflinePush | Object | No | Offline Push, see <a href="#offlinepush-introduction-inapplicable-for-room-messages"> OfflinePush introduction</a> for more information. |
+| HasReceipt | Number | No | Message includes a receipt: <ul><li>0: No.</li><li>1: Yes.</li></ul> |
+
+
+### Message structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Uid | String | Yes | A unique ID for the audio. generated by the developer. |
+| Url | String | Yes | URL address of the audi, and the maximum length is 500 bytes. |
+| FileName | String | Yes | Audio name in the recommended format "xxx.file extension" with a maximum length of 150 bytes. |
+| Size | Number | No | Audio data size in bytes. |
+| MediaDuration | Number | No | Audio duration in seconds. |
+
+
+### Message example
+
+```json
+{
+    "Uid":"343649807833778782", 
+    "Url":"https:xxx", 
+    "FileName":"FileName.mp3", 
+    "Size":1024,
+    "MediaDuration":30
+}
+```
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"", // The content of the audio message, a JSON byte string generated according to the Message structure of the audio message.
+        "ExtendedData":"extendedData",
+        "OfflinePush" :{
+            "Enable":0, 
+            "Title":"Title",
+            "Content":"Content", 
+            "Payload":"data"
+        },
+        "HasReceipt": 1
+    }
+}
+```
+
+## Video message
+
+### MessageBody structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Message | String | Yes | <p>Video message content, a JSON byte string generated according to `Message structure` defaults to 2 KB. Please contact ZEGO technical support for configurations up to 32 KB if needed. </p> |
+| ExtendedData | String | No | Extended field with a maximum length of 1 KB. |
+| OfflinePush | Object | No | Offline Push, see <a href="#offlinepush-introduction-inapplicable-for-room-messages"> OfflinePush introduction</a> for more information. |
+| HasReceipt | Number | No | Message includes a receipt: <ul><li>0: No.</li><li>1: Yes.</li></ul> |
+
+
+### Message structure
+
+| Parameters | Type | Required or not | Description |
+| :-- | :-- | :-- | :-- | 
+| Uid | String | Yes | The unique ID of the file. generated by the developer. |
+| Url | String | Yes | The URL address of the video, the maximum length is 500 bytes. |
+| FileName | String | Yes | Video name in the recommended format "xxx.file extension" with a maximum length of 150 bytes. |
+| Size | Number | No | Audio data size, measured in bytes. |
+| MediaDuration | Number | No | Video duration in seconds. |
+| Thumbnail | Object | No | Video first frame. |
+| Url | String | Yes（Only if the first frame of the video is required） | The URL address of the thumbnail, the maximum length is 500 bytes. |
+| Width | Number | Yes（Only if the first frame of the video is required） | Picture width in pixels（px). |
+| Height | Number | Yes（Only if the first frame of the video is required） | Picture height in pixels（px). |
+
+
+
+
+### Message example
+
+```json
+{
+    "Uid":"343649807833778782", 
+    "Url":"https:xxx", 
+    "FileName":"FileName.mp4", 
+    "Size":1024,
+    "MediaDuration":300,
+    "Thumbnail": {
+        "Url":"https:xxx", 
+        "Width":100,
+        "Height":200
+    }
+}
+```
+
+### MessageBody example
+
+```json
+{
+    "MessageBody": {
+        "Message":"", // The content of the video message as a JSON byte string generated from the Message structure of the audio message.
+        "ExtendedData":"extendedData",
+        "OfflinePush" :{
+            "Enable":0, 
+            "Title":"Title",
+            "Content":"Content", 
+            "Payload":"data"
+        },
+        "HasReceipt": 1
+    }
+}
+```
