@@ -338,15 +338,6 @@ In a call invitation process, the call state of a user determines whether the us
 </tr>
 </tbody></table>
 
-## Prerequisites
-
-Before you use the call invitation feature, make sure that the following prerequisites are satisfied:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-- (Optional) The offline push certificate of ZIM is configured in the [ZEGO console](https://console.zego.im). You need to configure the certificate when you want to send a call invitation to an offline user and push offline notifications. For more information about how to configure the certificate, see [Offline push configuration](#16233). If you fail to configure the certificate, contact ZEGO technical support.
-
 ## Common mode
 
 In common mode, the lifecycle of a call invitation ends after all invitees respond to the invitation. To be specific, a call invitation is terminated after all invitees accept or refuse the invitation, or the invitation times out. The following example shows that a client A initiates a call invitation to a client B in common mode.

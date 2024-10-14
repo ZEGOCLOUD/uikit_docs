@@ -37,14 +37,6 @@ export const deleteAllConversationsMap = {
 
 ZIM supports users to delete a specific conversation or all conversations in the conversation list.
 
-## Prerequisites
-
-Before muting a conversation, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Delete a conversation
 
 To delete a specified conversation after login, call the {getPlatformData(props,deleteConversationMap)} with the `conversationID` parameter.
@@ -53,7 +45,7 @@ To delete a specified conversation after login, call the {getPlatformData(props,
 
 When deleting a specified conversation:
 
-- All messages in the conversation are not automatically deleted. If you need to delete both the conversation and all messages in the conversation, call the {getPlatformData(props,deleteAllMessageMap)} method. For details, see the chapter **Delete all messages of the specified conversation** of [Delete messages](!deleteMessages).
+- All messages in the conversation are not automatically deleted. If you need to delete both the conversation and all messages in the conversation, call the {getPlatformData(props,deleteAllMessageMap)} method. For details, see the chapter **Delete all messages of the specified conversation** of [Delete messages](./../Messaging/Delete%20messages.mdx).
 - If the conversation has unread messages, the total number of unread messages will be reduced and shown in the {getPlatformData(props,onConversationTotalUnreadMessageCountUpdatedMap)} callback. For details, see the chapter **Get the number of unread messages** above.
 </Note>
 

@@ -116,13 +116,6 @@ The In-app Chat SDK supports reading receipts for one-to-one messages and group 
 
 </Warning>
 
-## Prerequisites
-
-Before you implement the `message reading receipt` feature, ensure that the following conditions are met:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Implementation process
 
 The sender sends a message through the In-app Chat SDK and sets the `hasReceipt` field of {getPlatformData(props,ZIMMessageSendConfigMap)} to identify whether a reading receipt is required for the message. Based on the `receiptStatus` field, the receiver determines whether a reading receipt is required for the message or whether the message is read or unread to render different UI effects. The message receiver can use different reading methods based on the scenario.
@@ -146,7 +139,7 @@ The receiver can set a message that requires a reading receipt from the sender a
 
 - A single message or a batch of messages are supported. The sender and receiver must be in the same session. Cross-session operations are not supported.
   
-- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](!query_Message_Records).
+- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](./Get%20message%20history.mdx).
 </Warning>
 
 1. Through related callback ({getPlatformData(props,onReceivePeerMessageMap)} or {getPlatformData(props,onReceiveGroupMessageMap)}), Client B receives a message that requires a reading receipt from Client A.
@@ -165,7 +158,7 @@ The receiver can set all messages **received** from the sender in a specified se
 - This feature takes effect only on messages received before setting the feature. 
 - It is recommended that this feature be used when a user switches from the session list page to a session. It is not recommended that this feature be used together with the {getPlatformData(props,sendMessageReceiptsReadMap)} API on a message chat page.
   
-- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](!query_Message_Records).
+- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](./Get%20message%20history.mdx).
 </Warning>
 
 1. Based on the `receiptStatus` field of the {getPlatformData(props,onReceivePeerMessageMap)} callback, Client B determines the receipt status of the message. If this field is set to `PROCESSING`, the message is unread. Developers can call the {getPlatformData(props,sendConversationMessageReceiptReadMap)} API to set all messages sent by Client A in the session as read based on the service logic.
@@ -182,7 +175,7 @@ To query the message receipt status, the number of users who have read the messa
 
 - If messages sent by other users are queried, the number of users who have read the message and the number of users who have not read the message are **0**.
   
-- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](!query_Message_Records).
+- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](./Get%20message%20history.mdx).
 </Warning>
 
 ### Query the list of members who have or have not read a group message
@@ -195,7 +188,7 @@ To query the list of members who have read a group message, call the {getPlatfor
 
 <Warning title="Warning">
 
-To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](!query_Message_Records).
+To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](./Get%20message%20history.mdx).
 </Warning>
 
 #### Query the list of members who have not read a group message
@@ -206,7 +199,7 @@ To query the list of members who have not read a group message, call the {getPla
 
 - If the SDK version is older than 2.16.0, when the number of group members is greater than 100, this API will not return the list of members who have not read a group message. To use this feature, contact ZEGOCLOUD technical support.
   
-- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](!query_Message_Records).
+- To perform operations on the historical messages of the conversation, you need to get the historical messages and determine the receipt status of the historical messages. For details, see [Get message history](./Get%20message%20history.mdx).
 </Warning>
 
 ## Sample code

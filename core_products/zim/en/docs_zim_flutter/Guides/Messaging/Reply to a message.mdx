@@ -31,13 +31,6 @@ Using messages A, B, and C in group chat as examples:
 3. Both message B and message C are child messages of message A. 
 4. The reply count of message A is 2. Message B does not have a reply count.
 
-## Prerequisites
-
-Before implementing the "Reply to a message" feature, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Reply to a message
 
 After logging in to ZIM, users can listen to the [onReceivePeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceivePeerMessage.html) and [onReceiveGroupMessage](https://pub.dev/documentation/zego_zim/latest/search.html?q=onReceiveGroupMessage) callback to receive new messages from one-on-one and group conversations, or call the [queryHistoryMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html) interface to fetch historical messages.

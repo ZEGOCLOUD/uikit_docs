@@ -28,12 +28,6 @@ You can use this feature to insert a message into the local database for display
 </Warning>
 :::
 
-## Prerequisites
-Before you implement the `insert local messages` feature, ensure that the following conditions are met:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Implementation process
 To insert a message into the local database, you need to call the {getPlatformData(props,insertMessageToLocalDBMap)} API and introduce the created {getPlatformData(props,ZIMMessageMap)} message, `conversationID`, `conversationType`, `senderUserID`, and other parameters.
 

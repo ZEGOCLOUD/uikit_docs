@@ -75,28 +75,21 @@ ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room messaging,
 
 With the room messaging feature, you can build your app to meet different requirements of various scenarios, such as one-to-many classes, online conferences, and more. 
 
-
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Join a room 
 
 Now, we provide two methods to join a room:
 
-- <b>[Method 1: Manually create a room & Join a room ](!Room_Management#2_1)</b>: Call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info to manually create a room first. And other client users call the {getPlatformData(props,joinRoomMap)}  with the roomID to join the room.
+- <b>[Method 1: Manually create a room & Join a room ](#method-1-manually-create-a-room--join-a-room-)</b>: Call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info to manually create a room first. And other client users call the {getPlatformData(props,joinRoomMap)}  with the roomID to join the room.
 
-- <b>[Method 2: Join a room directly (room will be created automatically)](!Room_Management#2_2)</b>: Call the {getPlatformData(props,enterRoomMap)}  method with  {getPlatformData(props,ZIMRoomInfoMap)} info to join a room directly (if the room doesn't exist, the room will be created automatically). Other client users can call the {getPlatformData(props,enterRoomMap)} method with the roomID to join the room.
+- <b>[Method 2: Join a room directly (room will be created automatically)](#method-2-join-a-room-directly-room-will-be-created-automatically)</b>: Call the {getPlatformData(props,enterRoomMap)}  method with  {getPlatformData(props,ZIMRoomInfoMap)} info to join a room directly (if the room doesn't exist, the room will be created automatically). Other client users can call the {getPlatformData(props,enterRoomMap)} method with the roomID to join the room.
 
-For in-room users to send messages to a room, call the {getPlatformData(props,sendRoomMessageMap)} method. For details, see [Send & Receive messages](!sendMessages#6).
+For in-room users to send messages to a room, call the {getPlatformData(props,sendRoomMessageMap)} method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx).
 
 <Note title="Note">
 
 If the room (roomID) already exists:
 
-- Call the {getPlatformData(props,createRoomMap)}  method: returns an error code. For details, see [Error codes](!Error_Codes#6).
+- Call the {getPlatformData(props,createRoomMap)}  method: returns an error code. For details, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx#room-errors).
 - Call the {getPlatformData(props,enterRoomMap)} method: you will join the room directly. 
 
 If the room (roomID) doesn't exist:
@@ -111,7 +104,7 @@ If the room (roomID) doesn't exist:
 
 Let's suppose we have Client A and Client B. The following shows how Client A creates a room, how Client B and other client users join the room. 
 
-For Client A to create a room after login, he can call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info. And he can be told whether the room is created successfully by the `ZIMError` parameter. For related error codes, see [Error codes](!Error_Codes).
+For Client A to create a room after login, he can call the {getPlatformData(props,createRoomMap)} method with the {getPlatformData(props,ZIMRoomInfoMap)} info. And he can be told whether the room is created successfully by the `ZIMError` parameter. For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
 
 
 <Warning title="Warning">
@@ -219,7 +212,7 @@ zim.createRoom(roomInfo)
 
 #### Join a room 
 
-For Client B and other client users to join the room created by Client A, call the {getPlatformData(props,joinRoomMap)}  method with the roomID of client A's room. And Client B and other client users can be told whether they joined the room successfully by the `ZIMError` parameter. For related error codes, see [Error codes](!Error_Codes).
+For Client B and other client users to join the room created by Client A, call the {getPlatformData(props,joinRoomMap)}  method with the roomID of client A's room. And Client B and other client users can be told whether they joined the room successfully by the `ZIMError` parameter. For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
 
 :::if{props.platform=undefined}
 ```java

@@ -54,14 +54,6 @@ If the ZIM SDK version used by the message recipient is lower than 2.5.0, the fo
 </Note>
 
 
-## Prerequisites
-
-Before you implement the `recall messages` feature, ensure that the following conditions are met:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Implementation process
 
 The In-app Chat SDK supports recalling a specified message in a session. Developers can call {getPlatformData(props,ZIMMessageRevokeConfigMap)} to configure advanced attributes for recalling messages.

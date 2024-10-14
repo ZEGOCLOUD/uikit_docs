@@ -9,14 +9,6 @@ articleID: 17739
 
 Through ZIM, you can get the unread message count for an individual conversation, acquire the total unread message count for all conversations, and clear the aforementioned values.
 
-## Prerequisites
-
-Before managing unread message counts, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 
 ## Get the unread message count of one conversation
 
@@ -28,7 +20,7 @@ To actively obtain the number of unread messages in a conversation, first call [
 
 ### Passively obtaining
 
-Listen for the [OnConversationChanged](@OnConversationChanged) callback to obtain the [unreadMessageCount](@unreadMessageCount-ZIMConversation) property of a conversation and know the latest number of unread messages in that conversation. For more details, refer to [Get conversation list - Listen for conversation changes](!zim-Conversation_Management#conversationChanged).
+Listen for the [OnConversationChanged](@OnConversationChanged) callback to obtain the [unreadMessageCount](@unreadMessageCount-ZIMConversation) property of a conversation and know the latest number of unread messages in that conversation. For more details, refer to [Get conversation list - Listen for conversation changes](./Get%20the%20conversation%20list.mdx#listen-for-conversation-changes).
 
 ## Get the total unread message count of all conversations
 To know how many unread messages you currently have after login, listen for the callback [OnConversationTotalUnreadMessageCountUpdated](@OnConversationTotalUnreadMessageCountUpdated) callback. 

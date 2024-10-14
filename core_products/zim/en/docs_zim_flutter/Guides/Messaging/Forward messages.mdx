@@ -22,14 +22,6 @@ This feature allows you to get historical messages of types **other than command
 </Note>
 
 
-## Prerequisites
-
-Before getting message history, please make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Get the full message history
 
 After logging in to ZIM SDK, users can use the [queryHistoryMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html) method to retrieve the message history of `one-to-one chats`, `group chats`, and `rooms chats` by providing the parameters conversationID and config.

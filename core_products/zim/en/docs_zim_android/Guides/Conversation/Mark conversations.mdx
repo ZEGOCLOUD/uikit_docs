@@ -65,13 +65,6 @@ When users need to focus on a conversation or can not deal with a conversation a
 When a user marks a conversation, the SDK simply records the mark value of the conversation without changing the underlying logic of the conversation.
 </Note>
 
-## Prerequisites
-
-Before marking conversations, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Set conversation marks
 
 ZIM supports you in implementing conversation marking operations using either client API or server API.
@@ -291,7 +284,7 @@ ZIM.getInstance()?.setConversationMark(markType, enable, convList).then((value) 
 
 ### Server API
 
-Developers can set or cancel conversation marks for multiple users in batches by calling the server-side API. For details, please refer to the server API documentation [Mark Conversations](!zim-Mark_Conv).
+Developers can set or cancel conversation marks for multiple users in batches by calling the server-side API. For details, please refer to the server API documentation [Mark Conversations](./Mark%20conversations.mdx).
 
 
 ## Query conversation list by marks

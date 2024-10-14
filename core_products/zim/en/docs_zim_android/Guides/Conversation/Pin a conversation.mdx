@@ -56,14 +56,6 @@ ZIM supports users to pin conversations and query the pinned conversation list
     The above example assumes that the orderKey of the related conversations remains unchanged before and after pinning. If the orderKey changes, the order in the pinned conversation list will also change.
     </Note>
 
-
-## Prerequisites
-
-Before pinning a conversation, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Pin a conversation
 
 After the login, a user can pin or unpin a conversation in their conversation list by calling the {getPlatformData(props,updateConversationPinnedStateMap)} interface.

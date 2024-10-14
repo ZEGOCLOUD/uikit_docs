@@ -193,24 +193,17 @@ ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group managemen
 With the group management feature, you can create different types of group chats as needed, such as colleague groups, social groups, fan groups, and more.
 
 
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Create a group 
 
 After user A logs in to the ZIM SDK on a client, the user can call the {getPlatformData(props,createGroup1Map)} method to create a group with advanced settings. In this case, user A logged on this client is the group owner, and users on other clients can join this group using the `groupID`.
 
-You can check whether the group is created through the {getPlatformData(props,ZIMGroupCreatedCallbackMap)} callback. For more information about error codes, see [Error codes](!zim-Error_Codes).
-
+You can check whether the group is created through the {getPlatformData(props,ZIMGroupCreatedCallbackMap)} callback. For more information about error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
 
 
 <Warning title="Warning">
 - You can specify custom rules for `groupID` generation. A group ID can contain only digits, letters, and the following characters: {"'!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~',"} and cannot start with a pound sign (#). If this parameter is empty, the ZIM server automatically generates a value. We recommend that you set a meaningful group ID generation rule. You can associate the group ID with your business account system.
 - If a user calls the {getPlatformData(props,createGroupMap)} method to create a group, the user automatically joins the group without calling the {getPlatformData(props,joinGroupMap)} method.
-- The user creating a group is the group owner. For more information about group ownership transfer, see [Transfer the group ownership](!zim-TransferGroupOwner#3_5).
+- The user creating a group is the group owner. For more information about group ownership transfer, see [Transfer the group ownership](/zim-server/group/transfer-the-group-ownership#request-parameters).
 :::if{props.platform=undefined}
 <div>
 - To specify the maximum number of group members and the group joining mode (including the approval mode, invitation mode, and whether the invitation needs to be approved by the invitee), integrate ZIM SDK 2.15.0 or later.
@@ -218,7 +211,7 @@ You can check whether the group is created through the {getPlatformData(props,ZI
 :::
 :::if{props.platform="Flutter"}
 <div>
-- After creating a group, the group owner can use the [sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html) interface to send messages to the group. For details, please refer to [Send and Receive Group Messages](!sendMessages#4_2).
+- After creating a group, the group owner can use the [sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html) interface to send messages to the group. For details, please refer to [Send and Receive Group Messages](./../Messaging/Send%20and%20receive%20messages.mdx#receive-rich-media-content).
 </div>
 :::
 </Warning>
@@ -1687,7 +1680,7 @@ The result is returned in the {getPlatformData(props,ZIMGroupMutedCallbackMap)} 
 
 <Note title="Note">
 
-If you want to block specific group members from posting, please refer to [Set mute status for group members - Manage group members](!zim-Group_Members#muteGroupMembers).
+If you want to block specific group members from posting, please refer to [Set mute status for group members - Manage group members](./Group%20members.mdx#set-mute-status-for-group-members).
 </Note>
 
 :::if{props.platform=undefined}
@@ -1853,8 +1846,8 @@ zim.on('groupMutedInfoUpdated', function (zim, { groupID, mutedInfo, operatedInf
 ### Check whether a user is in a group
 
 To check whether a user is in a group, call any of the following methods:
-- Pull the conversation list. For more information, see [Pull the conversation list](!zim-Conversation_Management).
-- Listen for the conversation change callback and update the conversation list. For more information, see [Update the conversation list](!zim-Conversation_Management#).
+- Pull the conversation list. For more information, see [Pull the conversation list](./../Conversation/Get%20the%20conversation%20list.mdx).
+- Listen for the conversation change callback and update the conversation list. For more information, see [Update the conversation list](./../Conversation/Get%20the%20conversation%20list.mdx).
 
 For group chats, the result is indicated by the {getPlatformData(props,isDisabledMap)}  property of {getPlatformData(props,ZIMGroupConversationMap)}.
 

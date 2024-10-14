@@ -19,17 +19,11 @@ ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group managemen
 With the group management feature, you can create different types of group chats as needed, such as colleague groups, social groups, fan groups, and more.
 
 
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Create a group 
 
 Let's suppose we have Client A and other client users. The following shows how Client A creates the group, how other client users join and leave the room. 
 
-After Client A logs in, he can call the [CreateGroup](@CreateGroup) method to create a new group, and he can be told whether the group is created successfully through the callback [ZIMGroupCreatedCallback](@ZIMGroupCreatedCallback). For related error codes, see [Error codes](!Error_Codes).
+After Client A logs in, he can call the [CreateGroup](@CreateGroup) method to create a new group, and he can be told whether the group is created successfully through the callback [ZIMGroupCreatedCallback](@ZIMGroupCreatedCallback). For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
 
 Client A automatically becomes the group owner of the group. Other client users can join the group with the correct groupID.
 
@@ -39,8 +33,8 @@ Client A automatically becomes the group owner of the group. Other client users 
 
 - You can customize the `groupID`, and it can't start with "#", and it can only contain numbers, letters, and the following special characters: {"!#$%&()+-:;<=>.?@[]^_{}|~"}. We recommend you set the `groupID` to a meaningful value and associate them with the account system of your application. If you leave it empty, the ZIM Server automatically generates a groupID for you.
 - After creating a group by calling the [CreateGroup](@CreateGroup) method, you will directly join the group you just created, you don't need to call the [JoinGroup](@JoinGroup) method to join the group again.
-- You will automatically become the group owner after you create a group successfully. To transfer the ownership, refer to chapter **Transfer the group ownership** of the [Manage group members](!Group_Members).
-- After creating a group, for the group owner to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](!sendMessages#5).
+- You will automatically become the group owner after you create a group successfully. To transfer the ownership, refer to chapter **Transfer the group ownership** of the [Manage group members](./Group%20members.mdx).
+- After creating a group, for the group owner to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx#send--receive-signaling-messages).
 </Warning>
 
 <CodeGroup>
@@ -93,7 +87,7 @@ For a client user to join a group, choose either of the following methods:
 When an existing group member calls the [InviteUsersIntoGroup](@InviteUsersIntoGroup) method to invite other users to the group:
 - The invited client user will be directly joined to the group.
 - The invited user must be an existing user (that is, the user must be logged in); otherwise, the operation fails.
-- After joining a group, for the group members to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](!sendMessages#5).
+- After joining a group, for the group members to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx#send--receive-signaling-messages).
 </Warning>
 
 

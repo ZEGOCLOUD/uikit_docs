@@ -13,14 +13,6 @@ The ZIM SDK supports forwarding messages in one of the following ways:
 - Combining messages and forwarding the combined message.
 - Forwarding messages one by one.
 
-## Prerequisites
-
-Before you implement the "Forward Messages" feature, ensure that the following conditions are met:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Send and receive a combined message
 
 <Note title="Note">
@@ -48,7 +40,7 @@ Below is the procedure:
 The ZIM SDK supports containing a combined message in another combined message.
 </Note>
 
-2. To send a combined message, call the [sendMessage](@sendMessage) operation. For more information about this operation, see [Send & Receive messages - Send messages](!zim-sendMessages#4_1).
+2. To send a combined message, call the [sendMessage](@sendMessage) operation. For more information about this operation, see [Send & Receive messages - Send messages](./Send%20and%20receive%20messages.mdx#send-rich-media-content).
 
 Below is the sample code for sending a combined message in a one-to-one chat:
 
@@ -85,7 +77,7 @@ zim.sendMessage(messageCombineObj, toConversationID, conversationType, config, n
 
 ### Receive a combined message
 
-Call the same operation for receiving ordinary messages to receive a combined message. For more information about this operation, see [Send & Receive messages - Receive messages](!zim-sendMessages#4_2).
+Call the same operation for receiving ordinary messages to receive a combined message. For more information about this operation, see [Send & Receive messages - Receive messages](./Send%20and%20receive%20messages.mdx#sendreceive-signaling-messages).
 
 <Warning title="Warning">
 
@@ -138,4 +130,4 @@ If one of the sub-messages is a combined message, you need to call the [queryCom
 
 ## Forward messages one by one
 
-Forwarding messages one by one is sending messages that are sent successfully to another conversation as a parameter. The operation for achieving this is the same as that for sending ordinary messages. For more information about this operation, see [Send & Receive messages - Send messages](!zim-sendMessages#4_1).
+Forwarding messages one by one is sending messages that are sent successfully to another conversation as a parameter. The operation for achieving this is the same as that for sending ordinary messages. For more information about this operation, see [Send & Receive messages - Send messages](./Send%20and%20receive%20messages.mdx#send-rich-media-content).

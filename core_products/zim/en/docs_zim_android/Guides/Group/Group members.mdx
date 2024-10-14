@@ -97,18 +97,10 @@ export const ZIMConversationMap = {
 ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group member management, allowing you to query the group member list and group member info, change the group owner, and more.
 
 
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
-
 
 <Warning title="Warning">
 
-- Before you use the following features, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](!GroupManagement).
+- Before you use the following features, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](./Manage%20groups.mdx).
 </Warning>
 
 <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/14556.png" /></Frame>
@@ -802,7 +794,7 @@ Once a mute or unmute operation is successful, all group members will receive {g
 
 <Note title="Note">
 
-If you want to mute certain group members , please refer [Manage groups - Mute group](!zim-GroupManagement#muteGroup).
+If you want to mute certain group members , please refer [Manage groups - Mute group](./Manage%20groups.mdx#mute-or-unmute-a-group).
 </Note>
 
 :::if{props.platform=undefined}
@@ -980,8 +972,8 @@ zim_->queryGroupMemberMutedList(
 ### Get the mute status of current group members
 
 To actively retrieve the mute status of the current user in a group, please use any of the following methods:
-- Refer to [Manage sessions - Get the session list](!zim-Conversation_Management) to fetch the session list proactively.
-- Refer to [Manage sessions - Update session list](!zim-Conversation_Management) for session change callbacks and update the session list.
+- Refer to [Manage sessions - Get the session list](./../Conversation/Get%20the%20conversation%20list.mdx) to fetch the session list proactively.
+- Refer to [Manage sessions - Update session list](./../Conversation/Get%20the%20conversation%20list.mdx) for session change callbacks and update the session list.
 
 Retrieve the {getPlatformData(props,mutedExpiredTimeMap)} from the {getPlatformData(props,ZIMConversationMap)} object in the returned result, which indicates the mute duration in seconds.
 
@@ -993,6 +985,6 @@ The explanation of the {getPlatformData(props,mutedExpiredTimeMap)} value is as 
 <Note title="Note">
 
 
-If the current user is both muted due to group role restrictions (refer to [Manage groups - Mute or unmute group](!zim-GroupManagement), and individually muted（refer to the section <a href="#set-mute-status-for-group-members">Set mute status for group members</a> in this article）, the value of {getPlatformData(props,mutedExpiredTimeMap)} will be determined by taking the maximum value between the "group mute time" and the "individual mute time".
+If the current user is both muted due to group role restrictions (refer to [Manage groups - Mute or unmute group](./Manage%20groups.mdx), and individually muted（refer to the section <a href="#set-mute-status-for-group-members">Set mute status for group members</a> in this article）, the value of {getPlatformData(props,mutedExpiredTimeMap)} will be determined by taking the maximum value between the "group mute time" and the "individual mute time".
 
 </Note>

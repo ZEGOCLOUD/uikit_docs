@@ -17,13 +17,6 @@ export const setConversationNotificationStatusMap = {
 
 Mute a conversation: A user can mute any conversation, and when the ZIM SDK receives a message for the conversation, it does not send a push notification, and **the total count of unread messages does not increase**.
 
-## Prerequisites
-
-Before muting a conversation, make sure:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 ## Procedure
 
 To mute a conversation, call the {getPlatformData(props,setConversationNotificationStatusMap)} method with the `conversationID` parameter.

@@ -49,11 +49,6 @@ ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of message managem
 
 This document describes how to delete the specified messages in a specified session, or delete all the messages in a specified session.
 
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
 
 ## Implementation process
 
@@ -484,8 +479,8 @@ The result of the deletion operation will be returned through the {getPlatformDa
 
 
 After clearing all messages in all conversations:
-- If you want to keep the existing conversation list and update the `lastMessage` displayed in the conversation list to be empty, please [Pull the conversation list](!zim-Conversation_Management).
-- If you want to clear the existing conversation list, please [Delete all conversations](!zim-Conversation_Management).
+- If you want to keep the existing conversation list and update the `lastMessage` displayed in the conversation list to be empty, please [Pull the conversation list](./../Conversation/Get%20the%20conversation%20list.mdx).
+- If you want to clear the existing conversation list, please [Delete all conversations](./../Conversation/Get%20the%20conversation%20list.mdx).
 
 :::if{props.platform=undefined}
 ```java

@@ -96,14 +96,6 @@ API:
 
 
 
-
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
-
 ## Send/Receive regular messages
 
 Regular messages refer to the messages of the following message types: ZIMTextMessage and ZIMBarrageMessage.
@@ -575,7 +567,7 @@ The ZIM SDK supports developers to send and receive custom types of messages. De
 
 ### Sending Custom Messages
 
-The interface used to send custom messages is [sendMessage](@sendMessage), which is the same as the interface used to send normal messages. Developers can refer to [Sending Messages in Sending and Receiving Normal Messages](!IM-sendMessages#4_1) for details of this interface parameters.
+The interface used to send custom messages is [sendMessage](@sendMessage), which is the same as the interface used to send normal messages. Developers can refer to [Sending Messages in Sending and Receiving Normal Messages](#send-rich-media-content) for details of this interface parameters.
 
 Developers need to define custom type messages through the [ZIMCustomMessage](@-ZIMCustomMessage) object.
 
@@ -626,7 +618,7 @@ zim_->sendMessage(message, "toConversationID", type, config, notification,
 
 ### Receiving Custom Messages
 
-The callback interface for receiving custom messages is the same as the callback interface for receiving normal messages. Please refer to [Receiving Messages in Sending and Receiving Normal Messages](!IM-sendMessages#4_2) for the specific interface.
+The callback interface for receiving custom messages is the same as the callback interface for receiving normal messages. Please refer to [Receiving Messages in Sending and Receiving Normal Messages](#receive-rich-media-content) for the specific interface.
 
 The following is an example code for users to receive custom messages in a one-on-one chat session:
 
@@ -707,7 +699,7 @@ zim_->sendMessage(
 ### Receive @ messages
 
 
-The callback interface for receiving @ messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](!zim-sendMessages#4_2) for details on the specific interface.
+The callback interface for receiving @ messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](#receive-rich-media-content) for details on the specific interface.
 
 After receiving a message, developers can implement corresponding functionalities based on their business logic, such as highlighting, etc.
 
@@ -750,8 +742,8 @@ std::vector<ZIMMessageMentionedInfo> mentionedInfoList = conversation.mentionedI
 After receiving @ messages, users need to clear the [mentionedInfoList](@mentionedInfoList) of a conversation to stop receiving notifications.
 
 The interface for clearing the mentionedInfoList  is the same as clearing the unread message count of a conversation:
-- [clearConversationUnreadMessageCount](@clearConversationUnreadMessageCount): Clears the unread message count of a single conversation. Refer to the example code in [Manage sessions - Clear single session message unread](!zim-Conversation_Management#clearConversationUnreadMessageCount).
-- [clearConversationTotalUnreadMessageCount](@clearConversationTotalUnreadMessageCount): Clears the total unread message count of all conversations. Refer to the example code in [Manage sessions - Clear all unread conversation messages](!zim-Conversation_Management#clearConversationTotalUnreadMessageCount).
+- [clearConversationUnreadMessageCount](@clearConversationUnreadMessageCount): Clears the unread message count of a single conversation. Refer to the example code in [Manage sessions - Clear single session message unread](./../Conversation/Get%20the%20conversation%20list.mdx).
+- [clearConversationTotalUnreadMessageCount](@clearConversationTotalUnreadMessageCount): Clears the total unread message count of all conversations. Refer to the example code in [Manage sessions - Clear all unread conversation messages](./../Conversation/Get%20the%20conversation%20list.mdx).
 
 ### Get the reminder user list
 
@@ -777,7 +769,7 @@ ZIM allows you to send messages to all online users of your app from the server 
 
 ### Send messages to all users from the server side
 
-Please refer to the server-side API documentation [Push message to all user](!zim-PushMessageToAllUsers) to learn how to send messages to all users from the server side.
+Please refer to the server-side API documentation [Push message to all user](/zim-server/push-message-to-all-users) to learn how to send messages to all users from the server side.
 
 ### Receive broadcast messages sent from the server side
 
@@ -803,12 +795,12 @@ The ZIM SDK supports forwarding messages in one of the following ways:
 - Combining messages and forwarding the combined message. 
 - Forwarding messages one by one.
 
-For more information, see [Forward messages\|\_blank](!zim-Merge_and_Forward_Messages).
+For more information, see [Forward messages](./Forward%20messages.mdx).
 
 ## Receive Tips message
 
 
-ZIM SDK supports converting user operations within a session into Tips messages. When a related operation occurs, ZIM SDK will send a Tips message to the session to notify. For details, please refer to [Receive tip messages](!zim-receive_tips).
+ZIM SDK supports converting user operations within a session into Tips messages. When a related operation occurs, ZIM SDK will send a Tips message to the session to notify. For details, please refer to [Receive tip messages](./Receive%20tip%20messages.mdx).
 
 ## Listen for the message status 
 

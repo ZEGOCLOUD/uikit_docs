@@ -13,14 +13,6 @@ The call invitation feature provided by the ZIM SDK **only implements the basic 
 The implementation steps described in this document won't initiate a real call invitation. You must implement that yourself according to your business requirements.
 </Warning>
 
-
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Get the token for SDK login. For details, see [Authentication](!zim-token_authentication/token_authentication).
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 - (Optional) When need to send call invitations to offline users, configure the ZIM offline push certificate in the [ZEGOCLOUD Admin Console](https://console.zegocloud.com) (refer to [How to configure Offline Push Certificates](#16146) for details). If you are unable to configure it, please contact ZEGOCLOUD technical support.
 
 Let's suppose we have Client A (caller) and Client B (callee). The following shows how they implement the call invitation.

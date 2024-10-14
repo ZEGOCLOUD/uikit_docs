@@ -191,13 +191,6 @@ API: {getPlatformData(props,sendMessageMap)}
 </table>
 
 
-
-## Prerequisites 
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
 ## Send/Receive regular messages
 
 Regular messages refer to the messages of the following message types: ZIMTextMessage and ZIMBarrageMessage.
@@ -536,9 +529,6 @@ zim.setEventHandler(new ZIMEventHandler() {
 ```
 </CodeGroup>
 :::
-
-
-
 
 ## Send/Receive rich media content
 
@@ -1002,7 +992,7 @@ The ZIM SDK supports developers in implementing the sending and receiving of cus
 
 ### Send custom messages
 
-The interface used to send custom messages is {getPlatformData(props,sendMessageMap)}, which is the same as the interface used to send regular messages. Developers can refer to [Send & Receive messages - Send messages](!zim-sendMessages#4_1) to learn about this interface Parameter details.
+The interface used to send custom messages is {getPlatformData(props,sendMessageMap)}, which is the same as the interface used to send regular messages. Developers can refer to [Send & Receive messages - Send messages](#send-rich-media-content) to learn about this interface Parameter details.
 
 Developers need to define custom type messages through the {getPlatformData(props,ZIMCustomMessageMap)} object.
 
@@ -1100,7 +1090,7 @@ zim.sendMessage(zimCustomMessage, toConversationID, type,config, new ZIMMessageS
 
 ### Receive custom messages
 
-The callback interface for receiving custom messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](!zim-sendMessages#4_2) for details on the specific interface.
+The callback interface for receiving custom messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](#receive-rich-media-content) for details on the specific interface.
 
 The following is an example code for receiving custom messages in a one-on-one chat session:
 
@@ -1291,7 +1281,7 @@ ZIMConversationType type = ZIMConversationTypePeer;
 
 ### Receive @ messages
 
-The callback interface for receiving @ messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](!zim-sendMessages#4_2) for details on the specific interface.
+The callback interface for receiving @ messages is the same as the callback interface for receiving regular messages. Please refer to [Send & Receive messages - Receive messages](#receive-rich-media-content) for details on the specific interface.
 
 After receiving a message, developers can implement corresponding functionalities based on their business logic, such as highlighting, etc.
 
@@ -1366,8 +1356,8 @@ ArrayList<ZIMMessageMentionedInfo> mentionedInfoList = conversation.mentionedInf
 After receiving @ messages, users need to clear the [mentionedInfoList](@mentionedInfoList) of a conversation to stop receiving notifications.
 
 The interface for clearing the mentionedInfoList  is the same as clearing the unread message count of a conversation:
-- {getPlatformData(props,clearConversationUnreadMessageCountMap)}: Clears the unread message count of a single conversation. Refer to the example code in [Manage sessions - Clear single session message unread](!zim-Conversation_Management#clearConversationUnreadMessageCount).
-- {getPlatformData(props,clearConversationTotalUnreadMessageCountMap)}: Clears the total unread message count of all conversations. Refer to the example code in [Manage sessions - Clear all unread conversation messages](!zim-Conversation_Management#clearConversationTotalUnreadMessageCount).
+- {getPlatformData(props,clearConversationUnreadMessageCountMap)}: Clears the unread message count of a single conversation. Refer to the example code in [Manage sessions - Clear single session message unread](./../Conversation/Get%20the%20conversation%20list.mdx).
+- {getPlatformData(props,clearConversationTotalUnreadMessageCountMap)}: Clears the total unread message count of all conversations. Refer to the example code in [Manage sessions - Clear all unread conversation messages](./../Conversation/Get%20the%20conversation%20list.mdx).
 
 ### Get reminder user list
 
@@ -1417,7 +1407,7 @@ ZIM allows you to send messages to all online users of your app from the server 
 
 ### Send messages to all users from the server side
 
-Please refer to the server-side API documentation [Push message to all user](!zim-PushMessageToAllUsers) to learn how to send messages to all users from the server side.
+Please refer to the server-side API documentation [Push message to all user](/zim-server/push-message-to-all-users) to learn how to send messages to all users from the server side.
 
 
 ### Receive broadcast messages sent from the server side
@@ -1466,11 +1456,11 @@ The ZIM SDK supports forwarding messages in one of the following ways:
 - Combining messages and forwarding the combined message. 
 - Forwarding messages one by one.
 
-For more information, see [Forward messages](!zim-Merge_and_Forward_Messages).
+For more information, see [Forward messages](./Forward%20messages.mdx).
 
 ## Receive Tips message
 
-ZIM SDK supports converting user operations within a session into Tips messages. When a related operation occurs, ZIM SDK will send a Tips message to the session to notify. For details, please refer to [Receive tip messages](!zim-receive_tips).
+ZIM SDK supports converting user operations within a session into Tips messages. When a related operation occurs, ZIM SDK will send a Tips message to the session to notify. For details, please refer to [Receive tip messages](./Receive%20tip%20messages.mdx).
 
 
 
