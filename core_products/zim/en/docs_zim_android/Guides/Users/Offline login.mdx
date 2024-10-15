@@ -20,16 +20,6 @@ Users can only perform an offline login using the UserID from their previous suc
 When the offline login interface is called, the ZIM SDK performs verification (UserID verification; if token-based login is used, it also verifies the token's validity period). After successful verification, the SDK returns a login success callback, allowing users to query local data, while the SDK internally attempts to establish a connection with the backend service automatically.
 
 
-
-## Prerequisites
-
-Before you implement the `offline login` feature, make sure that the following conditions are met:
-
-- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
-- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
-
-
-
 ## Procedure
 
 ### 1\. Log in to the app in offline status
@@ -46,7 +36,7 @@ We recommend that you cache user information for each login. If the app is opene
 
 #### Login method definition
 
-:::if{props.platform=undefined}
+
 <CodeGroup>
 ```java title="Sample code"
 ZIMLoginConfig config;
@@ -63,81 +53,7 @@ zim.login("userID", config, new ZIMLoggedInCallback() {
 }];
 ```
 </CodeGroup>
-:::
 
-:::if{props.platform="iOS"}
-<CodeGroup>
-```objc title="Sample code"
-ZIMLoginConfig *config = [[ZIMLoginConfig alloc] init];
-config.userName = @"usserName";
-// Do not specify this parameter for AppSign-based authentication.
-config.token = @"token";
-config.isOfflineLogin = YES;
-[[ZIM getInstance] loginWithUserID:@"userID" config:config callback:^(ZIMError * _Nonnull errorInfo) {
-    if(errorInfo.code == ZIMErrorCodeSuccess){
-        // Offline login is successful, and local data of the SDK can be queried.
-    }
-}];
-```
-</CodeGroup>
-:::
-:::if{props.platform="window"}
-<CodeGroup>
-```cpp title="Sample code"
-zim::ZIMLoginConfig config;
-config.userName = user_name;
-// Do not specify this parameter for AppSign-based authentication.
-config.token = token;
-config.isOfflineLogin = true;
-
-zim_sdk->login("user_id", config, [=](const zim::ZIMError &errorInfo) {
-    if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
-        // Offline login is successful, and local data of the SDK can be queried.
-    }
-}];
-```
-</CodeGroup>
-:::
-:::if{props.platform="Flutter"}
-<CodeGroup>
-```dart title="Sample code"
-ZIMLoginConfig loginConfig = ZIMLoginConfig();
-loginConfig.userName = 'username';
-// This parameter is not required when using AppSign authentication
-loginConfig.token = 'token';
-// Whether it is an offline login
-login.isOfflineLogin = true;
-
-try {
-    await ZIM.getInstance()!.login('zego', loginConfig);
-    // Login successful
-} on PlatformException catch (onError) {
-    // Login failed
-}
-```
-</CodeGroup>
-:::
-:::if{props.platform="Web"}
-<CodeGroup>
-```javascript title="Sample code"
-var userID = '';
-var config = {
-    token: '', // The validity period cannot exceed 24 days. Request the developer server to obtain it.
-               // When using AppSign authentication, this parameter is not required.
-    userName: '',
-    isOfflineLogin: true
-};
-
-zim.login(userID, config)
-    .then(function() {
-        // Offline login successful, can query SDK local data
-    })
-    .catch(function(err) {
-        // Login failed
-    });
-```
-</CodeGroup>
-:::
 
 ### 2\. Access local data of the SDK
 

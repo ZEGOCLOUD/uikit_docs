@@ -29,17 +29,9 @@ createRoom(roomInfo: ZIMRoomInfo, config: ZIMRoomAdvancedConfig): Promise<ZIMRoo
 - The customized room properties you set will be cleared after the room is destroyed.
 </Warning>
 
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| roomInfo | [ZIMRoomInfo](@-ZIMRoomInfo)| Yes | Basic room properties, such as roomID, roomName. |
-| config | [ZIMRoomAdvancedConfig](@-ZIMRoomAdvancedConfig)| Yes | Advanced room propertiies.|
-| Promise | [ZIMRoomCreatedResult](@-ZIMRoomCreatedResult)| Yes | Callback for creating a room. |
-
-#### Sample code
-
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var roomInfo = { roomID: '', roomName: '' };
 var config = { 
     roomAttributes: { key1: 'value1', key2: 'value2' }
@@ -53,6 +45,7 @@ zim.createRoom(roomInfo, config)
         // Operation failed.
     });
 ```
+</CodeGroup>
 
 ### Modify room properties
 
@@ -61,17 +54,10 @@ The room properties you set are stored as `key-value`.
 - When Key does not exist: Setting room property means adding room property.
 - When the Key already exists: Setting the room property means updating the value of the existing room property.
 
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| roomAttributes | Record{'<String, String>'}|  Yes | The target room property. |
-| roomID | string| The ID of the room that you want to set the room properties. |
-| config | [ZIMRoomAttributesSetConfig](@-ZIMRoomAttributesSetConfig)| No | <p>Configurations of room properties: </p><ul><li>isForce: whether to make a mandatory change.</li><li>isUpdateOwner: whether change the owner of the room property. </li><li>isDeleteAfterOwnerLeft: whether the room properties are automatically deleted after the owner leaves the room.<b>This feature can only be set by the owner of the room property.</b></li></ul><Warning title="Warning">If the `config` is not set, the room properties are not set by default. The room property owner and other configurations are not updated.</Warning> |
 
-#### Sample code
-
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var roomID = '';
 var roomAttributes = { key1: 'value1', key2: 'value2' };
 var config = { 
@@ -93,22 +79,17 @@ zim.on('roomAttributesUpdated', function (zim, { roomID, infos }) {
     console.log(''roomAttributesUpdated'', roomID, infos);
 });
 ```
+</CodeGroup>
 
 ## Delete room properties
 
 Generally, you can only delete the room properties that you own. You can also delete the room properties created by others by setting the `isForce` value in `config`.
 
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| keys  | string[] | Yes | The key of the room property that you want to delete.|
-| roomID |  string |  Yes | The ID of the room that you want to delete the room properties. |
-| config | [ZIMRoomAttributesDeleteConfig](@-ZIMRoomAttributesDeleteConfig)| No  | Delete room properties. `isForce` indicates whether to make a mandatory change.<Warning title="Warning">If the `config` is not set, the room properties won't be deleted by default.</Warning> |
 
-#### Sample code
 
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var roomID = '';
 var keys = ['key1'];
 var config = { 
@@ -128,19 +109,14 @@ zim.on('roomAttributesUpdated', function (zim, { roomID, infos }) {
     console.log(''roomAttributesUpdated'', roomID, infos);
 });
 ```
+</CodeGroup>
 
 ## Get room properties
 
-#### Parameter description
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| roomID | string | Yes | The ID of the room that you want to query the room properties. |
-| Promise | [ZIMRoomAttributesQueriedResult](@-ZIMRoomAttributesQueriedResult) | Yes | Callback for query room properties. A successful query returns all room properties of the current room.|
 
-#### Sample code
-
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var roomID = '';
 zim.queryRoomAllAttributes(roomID)
     .then(function ({ roomID, roomAttributes }) {
@@ -150,28 +126,17 @@ zim.queryRoomAllAttributes(roomID)
         // Query failed.
     });
 ```
+</CodeGroup>
 
 ## Combined room properties operation
 
 
-Combined operation means you can combine multiple operations in the same room into one operation. It is usually used when you want to perform continuous operations without being inserted by other users' operations.
+The merge operation means that you can combine multiple operations within the same room into one operation using the [beginRoomAttributesBatchOperation](@beginRoomAttributesBatchOperation) and [endRoomAttributesBatchOperation](@endRoomAttributesBatchOperation) methods. This is typically used when you want to perform consecutive operations without being interrupted by other users' operations.
 
-#### Parameter description for the [beginRoomAttributesBatchOperation](@beginRoomAttributesBatchOperation) method
 
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| config  | [ZIMRoomAttributesBatchOperationConfig](@-ZIMRoomAttributesBatchOperationConfig) | No | <p>Configurations of room properties:</p><ul><li>isForce: whether to make a mandatory change.</li><li>isUpdateOwner: whether change the owner of the room property.</li><li>isDeleteAfterOwnerLeft: whether the room properties are automatically deleted after the owner leaves the room.<b> This feature can only be set by the owner of the room property.</b></li></ul> |
 
-#### Parameter description for the [endRoomAttributesBatchOperation](@endRoomAttributesBatchOperation)  method
-
-| Parameter | Type | Required | Description |
-| ---- | ----| -------| -----|
-| roomID | string	|  Yes | The ID of the room that you want to set the room properties. |
-| Promise  | [ZIMRoomAttributesBatchOperatedResult](@-ZIMRoomAttributesBatchOperatedResult) | Yes | Callback for execute results of the room properties. ​|
-
-#### Sample code
-
-```javascript
+<CodeGroup>
+```javascript title="Sample code"
 var roomID = '';
 var config = { 
     isForce: false,
@@ -216,3 +181,4 @@ zim.on('roomAttributesBatchUpdated', function (zim, { roomID, infos }) {
     console.log(''roomAttributesBatchUpdated'', roomID, infos);
 });
 ```
+</CodeGroup>

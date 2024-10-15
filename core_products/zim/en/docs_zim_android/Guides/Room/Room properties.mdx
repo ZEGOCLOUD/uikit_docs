@@ -368,9 +368,7 @@ ZIM.GetInstance().QueryRoomAllAttributes("roomID", (string roomID, Dictionary<st
 
 ## Combined room properties operation
 
-
-Combined operation means you can combine multiple operations in the same room into one operation. It is usually used when you want to perform continuous operations without being inserted by other users' operations.
-
+The merge operation means that you can combine multiple operations within the same room into one operation using the {getPlatformData(props,beginRoomAttributesBatchOperationMap)} and {getPlatformData(props,endRoomAttributesBatchOperationMap)} methods. This is typically used when you want to perform consecutive operations without being interrupted by other users' operations.
 
 
 :::if{props.platform=undefined}
