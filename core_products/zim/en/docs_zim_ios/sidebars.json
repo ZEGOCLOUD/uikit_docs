@@ -42,11 +42,6 @@
         },
         {
           "type": "doc",
-          "label": "Upgrade guide",
-          "id": "client-sdks/upgrade-guide"
-        },
-        {
-          "type": "doc",
           "label": "ZPNs release notes",
           "id": "client-sdks/zpns-release-notes"
         },
@@ -54,6 +49,11 @@
           "type": "doc",
           "label": "ZIM Audio release notes",
           "id": "client-sdks/zim-audio-release-notes"
+        },
+        {
+          "type": "doc",
+          "label": "ZIM upgrade guide",
+          "id": "client-sdks/zim-upgrade-guide"
         },
         {
           "type": "doc",

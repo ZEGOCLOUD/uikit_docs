@@ -37,13 +37,8 @@
         },
         {
           "type": "doc",
-          "label": "ZIM Release notes",
+          "label": "ZIM release notes",
           "id": "client-sdks/zim-release-notes"
-        },
-        {
-          "type": "doc",
-          "label": "Upgrade guide",
-          "id": "client-sdks/upgrade-guide"
         },
         {
           "type": "doc",
@@ -54,6 +49,11 @@
           "type": "doc",
           "label": "ZIM Audio release notes",
           "id": "client-sdks/zim-audio-release-notes"
+        },
+        {
+          "type": "doc",
+          "label": "ZIM upgrade guide",
+          "id": "client-sdks/zim-upgrade-guide"
         },
         {
           "type": "doc",

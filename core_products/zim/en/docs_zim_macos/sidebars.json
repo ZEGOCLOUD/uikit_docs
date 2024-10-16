@@ -42,8 +42,8 @@
         },
         {
           "type": "doc",
-          "label": "Upgrade guide",
-          "id": "client-sdks/upgrade-guide"
+          "label": "ZIM upgrade guide",
+          "id": "client-sdks/zim-upgrade-guide"
         }
       ]
     },

@@ -37,18 +37,18 @@
         },
         {
           "type": "doc",
-          "label": "Release notes",
-          "id": "client-sdks/release-notes"
-        },
-        {
-          "type": "doc",
-          "label": "Upgrade guide",
-          "id": "client-sdks/upgrade-guide"
+          "label": "ZIM release notes",
+          "id": "client-sdks/zim-release-notes"
         },
         {
           "type": "doc",
           "label": "ZPNs release notes",
           "id": "client-sdks/zpns-release-notes"
+        },
+        {
+          "type": "doc",
+          "label": "ZIM upgrade guide",
+          "id": "client-sdks/zim-upgrade-guide"
         }
       ]
     },
