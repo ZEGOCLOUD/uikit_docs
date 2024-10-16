@@ -11,36 +11,19 @@
       "id": "accessing-server-apis"
     },
     {
-      "type": "doc",
-      "label": "Query users online status",
-      "id": "query-users-online-status"
-    },
-    {
-      "type": "doc",
-      "label": "Push message to all users",
-      "id": "push-message-to-all-users"
-    },
-    {
-      "type": "doc",
-      "label": "Remove user from the room",
-      "id": "remove-user-from-the-room"
-    },
-    {
-      "type": "doc",
-      "label": "Destroy the room",
-      "id": "destroy-the-room"
-    },
-    {
-      "type": "doc",
-      "label": "MessageBody Introduction",
-      "id": "messagebody-introduction"
-    },
-    {
       "type": "category",
       "label": "User",
       "items": [
         {
           "type": "doc",
+<<<<<<< HEAD
+=======
+          "label": "Query users online status",
+          "id": "query-users-online-status"
+        },
+        {
+          "type": "doc",
+>>>>>>> 2c2b59f (调整serverAPI的目录结构)
           "label": "Query user information",
           "id": "user/query-user-information"
         },
@@ -119,6 +102,16 @@
           "type": "doc",
           "label": "Obtain information about users in a room",
           "id": "room/obtain-information-about-users-in-a-room"
+        },
+        {
+          "type": "doc",
+          "label": "Remove user from the room",
+          "id": "remove-user-from-the-room"
+        },
+        {
+          "type": "doc",
+          "label": "Destroy the room",
+          "id": "destroy-the-room"
         },
         {
           "type": "doc",
@@ -214,6 +207,14 @@
         },
         {
           "type": "doc",
+<<<<<<< HEAD
+=======
+          "label": "Push message to all users",
+          "id": "push-message-to-all-users"
+        },
+        {
+          "type": "doc",
+>>>>>>> 2c2b59f (调整serverAPI的目录结构)
           "label": "Recall a one-to-one message",
           "id": "messaging/recall-a-one-to-one-message"
         },
@@ -224,11 +225,14 @@
         },
         {
           "type": "doc",
+<<<<<<< HEAD
           "label": "Recall a room message",
           "id": "messaging/recall-a-room-message"
         },
         {
           "type": "doc",
+=======
+>>>>>>> 2c2b59f (调整serverAPI的目录结构)
           "label": "Import one-to-one messages",
           "id": "messaging/import-one-to-one-messages"
         },
@@ -236,6 +240,11 @@
           "type": "doc",
           "label": "Import group messages",
           "id": "messaging/import-group-messages"
+        },
+        {
+          "type": "doc",
+          "label": "MessageBody Introduction",
+          "id": "messagebody-introduction"
         }
       ]
     },
@@ -367,6 +376,11 @@
       "type": "doc",
       "label": "Return codes",
       "id": "return-codes"
+    },
+    {
+      "type": "doc",
+      "label": "Debugging guide of server API operations",
+      "id": "debugging-guide-of-server-api-operations"
     }
   ]
 }
