@@ -22,7 +22,7 @@
         {
           "type": "doc",
           "label": "Query users online status",
-          "id": "query-users-online-status"
+          "id": "user/query-users-online-status"
         },
         {
           "type": "doc",

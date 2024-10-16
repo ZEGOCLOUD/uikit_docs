@@ -1,0 +1,229 @@
+---
+articleID: 16891
+---
+
+
+# Batch register users
+
+- - -
+
+
+
+## Overview
+
+You can call this operation to batch register ZEGOCLOUD Instant Messaging (ZIM) accounts for users in the backend, so that they can log in to ZIM and receive historical messages. This operation is applicable to education scenarios.
+
+QPS limit: 20 calls per second
+
+## Operation prototype
+
+- Request method: POST
+- Request URL: https://zim-api.zego.im/?Action=UserRegister
+- Protocol: HTTPS
+
+## Request parameters
+
+The following table describes only the operation-specific request parameters and some common request parameters. For the complete list of common request parameters, see the [Public request parameters section of the Accessing Server APIs topic](../Accessing%20Server%20APIs.mdx#public-parameters).
+
+<table class="collapsible-table" >
+<tbody><tr data-row-level="1">
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<tr data-row-level="3" data-row-child="true">
+<td>UserInfo</td>
+<td>Array of Object</td>
+<td>Yes</td>
+<td>The user information. Up to 100 users can be registered at a time.</td>
+</tr>
+<tr data-row-level="3-1">
+<td>└UserId</td>
+<td>String</td>
+<td>Yes</td>
+<td>The user ID, which cannot exceed 32 bytes in length.</td>
+</tr>
+<tr data-row-level="3-2">
+<td>└UserName</td>
+<td>String</td>
+<td>No</td>
+<td>The username, which cannot exceed 64 bytes in length.</td>
+</tr>
+<tr data-row-level="3-3">
+<td>└UserAvatar</td>
+<td>String</td>
+<td>No</td>
+<td>The URL of the user avatar, which cannot exceed 500 bytes in length.</td>
+</tr>
+</tbody></table>
+
+<Note title="Note">
+
+The `UserID`, `UserName`, and `UserAvatar` parameters can contain only digits, letters, and the following characters: '!', '#', '$', '%', '\&', '(', ')', '+', '-', ':', ';', '\<', '=', '.', '>', '?', '@', '\[', ']', '\^', '\_', '{', '}', '\|', '~'.
+
+</Note>
+
+## Sample request
+
+- Request URL:
+  
+  ```json
+  https://zim-api.zego.im/?Action=UserRegister
+  &<Common request parameters>
+  ```
+
+- Request body:
+  
+  ```json
+  {
+      "UserInfo":[
+    	{
+      	"UserId": "aaa",
+          "UserName": "userNamea",
+      	"UserAvatar": "http"
+    	},
+    	{
+      	"UserId": "bbb",
+          "UserName": "userNameb",
+      	"UserAvatar": "http"
+    	}
+      ]
+  }
+  ```
+
+## Response parameters
+
+<table class="collapsible-table" >
+<tbody><tr data-row-level="1">
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr data-row-level="2">
+<td>Code</td>
+<td>Number</td>
+<td>The return code.<div class="mk-hint">When you request to batch register users, take note of the following items:<ul><li>If one or more user IDs are successfully registered, `0` is returned. For more information, see `ErrorList`.</li><li>If all user IDs fail to be registered, a corresponding code is returned. For more information, see <a href="!Server_APIs/Return_Codes" target="_blank">Return codes</a>.</li></ul></div></td>
+</tr>
+<tr data-row-level="3">
+<td>Message</td>
+<td>String</td>
+<td>The description of the request result.</td>
+</tr>
+<tr data-row-level="4">
+<td>RequestId</td>
+<td>String</td>
+<td>The request ID.</td>
+</tr>
+<tr data-row-level="5" data-row-child="true">
+<td>ErrorList</td>
+<td>Array of Object</td>
+<td>
+The list of failed results.
+<ul>
+
+<li>
+If `Code` is `0`:
+<ul>
+<li>If `ErrorList` is empty, all user IDs are successfully registered.</li>
+<li>If `ErrorList` is not empty, some user IDs fail to be registered. In this case, see `SubCode`.</li>
+</ul>
+</li>
+<li>
+If `Code` is not `0`:
+<ul>
+<li>If `ErrorList` is empty, one or more parameters are invalid, the QPS limit is exceeded, or a system error occurs.</li>
+<li>If `ErrorList` is not empty, all user IDs fail to be registered, indicating that all of them have been registered.</li>
+</ul>
+
+</li>
+</ul></td>
+</tr>
+<tr data-row-level="5-3">
+<td>└UserID</td>
+<td>String</td>
+<td>The user ID that fails to be registered.</td>
+</tr>
+<tr data-row-level="5-4">
+<td>└SubCode</td>
+<td>Number</td>
+<td>The code returned when the request fails.</td>
+</tr>
+<tr data-row-level="5-5">
+<td>└SubMessage</td>
+<td>String</td>
+<td>The error message.</td>
+</tr>
+</tbody></table>
+
+## Sample response
+
+```json
+{
+    "Code":0,   // If one or more user IDs are successfully registered, 0 is returned. For more information, see ErrorList.
+    "Message":"success",
+    "RequestId":"343649807833778782",
+    "ErrorList": [
+       {
+           "UserId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+           "SubCode": 660000012,
+           "SubMessage":"user length limit"
+       }
+     ] 
+}
+```
+
+## Return codes
+
+The following table describes only the return codes related to the business logic of the operation. For the complete list of return codes, see [Return codes](../Return%20codes.mdx).
+
+<table>
+<tbody><tr>
+<th>Return Code</th>
+<th>Description</th>
+<th>Possible Reason</th>
+<th>Solution</th>
+</tr>
+<tr>
+<td>660000001</td>
+<td>A common service error occurred.</td>
+<td>A server error occurred.</td>
+<td>Try again, or contact ZEGOCLOUD technical support.</td>
+</tr>
+<tr>
+<td>660000002</td>
+<td>Invalid parameter.</td>
+<td>The input parameter is invalid or not specified.</td>
+<td>Check the input parameter.</td>
+</tr>
+<tr>
+<td>660000012</td>
+<td>The length of the `UserID` parameter exceeds the limit.</td>
+<td>The `UserID` parameter cannot exceed 32 bytes in length.</td>
+<td>Make sure that the `UserID` parameter does not exceed 32 bytes in length.</td>
+</tr>
+<tr>
+<td>660700001</td>
+<td>Too many requests are sent.</td>
+<td>More than 20 requests are sent per second.</td>
+<td>Try again later.</td>
+</tr>
+<tr>
+<td>660700002</td>
+<td>The user already exists.</td>
+<td>The ID of the user specified in the request has already been registered.</td>
+<td>Make sure that the user ID has not been registered before.</td>
+</tr>
+<tr>
+<td>660700006</td>
+<td>The length of the `UserName` parameter exceeds the limit.</td>
+<td>The `UserName` parameter cannot exceed 64 bytes in length.</td>
+<td>Make sure that the `UserName` parameter does not exceed 64 bytes in length.</td>
+</tr>
+<tr>
+<td>660700007</td>
+<td>The length of the `UserAvatar` parameter exceeds the limit.</td>
+<td>The `UserAvatar` parameter cannot exceed 500 bytes in length.</td>
+<td>Make sure that the `UserAvatar` parameter does not exceed 500 bytes in length.</td>
+</tr>
+</tbody></table>
