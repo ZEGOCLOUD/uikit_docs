@@ -22,7 +22,12 @@
         {
           "type": "doc",
           "label": "Query users online status",
-          "id": "user/query-users-online-status"
+          "id": "query-users-online-status"
+        },
+        {
+          "type": "doc",
+          "label": "Query user information",
+          "id": "user/query-user-information"
         },
         {
           "type": "doc",
@@ -38,6 +43,11 @@
           "type": "doc",
           "label": "Batch add friends",
           "id": "user/batch-add-friends"
+        },
+        {
+          "type": "doc",
+          "label": "Batch send friend requests",
+          "id": "user/batch-send-friend-requests"
         },
         {
           "type": "doc",
