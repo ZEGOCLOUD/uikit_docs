@@ -37,8 +37,8 @@
         },
         {
           "type": "doc",
-          "label": "Release notes",
-          "id": "client-sdks/release-notes"
+          "label": "ZIM release notes",
+          "id": "client-sdks/zim-release-notes"
         },
         {
           "type": "doc",
