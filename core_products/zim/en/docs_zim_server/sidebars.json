@@ -41,6 +41,11 @@
       "items": [
         {
           "type": "doc",
+          "label": "Query user information",
+          "id": "user/query-user-information"
+        },
+        {
+          "type": "doc",
           "label": "Batch register users",
           "id": "user/batch-register-users"
         },
@@ -204,6 +209,11 @@
         },
         {
           "type": "doc",
+          "label": "Send room messages",
+          "id": "messaging/send-room-messages"
+        },
+        {
+          "type": "doc",
           "label": "Recall a one-to-one message",
           "id": "messaging/recall-a-one-to-one-message"
         },
@@ -214,8 +224,8 @@
         },
         {
           "type": "doc",
-          "label": "Send room messages",
-          "id": "messaging/send-room-messages"
+          "label": "Recall a room message",
+          "id": "messaging/recall-a-room-message"
         },
         {
           "type": "doc",

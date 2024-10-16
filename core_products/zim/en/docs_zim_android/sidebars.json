@@ -37,8 +37,8 @@
         },
         {
           "type": "doc",
-          "label": "Release notes",
-          "id": "client-sdks/release-notes"
+          "label": "ZIM Release notes",
+          "id": "client-sdks/zim-release-notes"
         },
         {
           "type": "doc",
@@ -99,6 +99,11 @@
               "type": "doc",
               "label": "Friend management",
               "id": "guides/users/friend-management"
+            },
+            {
+              "type": "doc",
+              "label": "Online Status Subscription",
+              "id": "guides/users/online-status-subscription"
             }
           ]
         },
