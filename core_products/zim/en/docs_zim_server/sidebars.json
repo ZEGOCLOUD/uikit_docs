@@ -11,11 +11,6 @@
       "id": "accessing-server-apis"
     },
     {
-      "type": "doc",
-      "label": "MessageBody Introduction",
-      "id": "messagebody-introduction"
-    },
-    {
       "type": "category",
       "label": "User",
       "items": [
@@ -245,7 +240,7 @@
         {
           "type": "doc",
           "label": "MessageBody Introduction",
-          "id": "messagebody-introduction"
+          "id": "messaging/messagebody-introduction"
         }
       ]
     },
