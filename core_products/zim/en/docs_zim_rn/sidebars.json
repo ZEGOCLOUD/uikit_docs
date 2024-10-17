@@ -99,6 +99,11 @@
               "type": "doc",
               "label": "Friend management",
               "id": "guides/users/friend-management"
+            },
+            {
+              "type": "doc",
+              "label": "Online Status Subscription",
+              "id": "guides/users/online-status-subscription"
             }
           ]
         },
