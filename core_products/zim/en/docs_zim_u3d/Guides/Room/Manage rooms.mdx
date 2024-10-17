@@ -1,0 +1,198 @@
+---
+articleID: 16361
+---
+
+
+# Manage rooms
+
+- - -
+
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+## Overview
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room messaging, allows multiple users to send text or custom messages to a room, and chat and share ideas in real time.
+
+With the room messaging feature, you can build your app to meet different requirements of various scenarios, such as one-to-many classes, online conferences, and more. 
+
+
+
+## Join a room 
+
+Now, we provide two methods to join a room:
+
+- <b>[Method 1: Manually create a room & Join a room ](#method-1-manually-create-a-room--join-a-room-)</b>: Call the [CreateRoom](@CreateRoom) method with the [ZIMRoomInfo](@-ZIMRoomInfo) info to manually create a room first. And other client users call the [JoinRoom](@JoinRoom) with the roomID to join the room.
+
+
+- <b>[Method 2: Join a room directly (room will be created automatically)](#method-2-join-a-room-directly-room-will-be-created-automatically)</b>: Call the [EnterRoom](@EnterRoom) method with [ZIMRoomInfo](@-ZIMRoomInfo) info to join a room directly (if the room doesn't exist, the room will be created automatically). Other client users can call the [EnterRoom](@EnterRoom) method with the roomID to join the room.
+
+For in-room users to send messages to a room, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx#sendreceive-custom-messages).
+
+
+<Note title="Note">
+
+If the room (roomID) already exists:
+
+- Call the [CreateRoom](@CreateRoom) method: returns an error code. For details, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx#room-errors).
+- Call the [EnterRoom](@EnterRoom) method: you will join the room directly. 
+
+If the room (roomID) doesn't exist:
+
+- Call the [CreateRoom](@CreateRoom) method: you can create a room, and you will join the room upon creation. 
+- Call the [EnterRoom](@EnterRoom) method: a room will be created automatically, and you will join the room directly. 
+</Note>
+
+
+### Method 1: Manually create a room & Join a room 
+
+#### Manually create a room
+
+Let's suppose we have Client A and Client B. The following shows how Client A creates a room, how Client B and other client users join the room. 
+
+For Client A to create a room after login, he can call the [CreateRoom](@CreateRoom) method with the [ZIMRoomInfo](@-ZIMRoomInfo) info. And he can be told whether the room is created successfully by the `ZIMError` parameter. For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
+
+
+
+<Warning title="Warning">
+
+- You can customize the **roomID** and **roomName**, and we recommend you set the **roomID** to a meaningful value and associate them with the account system of your application.
+- After creating a room by calling the [CreateRoom](@CreateRoom) method, you will directly join the room you just created, you don't need to call the [JoinRoom](@JoinRoom) method to join the room.
+</Warning>
+
+
+```c#
+// The roomID is a string with a maximum length of 32 bytes and can only contain numbers, English characters, and these special characters: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '[', ']', '^', '_', '{', '}', '|', '~'.
+// The roomName is a string with a maximum length of 64 bytes and has no special character restrictions.
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+zimRoomInfo.roomID = "roomID";
+zimRoomInfo.roomName = "roomName";
+ZIM.GetInstance().CreateRoom(zimRoomInfo, (ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) =>
+{
+    if (error.code == ZIMErrorCode.Success)
+    {
+        // Created successfully.          
+    }
+    else
+    {
+        // Failed to create.            
+    }
+});
+```
+
+#### Join a room 
+
+For Client B and other client users to join the room created by Client A, call the [JoinRoom](@JoinRoom) method with the roomID of client A's room. And Client B and other client users can be told whether they joined the room successfully by the `ZIMError` parameter. For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
+
+
+```C#
+ZIM.GetInstance().JoinRoom("roomID", (ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) =>
+{
+    if (error.code == ZIMErrorCode.Success)
+    {
+        //Joined successfully.
+    }
+    else
+    {
+        // Failed to join.
+    }
+});
+```
+
+To receive notifications when a new room member joins the room, set up and listen for the callback [OnRoomMemberJoined](@OnRoomMemberJoined). 
+
+The following shows Client A receives the callback notification when Client B joins the room created by Client A:
+
+
+```c#
+ZIM.GetInstance().onRoomMemberJoined = (ZIM zim, List<ZIMUserInfo> memberList,
+                                            string roomID) =>
+{
+    // Info of the member who join the room.
+};
+```
+
+
+### Method 2: Join a room directly (room will be created automatically)
+
+Let's suppose we have Client A and Client B. The following shows how Client A joins the room without creating a room manually, and how Client B and other client users join the room.
+
+1. After logs in, Client A calls the [EnterRoom](@EnterRoom) method with the [ZIMRoomInfo](@-ZIMRoomInfo) information. The room will be created automatically when the passed roomID doesn't exist.
+
+2. Client B and other client users call the [EnterRoom](@EnterRoom) method with the roomID to join the room created by Client A. 
+
+3. For in-room client users to receive notifications when a new room member joins the room, set up and listen for the callback [OnRoomMemberJoined](@OnRoomMemberJoined).
+
+
+
+```C#
+ZIMRoomInfo zimRoomInfo = new ZIMRoomInfo();
+zimRoomInfo.roomID = "roomID";
+zimRoomInfo.roomName = "roomName";
+
+ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
+
+ZIM.GetInstance().EnterRoom(zimRoomInfo, config, (ZIMRoomFullInfo zimRoomFullInfo, ZIMError error) =>
+{
+    if (error.code == ZIMErrorCode.Success)
+    {
+        // Entered successfully.           
+    }
+    else
+    {
+        // Failed to enter.           
+    }
+});
+```
+
+```c#
+// Listen for the callback. 
+ZIM.GetInstance().onRoomMemberJoined = (ZIM zim, List<ZIMUserInfo> memberList,
+                                                    string roomID) =>
+{
+    // Info of the member who join the room.
+};
+```
+
+
+## Leave a room 
+
+
+For Client B to leave the room, call the [LeaveRoom](@LeaveRoom) method with `roomID`.
+And Client A and other client users in the room will receive notifications through the callback [OnRoomMemberLeft](@OnRoomMemberLeft) method. 
+
+Room members who leave the room cannot receive messages in the room anymore.
+
+
+
+```c#
+// Leave the room.
+ZIM.GetInstance().LeaveRoom("roomID", (string roomID, ZIMError errorInfo) =>
+{
+    if (errorInfo.code == ZIMErrorCode.Success)
+    {
+        // Left successfully.
+    }
+    else
+    {
+        // Failed to leave.
+    }
+});
+```
+
+```c#
+ZIM.GetInstance().onRoomMemberLeft = (ZIM zim, List<ZIMUserInfo> memberList,
+                                  string roomID) =>
+{
+    // Info of the member who left the room.
+};
+```
+
+<Note title="Note">
+
+When all members leave the room, the room will be automatically destroyed. ZIM SDK supports setting the room delay destruction through [ZIMRoomAdvancedConfig], with a maximum delay of 3 hours.
+
+</Note>

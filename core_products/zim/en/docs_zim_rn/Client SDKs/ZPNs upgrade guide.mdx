@@ -1,0 +1,37 @@
+# ZPNs upgrade guide
+
+- - -
+
+This article introduces some instructions and considerations for upgrading the ZPNs React Native framework SDK version.
+
+<a id="2_6_0"></a>
+
+## 2.6.0 Upgrade Guide
+
+ZPNs 2.6.0 separates CallKit and makes it a separate plugin. If your project uses an older version of ZPNs, you need to integrate the zego-callkit-react-native plugin additionally to achieve compatibility after the upgrade.
+
+1. Import the zego-callkit-react-native plugin.
+
+   Developers can use npm to obtain the SDK.
+
+   Go to the root directory of your project and execute the following command to install the dependencies.
+
+   <Note title="Note">
+
+   npm package download supports TypeScript (recommended).
+   </Note>
+
+<CodeGroup>
+```bash title="npm"
+   npm i zego-callkit-react-native
+   ```
+```bash title="yarn"
+   yarn add zego-callkit-react-native
+   ```
+</CodeGroup>
+
+2. Remove the obsolete Callkit dependency and rely on the new header files to achieve compatibility after the upgrade.
+
+```javascript
+import CallKit from 'zego-callkit-react-native';
+```

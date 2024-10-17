@@ -1,0 +1,81 @@
+# Migration solution
+
+
+ZEGO Instant Messaging (ZIM) is an all-platform messaging service featuring massive concurrency, ultra-low latency, and reliable delivery. ZIM is applicable to large-scale live streaming, voice chatroom, customer service, and other scenarios. This topic describes how to migrate data from other communication services to ZIM.
+
+## Concepts
+
+- Legacy system: original communication service
+- New system: ZIM
+- App 1.0: the app developed by using the **legacy system**
+- App 2.0: the app developed by using the **new system**
+
+## Force upgrade solution
+
+Force upgrade forces the upgrade from app 1.0 to 2.0 after data is synchronized to the ZIM server. The procedure is as follows:
+1. Import historical data to the ZIM server, specifically:
+    - <a href="#importAccounts">(Prerequisite) Import accounts</a>
+    - <a href="#import-user-information">Import user information</a>
+    - <a href="#import-the-friend-list-and-blocklist">Import the friend list and blocklist</a>
+    - <a href="#import-historical-one-to-one-messages">Import historical one-to-one messages</a>
+    - <a href="#import-group-data-and-historical-group-messages">Import group information and historical group messages</a>
+2. Force the upgrade from app 1.0 to 2.0.
+3. Discontinue the legacy system so that all users communicate on the new system.
+
+## Migration procedure
+
+<a id='importAccounts'></a>
+### (Prerequisite) Import accounts
+
+This step is the prerequisite for importing other data. In the app backend, call the [`Batch register users`](/zim-server/user/batch-register-users) method of the ZIM server to import all existing accounts to the ZIM backend.
+
+
+### Import user information
+
+In the app backend, call the [`Modify user information`\|_blank](/zim-server/user/modify-user-information) method of the ZIM server to import existing user information to the ZIM backend.
+
+### Import the friend list and blocklist
+
+<Note title="Note">
+In ZIM, the friend list and blocklist are not exclusive. Two users can be friends of each other and block each other at the same time.
+</Note>
+
+Call the [`Batch add friends`\|_blank](/zim-server/user/batch-add-friends) method of the ZIM server to import the friend list to the ZIM backend.
+
+Call the [`Batch block users`\|_blank](/zim-server/user/batch-block-users) method of the ZIM server to import the blocklist to the ZIM backend.
+
+### Import historical one-to-one messages
+
+Call the [`Import one-to-one messages`\|_blank](/zim-server/messaging/import-one-to-one-messages) method of the ZIM server to import one-to-one messages to the ZIM backend.
+
+
+### Import group data and historical group messages
+
+The procedure is as follows:
+
+1. Call the [`Create a group`\|_blank](/zim-server/group/create-a-group) method of the ZIM server to import existing group information and group members to the ZIM backend.
+2. If the imported group member information is incorrect, call the [`Add group members`\|_blank](/zim-server/group/add-group-members) or [`Remove group members`\|_blank](/zim-server/group/remove-group-member) method of the ZIM server for adjustment.
+3. Call the [`Import group messages`\|_blank](/zim-server/messaging/import-group-messages) method of the ZIM server to import historical group messages.
+
+## Import data from multiple apps
+
+This section describes how to import user data from multiple apps to the ZIM backend.
+
+### User information
+
+If the information of a user exists in two apps, you need to merge and import the information, because an import will be overwritten by the next import.
+
+### User relationship
+
+If user A and user B are friends in app 1, and user A and user C are friends in app 2, no special operation is required.
+
+If user A and user B are friends in both app 1 and app 2, import the information only once, as a repeated import will fail.
+
+### Historical one-to-one messages
+
+If one-to-one messages between user A and user B exist in both app 1 and app 2, messages will be merged into one conversation after the import. We recommend that you merge messages in two apps and store them in one app only.
+
+### Group data and historical group messages
+
+One group will not exist in two apps, and you do not need to merge group data.
+f

@@ -1,0 +1,53 @@
+# Basic concepts
+
+## One-on-one chat
+
+Peer-to-peer messaging. Users can receive [offline notifications\|_blank](https://www.zegocloud.com/article/14252) when the App is running in the background or the App process is killed. 
+
+## Group chat
+
+[Group\|_blank](./../Guides/Group/Manage%20groups.mdx) chat between two or more users. 
+Group members receive notifications when existing members sent messages in the group. Offline group members can receive offline notifications when the App is running in the background or the App process is killed.
+
+In-app Chat stores the group relation chain persistently. And the online or offline status of members will not change the relation chain.
+
+## Room
+
+[Room\|_blank](./../Guides/Room/Manage%20rooms.mdx) refers to the chatroom where two or more users can chat. In-room members receive notifications when existing members sent messages to the room. And members can't receive any notifications when the App is running in the background or the App process is killed. 
+
+Members automatically leave the chatroom after getting offline and last for 30 seconds (by default) and won't receive any messages or notifications upon leaving.  
+The message history is not stored by default, while you can customize the configuration to store and retrieve up to 3 hours of history messages.
+
+
+## Session list
+
+Each one-on-one chat or group chat has its own session ID. The [session list\|_blank](./../Guides/Conversation/Get%20the%20conversation%20list.mdx) is a list of all session IDs in chronological order. The order of the list will be influenced by: the time of the last message of each session, and whether the session is sticky to the top. (Room is not included.)
+
+## Offline messages 
+
+Cache the peer-to-peer messages you sent when the receiver is offline. The receiver will get the message when back online. 
+
+This is supported in both one-on-one chat and group chat.
+
+## Offline notifications
+
+Send notifications to an offline user, notifications will be is displayed in the notification bar of the client.
+We now support Apple, Huawei, Xiaomi, Vivo, Oppo, and more devices.
+
+## Message migration
+
+When a user logs in to the In-app Chat from another device, the user can pull the received messages from the In-app Chat Server to the newly logged client.
+
+
+## Signaling messages
+
+Binary messages, signaling messages, and custom messages are generally talking about the same thing, that is, binary messages, such as images, audio, and video, that you can customize.
+
+You can customize the signaling message type and content according to your business requirements, and send the message to the business server to implement the corresponding business logic.
+
+
+## Message cloud storage 
+
+The one-on-one, group chat, in-room messages you sent are stored on the In-app Chat Server for retrieval after changing your devices or getting back from offline status.
+
+For privacy protection, you can set the actual message storage duration or delete the message storage.

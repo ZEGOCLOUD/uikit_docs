@@ -1,0 +1,382 @@
+{
+  "mySidebar": [
+    {
+      "type": "doc",
+      "label": "Overview",
+      "id": "overview"
+    },
+    {
+      "type": "doc",
+      "label": "Accessing Server APIs",
+      "id": "accessing-server-apis"
+    },
+    {
+      "type": "category",
+      "label": "User",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Query users online status",
+          "id": "user/query-users-online-status"
+        },
+        {
+          "type": "doc",
+          "label": "Query user information",
+          "id": "user/query-user-information"
+        },
+        {
+          "type": "doc",
+          "label": "Batch register users",
+          "id": "user/batch-register-users"
+        },
+        {
+          "type": "doc",
+          "label": "Modify user information",
+          "id": "user/modify-user-information"
+        },
+        {
+          "type": "doc",
+          "label": "Batch add friends",
+          "id": "user/batch-add-friends"
+        },
+        {
+          "type": "doc",
+          "label": "Batch send friend requests",
+          "id": "user/batch-send-friend-requests"
+        },
+        {
+          "type": "doc",
+          "label": "Query the friend list",
+          "id": "user/query-the-friend-list"
+        },
+        {
+          "type": "doc",
+          "label": "Check friendships",
+          "id": "user/check-friendships"
+        },
+        {
+          "type": "doc",
+          "label": "Change the alias of a friend",
+          "id": "user/change-the-alias-of-a-friend"
+        },
+        {
+          "type": "doc",
+          "label": "Modify the attributes of a friend",
+          "id": "user/modify-the-attributes-of-a-friend"
+        },
+        {
+          "type": "doc",
+          "label": "Batch block users",
+          "id": "user/batch-block-users"
+        },
+        {
+          "type": "doc",
+          "label": "Batch unblock users",
+          "id": "user/batch-unblock-users"
+        },
+        {
+          "type": "doc",
+          "label": "Query the blocklist",
+          "id": "user/query-the-blocklist"
+        },
+        {
+          "type": "doc",
+          "label": "Check blockships",
+          "id": "user/check-blockships"
+        },
+        {
+          "type": "doc",
+          "label": "Batch delete friends",
+          "id": "user/batch-delete-friends"
+        },
+        {
+          "type": "doc",
+          "label": "Delete all friends",
+          "id": "user/delete-all-friends"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Room",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Destroy the room",
+          "id": "room/destroy-the-room"
+        },
+        {
+          "type": "doc",
+          "label": "Obtain information about users in a room",
+          "id": "room/obtain-information-about-users-in-a-room"
+        },
+        {
+          "type": "doc",
+          "label": "Remove user from the room",
+          "id": "room/remove-user-from-the-room"
+        },
+        {
+          "type": "doc",
+          "label": "Query whether a user is in a room",
+          "id": "room/query-whether-a-user-is-in-a-room"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Group",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Create a group",
+          "id": "group/create-a-group"
+        },
+        {
+          "type": "doc",
+          "label": "Modify group specification limits",
+          "id": "group/modify-group-specification-limits"
+        },
+        {
+          "type": "doc",
+          "label": "Query group list in the app",
+          "id": "group/query-group-list-in-the-app"
+        },
+        {
+          "type": "doc",
+          "label": "Query group member list",
+          "id": "group/query-group-member-list"
+        },
+        {
+          "type": "doc",
+          "label": "Remove group member",
+          "id": "group/remove-group-member"
+        },
+        {
+          "type": "doc",
+          "label": "Transfer the group ownership",
+          "id": "group/transfer-the-group-ownership"
+        },
+        {
+          "type": "doc",
+          "label": "Add group members",
+          "id": "group/add-group-members"
+        },
+        {
+          "type": "doc",
+          "label": "Set nicknames of group members",
+          "id": "group/set-nicknames-of-group-members"
+        },
+        {
+          "type": "doc",
+          "label": "Set group member roles",
+          "id": "group/set-group-member-roles"
+        },
+        {
+          "type": "doc",
+          "label": "Mute a group",
+          "id": "group/mute-a-group"
+        },
+        {
+          "type": "doc",
+          "label": "Mute group members",
+          "id": "group/mute-group-members"
+        },
+        {
+          "type": "doc",
+          "label": "Disband a group chat",
+          "id": "group/disband-a-group-chat"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Message",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Send a one-to-one message",
+          "id": "messaging/send-a-one-to-one-message"
+        },
+        {
+          "type": "doc",
+          "label": "Send group messages",
+          "id": "messaging/send-group-messages"
+        },
+        {
+          "type": "doc",
+          "label": "Send room messages",
+          "id": "messaging/send-room-messages"
+        },
+        {
+          "type": "doc",
+          "label": "Recall a one-to-one message",
+          "id": "messaging/recall-a-one-to-one-message"
+        },
+        {
+          "type": "doc",
+          "label": "Recall a group message",
+          "id": "messaging/recall-a-group-message"
+        },
+        {
+          "type": "doc",
+          "label": "Recall a room message",
+          "id": "messaging/recall-a-room-message"
+        },
+        {
+          "type": "doc",
+          "label": "Push message to all users",
+          "id": "messaging/push-message-to-all-users"
+        },
+        {
+          "type": "doc",
+          "label": "Import one-to-one messages",
+          "id": "messaging/import-one-to-one-messages"
+        },
+        {
+          "type": "doc",
+          "label": "Import group messages",
+          "id": "messaging/import-group-messages"
+        },
+        {
+          "type": "doc",
+          "label": "MessageBody Introduction",
+          "id": "messaging/messagebody-introduction"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Call invitation",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Send a call invitation",
+          "id": "call-invitation/send-a-call-invitation"
+        },
+        {
+          "type": "doc",
+          "label": "Accept a call invitation",
+          "id": "call-invitation/accept-a-call-invitation"
+        },
+        {
+          "type": "doc",
+          "label": "Reject a call invitation",
+          "id": "call-invitation/reject-a-call-invitation"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Conversation",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Mute notifications for conversations",
+          "id": "conversation/mute-notifications-for-conversations"
+        },
+        {
+          "type": "doc",
+          "label": "Pin conversations to the top",
+          "id": "conversation/pin-conversations-to-the-top"
+        },
+        {
+          "type": "doc",
+          "label": "Query conversation list",
+          "id": "conversation/query-conversation-list"
+        },
+        {
+          "type": "doc",
+          "label": "Query the message list of one-on-one chats",
+          "id": "conversation/query-the-message-list-of-one-on-one-chats"
+        },
+        {
+          "type": "doc",
+          "label": "Query the message list of group chats",
+          "id": "conversation/query-the-message-list-of-group-chats"
+        },
+        {
+          "type": "doc",
+          "label": "Set conversation marks",
+          "id": "conversation/set-conversation-marks"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "ZIMAudio",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Obtain a license",
+          "id": "zim-audio/obtain-a-license"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Callbacks",
+      "items": [
+        {
+          "type": "doc",
+          "label": "Callback configuration instructions",
+          "id": "callbacks/callback-configuration-instructions"
+        },
+        {
+          "type": "doc",
+          "label": "Login and logout",
+          "id": "callbacks/login-and-logout"
+        },
+        {
+          "type": "doc",
+          "label": "Call invitation sent",
+          "id": "callbacks/call-invitation-sent"
+        },
+        {
+          "type": "doc",
+          "label": "Call invitation canceled",
+          "id": "callbacks/call-invitation-canceled"
+        },
+        {
+          "type": "doc",
+          "label": "Call invitation accepted",
+          "id": "callbacks/call-invitation-accepted"
+        },
+        {
+          "type": "doc",
+          "label": "Call invitation rejected",
+          "id": "callbacks/call-invitation-rejected"
+        },
+        {
+          "type": "doc",
+          "label": "Call invitation timed out",
+          "id": "callbacks/call-invitation-timed-out"
+        },
+        {
+          "type": "doc",
+          "label": "Message not sent yet",
+          "id": "callbacks/message-not-sent-yet"
+        },
+        {
+          "type": "doc",
+          "label": "Message sent",
+          "id": "callbacks/message-sent"
+        },
+        {
+          "type": "doc",
+          "label": "Authenticating server-to-server callbacks",
+          "id": "callbacks/authenticating-server-to-server-callbacks"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "label": "Return codes",
+      "id": "return-codes"
+    },
+    {
+      "type": "doc",
+      "label": "Debugging guide of server API operations",
+      "id": "debugging-guide-of-server-api-operations"
+    }
+  ]
+}

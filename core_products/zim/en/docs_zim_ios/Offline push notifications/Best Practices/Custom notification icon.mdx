@@ -1,0 +1,291 @@
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const ZIMPushConfig={
+    "Android": <a href="https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_ios~class~ZIMPushConfig" target="_blank">ZIMPushConfig</a>,
+    "RN": <a href="https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~interface~ZIMPushConfig" target="_blank">ZIMPushConfig</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html" target="_blank">ZIMPushConfig</a>
+}
+
+# Custom notification icon
+
+
+## Overview
+In addition to the default display of the app icon in offline push notifications, you can also customize the notification icon for offline pushes using ZPNs. This allows you to include the sender's avatar when sending one-on-one or group chat messages.
+
+Taking the ZIM demo as an example:
+
+| Default Notification Icon | Custom Notification Icon with Retained App Icon |
+| -- | -- |
+| <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17240_1.jpeg" /></Frame> | <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17240_2.jpeg" /></Frame> |
+
+## How it works
+
+ZPNs supports including the `"mutable-content":1` field when sending APNs push notifications. This allows your app to intercept the push message, modify its content, and then display it. For more details, please refer to [Description of Mutable-content](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification#2943360) in the Official Documentation of Apple Developer.
+
+## Prerequisites
+
+- Offline push has been implemented. For details, please refer to this document [Implement offline push notification](./../Implement%20offline%20push%20notification.mdx).
+- Real iOS devices with iOS 15.0 or above.
+
+## Configure resourceID
+
+Contact ZEGOCLOUD technical support to configure a resourceID carrying `"mutable-content":1`.
+
+## Sender
+
+When sending offline push notifications using the interface that includes {getPlatformData(props, ZIMPushConfig)}, please fill in the before-mentioned resourceID.
+
+Taking sending one-on-one text messages as an example:
+
+:::if{props.platform=undefined}
+```objc
+ZIMTextMessage *txtMsg = [[ZIMTextMessage alloc] init];
+txtMsg.message = @"Message content";
+
+ZIMMessageSendConfig *sentConfig = [[ZIMMessageSendConfig alloc] init];
+
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"Push title, usually the user's userName, corresponding to APNs title";
+pushConfig.content = @"Push content, usually the same as the message content, corresponding to APNs body";
+pushConfig.resourcesID = @"resourceID carrying 'mutable-content':1";
+// Fill in the required icon image URL
+pushConfig.payload = @"{\"avatar_url\":\"https://storage.zego.im/zim/example/web/assets/1.jpeg\"}"; // Define a custom protocol in the payload, adding a field to carry the notification image URL, which should be consistent with the protocol used for parsing on the app receiver end. Here, a JSON string is used.
+sentConfig.pushConfig = pushConfig;
+
+// Send one-on-one text message
+[[ZIM getInstance] sendMessage:txtMsg toConversationID:@"toUserID" conversationType:ZIMConversationTypePeer config:sentConfig notification:nil callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = "Push title, usually the user's userName, corresponding to APNs title";
+pushConfig.content = "Push content, usually the same as the message content, corresponding to APNs body";
+pushConfig.resourcesID = "Carrying mutable-content";
+// Provide the required icon address
+pushConfig.payload = "{\"avatar_url\":\"Image resource URL\"}";// Define a custom protocol in the payload, adding a field to carry the notification image URL, which should be consistent with the protocol used for parsing on the app receiver end. Here, a JSON string is used.
+sendConfig.pushConfig = pushConfig;
+// Send one-on-one text message
+ZIM.getInstance()?.sendMessage(ZIMTextMessage(message: 'message'), "toConversationID", ZIMConversationType.peer, sendConfig);
+```
+:::
+:::if{props.platform="RN"}
+```js
+var sendConfig = {
+    pushConfig:{
+        title: 'Push title, usually the user's userName',
+        content: 'Push content, usually the same as the message content, corresponding to APNs body',
+        resourcesID: 'resourceID carrying mutable-content',
+        payload: '{\"avatar_url\":\"Image resource URL\"}';// Define a custom protocol in the payload, adding a field to carry the notification image URL, which should be consistent with the protocol used for parsing on the app receiver end. Here, a JSON string is used.
+    }
+}
+
+// Send one-on-one text message
+var toUserID = '';
+var messageTextObj = { type: 1, message: 'text message content' };
+zim.sendMessage(messageTextObj, toUserID, 0, sendConfig)
+.then(function ({ message }) {
+    // Operation succeeded
+})
+.catch(function (err) {
+    // Operation failed
+});
+```
+:::
+
+## Receiver
+
+### 1. Configure Capability
+
+Open Xcode, select the target under TARGETS, and navigate to Signing & Capabilities > Capabilities. Enable **Push Notification** (for offline push notifications) and **Communication Notifications** (for customizing notification icons after intercepting pushes).
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_3.jpeg" /></Frame>
+
+### 2. Configure info.plist file
+
+Add the following configuration to the project'sinfo.plist file.
+
+```xml
+NSUserActivityTypes (Array)
+    - INStartCallIntent
+    - INSendMessageIntent
+```
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_4.jpeg" /></Frame>
+
+### 3. Set up Notification Service Extension
+
+1. Add Notification Service Extension to Targets.
+
+    1. Click “File > New > Target...”
+
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_5.jpeg" /></Frame>
+
+    2. In the pop-up window, select “iOS > Notification Service Extension”.
+    
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_6.jpeg" /></Frame>
+
+    3. Enter the Product Name and other information for the extension.
+
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_7.jpeg" /></Frame>
+
+   After creating Extension, a "xxxExtension"  folder (where xxx is the Product Name entered when adding the extension) will be generated in the project. You will need the NotificationService class file and info.plist file within that folder.
+
+
+2. Configure the info.plist file for the newly added extension.
+
+    ```xml
+    NSUserActivityTypes (Array)
+        - INStartCallIntent
+        - INSendMessageIntent
+    ```
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_8.jpeg" /></Frame>
+
+3. Configure the Capability for the newly added extension.
+
+   Select Extension as target under TARGETS, then navigate to "Signing & Capabilities > Capabilities > Push Notification" to enable offline push notifications.
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_9.jpeg" /></Frame>
+
+4. Adjust the minimum supported version for the newly added extension to iOS 11.0 or above.
+
+    If the iOS version on the device is lower than the requirement mentioned here, the extension will not be effective on that device.
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_10.jpeg" /></Frame>
+
+### 4. Write the business logic for custom notification icons
+
+In the NotificationService.m file located in the "xxxExtension" folder (where xxx is the Product Name entered when adding the extension), write the business logic for customizing notification icons. Here is an example of the code:
+
+```objc
+//  NotificationService.m
+//  NotificationService
+
+#import "NotificationService.h"
+#import <Intents/Intents.h>
+
+@interface NotificationService ()
+
+@property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
+@property (nonatomic, strong) UNMutableNotificationContent *bestAttemptContent;
+
+@end
+
+@implementation NotificationService
+
+
+// When intercepting push notifications, this method will be triggered upon receiving a push notification that includes "mutable-content":1.
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
+    self.contentHandler = contentHandler;
+    self.bestAttemptContent = [request.content mutableCopy];
+    // Title
+    NSString *title = self.bestAttemptContent.title;
+    // Subtitle
+    NSString *subtitle = self.bestAttemptContent.subtitle;
+    // Content
+    NSString *body = self.bestAttemptContent.body;
+
+    // Retrieve the payload string attached to the sent push notification message.
+    NSString *payload = [self.bestAttemptContent.userInfo objectForKey:@"payload"];
+
+    if(payload == nil){
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    
+    
+    // Parse the JSON string and convert it to an NSDictionary.
+    NSData *jsonData = [payload dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *payload_json_map = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
+    if (error) {
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    
+    
+    NSString *avatar_url = [payload_json_map objectForKey:@"avatar_url"];
+    if(avatar_url == nil){
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    if(@available(iOS 15.0, *)){
+        [self downloadWithURLString:avatar_url completionHandle:^(NSData *data, NSURL *localURL) {
+            // Convert image data to INImage (requires #import <Intents/Intents.h>)
+            INImage *avatar = [INImage imageWithImageData:data];
+            // Create the sending object
+            INPersonHandle *messageSenderPersonHandle = [[INPersonHandle alloc] initWithValue:@"" type:INPersonHandleTypeUnknown];
+            NSPersonNameComponents *components = [[NSPersonNameComponents alloc] init];
+            INPerson *messageSender = [[INPerson alloc] initWithPersonHandle:messageSenderPersonHandle
+                                                              nameComponents:components
+                                                                 displayName:title
+                                                                       image:avatar
+                                                           contactIdentifier:nil
+                                                            customIdentifier:nil
+                                                                        isMe:NO
+                                                              suggestionType:INPersonSuggestionTypeNone];
+            // Create your own object.
+            INPersonHandle *mePersonHandle = [[INPersonHandle alloc] initWithValue:@"" type:INPersonHandleTypeUnknown];
+            INPerson *mePerson = [[INPerson alloc] initWithPersonHandle:mePersonHandle
+                                                         nameComponents:nil
+                                                            displayName:nil
+                                                                  image:nil
+                                                      contactIdentifier:nil
+                                                       customIdentifier:nil
+                                                                   isMe:YES
+                                                         suggestionType:INPersonSuggestionTypeNone];
+
+
+            // Createintent
+            INSpeakableString *speakableString = [[INSpeakableString alloc] initWithSpokenPhrase:subtitle];
+            INSendMessageIntent *intent = [[INSendMessageIntent alloc] initWithRecipients:nil
+                                                                      outgoingMessageType:INOutgoingMessageTypeOutgoingMessageText
+                                                                                  content:body
+                                                                       speakableGroupName:speakableString
+                                                                   conversationIdentifier:nil
+                                                                              serviceName:nil
+                                                                                   sender:messageSender
+                                                                              attachments:nil];
+
+            [intent setImage:avatar forParameterNamed:@"speakableGroupName"];
+            // Create interaction
+            INInteraction *interaction = [[INInteraction alloc] initWithIntent:intent response:nil];
+            interaction.direction = INInteractionDirectionIncoming;
+            [interaction donateInteractionWithCompletion:nil];
+            // Create processed UNNotificationContent
+            UNNotificationContent *newContent = [self.bestAttemptContent contentByUpdatingWithProvider:intent error:nil];
+            self.bestAttemptContent = [newContent mutableCopy];
+            self.contentHandler(self.bestAttemptContent);
+        }];
+    }else{
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+}
+
+// How to download and save images
+- (void)downloadWithURLString:(NSString *)urlStr completionHandle:(void(^)(NSData *data,NSURL *localURL))completionHandler{
+    __block NSData *data = nil;
+    NSURL *imageURL = [NSURL URLWithString:urlStr];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session downloadTaskWithURL:imageURL completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
+        NSURL *localURL;
+        if (error != nil) {
+            NSLog(@"%@", error.localizedDescription);
+        } else {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:@".png"]];
+            [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];
+
+            NSLog(@"localURL = %@", localURL);
+            data = [[NSData alloc] initWithContentsOfURL:localURL];
+        }
+        completionHandler(data,localURL);
+
+    }]resume];
+}
+
+@end
+```

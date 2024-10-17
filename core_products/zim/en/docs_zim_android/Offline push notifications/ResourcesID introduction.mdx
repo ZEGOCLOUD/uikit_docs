@@ -1,0 +1,68 @@
+# ResourcesID introduction
+
+
+ResourcesID is an string that can map advanced push configurations for multiple push service providers. It has a maximum length of 32 characters and can be customized by you. By using this field, you can abstract the push configurations of multiple vendors into a custom push strategy.
+
+By default, a project can have up to 10 resourcesIDs at the same time. If you need to increase this limit, please contact ZEGOCLOUD technical support.
+
+## Mappable Parameters for resourcesID
+
+The mappable parameters for resourcesID vary for different push service providers. The specific explanations are shown in the following table:
+
+<table>
+<tbody><tr>
+<th>Vendor</th>
+<th>Mappable Parameters</th>
+<th>Parameter Explanation</th>
+<th>Reference Documentation</th>
+</tr>
+<tr>
+<td rowspan="2">Apple</td>
+<td>Sound</td>
+<td>Custom push sound field, only effective when the push type is <strong>Normal</strong>.</td>
+<td>[Customize notification sound](./Customize%20notification%20sound.mdx)</td>
+</tr>
+<tr>
+<td>mutable_content</td>
+<td>Whether to enable push interception.</td>
+<td>Apple official documentation [Modifying content in newly delivered notifications](https://developer.apple.com/documentation/usernotifications/modifying_content_in_newly_delivered_notifications?language=objc)</td>
+</tr>
+<tr>
+<td rowspan="3">FCM<br/>(Only for android devices)</td>
+<td>Sound</td>
+<td>Custom push sound field, only effective when the push type is notification messages.</td>
+<td>[Customize notification sound](./Customize%20notification%20sound.mdx)</td>
+</tr>
+<tr>
+<td>Channel ID</td>
+<td>Android push channel field, used to specify the push channel for this offline push.</td>
+<td>Android official documentation [Create and manage notification channels](https://developer.android.com/develop/ui/views/notifications/channels?hl=en)</td>
+</tr>
+<tr>
+<td>Push Type</td>
+<td><ul><li><strong>Notification messages</strong>: System default pop-up notification.</li><li><strong>Data messages</strong>: This push only triggers relevant callbacks and does not trigger system notifications.</li></ul></td>
+<td>[Implement silent push notifications](./Implement%20silent%20push%20notifications.mdx)</td>
+</tr>
+</tbody></table>
+
+## Configuration
+
+1. Log in to the ZEGOCLOUD console, and naviagte to the "Projects > Projects Management" tab, select one project to enter the "Project Configuration" page.
+
+2. Select the "Service Management > In-app Chat" tab.
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZEGOCLOUD_Console/service_management_1.jpeg" /></Frame>
+
+3. Find the "Customized push resource" and click "Add".
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZEGOCLOUD_Console/service_management_2.jpeg" /></Frame>
+
+4. Enter the relevant information for the resourcesID in the pop-up window and click "Continue".
+
+5. After completing the input, the specific information of the resourcesID will appear under the "Customized push resource".
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Copy_1.jpeg" /></Frame>
+
+## Usage
+
+You need to pass the resourcesID field when calling ZIM interfaces that include the `pushConfig` parameter. The ZPNs server will select the appropriate push service provider configuration based on the receiver's push service provider to complete the push.

@@ -1,0 +1,496 @@
+---
+articleID: 14733
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const updateUserExtendedData={
+    "Android": <a href="@updateUserExtendedData" target="_blank">updateUserExtendedData</a>,
+    "u3d": <a href="@UpdateUserExtendedData" target="_blank">UpdateUserExtendedData</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserExtendedData.html" target="_blank">updateUserExtendedData</a>
+}
+export const extendedDataUpdatedCallback={
+    "Android": <a href="@-ZIMUserExtendedDataUpdatedCallback" target="_blank">ZIMUserExtendedDataUpdatedCallback</a>,
+    "iOS,Windows,u3d": <a href="@ZIMUserExtendedDataUpdatedCallback" target="_blank">ZIMUserExtendedDataUpdatedCallback</a>,
+    "Web,RN": <a href="@-ZIMUserExtendedDataUpdatedResult" target="_blank">ZIMUserExtendedDataUpdatedResult</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserExtendedDataUpdatedResult-class.html" target="_blank">ZIMUserExtendedDataUpdatedResult</a>,
+}
+export const ZIMUserInfo={
+    "Android": <a href="@-ZIMUserInfo" target="_blank">ZIMUserInfo</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfo-class.html" target="_blank">ZIMUserInfo</a>,
+}
+export const updateUserName={
+    "Android": <a href="@updateUserName" target="_blank">updateUserName</a>,
+    "u3d": <a href="@UpdateUserName" target="_blank">UpdateUserName</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserName.html" target="_blank">updateUserName</a>,
+}
+export const ZIMUserNameUpdatedCallback={
+    "Android": <a href="@-ZIMUserNameUpdatedCallback" target="_blank">ZIMUserNameUpdatedCallback</a>,
+    "iOS,Windows,u3d": <a href="@ZIMUserNameUpdatedCallback" target="_blank">ZIMUserNameUpdatedCallback</a>,
+    "Web,RN": <a href="@-ZIMUserNameUpdatedResult" target="_blank">ZIMUserNameUpdatedResult</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserNameUpdatedResult-class.html" target="_blank">ZIMUserNameUpdatedResult</a>,
+}
+export const updateUserAvatarUrl={
+    "Android": <a href="@updateUserAvatarUrl" target="_blank">updateUserAvatarUrl</a>,
+    "u3d": <a href="@UpdateUserAvatarUrl" target="_blank">UpdateUserAvatarUrl</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserAvatarUrl.html" target="_blank">updateUserAvatarUrl</a>,
+}
+export const ZIMUserAvatarUrlUpdatedCallback={
+    "Android": <a href="@-ZIMUserAvatarUrlUpdatedCallback" target="_blank">ZIMUserAvatarUrlUpdatedCallback</a>,
+    "iOS,Windows,u3d": <a href="@ZIMUserAvatarUrlUpdatedCallback" target="_blank">ZIMUserAvatarUrlUpdatedCallback</a>,
+    "Web,RN": <a href="@-ZIMUserAvatarUrlUpdatedResult" target="_blank">ZIMUserAvatarUrlUpdatedResult</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserAvatarUrlUpdatedResult-class.html" target="_blank">ZIMUserAvatarUrlUpdatedResult</a>,
+}
+export const queryUsersInfo={
+    "Android": <a href="@queryUsersInfo" target="_blank">queryUsersInfo</a>,
+    "u3d": <a href="@QueryUsersInfo" target="_blank">QueryUsersInfo</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryUsersInfo.html" target="_blank">queryUsersInfo</a>,
+}
+export const ZIMUsersInfoQueriedCallback={
+    "Android": <a href="@-ZIMUsersInfoQueriedCallback" target="_blank">ZIMUsersInfoQueriedCallback</a>,
+    "iOS,Windows,u3d": <a href="@ZIMUsersInfoQueriedCallback" target="_blank">ZIMUsersInfoQueriedCallback</a>,
+    "Web,RN": <a href="@-ZIMUsersInfoQueriedResult" target="_blank">ZIMUsersInfoQueriedResult</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUsersInfoQueriedResult-class.html" target="_blank">ZIMUsersInfoQueriedResult</a>
+}
+export const isQueryFromServer={
+    "Android": <a href="@isQueryFromServer" target="_blank">isQueryFromServer</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfoQueryConfig/isQueryFromServer.html" target="_blank">isQueryFromServer</a>,
+}
+export const ZIMUsersInfoQueryConfig={
+    "Android": <a href="@-ZIMUsersInfoQueryConfig" target="_blank">ZIMUsersInfoQueryConfig</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfoQueryConfig-class.html" target="_blank">ZIMUsersInfoQueryConfig</a>,
+}
+
+# Manage users
+
+:::if{props.platform="Flutter"}
+<Note title="Note">
+This document applies to the following platforms: iOS, Android, macOS, Windows and Web.
+</Note>
+:::
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of user management, allows users to update their personal profile, such as username, and status updates.
+
+
+## Implementation Process
+
+### Manage the extended field
+
+The ZIM SDK provides user extended fields to describe additional properties of users. Developers can use extended fields to customize user attributes through the {getPlatformData(props, updateUserExtendedData)} interface. **The usage of extended fields can be defined by developers, and the SDK will only pass the fields without any further processing.**
+
+After modifying the extended field properties, users can receive the modification results through {getPlatformData(props, extendedDataUpdatedCallback)}.
+
+:::if{props.platform=undefined}
+```java Example
+// Modify the user information extended field
+String newUserExtendedData = "{\"user_avatar\":\"https://url\",\"user_name\":\"new_name\",\"user_sex\":\"male\",\"user_birth\":\"1970-01-01\",\"user_phone\":\"12345678901\"}";
+
+zim.updateUserExtendedData(newUserExtendedData, new ZIMUserExtendedDataUpdatedCallback() {
+        @Override
+        public void onUserExtendedDataUpdated(String extendedData, ZIMError errorInfo) {
+            if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+                // Modification succeeded
+            }
+        }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```oc Example
+// Update the extended field of user information.
+NSString *extendedData = @"";
+
+[zim updateUserExtendedData:extendedData callback:^(NSString * _Nonnull extendedData, ZIMError * _Nonnull errorInfo) {
+        
+    }];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart Example
+// Modify user information extension fields
+String newUserExtendedData = "{\"user_avatar\":\"https://url\",\"user_name\":\"new_name\",\"user_sex\":\"male\",\"user_birth\":\"1970-01-01\",\"user_phone\":\"12345678901\"}";
+
+try {
+    ZIMUserExtendedDataUpdatedResult result =
+        await ZIM.getInstance()!.updateUserExtendedData(newUserExtendedData);
+    
+    } on PlatformException catch (onError) {
+        //Here is the logic of write operation failure according to the return value of onError
+    }
+```
+:::
+:::if{props.platform="Windows"}
+```cpp Example
+std::string new_user_extended_data = "{\"user_avatar\":\"https://url\",\"user_name\":\"new_name\",\"user_sex\":\"male\",\"user_birth\":\"1970-01-01\",\"user_phone\":\"12345678901\"}";
+
+zim_->updateUserExtendedData(new_user_extended_data, [=](const std::string &extended_data, zim::ZIMError error_info){
+    if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+        // Modification successful
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```js Example
+var extendedData = JSON.stringify({ age: 18, birthdy: '2000-01-01' });
+
+zim.updateUserExtendedData(extendedData)
+    .then(function ({ extendedData }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="RN"}
+```js Example
+var extendedData = JSON.stringify({ age: 18, birthdy: '2000-01-01' });
+
+zim.updateUserExtendedData(extendedData)
+    .then(function ({ extendedData }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="u3d"}
+```c# Example
+string newUserExtendedData = "{\"user_avatar\":\"https://url\",\"user_name\":\"new_name\",\"user_sex\":\"male\",\"user_birth\":\"1970-01-01\",\"user_phone\":\"12345678901\"}";
+
+ZIM.GetInstance().UpdateUserExtendedData(newUserExtendedData, 
+(string extendedData, ZIMError errorInfo) => {
+    if(errorInfo.code == ZIMErrorCode.Success) {
+        // Operation successful
+    }
+});
+```
+:::
+
+
+### Modify User Name
+
+The user name `userName` is a string used to describe the user's nickname. Developers can configure it through the {getPlatformData(props, ZIMUserInfo)} object. The ZIM SDK supports users to modify their user names after logging in through the {getPlatformData(props, updateUserName)} interface.
+
+After modifying the user name, users can receive the modification results through {getPlatformData(props, ZIMUserNameUpdatedCallback)}.
+
+:::if{props.platform=undefined}
+```java Example
+// Modify the user name
+// The userName is a string with a maximum length of 256 bytes, and there are no special character restrictions.
+String newUserName = "new_name";
+zim.updateUserName(newUserName, new ZIMUserNameUpdatedCallback() {
+        @Override
+        public void onUserNameUpdated(String userName, ZIMError errorInfo) {
+            if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+                // Modification succeeded
+            }
+        }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```oc Example
+// Modify the username.
+// The `userName` parameter can contain up to 256 bytes in length, with no limit on characters.
+NSString *userName = @"";
+
+[zim updateUserName:userName callback:^(NSString * _Nonnull userName, ZIMError * _Nonnull errorInfo) {
+        
+}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart Example
+// modify user name
+// userName A string of up to 256 bytes, with no special character restrictions.
+try {
+    ZIMUserNameUpdatedResult result =
+        await ZIM.getInstance()!.updateUserName('userName');
+        //The logic of successful modification is written here
+    } on PlatformException catch (onError) {
+        // Write and modify the failure logic according to onError
+    }
+```
+:::
+:::if{props.platform="Windows"}
+```cpp Example
+// Modify user name
+// userName is a string with a maximum of 256 bytes, no special character restrictions.
+std::string new_user_name = "new_name";
+
+zim_->updateUserName(new_user_name, [=](const std::string &userName, const zim::ZIMError &errorInfo){
+    if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+        // Modification successful
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```js Example
+// Modify user name
+// userName is a string with a maximum of 256 bytes, no special character restrictions.
+var userName = 'new_name';
+
+zim.updateUserName(userName)
+    .then(function ({ userName }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="RN"}
+```javascript Example
+// Modify user name
+// userName is a string with a maximum of 256 bytes, no special character restrictions.
+var userName = 'new_name';
+
+zim.updateUserName(userName)
+    .then(function ({ userName }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="u3d"}
+```c# Example
+// Modify user name
+// userName is a string with a maximum of 256 bytes, no special character restrictions.
+string newUserName = "new_name";
+ZIM.GetInstance().UpdateUserName(newUserName, (string userName, ZIMError errorInfo) => {
+    if(errorInfo.code == ZIMErrorCode.Success) {
+        // Operation successful
+    }
+});
+```
+:::
+
+
+### Set User Avatar
+
+The ZIM SDK supports users to set or modify their avatars after logging in through the {getPlatformData(props, updateUserAvatarUrl)} interface.
+
+After setting the user avatar, users can receive the setting results through the {getPlatformData(props, ZIMUserAvatarUrlUpdatedCallback)}.
+
+<Warning title="Warning">
+When a user modifies his/her avatar, other users need to call the {getPlatformData(props, queryUsersInfo)} interface and set the {getPlatformData(props, isQueryFromServer)} parameter in {getPlatformData(props, ZIMUsersInfoQueryConfig)} to `true` to re-query the user information to obtain the latest avatar.
+</Warning>
+
+
+:::if{props.platform=undefined}
+```java Example
+// Set the user avatar
+// The URL has a maximum length of 500 bytes, and there are no special character restrictions.
+String userAvatarUrl = "xxx";
+zim.updateUserAvatarUrl(userAvatarUrl, new ZIMUserAvatarUrlUpdatedCallback() {
+    @Override
+    public void onUserAvatarUrlUpdated(String userAvatarUrl, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Setting succeeded
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```oc Example
+// Set the user avatar.
+// The URL can contain up to 500 bytes in length, with no limit on characters.
+NSString *userAvatarUrl = @"";
+
+[zim updateUserAvatarUrl callback:^(NSString * _Nonnull userAvatarUrl, ZIMError * _Nonnull errorInfo) {
+        
+}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart Example
+// modify user name
+// userAvatarUrl A string of up to 500 bytes, with no special character restrictions.
+try {
+    ZIMUserAvatarUrlUpdatedResult result =
+        await ZIM.getInstance()!.updateUserAvatarUrl('userAvatarUrl');
+        //The logic of successful modification is written here
+    } on PlatformException catch (onError) {
+        // Write and modify the failure logic according to onError
+    }
+```
+:::
+:::if{props.platform="Windows"}
+```cpp Example
+// URL maximum 500 bytes, no special character restrictions
+std::string user_avatar_url = "";
+
+zim_->updateUserAvatarUrl(user_avatar_url, [=](const std::string &userAvatarUrl, zim::ZIMError error_info){
+    if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+         // Operation successful
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```js Example
+// URL maximum 500 bytes, no special character restrictions
+var userAvatarUrl = 'https://xxxx';
+
+zim.updateUserAvatarUrl(userAvatarUrl)
+    .then(function ({ userAvatarUrl }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="RN"}
+```js Example
+// URL maximum 500 bytes, no special character restrictions
+var userAvatarUrl = 'https://xxxx';
+
+zim.updateUserAvatarUrl(userAvatarUrl)
+    .then(function ({ userAvatarUrl }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="u3d"}
+```c# Example
+// URL maximum 500 bytes, no special character restrictions
+string userAvatarUrl = "xxx";
+ZIM.GetInstance().UpdateUserAvatarUrl(userAvatarUrl, (string userAvatarUrl, ZIMError errorInfo) => {
+    if(errorInfo.code == ZIMErrorCode.Success) {
+        // Operation successful
+    }
+});
+```
+:::
+
+
+### Query User Information
+
+Users can query the full information of specified users, including user names and user extended fields, through the {getPlatformData(props, queryUsersInfo)} interface. **Only in this interface can users obtain user avatar URLs and user extended field information.**
+
+After querying the information, users can receive the query results through the {getPlatformData(props, ZIMUsersInfoQueriedCallback)}.
+
+:::if{props.platform=undefined}
+```java Example
+// Query user information
+
+// Usage restrictions: The number of UserID to be queried in a single call to the interface cannot exceed 10; within 10 seconds, the cumulative total number of UserID queried by multiple calls to the interface cannot exceed 10.
+ArrayList<String> userIDList = new ArrayList<>();
+userIDList.add("user_id_1");
+
+ZIMUsersInfoQueryConfig config = new ZIMUsersInfoQueryConfig();
+config.isQueryFromServer = false;
+
+zim.queryUsersInfo(userIDList, config, new ZIMUsersInfoQueriedCallback() {
+        @Override
+        public void onUsersInfoQueried(ArrayList<ZIMUserFullInfo> userList, ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+            if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+                 // Query succeeded
+            }
+        }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```oc Example
+// Query user information.
+// Restrictions: You can query up to 10 user IDs per call or by multiple calls within 10 seconds.
+[self.zim queryUsersInfo:@[@"userID_1",@"userID_2"] callback:^(NSArray<ZIMUserFullInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
+        
+}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart Example
+// Query user information
+// Usage restrictions: The number of UserID queries in a single API call cannot exceed 10; within 10 seconds, the cumulative total number of UserID queries in multiple API calls cannot exceed 10.
+try {
+    ZIMUserInfoQueryConfig config = ZIMUserInfoQueryConfig();
+    config.isQueryFromServer = false; // Set to true if querying from the server, set to false if querying from local data
+    ZIMUsersInfoQueriedResult result =
+        await ZIM.getInstance()!.queryUsersInfo(['userID_1', 'userID_2'], config);
+        // Write logic for successful query here
+    } on PlatformException catch (onError) {
+        // Write logic for failed query based on onError
+    }
+```
+:::
+:::if{props.platform="Windows"}
+```cpp Example
+// Query user information
+// Usage restrictions: The number of UserID to be queried in a single call to the interface cannot exceed 10; 
+// within 10 seconds, the cumulative total number of UserID queried by multiple calls to the interface cannot exceed 10.
+std::string target_user_id = "user_id_1";
+
+std::vector<std::string> user_id_list;
+user_id_list.push_back(target_user_id);
+
+zim::ZIMUsersInfoQueryConfig config;
+// false is for local query, which prioritizes returning data from the local database. 
+// If there is no corresponding user information in the local database and the query frequency limit has not been reached, it will automatically upgrade to query from the server.
+// true is for server query, which prioritizes pulling user information from the server. 
+// When the query frequency limit is reached, user information that has not been queried from the server will attempt to return data from the local database.
+config.isQueryFromServer = false; 
+
+zim_->queryUsersInfo(user_id_list, config, [=](const std::vector<zim::ZIMUserFullInfo> &userList, const std::vector<zim::ZIMErrorUserInfo> &errorUserList, const ZIM::ZIMError &errorInfo) {
+    if (errorInfo.code == ZIM_ERROR_CODE_SUCCESS) {
+        // Query succeeded
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```js Example
+// Limitations: The number of UserID queries in a single API call cannot exceed 10; Within 10 seconds, the cumulative total of all UserID queries cannot exceed 10.
+var userIDs = ['id1', 'id2'];
+
+zim.queryUsersInfo(userIDs, { isQueryFromServer: false })
+    .then(function ({ userList, errorUserList }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="RN"}
+```js Example
+// Limitations: The number of UserID queries in a single API call cannot exceed 10; Within 10 seconds, the cumulative total of all UserID queries cannot exceed 10.
+var userIDs = ['id1', 'id2'];
+
+zim.queryUsersInfo(userIDs, { isQueryFromServer: false })
+    .then(function ({ userList, errorUserList }) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="u3d"}
+```c# Example
+// Limitations: The number of UserID queries in a single API call cannot exceed 10; Within 10 seconds, the cumulative total of all UserID queries cannot exceed 10.
+List<string> userIDList = new List<string>();
+userIDList.Add("user_id_1");
+ZIMUsersInfoQueryConfig config = new ZIMUsersInfoQueryConfig();
+ZIM.GetInstance().QueryUsersInfo(userIDList, config, (ZIMUserFullInfo[] userList, ZIMErrorUserInfo[] errorUserList, ZIMError errorInfo) => {
+    if (errorInfo.code == ZIMErrorCode.Success)
+    {
+        // Operation successful
+    }
+});
+
+```
+:::

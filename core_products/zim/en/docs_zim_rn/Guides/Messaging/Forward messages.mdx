@@ -1,0 +1,141 @@
+---
+articleID: 16989
+---
+
+# Forward messages
+
+- - -
+
+## Overview
+
+The ZIM SDK supports forwarding messages in one of the following ways:
+- Combining messages and forwarding the combined message.
+- Forwarding messages one by one.
+
+## Prerequisites
+
+Before you implement the "Forward Messages" feature, ensure that the following conditions are met:
+
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat ](#15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK. For details, see the **Integrate the SDK** chapter of [Send and receive messages](!Implementation_of_sending_and_receiving).
+
+
+## Send and receive a combined message
+
+<Note title="Note">
+
+- Only the ZIM SDK 2.14.0 or later supports sending, receiving, and viewing a combined message.
+- If the version of the receiving ZIM SDK is 2.0.0 or later but earlier than 2.14.0, the ZIM SDK can receive a combined message but will identify the message type as unknown. In addition, it cannot obtain the message content. To obtain the message content, upgrade the ZIM SDK to 2.14.0 or later.
+- If the version of the receiving ZIM SDK is 1.x.x, the ZIM SDK cannot receive a combined message and identify the message type as unknown.
+</Note>
+
+### Send a combined message
+
+Below is the procedure:
+
+1. Call the [ZIMCombineMessage](@-ZIMCombineMessage) operation to construct a combined message. The following table lists the parameters.
+
+    | Parameter| Type| Required| Description |
+    | ---- | ----| -------| -----|
+    | type| number| Yes| It must be set to **100**, which indicates a combined message. |
+    | title| string| Yes| The title of the combined message, which can contain up to 20 bytes in length. If you need a longer length, contact ZEGOCLOUD technical support.|
+    | summary| string| Yes| The summary of the combined message, which can contain up to 100 bytes in length. If you need a longer length, contact ZEGOCLOUD technical support.|
+    | messageList| ZIMMessage\[]| Yes| The list of messages to be combined and forwarded. Signaling messages, on-screen comments, recalled messages, system messages, and messages that failed to be sent are not supported.|
+
+<Note title="Note">
+
+The ZIM SDK supports containing a combined message in another combined message.
+</Note>
+
+2. To send a combined message, call the [sendMessage](@sendMessage) operation. For more information about this operation, see [Send & Receive messages - Send messages](!zim-sendMessages#4_1).
+
+Below is the sample code for sending a combined message in a one-to-one chat:
+
+```javascript
+// Send a combined message in a one-to-one chat.
+
+var toConversationID = ''; // The ID of the other user.
+var conversationType = 0; // The conversation type. Valid values: 0: one-to-one chat; 1: voice chatroom; 2: group chat.
+var config = { 
+    priority: 1, // Specify the message priority. Valid values: 1 (default): low; 2: medium; 3: high.
+};
+
+var messageCombineObj = { 
+    type: 100, 
+    title: 'Title', // The title of the combined message.
+    summary: 'Summary' , // The summary of the combined message.
+    messageList: [message1, message2], // The list of messages to be combined and forwarded, which can be obtained from historical messages.
+};
+
+var notification = {
+    onMessageAttached: function(message) {
+        // To-do: loading.
+    }
+}
+
+zim.sendMessage(messageCombineObj, toConversationID, conversationType, config, notification)
+    .then(function ({ message }) {
+        // Sending succeeded.
+    })
+    .catch(function (err) {
+        // Sending failed.
+    });
+```
+
+### Receive a combined message
+
+Call the same operation for receiving ordinary messages to receive a combined message. For more information about this operation, see [Send & Receive messages - Receive messages](!zim-sendMessages#4_2).
+
+<Warning title="Warning">
+
+The callback for receiving messages returns only the title, summary, and ID of the combined message. To obtain the combined message content, see <a href="#view-the-details-of-a-combined-message">View the details of a combined message</a>.
+</Warning>
+
+Below is the sample code for receiving a combined message in a one-to-one chat:
+
+```javascript
+// The user receives a combined message in a one-to-one chat.
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log(messageList, fromConversationID);
+    messageList.forEach(function (msg) {
+        // The `Combine` message is received.
+        if (msg.type == 100) {
+        }
+    })
+});
+```
+
+
+### View the details of a combined message
+
+Operations on a combined message, for example, listening, adding, and historical message pulling, return only the title, summary, and ID of the combined message. To view sub-messages contained in the combined message, call the [queryCombineMessageDetail](@queryCombineMessageDetail) operation.
+
+The result is returned in the [ZIMCombineMessageDetailQueriedResult](@-ZIMCombineMessageDetailQueriedResult) callback.
+
+```js
+queryCombineMessageDetail(message: ZIMCombineMessage): Promise<ZIMCombineMessageDetailQueriedResult>
+```
+
+| Parameter| Type| Required| Description |
+| ---- | ----| -------| -----|
+| message| [ZIMCombineMessage](@-ZIMCombineMessage)| Yes| The combined message.|
+
+```js
+zim.queryCombineMessageDetail(message)
+    .then(function (message) {
+        // Operation succeeded. The list of sub-messages of the combined message is updated on the UI.
+        // The detailed sub-messages are contained in the messageList of the message in the callback.
+        console.log(message.messageList)
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+```
+
+
+If one of the sub-messages is a combined message, you need to call the [queryCombineMessageDetail](@queryCombineMessageDetail) operation to obtain the sub-messages of the combined message. If there are multiple nested combined messages, you need to call this operation multiple times accordingly.
+
+## Forward messages one by one
+
+Forwarding messages one by one is sending messages that are sent successfully to another conversation as a parameter. The operation for achieving this is the same as that for sending ordinary messages. For more information about this operation, see [Send & Receive messages - Send messages](!zim-sendMessages#4_1).
+

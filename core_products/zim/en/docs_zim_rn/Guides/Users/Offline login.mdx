@@ -1,0 +1,187 @@
+---
+articleID: 17602
+---
+
+# Offline login
+
+- - -
+## Function introduction
+
+Offline login is typically used when the application is cleared from memory, and the user relaunches the application by clicking on the application icon. In this scenario, the user can directly access the local SDK data without network connectivity or a successful login.
+
+<Note title="Note">
+
+Users can only perform an offline login using the UserID from their previous successful login; otherwise, the login will not succeed.
+</Note>
+
+## Technical principle
+
+When the offline login interface is called, the ZIM SDK performs verification (UserID verification; if token-based login is used, it also verifies the token's validity period). After successful verification, the SDK returns a login success callback, allowing users to query local data, while the SDK internally attempts to establish a connection with the backend service automatically.
+
+## Implementation Steps
+
+### 1. Offline Login
+
+In the case of no network and the app being cleared, you can call the [login](@login__2) interface with the [isOfflineLogin](@isOfflineLogin) parameter set to `true` in [ZIMLoginConfig](@-ZIMLoginConfig) to achieve offline login using the user information from the last login. After successful login, you can access the local SDK data.
+
+<Note title="Note">
+
+We recommend caching the user information used for each login. When the app is opened, read the cache and implement the following logic:
+- If it is determined that the user did not use the UserID from the last online login, the [isOfflineLogin](@isOfflineLogin) should be set to `false`, and offline login will fail, not allowing the user to access the local SDK data for that UserID.
+- If the user used the UserID from the last online login, in order to achieve automatic login, speed up entering the app's main page, and pre-render the UI, the [isOfflineLogin](@isOfflineLogin) should be set to `true` to achieve offline login.
+</Note>
+
+#### Definition of the Login Interface
+
+```TypeScript
+// This Login interface is the new login interface. The original login interface has been deprecated since version 2.13.0 and is no longer maintained.
+login(userID: string, config: ZIMLoginConfig): Promise<void>;
+```
+
+<table>
+
+<tbody><tr>
+<th>Parameter/Callback</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>userID</td>
+<td>string</td>
+<td>Yes</td>
+<td>The user ID for the previous online login. It can contain up to 32 bytes in length, including digits, letters, and the following characters: &apos;!&apos;, &apos;#&apos;, &apos;$&apos;, &apos;%&apos;, &apos;&amp;&apos;, &apos;(&apos;, &apos;)&apos;, &apos;+&apos;, &apos;-&apos;, &apos;:&apos;, &apos;;&apos;, &apos;< &apos;, &apos;= &apos;, &apos;. &apos;, &apos;> &apos;, &apos;?&apos;, &apos;@&apos;, &apos;[&apos;, &apos;]&apos;, &apos;^&apos;, &apos;_&apos;, { "'{'" },{"'}'"} &apos;|&apos;, &apos;~&apos;.</td>
+</tr>
+<tr>
+<td>config</td>
+<td>[ZIMLoginConfig](@-ZIMLoginConfig)</td>
+<td>Yes</td>
+<td>Login configuration.</td>
+</tr>
+<tr>
+<td>Promise</td>
+<td>void</td>
+<td>No</td>
+<td>Login operation callback.</td>
+</tr>
+</tbody></table>
+
+The `config` parameter needs to be configured with the following parameters of the [ZIMLoginConfig](@-ZIMLoginConfig) class:
+
+<table>
+
+<tbody><tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>userName</td>
+<td>string</td>
+<td>No</td>
+<td>User name. A string with a maximum of 256 bytes. If empty, it will be the UserName set during the last login.</td>
+</tr>
+<tr>
+<td>token</td>
+<td>string</td>
+<td>Yes</td>
+<td>Token authentication.</td>
+</tr>
+<tr>
+<td>isOfflineLogin</td>
+<td>boolean</td>
+<td>No</td>
+<td>Whether this login is an offline login. If empty, it will be an online login.</td>
+</tr>
+</tbody></table>
+
+#### Example
+
+```javascript
+var userID = '';
+var config = {
+    token: '', // The validity period cannot exceed 24 days. Request the developer server to obtain it.
+               // When using AppSign authentication, this parameter is not required.
+    userName: '',
+    isOfflineLogin: true
+};
+
+zim.login(userID, config)
+    .then(function() {
+        // Offline login successful, can query SDK local data
+    })
+    .catch(function(err) {
+        // Login failed
+    });
+```
+
+### 2 Accessing Local SDK Data
+
+After a successful offline login, users can perform the following operations when offline (as of version 2.12):
+
+<table>
+<tbody><tr>
+<th>Category</th>
+<th>Interface</th>
+</tr>
+<tr>
+<td>User-related</td>
+<td>[queryUsersInfo](@queryUsersInfo)</td>
+</tr>
+<tr>
+<td>Group-related</td>
+<td>
+- [queryGroupList](@queryGroupList) 
+- [searchLocalGroups](@searchLocalGroups)
+- [queryGroupInfo](@queryGroupInfo)
+- [queryGroupAttributes](@queryGroupAttributes)
+- [queryGroupAllAttributes](@queryGroupAllAttributes)
+- [queryGroupMemberList](@queryGroupMemberList)
+- [searchLocalGroupMembers](@searchLocalGroupMembers)
+- [queryGroupMemberInfo](@queryGroupMemberInfo)
+- [queryGroupMemberCount](@queryGroupMemberCount)
+- [queryGroupMessageReceiptReadMemberList](@queryGroupMessageReceiptReadMemberList)
+- [queryGroupMessageReceiptUnreadMemberList](@queryGroupMessageReceiptUnreadMemberList)
+</td>
+</tr>
+<tr>
+<td>Message Related</td>
+<td>
+- [queryHistoryMessage](@queryHistoryMessage)
+- [updateMessageLocalExtendedData](@updateMessageLocalExtendedData)
+- [searchLocalMessages](@searchLocalMessages)
+- [searchGlobalLocalMessages](@searchGlobalLocalMessages)
+- [insertMessageToLocalDB](@insertMessageToLocalDB)
+- [deleteAllMessage](@deleteAllMessage): Only supports deleting messages in the local database.
+- [deleteMessages](@deleteMessages): Only supports deleting messages in the local database.
+- [queryMessageReceiptsInfo](@queryMessageReceiptsInfo)
+- [queryMessageReactionUserList](@queryMessageReactionUserList)
+</td>
+</tr>
+<tr>
+<td>Call Invitation Related</td>
+<td>[queryCallInvitationList](@queryCallInvitationList)</td>
+</tr>
+<tr>
+<td>Conversation Related</td>
+<td>
+- [queryConversation](@queryConversation)
+- [queryConversationList](@queryConversationList)
+- [queryConversationPinnedList](@queryConversationPinnedList)
+- [searchLocalConversations](@searchLocalConversations)
+- [clearConversationUnreadMessageCount](@clearConversationUnreadMessageCount)
+- [clearConversationTotalUnreadMessageCount](@clearConversationTotalUnreadMessageCount)
+- [deleteConversation](@deleteConversation): Only supports deleting conversations in the local database.
+- [deleteAllConversations](@deleteAllConversations): Only supports deleting conversations in the local database.
+</td>
+</tr>
+</tbody></table>
+
+### 3. Listening for Events
+
+Users can listen for the [connectionStateChanged](@connectionStateChanged) event notification to get the connection status between the SDK and the ZIM backend service.
+
+When offline login is successful, [connectionStateChanged](@connectionStateChanged) returns [ZIMConnectionState](@-ZIMConnectionState) as Connecting (enum value 1).
+
+When the user's network is restored and the ZIM SDK successfully reconnects to the ZIM backend service, [connectionStateChanged](@connectionStateChanged) returns [ZIMConnectionState](@-ZIMConnectionState) as Connected (enum value 2). Only when this happens, the ZIM SDK allows calling APIs that depend on a stable network connection and synchronizes backend data.

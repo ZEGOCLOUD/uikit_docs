@@ -1,0 +1,552 @@
+---
+articleID: 17789
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const onConversationChangedMap = {
+  'Android': <a href='@onConversationChanged' target='_blank'>onConversationChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationChanged.html' target='_blank'>onConversationChanged</a>,
+  'Web': <a href='@conversationChanged' target='_blank'>conversationChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+}
+export const setEventHandlerMap = {
+  'Android':<span>via <a href='@setEventHandler' target='_blank'>setEventHandler</a></span> ,
+  'Web':<span>via <a href='@on' target='_blank'>on</a></span>,
+  "Flutter":" "
+}
+export const conversationMarksMap = {
+  'Android': <a href='@marks-ZIMConversation' target='_blank'>conversation.marks</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversation/marks.html' target='_blank'>conversation.marks</a>,
+}
+export const setConversationMarkMap = {
+  'Android': <a href='@setConversationMark' target='_blank'>setConversationMark</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationMark.html' target='_blank'>setConversationMark</a>,
+}
+export const queryConversationListMap = {
+  'Android': <a href='@queryConversationList' target='_blank'>queryConversationList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html' target='_blank'>queryConversationList</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIM#query-conversation-list-with-config-callback-1' target='_blank'>queryConversationListWithConfig</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIM#query-conversation-list-with-config-callback-1' target='_blank'>queryConversationListWithConfig</a>,
+}
+export const ZIMConversationFilterOptionMarksMap = {
+  'Android': <a href='@marks-ZIMConversationFilterOption' target='_blank'>ZIMConversationFilterOption.marks</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationFilterOption/marks.html' target='_blank'>ZIMConversationFilterOption.marks</a>,
+}
+export const queryConversationTotalUnreadMessageCountMap = {
+  'Android': <a href='@queryConversationTotalUnreadMessageCount' target='_blank'>queryConversationTotalUnreadMessageCount</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationTotalUnreadMessageCount.html' target='_blank'>queryConversationTotalUnreadMessageCount</a>,
+  'iOS,mac': <a href='@queryConversationTotalUnreadMessageCountWithConfig' target='_blank'>queryConversationTotalUnreadMessageCountWithConfig</a>,
+}
+export const ZIMConversationTotalUnreadMessageCountQueryConfigMarksMap = {
+  'Android': <a href='@marks-ZIMConversationTotalUnreadMessageCountQueryConfig' target='_blank'>ZIMConversationTotalUnreadMessageCountQueryConfig.marks</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationTotalUnreadMessageCountQueryConfig/marks.html' target='_blank'>ZIMConversationTotalUnreadMessageCountQueryConfig.marks</a>,
+}
+export const onConversationTotalUnreadMessageCountUpdatedMap = {
+  'Android': <a href='@onConversationTotalUnreadMessageCountUpdated' target='_blank'>onConversationTotalUnreadMessageCountUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationTotalUnreadMessageCountUpdated.html' target='_blank'>onConversationTotalUnreadMessageCountUpdated</a>,
+  'Web': <a href='@conversationTotalUnreadMessageCountUpdated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+}
+
+
+# Mark conversations
+
+- - -
+
+## Introduction
+
+When users need to focus on a conversation or can not deal with a conversation at the moment, you can mark the conversation for later processing, such as "starring a conversation," "collapsing a conversation," "hiding a conversation," "marking a conversation as unread," etc. You can achieve this by calling the `setConversationMark` interface.
+
+<Note title="Note">
+
+When a user marks a conversation, the SDK simply records the mark value of the conversation without changing the underlying logic of the conversation.
+</Note>
+
+## Set conversation marks
+
+ZIM supports you in implementing conversation marking operations using either client API or server API.
+
+### Client API
+
+
+#### 1 Listen for conversationChanged
+
+After a user logs into the ZIM SDK, they can register to listen for the {getPlatformData(props,onConversationChangedMap)} callback interface  {getPlatformData(props,setEventHandlerMap)}, to receive notifications of changes in conversation markings.
+
+When the conversation marks are changed, all of the user's online devices will receive a {getPlatformData(props,onConversationChangedMap)} event notification. From this, the current marks of the conversation can be obtained from the {getPlatformData(props,conversationMarksMap)} field.
+
+:::if{props.platform=undefined}
+```java
+// Register the SDK event notification callback
+zim.setEventHandler(this);
+
+// ...
+
+public void onConversationChanged(ZIM zim, ArrayList<ZIMConversationChangeInfo> conversationChangeInfoList) {
+    super.onConversationChanged(zim, conversationChangeInfoList);
+    for (ZIMConversationChangeInfo conversationChangeInfo : conversationChangeInfoList) {
+        // The full set of markings for the conversation can be obtained from changeInfo.conversation.marks
+
+    }
+}
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Register the SDK event notification callback
+[self.zim setEventHandler:self];
+...
+
+
+// Implement the SDK event notification callback
+- (void)zim:(ZIM *)zim
+conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{    
+    for(ZIMConversationChangeInfo *changeInfo in conversationChangeInfoList){
+        // The full set of markings for the conversation can be obtained from changeInfo.conversation.marks
+    }
+}
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Register the SDK event notification callback
+[self.zim setEventHandler:self];
+...
+
+
+// Implement the SDK event notification callback
+- (void)zim:(ZIM *)zim
+conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{    
+    for(ZIMConversationChangeInfo *changeInfo in conversationChangeInfoList){
+        // The full set of markings for the conversation can be obtained from changeInfo.conversation.marks
+    }
+}
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+// Register the SDK event notification callback
+class zim_event_handler : public zim::ZIMEventHandler {
+    // 
+    virtual void onConversationChanged(
+        zim::ZIM *zim,
+        const std::vector<zim::ZIMConversationChangeInfo> &conversationChangeInfoList) override;
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Register the SDK event notification callback
+zim.on('conversationChanged', function (zim, { infoList }) {
+    infoList.forEach((info) => {
+        console.log(info.conversation.marks);
+    });
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Register the SDK event notification callback
+ZIMEventHandler.onConversationChanged = (ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList){
+    for (ZIMConversationChangeInfo conversationChangeInfo in conversationChangeInfoList) {
+        // Get all the marks of this conversation from conversationChangeInfo.conversation.marks
+    }
+};
+```
+:::
+
+#### 2 Set or cancel marks
+
+You simply need to call the {getPlatformData(props,setConversationMarkMap)} interface to set or cancel marks for up to 100 conversations (**only supports one-on-one chats or group chats**). Each conversation can have up to 20 marks.
+
+:::if{props.platform=undefined}
+```java
+// For example, setting a mark with type 1 for a group chat conversation
+Integer markType = 1;
+boolean enable  = true;
+ArrayList<ZIMConversationBaseInfo> convList = new ArrayList<>();
+ZIMConversationBaseInfo conversation = new ZIMConversationBaseInfo();
+conversation.conversationID = "GroupConv";
+conversation.conversationType = ZIMConversationType.GROUP;
+convList.add(conversation);
+
+zim.setConversationMark(markType, enable, convList, new ZIMConversationMarkSetCallback() {
+    @Override
+    public void onConversationMarkSet(ArrayList<ZIMConversationBaseInfo> failedConversationInfos, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Operation succesdful
+            // Note: Even if part of the operation is successful and part is failed, the errorCode will still be Success, and failedConversationInfos will return the conversations where the operation failed
+        } else {
+            // Logic when all operations on all conversations fail
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// For example, setting a mark with type 1 for a group chat conversation
+NSNumber *markType = @(1);
+BOOL enable = YES;
+ZIMConversationBaseInfo *conversationInfo = [[ZIMConversationBaseInfo alloc] init];
+conversationInfo.conversationID = @"GroupConv";
+conversationInfo.conversationType = ZIMConversationTypeGroup;
+
+[[ZIM getInstance] setConversationMark:markType enable:enable conversationInfos:@[conversationInfo] callback:^(NSArray<ZIMConversationBaseInfo *> * _Nonnull failedConversationInfos, ZIMError * _Nonnull errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSuccess) {
+        // Operation succesdful
+        // Note: Even if part of the operation is successful and part is failed, the errorCode will still be Success, and failedConversationInfos will return the conversations where the operation failed
+    } else {
+        // Logic when all operations on all conversations fail
+    }
+}];
+```
+
+:::
+:::if{props.platform="mac"}
+```objc
+// For example, setting a mark with type 1 for a group chat conversation
+NSNumber *markType = @(1);
+BOOL enable = YES;
+ZIMConversationBaseInfo *conversationInfo = [[ZIMConversationBaseInfo alloc] init];
+conversationInfo.conversationID = @"GroupConv";
+conversationInfo.conversationType = ZIMConversationTypeGroup;
+
+[[ZIM getInstance] setConversationMark:markType enable:enable conversationInfos:@[conversationInfo] callback:^(NSArray<ZIMConversationBaseInfo *> * _Nonnull failedConversationInfos, ZIMError * _Nonnull errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSuccess) {
+        // Operation succesdful
+        // Note: Even if part of the operation is successful and part is failed, the errorCode will still be Success, and failedConversationInfos will return the conversations where the operation failed
+    } else {
+        // Logic when all operations on all conversations fail
+    }
+}];
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+// For example, setting a mark with type 1 for a group chat conversation
+int markType = 1;
+bool enable = true;
+auto infos = std::vector<ZIMConversationBaseInfo>({ZIMConversationBaseInfo("conv_id", ZIMConversationType::ZIM_CONVERSATION_TYPE_GROUP)});
+
+zim_->setConversationMark(
+    markType, enable, infos,
+    [=](const std::vector<zim::ZIMConversationBaseInfo> &failedConversationList,
+        const zim::ZIMError &errorInfo) {
+        // Your codes
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Taking setting a mark with 1 for a one-on-one conversation and a group chat conversation as an example
+var markType = 1;
+var enable = true;
+var convList = [
+    { conversationID: 'One-to-one conversation', conversationType: 0 },
+    { conversationID: 'Group conversation', conversationType: 2 },
+];
+
+zim.setConversationMark(markType, enable, convList)
+    .then((res) => {
+        // Operation successful. The conversations that failed are returned through res.failedConversationInfos.
+    })
+    .catch((err) => {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// For example, setting a mark with type 1 for a group chat conversation
+int markType = 1;
+bool enable = true;
+List<ZIMConversationBaseInfo> convList = [];
+ZIMConversationBaseInfo conversationBaseInfo = ZIMConversationBaseInfo();
+conversationBaseInfo.conversationID = "GroupConv";
+conversationBaseInfo.conversationType = ZIMConversationType.group;
+convList.add(conversationBaseInfo);
+ZIM.getInstance()?.setConversationMark(markType, enable, convList).then((value) {
+        // Operation successful
+        // Note: Even some of the operations succeeded, some of them failed, errorCode still will be success, and the SDK will return the failed conversations in failedConversationInfos     }).catchError((onError){
+        if(onError is PlatformException){
+            // Codes for all operation failures 
+        }
+});
+```
+:::
+
+### Server API
+
+Developers can set or cancel conversation marks for multiple users in batches by calling the server-side API. For details, please refer to the server API documentation [Mark Conversations](./Mark%20conversations.mdx).
+
+
+## Query conversation list by marks
+
+When calling the {getPlatformData(props,queryConversationListMap)} interface, pass in a mark list by {getPlatformData(props,ZIMConversationFilterOptionMarksMap)}, and you can use the marks as filters to get a conversation list.
+
+<Note title="Note">
+
+- The conversation mark list {getPlatformData(props,ZIMConversationFilterOptionMarksMap)} only supports integers in the range [1, 20]:
+    - If the list contains -1, the query result will be all marked conversations;
+    - If the list contains 0, the query result will be all conversations without any marks;
+    - If multiple marks are passed, the query result will be the union of all the passed marks;
+    - If the list is empty, the query result will be all conversations.
+- Only one-on-one conversations and group conversations are queried.
+</Note>
+
+
+Additionally, if you need to consider whether there are unread messages in the conversation during the query, simply pass `isOnlyUnreadConversation` as YES when calling the {getPlatformData(props,queryConversationListMap)} interface.
+
+:::if{props.platform=undefined}
+```java
+// For example, querying the list of group chat conversations that have a mark of 1 and contain unread messages
+ZIMConversationQueryConfig config = new ZIMConversationQueryConfig();
+config.count = 100;
+config.nextConversation = null;  // Set to null for the first query, and for subsequent paginated queries, pass in the last conversation in the returned list
+ZIMConversationFilterOption option = new ZIMConversationFilterOption();
+option.marks.add(1);  // Fill in the marks to be queried
+option.conversationTypes.add(ZIMConversationType.GROUP); // Fill the conversation type. If the list is empty, get both one-to-one and group conversations
+option.isOnlyUnreadConversation = true； // Here, specify whether to only query conversations with unread messages. The default is false, and the query does not consider whether there are unread messages in the conversation
+
+zim.queryConversationList(config, option, new ZIMConversationListQueriedCallback() {
+    @Override
+    public void onConversationListQueried(ArrayList<ZIMConversation> conversationList, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Query successful
+        } else {
+            // Query failed
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// For example, querying the list of group chat conversations that have a mark of 1 and contain unread messages
+ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
+config.count = 100;
+config.nextConversation = nil; // Set to nil for the first query, and for subsequent paginated queries, pass in the last conversation in the returned list
+
+ZIMConversationFilterOption *option = [[ZIMConversationFilterOption alloc] init];
+option.marks = @[@(1)];
+option.conversationTypes = @[@(ZIMConversationTypeGroup)];
+option.isOnlyUnreadConversation = YES; // Here, specify whether to only query conversations with unread messages. The default is NO, and the query does not consider whether there are unread messages in the conversation
+
+[zim queryConversationListWithConfig:config
+                                option:option
+                                callback:^(NSArray<ZIMConversation *> *conversationList, ZIMError *errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSuccess) {
+        // Handling for successful query
+    } else {
+        // Handling for failed query
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// For example, querying the list of group chat conversations that have a mark of 1 and contain unread messages
+ZIMConversationQueryConfig *config = [[ZIMConversationQueryConfig alloc] init];
+config.count = 100;
+config.nextConversation = nil; // Set to nil for the first query, and for subsequent paginated queries, pass in the last conversation in the returned list
+
+ZIMConversationFilterOption *option = [[ZIMConversationFilterOption alloc] init];
+option.marks = @[@(1)];
+option.conversationTypes = @[@(ZIMConversationTypeGroup)];
+option.isOnlyUnreadConversation = YES; // Here, specify whether to only query conversations with unread messages. The default is NO, and the query does not consider whether there are unread messages in the conversation
+
+[zim queryConversationListWithConfig:config
+                                option:option
+                                callback:^(NSArray<ZIMConversation *> *conversationList, ZIMError *errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSuccess) {
+        // Handling for successful query
+    } else {
+        // Handling for failed query
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// For example, querying the list of group chat conversations that have a mark of 1 and contain unread messages
+zim::ZIMConversationQueryConfig queryConfig;
+queryConfig.nextConversation = nullptr; // Set to nullptr for the first query, and for subsequent paginated queries, pass in the last conversation in the returned list
+queryConfig.count = 100;
+
+zim::ZIMConversationFilterOption option;
+option.marks.push_back(1); // Fill in the marks to be queried
+option.conversationTypes.push_back(ZIMConversationType::ZIM_CONVERSATION_TYPE_GROUP);  // Fill the conversation type. If the list is empty, get both one-to-one and group conversations
+
+option.isOnlyUnreadConversation = true; // Here, specify whether to only query conversations with unread messages. The default is false, and the query does not consider whether there are unread messages in the conversation
+
+zim_sdk_->GetInstance()->queryConversationList(
+queryConfig, option,
+[=](const std::vector<std::shared_ptr<zim::ZIMConversation>> &conversationList,
+    const zim::ZIMError &errorInfo) {
+    // Your codes
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// For example, querying the list of group and one-to-one conversations that have a mark of 1 and contain unread messages
+var config = { count: 10 };
+var option = {
+    marks: [1],
+    conversationTypes: [],
+    isOnlyUnreadConversation: true,
+};
+
+zim.queryConversationList(config, option)
+    .then((res) => {
+        // Operation successful
+    })
+    .catch((err) => {
+        // Operation failed
+    });
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// For example, querying the list of group chat conversations that have a mark of 1 and contain unread messages
+ZIMConversationQueryConfig config = ZIMConversationQueryConfig();
+config.count = 100;
+config.nextConversation = null; // Set to null for the first query, and for subsequent paginated queries, pass in the last conversation in the returned list
+ZIMConversationFilterOption option = ZIMConversationFilterOption();
+option.marks.add(1); // Fill in the marks to be queried
+option.conversationTypes.add(ZIMConversationType.group); // Fill the conversation type. If the list is empty, get both one-to-one and group conversations
+option.isOnlyUnreadConversation = true; // Here, specify whether to only query conversations with unread messages. The default is false, and the query does not consider whether there are unread messages in the conversation
+
+ZIM.getInstance()?.queryConversationList(config,option).then((value) {
+    // Operation successful
+}).catchError((onError){
+if(onError is PlatformException){
+    // Operation failed
+    onError.code;
+    onError.message;
+}
+});
+```
+:::
+
+
+## Query total unread Message count by marks
+
+Call the {getPlatformData(props,queryConversationTotalUnreadMessageCountMap)} interface and pass in the conversation mark list through {getPlatformData(props,ZIMConversationTotalUnreadMessageCountQueryConfigMarksMap)} to query the total number of unread messages for conversations marked accordingly.
+
+<Note title="Note">
+
+- The rule for calculating the total number of unread messages here is consistent with the {getPlatformData(props,onConversationTotalUnreadMessageCountUpdatedMap)} event, which means that if there is a conversation which meets the requirements and has been muted, the unread count of this conversation will not be included in the total unread count queried here.
+- The conversation mark list ({getPlatformData(props,ZIMConversationTotalUnreadMessageCountQueryConfigMarksMap)}) only supports integers in the range [1, 20]:
+    - If the list contains -1, the query result will be for all marked conversations;
+    - If the list contains 0, the query result will be for all conversations without any marks;
+    - If multiple marks are passed, the query result will be the union of all the passed marks;
+    - If the list is empty, the query result will be for all conversations.
+- Only one-on-one conversations and group conversations are queried.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// For example, querying the total number of unread messages for group conversations marked with 1
+ZIMConversationTotalUnreadMessageCountQueryConfig config = new ZIMConversationTotalUnreadMessageCountQueryConfig();
+config.marks.add(1); // Fill in the marks you want to query here
+config.conversationTypes.add(ZIMConversationType.GROUP); // Fill in the conversation types you want to query here. If the list is empty, both one-on-one and group conversations will be queried.
+
+zim.queryConversationTotalUnreadMessageCount(config, new ZIMConversationTotalUnreadMessageCountQueriedCallback() {
+    @Override
+    public void onConversationTotalUnreadMessageCountQueried(int unreadMessageCount, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Query successful
+        } else {
+            // Query failed
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// For example, querying the total number of unread messages for group conversations marked with 1
+ZIMConversationTotalUnreadMessageCountQueryConfig *config = [[ZIMConversationTotalUnreadMessageCountQueryConfig alloc] init];
+config.marks = @[@(1)]; // Fill in the marks you want to query here
+config.conversationTypes = @[@(ZIMConversationTypeGroup)]; // Fill in the conversation types you want to query here. If the list is empty, both one-on-one and group conversations will be queried.
+
+[[ZIM getInstance] queryConversationTotalUnreadMessageCountWithConfig:config callback:^(unsigned int unreadMessageCount, ZIMError * _Nonnull errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSUCCESS) {
+        // Logic for successful query
+    } else {
+        // Logic for failed query
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// For example, querying the total number of unread messages for group conversations marked with 1
+ZIMConversationTotalUnreadMessageCountQueryConfig *config = [[ZIMConversationTotalUnreadMessageCountQueryConfig alloc] init];
+config.marks = @[@(1)]; // Fill in the marks you want to query here
+config.conversationTypes = @[@(ZIMConversationTypeGroup)]; // Fill in the conversation types you want to query here. If the list is empty, both one-on-one and group conversations will be queried.
+
+[[ZIM getInstance] queryConversationTotalUnreadMessageCountWithConfig:config callback:^(unsigned int unreadMessageCount, ZIMError * _Nonnull errorInfo) {
+    if (errorInfo.code == ZIMErrorCodeSUCCESS) {
+        // Logic for successful query
+    } else {
+        // Logic for failed query
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// For example, querying the total number of unread messages for group conversations marked with 1
+zim::ZIMConversationTotalUnreadMessageCountQueryConfig queryConfig;
+queryConfig.marks.push_back(1); // Fill in the marks you want to query here
+queryConfig.conversationTypes.push_back(ZIMConversationType::ZIM_CONVERSATION_TYPE_GROUP); // Fill in the conversation types you want to query here. If the list is empty, both one-on-one and group conversations will be queried.
+
+zim_sdk_->GetInstance()->queryConversationTotalUnreadMessageCount(
+    queryConfig, [=](unsigned int totalUnreadCount, const zim::ZIMError &errorInfo) {
+        // Your code
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// For example, querying the total number of unread messages for one-to-one and group conversations marked with 1
+var config = {
+    marks: [1],
+    conversationTypes: [],
+};
+
+zim.queryConversationTotalUnreadMessageCount(config)
+    .then((res) => {
+        // Operation successful
+    })
+    .catch((err) => {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// For example, querying the total number of unread messages for group conversations marked with 1
+ZIMConversationTotalUnreadMessageCountQueryConfig config =  ZIMConversationTotalUnreadMessageCountQueryConfig();
+config.marks.add(1); // Fill in the marks you want to query here
+config.conversationTypes.add(ZIMConversationType.group); // Fill in the conversation types you want to query here. If the list is empty, both one-on-one and group conversations will be queried.
+ZIM.getInstance()?.queryConversationTotalUnreadMessageCount(config).then((value) {
+    // Query Successful
+}).catchError((onError){
+    if(onError is PlatformException){
+        // Query failed
+
+    }
+});
+```
+:::

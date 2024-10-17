@@ -1,0 +1,245 @@
+---
+articleID: 14203
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const queryRoomMemberListMap = {
+  'Android': <a href='@queryRoomMemberList' target='_blank'>queryRoomMemberList</a>,
+  'iOS': <a href='@queryRoomMemberListByRoomID' target='_blank'>queryRoomMemberListByRoomID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberList.html' target='_blank'>queryRoomMemberList</a>,
+}
+export const onRoomMemberQueriedMap = {
+  'Android': <a href='@onRoomMemberQueried' target='_blank'>onRoomMemberQueried</a>,
+}
+export const ZIMRoomMemberQueriedCallbackMap = {
+  'Android': <a href='@-ZIMRoomMemberQueriedCallback' target='_blank'>ZIMRoomMemberQueriedCallback</a>,
+}
+export const ZIMRoomMemberQueryConfigMap = {
+  'Android': <a href='@-ZIMRoomMemberQueryConfig' target='_blank'>ZIMRoomMemberQueryConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMemberQueryConfig-class.html' target='_blank'>ZIMRoomMemberQueryConfig</a>,
+}
+export const queryRoomOnlineMemberCountMap = {
+  'Android': <a href='@queryRoomOnlineMemberCount' target='_blank'>queryRoomOnlineMemberCount</a>,
+  'iOS': <a href='@queryRoomOnlineMemberCountByRoomID' target='_blank'>queryRoomOnlineMemberCountByRoomID</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomOnlineMemberCount.html' target='_blank'>queryRoomOnlineMemberCount</a>,
+}
+export const logoutMap = {
+  'Android': <a href='@logout' target='_blank'>logout</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/logout.html' target='_blank'>logout</a>,
+}
+export const typeMap = {
+  'Android': "int",
+  'Web': "number",
+}
+
+# Manage room info
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room info queries, such as getting the room member list, querying the number of online members in the room, and more.
+
+<Note title="Note">
+
+You can only implement the following features in the room you created or joined.
+
+</Note>
+
+## Get room member list
+
+:::if{props.platform=undefined}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters, and the room member list will return through the callback {getPlatformData(props,onRoomMemberQueriedMap)} of {getPlatformData(props,ZIMRoomMemberQueriedCallbackMap)} method.
+:::
+:::if{props.platform="U3d"}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters.Then, the callback [ZIMRoomMemberQueriedCallback](@ZIMRoomMemberQueriedCallback) is used to return the member list in the room.
+:::
+:::if{props.platform="Web"}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters.And the room member list will be returned through the callback [ZIMRoomMemberQueriedResult](@-ZIMRoomMemberQueriedResult).
+:::
+:::if{props.platform="iOS"}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters.
+:::
+:::if{props.platform="Flutter"}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters.
+:::
+:::if{props.platform="window"}
+After joining a room, to know who are in the current room and get the room member list, call the {getPlatformData(props,queryRoomMemberListMap)} method with `roomID` and `config` parameters.
+:::
+
+The `config` parameter refers to the configurations for querying room members. You will need to configure the parameters of the class {getPlatformData(props,ZIMRoomMemberQueryConfigMap)} according to the following:
+
+| Parameter | Type | Required | Description |
+| ------- | ---- | ---- | ---- |
+| nextFlag |  string | Yes |<p> The paging identifier. Set this to null for the first query. </p><p> If the `nextFlag` field returned in the callback is not null, which means the query is not completed. In this case, you need to set it to the current position to continue the query on the next page.</p>|
+| count | {getPlatformData(props,typeMap)} | Yes | <p>The number of room members that can be obtained in a query.</p><p>Note: To save overhead, we recommend you to obtain less than 100 members at a time.</p>|
+
+:::if{props.platform=undefined}
+```java  
+ZIMRoomMemberQueryConfig ZIMRoomMemberQueryConfig = new ZIMQueryMemberConfig();
+zimRoomMemberQueryConfig.count = 100;
+zim.queryRoomMemberList(roomID, config, new ZIMRoomMemberQueriedCallback() {
+            @Override
+            public void onRoomMemberQueried(String roomID, ArrayList<ZIMUserInfo> memberList, String nextFlag, ZIMError errorInfo) {
+                
+            }
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart  
+ZIMRoomMemberQueryConfig roomMemberQueryConfig = ZIMRoomMemberQueryConfig();
+roomMemberQueryConfig.count = 100;
+ZIM
+    .getInstance()
+    .queryRoomMemberList('roomID', roomMemberQueryConfig)
+    .then((value) {
+      //value is the ZIMRoomMemberQueriedResult object.
+      //This will be triggered when operation successful.
+    })
+    .catchError((onError) {
+      //This will be triggered when operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc  
+    ZIMRoomMemberQueryConfig *config = [[ZIMRoomMemberQueryConfig alloc] init];
+    config.nextFlag = @"";
+    config.count = 1;//1 indicates that get one member at a time.
+    [zim queryRoomMemberListByRoomID:RoomID config:config callback:^(NSArray<ZIMUserInfo *> * _Nonnull memberList, NSString * _Nonnull nextFlag, ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for getting the room member list here.
+    }];
+```
+:::
+:::if{props.platform="window"}
+```cpp 
+ZIMRoomMemberQueryConfig config;
+config.count = count;
+config.nextFlag = string_flag;
+
+zim_->queryRoomMemberList(string_room_id, config, [=](const std::vector<ZIMUserInfo>& member_list, const std::string& next_flag, zim::ZIMError error_info) {
+    if (error_info.code != 0)
+    {
+        ShowMsg(L"Get room member list failed，roomID: %s", string_room_id);
+    }
+    else
+    {
+        CString string_user_list;
+        for (auto& member : member_list)
+        {
+            CString string_user;
+            string_user.Format(L"(%s,%s),", member.userID, member.userName);
+            string_user_list += string_user;
+        }
+
+        ShowMsg(L"Get room member list successfully，roomID: %s，count: %d, users: %s, next flag: %s", string_room_id, member_list.size(), string_user_list, next_flag);
+    }
+});
+```
+:::
+:::if{props.platform="U3d"}
+```c#  
+ZIMRoomMemberQueryConfig zimQueryMemberConfig = new ZIMRoomMemberQueryConfig();
+zimQueryMemberConfig.count = 100;
+ZIM.GetInstance().QueryRoomMemberList("roomID", zimQueryMemberConfig, (string roomID, List<ZIMUserInfo> memberList, string nextFlag, ZIMError errorInfo) =>
+    {
+                    
+    }
+);
+```
+:::
+:::if{props.platform="Web"}
+```javascript  
+var roomID = '';
+var config = { count: 10, nextFlag: '' };
+
+zim.queryRoomMemberList(roomID, config)
+    .then(function ({ roomID, memberList, nextFlag }) {
+        // Query successful.
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+:::
+
+## Get the number of online room members
+
+
+To get the number of the online room members, call the {getPlatformData(props,queryRoomOnlineMemberCountMap)} method with the `roomID`.
+
+:::if{props.platform=undefined}
+```java  
+zim.queryRoomOnlineMemberCount(roomID, new ZIMRoomOnlineMemberCountQueriedCallback() {
+            @Override
+            public void onRoomOnlineMemberCountQueried(String roomID, int count, ZIMError errorInfo) {
+
+            }
+ });
+```
+:::
+:::if{props.platform="Flutter"}
+```dart  
+// Get the number of online room members
+ZIM
+    .getInstance()
+    .queryRoomOnlineMemberCount('roomID')
+    .then((value) {
+        //This will be triggered when operation successful.
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim queryRoomOnlineMemberCountByRoomID:<#(nonnull NSString *)#> callback:^(NSString * _Nonnull roomID, unsigned int count, ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for querying the online room members. 
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim_->queryRoomOnlineMemberCount(string_room_id, [=](unsigned int count, zim::ZIMError error_info) {
+    if (error_info.code != 0)
+    {
+        ShowMsg(L"Query the number of online room members failed，roomID: %s",string_room_id);
+    }
+    else
+    {
+        ShowMsg(L"Query the number of online room members successfully，roomID: %s", string_room_id);
+    }
+});
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+// Get the number of online room members
+ZIM.GetInstance().QueryRoomOnlineMemberCount("roomID", (string roomID, uint count, ZIMError errorInfo) =>
+    {
+
+    }
+);
+```
+:::
+:::if{props.platform="Web"}
+```javascript  
+var roomID = '';
+
+zim.queryRoomOnlineMemberCount(roomID, config)
+    .then(function ({ roomID, count }) {
+        // Query successful.
+    })
+    .catch(function (err) {
+        // Query failed.
+    });
+```
+:::
+
+<Note title="Note">
+A room member automatically gets offline if he calls the {getPlatformData(props,logoutMap)} method to log out from the room.
+</Note>
+
+
+

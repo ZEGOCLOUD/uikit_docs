@@ -1,0 +1,499 @@
+---
+articleID: 17409
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const onReceiveGroupMessageMap = {
+  'Android': <a href='@onReceiveGroupMessage' target='_blank'>onReceiveGroupMessage</a>,
+  'Web': <a href='@receiveGroupMessage' target='_blank'>receiveGroupMessage</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-receive-group-message-from-group-id' target='_blank'>receiveGroupMessage</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-receive-group-message-from-group-id' target='_blank'>receiveGroupMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveGroupMessage.html' target='_blank'>onReceiveGroupMessage</a>,
+}
+export const ZIMTipsMessageEventMap = {
+  'Android': <a href='@-ZIMTipsMessageEvent' target='_blank'>ZIMTipsMessageEvent</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMTipsMessageEvent.html' target='_blank'>ZIMTipsMessageEvent</a>,
+}
+export const ZIMTipsMessageGroupChangeInfoMap = {
+  'Android': <a href='@-ZIMTipsMessageGroupChangeInfo' target='_blank'>ZIMTipsMessageGroupChangeInfo</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMTipsMessageGroupChangeInfo-class.html' target='_blank'>ZIMTipsMessageGroupChangeInfo</a>,
+}
+export const ZIMTipsMessageChangeInfoTypeMap = {
+  'Android': <a href='@-ZIMTipsMessageChangeInfoType' target='_blank'>ZIMTipsMessageChangeInfoType</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMTipsMessageChangeInfoType.html' target='_blank'>ZIMTipsMessageChangeInfoType</a>,
+}
+export const ZIMTipsMessageGroupMemberChangeInfoMap = {
+  'Android': <a href='@-ZIMTipsMessageGroupMemberChangeInfo' target='_blank'>ZIMTipsMessageGroupMemberChangeInfo</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMTipsMessageGroupMemberChangeInfo-class.html' target='_blank'>ZIMTipsMessageGroupMemberChangeInfo</a>,
+}
+
+
+# Receive tip messages
+- - -
+
+## Overview
+
+The ZIM SDK converts some user operations on a group (such as group creation and disbandment) into tip messages, A tip message is a special type of message, whose enumeration value is `32`. Tip messages can be generated only by the ZIM backend or ZIM SDK. Users cannot insert tip messages into local conversations, set the read receipt or response for them, or directly delete them. However, users can delete a tip message by deleting all messages in a conversation.
+
+<Note title="Note">
+
+Only ZIM SDK 2.15.0 or later supports tip messages.
+</Note>
+
+## Procedure
+
+### 1. Enable the feature
+
+To enable the tip message feature for the following events, contact ZEGOCLOUD technical support .
+- Group creation
+- Group disbandment
+- User joined
+- User joined by invitation
+- Member leave
+- Member removal
+- Group profile change, including the following sub-events:
+    <Note title="Note">
+    
+    The group profile change event is a collection of the following events that need to be specified separately.
+    </Note>
+    
+    - Group name change
+    - Group avatar change
+    - Group notice change
+    - Group muting status change
+- Group member information change, including the following sub-events:
+    <Note title="Note">
+    
+    The group member information change event is a collection of the following events that need to be specified separately.
+    </Note>
+    
+    - Group ownership change
+    - Group member role change
+    - Group role muting status change
+
+### 2. Receive a tip message
+
+Listen for the {getPlatformData(props,onReceiveGroupMessageMap)}  callback to receive the tip message when a group event occurs.
+
+If the group event ({getPlatformData(props,ZIMTipsMessageEventMap)}) is a group profile change (`ZIMTipsMessageEvent.GROUP_INFO_CHANGED`) or group member information change (`ZIMTipsMessageEvent.GROUP_MEMBER_INFO_CHANGED`), do the following:
+1. Change the `changeInfo` in the tip message to {getPlatformData(props,ZIMTipsMessageGroupChangeInfoMap)} or {getPlatformData(props,ZIMTipsMessageGroupMemberChangeInfoMap)}.
+2. Based on the `type` in the `changeInfo`, obtain the event type ({getPlatformData(props,ZIMTipsMessageChangeInfoTypeMap)}) and determine the field to be read from the `changeInfo`. The ZIM SDK does not assign values to irrelevant fields. For more information, see the sample code at the end of this topic.
+
+The following table describes the relationship between the {getPlatformData(props,ZIMTipsMessageEventMap)} and the {getPlatformData(props,ZIMTipsMessageChangeInfoTypeMap)}.
+
+<table class="collapsible-table" >
+<tbody>
+<tr data-row-level="1">
+<th>
+Event 
+
+(`ZIMTipsMessageEvent`)
+</th>
+<th>Enumeration</th>
+<th>Value</th>
+<th>
+Read from 
+
+`ZIMTipsMessageGroupChangeInfo`
+</th>
+</tr>
+<tr data-row-level="2">
+<td>Group creation</td>
+<td>GROUP_CREATED</td>
+<td>1</td>
+<td rowspan="6">Not required</td>
+</tr>
+<tr data-row-level="3">
+<td>Group disbandment</td>
+<td>GROUP_DISMISSED</td>
+<td>2</td>
+</tr>
+<tr data-row-level="4">
+<td>User joined</td>
+<td>GROUP_JOINED</td>
+<td>3</td>
+</tr>
+<tr data-row-level="5">
+<td>User joined by invitation</td>
+<td>GROUP_INVITED</td>
+<td>4</td>
+</tr>
+<tr data-row-level="6">
+<td>Member leave</td>
+<td>GROUP_LEFT</td>
+<td>5</td>
+</tr>
+<tr data-row-level="7">
+<td>Member removal</td>
+<td>GROUP_KICKED_OUT</td>
+<td>6</td>
+</tr>
+<tr data-row-level="8" data-row-child="true">
+<td>Group profile change</td>
+<td>GROUP_INFO_CHANGED</td>
+<td>7</td>
+<td>Required</td>
+</tr>
+<tr data-row-level="8-1">
+<th>
+Extra information
+
+（ZIMTipsMessageChangeInfoType）
+</th>
+<th>Enumeration</th>
+<th>Value</th>
+<th>
+Read from 
+
+`ZIMTipsMessageGroupChangeInfo` 
+</th>
+</tr>
+<tr data-row-level="8-2">
+<td>Change of multiple items of the group name, group avatar, and group notice</td>
+<td>GROUP_DATA_CHANGED</td>
+<td>1</td>
+<td>Perform a bitwise operation based on the `groupDataFlag` to calculate multiple items of the group name, group notice, and group avatar.</td>
+</tr>
+<tr data-row-level="8-3">
+<td>Group notice change</td>
+<td>GROUP_NOTICE_CHANGED</td>
+<td>2</td>
+<td>Read the `groupNotice` field from `ZIMTipsMessageGroupChangeInfo`.</td>
+</tr>
+<tr data-row-level="8-4">
+<td>Group name change</td>
+<td>GROUP_NAME_CHANGED</td>
+<td>3</td>
+<td>Read the `groupName` field from `ZIMTipsMessageGroupChangeInfo`.</td>
+</tr>
+<tr data-row-level="8-5">
+<td>Group avatar change</td>
+<td>GROUP_AVATAR_URL_CHANGED</td>
+<td>4</td>
+<td>Read the `groupAvatarUrl` field from `ZIMTipsMessageGroupChangeInfo`.</td>
+</tr>
+<tr data-row-level="8-6">
+<td>Group muting status change</td>
+<td>GROUP_MUTE_CHANGED</td>
+<td>5</td>
+<td>Read the `groupMutedInfo` field from `ZIMTipsMessageGroupChangeInfo`.</td>
+</tr>
+<tr data-row-level="9" data-row-child="true">
+<td>Group member information change</td>
+<td>GROUP_MEMBER_INFO_CHANGED</td>
+<td>8</td>
+<td>Depends on the extra information.</td>
+</tr>
+<tr data-row-level="9-1">
+<th>
+Extra information （ZIMTipsChangeInfoType）
+</th>
+<th>Enumeration</th>
+<th> Value </th>
+<th colSpan={5}>
+Read from 
+
+`ZIMTipsMessageGroupMemberChangeInfo` 
+</th>
+</tr>
+<tr data-row-level="9-2">
+<td>Group ownership change</td>
+<td>GROUP_OWNER_TRANSFERRED</td>
+<td>10</td>
+<td>Not required</td>
+</tr>
+<tr data-row-level="9-3">
+<td>Group member role change</td>
+<td>GROUP_MEMBER_ROLE_CHANGED</td>
+<td>11</td>
+<td>Read the `memberRole` field from `ZIMTipsMessageGroupMemberChangeInfo`.</td>
+</tr>
+<tr data-row-level="9-4">
+<td>Group role muting status change</td>
+<td>GROUP_MEMBER_MUTE_CHANGED</td>
+<td>12</td>
+<td>Read the `muteExpiredTime` field from `ZIMTipsMessageGroupMemberChangeInfo`.</td>
+</tr>
+</tbody>
+</table>
+
+
+:::if{props.platform=undefined}
+```java
+// Receive a group message.
+zim.setEventHandler(new ZIMEventHandler(){
+@Override
+public void onReceiveGroupMessage(ZIM zim, List<ZIMMessage> messageList, String fromGroupID) {
+        for (ZIMMessage message : messageList) {
+            // It is a tip message.
+            if (message.getType() == ZIMMessageType.TIPS) {
+                ZIMTipsMessage tipsMessage = (ZIMTipsMessage) message;
+                // It is a group profile change event.
+                if (tipsMessage.event == ZIMTipsMessageEvent.GROUP_INFO_CHANGED) {
+                    ZIMTipsMessageGroupChangeInfo info = (ZIMTipsMessageGroupChangeInfo)tipsMessage.changeInfo;
+                    if (info.type == ZIMTipsMessageChangeInfoType.GROUP_DATA_CHANGED) {
+                        if ((info.groupDataFlag & ZIMGroupDataFlag.NAME) == ZIMGroupDataFlag.NAME) {
+                            // Group name change.
+                            String newGroupName = info.groupName;
+                        }
+
+                        if ((info.groupDataFlag & ZIMGroupDataFlag.NOTICE) == ZIMGroupDataFlag.NOTICE) {
+                            // Group notice change.
+                            String newGroupNotice = info.groupNotice;
+                        }
+
+                        if ((info.groupDataFlag &  ZIMGroupDataFlag.AVATAR_URL) == ZIMGroupDataFlag.AVATAR_URL) {
+                            // Group avatar change.
+                            String newGroupAvatarUrl = info.groupAvatarUrl;
+                        }
+                    }
+
+                    // ...  The business logic.
+                } else if (tipsMessage.event == ZIMTipsMessageEvent.GROUP_MEMBER_INFO_CHANGED) {
+                    ZIMTipsMessageGroupMemberChangeInfo memberInfo = (ZIMTipsMessageGroupMemberChangeInfo) tipsMessage.changeInfo;
+                    // ...  The business logic.
+                }
+                // ... Other business logic.
+            }
+        }
+    }
+});
+```
+
+:::
+:::if{props.platform="window"}
+```cpp
+// Receive a group message.
+void zim_event_handler::onReceiveGroupMessage(
+    zim::ZIM *, const std::vector<std::shared_ptr<zim::ZIMMessage>> &messageList,
+    const std::string &fromGroupID) {
+
+    for (const auto &message: messageList) {
+        // It is a tip message.
+
+        if (message->getType() == zim::ZIMMessageType::ZIM_MESSAGE_TYPE_TIPS) {
+            auto tips_message = std::static_pointer_cast<zim::ZIMTipsMessage>(message);
+            // It is a group profile change event.
+            if (tips_message->getEvent() == zim::ZIMTipsMessageEvent::ZIM_TIPS_MESSAGE_EVENT_GROUP_INFO_CHANGED) {
+                auto info = std::static_pointer_cast<zim::ZIMTipsMessageGroupChangeInfo>(tips_message->getChangeInfo());
+
+                if (info->getType() == zim::ZIMTipsMessageChangeInfoType::ZIM_TIPS_MESSAGE_CHANGE_INFO_TYPE_GROUP_DATA_CHANGED) {
+                    if (info->getGroupDataFlag() & ZIM_GROUP_DATA_FLAG_NAME) {
+                        // Group name change.
+                        auto new_group_name = info->getGroupName();
+                    }
+
+                    if (info->getGroupDataFlag() & ZIM_GROUP_DATA_FLAG_NOTICE) {
+                        // Group notice change.
+                        auto new_group_notice = info->getGroupNotice();
+                    }
+
+                    if (info->getGroupDataFlag() & ZIM_GROUP_DATA_FLAG_AVATAR_URL) {
+                        // Group avatar change.
+                        auto new_group_avatar_url = info->getGroupAvatarUrl();
+                    }
+                }
+            
+                ......//  The business logic.
+            } else if (tips_message->getEvent() == zim::ZIMTipsMessageEvent::ZIM_TIPS_MESSAGE_EVENT_GROUP_MEMBER_INFO_CHANGED) {
+                // It is a group member information change event.
+                auto info = std::static_pointer_cast<zim::ZIMTipsMessageGroupMemberChangeInfo>(tips_message->getChangeInfo());
+                ......// The business logic.
+            }
+            ......
+        }
+    }
+
+}
+```
+
+### 3. Display a tip message
+
+Based on the obtained tip message, generate the corresponding event string and display the event string on the UI.
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+// Receive group messages
+ZIMEventHandler.onReceiveGroupMessage = (ZIM zim, List<ZIMMessage> messageList, String fromGroupID) {
+    for (ZIMMessage message in messageList) {
+        // Message is a tip
+        if (message.type == ZIMMessageType.tips) {
+            ZIMTipsMessage tipsMessage = message as ZIMTipsMessage;
+            // If the tip message type is group info changed
+            if (tipsMessage.event == ZIMTipsMessageEvent.groupInfoChanged) {
+                ZIMTipsMessageGroupChangeInfo info = tipsMessage.changeInfo as ZIMTipsMessageGroupChangeInfo;
+                if (info.type == ZIMTipsMessageChangeInfoType.groupDataChanged) {
+                    if ((info.groupDataFlag & ZIMGroupDataFlag.groupName) != 0) {
+                        // Group name changed
+                        String newGroupName = info.groupName;
+                    }
+                    if ((info.groupDataFlag & ZIMGroupDataFlag.groupNotice) != 0) {
+                        // Group notice changed
+                        String groupNotice = info.groupNotice;
+                    }
+
+                    if ((info.groupDataFlag & ZIMGroupDataFlag.avatarUrl) != 0) {
+                        // Group avatar changed
+                        String newGroupAvatarUrl = info.groupAvatarUrl;
+                    }
+                }
+            } else if (tipsMessage.event == ZIMTipsMessageEvent.groupMemberInfoChanged) {
+                ZIMTipsMessageGroupMemberChangeInfo memberInfo = tipsMessage.changeInfo as ZIMTipsMessageGroupMemberChangeInfo;
+                // ... Business logic
+            }
+            // ... Other logic
+        }
+    }
+};
+```
+:::
+
+:::if{props.platform="Web"}
+```JavaScript
+// Receive a group message.
+zim.on('receiveGroupMessage', (zim, { messageList, fromConversationID }) => {
+    messageList.forEach((message) => {
+        // It is a tip message.
+        if (message.type == 32) {
+            // It is a group profile change event.
+            if (message.event == 7) {
+                const info = message.changeInfo;
+                // Server API modifies multiple attributes of group data.
+                if (info.type == 1 && info.groupDataFlag) {
+                    if (info.groupDataFlag & 1 == 1) {
+                        // Group name change.
+                        const groupName = info.groupName;
+                    }
+
+                    if (info.groupDataFlag & 2 == 2) {
+                        // Group notice change.
+                        const groupNotice = info.groupNotice;
+                    }
+
+                    if (info.groupDataFlag & 4 == 4) {
+                        // Group avatar change.
+                        const groupAvatarUrl = info.groupAvatarUrl;
+                    }
+                }
+                // The business logic.
+            } else if (message.event == 8) {
+                // It is a group member information change event.
+                const info = message.changeInfo;
+                // The business logic.
+            }
+        }
+    });
+});
+```
+
+### 3. Display a tip message
+
+Based on the obtained tip message, generate the corresponding event string and display the event string on the UI.
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Receive a group message.
+- (void)receiveGroupMessage:(ZIM *)zim 
+                 messageList:(NSArray<ZIMMessage *> *)messageList 
+                  fromGroupID:(NSString *)fromGroupID {
+    
+    for (ZIMMessage *message in messageList) {
+        // It is a tip message.
+        if (message.type == ZIMMessageTypeTips) {
+            ZIMTipsMessage *tipsMessage = (ZIMTipsMessage *)message;
+            // It is a group profile change event.
+            if (tipsMessage.event == ZIMTipsMessageEventGroupInfoChanged) {
+                ZIMTipsMessageGroupChangeInfo *info = (ZIMTipsMessageGroupChangeInfo *)tipsMessage.changeInfo;
+                
+                if (info.type == ZIMTipsMessageChangeInfoTypeGroupDataChanged) {
+                    if (info.groupDataFlag & ZIMGroupDataFlagName) {
+                        // Group name change.
+                        NSString *newGroupName = info.groupName;
+                    }
+                    
+                    if (info.groupDataFlag & ZIMGroupDataFlagNotice) {
+                        // Group notice change.
+                        NSString *newGroupNotice = info.groupNotice;
+                    }
+                    
+                    if (info.groupDataFlag & ZIMGroupDataFlagAvatarUrl) {
+                        // Group avatar change.
+                        NSString *newGroupAvatarUrl = info.groupAvatarUrl;
+                    }
+                }
+                
+                // The business logic.
+            } else if (tipsMessage.event == ZIMTipsMessageEventGroupMemberInfoChanged) {
+                // It is a group member information change event.
+                ZIMTipsMessageGroupMemberChangeInfo *info = (ZIMTipsMessageGroupMemberChangeInfo *)tipsMessage.changeInfo;
+                
+                // The business logic.
+            }
+            
+            // Other business logic.
+        }
+    }
+}
+```
+
+### 3. Display a tip message
+
+Based on the obtained tip message, generate the corresponding event string and display the event string on the UI.
+
+:::
+:::if{props.platform="mac"}
+```objc
+// Receive a group message.
+- (void)receiveGroupMessage:(ZIM *)zim 
+                 messageList:(NSArray<ZIMMessage *> *)messageList 
+                  fromGroupID:(NSString *)fromGroupID {
+    
+    for (ZIMMessage *message in messageList) {
+        // It is a tip message.
+        if (message.type == ZIMMessageTypeTips) {
+            ZIMTipsMessage *tipsMessage = (ZIMTipsMessage *)message;
+            // It is a group profile change event.
+            if (tipsMessage.event == ZIMTipsMessageEventGroupInfoChanged) {
+                ZIMTipsMessageGroupChangeInfo *info = (ZIMTipsMessageGroupChangeInfo *)tipsMessage.changeInfo;
+                
+                if (info.type == ZIMTipsMessageChangeInfoTypeGroupDataChanged) {
+                    if (info.groupDataFlag & ZIMGroupDataFlagName) {
+                        // Group name change.
+                        NSString *newGroupName = info.groupName;
+                    }
+                    
+                    if (info.groupDataFlag & ZIMGroupDataFlagNotice) {
+                        // Group notice change.
+                        NSString *newGroupNotice = info.groupNotice;
+                    }
+                    
+                    if (info.groupDataFlag & ZIMGroupDataFlagAvatarUrl) {
+                        // Group avatar change.
+                        NSString *newGroupAvatarUrl = info.groupAvatarUrl;
+                    }
+                }
+                
+                // The business logic.
+            } else if (tipsMessage.event == ZIMTipsMessageEventGroupMemberInfoChanged) {
+                // It is a group member information change event.
+                ZIMTipsMessageGroupMemberChangeInfo *info = (ZIMTipsMessageGroupMemberChangeInfo *)tipsMessage.changeInfo;
+                
+                // The business logic.
+            }
+            
+            // Other business logic.
+        }
+    }
+}
+```
+
+### 3. Display a tip message
+
+Based on the obtained tip message, generate the corresponding event string and display the event string on the UI.
+
+:::
+

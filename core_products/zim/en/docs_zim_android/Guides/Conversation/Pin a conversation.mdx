@@ -1,0 +1,266 @@
+---
+articleID: 17765
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const queryConversationListMap = {
+  'Android': <a href='@queryConversationList' target='_blank'>queryConversationList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html' target='_blank'>queryConversationList</a>,
+  'iOS': <a href='@queryConversationListWithConfig' target='_blank'>queryConversationListWithConfig</a>,
+}
+export const isPinnedMap = {
+  'Android': <a href='@isPinned-ZIMConversation' target='_blank'>isPinned</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversation/isPinned.html' target='_blank'>isPinned</a>,
+}
+export const updateConversationPinnedStateMap = {
+  'Android': <a href='@updateConversationPinnedState' target='_blank'>updateConversationPinnedState</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateConversationPinnedState.html' target='_blank'>updateConversationPinnedState</a>,
+}
+export const queryConversationPinnedListMap = {
+  'Android': <a href='@queryConversationPinnedList' target='_blank'>queryConversationPinnedList</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationPinnedList.html' target='_blank'>queryConversationPinnedList</a>,
+  'iOS': <a href='@queryConversationPinnedListWithConfig' target='_blank'>queryConversationPinnedListWithConfig</a>,
+}
+
+# Pin a conversation
+
+- - -
+
+## Introduction
+
+
+Pinning conversations refers to fixing one-on-one or group chat conversations at the top of the conversation list, preventing them from being pushed to the bottom by other non-pinned conversations, and making it easier for users to find them. When users pin a conversation through the client, the pinned status is stored on the server. Therefore, when users switch to another device, the pinned status will be synchronized to the current device.
+
+ZIM supports users to pin conversations and query the pinned conversation list
+
+<Note title="Note">
+
+- Pinned conversations are only supported in ZIM SDK version 2.8.0 or above.
+- The maximum limit for pinned conversations is 100.
+</Note>
+
+- Pinned conversations are always placed before unpinned conversations.
+
+    <Note title="Note">
+
+    This rule also applies to the conversation list fetched by calling the {getPlatformData(props,queryConversationListMap)} interface. Developers can confirm whether a conversation is pinned by checking the {getPlatformData(props,isPinnedMap)} field of the ZIMConversation in the fetched results.
+    </Note>
+
+- After a user pins multiple conversations, the relative order between these conversations will remain unchanged.   
+    Let's assume there are 5 conversations, and the existing order in the conversation list is: a, b, c, d, e.   
+    If the user pins conversations b and d (regardless of the order in which they are pinned), the new order will be b, d, a, c, e. In other words, conversations b and d are placed at the front, and conversation b is still placed before conversation d.
+
+    <Note title="Note">
+
+    The above example assumes that the orderKey of the related conversations remains unchanged before and after pinning. If the orderKey changes, the order in the pinned conversation list will also change.
+    </Note>
+
+## Pin a conversation
+
+After the login, a user can pin or unpin a conversation in their conversation list by calling the {getPlatformData(props,updateConversationPinnedStateMap)} interface.
+
+:::if{props.platform=undefined}
+```java
+// Pin a one-on-one conversation
+boolean isPinned = true;
+zim.updateConversationPinnedState(isPinned, conversation.conversationID, conversation.type, new ZIMConversationPinnedStateUpdatedCallback() {
+        @Override
+        public void onConversationPinnedStateUpdated(String conversationID, ZIMConversationType conversationType, ZIMError errorInfo) {
+             // Callback of the isPinned value change
+        }
+    });
+```
+
+:::
+:::if{props.platform="iOS"}
+
+```objc
+// Pin a one-on-one conversation
+bool isPinned = YES;
+    
+[[ZIM getInstance] updateConversationPinnedState:isPinned conversationID:@"conversationID" conversationType:ZIMConversationTypePeer callback:^(NSString * _Nonnull conversationID, ZIMConversationType conversationType, ZIMError * _Nonnull errorInfo) {
+    // Business logic
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Pin a one-to-one conversation
+zim_->updateConversationPinnedState(
+    true, conv_id, zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_PEER,
+    [=](const std::string &conversationID, zim::ZIMConversationType conversationType,
+        const zim::ZIMError &errorInfo) {
+        // Operarion result
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Operation succeeded
+        } else {
+            // Operation failed, you can print the error code and error message and troubleshoot the error by looking for the ZIM official error code documentation. 
+        }
+    });
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+// Pin a one-on-one conversation
+ZIM.GetInstance().UpdateConversationPinnedState(
+    true, "conv_id", ZIMConversationType.Peer,
+    (string conversationID, ZIMConversationType conversationType,
+        ZIMError errorInfo) {
+        // Callback notification for the result of the pinned conversation operation
+        if (errorInfo.code == ZIMErrorCode.Success) {
+            //......
+        } else {
+            // You can print the error code and error message to troubleshoot the issue, refer to the ZIM official website error code documentation for troubleshooting
+        }
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Pin a one-on-one conversation
+var isPinned = true;
+var conversationID = "";
+var conversationType = 0;
+zim.updateConversationPinnedState(isPinned, conversationID, conversationType)
+    .then(function(res){
+        // Operation succeeded
+    })
+    .catch(function(err){
+        // Operation failed
+    })
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Pin a one-on-one conversation
+ZIM.getInstance().updateConversationPinnedState(true, "conversationID", ZIMConversationType.peer
+    ).then((value){
+
+}).catchError((onError){
+    // You can print the error code and error message to troubleshoot the error, please refer to the ZIM official website error code documentation for the error reasons.
+});
+```
+:::
+
+## Get the pinned conversation list
+
+After the login, a user can use the {getPlatformData(props,queryConversationPinnedListMap)} interface to get the full list of pinned conversations.
+
+:::if{props.platform=undefined}
+```java
+ZIMConversationQueryConfig config = new ZIMConversationQueryConfig();
+config.nextConversation = null;//// No need to pass in for the first query
+config.count = 20; // // The number of pinned conversations to retrieve each time
+
+zim.queryConversationPinnedList(config, new ZIMConversationPinnedListQueriedCallback() {
+    @Override
+    public void onConversationPinnedListQueried(ArrayList<ZIMConversation> conversationList, ZIMError errorInfo) {
+        // Get the data
+    }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMConversationQueryConfig *queryConfig = [[ZIMConversationQueryConfig alloc] init];
+// The number of pinned conversations to retrieve each time
+queryConfig.count = 20;
+// No need to pass in for the first query
+queryConfig.nextConversation = nil;
+[[ZIM getInstance] queryConversationPinnedListWithConfig:queryConfig callback:^(NSArray<ZIMConversation *> * _Nonnull conversationList, ZIMError * _Nonnull errorInfo) {
+    if(errorInfo.code != ZIMErrorCodeSuccess){
+        NSLog(@"Please handle according to the actual error code and error message by referring to the error code table");
+        return;
+    }
+    NSLog(@"conversationList is the query result");
+    
+    // Pass the last conversation in the previous query result to query subsequent content based on the previous query result
+    queryConfig.nextConversation = [conversationList lastObject];
+}];
+```
+
+:::
+:::if{props.platform="window"}
+
+```cpp
+zim::ZIMConversationQueryConfig config;
+// anchor, no need to pass in for the first query
+config.nextConversation = nullptr;
+// Number of pinned conversations to retrieve each time
+config.count = 20;
+zim_->queryConversationPinnedList(
+    config,
+    [=](const std::vector<std::shared_ptr<zim::ZIMConversation>> &conversationList,
+        const zim::ZIMError &errorInfo) {
+        // Operation result
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            for (const auto &conv : conversationList) {
+                // Operation succeeded
+            }
+        } else {
+            // Operation failed, you can print the error code and error message and troubleshoot the error by looking for the ZIM official error code documentation. 
+        }
+    });
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+ZIMConversationQueryConfig config = new ZIMConversationQueryConfig();
+// Conversation anchor, pass empty to query from the latest
+config.nextConversation = null;
+// Number of top conversations to retrieve each time
+config.count = 100;
+// Fetching the list of pinned conversations
+ZIM.GetInstance().QueryConversationPinnedList(
+    config,
+    [=](List<ZIMConversation> convList, ZIMError errorInfo) {
+        // Callback notification for fetching the results of the operation to retrieve the list of pinned conversations.
+        if (errorInfo.code == ZIMErrorCode.Success) {
+            foreach (var conv in convList) {
+                //......
+            }
+        } else {
+            // You can print the error code and error message to troubleshoot the error cause. Please refer to the ZIM official website error code documentation for further investigation.
+        }
+    });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+var config = {
+    // No need to pass in for the first query
+    nextConversation: null,
+    // The number of pinned conversations to retrieve each time
+    count: 20
+};
+
+// Get the pinned
+ conversation list
+zim.queryConversationPinnedList(config)
+    .then(function({ conversationList }){
+        // Operation succeeded, you should save and manage the conversation objects in the array 
+    })
+    .catch(function(err){
+        // Operation failed
+    })
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMConversationQueryConfig config;
+// pass null for the first time to start querying from the latest
+config.nextConversation = null;
+// Number of pinned conversations to retrieve each time
+config.count = 20;
+// Fetch the list of pinned conversations
+
+ZIM.getInstance().queryConversationPinnedList(config).then((value) {
+    // Callback for the result of getting the list of pinned conversations
+}).catchError((onError){
+    // You can print the error code and error message to troubleshoot the error cause, refer to the ZIM official website error code documentation
+});
+```
+:::

@@ -1,0 +1,711 @@
+---
+articleID: 15505
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const ZIMMessageMap = {
+  'Android': <a href='@-ZIMMessage' target='_blank'>ZIMMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage-class.html' target='_blank'>ZIMMessage</a>,
+}
+export const extendedDataMap = {
+  'Android': <a href='@extendedData-ZIMMessage' target='_blank'>extendedData</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/extendedData.html' target='_blank'>extendedData</a>,
+}
+export const sendMessageMap = {
+  'Android': <a href='@sendMessage' target='_blank'>sendMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html' target='_blank'>sendMessage</a>,
+}
+export const localExtendedDataMap = {
+  'Android': <a href='@localExtendedData' target='_blank'>localExtendedData</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/localExtendedData.html' target='_blank'>localExtendedData</a>,
+}
+export const updateMessageLocalExtendedDataMap = {
+  'Android': <a href='@updateMessageLocalExtendedData' target='_blank'>updateMessageLocalExtendedData</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateMessageLocalExtendedData.html' target='_blank'>updateMessageLocalExtendedData</a>,
+}
+
+# Set message extension field
+- - -
+
+## Introduction
+
+ZEGOCLOUD Instant Messaging (ZIM) SDK allows you to add an extension field to a message and send the extension field as additional message information. Message extension fields can be visible to the peer end or visible only to the local end based on the synchronization effects. A message extension field is used to present information such as the translation status and translation content of a message, and the business logic included in the message.
+
+## Implementation Steps
+
+1. Create a ZIM instance.
+2. Log in to the ZIM SDK.
+3. Construct the {getPlatformData(props,ZIMMessageMap)} object, and fill in the {getPlatformData(props,ZIMMessageMap)} field in the {getPlatformData(props,extendedDataMap)} object as the message extension field.
+4. Call the {getPlatformData(props,sendMessageMap)} interface, pass in the {getPlatformData(props,ZIMMessageMap)} object, send the message and expand the fields.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// 1. Create a ZIM object, pass in appID, appSign and Application in Android
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace it with the AppID you applied for from the ZEGO Admin Console
+appConfig.appSign = "appSign";   // Replace with the AppSign you applied for from the ZEGO Admin Console
+zim = ZIM.create(appConfig, application);
+
+// 2. Set the setEventHandler callback
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+        // Callback for receiving a single chat message
+    }
+});
+
+// 3. Login
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+zim.login(zimUserInfo, new ZIMLoggedInCallback() {
+    @Override
+    public void onLoggedIn(ZIMError error) {
+          // Developers can judge whether the login is successful according to ZIMError.
+    }
+ });
+
+String toConversationID = "xxxx1";
+
+ZIMTextMessage zimMessage = new ZIMTextMessage();
+zimMessage.message = "Message content";
+// The extended fields that need to be sent
+zimMessage.extendedData = "Message Extension Field";
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set message priority
+config.priority = ZIMMessagePriority.LOW;
+
+// 4. Set the session type to send
+// Send one-on-one chat information
+ZIMConversationType type = ZIMConversationType.Peer;
+
+// Send a group chat message
+ZIMConversationType type = ZIMConversationType.Gourp;
+
+// send room info
+ZIMConversationType type = ZIMConversationType.Room;
+
+// 5. Send message
+
+zim.sendMessage(zimMessage, toConversationID, type, config, new ZIMMessageSentCallback() {
+    @Override
+    public void onMessageAttached(ZIMMessage zimMessage) {
+        
+    }
+
+    @Override
+    public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
+        // Developers can use this callback to monitor whether the message is sent successfully.
+    }
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// 1. Create a ZIM object and pass in the AppID
+ZIMAppConfig appConfig = ZIMAppConfig();
+appConfig.appID = appID;
+appConfig.appSign = appSign;
+ZIM.create(appConfig);
+
+// 2. Login
+try {
+    ZIMLoginConfig loginConfig = ZIMLoginConfig();
+    // User nickname, leave it blank if you don't want to modify the nickname
+    loginConfig.userName = 'userName';
+    // If using token for login authentication, please fill in this parameter, otherwise leave it blank
+    loginConfig.token = '';
+    // Whether this login is an offline login, please refer to the offline login documentation for details
+    loginConfig.isOfflineLogin = false;
+    await ZIM.getInstance()?.login('zego', loginConfig);
+    // Login successful, write your business logic for successful login
+} on PlatformException catch (onError) {
+    // Login failed
+    // Error code for login failure, please refer to the error code table in the documentation for handling
+    onError.code;
+    // Error message for login failure
+    onError.message;
+}
+
+// 3. Send a message
+ZIMTextMessage textMessage = ZIMTextMessage(message: "message");
+textMessage.extendedData = @"Extended data to be sent";  // Extended data to be sent
+ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+// Set message priority
+sendConfig.priority = ZIMMessagePriority.low;
+
+ZIMMessageSendNotification notification = ZIMMessageSendNotification(onMessageAttached: (message) {
+    // Callback before sending, developers can get a temporary object here, which is the same object as the zimMessage created by the developer. Developers can use this feature to do some business logic, such as displaying UI in advance, etc.
+});
+
+// 4. Set the conversation type and send the message to the corresponding conversation type
+// Send a message in a one-on-one conversation
+ZIMConversationType type = ZIMConversationType.peer;
+
+// Send a message in a group conversation
+ZIMConversationType type = ZIMConversationType.room;
+
+// Send a message in a chat room
+ZIMConversationType type = ZIMConversationType.group;
+
+
+ZIM.getInstance()!.sendMessage(textMessage, toConversationID, type, sendConfig).then((value) => {
+    // Developers can use this callback to listen for whether the message was sent successfully.
+}).catchError((onError) {
+    // Developers can catch the exception if the message fails to send.
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title ="Sample code"
+// 1. Create a ZIM object and pass in appID and appSign
+ZIMAppConfig *appConfig = [[ZIMAppConfig alloc] init];
+appConfig.appID = (unsigned int)appID;    // Replace it with the AppID you applied for from the ZEGO Admin Console
+appConfig.appSign = @"appSign";     // Replace with the AppSign you applied for from the ZEGO Admin Console
+self.zim = [ZIM createWithAppConfig: appConfig];
+
+// 2. Set the setEventHandler callback
+[self.zim setEventHandler:self];
+
+// 3. Login
+ZIMUserInfo *userInfo = [[ZIMUserInfo alloc] init];
+userInfo.userID = @"xxxx";
+userInfo.userName = @"xxxx";
+[self.zim loginWithUserInfo:userInfo callback:^(ZIMError * _Nonnull errorInfo){
+    // Developers can judge whether the login is successful according to ZIMError.
+}];
+
+NSString *toConversationID = @"xxxx1";
+
+ZIMTextMessage *textMessage = [[ZIMTextMessage alloc] init];
+textMessage.message = @"Message content";
+textMessage.extendedData = @"Extended field"; // The extended field that needs to be sent
+
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+
+ZIMMessageSendNotification *notification = [[ZIMMessageSendNotification alloc] init];
+notification.onMessageAttached = ^(ZIMMessage * _Nonnull message) {
+    // The callback before sending, where the client can obtain a temporary object, which belongs to the same object as the zimMessage object created by the developer. The developer can use this feature to do some business logic, such as displaying the UI in advance, etc.
+};
+
+// 4. Set the session type and select it to send messages to the corresponding session type
+// Send one-on-one chat information
+ZIMConvesationType type = ZIMConversationTypePeer;
+
+// Send a group chat message
+ZIMConvesationType type = ZIMConversationTypeGroup;
+
+// send room info
+ZIMConvesationType type = ZIMConversationTypeRoom;
+
+// send messages
+[self.zim sendMessage:textMessage toConversationID:toConversationID conversationType:type config:config notification:notification callback:^((ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo)) {
+    // Developers can use this callback to monitor whether the message is sent successfully.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// 1. Create a ZIM object and pass in appID and appSign. Currently, only one client is recommended to create a ZIM instance
+zim::ZIMAppConfig app_config;
+app_config.appID = 12345;     //Replace with the AppID you applied for
+app_config.appSign = "appSign";   //Replace with the AppSign you applied for
+zim_ = zim::ZIM::create(app_config);
+
+// 2. Set the setEventHandler callback
+im_event_handler_ = std::make_shared<CZIMEventHandler>();
+zim_->setEventHandler(im_event_handler_);
+
+// 3. Login
+zim::ZIMUserInfo user_info;
+user_info.userID = user_id;
+user_info.userName = user_name;
+
+zim_->login(user_info, [=](zim::ZIMError errorInfo){
+    // Here you can get the return value of the login result and execute the user code according to the Error Codes code
+});
+
+zim::ZIMMessage* message = nullptr;
+zim::ZIMTextMessage text_message;
+text_message.message = "message";
+// The extended fields that need to be sent
+text_message.extendedData = "extendedData";
+// Set message priority
+zim::ZIMMessageSendConfig config;
+config.priority = zim::ZIM_MESSAGE_PRIORITY_LOW;
+message = &text_message;
+
+// 4. Set the session type
+// Send one-on-one chat information
+zim::ZIMConversationType type = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_PEER
+
+// Send a group chat message
+zim::ZIMConversationType type = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_GROUP
+
+// send room info
+zim::ZIMConversationType type = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_ROOM
+
+auto notification = std::make_shared<zim::ZIMMessageSendNotification>(
+            [=](const std::shared_ptr<zim::ZIMMessage> &message) { int i = 0; });
+
+// 5. Send message
+zim_->sendMessage(message, "toConversationID", type, config, notification,
+                    [=](const std::shared_ptr<zim::ZIMMessage> &message,
+                              const zim::ZIMError &errorInfo) { int i = 0; });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# title="Sample code"
+// 1. Create a ZIM object and pass in the appID and appSign
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace with the AppID you obtained from ZEGO Console
+appConfig.appSign = "appSign";   // Replace with the AppSign you obtained from ZEGO Console
+ZIM.Create(appConfig);
+
+// 2. Log in
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+ZIM.GetInstance().Login(zimUserInfo, (ZIMError errorInfo) =>
+    {
+        // Developers can determine whether the login was successful based on ZIMError.
+    }
+);
+
+// 3. Configure message extension fields
+string toConversationID = "xxxx1";
+
+ZIMTextMessage zimMessage = new ZIMTextMessage();
+zimMessage.message = "Message content";
+// Extension fields to be sent
+zimMessage.extendedData = "Message extension fields";
+
+ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+// Set message priority
+config.priority = ZIMMessagePriority.Low;
+
+// 4. Set the conversation type for sending
+// Send one-on-one chat messages
+ZIMConversationType type = ZIMConversationType.Peer;
+
+// Send group chat messages
+ZIMConversationType groupType = ZIMConversationType.Group;
+
+// Send room chat messages
+ZIMConversationType roomType = ZIMConversationType.Room;
+
+// 5. Send messages
+ZIMMessageSendNotification notification = new ZIMMessageSendNotification();
+ZIM.GetInstance().SendMessage(zimMessage, toConversationID, type, config, notification, 
+    (ZIMMessage message, ZIMError errorInfo) => 
+{
+    // Callback result of message sending
+});
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Send single chat `Text` message
+
+var toConversationID = ''; // Other party userID
+var conversationType = 0; // Session type, the value is single chat: 0, room: 1, group: 2
+var config = { 
+    priority: 1, // Set the message priority, the value is low: 1 default, medium: 2, high: 3
+};
+
+var messageTextObj = { type: 1, message: 'Text message content', extendedData: 'Extended information of the message (optional)' };
+var notification = {
+    onMessageAttached: function(message) {
+        // todo: Loading
+    }
+}
+
+zim.sendMessage(messageTextObj, toConversationID, conversationType, config, notification)
+    .then(function ({ message }) {
+        // Sent successfully
+    })
+    .catch(function (err) {
+        // Failed to send
+    });
+```
+</CodeGroup>
+:::
+
+### Configure an extension field visible only to the local end
+
+Procedure for sending a message:
+
+1. Log in to ZIM SDK, construct a {getPlatformData(props,ZIMMessageMap)}field as an extension field visible only to the local end in the {getPlatformData(props,ZIMMessageMap)} object.
+2. Call the {getPlatformData(props,sendMessageMap)} operation and pass in the {getPlatformData(props,ZIMMessageMap)} object to send the message and the extension field.
+
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+  // 1. Configure the local extension field of a message.
+
+  // Specify the session ID.
+  String toConversationID = "xxx1";
+
+  // Construct a ZIMMessage object.
+ZIMTextMessage zimMessage = new ZIMTextMessage();
+zimMessage.message = "Message content";
+
+  // Configure the local extension field of a message.
+  zimTextMessage.localExtendedData = "Local extension field of the message";
+  
+  ZIMMessageSendConfig config = ZIMMessageSendConfig();
+
+  // Configure the priority of the message.
+  config.priority = ZIMMessagePriority.low;
+
+  // Send a private-chat message.
+  ZIMConversationType type = ZIMConversationType.peer;
+
+  // Send a group-chat message.
+  ZIMConversationType type = ZIMConversationType.group;
+
+  // Send a room message.
+  ZIMConversationType type = ZIMConversationType.room;
+
+  // 2. Send the message.
+zim.sendMessage(zimMessage, toConversationID, type, config, new ZIMMessageSentCallback() {
+    @Override
+    public void onMessageAttached(ZIMMessage zimMessage) {
+        
+    }
+
+    @Override
+    public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
+        // Developers can use this callback to monitor whether the message is sent successfully.
+    }
+});
+
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+
+  // 1. Configure the local extension field of a message.
+
+  // Specify the session ID.
+  String toConversationID = "xxx1";
+
+  // Construct a ZIMMessage object.
+  ZIMTextMessage zimTextMessage = ZIMTextMessage(message: 'message');
+
+  // Configure the local extension field of a message.
+  zimTextMessage.localExtendedData = "Local extension field of the message";
+  
+  ZIMMessageSendConfig config = ZIMMessageSendConfig();
+
+  // Configure the priority of the message.
+  config.priority = ZIMMessagePriority.low;
+
+  // Send a private-chat message.
+  ZIMConversationType type = ZIMConversationType.peer;
+
+  // Send a group-chat message.
+  ZIMConversationType type = ZIMConversationType.group;
+
+  // Send a room message.
+  ZIMConversationType type = ZIMConversationType.room;
+
+  // 2. Send the message.
+  ZIM.getInstance()!.sendMessage(zimTextMessage, 'toConversationID', type, config).then((value) {
+
+  }).catchError((onError){
+
+  });
+
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// 1. Configure the local extension field of a message.
+
+// Specify the session ID.
+NSString *toConversationID = @"xxx1";
+
+// Construct a ZIMMessage object.
+ZIMTextMessage *zimTextMessage = [[ZIMTextMessage alloc] initWithMessage:@"Message content"];
+// Configure the local extension field of a message.zimTextMessage.localExtendedData = @"Local extension field of the message";
+ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
+// Configure the priority of the message.
+config.priority = ZIMMessagePriorityLow;
+    
+// Set the type of session sent.
+// Send a private-chat message.
+ZIMConversationType type = ZIMConversationTypePeer;
+    
+ZIMMessageSendNotification *notification = [[ZIMMessageSendNotification alloc] init];
+notification.onMessageAttached = ^(ZIMMessage *message){
+        
+};
+    
+[[ZIM getInstance] sendMessage:zimTextMessage toConversationID:toConversationID conversationType:type config:config notification:notification callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+    // Developers can use this callback to monitor whether the message is sent successfully.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+
+  // 1. Configure the local extension field of a message.
+
+  // Specify the session ID.
+  std::string conversationID = "conv";
+
+  // Construct a ZIMMessage object.
+  auto zimMessage = std::make_shared<zim::ZIMTextMessage>(message: 'message');
+
+  // Configure the local extension field of a message.
+  zimMessage->localExtendedData =  "Local extension field of the message";
+
+  auto sendConfig = zim::ZIMMessageSendConfig();
+  // Configure the priority of the message.
+  sendConfig.priority = zim::ZIMMessagePriority::ZIM_MESSAGE_PRIORITY_LOW;
+  
+  //Set the session type sent
+  // Send a private-chat message.
+  auto conversationType = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_PEER;
+
+  // Send a group-chat message.
+  // auto conversationType = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_GROUP;
+
+
+  // Send a room message.
+  // auto conversationType = zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_ROOM;
+
+  // 2. Send the message.
+ zim_->sendMessage(zimMessage, conversationID, conversationType, sendConfig,
+                    std::make_shared<zim::ZIMMessageSendNotification>(
+                        [=](const std::shared_ptr<zim::ZIMMessage> &message) {
+                              
+                        }),
+                    [=](const std::shared_ptr<zim::ZIMMessage> &message,
+                        const zim::ZIMError &errorInfo) {
+                              
+                        });
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+
+  // 1. Configure the local extension field of a message.
+
+  // Specify the session ID.
+  String toConversationID = "xxx1";
+
+  // Construct a ZIMMessage object.
+  ZIMTextMessage zimMessage = new ZIMTextMessage();
+  zimMessage.message = "message";
+
+  // Configure the local extension field of a message.
+
+  zimMessage.localExtendedData = "Local extension field of the message";
+
+  ZIMMessageSendConfig config = new ZIMMessageSendConfig();
+
+  // Configure the priority of the message.
+  config.priority = ZIMMessagePriority.Low;
+
+  // Set the session type sent
+  // Send a private-chat message.
+  ZIMConversationType peerType = ZIMConversationType.Peer;
+
+  // Send a group-chat message.
+  ZIMConversationType groupType = ZIMConversationType.Group;
+
+  // Send a room message.
+  ZIMConversationType roomType = ZIMConversationType.Room;
+
+  // 2. Send the message.
+  ZIM.GetInstance().SendMessage(zimMessage, toConversationID, peerType, config, notification, (ZIMMessage message, ZIMError errorInfo) =>
+{
+    // Developers can use this callback to monitor whether the message is sent successfully.
+});
+
+
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```JavaScript title="Sample code"
+// Send the single chat `Text` message
+
+var toConversationID = ''; // Other party userID
+var conversationType = 0; // Session type, the value is  single chat: 0, room: 1, group: 2
+var config = { 
+    priority: 1, // Set the message priority, the value is  low: 1 default, medium: 2, high: 3
+};
+
+
+  // 1. Configure the local extension field of a message.
+
+var messageTextObj = { type: 1, message: 'Text message content', localExtendedData: 'Local extension information of the message' };
+var notification = {
+    onMessageAttached: function(message) {
+        // todo: Loading
+    }
+}
+
+// 2. Send a message
+zim.sendMessage(messageTextObj, toConversationID, conversationType, config, notification)
+    .then(function ({ message }) {
+        // Sent successfully
+    })
+    .catch(function (err) {
+        // Failed to send
+    });
+
+```
+</CodeGroup>
+:::
+
+
+### Update the local extension field of a message
+
+For a message that is already received or sent, you can call the {getPlatformData(props,updateMessageLocalExtendedDataMap)} operation to update the local extension field of the message.
+
+
+
+The following sample code shows how to update the local extension field of a message that is already received:
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Sample code"
+// After receiving a single chat message, update the local extension field of the message.
+zim.setEventHandler(new ZIMEventHandler() {
+    @Override
+    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+          
+      for(ZIMMessage message: messageList){
+         zim.updateMessageLocalExtendedData("Update local extension fields", message, new ZIMMessageLocalExtendedDataUpdatedCallback() {
+         @Override
+         public void onMessageExtendedDataUpdated(ZIMMessage message, ZIMError errorInfo) {
+               // Developers can use this callback to monitor whether the local extended field is updated successfully.
+         }
+      });}
+    }
+});
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Update the local extension field of a private-chat message after you receive the message.
+ZIMEventHandler.onReceivePeerMessage = (ZIM zim, List<ZIMMessage> messageList, String fromUserID){
+    for(ZIMMessage message in messageList){
+        ZIM.getInstance()!.updateMessageLocalExtendedData('Update the local extension field.', message).then((value){
+            // The request was successful.
+        }).catchError((onError){
+            // Handle the error based on the corresponding error code table.
+        });
+    }
+};
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title="Sample code"
+// Update the local extension field of a private-chat message after you receive the message.
+- (void)zim:(ZIM *)zim receivePeerMessage:(NSArray<ZIMMessage *> *)messageList fromUserID:(NSString *)fromUserID {
+    NSArray *messageBasicList = [ZGZIMManager cnvZIMMessageListToDicList:messageList];
+    GGLog(@"[GGLog][event][receivePeerMessage],fromUserID:%@,messageList:%@",fromUserID,messageBasicList);
+    for (ZIMMessage *message in messageList) {
+        [[ZIM getInstance] updateMessageLocalExtendedData:@"Update local extension fields" message:message callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+            // Developers can use this callback to monitor whether the local extended field is updated successfully.        }];
+    }
+}
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title="Sample code"
+// Update the local extension field of a private-chat message after you receive the message.
+void onReceivePeerMessage(zim::ZIM *zim,
+                              const std::vector<std::shared_ptr<zim::ZIMMessage>> &messageList,
+                              const std::string &fromUserID) override {
+    for (const auto &message : messageList) {
+        zim->updateMessageLocalExtendedData("Update the local extension field.", message,
+                                            [=](const std::shared_ptr<zim::ZIMMessage> &msg,
+                                                const zim::ZIMError &errorInfo) {
+                                                    // Developers can use this callback to monitor whether the local extension field is updated successfully.                                                });
+    }
+}
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```C# title="Sample code"
+ZIM.GetInstance().onReceivePeerMessage += (ZIM zim,
+                                List<ZIMMessage> messageList,
+                                string fromUserID) =>
+    {
+        foreach (ZIMMessage message in messageList)
+        {
+            ZIM.GetInstance().UpdateMessageLocalExtendedData("Update the local extension field",
+                message,
+                (ZIMMessage message, ZIMError errorInfo) =>
+                {
+                    // Developers can use this callback to monitor whether the local extension field is updated successfully. 
+                });
+        };
+    };
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+The following sample code shows how to update the local extension field of a message that is already received:
+
+<CodeGroup>
+```JavaScript title="Sample code"
+// Update the local extension field of a private-chat message after you receive the message.
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log(messageList, fromConversationID);
+    messageList.forEach((message) => {
+        zim.updateMessageLocalExtendedData('Update the local extension field', message)
+            .then(function ({ message }) {
+                // Operation successful. 
+            })
+            .catch(function (err) {
+                // Operation failed.
+            });
+    });
+});
+```
+</CodeGroup>
+
+:::

@@ -1,0 +1,312 @@
+# Implement offline push notification
+
+
+<Note title="Note">
+This document is applicable for developing applications on the following platforms: iOS, Android, and Web.
+</Note>
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications. That is, in one-on-one chat or group chat, if your app is frozen, killed by the system or a user in the backend, and get disconnected with the ZEGOCLOUD service backend due to timeout, with the offline push notification feature, the ZEGOCLOUD backend will send offline push notifications to the target users.
+
+You can integrate the ZPNs SDK and use it together with the ZIM SDK to implement the offline push notification feature.
+
+## Solution
+
+The solution we provide is as follows: 
+
+1. The receiver (the client user that receives the offline push notifications) enables the push channel of APNs and Google FCM, and sends a request to get the Token from their servers. 
+2. The servers of APNs and Google FCM returns the Token. 
+3. The receiver generates a PushID, and sends it to the ZIM server for binding the client user and the PushID.   
+   
+    If you use the ZPNs SDK together with the ZIM SDK, the SDK will automatically bind the client user to PushID, you don't need to do other operations; If you use the ZPNs SDK alone, you will need to connect to the ZPNs server and implement the binding logic. **Note: Before switching the userID on the same device, remember to call the [`logout`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/logout.html) method to remove the PushID that userID is binding.**
+
+4. The sender starts sending messages, and the messages are stored in the ZIM server.
+5. The ZIM server checks whether the receiver is online. 
+6. If the receiver is offline, then the messages will be transferred to the ZPNs server.
+7. The ZPNs Server sends offline push notifications to the servers of APNs and Google FCM.
+8. The servers of APNs and Google FCM push the offline push notifications to the receiver. The receiver receives the offline messages when gets back online. 
+
+
+## Prerequisites 
+
+Before you implement this, make sure you complete the following:
+
+- Platform-specific requirements:
+
+    **iOS:** 
+
+    - Xcode 7.0 or later.
+    - An iOS device that is running on iOS 9.0 or later and supports audio and video.
+    - iOS device is connected to the internet.
+
+    **Android:** 
+
+    - Android Studio 2.1 or later
+    - Android SDK Packages: Android SDK 25, Android SDK Build-Tools 25.0.2, Android SDK Platform-Tools 25.x.x or later.
+    - An Android device or Simulator that is running on Android 9.0 or later and supports audio and video. We recommend you use a real device.
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](https://www.zegocloud.com/docs/admin-console/activate-inapp-chat?platform=all&language=all)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK version 2.1.5 or later. For details, see the **Integrate the SDK** chapter of [Send and receive messages](./../Send%20and%20receive%20messages.mdx).
+
+## Implementation on iOS and Android
+
+### Integrate push notification channels
+
+Integrate the offline push notification channels of APNs and Google FCM. For more, refer to [Integrate Apple Push Notification service (APNs)](./Integrate%20APNs.mdx) and [Integrate Google FCM push notification (Android)](./Integrate%20FCM.mdx).
+
+### Integrate the ZPNs SDK
+
+#### Import the ZPNs SDK
+ 
+Open the `pubspec.yaml` file, and add the `zego_zim` dependencies as follows:
+
+```pub
+dependencies:
+flutter:
+sdk: flutter
+zego_zpns: ^2.6.0
+```
+
+#### Set permissions 
+
+Permissions can be set as needed. 
+
+- **iOS:**
+
+    Call the [`applyNotificationPermission`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/applyNotificationPermission.html) method to apply for the push notification permission. (**This interface takes effect only when called for the first time.**)
+    
+    ```dart
+    ZPNs.getInstance().applyNotificationPermission();
+    ```
+
+- **Android:**
+
+    Open the `AndroidManifest.xml` file under the `app/src/main` directory to set permissions. 
+ 
+    ```java
+    <!-- The following permissions are required for the ZPNs SDK -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    ```
+
+### Set up the offline push notification feature using the ZPNs SDK 
+
+1. Set up the [`ZPNsEventHandler`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler-class.html) method to receive the related event callbacks.
+
+    The [`ZPNsEventHandler`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler-class.html) class contains all event callbacks' static functions, you can pass the following callback to `Function` to receive ZPNs related event callbacks, and use it to handle SDK exceptions or receive message event notifications.
+
+
+    - [`onRegistered`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onRegistered.html): The result callback for registering the offline push notification services from APNs and Google FCM. You can get the PushID from this callback.Both APNs and Google FCM support this callback.
+    - [`onNotificationArrived `](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onNotificationArrived.html): The callback displays notifications from APNs. 
+    - [`onThroughMessageReceived `](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onThroughMessageReceived.html): The pass-through messages returned by Google FCM will trigger this callback, and the callback will  throw notifications.
+
+   <Accordion title="Sample code for listening up event callbacks using the ZPNsEventHandler" defaultOpen="false">
+   	
+   1. You can define a `ZPNsEventHandlerManager` class, and create a new static method `loadingEventHandler` in the class. And implement the callback [`onRegistered`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onRegistered.html) in the created new method, and log the `pushID` when the callback is triggered.
+
+      ```dart
+      class ZPNsEventHandlerManager {
+          static loadingEventHandler() {
+              ZPNsEventHandler.onRegistered = (ZPNsRegisterMessage registerMessage) {
+                  log(registerMessage.errorCode.toString());
+                  log(registerMessage.errorMessage);
+                  log(registerMessage.pushID);
+              };
+          }
+      }
+      ```
+
+   2. When running the program, call the `loadingEventHandler` method and implement the callback [`ZPNsEventHandler`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler-class.html).
+
+      ```dart
+      void main() {
+          ZPNsEventHandlerManager.loadingEventHandler();
+
+          runApp(const MyApp());
+      }
+      ```
+
+    And the `pushID` will be logged when the [`onRegistered`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onRegistered.html) is triggered by events.
+
+   </Accordion>
+
+2. Configure the Google FCM push notification channel.
+
+   1. Modify the bool value of [`ZPNsConfig > enableFCMPush `](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsConfig/enableFCMPush.html) to be `true`. 
+   2. Call the [`setPushConfig`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/setPushConfig.html) method to enable the Google FCM push notification channel.
+
+   ```dart
+    ZPNsConfig zpnsConfig = ZPNsConfig();
+    zpnsConfig.enableFCMPush = true;
+    ZPNs.setPushConfig(zpnsConfig);
+   ```
+
+3. Set up the offline push notification feature. 
+
+    Call the [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) method to register for offline push notifications. Calling this method will incur certain performance overhead.
+
+    <div class="mk-hint">
+
+    - When calling the [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) method on iOS , you need to fill in the `ZPNsIOSEnvironment` in advance according to the certificate selected during packaging, whether it is development or distribution. When switching certificates, please change this enumeration.
+    - When the certificate is development, `ZPNsIOSEnvironment` is `Development`.
+    - When the certificate is distribution, `ZPNsIOSEnvironment` is `Production`.
+    - If you are not sure about the current `ZPNsIOSEnvironment`, please fill in `ZPNsIOSEnvironment.Automatic`. `Automatic` may be affected by the iOS version. If the iOS undergoes a major version update, please pay attention to the [ZPNs release notes](./../Client%20SDKs/ZPNs%20release%20notes.mdx).
+    </div>
+
+    ```dart
+    // Register for offline push notifications.
+    // When calling the `registerPush` method on iOS, the `iOSNotificationArrivedConfig` parameter can be used to set whether to display the popup window, badge, and sound when a normal popup push arrives in the foreground. If you don't want to display it, you can leave it blank.
+    ZPNs.getInstance().registerPush(iOSEnvironment: ZPNsIOSEnvironment.Automatic,iOSNotificationArrivedConfig: ZPNsIOSNotificationArrivedConfig()..isPresentBadge=true..isPresentSound=true..isPresentAlert=true,enableIOSVoIP: true)
+    .catchError((onError) {
+        if (onError is PlatformException) {
+        // Notice exception here
+        log(onError.message ?? "");
+        }
+    });
+    ```
+
+After setting up the offline push notification feature, listen for the callback [`onRegistered`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onRegistered.html) of the class [`ZPNsEventHandler`](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler-class.html), and get the `pushID` to push offline push notifications to specified devices.
+
+## Implementation on Web
+
+### Integrate the Google FCM push notification channel
+
+You need to integrate the Google FCM offline push notification channel. For more, refer to [Integrate Google FCM push notification (Web)](./Integrate%20FCM%20web.mdx).
+
+### Integrate the ZPNs SDK
+
+Open the `pubspec.yaml` file, and add the `zego_zim` dependencies as follows:
+
+<Warning title="Warning">
+To implement offline push notifications on Web with ZPNs Flutter SDK, the SDK version should be 2.5.0 or above.
+</Warning>
+
+```pub
+dependencies:
+flutter:
+sdk: flutter
+zego_zpns: ^2.6.0
+```
+
+### Set up the offline push notification feature using the ZPNs SDK 
+
+1. Create a ZIM instance.
+2. Call the [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) method to register for offline push notifications. 
+
+```dart
+ZIMAppConfig appConfig = ZIMAppConfig();
+appConfig.appID = 0;
+appConfig.appSign = "";
+
+ZIM.create(appConfig);    
+
+// From firebaseConfig
+ZPNsWebConfig config = ZPNsWebConfig();
+config.apiKey = "";
+config.authDomain = "";
+config.projectID = "";
+config.storageBucket = "";
+config.messagingSenderID = "";
+config.appID = "";
+config.measurementID = "";
+// From Web Push certificates
+config.vapidKey = "";
+
+ZPNs.getInstance().registerPush(webConfig: config);
+```
+
+## Implement the offline push notification using the ZIM SDK
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications for one-on-one or group chats, and for call invitations.
+
+<Warning title="Warning">
+Before implementing offline push, you should:
+- refer to [Send and receive messages](./../Send%20and%20receive%20messages.mdx) to send one-on-one/group chat messages.
+- refer to [Call invitation](./../Guides/Call%20invitation%20signaling.mdx) to send and receive call invitations.
+</Warning>
+
+
+### Send one-on-one messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) object. 
+
+    ```dart
+    ZIMPushConfig pushConfig = ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional.";
+    pushConfig.resourcesID = "resource ID";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSendConfig-class.html) object. 
+
+   ```dart
+    ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+    sendConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendMessage`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html) method with the `sendConfig` to send a one-to-one message. 
+
+    ```dart
+    ZIM.getInstance()!.sendMessage(ZIMTextMessage(message: 'message'), 'toUserID', ZIMConversationType.peer, sendConfig).then((value) => {}).onError((error, stackTrace) => {});
+    ```
+
+4. If the receiver is offline, the user will receive the message when going online.
+
+### Send group messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) object. 
+ 
+    ```dart
+    ZIMPushConfig pushConfig = ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional.";
+    pushConfig.resourcesID = "resource ID";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSendConfig-class.html) object.  
+
+    ```dart
+    ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+    sendConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendMessage`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html) method with the `sendConfig` to send a group message. 
+
+    ```dart
+    ZIM.getInstance()!.sendMessage(ZIMTextMessage(message: 'message'), 'toGroupID', ZIMConversationType.group, sendConfig).then((value) => {}).onError((error, stackTrace) => {});
+    ```
+
+4. The offline group members can receive the message when getting back online.
+
+#### Send call invitations with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) object. 
+
+    ```dart
+    ZIMPushConfig pushConfig = ZIMPushConfig();
+    pushConfig.title = "offline push notification title";
+    pushConfig.content = "offline push notification content";
+    pushConfig.payload = "Customizable field, optional.";
+    pushConfig.resourcesID = "resource ID";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMCallInviteConfig`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallInviteConfig-class.html) object.  
+
+    ```dart
+    ZIMCallInviteConfig callInviteConfig = ZIMCallInviteConfig();
+    callInviteConfig.pushConfig = pushConfig;
+    ```
+3. The message sender calls the [`callInvite`](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callInvite.html) method with the `callInviteConfig` to send a call invitation. 
+
+    ```dart
+    ZIMCallInviteConfig callInviteConfig = ZIMCallInviteConfig();
+    callInviteConfig.pushConfig = pushConfig;
+    ZIM.getInstance()!.callInvite(["userA","userB"], callInviteConfig).then((value) {
+    
+    }).catchError((onError){
+    
+    });
+    ```
+
+4. The invitees who are offline can receive an offline push notification. Once they come online, if the call invitation is still ongoing, they will receive the callback [onCallInvitationReceived](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationReceived.html).
