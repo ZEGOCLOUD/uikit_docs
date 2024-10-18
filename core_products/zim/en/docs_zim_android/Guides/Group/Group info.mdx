@@ -527,7 +527,6 @@ zim.updateGroupAlias(group_alias, group_id, new ZIMGroupAliasUpdatedCallback() {
 ```
 </CodeGroup>
 :::
-
 :::if{props.platform="iOS"}
 <CodeGroup>
 ```objc SampleCode
@@ -583,6 +582,22 @@ try{
 }
 ```
 </CodeGroup>
+:::
+:::if{props.platform="Web"}
+```javascript SampleCode
+// Modify the group alias
+try {
+    const groupAlias = "new_group_alias_example"; // groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+
+    const groupID = "example_group_id"; 
+
+    // Call the updateGroupAlias method
+    const result = await zim.updateGroupAlias(groupAlias, groupID);
+    console.log("Update succeeded:", result);
+} catch (error) {
+    console.error("Update failed:", error);
+}
+```
 :::
 
 After the modification is successful, all devices of the user can receive notifications through {getPlatformData(props,onGroupAliasUpdatedMap)}.
@@ -676,6 +691,14 @@ class zim_event_handler : public zim::ZIMEventHandler {
 ZIMEventHandler.onGroupAliasUpdated = (ZIM zim, String groupAlias, String operatedUserID, String groupID){
     // Business logic
 };
+```
+:::
+:::if{props.platform="Web"}
+```javascript SampleCode
+// Listen for group alias update notifications
+zim.on('groupAliasUpdated', function (zim, { groupID, groupAlias, operatedUserID }) {
+    // You can handle the logic after the group alias is updated here, such as updating the UI or notifying the user
+});
 ```
 :::
 

@@ -26,12 +26,12 @@ export const sendRoomMessageMap = {
 }
 export const setEventHandlerMap = {
   'Android': <a href='@setEventHandler' target='_blank'>setEventHandler</a>,
-  'Web': <a href='@on' target='_blank'>on</a>,
+  'Web,RN': <a href='@on' target='_blank'>on</a>,
   'Flutter': "",
 }
 export const onRoomMemberJoinedMap = {
   'Android': <a href='@onRoomMemberJoined' target='_blank'>onRoomMemberJoined</a>,
-  'Web': <a href='@roomMemberJoined' target='_blank'>roomMemberJoined</a>,
+  'Web,RN': <a href='@roomMemberJoined' target='_blank'>roomMemberJoined</a>,
   'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-member-joined-room-id' target='_blank'>roomMemberJoined</a>,
   'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-member-joined-room-id' target='_blank'>roomMemberJoined</a>,
   'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberJoined.html' target='_blank'>onRoomMemberJoined</a>,
@@ -42,7 +42,7 @@ export const leaveRoomMap = {
 }
 export const onRoomMemberLeftMap = {
   'Android': <a href='@onRoomMemberLeft' target='_blank'>onRoomMemberLeft</a>,
-  'Web': <a href='@roomMemberLeft' target='_blank'>roomMemberLeft</a>,
+  'Web,RN': <a href='@roomMemberLeft' target='_blank'>roomMemberLeft</a>,
   'iOS': <a href='/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-member-left-room-id' target='_blank'>roomMemberLeft</a>,
   'mac': <a href='/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-member-left-room-id' target='_blank'>roomMemberLeft</a>,
   'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberLeft.html' target='_blank'>onRoomMemberLeft</a>,
@@ -53,7 +53,7 @@ export const leaveAllRoomMap = {
 }
 export const onRoomStateChangedMap = {
   'Android': <a href='@onRoomStateChanged' target='_blank'>onRoomStateChanged</a>,
-  'Web': <a href='@roomStateChanged' target='_blank'>roomStateChanged</a>,
+  'Web,RN': <a href='@roomStateChanged' target='_blank'>roomStateChanged</a>,
   'iOS': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
   'mac': <a href='https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-room-state-changed-event-extended-data' target='_blank'>roomStateChanged</a>,
   'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html' target='_blank'>onRoomStateChanged</a>,
@@ -139,7 +139,6 @@ zim.createRoom(zimRoomInfo, new ZIMRoomCreatedCallback() {
     }
 });
 ```
-
 :::
 :::if{props.platform="Flutter"}
 ```dart
@@ -216,9 +215,7 @@ zim.createRoom(roomInfo)
         // Operation failed. 
     });
 ```
-
 :::
-
 
 #### Join a room 
 
@@ -237,7 +234,6 @@ zim.joinRoom(roomID, new ZIMRoomJoinedCallback() {
     }
 });
 ```
-
 :::
 :::if{props.platform="Flutter"}
 ```dart
@@ -280,7 +276,6 @@ zim_->joinRoom(roomId, [=](ZIMRoomFullInfo room_info, zim::ZIMError error_info) 
     }
 });
 ```
-
 :::
 :::if{props.platform="Web"}
 ```javascript
@@ -293,7 +288,6 @@ zim.joinRoom(roomID)
         // Operation failed. 
     });
 ```
-
 :::
 
 
@@ -386,7 +380,6 @@ zim.enterRoom(zimRoomInfo, config, new ZIMRoomEnteredCallback() {
     }
 });
 ```
-
 :::
 :::if{props.platform="Flutter"}
 ```dart
@@ -472,7 +465,7 @@ zim.on('roomMemberJoined', function (zim, { roomID, memberList }) {
 });
 ```
 :::
-
+:::if{props.platform="ios|undefined|null|RN|window"}
 ## Switch Rooms
 
 If a user wants to switch from one room to another, the user can call the {getPlatformData(props,switchRoomMap)} method, passing in the ID of the original room (`fromRoomID`) and the information of the target room (`toRoomInfo`), which includes the room ID and room name. This will allow the user to switch rooms.
@@ -487,134 +480,162 @@ After a successful room switch, other users in the original room can be notified
         <img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Switch_Room_en.jpeg" />
     </Frame>
 
-
 - Sample code:
-    :::if{props.platform=undefined}
-    ```java
-    String fromRoomID = "fromRoomID";
-    ZIMRoomInfo toRoomInfo = new ZIMRoomInfo();
-    roomInfo.roomID = "toRoomID";
-    roomInfo.roomName = "toRoomName";
+:::
+:::if{props.platform=undefined}
+```java
+String fromRoomID = "fromRoomID";
+ZIMRoomInfo toRoomInfo = new ZIMRoomInfo();
+roomInfo.roomID = "toRoomID";
+roomInfo.roomName = "toRoomName";
 
-    // Whether to create a room if it does not exist.
-    // Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
-    boolean isCreateWhenRoomNotExisted = true;
+// Whether to create a room if it does not exist.
+// Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
+boolean isCreateWhenRoomNotExisted = true;
 
-    // Advanced configuration for creating a room
-    ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
-    config.roomAttributes.put("key1", "value1");
-    config.roomDestroyDelayTime = 90;
+// Advanced configuration for creating a room
+ZIMRoomAdvancedConfig config = new ZIMRoomAdvancedConfig();
+config.roomAttributes.put("key1", "value1");
+config.roomDestroyDelayTime = 90;
 
-    // Switch rooms
-    zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config, new ZIMRoomSwitchedCallback() {
-        @Override
-        public void onRoomSwitched(ZIMRoomFullInfo roomInfo, ZIMError errorInfo) {
-            if (errorInfo.code == ZIMErrorCode.SUCCESS) {
-                // Room switch successful, you can obtain information about the switched room from roomInfo
-            }
+// Switch rooms
+zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config, new ZIMRoomSwitchedCallback() {
+    @Override
+    public void onRoomSwitched(ZIMRoomFullInfo roomInfo, ZIMError errorInfo) {
+        if (errorInfo.code == ZIMErrorCode.SUCCESS) {
+            // Room switch successful, you can obtain information about the switched room from roomInfo
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+NSString *fromRoomID = @"fromRoomID";
+ZIMRoomInfo *toRoomInfo = [[ZIMRoomInfo alloc] init];
+toRoomInfo.roomID = @"toRoomID";
+toRoomInfo.roomName = @"toRoomName";
+// Whether to create a room if it does not exist.
+// Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
+BOOL isCreateWhenRoomNotExisted = YES; 
+// Advanced configuration for creating a room
+ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
+[config insertRoomAttribute:@"key1" value:@"value1"];
+config.roomDestroyDelayTime = 90;
+// Switch rooms
+[zim switchRoomFromRoomID:fromRoomID 
+            toRoomInfo:toRoomInfo 
+isCreateWhenRoomNotExisted:isCreateWhenRoomNotExisted
+                config:config
+                callback:^(ZIMRoomFullInfo *_Nonnull roomInfo, ZIMError *_Nonnull errorInfo) {
+        if (errorInfo.code == 0) {
+            // Room switch successful, you can obtain information about the switched room from roomInfo
+        }
+    }];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+NSString *fromRoomID = @"fromRoomID";
+ZIMRoomInfo *toRoomInfo = [[ZIMRoomInfo alloc] init];
+toRoomInfo.roomID = @"toRoomID";
+toRoomInfo.roomName = @"toRoomName";
+// Whether to create a room if it does not exist.
+// Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
+BOOL isCreateWhenRoomNotExisted = YES; 
+// Advanced configuration for creating a room
+ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
+[config insertRoomAttribute:@"key1" value:@"value1"];
+config.roomDestroyDelayTime = 90;
+// Switch rooms
+[zim switchRoomFromRoomID:fromRoomID 
+            toRoomInfo:toRoomInfo 
+isCreateWhenRoomNotExisted:isCreateWhenRoomNotExisted
+                config:config
+                callback:^(ZIMRoomFullInfo *_Nonnull roomInfo, ZIMError *_Nonnull errorInfo) {
+        if (errorInfo.code == 0) {
+            // Room switch successful, you can obtain information about the switched room from roomInfo
+        }
+    }];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+std::string fromRoomID = "fromRoomID";
+auto toRoomInfo = zim::ZIMRoomInfo("toRoomID", "toRoomName");
+
+// Whether to create a room if it does not exist.
+// Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
+bool isCreateWhenRoomNotExisted = true; 
+
+// Advanced configuration for creating a room
+auto config = zim::ZIMRoomAdvancedConfig();
+config.roomAttributes.emplace("key1", "value1");
+config.roomDestroyDelayTime = 90;
+
+// Switch rooms
+zim->switchRoom(
+    fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config,
+    [=](const zim::ZIMRoomFullInfo &roomInfo, const zim::ZIMError &errorInfo) {
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Room switch successful, you can obtain information about the switched room from roomInfo
         }
     });
-    ```
-    :::
-    :::if{props.platform="iOS"}
-    ```objc
-    NSString *fromRoomID = @"fromRoomID";
-    ZIMRoomInfo *toRoomInfo = [[ZIMRoomInfo alloc] init];
-    toRoomInfo.roomID = @"toRoomID";
-    toRoomInfo.roomName = @"toRoomName";
-    // Whether to create a room if it does not exist.
-    // Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
-    BOOL isCreateWhenRoomNotExisted = YES; 
-    // Advanced configuration for creating a room
-    ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
-    [config insertRoomAttribute:@"key1" value:@"value1"];
-    config.roomDestroyDelayTime = 90;
-    // Switch rooms
-    [zim switchRoomFromRoomID:fromRoomID 
-                toRoomInfo:toRoomInfo 
-    isCreateWhenRoomNotExisted:isCreateWhenRoomNotExisted
-                    config:config
-                    callback:^(ZIMRoomFullInfo *_Nonnull roomInfo, ZIMError *_Nonnull errorInfo) {
-            if (errorInfo.code == 0) {
-                // Room switch successful, you can obtain information about the switched room from roomInfo
-            }
-        }];
-    ```
-    :::
-    :::if{props.platform="mac"}
-    ```objc
-    NSString *fromRoomID = @"fromRoomID";
-    ZIMRoomInfo *toRoomInfo = [[ZIMRoomInfo alloc] init];
-    toRoomInfo.roomID = @"toRoomID";
-    toRoomInfo.roomName = @"toRoomName";
-    // Whether to create a room if it does not exist.
-    // Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
-    BOOL isCreateWhenRoomNotExisted = YES; 
-    // Advanced configuration for creating a room
-    ZIMRoomAdvancedConfig *config = [[ZIMRoomAdvancedConfig alloc] init];
-    [config insertRoomAttribute:@"key1" value:@"value1"];
-    config.roomDestroyDelayTime = 90;
-    // Switch rooms
-    [zim switchRoomFromRoomID:fromRoomID 
-                toRoomInfo:toRoomInfo 
-    isCreateWhenRoomNotExisted:isCreateWhenRoomNotExisted
-                    config:config
-                    callback:^(ZIMRoomFullInfo *_Nonnull roomInfo, ZIMError *_Nonnull errorInfo) {
-            if (errorInfo.code == 0) {
-                // Room switch successful, you can obtain information about the switched room from roomInfo
-            }
-        }];
-    ```
-    :::
-    :::if{props.platform="window"}
-    ```cpp
-    std::string fromRoomID = "fromRoomID";
-    auto toRoomInfo = zim::ZIMRoomInfo("toRoomID", "toRoomName");
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+String fromRoomID = 'fromRoomID';
+ZIMRoomInfo toRoomInfo = ZIMRoomInfo();
+toRoomInfo.roomID = 'toRoomID';
+toRoomInfo.roomName = 'toRoomName';
 
-    // Whether to create a room if it does not exist.
-    // Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
-    bool isCreateWhenRoomNotExisted = true; 
+// Whether to create a room if it does not exist.
+// Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
+bool isCreateWhenRoomNotExisted = true;
 
-    // Advanced configuration for creating a room
-    auto config = zim::ZIMRoomAdvancedConfig();
-    config.roomAttributes.emplace("key1", "value1");
-    config.roomDestroyDelayTime = 90;
+// Advanced configuration for creating a room
+ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
+config.roomAttributes['key1'] = 'value1';
+config.roomDestroyDelayTime = 90;
+try{
+    ZIMRoomSwitchedResult? result = await ZIM.getInstance()?.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config);
+    // Room switch successful, you can obtain information about the switched room from result.roomInfo.
+} on PlatformException catch (onError){
+    onError.code; // Error code for failed room switch
+    onError.message; // Error message for failed room switch
+}
+```
+:::
+:::if{props.platform="Web|RN"}
+```javascript
+const fromRoomID = 'fromRoomID';
+const toRoomInfo = { roomID: 'toRoomID', roomName: 'toRoomName' };
+const isCreateWhenRoomNotExisted = true;
+// Advanced configuration for creating a room
+const to_room_attr = {
+    key1: 'value1', // Replace this code to the actual key-value pair
+    key2: 'value2', // Another key-value pair
+    // You can add more pairs
+};
 
-    // Switch rooms
-    zim->switchRoom(
-        fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config,
-        [=](const zim::ZIMRoomFullInfo &roomInfo, const zim::ZIMError &errorInfo) {
-            if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
-                // Room switch successful, you can obtain information about the switched room from roomInfo
-            }
-        });
-    ```
-    :::
-    :::if{props.platform="Flutter"}
-    ```dart
-    String fromRoomID = 'fromRoomID';
-    ZIMRoomInfo toRoomInfo = ZIMRoomInfo();
-    toRoomInfo.roomID = 'toRoomID';
-    toRoomInfo.roomName = 'toRoomName';
+// Set room destruction delay time (in seconds)
+const to_room_delay_destroy_time = 90; 
 
-    // Whether to create a room if it does not exist.
-    // Only when this is true and the target room does not exist, the toRoomName and config in toRoomInfo are meaningful
-    bool isCreateWhenRoomNotExisted = true;
+const config = {
+    roomAttributes: to_room_attr,
+    roomDestroyDelayTime: to_room_delay_destroy_time,
+};
 
-    // Advanced configuration for creating a room
-    ZIMRoomAdvancedConfig config = ZIMRoomAdvancedConfig();
-    config.roomAttributes['key1'] = 'value1';
-    config.roomDestroyDelayTime = 90;
-    try{
-        ZIMRoomSwitchedResult? result = await ZIM.getInstance()?.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config);
-        // Room switch successful, you can obtain information about the switched room from result.roomInfo.
-    } on PlatformException catch (onError){
-        onError.code; // Error code for failed room switch
-        onError.message; // Error message for failed room switch
-    }
-    ```
-    :::
-
+zim.switchRoom(fromRoomID, toRoomInfo, isCreateWhenRoomNotExisted, config)
+    .then(function (res) {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
 
 ## Leave the room 
 
@@ -642,9 +663,7 @@ zim.setEventHandler(new ZIMEventHandler() {
     }
 });
 ```
-
 :::
-
 :::if{props.platform="Flutter"}
 ```dart
  ZIM
@@ -734,7 +753,6 @@ zim.on('roomMemberLeft', function (zim, { roomID, memberList }) {
 });
 ```
 :::
-
 
 <Note title="Note">
 The room will be automatically destroyed after all room members left the room. You can also delay the destruction with the room settings.
