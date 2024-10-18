@@ -1,0 +1,73 @@
+# ZPNs upgrade guide
+
+- - -
+
+This article provides some instructions and considerations for upgrading the ZPNs Android platform SDK version.
+
+## 2.2.0 Upgrade Guide
+
+<Warning title="Warning">
+
+Please note that starting from version 2.2.0, there are significant changes to the API interface. Therefore, when upgrading from an older version to version 2.2.0, please read the following guide.
+</Warning>
+
+
+### Changes to ZPNsMessageReceiver callback methods
+
+#### Vendor through message callback
+
+Old method
+
+```java
+protected abstract void onThroughMessage(Context context, ZPNsMessage message);
+```
+
+New method
+
+```java
+protected abstract void onThroughMessageReceived(Context context, ZPNsMessage message);
+```
+
+### Changes to ZPNsConfig configuration class properties
+
+
+#### Enable Google FCM push
+
+Old property
+
+```java
+public boolean fcm_push;
+```
+
+New property
+
+```java
+public boolean enableFCMPush;
+```
+
+### Changes to ZPNsConfig configuration class methods
+
+
+#### Enable Google FCM push
+
+Old method
+
+```java
+public ZPNsConfig enableFCMPush(boolean enable);
+```
+
+New method
+
+```java
+public ZPNsConfig enableFCMPush();
+```
+
+### New methods in ZPNsConfig configuration class
+
+
+
+#### Disable Google FCM push
+
+```java
+public ZPNsConfig disableFCMPush();
+```

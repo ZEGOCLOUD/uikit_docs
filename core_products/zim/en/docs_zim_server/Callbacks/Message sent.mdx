@@ -1,0 +1,104 @@
+
+
+# Callback on message sent
+
+- - -
+
+## Description
+
+After the user sends a message to one-on-one chat, group chat, or room successfully or fails, the business server can receive the message sending callback from the In-app Chat server, and synchronize the message sent by the user to the business server in real time, and store it in the business server.
+
+<Warning title="Warning">
+
+The supported message types for this callback are text messages, image messages, file messages, audio messages, video messages, and custom messages. command messages and barrage messages are not supported.
+
+</Warning>
+
+## Callback request
+
+- Request method: POST
+<Note title="Note">
+
+- The callback data needs to be decoded by UrlDecode.
+- When using the POST request method to pass parameters:
+  - The parameters in the body can be directly passed in the JsonObject format, without the need to serialize them into a string format.
+  - In the headers, set "Content-type" to "application/json".
+</Note>
+- Request endpoint: Contact ZEGOCLOUD Technical Support to configure the corresponding callback endpoint.
+
+- Transmission protocol: HTTPS/HTTP (HTTPS is recommended.)
+
+
+## Callback parameters
+
+| appid | String | A unique identifier for the App. |
+| :-- | :-- | :-- | 
+| event | String | Callback event, the return value of this callback is `send_msg`. |
+| nonce | String | Random number, used to calculate signature. |
+| signature | String | The verification string, see [Authenticating server-to-server callbacks](./Authenticating%20server-to-server%20callbacks.mdx) for details. |
+| timestamp | Int | The current server time in Unix timestamp format, in seconds. It is used to calculate the signature. |
+| from_user_id | String | Message sender ID. |
+| conv_type | Int | Target session type: <ul><li>0: One-on-one chat. </li><li>1: Room chat. </li><li>2: Group chat. </li></ul> |
+| conv_id | String | Target session ID.  <Note title="Note"> When you use the server to send a single chat message, this field is empty and "user_list" has a value. </Note> |
+| msg_type | Int | Message type: <ul><li>1: Text. </li><li>11: Images. </li><li>12: Files. </li><li>13: Audio. </li><li>14: Video. </li><li>200: Custom. </li></ul> |
+| sub_msg_type | Int | The specific custom type. The value is filled in when the user sends a custom message, and the value range is [0,200]. This parameter is meaningful only when msg_type is 200 (custom type). |
+| msg_body | String | Message content. <ul><li>When msg_type is 1 (text type) or 200 (custom type), msg_body is the message content passed in when sending a message, and you can directly read the message content. </li><li>When msg_type is 11, 12, 13, 14, that is, when the message is a media type, msg_body is a JSON string. Please use URLDecode to decode this JSON string, and parse this JSON string according to the multimedia message structure, and then obtain <a href="#msgbody-json-string-parsing-result-parameter-description">each field data</a> in the message. </li></ul> |
+| msg_id | String | Message ID, which can be used to determine the uniqueness of the message. <Warning title="Warning"><p>When sending single chat messages <strong>in batches</strong> through the server API, this field is empty. If you need to obtain the message ID at this time, please obtain it from "user_list". </p></Warning> |
+| msg_seq | Int | Message Seq, which can be used to withdraw messages. <Warning title="Warning"><p>When sending single chat messages <strong>in batches</strong> through the server API, this field is empty. If you need to obtain the message Seq at this time, please obtain it from "user_list". </p></Warning> |
+| msg_time | Int | The time when the server receives the message, Unix timestamp, in milliseconds (ms). |
+| send_result | Int | Message sending result. 0 means the sending is successful, and other integers are specific Error Codes, which means the sending failed, you can refer to <a href="../Return codes.mdx">return codes</a>for the cause and solution. |
+| user_list | Array of Object | This field will be included in the callback only when sending a single chat message through the server, which is used to return the message receiving user information in batches. <Note title="Note"><ul><li>When this field has a value, "conv_id" is empty. </li><li>If you have used this callback before January 5, 2024, you will find that this field is not included in the callback. If you need the callback to support this field, please contact ZEGOCLOUD Technical Support. </li></ul></Note> |
+| └user_id | String | Message receiving user. |
+| └msg_id | String | Message ID, which can be used to determine the uniqueness of the message. When the message fails to be sent, this field is empty. |
+| └msg_seq | Int | Message Seq, which can be used to withdraw the message. |
+
+
+
+<Note title="Note">
+
+We recommend that you convert some parameters to Int for logical processing. The relevant fields include `appid` and `nonce`.
+</Note>
+
+#### msg_body JSON string parsing result parameter description
+
+| Parameters | Type | Description|
+|-----------------|--------|-------|
+| md5 | String | The MD5 value of the file. |
+| file_name | String | File name. |
+| file_size | String | File size in bytes. |
+| download_url | String | Download URL. |
+| media_duration | String | Audio and Video duration, in seconds. |
+
+
+## Callback example
+
+- POST/JSON
+
+```json
+{
+    "appid": "1",
+    "event": "zim_send_msg",
+    "nonce": "350176",
+    "signature": "signature",
+    "timestamp": 1679553625,
+    "from_user_id": "350176117361",
+    "conv_type": 2,
+    "conv_id": "group1",
+    "msg_type": 1,
+    "msg_body": "msg_body",
+    "msg_id": "857639062792568832",
+    "payload": "payload",
+    "msg_time": 1679554146000,
+    "send_result": 0,
+    "sub_msg_type": 0
+}
+```
+
+## Return response
+
+A status code of 2XX (such as 200) indicates success, and other responses indicate failure.
+
+## Callback retry strategy
+
+If the ZEGOCLOUD server does not receive a response, or the HTTP status code received by the ZEGOCLOUD server is not 2xx (such as 200), it will retry with intervals of 2s, 4s, 8s, 16s, and 32s respectively. If the retry still fails after an interval of 32s, it will no longer retry.
+

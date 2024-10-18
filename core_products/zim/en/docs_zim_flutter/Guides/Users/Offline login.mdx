@@ -1,0 +1,181 @@
+---
+articleID: 17601
+---
+
+# Offline login
+
+- - -
+
+
+## Function introduction
+
+Offline login is typically used when the application is cleared from memory, and the user relaunches the application by clicking on the application icon. In this scenario, the user can directly access the local SDK data without network connectivity or a successful login.
+
+<Note title="Note">
+
+Users can only perform an offline login using the UserID from their previous successful login; otherwise, the login will not succeed.
+</Note>
+
+## Technical principle
+
+When the offline login interface is called, the ZIM SDK performs verification (UserID verification; if token-based login is used, it also verifies the token's validity period). After successful verification, the SDK returns a login success callback, allowing users to query local data, while the SDK internally attempts to establish a connection with the backend service automatically.
+
+
+## Implementation Steps
+
+### 1. Offline Login
+
+In the case of no network and the app being cleared, you can call the [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) interface with the [isOfflineLogin](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig/isOfflineLogin.html) parameter set to `true` in [ZIMLoginConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig-class.html) to achieve offline login using the user information from the last login. After successful login, you can access the local SDK data.
+
+<Note title="Note">
+
+We recommend caching the user information used for each login. When the app is opened, read the cache and implement the following logic:
+- If it is determined that the user did not use the UserID from the last online login, the [isOfflineLogin](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig/isOfflineLogin.html) should be `false`. In this case, offline login will fail and the user will not be allowed to access the local SDK data for that UserID.
+- If the user uses the UserID from the last online login, in order to achieve automatic login, speed up entering the app's main page, and pre-render the UI, the [isOfflineLogin](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig/isOfflineLogin.html) should be `true` to achieve offline login.
+</Note>
+
+#### Definition of the Login Interface
+
+```dart
+// This Login interface is the new login interface. The original login interface has been deprecated since version 2.13.0 and is no longer maintained.
+  Future<void> login(String userID,ZIMLoginConfig config);
+```
+
+
+<table>
+<tbody><tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>userID</td>
+<td>String</td>
+<td>Yes</td>
+<td>The user ID for the previous online login. It can contain up to 32 bytes in length, including digits, letters, and the following characters: &apos;!&apos;, &apos;#&apos;, &apos;$&apos;, &apos;%&apos;, &apos;&amp;&apos;, &apos;(&apos;, &apos;)&apos;, &apos;+&apos;, &apos;-&apos;, &apos;:&apos;, &apos;;&apos;, &apos;< &apos;, &apos;= &apos;, &apos;. &apos;, &apos;> &apos;, &apos;?&apos;, &apos;@&apos;, &apos;[&apos;, &apos;]&apos;, &apos;^&apos;, &apos;_&apos;, { "'{'" },{"'}'"} &apos;|&apos;, &apos;~&apos;.</td>
+</tr>
+<tr>
+<td>config</td>
+<td>[ZIMLoginConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig-class.html)</td>
+<td>Yes</td>
+<td>Login configuration.</td>
+</tr>
+</tbody></table>
+
+The parameter `config` needs to be configured using the following parameters of the [ZIMLoginConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig-class.html) class:
+
+<table>
+<tbody><tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>userName</td>
+<td>String</td>
+<td>No</td>
+<td>User name. A string with a maximum of 256 bytes. If empty, it will be the UserName set during the last login.</td>
+</tr>
+<tr>
+<td>token</td>
+<td>String</td>
+<td>No</td>
+<td>Token.<ul><li>When using Token authentication, this parameter is required.</li><li>When using AppSign authentication, this parameter is not required.</li></ul></td>
+</tr>
+<tr>
+<td>isOfflineLogin</td>
+<td>bool</td>
+<td>No</td>
+<td>Whether this login is an offline login. If empty, it will be an online login.</td>
+</tr>
+</tbody></table>
+
+#### Example
+
+```dart
+ZIMLoginConfig loginConfig = ZIMLoginConfig();
+loginConfig.userName = 'username';
+// This parameter is not required when using AppSign authentication
+loginConfig.token = 'token';
+// Whether it is an offline login
+login.isOfflineLogin = true;
+
+try {
+    await ZIM.getInstance()!.login('zego', loginConfig);
+    // Login successful
+} on PlatformException catch (onError) {
+    // Login failed
+}
+```
+
+### 2 Accessing Local SDK Data
+
+After a successful offline login, users can perform the following operations when offline (as of version 2.12):
+
+<table>
+<tbody><tr>
+<th>Category</th>
+<th>Interface</th>
+</tr>
+<tr>
+<td>User-related</td>
+<td><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryUsersInfo.html" target="_blank" referer="noopener">queryUsersInfo</a></td>
+</tr>
+<tr>
+<td>Group-related</td>
+<td><ul>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupList.html" target="_blank" referer="noopener">queryGroupList</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalGroups.html" target="_blank" referer="noopener">searchLocalGroups</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupInfo.html" target="_blank" referer="noopener">queryGroupInfo</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupAttributes.html" target="_blank" referer="noopener">queryGroupAttributes</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupAllAttributes.html" target="_blank" referer="noopener">queryGroupAllAttributes</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberList.html" target="_blank" referer="noopener">queryGroupMemberList</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalGroupMembers.html" target="_blank" referer="noopener">searchLocalGroupMembers</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberInfo.html" target="_blank" referer="noopener">queryGroupMemberInfo</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberCount.html" target="_blank" referer="noopener">queryGroupMemberCount</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptReadMemberList.html" target="_blank" referer="noopener">queryGroupMessageReceiptReadMemberList</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptUnreadMemberList.html" target="_blank" referer="noopener">queryGroupMessageReceiptUnreadMemberList</a></li>
+</ul></td>
+</tr>
+<tr>
+<td>Message-related</td>
+<td><ul>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html" target="_blank" referer="noopener">queryHistoryMessage</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateMessageLocalExtendedData.html" target="_blank" referer="noopener">updateMessageLocalExtendedData</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalMessages.html" target="_blank" referer="noopener">searchLocalMessages</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchGlobalLocalMessages.html" target="_blank" referer="noopener">searchGlobalLocalMessages</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/insertMessageToLocalDB.html" target="_blank" referer="noopener">insertMessageToLocalDB</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllMessage.html" target="_blank" referer="noopener">deleteAllMessage</a>: Only supports deleting messages in the local database.</li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessages.html" target="_blank" referer="noopener">deleteMessages</a>: Only supports deleting messages in the local database.</li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageReceiptsInfo.html" target="_blank" referer="noopener">queryMessageReceiptsInfo</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageReactionUserList.html" target="_blank" referer="noopener">queryMessageReactionUserList</a></li>
+</ul></td>
+</tr>
+<tr>
+<td>Call Invitation-related</td>
+<td><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryCallInvitationList.html" target="_blank" referer="noopener">queryCallInvitationList</a></td>
+</tr>
+<tr>
+<td>Conversation-related</td>
+<td><ul>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversation.html" target="_blank" referer="noopener">queryConversation</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html" target="_blank" referer="noopener">queryConversationList</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationPinnedList.html" target="_blank" referer="noopener">queryConversationPinnedList</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalConversations.html" target="_blank" referer="noopener">searchLocalConversations</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/clearConversationUnreadMessageCount.html" target="_blank" referer="noopener">clearConversationUnreadMessageCount</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/clearConversationTotalUnreadMessageCount.html" target="_blank" referer="noopener">clearConversationTotalUnreadMessageCount</a></li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteConversation.html" target="_blank" referer="noopener">deleteConversation</a>: Only supports deleting conversations in the local database.</li>
+<li><a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversations.html" target="_blank" referer="noopener">deleteAllConversations</a>: Only supports deleting conversations in the local database.</li>
+</ul></td>
+</tr>
+</tbody></table>
+
+### 3 Event Listening
+
+Users can listen to the [onConnectionStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html) event notification to get the connection status between the SDK and the ZIM backend service.
+
+When offline login is successful, [onConnectionStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html) returns [ZIMConnectionState](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConnectionState.html) as Connecting (enum value 1).
+
+When the user's network is restored and the ZIM SDK successfully connects to the ZIM backend service, [onConnectionStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html) returns [ZIMConnectionState](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConnectionState.html) as Connected (enum value 2). Only then does the ZIM SDK allow calling interfaces that depend on a stable network connection and synchronizing backend data.

@@ -1,0 +1,107 @@
+---
+articleID: 17773
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const queryConversationMap = {
+  'Android': <a href='@queryConversation' target='_blank'>queryConversation</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversation.html' target='_blank'>queryConversation</a>,
+}
+
+# Query a conversation
+
+- - -
+
+## Introduction
+
+ZIM supports querying detailed information of a conversation by specifying the conversation ID.
+
+## Procedures
+
+After the login, a user can use the {getPlatformData(props,queryConversationMap)} interface to specify the conversation ID and conversation type to get detailed information about the corresponding conversation, including the conversation name, unread count, and notification status.
+
+:::if{props.platform=undefined}
+```java
+String conversationID = "convId";
+ZIMConversationType type = ZIMConversationType.PEER;
+
+// Query a conversation
+zim.queryConversation(conversationID,type, new ZIMConversationQueriedCallback() {
+    @Override
+    public void onConversationQueried(ZIMConversation conversation, ZIMError errorInfo) {
+       
+    }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Query conversation information
+[[ZIM getInstance] queryConversation:@"targetConversationID" conversationType:ZIMConversationTypePeer callback:^(ZIMConversation * _Nonnull conversation, ZIMError * _Nonnull errorInfo) {
+         // Callback for the result of the query conversation operation
+        if (errorInfo.code == ZIMErrorCodeSuccessS) {
+            
+        } else {
+            // You can print the error code and error message to troubleshoot the error cause, referring to the ZIM official website error code documentation
+        }
+}];
+
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Query conversation information
+var conversationID = "xxx";
+var conversationType = 0;
+
+zim.queryConversation(conversationID, conversationType)
+    .then(function({ conversation }){
+        // Query successful, you need to save and maintain the conversation object in the array
+    })
+    .catch(function(err){
+        // Query failed
+    })
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Query conversation information
+ZIM.getInstance().queryConversation("conversationID", ZIMConversationType.peer).then((value){
+    // Query succeeded
+}).catchError((onError){
+    // Query failed, you can print the error code and error message to troubleshoot the error cause, refer to the ZIM official website error code documentation
+});
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Query the information of a conversation
+zim_->queryConversation(
+    "conv_id", conv_type,
+    [=](std::shared_ptr<zim::ZIMConversation> conv, const zim::ZIMError &errorInfo) {
+        // Operation result
+        if (errorInfo.code == zim::ZIMErrorCode::ZIM_ERROR_CODE_SUCCESS) {
+            // Operation succeeded
+        } else {
+            // Operation failed, you can print the error code and error message and troubleshoot the error by looking for the ZIM official error code documentation. 
+        }
+    });
+```
+:::
+:::if{props.platform="U3d"}
+```c#
+// Query conversation information
+ZIM.GetInstance().QueryConversation(
+    "conv_id", ZIMConversationType.Peer,
+    (ZIMConversation conv, ZIMError errorInfo) => {
+        // Callback for the result of the query conversation operation
+        if (errorInfo.code == ZIMErrorCode.Success) {
+
+        } else {
+            // You can print the error code and error message to troubleshoot the issue, refer to the ZIM official website error code documentation for troubleshooting
+        }
+    });
+```
+:::

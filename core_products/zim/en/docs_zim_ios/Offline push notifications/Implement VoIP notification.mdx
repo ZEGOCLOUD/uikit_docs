@@ -1,0 +1,233 @@
+---
+articleID: 17533
+---
+# Implement VoIP notification
+
+
+## Overview
+
+The VoIP notification offers the same experience on your app as a voice call provided by an ISP carrier.
+
+
+
+## Prerequisites
+
+Before you implement the `VoIP notification` feature, make sure that the following conditions are met:
+
+- ZPNs SDK **2.1.0 or later** is integrated, and offline push notification is implemented. For more information, see [Implement offline push notification](./Implement%20offline%20push%20notification.mdx).
+- Notification permission is obtained from the user.
+- **Push Notifications** is added to the **Capabilities** pane in your Xcode project.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/offline_push_enable_pushNotification.png" /></Frame>
+
+## Implementation Process
+
+<Steps>
+<Step title="Apply for a VoIP service certificate">
+Go to [developer.apple.com](https://developer.apple.com/), and apply for a VoIP service certificate, which is a `.cer` file. For more information, see [Create VoIP services certificates](https://developer.apple.com/help/account/create-certificates/create-voip-services-certificates/) at Apple official website.
+</Step>
+<Step title="Export the .p12 file">
+Double-click the certificate file to install it on **Keychain Access**. In the left-side navigation pane, click **login**. On the **Keychain Access** page, click the **Certificate** tab, find the certificate file, and export the `.p12` file.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/iOS/VoIP_p12.jpg" /></Frame>
+</Step>
+<Step title="Obtain resourceID">
+Please contact ZEGOCLOUD technical support to obtain resourceID with the iOS VoIP policy from.
+</Step>
+<Step title="Add Background Modes Capabilities">
+Open your project in Xcode. On the **Signing \& Capabilities** tab, click **Capability**. In the pop-up window, double-click **Background Modes**.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/iOS/capability.jpg" /></Frame>
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/iOS/Capability_Window.jpeg" /></Frame>
+
+In the configuration area of **Background Modes**, select **Voice over IP**, **Background fetch**, and **Remote notifications**.
+   
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/iOS/Background_Modes.jpeg" /></Frame>
+</Step>
+<Step title="Import the PushKit and CallKit libraries">
+Import the PushKit and CallKit libraries.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/iOS/Callkit_and_Pushkit.jpg" /></Frame>
+</Step>
+
+:::if{props.platform=undefined}
+<Step title="Import the header files before use">
+```oc
+#import "CallKit/CallKit.h"
+#import "PushKit/PushKit.h"
+```
+</Step>
+<Step title="Apply for the VoIP token">
+Run the following code to apply for the VoIP token.
+   
+```oc
+dispatch_queue_t mainQueue = dispatch_get_main_queue();
+PKPushRegistry *voipRegistry = [[PKPushRegistry alloc] initWithQueue:mainQueue];
+[voipRegistry setDelegate:self]; // Replace `self` with the object to receive the VoIP notification.
+NSMutableSet *desiredPushTypes = [[NSMutableSet alloc] init];
+[desiredPushTypes addObject:PKPushTypeVoIP];
+voipRegistry.desiredPushTypes = desiredPushTypes;
+```
+</Step>
+<Step title="Obtain the VoIP token">
+Call the `didUpdatePushCredentials` method to obtain the VoIP token, and then call the [setVoipToken](@setVoipToken) method to pass it to the ZPNs SDK.
+   
+```oc
+- (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials: (PKPushCredentials *)credentials forType:(NSString *)type {
+    NSData *voIPToken = credentials.token;
+    [[ZPNs shared] setVoipToken:voIPToken isProduct:TRUE];
+}
+```
+   
+<div class="mk-warning">
+Enter the correct value of the isProduct for the development or production environment; otherwise, the ZPNs server cannot select the proper push certificate to send offline notification requests to the APNs. During packaging, if you use the development certificate, select the value for the development environment; if you use the distribution certificate, select the value for the production environment. The APNs has a better delivery rate and lower latency in a production environment than in a development environment.
+</div>
+</Step>
+<Step title="Send and receive a VoIP notification">
+
+- Send a VoIP notification
+     
+<Note title="Note">
+Obtain `resourceID` with the **VoIP policy** from ZEGOCLOUD Technical Support.
+</Note>
+
+In the [`Call invitation`](./../Guides/Call%20invitation%20signaling.mdx) scenario or other scenarios that require VoIP notifications, pass in `resourceID` in the [`ZIMPushConfig`](@-ZIMPushConfig) method to set the push to a VoIP push.
+
+     
+```oc
+pushConfig.resourcesID = @"Contact ZEGOCLOUD Technical Support to obtain the value.";
+```
+   
+- Receive a VoIP notification
+     
+If a VoIP notification is received, your app is called to trigger the [didReceiveIncomingPushWithPayload](https://developer.apple.com/documentation/pushkit/pkpushregistrydelegate/2875784-pushregistry?language=objc) method. Call the [reportNewIncomingCallWithUUID](https://developer.apple.com/documentation/callkit/cxprovider/1930694-reportnewincomingcallwithuuid/) method of CallKit in the callback to pull the call interface, write the logic (for more information, see [CallKit](https://developer.apple.com/documentation/callkit?language=objc)), and call the `completion()`.
+     
+```oc
+- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion{
+    // Write the logic. For more information, visit https://developer.apple.com/documentation/callkit?language=objc.
+    // Call the `reportNewIncomingCallWithUUID` method to pull the call interface of CallKit.
+    completion();
+}
+```
+</Step>
+:::
+:::if{props.platform="Flutter"}
+<Step title="Apply for Notification Permission">
+Call the [applyNotificationPermission](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/applyNotificationPermission.html) method to request the user's consent for the app's notification permission.
+
+```dart
+ZPNs.getInstance().applyNotificationPermission();
+```
+</Step>
+<Step title="Enable VoIP">
+Before using VoIP, you need to call [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html), set the current iOS environment, and set `enableIOSVoIP` to true.
+
+```dart
+ZPNs.getInstance()
+.registerPush(iOSEnvironment: ZPNsIOSEnvironment.Development,enableIOSVoIP: true)
+.catchError((onError) {
+	if (onError is PlatformException) {
+    	// You need to pay attention to the exceptions that may be thrown here
+    	log(onError.message ?? "");
+   	}
+});
+```
+<Warning title="Warning">
+Please enter the correct value of the `iOSEnvironment` for the development or production environment. Otherwise, the ZPNs server cannot select the proper push certificate to send offline notification requests to the APNs. During packaging, if you use the development certificate, select the value for the development environment; if you use the distribution certificate, select the value for the production environment. The APNs has a better delivery rate and lower latency in a production environment than in a development environment.
+</Warning>
+</Step>
+<Step title="Get the pushID with VoIP token">
+Get the pushID with VoIP token through the [onRegistered](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onRegistered.html) method.
+
+```dart
+ZPNsEventHandler.onRegistered = (ZPNsRegisterMessage registerMessage) {
+	log(registerMessage.errorCode.toString());
+};
+```
+</Step>
+<Step title="Send and receive a VoIP notification">
+- Send a VoIP notification
+    
+<Note title="Note">
+Obtain `resourceID` with the **VoIP policy** from ZEGOCLOUD Technical Support.
+</Note>
+ 
+In the [`Call invitation`](./../Guides/Call%20invitation%20signaling.mdx) scenario or other scenarios that require VoIP notifications, pass in `resourceID` in the [`ZIMPushConfig`](@-ZIMPushConfig) method to set the push to a VoIP push.
+
+
+```dart
+pushConfig.title = "System call title";
+pushConfig.payload = "Transmitted fields required by the business";
+pushConfig.resourcesID = "Contact ZEGOCLOUD Technical Support to configure resourcesID";
+
+        ZIMVoIPConfig voIPConfig = ZIMVoIPConfig();
+        voIPConfig.iOSVoIPHandleType = ZIMCXHandleType.generic;
+        //Contact information of the sender
+        voIPConfig.iOSVoIPHandleValue = "Li hua";
+        //Is it a video call
+        voIPConfig.iOSVoIPHasVideo = false;
+        pushConfig.voIPConfig = voIPConfig;
+```
+
+- Receive a VoIP notification
+
+To facilitate Flutter developers to use iOS native Callkit library interfaces, ZEGOCLOUD encapsulates the relevant interfaces into the zego_callkit plugin. Please refer to [CallKit](./Best%20Practices/CallKit%20user%20guide.mdx).
+</Step>
+:::
+:::if{props.platform="RN"}
+<Step title="Apply for Notification Permission">
+Call the [applyNotificationPermission](https://doc-en.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNs#apply-notification-permission) method to request the user's consent for the app's notification permission.
+
+```js
+ZPNs.getInstance().applyNotificationPermission();
+```
+</Step>
+<Step title="Enable VoIP">
+Before using VoIP, you need to call [registerPush](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNs#register-push) and set [enableDebug](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNs#enable-debug) to true. And set the current iOS environment by call [enableDebug](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNs#enable-debug) method.
+
+```js
+// true for development environment; false(default value) for production environment.
+ZPNs.enableDebug(true);
+
+ZPNs.getInstance().registerPush({ enableIOSVoIP: true });
+```
+<Warning title="Warning">
+Please accurately fill in the [enableDebug](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNs#enable-debug) parameter based on the development environment or production environment (signing with a development certificate for development environment during packaging, and signing with a distribution certificate for production environment). Otherwise, ZPNs server will not be able to select the appropriate push certificate to send offline push requests to APNs correctly. The delivery rate and latency of APNs are better in the production environment than in the development environment.
+</Warning>
+</Step>
+<Step title="Get the pushID with VoIP token">
+Get the pushID with VoIP token through the [onRegistered](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~class~ZPNsEventHandler#registered) method.
+
+```js
+ZPNs.getInstance().on("registered", function (message) {
+     console.log("[ZPNs] registered. pushID: " + message.pushID + ", error: " + message.errorCode);
+ });
+```
+</Step>
+<Step title="Send and receive a VoIP notification">
+- Send a VoIP notification
+    
+<Note title="Note">
+Obtain `resourceID` with the **VoIP policy** from ZEGOCLOUD Technical Support.
+</Note>
+ 
+In the [`Call invitation`](./../Guides/Call%20invitation%20signaling.mdx) scenario or other scenarios that require VoIP notifications, pass in `resourceID` in the [`ZIMPushConfig`](https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~interface~ZIMPushConfig) method to set the push to a VoIP push.
+
+
+```js
+var pushConfig = {
+    resourcesID: "your resourcesID", // Contact ZEGO technical support for the configured resourcesID
+    title: "System call title",
+    payload: "Business required pass-through field",
+    content: "your content",
+    voIPConfig:{
+        'iOSVoIPHandleType': ZIMCXHandleType.Generic,
+        'iOSVoIPHandleValue': 'Sender contact information',
+        'iOSVoIPHasVideo': true
+    }
+};
+```
+
+- Receive a VoIP notification
+
+To facilitate RN developers to use iOS native Callkit library interfaces, ZEGOCLOUD encapsulates the relevant interfaces into the zego-callkit-react-native plugin. Please refer to [CallKit](./Best%20Practices/CallKit%20user%20guide.mdx).
+</Step>
+:::
+</Steps>

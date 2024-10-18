@@ -1,0 +1,192 @@
+# Custom notification sound
+- - -
+
+## Introduction
+
+
+By default, the In-app Chat uses the system sounds and vibrations for delivering notifications, while it also supports customizing notification sounds.
+
+<Note title="Note">
+This document is applicable to the project integrated with APNs or Google FCM (Android).
+</Note>
+
+## Common Usage
+
+To customize the notification sound, you must package the sound resource file into the app, and configure the file path of the sound resource in the ZEGOCLOUD Admin Console. 
+
+### Add sound resource files to the local project.
+
+<Tabs>
+<Tab title="iOS Project">
+#### Prepare sound resources
+
+Prepare the sound resources as follows:
+
+- The audio length must be less than 30 seconds; otherwise, the system will play the default ringtone.
+- The audio data should be in one of the following formats:
+    - Linear PCM
+    - MA4 (IMA/ADPCM)
+    - µLaw
+    - aLaw
+- The audio file should be in one of the following formats:
+    - AIFF
+    - WAV
+    - CAF
+
+For more details, refer to the Apple Developer Documentation on [UNNotificationSound](https://developer.apple.com/documentation/usernotifications/unnotificationsound?language=objc).
+
+#### Add sound resources to your project
+
+Use XCode to open your project, select your project, select the appropriate Target, click the Build Phrases tab, expand Copy Bundle Resources, and add sound resources, as shown in the figure:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/addSound.png" /></Frame>
+</Tab>
+<Tab title="Android Project">
+
+#### Add sound resources to your project
+
+1. Add the sound resource file to the `your project/res/raw` directory.  
+2. If your project supports Android 8.0 (API 26) or later, you will need to create a channel to customize the notification sound.
+
+Sample codes:
+
+<CodeGroup>
+```java title="Android - Java"
+// Create a channel and assign a ringtone to the channel.
+// The callChannel in the code is an example Channel ID.
+// callChannel and ChannelName are for demonstration. You can customize the parameters according to the actual situation.
+if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+    NotificationChannel channel = new NotificationChannel("callChannel", "ChannelName", NotificationManager.IMPORTANCE_HIGH);
+    Uri sound = Uri.parse("android.resource://" + getPackageName() + "/raw/call_sound");
+    channel.setSound(sound, null);
+    NotificationManager notificationManager = getSystemService(NotificationManager.class);
+    notificationManager.createNotificationChannel(channel);
+}
+```
+```dart title="Flutter - Dart"
+  // Create a channel and assign a ringtone to the channel.
+  // The callChannel in the code is an example Channel ID.
+  // callChannel and ChannelName are for demonstration. You can customize the parameters according to the actual situation.
+  ZPNsNotificationChannel channel = ZPNsNotificationChannel();
+  channel.channelID = "channelID";
+  channel.channelName = "channelName";
+  channel.androidSound = "sound";
+  ZPNs.getInstance().createNotificationChannel(channel);
+  ```
+```js title="React Native - JavaScript"
+  // Create a channel and assign a ringtone to the channel.
+  // The callChannel in the code is an example Channel ID.
+  // callChannel and ChannelName are for demonstration. You can customize the parameters according to the actual situation.
+  var channel = {
+      channelID: "channelID",
+      channelName: "channelName",
+      androidSound: "sound"
+  }; 
+  ZPNs.getInstance().createNotificationChannel(channel);
+  ```
+</CodeGroup>
+</Tab>
+</Tabs>
+
+### Get Push Resource ID in ZEGOCLOUD Admin Console
+
+<Steps>
+<Step title="Go to your project's detailed page">
+Log in to the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/), select **Projects > Project Management** to go to your project's detailed page.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Enter_project.png" /></Frame>
+</Step>
+<Step title="Click add resources button">
+In the project management page, click the **In-app Chat** tab, find the **Customized push resource** area and click the **Add** button.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Add.png" /></Frame>
+</Step>
+<Step title="Fill in the required fields">
+Fill in the required fields and click **Continue**.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/zegocloud/console/inappchat_resourceid.png" /></Frame>
+
+The required fields are explained as follows:
+
+<table>
+<tbody><tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>Push Resource ID</td>
+<td>The ID of the resource to push. You can customize this ID.</td>
+</tr>
+<tr>
+<td colspan="2">APNs</td>
+</tr>
+<tr>
+<td>Sound</td>
+<td>The path of the sound resource file in your app's IPA package. For example, if you opened your project in Xcode and imported the sound resource into the project in Build Phrases & Copy Bundle Resources, then the sound resource is already in the root directory with "sound resource name + file format", like callSound.caf.</td>
+</tr>
+<tr>
+<td colspan="2">FCM</td>
+</tr>
+<tr>
+<td>Chanel ID</td>
+<td>If your project supports Android 8.0 (API 26) or later, you need to create a channel to customize notification sounds.</td>
+</tr>
+<tr>
+<td>Sound</td>
+<td>The name of the sound resource file, without the suffix, such as call_sound. </td>
+</tr>
+</tbody></table>
+</Step>
+<Step title="Copy the Push Resource ID">
+After filling in all fields, a newly added entry shows like this, and you will need to copy the **Push Resource ID**.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/OfflinePush/Copy.png" /></Frame>
+</Step>
+</Steps>
+
+### Use the customized notification sound
+
+Fill in the previously copied **Push Resource ID** in `ZIMPushConfig`:
+
+```dart
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.resourcesID = "push_resources_soundlimit";    
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+```
+
+<CodeGroup>
+```objc title="iOS - objective-C"
+  ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+  pushConfig.resourcesID = @"push_resources_soundlimit";    // Push Resource ID copied from ZEGOCLOUD Admin Console
+  pushConfig.title = @"your title";
+  pushConfig.content = @"your content";
+
+  // Call API including pushConfig
+  ```
+```java title="Android - Java"
+  ZIMPushConfig pushConfig = new ZIMPushConfig();
+  pushConfig.title = "your title";
+  pushConfig.content = "your content";
+  pushConfig.resourcesID = "push_resources_soundlimit";    // Push Resource ID copied from ZEGOCLOUD Admin Console
+
+  // Call API including pushConfig
+  ```
+```dart title="Flutter - Dart"
+  ZIMPushConfig pushConfig = ZIMPushConfig();
+  pushConfig.resourcesID = "push_resources_soundlimit";    // Push Resource ID copied from ZEGOCLOUD Admin Console
+  pushConfig.title = "your title";
+  pushConfig.content = "your content";
+
+  // Call API including pushConfig
+  ```
+```js title="React Native - JavaScript"
+  var pushConfig = {
+      resourcesID: "push_resources_soundlimit",    // Push Resource ID copied from ZEGOCLOUD Admin Console
+      title: "your title",
+      content: "your content"
+  };
+  var sendConfig = {
+      priority: 2,
+      pushConfig: pushConfig
+  };
+
+  // Call API including pushConfig
+  ```
+</CodeGroup>

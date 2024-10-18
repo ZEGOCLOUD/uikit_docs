@@ -1,0 +1,102 @@
+---
+articleID: 17507
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const enableANSMethod={
+    "Android,RN,iOS": <a href="@enableANS" target="_blank">enableANS</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/enableANS.html" target="_blank">enableANS</a>
+}
+export const setANSParamMethod={
+    "Android,RN,iOS": <a href="@setANSParam" target="_blank">setANSParam</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/setANSParam.html" target="_blank">setANSParam</a>
+}
+
+# ANS
+
+
+Ambient noise suppression (ANS) recognizes and clears background noise to enhance the quality of recorded audio and user experience. This feature is better at suppressing continuous noise, such as rain sounds and other white noise .
+
+<Warning title="Warning">
+To use this feature, contact ZEGOCLOUD technical support to enable it. Pro or Enterprise users can enable it free of charge.
+</Warning>
+
+## Prerequisites
+
+Before you implement the `ANS` feature, make sure that the following conditions are met:
+- You have implemented [Integrate the ZIM Audio SDK](./Integrate%20the%20ZIM%20Audio%20SDK.mdx).
+- You have implemented [Implement online authentication](./Implement%20online%20authentication.mdx).
+
+
+## Enable the feature
+
+After the initialization, call the {getPlatformData(props, enableANSMethod)} method to enable the feature.
+
+:::if{props.platform=undefined}
+```java
+// Enable the ANS feature.
+ZIMAudio.getInstance().enableANS(true);
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Enable the ANS feature.
+[[ZIMAudio sharedInstance] enableANS:YES];
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+// Enable the ANS feature.
+ZIMAudio.sharedInstance().enableANS(true);
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Enable the ANS feature.
+ZIMAudio.sharedInstance().enableANS(true);
+```
+:::
+
+After the feature is enabled, you can start recording audio files. For more information, see [Send and receive audio messages\|_blank](./Send%20and%20receive%20audio%20messages.mdx#4-record-an-audio-file).
+
+<Note title="Note">
+If the ANS feature is enabled after recording starts, this feature does not take effect for this recording and takes effect for subsequent recordings only.
+</Note>
+
+
+### (Optional) Set ANS parameters
+
+To change the ANS mode after enabling the ANS feature by calling the {getPlatformData(props, enableANSMethod)} method, call the {getPlatformData(props, setANSParamMethod)} method.
+
+:::if{props.platform=undefined}
+```java
+ZIMAudioANSParam param = new ZIMAudioANSParam();
+// Change the ANS mode to AGGRESSIVE.
+param.mode = ZIMAudioANSMode.AGGRESSIVE;
+ZIMAudio.getInstance().setANSParam(param);
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMAudioANSParam *param = [[ZIMAudioANSParam alloc] init];
+// Change the ANS mode to ZIMAudioANSModeAggressive.
+param.mode = ZIMAudioANSModeAggressive;
+[[ZIMAudio sharedInstance] setANSParam:param];
+
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+// Change the ANS mode to aggressive.
+ZIMAudio.getInstance().setANSParam({mode:ZIMAudioANSMode.aggressive});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Change the ANS mode to aggressive.
+ZIMAudioANSParam param = ZIMAudioANSParam(ZIMAudioANSMode.aggressive);
+ZIMAudio.getInstance().setANSParam(param);
+```
+:::

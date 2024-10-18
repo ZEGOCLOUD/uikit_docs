@@ -1,0 +1,231 @@
+---
+articleID: 16366
+---
+
+
+# Manage groups
+
+- - -
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+## Overview
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group management, allowing you to create a group, ungroup, join and leave a group, and maintain the group relation chain.
+
+With the group management feature, you can create different types of group chats as needed, such as colleague groups, social groups, fan groups, and more.
+
+
+## Create a group 
+
+Let's suppose we have Client A and other client users. The following shows how Client A creates the group, how other client users join and leave the room. 
+
+After Client A logs in, he can call the [CreateGroup](@CreateGroup) method to create a new group, and he can be told whether the group is created successfully through the callback [ZIMGroupCreatedCallback](@ZIMGroupCreatedCallback). For related error codes, see [Error codes](./../../SDK%20Error%20Codes/ZIM.mdx).
+
+Client A automatically becomes the group owner of the group. Other client users can join the group with the correct groupID.
+
+
+
+<Warning title="Warning">
+
+- You can customize the `groupID`, and it can't start with "#", and it can only contain numbers, letters, and the following special characters: {"!#$%&()+-:;<=>.?@[]^_{}|~"}. We recommend you set the `groupID` to a meaningful value and associate them with the account system of your application. If you leave it empty, the ZIM Server automatically generates a groupID for you.
+- After creating a group by calling the [CreateGroup](@CreateGroup) method, you will directly join the group you just created, you don't need to call the [JoinGroup](@JoinGroup) method to join the group again.
+- You will automatically become the group owner after you create a group successfully. To transfer the ownership, refer to chapter **Transfer the group ownership** of the [Manage group members](./Group%20members.mdx).
+- After creating a group, for the group owner to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx#send--receive-signaling-messages).
+</Warning>
+
+<CodeGroup>
+```c# SampleCode 
+// Create a group. 
+
+ZIMGroupInfo groupInfo = new ZIMGroupInfo();
+// groupID is a string with a maximum of 32 bytes. It only supports numbers, English characters, and special characters such as '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', ' '[', ']', '^', '_', '{', '}', '|', '~', and cannot start with '#'.
+groupInfo.groupID = "group_id";
+// groupName is a string with a maximum of 50 bytes, and there are no special character restrictions.
+groupInfo.groupName = "groupName";
+groupInfo.groupAvatarUrl = "groupAvatarUrl";
+
+ZIMGroupAdvancedConfig config = new ZIMGroupAdvancedConfig();
+Dictionary<string, string> attributes = new Dictionary<string, string>();
+attributes.Add("key_0", "value_0");
+attributes.Add("key_1", "value_1");
+attributes.Add("key_2", "value_2");
+config.groupAttributes = attributes;
+
+List<string> userList = new List<string>();
+userList.Add("user_1");
+userList.Add("user_2");
+
+ZIM.GetInstance().CreateGroup(groupInfo, userList, config, (ZIMGroupFullInfo groupInfo, List<ZIMGroupMemberInfo> userIDs,
+    List<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) =>
+        {
+            // You can get the result of creating a group by accessing errorInfo.code.
+        }
+);
+```
+</CodeGroup>
+## Join a group
+
+For a client user to join a group, choose either of the following methods: 
+
+- Join a group directly (actively):
+    
+    To join a group directly, call the [JoinGroup](@JoinGroup) method with the `groupID` (an existing groupID).
+    All group members including the client user himself receive a notification through the callback [OnGroupMemberStateChanged](@OnGroupMemberStateChanged) after the client user joins the group successfully.
+
+
+- Join a group by invited by a group member (passively):
+
+    To invite a new member into the group, call the [InviteUsersIntoGroup](@InviteUsersIntoGroup) method with the `groupID` (an existing groupID), and `userIDList` (the ID of the user you want to invite).
+    All group members including the client user himself receive a notification through the callback [OnGroupMemberStateChanged](@OnGroupMemberStateChanged) after the client user joins the group successfully.
+
+<Warning title="Warning">
+
+When an existing group member calls the [InviteUsersIntoGroup](@InviteUsersIntoGroup) method to invite other users to the group:
+- The invited client user will be directly joined to the group.
+- The invited user must be an existing user (that is, the user must be logged in); otherwise, the operation fails.
+- After joining a group, for the group members to send messages to a group, call the [SendMessage](@SendMessage) method. For details, see [Send & Receive messages](./../Messaging/Send%20and%20receive%20messages.mdx#send--receive-signaling-messages).
+</Warning>
+
+
+### Join a group directly (actively)
+
+
+
+```c# SampleCode
+// Other clients directly join the group
+ZIM.GetInstance().JoinGroup("groupID", (ZIMGroupFullInfo groupInfo, ZIMError errorInfo) =>
+{
+    // You can get the result of joining the group by accessing errorInfo.code
+});
+```
+### Join a group by being invited by a group member (passively)
+
+
+
+```c# SampleCode
+// Group members add users to the group
+List<string> userList = new List<string>();
+userList.Add("user_1");
+userList.Add("user_2");
+ZIM.GetInstance().InviteUsersIntoGroup(userList, "groupID", (string groupID, List<ZIMGroupMemberInfo> userList,
+List<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) =>
+{
+    // You can get the result of adding users to the group by accessing errorInfo.code
+});
+```
+
+
+## Leave the group
+
+For a client user to leave a group, choose either of the following methods: 
+
+- Leave the group directly (actively):
+
+    To leave the group, call the [LeaveGroup](@LeaveGroup) method with the `groupID` (an existing groupID).
+    All group members including the client user himself receive a notification through the callback [OnGroupMemberStateChanged](@OnGroupMemberStateChanged) after the client user leaves the group successfully.
+
+
+
+- Leave the group by removed by the group owner (passively):
+
+    To remove a group member from the group, call the [KickGroupMembers](@KickGroupMembers) method with the `groupID` (an existing groupID), and `userIDList` (the ID of the user you want to remove).
+    All group members including the client user himself receive a notification through the callback [OnGroupMemberStateChanged](@OnGroupMemberStateChanged) after the client user was removed from the group successfully.
+
+<Warning title="Warning">
+- Only the group owner can call the [KickGroupMembers](@KickGroupMembers) method to remove a group member from the group. And the group owner can remove a member when he is offline and without the member's consent.
+- The user to be removed must be in the member list of the group; otherwise, the operation fails.
+- When the group owner leaves the group, the group owner will be automatically transferred to the earliest member who joined the group. When all members leave the group, the group is automatically dismissed.
+</Warning>
+
+
+### Leave the group directly (actively)
+
+
+```c# SampleCode
+// Leave the group voluntarily
+ZIM.GetInstance().LeaveGroup("groupID", (string groupID, ZIMError errorInfo) =>
+{
+    // You can get the result of leaving the group voluntarily by accessing errorInfo.code
+});
+```
+### Leave the group by removed by the group owner (passively)
+
+
+
+```c# SampleCode
+// Group owner removes group members
+List<string> userList = new List<string>();
+userList.Add("user_1");
+userList.Add("user_2");
+ZIM.GetInstance().KickGroupMembers(userList, "group_id", (string groupID, List<string> kickedUserIDList,
+   List<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) =>
+{
+    // You can get the result of removing group members by accessing errorInfo.code
+});
+```
+
+
+## Ungroup
+
+For a group owner to ungroup, call the [DismissGroup](@DismissGroup) method. 
+All group members receive a notification through the callback [OnGroupStateChanged](@OnGroupStateChanged) when ungroup operation succeeds.
+
+<Note title="Note">
+
+- Only the group owner can call the [DismissGroup](@DismissGroup) to ungroup.
+- When all members leave the group, the group is automatically dismissed.
+- After the group is disbanded, the local conversation list will not be cleared, and users can still see the chat records of the group before they left.
+</Note>
+
+
+
+```c# SampleCode
+// Group owner dismisses the group
+ZIM.GetInstance().DismissGroup("groupID", (string groupID, ZIMError errorInfo) =>
+{
+    // You can get the result of the group owner dismissing the group by accessing errorInfo.code
+});
+```
+
+## More functions
+## Get the list of joined groups 
+
+To know what groups you have joined after login, call the [QueryGroupList](@QueryGroupList) method. 
+
+
+
+```c# SampleCode
+// User queries the groups they have joined
+ZIM.GetInstance().QueryGroupList((List<ZIMGroup> groupList, ZIMError errorInfo) =>
+{
+    // You can get the result of the groups the user has joined by accessing errorInfo.code
+});
+```
+
+### Search Joined Groups
+
+After logging in to the ZIM SDK, if you want to search for joined groups based on certain conditions, you can call the [SearchLocalGroups](@SearchLocalGroups) interface and pass the config and callback to search for groups.
+
+The search results will be returned through the [ZIMGroupsSearchedCallback](@ZIMGroupsSearchedCallback) callback interface.
+
+
+
+```c# SampleCode
+// Search for joined groups with names containing "zego"
+ZIMGroupMemberSearchConfig config = new ZIMGroupMemberSearchConfig();
+config.count = 10;
+config.nextFlag = 0;
+config.isAlsoMatchGroupMemberNickname = true; // If the group member's nickname contains "zegocloud", the search result will include the group
+config.isAlsoMatchGroupMemberUserName = true; // If the group member's username contains "zegocloud", the search result will include the group
+config.keywords.Add("zegocloud");
+ZIM.GetInstance().SearchLocalGroups(groupSearchConfig, (List<ZIMGroupSearchInfo> groupSearchInfoList,
+        uint nextFlag, ZIMError errorInfo) =>
+    {
+        // Developers can obtain group information from groupSearchInfoList
+    });
+```
+

@@ -1,0 +1,241 @@
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const ZIMPushConfig={
+    "Android": <a href="https://doc-zh.zego.im/article/api?doc=zim_API~objective-c_ios~class~ZIMPushConfig" target="_blank">ZIMPushConfig</a>,
+    "RN": <a href="https://doc-zh.zego.im/article/api?doc=zim_API~javascript_react-native~interface~ZIMPushConfig" target="_blank">ZIMPushConfig</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html" target="_blank">ZIMPushConfig</a>
+}
+
+# Notify with photo attachment
+
+## Overview
+
+ZPNs supports sending offline push notifications with a photo attachment.
+
+## How it works
+
+ZPNs supports including the `"mutable-content":1` field when sending APNs push notifications. This allows your app to intercept the push message, modify its content, and then display it. For more details, please refer to [Description of Mutable-content](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification#2943360) in the Official Documentation of Apple Developer.
+
+
+## Prerequisites
+
+- Offline push notifications have been implemented. For details, please refer to [Implement offline push notification](./../Implement%20offline%20push%20notification.mdx).
+- iOS devices with iOS 11.0 or later.
+:::if{props.platform="Flutter"}
+<div>
+- Android device or emulator with Android 9.0 or above version (real device is recommended).
+</div>
+:::
+:::if{props.platform="RN"}
+<div>
+- Android device or emulator with Android 9.0 or above version (real device is recommended).
+</div>
+:::
+
+## Configure resourceID
+
+Contact ZEGOCLOUD technical support to configure the resourceID with `"mutable-content":1`.
+
+## Sender
+
+ZPNs supports two ways to send a photo attachment, [the SDK way](#sending-through-the-sdk) and [the server API way](#sending-through-a-server-api). The difference between them is that the SDK way can be used for all interfaces that use `ZIMPushConfig` and only supports iOS devices, while the server API is only applicable to messages pushed to all users on iOS and Google FCM devices.
+
+
+### Sending through the SDK
+
+1. Configure resourceID
+
+Contact ZEGOCLOUD technical support to configure the resourceID with `"mutable-content":1`.
+
+2. When sending offline push notifications with {getPlatformData(props, ZIMPushConfig)}, fill in the above `resourceID`.
+
+Take sending a text message in a one-to-one chat as an example:
+
+:::if{props.platform=undefined}
+```objc
+ZIMTextMessage *txtMsg = [[ZIMTextMessage alloc] init];
+txtMsg.message = @"Message content";
+
+ZIMMessageSendConfig *sentConfig = [[ZIMMessageSendConfig alloc] init];
+
+ZIMPushConfig *pushConfig = [[ZIMPushConfig alloc] init];
+pushConfig.title = @"Push title, generally the user's userName, corresponding to APNs title";
+pushConfig.content = @"Push content, generally the same as the message content, corresponding to APNs body";
+pushConfig.resourcesID = @"resourceID with "mutable-content":1";
+// Pass in the required image URL
+pushConfig.payload = @"{\"image_attachment\":\"URL of the image resource\"}"; // Customize the protocol in the payload, add a field to carry the image URL, and make it consistent with the protocol used by the app receiving end. Here, a JSON string is used.
+sentConfig.pushConfig = pushConfig;
+
+// Send a one-to-one text message
+[[ZIM getInstance] sendMessage:txtMsg toConversationID:@"toUserID" conversationType:ZIMConversationTypePeer config:sentConfig notification:nil callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {}];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = "Push title, usually the user's userName, corresponding to APNs title";
+pushConfig.content = "Push content, usually the same as the message content, corresponding to APNs body";
+pushConfig.resourcesID = "resourceID carrying mutable-content";
+pushConfig.payload = "{\"image_attachment\":\"URL of the image resource\"}";
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+var pushConfig = {
+    title: "Push title, usually the user's userName, corresponding to APNs title",
+    content: 'Push content, usually consistent with the message content, corresponding to APNs body',
+    payload: '{\"image_attachment\":\"URL of the image resource\"}',
+    resourcesID: 'resourceID carrying mutable-content'
+};
+```
+:::
+
+### Sending through a Server API
+
+Please refer to the relevant API documentation [Push message to all users](/zim-server/push-message-to-all-users) for details.
+
+## Receiver
+
+:::if{props.platform="Flutter"}
+<div>
+<Note title="Note">
+Only iOS devices requires corresponding processing on the receiving end to achieve receiving notifications with image attachments. There is no need for processing on the Android devices.
+</Note>
+</div>
+:::
+:::if{props.platform="RN"}
+<div>
+<Note title="Note">
+Only iOS requires corresponding processing on the receiving end to achieve receiving notifications with image attachments. There is no need for processing on the Android side.
+</Note>
+</div>
+:::
+
+<Steps>
+<Step title="Configure Capability">
+Open Xcode, select the target under TARGETS, and navigate to Signing & Capabilities > Capabilities. Enable Push Notification (for offline push notifications).
+</Step>
+<Step title="Set up Notification Service Extension">
+<Steps>
+<Step title="Add a Notification Service Extension to the Targets">
+
+    1. Click "File > New > Target..."
+
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_5.jpeg" /></Frame>
+
+    2. In the pop-up window, select "iOS > Notification Service Extension".
+    
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_6.jpeg" /></Frame>
+
+    3. Enter the Product Name and other information for the extension.
+
+        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_7.jpeg" /></Frame>
+
+    After creating the extension, a "xxxExtension" folder (xxx is the Product Name entered when adding the extension) will be generated in the project. You will need the NotificationService class file in it.
+</Step>
+<Step title="Configure the Capability for the newly added extension">
+    Select the extension target under TARGETS, and then select "Signing & Capabilities > Capabilities > Push Notification" to enable offline push notifications.
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_9.jpeg" /></Frame>
+</Step>
+<Step title="Adjust the minimum supported version of the newly added extension to iOS 11.0 or later">
+
+    If the iOS version of the device is lower than the requirement here, the extension will not take effect on this device.
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/ZPNS/pic_10.jpeg" /></Frame>
+</Step>
+</Steps>
+</Step>
+<Step title="Write the logic to add your photo attachment">
+In the NotificationService.m file in the "xxxExtension" folder (xxx is the Product Name entered when adding the extension), write the logic to add the photo attachment. The sample code is as follows:
+
+```objc
+//  NotificationService.m
+//  NotificationService
+
+#import "NotificationService.h"
+#import <Intents/Intents.h>
+
+@interface NotificationService ()
+
+@property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
+@property (nonatomic, strong) UNMutableNotificationContent *bestAttemptContent;
+
+@end
+
+@implementation NotificationService
+
+
+// When push interception is enabled, this method will be triggered when a push notification with "mutable-content":1 is received.
+- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request withContentHandler:(void (^)(UNNotificationContent * _Nonnull))contentHandler {
+    self.contentHandler = contentHandler;
+    self.bestAttemptContent = [request.content mutableCopy];
+    // Title
+    NSString *title = self.bestAttemptContent.title;
+    // Subtitle
+    NSString *subtitle = self.bestAttemptContent.subtitle;
+    // Body
+    NSString *body = self.bestAttemptContent.body;
+
+    // Extract the payload string carried by the push message
+    NSString *payload = [self.bestAttemptContent.userInfo objectForKey:@"payload"];
+
+    if(payload == nil){
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    
+    
+    // Parse the JSON string and convert it to an NSDictionary
+    NSData *jsonData = [payload dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *payload_json_map = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
+    if (error) {
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    
+    
+    NSString *imageAttachmentUrl = [payload_json_map objectForKey:@"image_attachment"];
+    if(imageAttachmentUrl == nil){
+        self.contentHandler(self.bestAttemptContent);
+        return;
+    }
+    
+    [self downloadWithURLString:imageAttachmentUrl completionHandle:^(NSData *data, NSURL *localURL) {
+        if(localURL){
+            UNNotificationAttachment * attachment = [UNNotificationAttachment attachmentWithIdentifier:@"myAttachment" URL:localURL options:nil error:nil];
+            self.bestAttemptContent.attachments = @[attachment];
+        }
+        contentHandler(self.bestAttemptContent);
+    }];
+    
+}
+
+// Method to download and save the image
+- (void)downloadWithURLString:(NSString *)urlStr completionHandle:(void(^)(NSData *data,NSURL *localURL))completionHandler{
+    __block NSData *data = nil;
+    NSURL *imageURL = [NSURL URLWithString:urlStr];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session downloadTaskWithURL:imageURL completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
+        NSURL *localURL;
+        if (error != nil) {
+            NSLog(@"%@", error.localizedDescription);
+        } else {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:@".png"]];
+            [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];
+
+            NSLog(@"localURL = %@", localURL);
+            data = [[NSData alloc] initWithContentsOfURL:localURL];
+        }
+        completionHandler(data,localURL);
+
+    }]resume];
+}
+
+@end
+```
+</Step>
+</Steps>

@@ -1,0 +1,62 @@
+---
+articleID: 17479
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const enableAGCMethod={
+    "Android,RN,iOS": <a href="@enableAGC" target="_blank">enableAGC</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/enableAGC.html" target="_blank">enableAGC</a>
+}
+
+# AGC
+
+
+The ZIM Audio SDK provides the automatic gain control (AGC) feature to flexibly adjust the volume of the microphone, improve sound quality and stability, and enhance user experience.
+
+<Warning title="Warning">
+To use this feature, contact ZEGOCLOUD Technical Support to enable it. Pro or Enterprise users can enable it free of charge.
+</Warning>
+
+## Prerequisites
+
+Before you implement the `AGC` feature, make sure that the following conditions are met:
+- You have implemented [Integrate the ZIM Audio SDK](./Integrate%20the%20ZIM%20Audio%20SDK.mdx).
+- You have implemented [Implement online authentication](./Implement%20online%20authentication.mdx).
+
+
+## Enable the feature
+
+After the initialization, call the {getPlatformData(props, enableAGCMethod)} method to enable the feature.
+
+:::if{props.platform=undefined}
+```java
+// Enable the AGC feature.
+ZIMAudio.getInstance().enableAGC(true);
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Enable the AGC feature.
+[[ZIMAudio sharedInstance] enableAGC:YES];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Enable the AGC feature.
+ZIMAudio.getInstance().enableAGC(true);
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+// Enable the AGC feature.
+ZIMAudio.getInstance().enableAGC(true);
+```
+:::
+
+After the feature is enabled, you can start recording audio files. For more information, see [Send and receive audio messages](./Send%20and%20receive%20audio%20messages.mdx#4-record-an-audio-file).
+
+<Note title="Note">
+If the AGC feature is enabled after recording starts, this feature does not take effect for this recording and takes effect for subsequent recordings only.
+</Note>

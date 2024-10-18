@@ -1,0 +1,165 @@
+---
+articleID: 16369
+---
+
+
+# Manage group members
+
+- - -
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group member management, allowing you to query the group member list and group member info, change the group owner, and more.
+
+
+<Warning title="Warning">
+
+- Before you use the following features, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](./Manage%20groups.mdx).
+</Warning>
+
+
+
+## Get group member list
+
+
+To know who is in the current group and get the group member list after login, call the [QueryGroupMemberList](@QueryGroupMemberList) method. 
+
+You will receive a notification through the callback [ZIMGroupMemberListQueriedCallback](@ZIMGroupMemberListQueriedCallback) after the query succeeds. 
+
+#### Sample code
+
+```c#
+// Group members query the member list of a group
+ZIMGroupMemberQueryConfig config = new ZIMGroupMemberQueryConfig();
+config.count = 100;
+config.nextFlag = 0;
+ZIM.GetInstance().QueryGroupMemberList("group_id", config, (string groupID, List<ZIMGroupMemberInfo> userList,
+    uint nextFlag, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of querying the group member list     
+    }
+);
+```
+
+
+## Get group member info
+
+To know the info of a specified member after joining a group, call the [QueryGroupMemberInfo](@QueryGroupMemberInfo) method.
+
+You will receive the specific info throught the callback [ZIMGroupMemberInfoQueriedCallback](@ZIMGroupMemberInfoQueriedCallback) after the query succeeds.
+
+
+#### Sample code
+
+```c#
+// Group members query the information of a specific member in a group
+ZIM.GetInstance().QueryGroupMemberInfo("user_id", "group_id", (string groupID, ZIMGroupMemberInfo userInfo, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of querying the group member information     
+    }
+);
+```
+
+
+
+## Set an alias
+
+
+To set an alias after joining a group, call the [SetGroupMemberNickname](@SetGroupMemberNickname) method.
+
+<Warning title="Warning">
+
+The group owner can set the alias of all group members. But the group members can only set their own aliases.
+</Warning>
+
+
+You will receive a notification through the callback [ZIMGroupMemberNicknameUpdatedCallback](@ZIMGroupMemberNicknameUpdatedCallback) after the alias is set successfully. 
+
+
+#### Sample code
+
+```c#
+// Group members set nickname. Note: The group owner can set the nickname for themselves and other members in the group; other group members can only set their own nickname in the group.
+ZIM.GetInstance().SetGroupMemberNickname("member_new_nick_name", "user_id", "group_id", (string groupID, string forUserID,
+    string nickname, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of setting the nickname
+    }
+);
+```
+
+## Set a role for a group member
+
+
+For a group owner to set a role for a group member, call the [SetGroupMemberRole](@SetGroupMemberRole) method. You can set the group member to a regular member or admin.
+
+<Warning title="Warning">
+
+Only the group owner can set roles for group members.
+</Warning>
+
+
+All group members will receive a notification through the callback [ZIMGroupMemberRoleUpdatedCallback](@ZIMGroupMemberRoleUpdatedCallback) after the role is set successfully.
+
+#### Sample code
+
+```c#
+// Group owner sets the role of other group members
+int role = ZIMGroupMemberRole.ZIMGroupMemberRoleOwner;
+ZIM.GetInstance().SetGroupMemberRole(role, "user_id", "group_id", (string groupID, string forUserID,
+    int role, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of setting the role of the group member
+    }
+);
+```
+
+
+## Transfer the group ownership
+
+
+For a group owner to transfer the group ownership, call the [TransferGroupOwner](@TransferGroupOwner) method with the `toUserID` (the ID of the member you want to transfer the group ownership to).
+
+<Warning title="Warning">
+
+- Only the group owner has permission to change the group owner.
+- The member you want to transfer the group ownership to must be in the group; otherwise, the operation fails.
+</Warning>
+
+All group members will receive a notification through the callback [ZIMGroupOwnerTransferredCallback](@ZIMGroupOwnerTransferredCallback) after the group owner is changed. 
+
+
+#### Sample code
+
+```c#
+// Transfer the group owner identity to another group member
+
+ZIM.GetInstance().TransferGroupOwner("new_group_owner_id", "group_id", (string groupID, string toUserID, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of transferring the group owner identity
+    }
+);
+```
+
+## Query the number of group members
+
+
+To query the number of group members after logging in and joining a group, call the [QueryGroupMemberCount](@QueryGroupMemberCount) method.
+
+You will receive the query results through the callback [ZIMGroupMemberCountQueriedCallback](@ZIMGroupMemberCountQueriedCallback).
+
+
+#### Sample code
+
+```c#
+// Group members query the number of members in the group
+ZIM.GetInstance().QueryGroupMemberCount("GROUP_ID", (string groupID, uint count, ZIMError errorInfo) =>
+    {
+        // Get the number of group members
+    }
+);
+```
