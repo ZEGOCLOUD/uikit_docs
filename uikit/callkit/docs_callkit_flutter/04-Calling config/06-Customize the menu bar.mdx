@@ -5,7 +5,7 @@
 
 The Call Kit (ZegoUIKitPrebuiltCall) allows you to configure the buttons of the menu bar. To remove the default buttons or add custom ones to the bottom menu bar, you can configure the `bottomMenuBarConfig`:
 
-(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBarConfig`.)
+(Similarly, to configure top menu bar buttons or add custom buttons to the top menu bar, use the `topMenuBar`.)
 
 1. `buttons`: Built-in buttons placed in the menu bar. By default, all buttons are displayed. If you need to hide some buttons, use this to configure them.
 
@@ -70,11 +70,11 @@ ZegoUIKitPrebuiltCallInvitationService().init(
           ),
       ],
       buttons: [
-        ZegoMenuBarButtonName.toggleCameraButton,
-        ZegoMenuBarButtonName.toggleMicrophoneButton,
-        ZegoMenuBarButtonName.switchAudioOutputButton,
-        ZegoMenuBarButtonName.hangUpButton,
-        ZegoMenuBarButtonName.switchCameraButton,
+        ZegoCallMenuBarButtonName.toggleCameraButton,
+        ZegoCallMenuBarButtonName.toggleMicrophoneButton,
+        ZegoCallMenuBarButtonName.switchAudioOutputButton,
+        ZegoCallMenuBarButtonName.hangUpButton,
+        ZegoCallMenuBarButtonName.switchCameraButton,
       ],
     );
     return config;
@@ -125,11 +125,11 @@ class CallPage extends StatelessWidget {
               ),
           ],
           buttons: [
-            ZegoMenuBarButtonName.toggleCameraButton,
-            ZegoMenuBarButtonName.toggleMicrophoneButton,
-            ZegoMenuBarButtonName.switchAudioOutputButton,
-            ZegoMenuBarButtonName.hangUpButton,
-            ZegoMenuBarButtonName.switchCameraButton,
+            ZegoCallMenuBarButtonName.toggleCameraButton,
+            ZegoCallMenuBarButtonName.toggleMicrophoneButton,
+            ZegoCallMenuBarButtonName.switchAudioOutputButton,
+            ZegoCallMenuBarButtonName.hangUpButton,
+            ZegoCallMenuBarButtonName.switchCameraButton,
           ],
         ),
     );
@@ -163,7 +163,7 @@ ZegoUIKitPrebuiltCallInvitationService().init(
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
     );
-    config.bottomMenuBarConfig.buttons.add(ZegoMenuBarButtonName.chatButton);
+    config.bottomMenuBarConfig.buttons.add(ZegoCallMenuBarButtonName.chatButton);
     return config;
   },
 );
@@ -185,7 +185,7 @@ class CallPage extends StatelessWidget {
 
       // Modify your custom configurations here.
       config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-        ..bottomMenuBarConfig.buttons.add(ZegoMenuBarButtonName.chatButton)
+        ..bottomMenuBarConfig.buttons.add(ZegoCallMenuBarButtonName.chatButton)
     );
   }
 }
@@ -244,16 +244,16 @@ ZegoUIKitPrebuiltCallInvitationService().init(
             ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
             : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
     );
-    config..topMenuBarConfig.height = 100
-      ..topMenuBarConfig.padding = const EdgeInsets.symmetric(
+    config..topMenuBar.height = 100
+      ..topMenuBar.padding = const EdgeInsets.symmetric(
         vertical: 10,
         horizontal: 0,
       )
-      ..topMenuBarConfig.margin = const EdgeInsets.symmetric(
+      ..topMenuBar.margin = const EdgeInsets.symmetric(
         vertical: 20,
         horizontal: 0,
       )
-      ..topMenuBarConfig.backgroundColor = Colors.red.withOpacity(0.2),
+      ..topMenuBar.backgroundColor = Colors.red.withOpacity(0.2),
     return config;
   },
 );
@@ -275,16 +275,16 @@ class CallPage extends StatelessWidget {
 
       // Modify your custom configurations here.
       config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-        ..topMenuBarConfig.height = 100
-        ..topMenuBarConfig.padding = const EdgeInsets.symmetric(
+        ..topMenuBar.height = 100
+        ..topMenuBar.padding = const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 0,
         )
-        ..topMenuBarConfig.margin = const EdgeInsets.symmetric(
+        ..topMenuBar.margin = const EdgeInsets.symmetric(
           vertical: 20,
           horizontal: 0,
         )
-        ..topMenuBarConfig.backgroundColor = Colors.red.withOpacity(0.2),
+        ..topMenuBar.backgroundColor = Colors.red.withOpacity(0.2),
     );
   }
 }

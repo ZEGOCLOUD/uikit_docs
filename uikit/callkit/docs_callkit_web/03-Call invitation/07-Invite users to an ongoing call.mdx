@@ -1,0 +1,77 @@
+# Invite users to an ongoing call
+
+By default, participants can only be set when the initiator sends the call invitation. However, Call Kit also supports you to invite users to an ongoing call.
+
+<Note title="Note">
+To use this feature, please upgrade Call Kit to v2.11.0 or later.
+</Note>
+
+## Enable the feature
+
+If you want to enable the feature to invite users to an ongoing call, you can set the `canInvitingInCalling` property to true.
+
+After the feature is enabled, if you want to permit all users in the call to invite other users, not just the initiator, you can set the `onlyInitiatorCanInvite` property to `false`.
+
+```typescript {2-7}
+zp.setCallInvitationConfig({
+    // Whether to enable the feature of inviting users to an ongoing call. 
+    // The default value is false
+    canInvitingInCalling: true,
+    // Whether only the call initiator can invite users to the ongoing call.
+    // The default value is false
+    onlyInitiatorCanInvite: true,
+})
+```
+
+After enabling this feature, you can find the "Invite members" button by clicking the "..." button on the bottom menu bar of the call page. At this point, you will also need to define the invitee list. For more details, please refer to [Define the invitee list
+](./07-Invite%20users%20to%20an%20ongoing%20call.mdx#define-the-invitee-list).
+
+<Frame width="auto" height="auto">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/a9c8c560d6.jpeg" alt="Call_button_en.jpeg" />
+</Frame>
+
+## Define the invitee list
+
+After enabling the feature, if you want to invite others during the call, you need to customize the invitee list first, so that you can invite users from the list.
+
+Before joining the room, you can define the list by calling `callingInvitationListConfig.waitingSelectUsers`.
+
+After joining the room, you can also update the list by calling the `updateCallingInvitationListConfig` interface.
+
+<Note title="Note">`waitingSelectUsers` can include up to 9 users.</Note>
+
+After completing the above definition, click the "Invite members" button, expand the "Invitees" sidebar, and you can view the list of invitees. Check the users you want to invite and send them an invitation.
+
+<Frame width="auto" height="auto">
+  <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/ce2a263595.jpeg" alt="TargetUserList_en1.jpeg"/>
+</Frame>
+
+
+```typescript {1-4,11-16,22-25}
+interface CallingInvitationListConfig {
+    waitingSelectUsers: ZegoUser[]; // user members waiting to be invited
+    defaultChecked?: boolean; // Whether to select the members to be invited by default. The default value is true
+}
+// before join room
+zp.setCallInvitationConfig({
+    onSetRoomConfigBeforeJoining() {
+        return {
+            // Should the invitation view be displayed on the inviter's interface? This view allows the user to cancel the invitation.
+            showWaitingCallAcceptAudioVideoView: true,
+            // Define the invitee list
+            // The list can include up to 9 users.
+            callingInvitationListConfig: {
+                waitingSelectUsers: [{userID:'123',userName:'U_123'}],
+                // Whether the users in the list are checked by default
+                defaultChecked: true,
+            },
+        }
+    }
+})
+
+// after join room
+zp.updateCallingInvitationListConfig({
+    waitingSelectUsers: [{userID:'456',userName:'U_456'}],
+    defaultChecked: true,
+})
+```

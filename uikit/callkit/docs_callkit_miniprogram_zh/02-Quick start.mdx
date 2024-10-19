@@ -18,7 +18,7 @@
 npm i @zegocloud/zego-uikit-prebuilt-call-mini-program --save
 ```
 
-## 实现流程
+## 使用步骤
 
 <Steps>
 <Step title="在您的服务端部署好 Token 生成服务。">
@@ -27,14 +27,14 @@ npm i @zegocloud/zego-uikit-prebuilt-call-mini-program --save
 <Step title="导入 UIKit 页面">
 您需要在项目根目录下创建一个名为 `ZegoUIKitPrebuiltCall` 的目录，然后将 UIKit 相关的页面拷贝至该目录中。可以参考以下命令操作：
 ```shell
-mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-prebuilt-call-mini-program/pages/ ./ZegoUIKitPrebuiltCall/pages/
+mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-prebuilt-call-mini-program/src/ ./ZegoUIKitPrebuiltCall/src/
 ```
 </Step>
 <Step title="在 uni-app 的 pages.json 文件中添加一个跳转至 UIKit 的页面配置项。">
 其中 path 指向上一个步骤中从 SDK 拷贝出来的页面路径。
-```js
+```js pages.json
 {
-    "path": "ZegoUIKitPrebuiltCall/pages/call/SingleCall",
+    "path": "ZegoUIKitPrebuiltCall/src/pages/call/SingleCall",
     "style": {
         "navigationBarTitleText": "Call"
     }
@@ -45,7 +45,7 @@ mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-pre
 
 在您的其他页面中，参考以下代码调用 `ZegoUIKitPrebuiltCall.joinRoom` 方法，然后运行。当点击“拨打电话”按钮后，就会跳转至通话页面。
 
-```js YourPage.vue
+```js YourPage.vue {18,23}
 <template>
    <view class="button-container">
         <button @tap="startCall" >
@@ -58,18 +58,17 @@ import { ZegoUIKitPrebuiltCall } from '@zegocloud/zego-uikit-prebuilt-call-mini-
 
 const appID = 0; // 您从控制台获取的 AppID
 const server = ""; // 您从控制台获取的 Server 地址
+const token = ""; // 您从服务端生成的 Token
+const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
+const userName = "user1_name"; // userName 用户名
 
 onMounted(() => {
-	ZegoUIKitPrebuiltCall.init(appID, server);
+	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token);
 })
 
 function startCall() {
-    const token = ""; // 您从服务端生成的 Token
-    const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
-    const userName = "user1_name"; // userName 用户名
     const callID = "call"; // callID，通话ID，通话双方需输入同一个ID
-    const config = {}; // 房间配置
-    ZegoUIKitPrebuiltCall.joinRoom(token, userID, userName, callID, config);
+    ZegoUIKitPrebuiltCall.joinRoom(callID);
 }
 </script>
 ```
@@ -80,6 +79,6 @@ function startCall() {
 至此，您已经完成了所有步骤！运行后的效果如下：
 |                                                                                                                                                                                                          |                                                                                                                                                                                                                 |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/12765df983.jpeg" alt="miniprogram_your_page.jpeg"/></Frame> | <Frame width="256" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/efee65a3e8.jpeg" alt="miniprogram_single_call_page.jpeg"/></Frame> |
+| <Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/12765df983.jpeg" alt="miniprogram_your_page.jpeg"/></Frame> | <Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/efee65a3e8.jpeg" alt="miniprogram_single_call_page.jpeg"/></Frame> |
 
 

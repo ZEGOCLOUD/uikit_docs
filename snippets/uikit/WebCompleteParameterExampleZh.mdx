@@ -77,6 +77,16 @@ declare interface ZegoCloudRoomConfig {
     showAvatarWhenCameraOff?: boolean; // 摄像头关闭时是否显示用户头像，默认true
   }[];
   backgroundUrl?: string; // 背景图
+  liveNotStartedTextForAudience?: string; // 自定义观众端直播开始前展示的文本
+  startLiveButtonText?: string; // 自定义开始直播按钮文本
+  // 通话中邀请用户时，邀请用户窗口将出现在邀请方，如果您想隐藏此视图，请将其设置为false。默认展示。
+  // 您可以在此视图中取消对此用户的邀请。
+  showWaitingCallAcceptAudioVideoView?: boolean;
+  // 通话中呼叫邀请列表配置
+  callingInvitationListConfig?: {
+    waitingSelectUsers: ZegoUser[]; // 等待选择的成员列表
+    defaultChecked?: boolean; // 是否默认选中， 默认true
+  };
 
   // 1.4 离开房间页面
   showLeavingView?: boolean; // 是否显示离开房间页面。默认显示。

@@ -1,3 +1,6 @@
+import UIKIT_FLUTTER_ANDROID_SCREEN_SHARING_CONFIG from "/snippets/uikit/UIKIT_FLUTTER_ANDROID_SCREEN_SHARING_CONFIG-en.mdx";
+
+
 # Screen sharing
 
 ## What's screen sharing?
@@ -29,7 +32,7 @@ Meanwhile, the full-screen mode button is customizable, you can decide the way h
 ### Add/customize the buttons
 
 
-To start the screen sharing, add the `ZegoMenuBarButtonName.toggleScreenSharingButton` config to the `bottomMenuBarConfig` to let the screen sharing button show.
+To start the screen sharing, add the `ZegoCallMenuBarButtonName.toggleScreenSharingButton` config to the `bottomMenuBarConfig` to let the screen sharing button show.
 
 ```dart
 class CallPage extends StatelessWidget {
@@ -52,10 +55,10 @@ class CallPage extends StatelessWidget {
                 showNewScreenSharingViewInFullscreenMode:
                     false) // Set the layout to gallery mode. and configure the [showNewScreenSharingViewInFullscreenMode] and [showScreenSharingFullscreenModeToggleButtonRules].
             ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(buttons: [
-              ZegoMenuBarButtonName.toggleCameraButton,
-              ZegoMenuBarButtonName.toggleMicrophoneButton,
-              ZegoMenuBarButtonName.hangUpButton,
-              ZegoMenuBarButtonName.toggleScreenSharingButton
+              ZegoCallMenuBarButtonName.toggleCameraButton,
+              ZegoCallMenuBarButtonName.toggleMicrophoneButton,
+              ZegoCallMenuBarButtonName.hangUpButton,
+              ZegoCallMenuBarButtonName.toggleScreenSharingButton
             ]) // Add a screen sharing toggle button.
           ),
     );
@@ -109,6 +112,10 @@ class _CallPageState extends State {
   }
 }
 ```
+
+## Add the screen sharing permission (for android only)
+
+<UIKIT_FLUTTER_ANDROID_SCREEN_SHARING_CONFIG />
 
 ### Create a Broadcast Upload Extension (for iOS only)
 
@@ -220,6 +227,30 @@ class SampleHandler: RPBroadcastSampleHandler, ZegoReplayKitExtHandler {
         @unknown default:
             // Handle other sample buffer types
             fatalError("Unknown type of sample buffer")
+        }
+    }
+
+    func broadcastFinished(_ broadcast: ZegoReplayKitExt, reason: ZegoReplayKitExtReason) {
+        switch reason {
+        case .hostStop:
+            let userInfo = [NSLocalizedDescriptionKey: "Host app stopped screen capture"]
+            let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: userInfo)
+            finishBroadcastWithError(error)
+
+        case .connectFail:
+            let userInfo = [NSLocalizedDescriptionKey: "Connect host app failed; need to startScreenCapture in host app"]
+            let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: userInfo)
+            finishBroadcastWithError(error)
+
+        case .disconnect:
+            let userInfo = [NSLocalizedDescriptionKey: "Disconnected from host app"]
+            let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: userInfo)
+            finishBroadcastWithError(error)
+
+        default:
+            let userInfo = [NSLocalizedDescriptionKey: "Unknown reason for broadcast finish"]
+            let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: userInfo)
+            finishBroadcastWithError(error)
         }
     }
 }
