@@ -1,0 +1,233 @@
+---
+articleID: 14252
+---
+
+
+# Implement offline push notification
+
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications. 
+That is, in one-on-one chat or group chat, if your app is frozen, killed by the system or a user in the backend, and get disconnected with the ZEGOCLOUD service backend due to timeout, with the offline push notification feature, the ZEGOCLOUD backend will send offline push notifications to the target users.
+
+You can integrate the ZPNs SDK and use it together with the ZIM SDK to implement the offline push notification feature.
+
+## Solution
+
+The solution we provide is as follows: 
+
+
+1. The receiver (the client user that receives the offline push notifications) enables the APNs channel, and sends a request to get the DeviceToken from the APNs Server. 
+2. The APNs Server returns the DeviceToken. 
+3. The receiver generates a PushID, and sends it to the ZIM Server for binding the client user and PushID.
+    
+    If you use the ZPNs SDK together with the ZIM SDK, the SDK will automatically bind the client user to PushID, you don't need to do other operations; If you use the ZPNs SDK alone, you will need to connect to the ZPNs server and implement the binding logic. **Note: Before switching the userID on the same device, remember to call the [`logout`\|_blank](@logout) method to remove the PushID that userID is binding.**
+
+4. The sender starts sending messages, and the messages are stored in the ZIM Server.
+5. The ZIM Server checks whether the receiver is online. 
+6. If the receiver is offline, then the messages will be transferred to the ZPNs Server.
+7. The ZPNs Server sends offline push notifications to the APNs Server.
+8. The APNs Server pushes the offline push notifications to the receiver. The receiver receives the offline messages when gets back online. 
+
+## Get the APNs certificate
+
+1. Go to the [Apple Developer Account](https://developer.apple.com/account/#/overview/) to get the APNs push notification service certificate.
+2. Double-click the `.cer` file you get, and export it to `.p12` file in Keychain Access.
+3. Contact ZEGOCLOUD Technical Support for further configuration.
+
+## Integrate the ZPNs SDK 
+   
+1. Download the latest version of the [ZPNs SDK](./../Client%20SDKs/SDK%20downloads.mdx).
+
+2. Extract the downloaded SDK package to the `libs` folder.
+
+3. Select the target project, click `General > Frameworks, Libraries, and Embedded Content` tab, add the `ZIM.xcframework`, and then set the **Embed** to **Embed & Sign**.
+
+
+## Enable the push notifications
+
+Enable the Push Notifications for the iOS device (which can only be running on a real device):
+
+In Xcode, select the target object, click the **Signing & Capabilities > Capabilities > Push Notification**, select the **Capability**, and then enable the **Push Notifications**. 
+
+<Frame width="512" height="auto" caption="">
+  <img src="http://doc.oa.zego.im/Pics/ZIM/offline_push_enable_pushNotification.png" />
+</Frame>
+
+## Get the DeviceToken
+
+The DeviceToken is required for the ZIM SDK to configure and implement the offline push notification feature.
+
+
+<Note title="Note">
+- DeviceToken is the unique identifier for each app on an iOS device.
+- APNs (Apple Push Notification Service, Apple Push Server) is the core component of Apple push service.
+</Note>
+
+
+### Import the header file
+
+Import the header file `AppDelegate.m`.
+
+```objc
+import <ZPNs/ZPNs.h>
+```
+
+### Apply for the push permission of the App 
+
+You need to call the `requestAuthorizationWithOptions` official method to apply for the push permission of the App; That is, when sending offline messages, a pop-up window on the mobile device prompts the user whether to agree to push.
+
+```objc
+UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    //Request push notification permission (mark, sound, popbox).
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge|UNAuthorizationOptionSound|UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if(granted){
+            NSLog(@"Notifications are allowed to be pushed.");
+        }
+    }];
+    center.delegate = [ZPNs shared];
+```
+
+### Get APNs's DeviceToken
+
+1. In the `AppDelegate.m` file, you will need to implement the following callback for receiving the deviceToken.
+
+```objc
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+
+}
+```
+
+2. Call the [`registerAPNs`](@registerAPNs) method to set up the APNs. You will receive the DeviceToken through the callback `didRegisterForRemoteNotificationsWithDeviceToken` when APNs is set successfully. 
+```oc
+[[ZPNs shared] registerAPNs];
+```
+
+### Get the DeviceToken using the ZPNs SDK
+
+In the callback `didRegisterForRemoteNotificationsWithDeviceToken`, you will need to call the [`setDeviceToken`](@setDeviceToken) method to get the DeviceToken.
+
+```objc
+// Get the DeviceToken using the ZPNs SDK
+- (void)application:(UIApplication *)application
+didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+/// Required - Used to get DeviceToken.
+//isProduct indicates whether the environment is a production environment.
+  [[ZPNs shared] setDeviceToken:devicetoken isProduct:false];
+}
+```
+
+After the ZPNs SDK obtains the DeviceToken, it will transfer the DeviceToken to the ZIM SDK, and the ZIM SDK will perform corresponding offline push processing logic based on the DeviceToken.
+
+
+### Get the pushID through onRegistered
+
+```objc
+- (void)onRegistered:(NSString *)Pushid{
+
+}
+```
+
+## Implement the offline push notification feature with the ZIM SDK 
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications for one-on-one messages, group messages and call invitations.
+
+<Warning title="Warning">
+Before implementing offline push, you should:
+- refer to [Send and receive messages](./../Send%20and%20receive%20messages.mdx) to send one-on-one/group chat messages.
+- refer to [Call invitation](./Call%20invitation%20signaling.mdx) to send and receive call invitations.
+</Warning>
+
+### Send one-on-one messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```objc
+    ZIMPushConfig *pushConfig = [ZIMPushConfig alloc] init];
+    pushConfig.title = @"offline push notification title";
+    pushConfig.content = @"offline push notification content";
+    pushConfig.payload = @"Customizable field, optional.";
+    pushConfig.resourcesID = @"resourcesID";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object.  
+
+    ```objc
+    ZIMMessageSendConfig *sendConfig = [ZIMMessageSendConfig alloc] init];
+    sendConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendPeerMessage`](@sendPeerMessage) method with the `sendConfig` to send one-to-one messages. 
+
+    ```objc
+    [zim sendPeerMessage:textMessage toUserID:@"toUserID" config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+        
+    }];
+    ```
+4. The receiver will receive the offline messages when gets back online. 
+
+
+### Send group messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```objc
+    ZIMPushConfig *pushConfig = [ZIMPushConfig alloc] init];
+    pushConfig.title = @"offline push notification title;
+    pushConfig.content = @"offline push notification content";
+    pushConfig.payload = @"Customizable field, optional.";
+    pushConfig.resourcesID = @"resourcesID";
+    ```
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object.  
+
+    ```objc
+    ZIMMessageSendConfig *sendConfig = [ZIMMessageSendConfig alloc] init];
+    sendConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`sendGroupMessage`](@sendPeerMessage) method with the `sendConfig` to send group messages. 
+
+    ```objc
+    [zim sendGroupMessage:textMessage toUserID:@"myGroupID" config:sendConfig callback:^(ZIMMessage * _Nonnull message, ZIMError * _Nonnull errorInfo) {
+
+    }];
+    ```
+4. The group members who are offline can receive offline messages when getting back online in the group.
+
+### Send call invitations with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [`ZIMPushConfig`](@-ZIMPushConfig) object. 
+
+    ```objc
+    ZIMPushConfig *pushConfig = [ZIMPushConfig alloc] init];
+    pushConfig.title = @"offline push notification title";
+    pushConfig.content = @"offline push notification content";
+    pushConfig.payload = @"Customizable field, optional";
+    pushConfig.resourcesID = @"resourceID=";
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMCallInviteConfig`](@-ZIMCallInviteConfig) object.  
+
+    ```objc
+    ZIMCallInviteConfig *callInviteConfig = [ZIMMessageSendConfig alloc] init];
+    callInviteConfig.pushConfig = pushConfig;
+    ```
+
+3. The message sender calls the [`callInviteWithInvitees`](@callInviteWithInvitees) method with the `callInviteConfig` to send group messages. 
+
+    ```objc
+    [[ZIM getInstance] callInviteWithInvitees:@[@"userA",@"userB"] config: callInviteConfig callback:^(NSString * _Nonnull callID, ZIMCallInvitationSentInfo * _Nonnull info, ZIMError * _Nonnull errorInfo) {
+        
+    }];
+    ```
+
+4. The invitees who are offline can receive an offline push notification. Once they come online, if the call invitation is still ongoing, they will receive the callback [callInvitationReceived\|_blank](/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-call-invitation-received-call-id).
+
+## Unregister Offline Push
+
+If developers no longer want a certain device to receive offline push notifications, they can unregister it by calling the [unregisterAPNs](@unregisterAPNs) interface. After unregistering, both alert push and silent push will no longer take effect.
+
+```objc
+[[ZPNs shared] unregisterAPNs];
+```

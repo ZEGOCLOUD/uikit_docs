@@ -1,0 +1,239 @@
+---
+articleID: 17429
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const exportLocalMessagesMap = {
+  'Android': <a href='@exportLocalMessages' target='_blank'>exportLocalMessages</a>,
+  'iOS': <a href='@exportLocalMessagesToFolderPath' target='_blank'>exportLocalMessagesToFolderPath</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/exportLocalMessages.html' target='_blank'>exportLocalMessages</a>,
+}
+export const ZIMMessageExportingProgressMap = {
+  'Android': <a href='@-ZIMMessageExportingProgress' target='_blank'>ZIMMessageExportingProgress</a>,
+  'window,iOS': <a href='@ZIMMessageExportingProgress' target='_blank'>ZIMMessageExportingProgress</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageExportingProgress.html' target='_blank'>ZIMMessageExportingProgress</a>,
+}
+export const ZIMMessageExportedCallbackMap = {
+  'Android': <a href='@-ZIMMessageExportedCallback' target='_blank'>ZIMMessageExportedCallback</a>,
+  'window,iOS': <a href='@ZIMMessageExportedCallback' target='_blank'>ZIMMessageExportedCallback</a>,
+}
+export const ZIMMessageImportedCallbackMap = {
+  'Android': <a href='@-ZIMMessageImportedCallback' target='_blank'>ZIMMessageImportedCallback</a>,
+  'window,iOS': <a href='@ZIMMessageImportedCallback' target='_blank'>ZIMMessageImportedCallback</a>,
+}
+export const importLocalMessagesMap = {
+  'Android': <a href='@importLocalMessages' target='_blank'>importLocalMessages</a>,
+  'iOS': <a href='@importLocalMessagesToFolderPath' target='_blank'>importLocalMessagesToFolderPath</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/importLocalMessages.html' target='_blank'>importLocalMessages</a>,
+}
+export const ZIMMessageImportingProgressMap = {
+  'Android': <a href='@-ZIMMessageImportingProgress' target='_blank'>ZIMMessageImportingProgress</a>,
+  'window,iOS': <a href='@ZIMMessageImportingProgress' target='_blank'>ZIMMessageImportingProgress</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageImportingProgress.html' target='_blank'>ZIMMessageImportingProgress</a>,
+}
+
+
+
+# Export and import messages
+
+- - -
+
+## Overview
+
+With the ZIM SDK, you can export the local chat history (one-to-one messages and group messages) of the current user's client as a backup. This backup can be used to migrate chat history when changing devices or to restore deleted messages.
+
+
+## Export messages
+
+
+After creating a ZIM object and logging in, you can call the {getPlatformData(props,exportLocalMessagesMap)}  interface by providing an absolute path to save the chat messages of the current user to that directory.
+
+The progress of the export will be returned through the {getPlatformData(props,ZIMMessageExportingProgressMap)} callback interface.
+
+:::if{props.platform=undefined}
+The result of the export operation will be returned through the {getPlatformData(props,ZIMMessageExportedCallbackMap)} callback interface.
+:::
+:::if{props.platform="window"}
+The result of the export operation will be returned through the {getPlatformData(props,ZIMMessageExportedCallbackMap)} callback interface.
+:::
+:::if{props.platform="iOS"}
+The result of the export operation will be returned through the {getPlatformData(props,ZIMMessageExportedCallbackMap)} callback interface.
+:::
+
+<Note title="Note">
+
+The exported message file name for this interface is zim_backup_msg_text. If the same path is provided in multiple calls to this interface, the ZIM SDK will automatically rename the old zim_backup_msg_text file to ensure that the latest exported file retains the name zim_backup_msg_text.
+
+</Note>
+
+:::if{props.platform=undefined}
+```java
+// Export messages
+ZIMMessageExportConfig config = new ZIMMessageExportConfig();
+zim.exportLocalMessages("folderPath", config, new ZIMMessageExportedCallback() {
+    @Override
+    public void onMessageExportingProgress(long exportedMessageCount, long totalMessageCount) {
+          // Export progress callback
+    }
+    @Override
+    public void onMessageExported(ZIMError errorInfo) {
+         //  Export progress callback
+    }
+ });
+```
+
+:::
+
+:::if{props.platform="Flutter"}
+```dart
+// Export messages
+try {
+    ZIMMessageExportConfig config = ZIMMessageExportConfig();
+    await ZIM.getInstance()!.exportLocalMessages('folderPath', config, (exportedMessageCount, totalMessageCount) {
+      // Export progress callback
+    });
+      // Export successful
+} on PlatformException catch (onError) {
+    onError.code;
+    onError.message;
+}
+```
+:::
+
+:::if{props.platform="RN"}
+```javascript
+// Export progress callback
+var progress = (exportedMessageCount, totalMessageCount) => {};
+// Export messages
+var folderPath = '/sdcard/xxxx'; // Absolute path of the local file directory
+zim.exportLocalMessages(folderPath, {}, progress)
+    .then(function () {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+
+:::if{props.platform="window"}
+```cpp
+// Export messages
+zim::ZIMMessageExportConfig config;
+zim::ZIM::getInstance()->exportLocalMessages("folderPath", config, [](unsigned long long exportedMessageCount,
+    unsigned long long totalMessageCount) {
+        // Export progress callback
+    }, [](const zim::ZIMError& errorInfo) {
+        // Export progress callback
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Export messages
+ZIMMessageExportConfig *config = [[ZIMMessageExportConfig alloc] init];
+[self.zim exportLocalMessagesToFolderPath:@"folderPath" config: config 
+                                 progress:^(unsigned long long exportedMessageCount,
+                                            unsigned long long totalMessageCount) {
+                                                // Export progress callback
+                                } callback:^(ZIMError *errorInfo) {
+                                                // Export progress callback
+}];
+```
+:::
+
+## Import messages
+
+After creating a ZIM object and logging in, you can call the {getPlatformData(props,importLocalMessagesMap)}  interface by providing the absolute path of the directory where the backup file is located. This will import the messages.
+
+By default, the ZIM SDK reads the file with the name "zim_backup_msg_text" in the specified directory. If there are multiple backups in that path, please ensure that the file you want to import is named "zim_backup_msg_text".
+
+
+
+The progress of the import will be returned through the {getPlatformData(props,ZIMMessageImportingProgressMap)} callback interface.
+
+:::if{props.platform=undefined}
+The result of the import operation will be returned through the {getPlatformData(props,ZIMMessageImportedCallbackMap)} interface.
+:::
+:::if{props.platform="window"}
+The result of the import operation will be returned through the {getPlatformData(props,ZIMMessageImportedCallbackMap)} interface.
+:::
+:::if{props.platform="iOS"}
+The result of the import operation will be returned through the {getPlatformData(props,ZIMMessageImportedCallbackMap)} interface.
+:::
+
+
+:::if{props.platform=undefined}
+```java
+// Import messages
+ZIMMessageImportConfig config = new ZIMMessageImportConfig();
+zim.importLocalMessages("folderPath", config, new ZIMMessageImportedCallback() {
+    @Override
+    public void onMessageImportingProgress(long importedMessageCount, long totalMessageCount) {
+          // Import progress callback 
+    }
+    @Override
+    public void onMessageImported(ZIMError errorInfo) {
+         // Import result callback
+    }
+
+ });
+```
+
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Import messages
+try {
+  ZIMMessageImportConfig config = ZIMMessageImportConfig();
+  var result = await ZIM.getInstance()!.importLocalMessages('folderPath', config, (importedMessageCount, totalMessageCount) {
+    // Import progress callback
+  });
+  // result is the import result callback
+} on PlatformException catch (onError) {
+  onError.code;
+  onError.message;
+}
+```
+
+:::
+:::if{props.platform="RN"}
+```javascript
+// Import progress callback
+var progress = (importedMessageCount, totalMessageCount) => {};
+// Import messages
+var folderPath = '/sdcard/xxxx'; // Absolute path of the local file directory
+zim.importLocalMessages(folderPath, {}, progress)
+    .then(function () {
+        // Operation successful
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Import messages
+zim::ZIMMessageImportConfig config;
+zim::ZIM::getInstance()->importLocalMessages("folderPath", config, [](unsigned long long importedMessageCount,
+    unsigned long long totalMessageCount) {
+        //Import progress callback
+    }, [](const zim::ZIMError& errorInfo) {
+        //Import result callback
+    });
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Import messages
+ZIMMessageImportConfig *config = [[ZIMMessageImportConfig alloc] init];
+[self.zim importLocalMessagesToFolderPath:@"folderPath" config: config 
+                                 progress:^(unsigned long long importedMessageCount,
+                                            unsigned long long totalMessageCount) {
+                                                //Import progress callback
+                                } callback:^(ZIMError *errorInfo) {
+                                                //Import result callback
+```
+:::

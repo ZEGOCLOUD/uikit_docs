@@ -1,0 +1,95 @@
+---
+articleID: 17479
+---
+
+
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+
+export const initMethod={
+    "Android,RN": <a href="@init" target="_blank">init</a>,
+    "iOS": <a href="@initWithLicense" target="_blank">initWithLicense</a>,
+    "Flutter": <a href="https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/init.html" target="_blank">init</a>
+}
+
+# Implement online authentication
+
+You need a license to use the advanced features of the ZIM Audio SDK. We recommend that you obtain and verify the license through online authentication.
+
+Online authentication refers to the method of accessing the ZIM server through the developer server, applying for authentication documents, and performing network verification.
+
+After obtaining the license, the client needs to be authenticated by the ZIM Audio SDK to use its advanced features.
+
+
+
+<Warning title="Warning">
+
+We recommend that you regularly pull and update online license data at the business layer to avoid issues such as local license cache expiration and authentication failure.
+
+</Warning>
+
+## How it works
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/17478.png" /></Frame>
+
+
+
+1. The client server sends a request to the ZIM server by using the public gateway URL. The ZIM server returns the license to the client server.
+2. The client server sends the license to the client. <strong>(You need to implement this feature.)</strong>
+3. The client passes in the obtained license and initializes the ZIM Audio SDK.
+4. The advanced features of the ZIM Audio SDK are enabled for audio processing.
+
+## Usage steps
+
+### 1. Request a license from the ZIM server
+
+The client server builds a message body and sends a request to the ZIM server by using the public gateway URL. For more information about the message body, see the [Request method and endpoint](/zim-server/zim-audio/obtain-a-license#request-method-and-endpoint), [Request parameters](/zim-server/zim-audio/obtain-a-license#request-parameters), and [Sample request](/zim-server/zim-audio/obtain-a-license#sample-request) sections in the Server APIs topic.
+
+### 2. The ZIM server returns the license
+
+For more information about the returned message, see the [Response parameters](/zim-server/zim-audio/obtain-a-license#response-parameters) and [Sample response](/zim-server/zim-audio/obtain-a-license#sample-response) sections in the Server APIs topic.
+
+### 3. Pass in the license and create an object.
+
+Pass in the obtained license to the ZIM Audio SDK to activate functional modules.
+
+You need to obtain the license content from the `License` field in the `Data` field and call the {getPlatformData(props, initMethod)} method to pass in the license and initialize the ZIM Audio SDK.
+
+:::if{props.platform=undefined}
+```java
+// Pass in the license and initialize the ZIM Audio SDK.
+String license = "";
+ZIMAudio.getInstance().init(application, license);
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+// Pass in the license and initialize the ZIM Audio SDK.
+[[ZIMAudio sharedInstance] initWithLicense:@""];
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Pass in the license and initialize the ZIM Audio SDK.
+String license = '';
+ZIMAudio.getInstance().init(license);
+```
+:::
+:::if{props.platform="RN"}
+```js
+// Pass in the license and initialize the ZIM Audio SDK.
+String license = '';
+ZIMAudio.getInstance().init(license);
+```
+:::
+
+
+
+
+
+
+
+
+
+
+

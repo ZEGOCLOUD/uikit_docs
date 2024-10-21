@@ -1,0 +1,35 @@
+---
+articleID: 16877
+---
+# ZIM upgrade Guide
+
+- - -
+
+
+This article introduces some instructions and precautions when upgrading the ZIM Unity3D SDK.
+
+## 2.10.0 upgrade guide
+
+
+<Warning title="Warning">
+
+Please note that starting from version 2.10.0, the following interfaces have significant changes, so please read the following guide when upgrading from older versions to version 2.10.0.
+</Warning>
+
+#### 1. OnCallInvitationTimeout method changed
+
+
+[OnCallInvitationTimeout](@OnCallInvitationTimeout) added the new parameter [ZIMCallInvitationTimeoutInfo](@-ZIMCallInvitationTimeoutInfo). Developers need to supplement this parameter when calling the callback, otherwise the code cannot be compiled.
+
+<CodeGroup>
+```c# title="2.10.0 version usage"#
+  ZIM.GetInstance().onCallInvitationTimeout += (ZIM zim, ZIMCallInvitationTimeoutInfo info, string callID) => {
+
+  };
+  ```
+```c# title="old version usage"#
+  ZIM.GetInstance().onCallInvitationTimeout += (ZIM zim, string callID) => {
+
+  };
+  ```
+</CodeGroup>

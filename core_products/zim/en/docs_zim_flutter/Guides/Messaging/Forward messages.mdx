@@ -1,0 +1,112 @@
+---
+articleID: 14558
+---
+
+
+# Get message history  
+
+- - -
+
+## Function overview
+
+<Note title="Note">
+
+This document applies to the following platforms: iOS, Android, macOS, Windows and Web.
+</Note>
+
+This document describes how to query the message history and specific messages of one-to-one, group, and in-room chats with the ZIM SDK.
+
+<Note title="Note">
+
+This feature allows you to get historical messages of types **other than command messages and pop-up messages**.
+</Note>
+
+
+## Get the full message history
+
+After logging in to ZIM SDK, users can use the [queryHistoryMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html) method to retrieve the message history of `one-to-one chats`, `group chats`, and `rooms chats` by providing the parameters conversationID and config.
+
+Taking the example of client A retrieving the conversation history of a one-on-one chat with client B:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/queryHistoryMessage.png" /></Frame>
+
+1. Both client A and client B log in to the ZIM SDK and send/receive one-on-one chat messages to each other.
+2. When client A needs to retrieve the conversation history with B:
+    1. Client A first logs in to the ZIM SDK.
+    2. Client A calls the [queryHistoryMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html) interface, passing the parameters `conversationID` and `config`, to start retrieving the history messages.
+    3. The retrieved results will be asynchronously returned to client A through the [ZIMMessageQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageQueriedResult-class.html) type.
+
+
+<CodeGroup>
+```dart title="Sample code"
+// 1. Create a ZIM object and pass in the AppID
+ZIMAppConfig appConfig = ZIMAppConfig();
+appConfig.appID = appID;
+appConfig.appSign = appSign;
+ZIM.create(appConfig);
+
+// 2. Log in
+ try{
+    ZIMLoginConfig loginConfig = ZIMLoginConfig();
+    // The user nickname, leave it blank if you don't want to modify the user nickname
+    loginConfig.userName = 'userName';
+    // If you use token for login authentication, please fill in this parameter; otherwise, no need to fill in
+    loginConfig.token = '';
+    // Whether this login is an offline login, please refer to the offline login documentation for details
+    loginConfig.isOfflineLogin = true;
+    await ZIM.getInstance()?.login('zego', loginConfig);
+    // Login successful, write the business logic for successful login
+  } on PlatformException catch(onError){
+    // Login failed
+    // Error code for login failure, please refer to the error code table in the integration documentation for handling
+    onError.code;
+    // Error message for login failure
+    onError.message;
+  }
+
+
+// 3. Retrieve the historical messages of a one-on-one chat
+// Retrieve the conversation history messages from the back to the front, retrieve 30 messages each time
+  ZIMMessageQueryConfig config = ZIMMessageQueryConfig();
+// For the first retrieval, nextMessage is null
+  config.nextMessage = null;
+  config.count = 30;
+  config.reverse = true;
+  await ZIM
+      .getInstance()!
+      .queryHistoryMessage('conversationID', ZIMConversationType.peer, config)
+      .then((value) => {
+            // Triggered when successful
+            // Developers can listen to this callback to obtain the retrieved message list.
+            // When the finger scrolls down to the topmost message on the screen, retrieve earlier messages
+            // Save the frontmost message as the anchor for the messages
+            if (fetchMore) {
+              // For subsequent pagination retrieval, nextMessage is the first message in the currently retrieved message list
+              config.nextMessage = value.messageList[0],
+              // Recursive retrieval
+            }
+          })
+      .catchError((onError) {
+    // Triggered when failed
+  });
+```
+</CodeGroup>
+## Get specific messages
+
+ZIM supports querying specific messages in a **one-to-one** or **group** conversation based on `messageSeq` (the sequence number of the message in the conversation) list (up to a maximum of 10) by calling [queryMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessages.html).
+
+This interface is used when you only know the `messageSeq` of a message and do not know the complete structure of the message. For example, if a message in a conversation replies to a historical message, members of the conversation can use the `repliedInfo.messageSeq` of the reply to obtain the `messageSeq` of the historical message. At this time, you can call this interface to obtain the complete structure of the historical message.
+
+```dart
+List<int> messageSeqs = []; // The maximum length is 10
+String conversationID = "YOUR_CONVERSATION_ID";
+ZIMConversationType conversationType = ZIMConversationType.peer; // Conversation type: one-to-one: ZIMConversationTypePeer, group: ZIMConversationTypeGroup
+
+ZIM.getInstance()?.queryMessages(messageSeqs, conversationID, conversationType).then((value) {
+    // Query successful
+}).catchError((onError){
+    if(onError is PlatformException){
+        // Query failed
+    }
+});
+```

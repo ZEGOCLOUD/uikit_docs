@@ -1,0 +1,75 @@
+---
+articleID: 17422
+---
+
+# Set custom push rules
+
+import Content from '/core_products/zim/en/snippets/CustomPushRulesIntro.mdx'
+
+<Content />
+
+
+## Procedure
+
+### Notification for offline push rule update
+
+
+To receive the notification for custom rule update, register the [ZIMEventHandler](@-ZIMEventHandler) delegate callback and listen for  [onUserRuleUpdated](@onUserRuleUpdated).
+
+```java
+// Listen for custom rules.
+@Override
+public void onUserRuleUpdated(ZIM zim, ZIMUserRule rule) {
+    // Offline push rules.
+    userRule.offlinePushRule;
+}
+```
+
+### Set offline push rules
+
+To support custom push rules, build the [ZIMUserOfflinePushRule](@-ZIMUserOfflinePushRule) class to specify the platforms that do not receive offline push notifications（[onlinePlatforms](@onlinePlatforms)）when the user is online on specified platforms（[notToReceiveOfflinePushPlatforms](@notToReceiveOfflinePushPlatforms)).
+
+To set the above rules, call the [updateUserOfflinePushRule](@updateUserOfflinePushRule) method.
+
+```java
+// Set offline push rules
+
+// Build ZIMUserOfflinePushRule
+ArrayList<Integer> onlinePlatforms = new ArrayList<>();
+
+// When the user logs in on win, MacOS, or Linux platforms
+ArrayList<Integer> onlinePlatforms = new ArrayList<>();
+onlinePlatforms.add(ZIMPlatformType.WIN.value());
+onlinePlatforms.add(ZIMPlatformType.MAC_OS.value());
+onlinePlatforms.add(ZIMPlatformType.LINUX.value());
+offlineRule.setOnlinePlatforms(onlinePlatforms);
+
+// Users do not receive offline push on iPhoneOS, iPadOS, and Android
+ArrayList<Integer> notToReceiveOfflinePushPlatforms = new ArrayList<>();
+notToReceiveOfflinePushPlatforms.add(ZIMPlatformType.IPHONE_OS.value());
+notToReceiveOfflinePushPlatforms.add(ZIMPlatformType.IPAD_OS.value());
+notToReceiveOfflinePushPlatforms.add(ZIMPlatformType.ANDROID.value());
+offlineRule.setNotToReceiveOfflinePushPlatforms(notToReceiveOfflinePushPlatforms);
+
+// Call the updateUserOfflinePushRule method
+ZIM.getInstance().updateUserOfflinePushRule(offlineRule, new ZIMUserOfflinePushRuleUpdatedCallback() {
+    @Override
+    public void onUserOfflinePushRuleUpdated(ZIMUserOfflinePushRule updatedOfflinePushRule, ZIMError errorInfo) {
+    }
+});
+```
+
+### Query custom push rules
+
+
+Call the [querySelfUserInfo](@querySelfUserInfo) method to obtain custom offline push rules from the`selfUserInfo.userRule.offlinePushRule` field in the callback.
+
+```java 
+ZIM.getInstance().querySelfUserInfo(new ZIMSelfUserInfoQueriedCallback() {
+    @Override
+    public void onSelfUserInfoQueried(ZIMSelfUserInfo selfUserInfo, ZIMError errorInfo) {
+         selfUserInfo.userRule.offlinePushRule; // Offline push rules specified by the user.
+        
+    }
+});
+```

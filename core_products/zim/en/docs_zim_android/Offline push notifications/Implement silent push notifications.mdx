@@ -1,0 +1,45 @@
+---
+articleID: 17637
+---
+# Implement silent push notifications
+
+
+## Introduction
+
+Silent push notifications are a special type of remote notification, mainly used for data synchronization between the App running in the background and the server. For example: when the App is not active and the data within the App is outdated, the server will send a silent push notification, and the App will update the data without any user awareness.
+
+<Note title="Note">
+This documentation is applicable to Android smart phones that support Google services.
+</Note>
+
+## Prerequisites
+
+Before implementing silent push notifications, please make sure of the following:
+- Implement offline push notifications. For more details, please refer to [Implement offline push notification](./Implement%20offline%20push%20notification.mdx).
+
+## Implementation steps
+
+1. Contact ZEGOCLOUD Technical Support to configure the `resourceID` for carrying silent push strategies.
+
+2. In scenarios where offline push notifications need to be sent (such as [call invitation](./../Guides/Call%20invitation%20signaling.mdx), [offline push notification](./Implement%20offline%20push%20notification.mdx), etc.), fill in the [ZIMPushConfig > resourceID](@-ZIMPushConfig) with the pre-configured value obtained from ZEGOCLOUD Technical Support. Additionally, fill in the payload field according to the specific business scenario.
+
+```java
+pushConfig.resourcesID = @"resourcesID configured by ZEGOCLOUD Technical Support";
+```
+
+3. Create a class that inherits from [ZPNsMessageReceiver](@-ZPNsMessageReceiver) and declare it as the broadcast receiver for ZPNs. Refer to [Implementing Offline Push - Set up the offline push notification feature using the ZPNs SDK](./Implement%20offline%20push%20notification.mdx#set-up-the-offline-push-notification-feature-using-the-zpns-sdk) for the declaration details. 
+
+    You can implement the specific logic for receiving silent push notifications in the [onThroughMessageReceived](@onThroughMessageReceived) method within the new class.
+
+ ```java
+public class MyZPNsReceiver extends ZPNsMessageReceiver {
+     // push service provider callback on pass-through message 
+     @Override
+     protected void onThroughMessageReceived(Context context, ZPNsMessage message) {
+         Log.e("MyZPNsReceiver", "onThroughMessageReceived message:" + message.toString());
+         // You can get the specific content of the silent push notification through message.getExtras().
+     }
+}
+```
+    
+4. Once the above steps are completed, you can send silent push notifications to others and receive silent push notifications from others.

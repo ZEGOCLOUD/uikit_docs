@@ -1,0 +1,141 @@
+---
+articleID: 17403
+---
+
+# Offline login
+
+- - -
+
+## Function introduction
+
+Offline login is typically used when the application is cleared from memory, and the user relaunches the application by clicking on the application icon. In this scenario, the user can directly access the local SDK data without network connectivity or a successful login.
+
+<Note title="Note">
+
+Users can only perform an offline login using the UserID from their previous successful login; otherwise, the login will not succeed.
+</Note>
+
+## Technical principle
+
+When the offline login interface is called, the ZIM SDK performs verification (UserID verification; if token-based login is used, it also verifies the token's validity period). After successful verification, the SDK returns a login success callback, allowing users to query local data, while the SDK internally attempts to establish a connection with the backend service automatically.
+
+
+## Procedure
+
+### 1\. Log in to the app in offline status
+
+If the network is disconnected and the app is logged out, create the [ZIMLoginConfig](@-ZIMLoginConfig) class first, set the [isOfflineLogin](@isOfflineLogin) parameter to `true`, and call the [login](@login) method to pass in [ZIMLoginConfig](@-ZIMLoginConfig) to log in to the app with the user information for the previous login. Local data of the SDK is accessible if the login is successful as indicated in the [ZIMLoggedInCallback](@-ZIMLoggedInCallback) callback.
+
+<Note title="Note">
+We recommend that you cache user information for each login. If the app is opened, the following logic is implemented when reading the cache:
+
+- If the user does not log in with the `UserID` for the previous online login, [isOfflineLogin](@isOfflineLogin) should be `false`. In this case, offline login is not supported, and local data of the SDK is inaccessible.
+- If the user logs in with the `UserID` for the previous online login, [isOfflineLogin](@isOfflineLogin) should be `true` to implement automatic login, accelerated access to the app homepage, and UI rendering in advance. In this case, offline login is supported.
+
+</Note>
+
+#### Login method definition
+
+
+<CodeGroup>
+```java title="Sample code"
+ZIMLoginConfig config;
+config.userName = user_name;
+// Do not specify this parameter for AppSign-based authentication.
+config.token = token;
+config.isOfflineLogin = true;
+
+zim.login("userID", config, new ZIMLoggedInCallback() {
+     @Override
+     public void onLoggedIn(ZIMError errorInfo) {
+        // Offline login is successful, and local data of the SDK can be queried.
+    }
+}];
+```
+</CodeGroup>
+
+
+### 2\. Access local data of the SDK
+
+After successful offline login, the following methods of the ZIM SDK 2.15.0 or earlier can be called when the network is disconnected.
+
+<table>
+
+<tbody><tr>
+<th>Category</th>
+<th>Method</th>
+</tr>
+<tr>
+<td>User</td>
+<td><ul>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-users-info" target="_blank" referer="noopener">queryUsersInfo</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-self-user-info" target="_blank" referer="noopener">querySelfUserInfo</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-application-list" target="_blank" referer="noopener">queryGroupApplicationList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-blacklist" target="_blank" referer="noopener">queryBlacklist</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#check-user-is-in-blacklist" target="_blank" referer="noopener">checkUserIsInBlackList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-local-friends" target="_blank" referer="noopener">searchLocalFriends</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-friends-info" target="_blank" referer="noopener">queryFriendsInfo</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-friend-list" target="_blank" referer="noopener">queryFriendList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-friend-application-list" target="_blank" referer="noopener">queryFriendApplicationList</a></li>
+</ul></td>
+</tr>
+<tr>
+<td>Group</td>
+<td><ul>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-list" target="_blank" referer="noopener">queryGroupList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-local-groups" target="_blank" referer="noopener">searchLocalGroups</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-info" target="_blank" referer="noopener">queryGroupInfo</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-attributes" target="_blank" referer="noopener">queryGroupAttributes</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-all-attributes" target="_blank" referer="noopener">queryGroupAllAttributes</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-member-list" target="_blank" referer="noopener">queryGroupMemberList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-local-group-members" target="_blank" referer="noopener">searchLocalGroupMembers</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-member-info" target="_blank" referer="noopener">queryGroupMemberInfo</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-member-count" target="_blank" referer="noopener">queryGroupMemberCount</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-member-muted-list" target="_blank" referer="noopener">queryGroupMemberMutedList</a></li>
+</ul></td>
+</tr>
+<tr>
+<td>Message</td>
+<td><ul>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-history-message" target="_blank" referer="noopener">queryHistoryMessage</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#update-message-local-extended-data" target="_blank" referer="noopener">updateMessageLocalExtendedData</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-local-messages" target="_blank" referer="noopener">searchLocalMessages</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-global-local-messages" target="_blank" referer="noopener">searchGlobalLocalMessages</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#insert-message-to-local-db" target="_blank" referer="noopener">insertMessageToLocalDB</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#delete-all-message" target="_blank" referer="noopener">deleteAllMessage</a>：Only messages in the local database can be deleted.</li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#delete-messages" target="_blank" referer="noopener">deleteMessages</a>：Only messages in the local database can be deleted.</li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#delete-all-conversation-messages" target="_blank" referer="noopener">deleteAllConversationMessages</a>：Only messages in the local database can be deleted.</li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-message-receipts-info" target="_blank" referer="noopener">queryMessageReceiptsInfo</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-message-reaction-user-list" target="_blank" referer="noopener">queryMessageReactionUserList</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-message-receipt-read-member-list" target="_blank" referer="noopener">queryGroupMessageReceiptReadMemberList</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-group-message-receipt-unread-member-list" target="_blank" referer="noopener">queryGroupMessageReceiptUnreadMemberList</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#import-local-messages" target="_blank" referer="noopener">importLocalMessages</a></li>
+<li><a href="https://doc-zh.zego.im/article/api?doc=zim_API~java_android~class~ZIM#export-local-messages" target="_blank" referer="noopener">exportLocalMessages</a></li>
+</ul></td>
+</tr>
+<tr>
+<td>Call invitation</td>
+<td><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-call-invitation-list" target="_blank" referer="noopener">queryCallInvitationList</a></td>
+</tr>
+<tr>
+<td>Conversation</td>
+<td><ul>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-conversation" target="_blank" referer="noopener">queryConversation</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-conversation-list" target="_blank" referer="noopener">queryConversationList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#query-conversation-pinned-list" target="_blank" referer="noopener">queryConversationPinnedList</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#search-local-conversations" target="_blank" referer="noopener">searchLocalConversations</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#clear-conversation-unread-message-count" target="_blank" referer="noopener">clearConversationUnreadMessageCount</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#clear-conversation-total-unread-message-count" target="_blank" referer="noopener">clearConversationTotalUnreadMessageCount</a></li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#delete-conversation" target="_blank" referer="noopener">deleteConversation</a>：Only conversations in the local database can be deleted.</li><li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#delete-all-conversations" target="_blank" referer="noopener">deleteAllConversations</a>: Only conversations in the local database can be deleted.</li>
+<li><a href="https://doc-en.zego.im/article/api?doc=zim_API~java_android~class~ZIM#set-conversation-draft" target="_blank" referer="noopener">setConversationDraft</a></li>
+</ul></td>
+</tr>
+</tbody></table>
+
+### 3\. Listen for the login event
+
+Listen for the [onConnectionStateChanged](@onConnectionStateChanged) event to obtain the status of connection between the ZIM SDK and the ZIM backend.
+
+After a successful offline login, the value of [ZIMConnectionState](@-ZIMConnectionState) in [onConnectionStateChanged](@onConnectionStateChanged) is `Connecting` (enumeration value: `1`).
+
+You can call network methods to synchronize backend data only when the ZIM SDK automatically connects to the ZIM backend upon network reconnection and the value of [ZIMConnectionState](@-ZIMConnectionState) in [onConnectionStateChanged](@onConnectionStateChanged) is `Connected` (enumeration value: `2`).
