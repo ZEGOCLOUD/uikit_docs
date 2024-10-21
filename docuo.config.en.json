@@ -152,7 +152,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Android: Java"
       }
@@ -170,7 +170,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Flutter: Dart"
       }
@@ -188,7 +188,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "iOS: Objective-C"
       }
@@ -206,7 +206,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "macOS: Objective-C"
       }
@@ -224,7 +224,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "RN: JS"
       }
@@ -242,7 +242,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Unity 3D: C#"
       }
@@ -260,7 +260,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Web: JS"
       }
@@ -278,7 +278,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Windows: C++"
       }
@@ -296,7 +296,7 @@
         },
         "category": [
           "Products",
-          "Core products"
+          "Cloud Communications Products"
         ],
         "platform": "Server"
       }
