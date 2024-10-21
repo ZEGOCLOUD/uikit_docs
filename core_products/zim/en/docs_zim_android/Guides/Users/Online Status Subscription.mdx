@@ -6,70 +6,70 @@ import { getPlatformData } from "/snippets/utils-content-parser.js"
 
 export const ZIMUserOnlineStatusMap = {
   'Android': <a href='@-ZIMUserOnlineStatus' target='_blank'>ZIMUserOnlineStatus</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserOnlineStatus.html' target='_blank'>ZIMUserOnlineStatus</a>,
+  
 }
 export const subscribeUsersStatusMap = {
   'Android': <a href='@subscribeUsersStatus' target='_blank'>subscribeUsersStatus</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/subscribeUsersStatus.html' target='_blank'>subscribeUsersStatus</a>,
+  
 }
 export const onUserStatusUpdatedMap = {
   'Android': <a href='@onUserStatusUpdated' target='_blank'>onUserStatusUpdated</a>,
   'ios': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
   'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
-  'Web': <a href='@userStatusUpdated' target='_blank'>userStatusUpdated</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onUserStatusUpdated.html' target='_blank'>onUserStatusUpdated</a>,
+  
+  
 }
 export const ZIMEventHandlerMap = {
   'Android': <a href='@-ZIMEventHandler' target='_blank'>ZIMEventHandler</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html' target='_blank'>ZIMEventHandler</a>,
-  'web': <a href='@on' target='_blank'>on</a>,
+  
+  
 }
 export const unsubscribeUsersStatusMap = {
   'Android': <a href='@unsubscribeUsersStatus' target='_blank'>subscribeUsersStatus</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/unsubscribeUsersStatus.html' target='_blank'>subscribeUsersStatus</a>,
+  
 }
 export const queryUsersStatusMap = {
   'Android': <a href='@queryUsersStatus' target='_blank'>queryUsersStatus</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryUsersStatus.html' target='_blank'>queryUsersStatus</a>,
+  
 }
 export const querySubscribedUserStatusListMap = {
   'Android': <a href='@querySubscribedUserStatusList' target='_blank'>querySubscribedUserStatusList</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/querySubscribedUserStatusList.html' target='_blank'>queryUsersStatus</a>,
+  
 }
 export const onConnectionStateChangedMap = {
   'Android': <a href='@onConnectionStateChanged' target='_blank'>onConnectionStateChanged</a>,
   'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
   'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
-  'Web': <a href='@connectionStateChanged' target='_blank'>connectionStateChanged</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html' target='_blank'>onConnectionStateChanged</a>,
+  
+  
 }
 export const ZIMConnectionStateMap = {
   'Android': <a href='@-ZIMConnectionStateMap' target='_blank'>ZIMConnectionStateMap</a>,
-  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConnectionState.html' target='_blank'>ZIMConnectionState</a>,
+  
 }
 export const ConnectedMap = {
   'Android': `CONNECTED`,
   'iOS, mac': `ZIMConnectionStateConnected`,
   'window': `ZIM_CONNECTION_STATE_CONNECTED`,
-  'Flutter,web': `connected`,
+  
 }
 export const DisconnectedMap = {
   'Android': `DISCONNECTED`,
   'iOS, mac': `ZIMConnectionStateDisconnected`,
   'window': `ZIM_CONNECTION_STATE_DISCONNECTED`,
-  'Flutter,web': `disconnected`,
+  
 }
 export const ConnectingMap = {
   'Android': `CONNECTING`,
   'iOS, mac': `ZIMConnectionStateConnecting`,
   'window': `ZIM_CONNECTION_STATE_CONNECTING`,
-  'Flutter,web': `connecting`,
+  
 }
 export const ReconnectingMap = {
   'Android': `RECONNECTING`,
   'iOS, mac': `ZIMConnectionStateReconnecting`,
   'window': `ZIM_CONNECTION_STATE_RECONNECTING`,
-  'Flutter,web': `reconnecting`,
+  
 }
 
 
@@ -170,49 +170,8 @@ zim_->subscribeUsersStatus(userIDs, config, [](const std::vector<ZIMErrorUserInf
 });
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIMUserStatusSubscribeConfig config = ZIMUserStatusSubscribeConfig();
-config.subscriptionDuration = 60; // Subscription duration in minutes, valid range is 1 to 43200 (30 days)
 
-ZIM.getInstance()?.subscribeUsersStatus(["userIdA","userIdB"], config).then((ZIMUsersStatusSubscribedResult result) {
-    for(ZIMErrorUserInfo errorUserInfo in result.errorUserList){
-        errorUserInfo.userID; // User ID failed to subscribe
-        errorUserInfo.reason; // Failure reason
-    }
-}).catchError((onError){
 
-});
-```
-:::
-::if{props.platform="web"}
-```javascript
-// Create the subscription configuration
-const config = {
-    subscriptionDuration: 60, // in minutes
-};
-
-// List of user IDs to subscribe
-const userIDs = ['userIdA', 'userIdB'];
-
-try {
-    // Call the subscribeUsersStatus method
-    const result = await zim.subscribeUsersStatus(userIDs, config);
-
-    // Check for users with subscription failure
-    if (result.errorUserList.length > 0) {
-        result.errorUserList.forEach((errorUserInfo) => {
-            console.log('User ID with subscription failure: ', errorUserInfo.userID);
-            console.log('Error code for subscription failure: ', errorUserInfo.reason);
-        });
-    } else {
-        console.log('All users subscribed successfully!');
-    }
-} catch (error) {
-    // Catch the exception and handle the error code
-    console.error('Error occurred during subscription:', error);
-}
-::::
 
 #### Event notification
 
@@ -321,32 +280,8 @@ void onUserStatusUpdated(ZIM* zim, const std::vector<ZIMUserStatus>& userStatusL
 }
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIMEventHandler.onUserStatusUpdated = (ZIM zim, List<ZIMUserStatus> userStatusList){
-    for (ZIMUserStatus userStatus in userStatusList) {
-        userStatus.userID;            // Target user ID
-        userStatus.onlineStatus;      // Target user's online status
-        userStatus.onlinePlatforms;   // User online platforms list 
-        userStatus.lastUpdateTime;    // Last update time of online status
-    }
-};
-```
-:::
-:::if{props.platform="web"}
-```javascript
-// Listen for user status update events
-zim.on('userStatusUpdated', function (zim, { userStatusList }) {
-    userStatusList.forEach((userStatus) => {
-        const { userID, onlineStatus, onlinePlatforms, lastUpdateTime } = userStatus;
 
-        console.log('userStatusUpdated:', userID, onlineStatus, onlinePlatforms, lastUpdateTime);
 
-        // Perform the logic after user status update here, such as updating UI or other operations
-    });
-});
-```
-:::
 
 
 ## Unsubscribe from user online statuses
@@ -406,42 +341,7 @@ zim_->unsubscribeUsersStatus(userIDs, [](const std::vector<ZIMErrorUserInfo> &er
 });
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIM.getInstance()?.unsubscribeUsersStatus(["userIdA","userIdB"]).then((ZIMUsersStatusUnsubscribedResult result) {
-    for(ZIMErrorUserInfo errorUserInfo in result.errorUserList){
-        errorUserInfo.userID;   // User ID failed to unsubscribe
-        errorUserInfo.reason;   // Failure reason
-    }
-}).catchError((onError){
 
-});
-```
-:::
-:::if{props.platform="web"}
-```javascript
-// List of user IDs to unsubscribe
-const userIDs = ['userIdA', 'userIdB'];
-
-try {
-    // Call the unsubscribeUsersStatus method
-    const result = await zim.unsubscribeUsersStatus(userIDs);
-
-    // Check for users who failed to unsubscribe
-    if (result.errorUserList.length > 0) {
-        result.errorUserList.forEach((errorUserInfo) => {
-            console.log('User ID failed to unsubscribe: ', errorUserInfo.userID);
-            console.log('Error code for failed unsubscribe: ', errorUserInfo.reason);
-        });
-    } else {
-        console.log('All users unsubscribed successfully!');
-    }
-} catch (error) {
-    // Catch and handle errors
-    console.error('An error occurred while unsubscribing:', error);
-}
-```
-:::
 
 ## Query user online statuses
 
@@ -529,52 +429,8 @@ zim_->queryUsersStatus(userIDs, [](const std::vector<ZIMUserStatus> &userStatusL
     }
 });
 ```
-:::if{props.platform="Flutter"}
-```dart
-ZIM.getInstance()?.queryUsersStatus(["userIdA","userIdB"]).then((ZIMUsersStatusQueriedResult result) {
-    for (ZIMUserStatus userStatus in result.userStatusList) {
-      userStatus.userID;          // 目标用户 ID
-      userStatus.onlineStatus;    // 用户在线状态
-      userStatus.onlinePlatforms; // 用户在线平台列表
-      userStatus.lastUpdateTime;  // 上次在线状态变更时间
-    }
-    for (ZIMErrorUserInfo errorUserInfo in result.errorUserList){
-      errorUserInfo.userID; // 查询失败的用户 ID
-      errorUserInfo.reason; // 查询失败的错误码
-    }
-}).catchError((onError){
-
-});
-```
 :::
-:::if{props.platform="web"}
-```javascript
-// User ID list to query status
-const userIDs = ['userIdA', 'userIdB'];
 
-try {
-    // Call the method to query user status
-    const result = await zim.queryUsersStatus(userIDs);
-
-    // Iterate through the successfully queried user statuses
-    result.userStatusList.forEach((userStatus) => {
-        console.log('User ID:', userStatus.userID); // Target user ID
-        console.log('Online Status:', userStatus.onlineStatus); // User online status
-        console.log('Online Platforms:', userStatus.onlinePlatforms); // List of user online platforms
-        console.log('Last Update Time:', userStatus.lastUpdateTime); // Last time the online status was updated
-    });
-
-    // Check for failed user queries
-    result.errorUserList.forEach((errorUserInfo) => {
-        console.log('Failed User ID:', errorUserInfo.userID);
-        console.log('Error Code:', errorUserInfo.reason);
-    });
-} catch (error) {
-    // Catch and handle errors
-    console.error('Error occurred while querying user status:', error);
-}
-```
-:::
 
 ## Query the online status subscription list
 
@@ -657,44 +513,7 @@ zim_->querySubscribedUserStatusList(config, [](const std::vector<ZIMUserStatusSu
 });
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIMSubscribedUserStatusQueryConfig queryConfig = ZIMSubscribedUserStatusQueryConfig();
-queryConfig.userIDs = ["userIdA","userIdB"];
-// Target user IDs for query (up to 200 users in a single query)
-// When userIDs is empty, it means getting the complete subscription table information
-// When userIDs is not empty, it means checking if the target users are in the subscription list
-// If they are, the result will include their status information
-// If they are not, the result will not include any related information
-ZIM.getInstance()?.querySubscribedUserStatusList(queryConfig).then((ZIMSubscribedUserStatusListQueriedResult result) {
 
-}).catchError((onError){
-
-});
-```
-:::
-:::if{props.platform="web"}
-```javascript
-// Query configuration object
-const config = {
-    userIDs: ['userIdA', 'userIdB'], // If empty, query all subscribed users
-};
-
-try {
-    // Call the method to query the subscribed user status list
-    const result = await zim.querySubscribedUserStatusList(config);
-
-    // Traverse the subscribed user status information
-    result.userStatusSubscriptionList.forEach((subscription) => {
-        console.log('Subscription expiration time:', subscription.subscribeExpiredTime); // Subscription expiration timestamp
-        console.log('User status information:', subscription.userStatus); // User status information
-    });
-} catch (error) {
-    // Catch the exception and handle the error
-    console.error('An error occurred while querying the subscribed user status list:', error);
-}
-```
-:::
 
 
 ## Listen to the online status of the current user on the current device
@@ -840,6 +659,7 @@ ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
 ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
 
 [zim setEventHandler: eventHandlerImpl];
+
 ```
 :::
 :::if{props.platform="window"}
@@ -881,55 +701,8 @@ void onConnectionStateChanged(ZIM* /*zim*/, ZIMConnectionState state, ZIMConnect
 }
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIMEventHandler.onConnectionStateChanged = (ZIM zim, ZIMConnectionState state,
-    ZIMConnectionEvent event, Map extendedData){
-    switch (state) {
-        case ZIMConnectionState.connected:
-        // Connected, you can map the current user's status as online
-            break;
-        case ZIMConnectionState.connecting:
-        // Connecting, you can map the current user's status as online or offline based on your business logic
-            break;
-        case ZIMConnectionState.reconnecting:
-        // Reconnecting, you can map the current user's status as online or offline based on your business logic
-            break;
-        case ZIMConnectionState.disconnected:
-        // Disconnected, you can map the current user's status as offline
-            break;
-        default:
-        // Other possible status
-            break;
-    }
-};
-```
-:::
-:::if{props.platform="web"}
-```javascript
-zim.on('connectionStateChanged', function (zim, { state, event }) {
-    switch (state) {
-        case 2: // Connected
-            console.log('Connected');
-            break;
-        case 1: // Connecting:
-            console.log('Connecting');
-            break;
-        case 3: // Reconnecting:
-            console.log('Reconnecting');
-            break;
-        case 0: // Disconnected:
-            console.log('Disconnected');
-            break;
-        default:
-            console.log('Unknown');
-            break;
-    }
 
-    console.log('Connection event:', event, state);
-});
-```
-:::
+
 
 
 ## Listen to the online platforms list of the current user
@@ -1033,41 +806,4 @@ void onUserStatusUpdated(ZIM* /*zim*/, const std::vector<ZIMUserStatus>& userSta
 }
 ```
 :::
-:::if{props.platform="Flutter"}
-```dart
-ZIMEventHandler.onUserStatusUpdated = (ZIM zim, List<ZIMUserStatus> userStatusList){
-    for (ZIMUserStatus userStatus in userStatusList) {
-        if (userStatus.userID == "myUserID"){
-            userStatus.onlineStatus;       // If it is the current user, onlineStatus will be UNKNOWN
-            userStatus.onlinePlatforms;    // List of online platforms for the current user
-            userStatus.lastUpdateTime;     // If it is the current user, lastUpdateTime will be 0
-        }
-    }
-};
-```
-:::
-:::if{props.platform="web"}
-```javascript
-zim.on('userStatusUpdated', function (zim, userStatusList) {
-    const myUserID = 'current user ID'; // Replace with the actual ID of the current user
 
-    userStatusList.forEach((userStatus) => {
-        if (userStatus.userID === myUserID) {
-            // If it is the current user, onlineStatus will be unknown and cannot accurately reflect the current user's online status
-            const onlineStatus = userStatus.onlineStatus;
-
-            // List of online platforms for the current user
-            const onlinePlatforms = userStatus.onlinePlatforms;
-
-            // If it is the current user, lastUpdateTime will be 0
-            const lastUpdateTime = userStatus.lastUpdateTime;
-
-            // Handle logic for online status, online platforms, etc.
-            console.log('Current user online status:', onlineStatus);
-            console.log('Current user online platforms:', onlinePlatforms);
-            console.log('Last status update time:', lastUpdateTime);
-        }
-    });
-});
-```
-:::

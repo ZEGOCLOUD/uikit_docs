@@ -54,11 +54,6 @@
           "type": "doc",
           "label": "ZIM upgrade guide",
           "id": "client-sdks/zim-upgrade-guide"
-        },
-        {
-          "type": "doc",
-          "label": "ZPNs upgrade guide",
-          "id": "client-sdks/zpns-upgrade-guide"
         }
       ]
     },

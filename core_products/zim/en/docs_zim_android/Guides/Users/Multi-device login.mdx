@@ -205,7 +205,7 @@ The following are the three login policies supported by the ZIM SDK: single-devi
 
 ## Implementation process
 
-Contact ZEGOCLOUD technical support team to activate the multi-terminal login service. After configuring the multi-device login, you can call {getPlatformData(props,loginMap)} on multiple devices to log in to the ZIM SDK. The implementation process is the same as a single-terminal login. For details on how to log in, please refer to the "Logging in ZIM" section in {<a href="!zim-Implementation_of_sending_and_receiving" target="_blank">Send and receive messages</a>}.
+Contact ZEGOCLOUD technical support team to activate the multi-terminal login service. After configuring the multi-device login, you can call {getPlatformData(props,loginMap)} on multiple devices to log in to the ZIM SDK. The implementation process is the same as a single-terminal login. For details on how to log in, please refer to the "Logging in ZIM" section in [Send and receive messages](../../Send%20and%20receive%20messages.mdx).
 
 When the number of login devices reaches the limit set by the policy, if you log in to the account on a new device, the account that was logged in the earliest on the original device will be kicked offline. You will be notified of this through the {getPlatformData(props,onConnectionStateChangedMap)} callback with the event set to `KickedOut`. For example, if the login specifies a maximum of 3 devices to be logged in, and the account has already been logged in on devices A, B, and C (in chronological order), logging in to the account on device D will kick the account on device A offline.
 
@@ -326,7 +326,7 @@ ZIMEventHandler.onConversationChanged = (ZIM zim, List<ZIMConversationChangeInfo
 :::if{props.platform="iOS"}
 ```objc
 - (void)zim:(ZIM *)zim
-    conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList{
+    conversationChanged:(NSArray<ZIMConversationChangeInfo * > *)conversationChangeInfoList{
         for(ZIMConversationChangeInfo *convInfo in conversationChangeInfoList){
             if(convInfo.event == ZIMConversationEventDeleted){
                 // The conversation is deleted
