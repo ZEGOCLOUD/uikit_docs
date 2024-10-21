@@ -80,6 +80,7 @@ The following table describes only the operation-specific request parameters and
 List of user IDs to join the group. By default, a maximum of 100 user IDs are supported.
 <Note title="Note">
 
+- If the array includes an element the same as the `FromUserId`, the element will be deleted. 
 - This parameter has the same effect as `GroupMemberInfos`, just choose one of the two.
 - This parameter is only valid when `GroupMemberInfos` length is 0.
 </Note>
@@ -95,7 +96,7 @@ List of user IDs to join the group. By default, a maximum of 100 user IDs are su
 <td>└UserId</td>
 <td>String</td>
 <td>Yes</td>
-<td>The ID of the user joining the group.</td>
+<td>The ID of the user joining the group.<Note title="Note">If the value is the same as the `FromUserId`, it will be deleted.</Note></td>
 </tr>
 <tr data-row-level="5-2">
 <td>└EnterGroupTime</td>
