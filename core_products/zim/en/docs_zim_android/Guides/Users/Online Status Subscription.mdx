@@ -14,14 +14,14 @@ export const subscribeUsersStatusMap = {
 }
 export const onUserStatusUpdatedMap = {
   'Android': <a href='@onUserStatusUpdated' target='_blank'>onUserStatusUpdated</a>,
-  'ios': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
   'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
-  
+  "Web": <a href="@userStatusUpdated">userStatusUpdated</a>
   
 }
 export const ZIMEventHandlerMap = {
   'Android': <a href='@-ZIMEventHandler' target='_blank'>ZIMEventHandler</a>,
-  
+  'Web': <a href="@on">on</a>,
   
 }
 export const unsubscribeUsersStatusMap = {
@@ -40,36 +40,36 @@ export const onConnectionStateChangedMap = {
   'Android': <a href='@onConnectionStateChanged' target='_blank'>onConnectionStateChanged</a>,
   'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
   'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
-  
-  
+  'Web': <a href='@connectionStateChanged' target='_blank'>connectionStateChanged</a>,
+
 }
 export const ZIMConnectionStateMap = {
-  'Android': <a href='@-ZIMConnectionStateMap' target='_blank'>ZIMConnectionStateMap</a>,
+  'Android': <a href='@-ZIMConnectionState' target='_blank'>ZIMConnectionState</a>,
   
 }
 export const ConnectedMap = {
   'Android': `CONNECTED`,
   'iOS, mac': `ZIMConnectionStateConnected`,
   'window': `ZIM_CONNECTION_STATE_CONNECTED`,
-  
+  'Web':`Connected`,
 }
 export const DisconnectedMap = {
   'Android': `DISCONNECTED`,
   'iOS, mac': `ZIMConnectionStateDisconnected`,
   'window': `ZIM_CONNECTION_STATE_DISCONNECTED`,
-  
+  'Web':`Disconnected`,
 }
 export const ConnectingMap = {
   'Android': `CONNECTING`,
   'iOS, mac': `ZIMConnectionStateConnecting`,
   'window': `ZIM_CONNECTION_STATE_CONNECTING`,
-  
+  'Web':`Connecting`,  
 }
 export const ReconnectingMap = {
   'Android': `RECONNECTING`,
   'iOS, mac': `ZIMConnectionStateReconnecting`,
   'window': `ZIM_CONNECTION_STATE_RECONNECTING`,
-  
+  'Web':`Reconnecting`,    
 }
 
 
@@ -168,6 +168,35 @@ zim_->subscribeUsersStatus(userIDs, config, [](const std::vector<ZIMErrorUserInf
         errorUserInfo.reason;   // Failure reason
     }
 });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Create the subscription configuration
+const config = {
+    subscriptionDuration: 60, // The duration is in minute
+};
+
+// Subscription user ID list
+const userIDs = ['userIdA', 'userIdB'];
+
+try {
+    // Call the subscribeUsersStatus method
+    const result = await zim.subscribeUsersStatus(userIDs, config);
+
+    // Check for users with failed subscriptions
+    if (result.errorUserList.length > 0) {
+        result.errorUserList.forEach((errorUserInfo) => {
+            console.log('User ID with failed subscription: ', errorUserInfo.userID);
+            console.log('Error code for failed subscription: ', errorUserInfo.reason);
+        });
+    } else {
+        console.log('All users subscribed successfully!');
+    }
+} catch (error) {
+    // Catch the exception and handle the error code
+    console.error('Error occurred while subscribing:', error);
+}
 ```
 :::
 
@@ -280,9 +309,20 @@ void onUserStatusUpdated(ZIM* zim, const std::vector<ZIMUserStatus>& userStatusL
 }
 ```
 :::
+:::if{props.platform="Web"}
+```javascript
+// Listen for the user status update event
+zim.on('userStatusUpdated', function (zim, { userStatusList }) {
+    userStatusList.forEach((userStatus) => {
+        const { userID, onlineStatus, onlinePlatforms, lastUpdateTime } = userStatus;
 
+        console.log('userStatusUpdated:', userID, onlineStatus, onlinePlatforms, lastUpdateTime);
 
-
+        // Handle the logic after user status update here, such as updating UI or other operations
+    });
+});
+```
+:::
 
 ## Unsubscribe from user online statuses
 
@@ -339,6 +379,29 @@ zim_->unsubscribeUsersStatus(userIDs, [](const std::vector<ZIMErrorUserInfo> &er
         errorUserInfo.reason;   // Failure reason
     }
 });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// List of user IDs to unsubscribe
+const userIDs = ['userIdA', 'userIdB'];
+
+try {
+    // Call the unsubscribeUsersStatus method
+    const result = await zim.unsubscribeUsersStatus(userIDs);
+// Check for users who could not be unsubscribed
+if (result.errorUserList.length > 0) {
+    result.errorUserList.forEach((errorUserInfo) => {
+        console.log('User ID of failed unsubscription: ', errorUserInfo.userID);
+        console.log('Error code of failed unsubscription: ', errorUserInfo.reason);
+        });
+    } else {
+        console.log('Successfully unsubscribe all users');
+    }
+} catch (error) {
+    // Catch the exception and handle the error
+    console.error('An error occurred while unsubscribing:', error);
+}
 ```
 :::
 
@@ -430,7 +493,34 @@ zim_->queryUsersStatus(userIDs, [](const std::vector<ZIMUserStatus> &userStatusL
 });
 ```
 :::
+:::if{props.platform="Web"}
+```javascript
+// User ID list for querying status
+const userIDs = ['userIdA', 'userIdB'];
 
+try {
+    // Call the method to query user status
+    const result = await zim.queryUsersStatus(userIDs);
+
+    // Traverse the successfully queried user statuses
+    result.userStatusList.forEach((userStatus) => {
+        console.log('User ID:', userStatus.userID); // Target user ID
+        console.log('Online Status:', userStatus.onlineStatus); // User online status
+        console.log('Online Platforms:', userStatus.onlinePlatforms); // List of user online platforms
+        console.log('Last Update Time:', userStatus.lastUpdateTime); // Last update time of online status
+    });
+
+    // Check for failed user queries
+    result.errorUserList.forEach((errorUserInfo) => {
+        console.log('Failed User ID:', errorUserInfo.userID);
+        console.log('Error Code for Failed Query:', errorUserInfo.reason);
+    });
+} catch (error) {
+    // Catch and handle errors
+    console.error('Error occurred while querying user status:', error);
+}
+```
+:::
 
 ## Query the online status subscription list
 
@@ -511,6 +601,28 @@ config.userIDs = {"userIdA", "userIdB"};
 zim_->querySubscribedUserStatusList(config, [](const std::vector<ZIMUserStatusSubscription> &userStatusSubscriptionList,
                                                 const ZIMError &errorInfo) {
 });
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Query configuration object
+const config = {
+    userIDs: ['userIdA', 'userIdB'], // If empty, query all subscribed users
+};
+
+try {
+    // Call the method to query the subscribed user status list
+    const result = await zim.querySubscribedUserStatusList(config);
+
+    // Traverse the subscribed user status information
+    result.userStatusSubscriptionList.forEach((subscription) => {
+        console.log('Subscription expiration time:', subscription.subscribeExpiredTime); // Subscription expiration timestamp
+        console.log('User status information:', subscription.userStatus); // User status information
+    });
+} catch (error) {
+    // Catch the exception and handle the error
+    console.error('An error occurred while querying the subscribed user status list:', error);
+}
 ```
 :::
 
@@ -701,9 +813,31 @@ void onConnectionStateChanged(ZIM* /*zim*/, ZIMConnectionState state, ZIMConnect
 }
 ```
 :::
+:::if{props.platform="Web"}
+```javascript
+zim.on('connectionStateChanged', function (zim, { state, event }) {
+    switch (state) {
+        case 2: // Connected
+            console.log('Connected');
+            break;
+        case 1: // Connecting:
+            console.log('Connecting');
+            break;
+        case 3: // Reconnecting:
+            console.log('Reconnecting');
+            break;
+        case 0: // Disconnected:
+            console.log('Disconnected');
+            break;
+        default:
+            console.log('Unknown');
+            break;
+    }
 
-
-
+    console.log('Connection event:', event, state);
+});
+```
+:::
 
 ## Listen to the online platforms list of the current user
 
@@ -806,4 +940,28 @@ void onUserStatusUpdated(ZIM* /*zim*/, const std::vector<ZIMUserStatus>& userSta
 }
 ```
 :::
+:::if{props.platform="Web"}
+```javascript
+zim.on('userStatusUpdated', function (zim, userStatusList) {
+    const myUserID = 'current user ID'; // Replace with the actual ID of the current user
 
+    userStatusList.forEach((userStatus) => {
+        if (userStatus.userID === myUserID) {
+            // If it is the current user, onlineStatus will be unknown and cannot accurately reflect the current user's online status
+            const onlineStatus = userStatus.onlineStatus;
+
+            // List of online platforms for the current user
+            const onlinePlatforms = userStatus.onlinePlatforms;
+
+            // If it is the current user, lastUpdateTime will be 0
+            const lastUpdateTime = userStatus.lastUpdateTime;
+
+            // Handle logic for online status, online platforms, etc.
+            console.log('Current user online status:', onlineStatus);
+            console.log('Current user online platforms:', onlinePlatforms);
+            console.log('Last status update time:', lastUpdateTime);
+        }
+    });
+});
+```
+:::
