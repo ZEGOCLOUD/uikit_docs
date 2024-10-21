@@ -1,0 +1,1 @@
+Here we provide you with a sample application to experience ZEGOCLOUD's In-app Chat, and also describe how to run the sample code.

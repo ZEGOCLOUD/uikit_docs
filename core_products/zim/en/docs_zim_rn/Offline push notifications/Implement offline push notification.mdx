@@ -1,0 +1,284 @@
+---
+articleID: 15518
+---
+
+# Implement offline push notification
+
+
+<Note title="Note">
+This document is applicable for developing applications on the following platforms: iOS and Android.
+</Note>
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications. 
+That is, in one-on-one chat or group chat, if your app is frozen, killed by the system or a user in the backend, and get disconnected with the ZEGOCLOUD service backend due to timeout, with the offline push notification feature, the ZEGOCLOUD backend will send offline push notifications to the target users.
+
+You can integrate the ZPNs SDK and use it together with the ZIM SDK to implement the offline push notification feature.
+
+## Solution
+
+The solution we provide is as follows:
+
+1. The receiver (the client user that receives the offline push notifications) enables the push channel of APNs and Google FCM, and sends a request to get the Token from their servers. 
+2. The servers of APNs and Google FCM returns the Token. 
+3. The receiver generates a PushID, and sends it to the ZIM server for binding the client user and the PushID.   
+   
+    If you use the ZPNs SDK together with the ZIM SDK, the SDK will automatically bind the client user to PushID, you don't need to do other operations; If you use the ZPNs SDK alone, you will need to connect to the ZPNs server and implement the binding logic. **Note: Before switching the userID on the same device, remember to call the [`logout`](@logout) method to remove the PushID that userID is binding.**
+
+4. The sender starts sending messages, and the messages are stored in the ZIM server.
+5. The ZIM server checks whether the receiver is online. 
+6. If the receiver is offline, then the messages will be transferred to the ZPNs server.
+7. The ZPNs Server sends offline push notifications to the servers of APNs and Google FCM.
+8. The servers of APNs and Google FCM push the offline push notifications to the receiver. The receiver receives the offline messages when gets back online. 
+
+## Prerequisites
+
+Before you implement this, make sure you complete the following:
+
+- Platform-specific requirements:
+    - React Native 0.60.0 or above.
+    - **Android：**
+        - Android Studio 2.1 or above.
+        - Android SDK 25, Android SDK Build-Tools 25.0.2, Android SDK Platform-Tools 25.xx or above.
+        - Android 9.0 or above Android device or emulator (real device recommended).
+    - **iOS：**
+        - Xcode 7.0 or above.
+        - iOS 11.0 or above and an iOS device.
+        - The iOS device is connected to the Internet.
+- **Create a project** in [ZEGOCLOUD Console](https://console.zegocloud.com). The ZIM service permission is not enabled by default. Before using it, please activate the ZIM service by yourself in [ZEGOCLOUD Console](https://console.zegocloud.com) (for details, please refer to [Project Management - In-app Chat](https://docs.zegocloud.com/article/15174)), if you cannot activate the ZIM service, please contact ZEGOCLOUD technical support to activate it.
+- Integrate the ZIM SDK version 2.2.0 or later. For details, see the **Integrate the SDK** chapter of [Send and receive messages](./../Send%20and%20receive%20messages.mdx).
+
+## Implementation
+
+### Integrate push notification channels
+
+Integrate the offline push notification channels of APNs and Google FCM. For more, refer to [Integrate Apple Push Notification service (APNs)](./Integrate%20APNs.mdx) and [Integrate Google FCM push notification (Android)](./Integrate%20FCM.mdx).
+
+### Integrate ZPNs SDK
+
+#### Import ZPNs SDK
+
+Developers can use npm to obtain the SDK.
+
+1. Enter the root directory of your project and execute the following command to install dependencies.
+
+<CodeGroup>
+```bash title="npm"
+    npm i zego-zpns-react-native
+    ```
+```bash title="yarn"
+    yarn add zego-zpns-react-native
+    ```
+</CodeGroup>
+
+2. Import the SDK.
+
+    ```javascript
+    // import ZPNs from 'zego-zpns-react-native';  // When the SDK version is less than 2.3.0, you can export the `zego-zpns-react-native` SDK using the default method. 
+    import { ZPNs } from 'zego-zpns-react-native'; // However, all versions of the SDK support exporting the `zego-zpns-react-native` SDK using a named method.
+    ```
+
+By completing the above steps, you can use zego-zpns-react-native in your project with JavaScript or TypeScript (recommended).
+
+#### Setting permissions
+
+You can set the permissions required by the application according to the actual application needs.
+
+- **iOS：**
+
+    Call the [applyNotificationPermission](@applyNotificationPermission) method to apply for notification permission from the user. This interface takes effect only when it is called for the first time. Please pay attention to the timing of the API call.
+
+    ```javascript
+    ZPNs.getInstance().applyNotificationPermission();
+    ```
+
+- **Android：**
+    
+    Enter the "app/src/main" directory, open the "AndroidManifest.xml" file, and add permissions.
+
+ 
+    ```java
+    <!-- Permissions required by ZPNs SDK  -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE-_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    ```
+
+### Set up the offline push notification feature using the ZPNs SDK
+
+1. Use [ZPNsEventHandler](@-ZPNsEventHandler) to listen for event callbacks.
+
+    The [ZPNsEventHandler](@-ZPNsEventHandler) class contains functions for various event callbacks in ZPNs. You can pass in `Function` to receive event callbacks in ZPNs, and handle SDK exceptions and message notification callbacks.
+
+
+    - [`registered`](@registered): The result callback for registering the offline push notification services from APNs and Google FCM. You can get the PushID from this callback.Both APNs and Google FCM support this callback.
+    - [`notificationArrived `](@notificationArrived): The callback displays notifications from APNs. 
+    - [`throughMessageReceived `](@throughMessageReceived): The pass-through messages returned by Google FCM will trigger this callback, and the callback will  throw notifications.
+
+  <Accordion title="Sample code for listening up event callbacks using the ZPNsEventHandler" defaultOpen="false">
+  You can obtain ZPNs registration results by listening to the [registered](@registered) callback, and print the PushID when the method is triggered.
+
+  ```javascript
+  ZPNs.getInstance().on('registered', function(message) {
+      console.log('[ZPNs] registered. pushID: ' + message.pushID + ", error: " + message.errorCode)
+  });
+  ```
+  </Accordion>
+
+2. Configure the Google FCM push notification channel.
+
+    As described in [Integrate push notification channels](##integrate-push-notification-channels), you have already integrated the offline push notification channel of Google FCM. Now, modify the [ZPNsConfig > enableFCMPush] as `true`], and call the [setPushConfig](@setPushConfig) to enable the channel.
+
+    ```javascript
+    ZPNs.setPushConfig({"enableFCMPush": true});
+    ```
+
+3. Call [enableDebug](@enableDebug) to set whether the compilation environment of the current project is Debug, and the default is false. This operation is to notify ZPNs SDK whether it is a Debug environment, and the PushID generation rules are affected by this, please set it correctly before calling the [registerPush](@registerPush) interface.
+
+    <Warning title="Warning">
+    If set to true, the push cannot be received in the release environment.
+    </Warning>
+
+    ```javascript
+    ZPNs.enableDebug(true);
+    ```
+
+4. Call the [registerPush](@registerPush) interface to register offline push.
+
+    <Note title="Note">
+    - When calling the [registerPush](@registerPush) method on iOS , you need to fill in the `ZPNsIOSEnvironment` in advance according to the certificate selected during packaging, whether it is development or distribution. When switching certificates, please change this enumeration.
+    - When the certificate is development, `ZPNsIOSEnvironment` is `Development`.
+    - When the certificate is distribution, `ZPNsIOSEnvironment` is `Production`.
+    - If you are not sure about the current `ZPNsIOSEnvironment`, please fill in `ZPNsIOSEnvironment.Automatic`. `Automatic` may be affected by the iOS version. If the iOS undergoes a major version update, please pay attention to the [ZPNs release notes](./../Client%20SDKs/ZPNs%20release%20notes.mdx).
+    </Note>
+
+    ```javascript
+    ZPNs.getInstance().registerPush();
+    ```
+
+    After registering the offline push function, you can get the `pushID` of the offline push through the [registered](@registered) callback in the [ZPNsEventHandler](@-ZPNsEventHandler) class, and push the offline message to the specified device.
+
+### Implement the offline push notification feature with the ZIM SDK
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of sending offline push notifications for one-on-one or group chats, and call invitations.
+
+<Warning title="Warning">
+Before implementing the offline function, please refer to [Send and receive messages](./../Send%20and%20receive%20messages.mdx) to realize the function of sending individual chat/group chat messages.
+</Warning>
+
+#### Send one-on-one messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [ZIMPushConfig](@-ZIMPushConfig) object.
+
+    ```javascript
+    var pushConfig = {
+        title = "Offline push title";
+        content = "Offline push content";
+        // extendedData = "Custom field, optional"; // Use this field when ZIM version < 2.5.0
+        // payload = "Custom field, optional"; // Use this field when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object. 
+
+    ```javascript
+    var sendConfig = {
+        priority: 2,
+        pushConfig: pushConfig
+    };
+    ```
+
+3. The message sender calls the [`sendMessage`](@sendMessage) method with the `sendConfig` to send a one-to-one message. 
+
+    ```javascript
+    var toUserID = '';
+    var messageTextObj = { type: 1, message: 'Content' };
+    zim.sendMessage(messageTextObj, toUserID, 0, sendConfig)
+    .then(function ({ message }) {
+        // Successfully sent
+    })
+    .catch(function (err) {
+        // Failed to send the message
+    });
+    ```
+
+4. If the receiver is offline, the user will receive the message when going online.
+
+### Send group messages with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [ZIMPushConfig](@-ZIMPushConfig) object.
+
+    ```javascript
+    var pushConfig = {
+        title = "Offline push title";
+        content = "Offline push content";
+        // extendedData = "Custom field, optional"; // Use this field when ZIM version < 2.5.0
+        // payload = "Custom field, optional"; // Use this field when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMMessageSendConfig`](@-ZIMMessageSendConfig) object. 
+
+    ```javascript
+    var sendConfig = {
+        priority: 2,
+        pushConfig: pushConfig
+    };
+    ```
+
+3. The message sender calls the [`sendMessage`](@sendMessage) method with the `sendConfig` to send a group message. 
+
+    ```javascript
+    var toGroupID = '';
+    var messageTextObj = { type: 1, message: 'Content' };
+    zim.sendMessage(messageTextObj, toGroupID, 2, sendConfig)
+    .then(function ({ message }) {
+        // Successfully sent
+    })
+    .catch(function (err) {
+        // Failed to send the message
+    });
+    ```
+
+4. The offline group members can receive the message when getting back online.
+
+#### Send call invitations with offline push notification
+
+1. Set the offline push notification title, content, and other properties in the [ZIMPushConfig](@-ZIMPushConfig) object.
+
+    ```javascript
+    var pushConfig = {
+        title = "Offline push title";
+        content = "Offline push content";
+        // extendedData = "Custom field, optional"; // Use this field when ZIM version < 2.5.0
+        // payload = "Custom field, optional"; // Use this field when ZIM version >= 2.5.0
+        resourcesID = "resource ID, optional";
+    }
+    ```
+
+2. Set up the configurations for offline push notification by modifying the `pushConfig` parameter of the [`ZIMCallInviteConfig `](@-ZIMCallInviteConfig) object. 
+
+    ```javascript
+    var callInviteConfig = {
+        timeout: 90,
+        pushConfig: pushConfig
+    };
+    ```
+
+3. The call invitation sender calls the [`callInvite`](@callInvite) method with the `callInviteConfig` to send a call invitation. 
+
+    ```javascript
+    var invitees = ['xxxx'];  // List of invitee IDs
+    zim.callInvite(invitees, callInviteConfig)
+        .then(function({ callID, timeout, errorInvitees }){
+            // Operation succeeded
+            // The callID here is the ID generated by the SDK to uniquely identify a call after the user initiates the call; this callID will be used when the initiator cancels the call or the invitee accepts/rejects the call.
+        })
+        .catch(function(err){
+            // Operation failed
+        })
+    ```
+
+4. The invitees who are offline can receive an offline push notification. Once they come online, if the call invitation is still ongoing, they will receive the callback [callInvitationReceived](@callInvitationReceived).

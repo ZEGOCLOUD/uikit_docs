@@ -1,0 +1,187 @@
+---
+articleID: 17554
+---
+
+# ZPNs release notes
+
+- - -
+
+## Version 2.6.0
+
+**Release Date: November 23, 2023**
+
+<Warning title="Warning">
+
+[Upgrade guide for version 2.6.0, please read before upgrading >> >>](./ZPNs%20upgrade%20guide.mdx)
+</Warning>
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Custom Notification Icon | In addition to displaying the app's default icon in offline push notifications, you can now customize the notification icon for offline pushes with ZPNs. This can be used to display the sender's avatar in push notifications for one-on-one or group messages. For more details, please refer to [Custom notification icon](./../Offline%20push%20notifications/Best%20Practices/Custom%20notification%20icon.mdx). | - |
+| Notification with Image | Supports including an image in offline push notifications. For more details, please refer to [Notify with photo attachment](./../Offline%20push%20notifications/Best%20Practices/Notify%20with%20photo%20attachment.mdx). | <ul><li>[ZIMPushConfig > resourceID](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig/resourcesID.html)</li><li>[Push message to all users](/zim-server/push-message-to-all-users)</li></ul> |
+| Update App Icon Badge | Supports updating the app icon badge to remind users of unread messages when they are offline. For more details, please refer to [Modify a notification badge](./../Offline%20push%20notifications/Best%20Practices/Modify%20a%20notification%20badge.mdx). | <ul><li>[setServerBadge](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/setServerBadge.html)</li><li>[ZIMPushConfig > enableBadge](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig/enableBadge.html)</li><li>[ZIMPushConfig > badgeIncrement](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig/badgeIncrement.html)</li></ul> |
+| Replace Notification | Supports replacing the content of a previously sent push notification. For more details, please refer to [Update a push notification](./../Offline%20push%20notifications/Best%20Practices/Update%20a%20push%20notification.mdx). | - |
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Improved iOS VoIP development experience | To facilitate Flutter developers in implementing VoIP functionality, ZEGO has encapsulated some functions of iOS CallKit and PushKit libraries into a separate plugin called zego_callkit. For more details, please refer to the [CallKit User Guide](./../Offline%20push%20notifications/Best%20Practices/CallKit%20user%20guide.mdx). | - |
+
+<br/>
+---
+
+## Version 2.5.0
+
+**Release Date: September 15, 2023**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Web Development | Support developing web applications using the Flutter framework, and implement offline push. For more details, please refer to [Implement Push Notification (Web)](./../Offline%20push%20notifications/Implement%20offline%20push%20notification.mdx#implementation-on-web). | - |
+| Local Logs | Add ZPNs local log component, call [uploadLog](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/uploadLog.html) of ZIM SDK to upload logs of both ZIM and ZPNs simultaneously. | [uploadLog](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/uploadLog.html) |
+| Unregister Push | Support unregistering offline push and disabling push notifications. | [unregisterPush](https://pub.dev/documentation/zego_zpns/2.5.0/zego_zpns/ZPNs/unregisterPush.html) |
+| iOS Push Display Settings | [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) adds parameter [ZPNsIOSNotificationArrivedConfig](https://pub.dev/documentation/zego_zpns/2.5.0/zego_zpns/ZPNsIOSNotificationArrivedConfig-class.html), which allows specifying whether to display iOS push alerts, sounds, and badges when registering for offline push. | [ZPNsIOSNotificationArrivedConfig](https://pub.dev/documentation/zego_zpns/2.5.0/zego_zpns/ZPNsIOSNotificationArrivedConfig-class.html) |
+| Push Private Messages to Android Devices | [ZIMPushConfig > resourcesID](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig/resourcesID.html) |
+
+<h4>Improvements</h4>
+
+| Feature | Description | Related APIs |
+| -- | -- | -- |
+| Automatic Detection of iOS Environment | [ZPNsIOSEnvironment](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsIOSEnvironment.html) enum adds `Automatic`. When developers call [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) to register for offline push and are not familiar with the iOS environment, they can pass this enum and ZPNs will automatically detect the environment. | [ZPNsIOSEnvironment > Automatic](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsIOSEnvironment.html#Automatic) |
+| Initiate iOS Callkit Call Interface | Add `reportIncomingCall` interface to support initiating the iOS Callkit call interface. | `reportIncomingCall` |
+
+<h4>API Changes</h4>
+
+| Feature | Description | Related APIs |
+| -- | -- | -- |
+| Data Class Member Variable Type Change | The type of `extras` in [ZPNsMessage](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsMessage-class.html) changes from `Map<String, Object>` to `Map<String, Object?>` to accommodate cases where the value of the Map field may be null when converting from JSON to Map. For more details, please refer to [ZPNs 升级指南 - 2.5.0 升级指南ZPNs Upgrade Guide - 2.5.0 Upgrade Guide](17218#2_5_0). | [ZPNsMessage > extras](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsMessage/extras.html) |
+
+<br/>
+---
+
+## Version 2.3.2
+
+**Release Date: 2023-04-21**
+
+<h4>Interface Changes</h4>
+
+| Feature | Description | Related Interfaces |
+| -- | -- | -- |
+| Interface Change | The callback method `performSetMutedCallAction` in `CallKitEventHandler` has been changed to `performSetMutedCallAction` | `performSetMutedCallAction` |
+
+<h4>Bug Fixes</h4>
+
+Fixed known issues.
+
+<br/>
+---
+
+## Version 2.3.1
+
+**Release Date: 2023-03-29**
+
+<h4>Interface Changes</h4>
+
+| Feature | Description | Related Interfaces |
+| -- | -- | -- |
+| Interface Change | <ul><li>Added `setBackgroundMessageHandler` interface for setting the callback triggered by Android silent push.</li><li>Renamed `didReceiveIncomingPushWithPayload` method to `didReceiveIncomingPush`, with parameters changed from `payload` and `completion` to `extras` and `uuid`.</li></ul> | <ul><li>[setBackgroundMessageHandler](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/setBackgroundMessageHandler.html)</li><li>`didReceiveIncomingPush`</li></ul>|
+
+<h4>Bug Fixes</h4>
+
+Fixed known issues.
+
+<br/>
+---
+
+## Version 2.3.0
+
+**Release Date: 2023-03-14**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related Interfaces |
+| -- | -- | -- |
+| Support iOS VoIP Push | Support VoIP notification functionality through iOS CallKit. | - |
+| Encapsulate iOS CallKit System API | Encapsulate iOS CallKit for easier cross-platform usage. | - |
+| Support Silent Push | Support synchronizing data between the background-running app and the server through silent push. | - |
+| Encapsulate Android Local Notification API | Flutter's local notification interface now supports Android platform. | [addLocalNotification](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/addLocalNotification.html) |
+
+<h4>Interface Changes</h4>
+
+| Feature | Description | Related Interfaces |
+| -- | -- | -- |
+| Interface Change | Based on the requirements for implementing silent push on iOS, the [onThroughMessageReceived](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onThroughMessageReceived.html) callback method has added a parameter `iOSOnThroughMessageReceiveCompletion`, so that when the operations triggered by [onThroughMessageReceived](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onThroughMessageReceived.html) are completed, `iOSOnThroughMessageReceiveCompletion()` can be called to notify the iOS system that the relevant operations have been completed. | [onThroughMessageReceived](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onThroughMessageReceived.html) |
+
+<br/>
+---
+
+## Version 2.2.0
+
+**Release Date: 2023-01-11**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related API |
+| -- | -- | -- |
+| Encapsulate Android channel creation | For custom ringtones on Android 8.0 and above, a channel needs to be created. Flutter has simplified this API for easy use by customers. | [createNotificationChannel](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/createNotificationChannel.html) |
+| Encapsulate iOS local notification sending | Simplify the iOS local notification sending function for easy use by developers. | [addLocalNotification](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/addLocalNotification.html) |
+
+<h4>Improvements</h4>
+
+| Feature | Description | Related API |
+| -- | -- | -- |
+| Changes to APIs | <ul><li>Differentiate between static functions and member functions.</li><li>Removed meaningless asynchronous return values.</li><li>[enableDebug](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/enableDebug.html) is no longer aligned with both iOS and Android platforms, only available on Android.</li><li>[registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) added optional named parameter [ZPNsIOSEnvironment](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsIOSEnvironment.html). If running in iOS environment and this parameter is not filled, ZPNs SDK will throw an exception.</li><li>In [ZPNsEventHandler](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler-class.html), the extendedData string in ZPNsMessage has been changed to an extra dictionary to resolve potential review issues on the Google Play Store.</li></ul> | - |
+
+<br/>
+---
+
+## Version 2.1.3
+
+**Release Date: 2022-09-01**
+
+<h4>Improvements</h4>
+
+| Feature | Description | Related API |
+| -- | -- | -- |
+| Android version compatibility | Compatible with Android 12. | - |
+
+<br/>
+---
+
+## Version 2.1.2
+
+**Release Date: 2022-08-31**
+
+<h4>Bug Fixes</h4>
+
+Fixed an error related to Android dependencies.
+
+<br/>
+---
+
+## Version 2.1.1
+
+**Release Date: 2022-08-28**
+
+<h4>Bug Fixes</h4>
+
+Fixed known issues.
+
+<br/>
+---
+
+## Version 2.1.0
+
+**Release Date: 2022-07-28**
+
+ZPNs SDK is first released .To use it, please use it with ZIM SDK.
+
+| Feature | Description | Related API |
+|-------|-------|-------|
+| Register for offline push | Register for offline push notifications from vendors. Please configure the vendor information before using. | <ul><li>[setPushConfig](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/setPushConfig.html)</li><li>[registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html)</li></ul> |
+| Receive vendor notification click callback | Vendor-specific notification click callbacks are unified and thrown in the related APIs. | [onNotificationClicked](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onNotificationClicked.html)|
+| Receive vendor notification display callback | Vendor-specific notification display callbacks are thrown in this interface. | [onNotificationArrived](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsEventHandler/onNotificationArrived.html)|

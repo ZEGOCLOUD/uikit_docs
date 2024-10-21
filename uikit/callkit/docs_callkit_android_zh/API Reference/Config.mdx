@@ -16,6 +16,8 @@
 | showDeclineButton                   | boolean                             | 收到在线来电呼叫的时候，是否显示拒绝按钮。                                                                                                                                                                                    |
 | notificationConfig                  | ZegoNotificationConfig              | 离线呼相关配置，具体请参考离线[向离线应用发送呼叫邀请](./../Implement%20offline%20call/Offline%20call.mdx)文档。                                                                                                              |
 | translationText                     | ZegoTranslationText                 | 呼叫邀请相关的文案。请参考[切换语言](./../Calling%20config/Switch%20language.mdx)。                                                                                                                                        |
+| callingConfig                       | [ZegoCallInvitationInCallingConfig](#zegocallinvitationincallingconfig)   | 通话中邀请的相关配置。  |
+| endCallWhenInitiatorLeave           | boolean                                                               | 是否因发起者离开而自动结束通话，默认为 false。       |
 
 
 ## ZegoUIKitPrebuiltCallConfig
@@ -40,8 +42,7 @@
 | miniVideoConfig             | [ZegoMiniVideoConfig](#zegominivideoconfig)                           | 小窗口视频的文案和可绘制资源配置。                                                                       |
 | avatarViewProvider          | ZegoAvatarViewProvider                                                | 可自定义用户头像。                                                                                       |
 | leaveCallListener           | LeaveCallListener                                                     | 自己离开通话的回调。                                                                                     |
-| zegoCallText                | ZegoCallText                                                          | 通话相关文案。                                                                                           |
-
+| zegoCallText                | ZegoCallText                                                          | 通话相关文案。|   
 
 ## ZegoPrebuiltAudioVideoViewConfig
 视图配置类
@@ -136,3 +137,12 @@
 | screenSharingToggleButtonOnImage  | Drawable | 屏幕共享切换按钮开启状态的图标。 |
 | screenSharingToggleButtonOffImage | Drawable | 屏幕共享切换按钮关闭状态的图标。 |
 | beautyButtonImage                 | Drawable | 美颜按钮的图标。                 |
+
+## ZegoCallInvitationInCallingConfig
+通话中邀请的相关配置
+
+| 属性                   | 类型                   | 描述                                  |
+| ---------------------- | ---------------------- | ------------------------------------- |
+| canInvitingInCalling              | boolean                | 是否开启通话中邀请模式。默认为 false。 |
+| onlyInitiatorCanInvite | boolean | 只有创建通话的人才能邀请别人加入。默认为 false。 |
+

@@ -73,6 +73,16 @@ declare interface ZegoCloudRoomConfig {
     showAvatarWhenCameraOff?: boolean; // Whether to display the user profile picture when the camera is off. The default value is true
   }[];
   backgroundUrl?: string; // background
+  liveNotStartedTextForAudience?: string; // Custom text displayed for the audience before the live broadcast starts.
+  startLiveButtonText?: string; // Custom Start Live button Text.
+  // When a user is invited during a call, the Invite User window appears on the inviting party. If you want to hide this view, set it to false. Display by default.
+  // You can cancel the invitation to this user in this view.
+  showWaitingCallAcceptAudioVideoView?: boolean;
+  // Configure the call invitation list during a call
+  callingInvitationListConfig?: {
+    waitingSelectUsers: ZegoUser[]; // Waiting for selected members
+    defaultChecked?: boolean; // Whether it is selected by default, the default value is true
+  };
 
   // 1.4 Leaving view
   showLeavingView?: boolean; // Whether to display the leaving view. Displayed by default.

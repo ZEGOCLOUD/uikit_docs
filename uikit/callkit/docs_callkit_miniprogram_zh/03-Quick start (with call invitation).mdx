@@ -1,0 +1,143 @@
+# 快速开始
+
+这份文档将指导您如何在 uni-app 项目集成`音视频通话 UIKit`小程序 SDK 并快速开始包含呼叫邀请的音视频通话。
+
+## 准备环境：
+- 参考 [uni-app 文档](https://zh.uniapp.dcloud.io/quickstart-hx.html)创建项目。
+- 使用微信小程序基础库1.7.0 或以上版本，否则不支持音视频播放。
+- 通过微信小程序实时音视频播放相关类目审核（获取到对应的小程序 AppID），开通 [live-player](https://developers.weixin.qq.com/miniprogram/dev/component/live-player.html)、[live-pusher](https://developers.weixin.qq.com/miniprogram/dev/component/live-pusher.html) 组件权限。
+
+## 前提条件
+- 已在 [ZEGO 控制台](https://console.zego.im/account/login) 创建项目，并申请有效的 AppID 和 AppSign，详情请参考 [控制台 - 项目信息](https://doc-zh.zego.im/article/12107)。
+- 联系 ZEGO 技术支持，开通 UIKit 相关服务。
+
+## 安装 SDK
+
+请在项目根目录运行以下命令将 SDK 安装到项目中。
+
+```shell
+npm i @zegocloud/zego-uikit-prebuilt-call-mini-program --save
+```
+
+## 使用步骤
+
+<Steps>
+<Step title="在您的服务端部署好 Token 生成服务。">
+详细步骤请参考 [Token](https://doc-zh.zego.im/article/8940) 生成文档。如需快速调试，建议使用控制台生成的临时 Token，生成临时 Token 的具体操作请参考 [控制台 - 项目管理](https://doc-zh.zego.im/article/12107)。
+</Step>
+<Step title="导入 UIKit 页面。">
+您需要在项目根目录下创建一个名为 `ZegoUIKitPrebuiltCall` 的目录，然后将 UIKit 相关的页面拷贝至该目录中。可以参考以下命令操作：
+```shell
+mkdir -p ./ZegoUIKitPrebuiltCall && cp -r node_modules/@zegocloud/zego-uikit-prebuilt-call-mini-program/src/ ./ZegoUIKitPrebuiltCall/src/
+```
+</Step>
+<Step title="在 uni-app 的 pages.json 文件中添加跳转至 UIKit 的页面配置项。">
+其中 path 指向上一个步骤中从 SDK 拷贝出来的页面路径。
+```js pages.json
+{
+    "path": "ZegoUIKitPrebuiltCall/src/pages/call_invitation/ZegoCallInviterPage",
+    "style": {
+        "navigationBarTitleText": "Waiting Page"
+    }
+},
+{
+    "path": "ZegoUIKitPrebuiltCall/src/pages/call_invitation/ZegoCallInvitationRoom",
+    "style": {
+        "navigationBarTitleText": "CallInvitation Room"
+    }
+},
+{
+    "path": "ZegoUIKitPrebuiltCall/src/pages/call_invitation/ZegoCallInviteePage",
+    "style": {
+        "navigationBarTitleText": "Incoming Call"
+    }
+}
+```
+</Step>
+<Step title="初始化带有呼叫邀请功能的 Call Kit。">
+在您的首页或其他页面中，参考以下代码初始化 ZegoUIKitPrebuiltCall。
+
+<Warning title="Warning">设置房间配置的 mode 参数为 ZegoCallScenario.CALL_INTIVATION 后才能发起呼叫和接受呼叫。</Warning>
+```js YourInitPage.vue {10,14}
+<script setup>
+import { ZegoUIKitPrebuiltCall, ZegoCallScenario }  from '@zegocloud/zego-uikit-prebuilt-call-mini-program';
+
+const appID = 0; // 您从控制台获取的 AppID
+const server = ""; // 您从控制台获取的 Server 地址
+const userID = "user1"; // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
+const userName = "user1_name"; // userName 用户名
+const token = ""; // 您从服务端生成的 Token
+const config = {
+    mode: ZegoCallScenario.CALL_INTIVATION, // 设置 mode 为 ZegoCallScenario.CALL_INTIVATION 后才能发起呼叫和接受呼叫
+}; // 房间配置
+
+onMounted(() => {
+	ZegoUIKitPrebuiltCall.init(appID, server, userID, userName, token, config);
+})
+</script>
+```
+</Step>
+<Step title="添加呼叫邀请按钮。">
+
+在您的其他页面中，参考以下代码导入 ZegoSendCallInvitationButton 组件，当点击组件后，就会发起呼叫邀请。
+```js YourPage.vue {3-10,14}
+<template>
+    <view class="button-container">
+        <ZegoSendCallInvitationButton 
+            :invitees="invitees" 
+            :isVideoCall="true" 
+            :text="text"
+            :customData="customData"
+            :timeout="30"
+            :onPressed="sendCallback">
+        </ZegoSendCallInvitationButton>
+    </view>
+</template>
+<script setup>
+import ZegoSendCallInvitationButton from './ZegoUIKitPrebuiltCall/src/components/ZegoSendCallInvitationButton.vue';
+import { ref } from 'vue';
+// 您要呼叫的用户列表
+const invitees = ref([{
+    userID: 'user_invitee',
+    userName: 'user_invitee',
+}]);
+const text = ret("视频通话");
+const customData = ref("您需要传递给被叫者的其他参数");
+const sendCallback = (code: number, message: string, errorInvitees: string[]) => {
+    // 点击发起呼叫邀请的回调
+}
+</script>
+```
+
+#### ZegoSendCallInvitationButton 属性
+
+| 属性        | 类型    | 必需 | 描述                                                      |
+| :---------- | :------ | :--- | :-------------------------------------------------------- |
+| invitees    | Array   | 是   | 被叫用户信息。必须包括 userID 和 userName。               |
+| isVideoCall | Boolean | 是   | 如果为 true，则按下按钮时进行视频通话，否则进行语音通话。 |
+| text        | String  | 否   | 发起呼叫邀请按钮的文本。                                  |
+| customData  | String  | 否   | 您需要传递给被叫者的自定义参数。                          |
+| timeout     | Number  | 否   | 超时时长。默认为60秒。超时后会自动取消本次呼叫。          |
+| onPressed   | Functon | 否   | 点击发起呼叫邀请按钮的回调。                              |
+
+</Step>
+</Steps>
+
+至此，您已经完成了所有步骤！运行后的效果如下：
+
+**主叫方**
+
+|示例 Demo 首页|发起呼叫邀请页面|主叫等待页面|
+|--|--|--|
+|<Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/c5e53f324b.png" alt="home.png"/></Frame>|<Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/e7e43e36c2.png" alt="StartCallPage.png"/></Frame>|<Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/8eb62111b7.png" alt="CallerWaitingPage.png"/></Frame>|
+
+**被叫方**
+
+|被叫收到呼叫邀请页面|接受邀请后双方通话页面|
+|--|--|
+|<Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/42894b6f9b.png" alt="CalleeReceiveInvite.png"/></Frame>|<Frame width="128" height="auto" caption=""><img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/ac8b9222af.png" alt="talkingpage.png"/></Frame>|
+
+
+
+
+

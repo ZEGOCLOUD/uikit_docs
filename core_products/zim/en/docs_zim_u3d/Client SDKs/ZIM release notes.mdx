@@ -1,0 +1,111 @@
+---
+articleID: 16250
+---
+
+# ZIM release notes
+
+- - -
+
+## Version 2.10.0
+
+**Release date: 2023-09-22**
+
+<Warning title="Warning">
+
+[Compilation issues when upgrading to version 2.10.0, must read before upgrading >>](./ZIM%20upgrade%20guide.mdx##2100-upgrade-guide)
+</Warning>
+
+<p class="hthree">New features</p>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Call invitation new mode  | Added advanced mode, supports inviting, exiting, and ending calls during a call.  | <ul><li>[CallingInvite](@CallingInvite)</li><li>[CallQuit](@CallQuit)</li><li>[CallEnd](@CallEnd)</li></ul> |
+| Revoke other's message | In group conversations, the group owner can revoke messages sent by others. | [RevokeMessage](@RevokeMessage) |
+| Get room member information | Supports calling server-side API to get information about room members based on room ID, including the number of users in the room, user IDs, and names.| [Obtain information about users in a room](/zim-server/room/obtain-information-about-users-in-a-room) |
+| Server-side message sending API now supports more message types |  Supports sending image, file, audio, video, custom, and barrage message types through the server-side API. For details, please refer to [MessageBody introduction](/zim-server/messagebody-introduction).| <ul><li>[Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message)</li><li>[Send group messages](/zim-server/messaging/send-group-messages)</li><li>[Send room messages](/zim-server/messaging/send-room-messages)</li></ul> |
+| Download external rich media messages| Supports calling the [DownloadMediaFile](@DownloadMediaFile) interface to download rich media messages through external URLs. | [DownloadMediaFile](@DownloadMediaFile) |
+| Set message extension fields | Added message extension fields that are only visible on the local end, supports updating this field, can be used to display message translation status or other content.  | <ul><li>[localExtendedData](@localExtendedData-ZIMMessage)</li><li>[UpdateMessageLocalExtendedData](@UpdateMessageLocalExtendedData)</li></ul> | 
+| Search local messages | Search local messages in individual or all 'one-to-one' and 'group' conversations based on keywords, user IDs, and other conditions, and retrieve a list of messages that meet the criteria; can also search conversations based on local messages. | <ul><li>[SearchLocalMessages](@SearchLocalMessages)</li><li>[SearchGlobalLocalMessages](@SearchGlobalLocalMessages)</li><li>[SearchLocalConversations](@SearchLocalConversations)</li></ul> |
+| Search groups |  Supports searching for group names based on keywords, and also supports including group member names and nicknames in the search scope.| [SearchLocalGroups](@SearchLocalGroups) |
+| Search group members |  Supports searching for group members' names in a specific group based on keywords, and also supports including group members' nicknames in the search scope.  | [SearchLocalGroupMembers](@SearchLocalGroupMembers) |
+|  Respond to messages with emoticons | Supports responding to messages with emoticons in one-on-one chats and group chats. It can be used for scenarios such as replying with emojis and initiating group polls or confirming group results. Additionally, it supports deleting one's own reactions and querying user information related to a specific reaction.  | <ul><li>[AddMessageReaction](@AddMessageReaction)</li><li>[DeleteMessageReaction](@DeleteMessageReaction)</li><li>[QueryMessageReactionUserList](@QueryMessageReactionUserList)</li></ul> |
+| Sender unaware for server-side peer messaging  | Added the `SenderUnaware`  field, which allows the client associated with the `FromUserId`(sender's user ID) to be unaware of the server-side peer message being sent.   | [Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message)|
+| Server-side broadcast messaging | Supports sending messages with specific content, such as text and images, to all online users, including the message sender. This feature is suitable for scenarios like broadcasting announcements or displaying cross-room gift animations.  | <ul><li>[Push message to all users](/zim-server/messaging/push-message-to-all-users)</li><li>[OnBroadcastMessageReceived](@OnBroadcastMessageReceived)</li></ul> |
+| The server has added a new interface to query whether the user is in the room | This interface supports querying whether a specified user is present in the target room. | [Query whether a user is in a room](/zim-server/room/query-whether-a-user-is-in-a-room) |
+
+
+<p class="hthree">Enhancement</p>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Call invitation reception callback |  Optimize the regular mode of call invitation, support offline users to receive call invitations and be immediately notified upon going online within the timeout period of the call invitation.| [OnCallUserStateChanged](@OnCallUserStateChanged) |
+| Adjusting the maximum length of user nickname, UserName | Extended from 64 bytes to 256 bytes, supports longer nicknames, applicable to ZIM SDK version 2.0.0 and later. |  [ZIMUserInfo > userName](@userName) |
+
+<p class="hthree">Deprecation</p>
+
+| Item | Description | Method |
+| -----  | ---- | ----- |
+| <ul><li>[OnCallInvitationAccepted](@OnCallInvitationAccepted)</li><li>[OnCallInvitationRejected](@OnCallInvitationRejected)</li><li>[OnCallInviteesAnsweredTimeout](@OnCallInviteesAnsweredTimeout)</li></ul> |  To facilitate developers to monitor the call status changes of users in call invitations, [onCallUserStateChanged](@onCallUserStateChanged) is added to replace the original call invitation callbacks  `onCallInvitationAccepted`、`onCallInvitationRejected` and `onCallInviteesAnsweredTimeout`.  | 2.9.0 |
+
+---
+
+## Version 2.8.0
+
+**Release Date: 2023-05-29**
+
+<p class="hthree">New Features</p>
+
+| Feature  | Description | Related APIs |
+|-------|-------|-------|
+| Pinned Conversations | Users can choose conversations they want to prioritize and pin them at the top of the conversation list. | <ul><li>[UpdateConversationPinnedState](@UpdateConversationPinnedState)</li><li>[QueryConversationPinnedList](@QueryConversationPinnedList)</li></ul> |
+| Custom Message Types | Added support for custom message types. Developers can define their own message types, such as voting types, chain types, video card types, etc., and handle the message parsing themselves. ZIM SDK does not define or parse the specific content of custom messages. | [ZIMCustomMessage](@-ZIMCustomMessage) |
+| Query Conversation Information | Retrieve detailed information about a conversation by specifying the conversation ID. | [QueryConversation](@QueryConversation) |
+| Query Room Members Status | Check if target users are in a specific room by specifying the user IDs and room ID. This can be used for business logic design, such as inviting users for co-hosting.<p>Note: Supports querying information for up to 10 users at a time.</p> | [QueryRoomMembers](@QueryRoomMembers) |
+| Pre-send message callback | By setting server-side callbacks, when users send one-on-one, group, or room chat messages, ZIM sends requests to the developer's server. Developers can implement:<ul><li>Intercepting inappropriate messages.</li><li>Establishing user blacklists and whitelists.</li></ul>  | [Callback on message not sent yet](/zim-server/callbacks/message-not-sent-yet) |
+| Post-send message callback| By setting server-side callbacks, after users successfully or unsuccessfully send one-on-one, group, or room chat messages, ZIM sends requests to the developer's server. Developers can implement:<ul><li>Real-time recording of messages sent by users.</li><li>Statistics of messages sent by users.</li><li>In live streaming and screen recording scenarios, embedding chat records into recorded videos using timestamps.</li></ul>  | [Callback on message sent](/zim-server/callbacks/message-sent) |
+| Batch user registration | Supports calling server-side APIs to specify user information (user ID, etc.), allowing developers to register multiple users with a single request. <p>Note: Supports registering up to 100 users at a time.</p> | [Batch register users](/zim-server/user/batch-register-users) |
+| Query group list under an app | Supports calling server-side APIs to retrieve the IDs of all groups in the app.  | [Query group list in the app](/zim-server/group/query-group-list-in-the-app) |
+| Query group member list | Supports calling server-side APIs to specify the group ID and retrieve the member list of the corresponding group.  | [Query group member list](/zim-server/group/query-group-member-list) |
+| Remove group members | Supports calling server-side APIs to specify the group ID and user ID, and remove group members in batch. <p>Note: Supports removing up to 50 group members at a time.</p> | [Remove group member](/zim-server/group/remove-group-member) |
+
+<p class="hthree">Deprecated and Removed</p>
+
+| Deprecated Item  | Description | Related APIs |
+| -----  | ---- | ----- |
+| Deprecated System Message Type | The system message (value 30) has been deprecated. Developers are advised to use the more feature-rich custom message (value 200) instead. | [ZIMMessageTypeCustom](/article/api?doc=zim_API~cs_unity3d~enum~ZIMMessageType#custom) |
+
+
+<p class="hthree">Other Matters</p>
+
+#### 1. Starting from version 2.8.0, ZIM no longer supports iOS versions below 11.0. Developers should set their iOS Deployment Target (minimum supported version) to iOS 11.0.
+
+For more information, please refer to the [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
+#### 2. Starting from version 2.8.0, ZIM iOS SDK no longer supports the 32-bit armv7 architecture.
+
+For more information, please refer to the [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
+#### 3. Starting from version 2.8.0, ZIM no longer supports macOS versions below 10.13. Developers should set their macOS Deployment Target (minimum supported version) to macOS 10.13.
+
+For more information, please refer to the [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
+---
+
+
+
+
+## Version 2.7.0
+
+**Release Date: 2023-03-06**
+
+Initial release with the following main features:
+
+| Feature  | Description | Related APIs |
+|-------|-------|-------|
+| Conversation Management | <ul><li>Supports user updating, querying, and deleting conversation lists.</li><li>Supports fetching conversation lists for displaying all conversations and implementing message lists.</li></ul>| <ul><li>[queryConversationList](@queryConversationList)</li></ul> |
+| Room System | <ul><li>Supports user login, creation, joining, entering, and exiting rooms.</li><li>If a room does not exist when entering, supports automatic creation of the room.</li><li>Supports room attributes.</li></ul>| <ul><li>[createRoom](@createRoom)</li><li>[joinRoom](@joinRoom)</li><li>[enterRoom](@enterRoom)</li><li>[leaveRoom](@leaveRoom)</li><li>[setRoomAttributes](@setRoomAttributes)</li></ul>|
+| Group System | Supports user login, creation, joining, quitting, and dissolving group chats; also equipped with common functions such as transferring group ownership and setting group announcements. | <ul><li>[createGroup](@createGroup)</li><li>[joinGroup](@joinGroup)</li><li>[leaveGroup](@leaveGroup)</li><li>[dismissGroup](@dismissGroup)</li><li>[transferGroupOwner](@transferGroupOwner)</li></ul>|
+| Message Management | <ul><li>All messages of "one-on-one/group/room" are stored in the local database, allowing users to fetch historical messages even when switching devices.</li><li>Supports deleting specific messages or all messages in "one-on-one/group" conversations.</li></ul>| <ul><li>[queryHistoryMessage](@queryHistoryMessage)</li><li>[deleteMessages](@deleteMessages)</li><li>[deleteAllMessage](@deleteAllMessage)</li></ul>|
+| Call Invitations | <ul><li>Supports user login and sending call invitations, cancelling invitations to specified "users/groups/rooms"; supports other users accepting or rejecting invitations.</li><li>Can be used in scenarios such as video calls and co-hosting applications.</li></ul>| <ul><li>[callInvite](@callInvite)</li><li>[callCancel](@callCancel)</li><li>[callAccept](@callAccept)</li><li>[callReject](@callReject)</li></ul> |
+| Security Audit | Supports security auditing of communication messages (text messages) in one-on-one/group/room chats, including content review for pornography, violence, prohibited content, political content, and advertisements. | <ul><li>[sendMessage](@sendMessage)</li></ul> |
+| Information Fields | <ul><li>Supports users setting their own personal information, such as profile picture, personal signature, gender, etc., through extended fields.</li><li>Users can upload their own profile pictures and customize group avatars.</li></ul>| <ul><li>[updateUserExtendedData](@updateUserExtendedData)</li><li>[updateUserAvatarUrl](@updateUserAvatarUrl)</li><li>[ZIMUserFullInfo](@-ZIMUserFullInfo)</li><li>[updateGroupAvatarUrl](@updateGroupAvatarUrl)</li><li>[ZIMGroupInfo](@-ZIMGroupInfo)</li><li>[ZIMConversation](@-ZIMConversation)</li></ul>|

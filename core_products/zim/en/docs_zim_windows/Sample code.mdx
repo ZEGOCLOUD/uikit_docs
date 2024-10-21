@@ -1,0 +1,177 @@
+# Sample app
+
+- - -
+
+
+<Card title="Sample Code" href="https://storage.zego.im/zim/example/windows/ZIMDemo.zip" target="_blank">Click here to get the complete sample code.</Card>
+
+
+### Overview
+
+This article explains how to quickly run the example source code and experience instant messaging services.
+
+### Prepare the Environment
+
+Please make sure that your development environment meets the following technical requirements:
+
+* Windows: Windows 7 or above.
+* macOS: macOS 11.0 or above.
+* Install Qt 5.12.12 version: [Download Link](https://download.qt.io/archive/qt/5.12/5.12.12/). First-time Qt developers can refer to the [official tutorial](https://doc.qt.io/qt-5/gettingstarted.html).
+
+### Prerequisites
+
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+    - Create a project, get the AppID and AppSign.
+    - Subscribe to the In-app Chat service (contact us if the subscription doesn't go well).
+
+<Warning title="Warning">
+
+For SDK `2.3.0` or later, the AppSign authentication mode and Token-based authentication mode are both supported.
+
+If you want to change your authentication mode, please refer to the [Upgrade the authentication mode from using the AppSign to Token](https://docs.zegocloud.com/faq/token_upgrade).
+</Warning>
+
+
+
+### Sample code structure 
+
+The following structure shows the subdirectory structure of the In-app Chat sample code:
+
+```bash
+ZIMDemo	
+|   .clang-format
+|   chinese.ts
+|   emojipopupwindow.cpp
+|   emojipopupwindow.h
+|   emojiprovider.cpp
+|   emojiprovider.h
+|   emojitablemodel.cpp
+|   emojitablemodel.h
+|   emojitextedit.cpp
+|   emojitextedit.h
+|   emojitextobject.cpp
+|   emojitextobject.h
+|   english.ts
+|   main.cpp
+|   Makefile
+|   res.qrc
+|   zimmainview.cpp
+|   zimmainview.h
+|   zimmainview.ui
+|   ZIMQTDemo.pro
+|   zim_audio_player.cpp
+|   zim_audio_player.h
+|   zim_chat_message_item.cpp
+|   zim_chat_message_item.h
+|   zim_clicked_label.cpp
+|   zim_clicked_label.h
+|   zim_conversation_item_data.h
+|   zim_conversation_item_delegate.cpp
+|   zim_conversation_item_delegate.h
+|   zim_conversation_view.cpp
+|   zim_conversation_view.h
+|   zim_conversation_view.ui
+|   zim_create_c2c_widget.cpp
+|   zim_create_c2c_widget.h
+|   zim_create_c2c_widget.ui
+|   zim_create_group_widget.cpp
+|   zim_create_group_widget.h
+|   zim_create_group_widget.ui
+|   zim_create_room_widget.cpp
+|   zim_create_room_widget.h
+|   zim_create_room_widget.ui
+|   zim_demo_inner_defines.cpp
+|   zim_demo_inner_defines.h
+|   zim_demo_log.h
+|   zim_demo_log_h.cpp
+|   zim_download_url_thread.cpp
+|   zim_download_url_thread.h
+|   zim_enter_room_widget.cpp
+|   zim_enter_room_widget.h
+|   zim_enter_room_widget.ui
+|   zim_event_handler.cpp
+|   zim_event_handler.h
+|   zim_group_info_widget.cpp
+|   zim_group_info_widget.h
+|   zim_group_info_widget.ui
+|   zim_group_member_info_widget.cpp
+|   zim_group_member_info_widget.h
+|   zim_group_member_info_widget.ui
+|   zim_http.cpp
+|   zim_http.h
+|   zim_invite_member_widget.cpp
+|   zim_invite_member_widget.h
+|   zim_invite_member_widget.ui
+|   zim_join_group_widget.cpp
+|   zim_join_group_widget.h
+|   zim_join_group_widget.ui
+|   zim_join_room_widget.cpp
+|   zim_join_room_widget.h
+|   zim_join_room_widget.ui
+|   zim_member_item.cpp
+|   zim_member_item.h
+|   zim_member_item.ui
+|   zim_others_inforamtion.cpp
+|   zim_others_inforamtion.h
+|   zim_others_inforamtion.ui
+|   zim_room_info_widget.cpp
+|   zim_room_info_widget.h
+|   zim_room_info_widget.ui
+|   zim_settings_view.cpp
+|   zim_settings_view.h
+|   zim_settings_view.ui
+|   zim_sigslot.h
+|   zim_title_view.cpp
+|   zim_title_view.h
+|   zim_update_token_widget.cpp
+|   zim_update_token_widget.h
+|   zim_update_token_widget.ui
+|   zim_user_information.cpp
+|   zim_user_information.h
+|   zim_user_information.ui
+|   zim_user_item.cpp
+|   zim_user_item.h
+|   zim_user_item.ui
+|   zim_video_player_widget.cpp
+|   zim_video_player_widget.h
+|   zim_video_player_widget.ui
++---data
++---rapidjson
+\---sdk
+```
+
+### Run the sample code
+
+1. Go to the [SDK downloads](./Client%20SDKs/SDK%20downloads.mdx) to download the latest version of SDK, and copy the unzipped SDK package to the `./sdk` directory. 
+
+2. In Visual Studio 2019, click the **Open a project or solution**. Navigate to the unzipped sample code files, select the `ZIMDemo.sln` file under the **ZIMDemo** folder, and then click **Open**.
+
+3. Modify the `ZIMKeyCenter.cpp` file under the `ZIMDemo/` folder with the AppID and ServerSecret that you get in the previous **Prerequisites** steps. 
+
+    ```cpp
+    unsigned int ZIMConfigManager::getAppID()
+    {
+      return 0;     // input AppID here
+    }
+
+    std::string ZIMConfigManager::getSecret()
+    {
+      return "";     // input Secret here
+    }
+    ```
+
+4. Then, you can start to run the sample code and experience the In-app Chat service. 
+![/Pics/Windows/ZIM/DebuggerAndRun.png](https://storage.zego.im/sdk-doc/Pics/Windows/ZIM/DebuggerAndRun.png)
+
+### FAQ
+
+1. **Compliance failed because the Platform Toolset or Windows SDK version used in the project properties is different from the version in the sample source code, such as Visual Studio 2015/2017.**
+
+    In the General Properties, change the Platform Toolset to Visual Studio 140 or later, and the Windows SDK that you installed (10.0 or later).
+
+    ![/Pics/Windows/ZIM/Property_Win_and_MSVC_SDK.png](https://storage.zego.im/sdk-doc/Pics/Windows/ZIM/Property_Win_and_MSVC_SDK.png)
+
+2. **An error that shows `Zim.dll` file can't be found when running the sample project.**
+
+    Copy the `ZIM.dll` file under the corresponding OS folder (x86 or x84) to the `ZIMDemo.exe` directory (the default directory is `ZIMDemo/_out/(x64 or x86)/(Release or Debug)/_product`).

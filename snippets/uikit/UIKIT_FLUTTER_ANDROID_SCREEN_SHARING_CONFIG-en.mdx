@@ -1,0 +1,21 @@
+<Note title="Note">
+
+Before sharing the screen, a dialog will prompt the user to allow the app to share the screen. 
+
+The user needs to manually grant the permission.
+</Note>
+
+The screen sharing feature relies on foreground service to keep the app alive. Therefore, navigate to the "app/src/main" directory, open the "AndroidManifest.xml" file, and add the following permissions:
+
+- If the Android SDK version is **lower than version 34.0.0**, you need to declare the **FOREGROUND_SERVICE** permission.
+
+    ```xml app/src/main/AndroidManifest.xml
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    ```
+
+- If the Android SDK version is **34.0.0 or later**, you need to declare the **FOREGROUND_SERVICE** and **FOREGROUND_SERVICE_MEDIA_PROJECTION** permission.
+
+    ```xml app/src/main/AndroidManifest.xml
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"/>
+    ```

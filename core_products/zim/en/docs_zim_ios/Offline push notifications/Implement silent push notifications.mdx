@@ -1,0 +1,35 @@
+---
+articleID: 17636
+---
+# Implement silent push notifications
+
+
+## Introduction
+
+Silent push notifications are a special type of remote notification, mainly used for data synchronization between the App running in the background and the server. For example: when the App is not active and the data within the App is outdated, the server will send a silent push notification, and the App will update the data without any user awareness.
+
+## Prerequisites
+
+Before implementing silent push notifications, please make sure of the following:
+- Implement offline push notifications. For more details, please refer to [Implement offline push notification](./Implement%20offline%20push%20notification.mdx).
+
+## Implementation steps
+
+1. Contact ZEGOCLOUD Technical Support to configure the `resourceID` for carrying silent push strategies.
+
+2. In scenarios where offline push notifications need to be sent (such as [call invitation](./../Guides/Call%20invitation%20signaling.mdx), [offline push notification](./Implement%20offline%20push%20notification.mdx), etc.), fill in the [ZIMPushConfig > resourceID](@-ZIMPushConfig) with the pre-configured value obtained from ZEGOCLOUD Technical Support. Additionally, fill in the payload field according to the specific business scenario.
+
+```objc
+pushConfig.resourcesID = @"resourcesID configured by ZEGOCLOUD Technical Support";
+```
+
+3. In the "AppDelegate.m" file, implement the `didReceiveRemoteNotification` method with your business logic. When the App is in the background and not killed, this method will be triggered. Sample code is as follows:
+
+```objc
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+
+    // Call the completionHandler after the your logic is completed
+}
+```
+
+4. Once the above steps are completed, you can send silent push notifications to others and receive silent push notifications from others.

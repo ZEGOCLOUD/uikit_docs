@@ -1,0 +1,474 @@
+---
+articleID: 16293
+---
+
+
+
+# Send and receive messages
+
+- - -
+
+This document describes how to use the ZIM SDK (In-app Chat) to send and receive messages.
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+## Prerequisites
+
+Before you begin, make sure:
+
+- Install Unity 2021.3.18f1c1 or later version. If not installed, you can download Unity Hub from [Unity official website](https://unity3d.com/get-unity/download), and then install the Unity version you need (if you are not sure, it is recommended to install the latest LTS version). When downloading, it is recommended to select the corresponding Platforms module according to your needs, for example, installing on Windows:
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Unity/unityEnv.jpeg" /></Frame>
+
+- Select the corresponding development environment or device according to the platform that the sample code needs to run on:
+
+    - To run the Android sample source code: requires devices or emulators that support Android 4.1 or later versions and JDK 1.6 or later versions (it is recommended to use a real device). If it is a real device, please enable the "allow debugging" option.
+    - To run the iOS sample source code: requires Xcode 13.0 or later versions and devices or emulators that support iOS 9.0 or later versions (it is recommended to use a real device).
+    - To run the macOS sample source code: requires macOS 10.11 or later versions.
+    - To run the Windows sample source code: requires Windows 7 or later versions and Visual Studio 2015 or later versions installed.
+    - Ensure that the device running the program is connected to the network properly.
+    - Ensure that Unity has installed the Platforms module corresponding to the platform that needs to be run. If Unity has been installed but the corresponding Platforms module has not been installed, you need to download the corresponding module. For example, on Windows: Open Unity Hub, click the "Install" option on the left, select the Unity version to be installed, click the icon in the upper right corner, select the "Add modules" option, and select the corresponding module in the pop-up window for download.
+
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com) to create a project, get the AppID and AppSign.
+
+<Warning title="Warning">
+
+The SDK also supports token authentication. If you need to upgrade the authentication method, you can refer to [Guide for upgrading the authentication mode from using the AppSign to Token](https://docs.zegocloud.com/faq/token_upgrade?product=ExpressVideo&platform=alll).
+</Warning>
+
+
+## Integrate the SDK
+
+### Optional: Create a project
+
+Skip this step if a project already exists.
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+Click the "New" button, select the "3D" template, fill in the "Project Name", choose a "Location" to store the project, and click the "Create" button to create the project.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Unity3D/ZegoExpressEngine/QuickStart/int-create.png" /></Frame>
+
+</details>
+
+### Import the SDK
+
+1. Download and extract the compressed package from [SDK](./Client%20SDKs/SDK%20downloads.mdx). Copy the "ZIM" folder from the extracted ZIMUnity3D directory to the "Assets" directory of your project to integrate the SDK.
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Unity/pic_1.jpeg" /></Frame>
+
+2. Additional processing is required for different platforms.
+
+<details class="zg-primary">
+    <summary>Windows</summary>
+
+In a Unity project, there cannot be `.dll` files with the same name, otherwise the `Multiple plugins with the same name 'zim'` error will occur during Build. You need to delete the `x64 folder` or `x86 folder` under the "Plugins/Windows" folder according to the actual business situation.
+
+
+<Note title="Note">
+
+If you do not plan to run the sample source code on the Windows platform, you can directly delete the "Plugins/Windows" folder.
+</Note>   
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Unity/win_dll.jpeg" /></Frame>     
+</details>
+
+<details class="zg-primary">
+    <summary>macOS</summary>
+
+If Unity is version 2019.3 or earlier, because it does not support macOS dylib as Plugins, please rename "libZIM.dylib" to "libZIM.bundle" to import the SDK correctly. In addition, macOS should be version 10.5 or above.
+</details>
+
+<details class="zg-primary">
+    <summary>iOS</summary>
+
+As shown in the figure below, there are three folders under the path "ZIM/Plugins/IOS/XCFramework":
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Unity/iOS_SDK.jpeg" /></Frame>     
+
+The explanations are as follows:
+
+|Folder Name | Function | Related Operations |
+| -- | -- | -- |
+| ios-arm64_armv7 | Real device architecture, used for real device debugging and publishing. | If you need to run on a real device, keep this folder and delete other folders. |
+| ios-arm64_x86_64-simulator | Simulator architecture, used for simulator debugging. | If you need to run on an iOS simulator, please keep this folder and delete other folders. (i.e., when the project is configured with iOS Target SDK specified as Simulator SDK.) |
+| ios-arm64_x86_64-maccatalyst |  iOS MacCatalyst architecture. | Currently, Unity does not support this architecture, **please delete directly**. |
+
+</details>
+    
+<details class="zg-primary">
+    <summary>Android</summary>
+
+When building an Android app, it may also prompt that there are multiple Windows DLL files. Please use the same method as above to handle it on Windows.
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/ZIM/Unity/win_dll.jpeg" /></Frame>     
+</details>
+
+## Implementation steps
+
+
+### Import the header file
+
+Include the header file in your project.
+
+```c#
+using ZEGO;
+```
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
+
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [Create](@Create) method with the AppID and AppSign (When developing web platform applications, there is no need to use "AppSign". To prevent exposure, please do not pass it in.) you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+
+```c#
+// Create a ZIM SDK instance
+// Create a ZIM singleton instance through the plugin, passing in APPID and AppSign
+// Note: ZIM SDK supports AppSign authentication from version 2.3.0, and the SDK defaults to AppSign authentication. If you need to switch authentication methods:
+// (1) For SDK versions 2.3.3 and above, autonomous switching of authentication methods is supported; (2) For SDK version 2.3.0, please contact ZEGOCLOUD technical support to switch to "Token authentication" when needed.
+
+// Define the unique ZIM instance (usually globally defined during actual use)
+ZIM zim;
+
+ZIMAppConfig config = new ZIMAppConfig();
+config.appID = (uint)appID; // You can get the appID in[ZEGOCLOUD Console](https://console.zegocloud.com). Format: 123456789. 
+config.appSign = (string)appSign;//  You can get the appSign in[ZEGOCLOUD Console](https://console.zegocloud.com). Format: 0123456789012345678901234567890123456789012345678901234567890123", 64 characters.
+
+zim = ZIM.Create(config);
+```
+
+
+#### 3. Register callbacks for receiving notifications
+
+Before calling the login interface, you must register the required callbacks.
+
+<details class="zg-primary">   
+    <summary>Registered through lambda expression.</summary>  
+
+```c#
+void SetZIMEventHandler()
+    {
+        // When an exception occurs in the SDK, it will use this callback to provide detailed exception information.
+        ZIM.GetInstance().onError = (ZIM zim, ZIMError errorInfo) => {};
+
+        // When the connection status changes, this callback will notify the user of the current status and event.
+        ZIM.GetInstance().onConnectionStateChanged = (ZIM zim, ZIMConnectionState state,
+                                              ZIMConnectionEvent connectionEvent,
+                                              Dictionary<string,string> extendedData) => {};
+        // Callback for room connection status changes.
+        ZIM.GetInstance().onRoomStateChanged = (ZIM zim, ZIMRoomState state, ZIMRoomEvent roomEvent,
+                                            Dictionary<string,string> extendedData,
+                                            string roomID) => {};
+
+        // When this callback is received, you should call the [RenewToken] function in time to update the Token.
+        ZIM.GetInstance().onTokenWillExpire = (ZIM zim, uint second) => {};
+
+        // This callback will be received when receiving peer-to-peer messages from others.
+        ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                                 List<ZIMMessage> messageList,
+                                 string fromUserID) => {};
+
+        // This callback will be received when receiving room messages.
+        ZIM.GetInstance().onReceiveRoomMessage = (ZIM zim,
+                                 List<ZIMMessage> messageList,
+                                 string fromRoomID) => {};
+
+        // This callback will be received when receiving group messages.
+        ZIM.GetInstance().onReceiveGroupMessage = (ZIM zim,
+                                  List<ZIMMessage> messageList,
+                                  string fromGroupID) => {};
+
+        // This callback will be received when the message recipient reads the acknowledgment message sent from this end.
+        ZIM.GetInstance().onMessageReceiptChanged = (ZIM zim,
+                                                 List<ZIMMessageReceiptInfo> infos) => {};
+
+        // This callback will be received when others send messages and then revoke them.
+        ZIM.GetInstance().onMessageRevokeReceived = (
+            ZIM zim, List<ZIMRevokeMessage> messageList) => {};
+
+        // This callback will be received when the message-sending status changes.
+        ZIM.GetInstance().onMessageSentStatusChanged = (
+            ZIM zim,
+                List<ZIMMessageSentStatusChangeInfo> messageSentStatusChangeInfoList) => {};
+
+        // This callback will be received when receiving peer-to-peer messages from others.
+        ZIM.GetInstance().onConversationChanged = (
+            ZIM zim, List<ZIMConversationChangeInfo> conversationChangeInfoList) => {};
+
+        // This callback is used to return the total number of unread messages in the conversation.
+        ZIM.GetInstance().onConversationTotalUnreadMessageCountUpdated = (ZIM zim,
+                                                     uint totalUnreadMessageCount) => {};
+
+        // This callback will be received by the message sender when the message recipient reads the conversation.
+        ZIM.GetInstance().onConversationMessageReceiptChanged = (ZIM zim,
+                                               List<ZIMMessageReceiptInfo> infos) => {};
+
+        // After joining a room, this callback will be received when other members also join this room.
+        ZIM.GetInstance().onRoomMemberJoined = (ZIM zim, List<ZIMUserInfo> memberList,
+                                            string roomID) => {};
+
+        // After joining a room, this callback will be received when other members leave this room.
+        ZIM.GetInstance().onRoomMemberLeft = (ZIM zim, List<ZIMUserInfo> memberList,
+                                          string roomID) => {};
+
+        // This callback is used to notify when the room attributes in the room have changed.
+        ZIM.GetInstance().onRoomAttributesUpdated = (ZIM zim,
+                                                 ZIMRoomAttributesUpdateInfo updateInfo,
+                                                 string roomID) => {};
+
+        // This callback is used to notify when the room attributes in the room have changed.
+        ZIM.GetInstance().onRoomAttributesBatchUpdated = (ZIM zim,
+                                         List<ZIMRoomAttributesUpdateInfo> updateInfos,
+                                         string roomID) => {};
+
+        // This callback will be received when a user's attributes change in the room.
+        ZIM.GetInstance().onRoomMemberAttributesUpdated = (
+            ZIM zim, List<ZIMRoomMemberAttributesUpdateInfo> infos,
+            ZIMRoomOperatedInfo operatedInfo, string roomID) => {};
+
+        // Callback for group status changes.
+        ZIM.GetInstance().onGroupStateChanged = (ZIM zim, ZIMGroupState state,
+                                         ZIMGroupEvent groupEvent,
+                                             ZIMGroupOperatedInfo operatedInfo,
+                                             ZIMGroupFullInfo groupInfo) => {};
+
+        // Callback for group name changes.
+        ZIM.GetInstance().onGroupNameUpdated = (ZIM zim, string groupName,
+                                            ZIMGroupOperatedInfo operatedInfo,
+                                            string groupID) => {};
+
+        // Callback for changes in the group avatar URL.
+        ZIM.GetInstance().onGroupAvatarUrlUpdated = (ZIM zim, string groupAvatar,
+                                                 ZIMGroupOperatedInfo operatedInfo,
+                                                 string groupID) => {};
+
+        // Callback for changes in group notices.
+        ZIM.GetInstance().onGroupNoticeUpdated = (ZIM zim, string groupNotice,
+                                              ZIMGroupOperatedInfo operatedInfo,
+                                              string groupID) => {};
+
+        // Callback for changes in group attributes.
+        ZIM.GetInstance().onGroupAttributesUpdated = (
+            ZIM zim, List<ZIMGroupAttributesUpdateInfo> groupAttributes,
+                ZIMGroupOperatedInfo operatedInfo, string groupID) => {};
+
+        // Callback for changes in group member status.
+        ZIM.GetInstance().onGroupMemberStateChanged = (ZIM zim, ZIMGroupMemberState state,
+                                               ZIMGroupMemberEvent groupMemberEvent,
+                                                   List<ZIMGroupMemberInfo> userList,
+                                                   ZIMGroupOperatedInfo operatedInfo,
+                                                   string groupID) => {};
+        // Callback for changes in group member basic information.
+        ZIM.GetInstance().onGroupMemberInfoUpdated = (
+            ZIM zim, List<ZIMGroupMemberInfo> groupMemberInfos,
+                ZIMGroupOperatedInfo operatedInfo, string groupID) => {};
+
+        // Callbacks related to call invitations.
+        ZIM.GetInstance().onCallInvitationReceived = (ZIM zim,
+                                                  ZIMCallInvitationReceivedInfo info,
+                                                  string callID) => {};
+
+        ZIM.GetInstance().onCallInvitationCancelled = (ZIM zim,
+                                                   ZIMCallInvitationCancelledInfo info,
+                                                   string callID) => {};
+
+        ZIM.GetInstance().onCallInvitationAccepted = (ZIM zim,
+                                                  ZIMCallInvitationAcceptedInfo info,
+                                                  string callID) => {};
+
+        ZIM.GetInstance().onCallInvitationRejected = (ZIM zim,
+                                                  ZIMCallInvitationRejectedInfo info,
+                                                   string callID) => {};
+
+        ZIM.GetInstance().onCallInvitationTimeout = (ZIM zim, string callID) => {};
+
+        ZIM.GetInstance().onCallInviteesAnsweredTimeout = (ZIM zim,
+                                                        List<string> invitees,
+                                                        string callID) => {};
+    }
+```
+</details>  
+
+Refer to the detailed API introduction for more information: [OnConnectionStateChanged](@OnConnectionStateChanged), [OnRoomStateChanged](@OnRoomStateChanged), [OnTokenWillExpire](@OnTokenWillExpire), [OnReceivePeerMessage](@OnReceivePeerMessage, [OnReceiveRoomMessage](@OnReceiveRoomMessage), [OnReceiveGroupMessage](@OnReceiveGroupMessage), [OnMessageReceiptChanged](@OnMessageReceiptChanged), [OnMessageRevokeReceived](@OnMessageRevokeReceived), [OnMessageSentStatusChanged](@OnMessageSentStatusChanged), [OnConversationChanged](@OnConversationChanged), [OnConversationTotalUnreadMessageCountUpdated](@OnConversationTotalUnreadMessageCountUpdated), [OnConversationMessageReceiptChanged](@OnConversationMessageReceiptChanged), [OnRoomMemberJoined](@OnRoomMemberJoined), [OnRoomMemberLeft](@OnRoomMemberLeft), [OnRoomAttributesUpdated](@OnRoomAttributesUpdated), [OnRoomAttributesBatchUpdated](@OnRoomAttributesBatchUpdated), [OnRoomMemberAttributesUpdated](@OnRoomMemberAttributesUpdated), [OnGroupStateChanged](@OnGroupStateChanged), [OnGroupNameUpdated](@OnGroupNameUpdated), [OnGroupAvatarUrlUpdated](@OnGroupAvatarUrlUpdated), [OnGroupNoticeUpdated](@OnGroupNoticeUpdated), [OnGroupAttributesUpdated](@OnGroupAttributesUpdated), [OnGroupMemberStateChanged](@OnGroupMemberStateChanged), [OnGroupMemberInfoUpdated](@OnGroupMemberInfoUpdated), [OnCallInvitationReceived](@OnCallInvitationReceived), [OnCallInvitationCancelled](@OnCallInvitationCancelled), [OnCallInvitationAccepted](@OnCallInvitationAccepted), [OnCallInvitationRejected](@OnCallInvitationRejected), [OnCallInvitationTimeout](@OnCallInvitationTimeout), [OnCallInviteesAnsweredTimeout](@OnCallInviteesAnsweredTimeout).
+
+
+### Log in to the ZIM SDK
+
+For client A and client B to send and receive messages after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
+
+To log in, Clients A and B both need to do the following:
+
+
+The client needs to log in using their respective user information. Call the [Login](@Login) method and pass in the user information [ZIMUserInfo](@-ZIMUserInfo) object to log in.
+
+
+<Warning title="Warning">
+
+- You can custom the **userID** and **userName**, and we recommend you set the  **userID** to a meaningful value and associate them with the account system of your application.
+- For SDK 2.3.0 or later: The SDK uses the AppSign authentication mode by default. You only need to pass the [ZIMUserInfo](@-ZIMUserInfo) when logging in. 
+
+- If you use the Token-based authentication mode, please refer to the [Authentication](./Guides/Users/Authentication.mdx) to get the Token first, and pass it when logging in. 
+</Warning>
+
+
+
+```c#
+// userID is a string of up to 32 bytes. Only digits, English characters and the following special characters are supported: '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', ' '[', ']', '^', '_', '{', '}', '|', '~'.
+// userName is a string of up to 256 bytes with no special character restrictions.
+ZIMUserInfo userInfo = new ZIMUserInfo();
+userInfo.userID = "xxxxx";
+userInfo.userName = "xxxxx";
+
+// Log in:
+// Use Token authentication: fill in the Token generated by referring to the "Use Token for authentication" document. For details, please refer to [Use Token for authentication] doc.
+// Use AppSign authentication: (default authentication method for version 2.3.0 or above), leave the Token parameter as an empty string.
+ZIM.GetInstance().Login(userInfo, "", (ZIMError errorInfo) =>
+{
+    if(errorInfo.code == ZIMErrorCode.Success)
+    {
+        //Login successful
+    }
+    else 
+    {
+        // Login failed
+    }
+});
+```
+
+
+### Send messages
+
+Client A can send messages to client B after logging in successfully.
+
+
+Currently, the ZIM SDK supports the following message types:
+
+<table>
+
+<tbody><tr data-row-level="1">
+<th>Message type</th>
+<th>Description</th>
+<th>Details</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>Text message. Size limit: 32 KB. Rate limit: 10 requests/second.</td>
+<td>
+Enable messages to be more deliverable, and can be stored as message history. Suitable for one-on-one chat and group chat.
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message. Size limit: 5 KB. Rate limit: 10 requests/second.</td>
+<td>
+Supports massive concurrency. Suitable for live audio room, online classroom, the messages won't be stored after the room is destroyed.
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>In-room barrage message (bullet) screen message). Size limit: 5 KB. No specific rate limit.</td>
+<td>
+<p>The high-frequency messages that don't require 100% deliverability, this message type is often used to send bullet screen messages.</p><p>
+Supports massive concurrency, but the message deliverability can't be guaranteed.</p>
+
+Relevant method: [SendMessage](@SendMessage)
+</td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports major image formats, including JPG, PNG, BMP, TIFF, and GIF, WebP. Size limit: 10 MB. Rate limit: 10 requests/second.</td>
+<td rowspan="4">
+Enable messages to be more deliverable, and can be stored as history messages (14 days by default). Suitable for one-on-one chat, room chat, and group chat.
+
+Relevant method: 
+[SendMediaMessage](@SendMediaMessage)
+</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. Supports files in any format. Size limit: 100 MB. Rate limit: 10 requests/second.</td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports voice messages in MP3, M4A format within 300 seconds. Size limit: 6 MB. Rate limit: 10 requests/second.</td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>Video message. Supports video messages in MP4 or MOV format. Size limit: 100 MB. Rate limit: 10 requests/second. Only video files encoded in H264 and H265 formats can obtain the width and height information of the first frame of the video after the message is sent successfully. </td>
+</tr>
+</tbody></table>
+
+
+
+
+To send one-to-one messages, for example, client A wants to send a message to client B, then client A needs to call the [sendMessage](@sendMessage) method with client B's userID, message content, conversation type (`conversationType`).
+And client A can be notified whether the message is delivered successfully through the callback [ZIMMessageSentCallback](@ZIMMessageSentCallback).
+
+
+- [onMessageAttached](@onMessageAttached-ZIMMediaMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage](@-ZIMMessage) message for you to implement your business logic as needed. 
+For example, before sending a message, obtain the ID information of the message. When you send messages with larger content such as videos, they can cache the message object before the message is uploaded, and keep it until they receive a successful sending notification from the SDK. By comparing the same object, they can achieve the effect of loading before sending.
+
+
+```c#
+// // The following shows how to send one-to-one message, the [conversationType] needs to be set to [ZIMConversationType.Peer].
+
+string toConversationID = ""; // peer's userID
+ZIMConversationType type = ZIMConversationType.Peer; // Conversation type is ZIMConversationType.Peer
+ZIMTextMessage message = new ZIMTextMessage("Message content");
+ZIMMessageSendConfig messageSendConfig = new ZIMMessageSendConfig(); // Use the default config.
+ZIMMessageSendNotification notification = new ZIMMessageSendNotification(); // Message notification.
+ZIM.GetInstance().SendMessage(message, toConversationID, type,
+messageSendConfig, notification, (ZIMMessage callbackMessage, ZIMError errorInfo) =>
+{
+    if(errorInfo.code == ZIMErrorCode.Success)
+    {
+        // Sent successfully.
+    }
+    else 
+    {
+        // Failed to send.
+    }
+});
+```
+
+
+### Receive messages
+
+After client B logs in, he will receive client A's message through the callback [OnReceivePeerMessage](@OnReceivePeerMessage).
+
+
+```c#
+// Register the callback for "receive one-to-one messages" listener.
+ZIM.GetInstance().onReceivePeerMessage = (ZIM zim,
+                         List<ZIMMessage> messageList,
+                         string fromUserID) =>
+{
+    // messageList is the received one-to-one message.
+};
+```
+
+### Log out
+
+For a client to log out, call the [logout](@logout) method.
+
+```c#
+ZIM.GetInstance().Logout();
+```
+
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [destroy](@destroy) method.
+
+```c#
+ZIM.GetInstance().Destroy();
+```

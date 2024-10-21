@@ -6,7 +6,7 @@ import UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG from "/snippets/uikit/UIKIT_FLUTTER_A
 
 <Video src="https://www.youtube.com/embed/RowFWxNfQhc"/>					
 
-<Tip title="TIPS">If you need the call invitation feature, the integration method is different. Please refer to [this document](./03-Quick%20start%20(with%20call%20invitation).mdx).</Tip>
+<Note title="TIPS">If you need the call invitation feature, the integration method is different. Please refer to [this document](./03-Quick%20start%20(with%20call%20invitation).mdx).</Note>
 
 ## Integrate the SDK
 
@@ -75,7 +75,7 @@ Now, you can make a new call by navigating to this `CallPage`.
             }
             ```
             <Frame width="800" height="auto" caption="">
-              <img src="images/android-config-appbuildgradle.jpeg" />
+              <img src="https://media-resource.spreading.io/docuo/workspace564/27e54a759d23575969552654cb45bf89/68c974520a.jpeg" alt="android-config-appbuildgradle.jpeg"/>
             </Frame>
           </Step>
           <Step title="change the `minSdkVersion`">
@@ -92,17 +92,19 @@ Now, you can make a new call by navigating to this `CallPage`.
             </Frame>
           </Step>
         </Steps>
-        <Tip title="created with Flutter 2.x.x">
+        <Note title="created with Flutter 2.x.x">
           > If your project is created with **Flutter 2.x.x**, you will need to modify the `compileSdkVersion` to **33**.
           
           <Frame width="800" height="auto" caption="">
             <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/compile_sdk_version.png" />
           </Frame>
-        </Tip>
+        </Note>
       </Accordion>
 
       <Accordion title="Edit android/build.gradle" defaultOpen="false">
-  <UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG />
+      
+        <UIKIT_FLUTTER_ANDROID_GRADLE_CONFIG />
+
       </Accordion>
 
       <Accordion title="Modify gradle-wrapper.properties" defaultOpen="false">
@@ -145,15 +147,19 @@ Now, you can make a new call by navigating to this `CallPage`.
       </Accordion>
 
       <Accordion title="Prevent code obfuscation" defaultOpen="false">
-<UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
+
+        <UIKIT_ANDROID_PREVENT_CODE_OBFUSCATION />
+
       </Accordion>
   </Tab>
   
   <Tab title="iOS">
     <Accordion title="Modify Permissions" defaultOpen="false">
+
 import UIKIT_IOS_PERMISSION_CONFIG_EN from "/snippets/uikit/UIKIT_IOS_PERMISSION_CONFIG-en.mdx";
 
 <UIKIT_IOS_PERMISSION_CONFIG_EN />
+
     </Accordion>
     <Accordion title="Disable 'Build Libraries for Distribution'" defaultOpen="false">
       Open the your_project > iOS > Runner.xcworkspace file.

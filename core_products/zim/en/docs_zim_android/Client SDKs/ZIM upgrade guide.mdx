@@ -1,0 +1,244 @@
+---
+articleID: 17558
+---
+# ZIM upgrade Guide
+
+- - -
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const platformMap = {
+  'Android': 'Android',
+  'window': 'Windows',
+  'Web': 'Web/Mini Program',
+  'RN': 'React Native'
+}
+
+
+This article provides some instructions and considerations for upgrading the ZIM {getPlatformData(props,platformMap)} platform SDK version.
+
+## 2.16.0 Upgrade Guide
+
+<Warning title="Warning">
+
+Starting from version 2.16.0, there are significant changes to the following interfaces. Therefore, when upgrading from an older version to version 2.16.0, please read the following guide.
+</Warning>
+
+#### callCancel
+
+<Note title="Note">
+
+The following changes only apply to **advanced mode** call invitations.
+</Note>
+
+In the new version of [callCancel](@callCancel), if the parameter userIDs contains a userID, this interface will only cancel the invitation for that callee. If the userIDs parameter is empty, this interface will cancel the invitation for all callees.
+
+For the old version of the `callCancel` interface, regardless of whether the userIDs parameter is empty or not, it is considered as canceling the invitation for all callees.
+
+Since the old version of the ZIM SDK is not compatible with separate cancellation logic, if you need to retain the cancellation logic implemented using the old version of ZIM and also need to use the separate cancellation feature of the new version, please isolate the call functionality between the old and new versions of ZIM.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title="Usage in 2.16.0 version"
+// Cancel userIdA and userIdB separately
+List<String> invitees = new ArrayList<>();
+invitees.add("userIdA");
+invitees.add("userIdB");
+ZIMCallCancelConfig cancelConfig = new ZIMCallCancelConfig();
+ZIM.getInstance().callCancel(invitees, "callID", cancelConfig, new ZIMCallCancelSentCallback() {
+    @Override
+    public void onCallCancelSent(String callID, ArrayList<String> errorInvitees, ZIMError errorInfo) {
+        
+    }
+});;
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the entire call have accepted    
+List<String> invitees = new ArrayList<>();
+ZIMCallCancelConfig cancelConfig = new ZIMCallCancelConfig();
+ZIM.getInstance().callCancel(invitees, "callID", cancelConfig, new ZIMCallCancelSentCallback() {
+    @Override
+    public void onCallCancelSent(String callID, ArrayList<String> errorInvitees, ZIMError errorInfo) {
+
+    }
+});
+```
+```java title="Usage in old versions"
+// Regardless of whether the userID is passed in the userIDs, it is considered as canceling the entire call, can be called successfully when none of the callees in the entire call have accepted
+List<String> invitees = new ArrayList<>();
+invitees.add("userIdA");
+invitees.add("userIdB");
+ZIMCallCancelConfig cancelConfig = new ZIMCallCancelConfig();
+ZIM.getInstance().callCancel(invitees, "callID", cancelConfig, new ZIMCallCancelSentCallback() {
+    @Override
+    public void onCallCancelSent(String callID, ArrayList<String> errorInvitees, ZIMError errorInfo) {
+        
+    }
+});;
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the entire call have accepted    
+List<String> invitees = new ArrayList<>();
+ZIMCallCancelConfig cancelConfig = new ZIMCallCancelConfig();
+ZIM.getInstance().callCancel(invitees, "callID", cancelConfig, new ZIMCallCancelSentCallback() {
+    @Override
+    public void onCallCancelSent(String callID, ArrayList<String> errorInvitees, ZIMError errorInfo) {
+
+    }
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```c title="Usage in version 2.16.0"++
+// Cancel userIdA and userIdB separately
+std::vector<std::string> invitees;
+invitees.emplace_back("userIdA");
+invitees.emplace_back("userIdB");
+ZIMCallCancelConfig config;
+zim->callCancel(invitees, "callID", config, [=](const std::string& callID, const std::vector<std::string>& errorInvitees,
+    const ZIMError& errorInfo) {
+});
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted
+std::vector<std::string> invitees;
+ZIMCallCancelConfig config;
+zim->callCancel(invitees, "callID", config, [=](const std::string& callID, const std::vector<std::string>& errorInvitees,
+    const ZIMError& errorInfo) {
+});
+```
+```c title="Usage in old versions"++
+// Regardless of whether the userID is passed in the userIDs, it is considered as canceling the entire call, can be called successfully when none of the callees in the call have accepted
+std::vector<std::string> invitees;
+invitees.emplace_back("userIdA");
+invitees.emplace_back("userIdB");
+ZIMCallCancelConfig config;
+zim->callCancel(invitees, "callID", config, [=](const std::string& callID, const std::vector<std::string>& errorInvitees,
+    const ZIMError& errorInfo) {
+});
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted
+std::vector<std::string> invitees;
+ZIMCallCancelConfig config;
+zim->callCancel(invitees, "callID", config, [=](const std::string& callID, const std::vector<std::string>& errorInvitees,
+    const ZIMError& errorInfo) {
+});
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Usage in version 2.16.0"
+// Cancel userIdA and userIdB separately
+var callID = 'xxxx';
+var invitees = ['userIdA','userIdB'];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+var callID = 'xxxx';
+var invitees = [];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+```javascript title="Usage in old versions"
+// Regardless of whether userID is passed in userIDs, it is considered as canceling the entire call, can be called successfully when none of the callees in the call have accepted
+var callID = 'xxxx';
+var invitees = ['userIdA','userIdB'];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+var callID = 'xxxx';
+var invitees = [];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+</CodeGroup>
+
+:::
+
+:::if{props.platform="RN"}
+<CodeGroup>
+```javascript title="Usage in version 2.16.0"
+// Cancel userIdA and userIdB separately
+var callID = 'xxxx';
+var invitees = ['userIdA','userIdB'];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+var callID = 'xxxx';
+var invitees = [];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+```javascript title="Usage in old versions"
+// Regardless of whether userID is passed in userIDs, it is considered as canceling the entire call, can be called successfully when none of the callees in the call have accepted
+var callID = 'xxxx';
+var invitees = ['userIdA','userIdB'];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+var callID = 'xxxx';
+var invitees = [];  // List of invitees' IDs
+var config = { extendedData: 'xxxx' }; 
+zim.callCancel(invitees, callID, config)
+    .then(res => {
+          // Operation successful
+    })
+    .catch(err => {
+        // Operation failed
+    })
+```
+</CodeGroup>
+
+:::
+

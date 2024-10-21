@@ -78,6 +78,16 @@
           "type": "doc",
           "label": "计算通话时长",
           "id": "calling-config/calculate-call-duration"
+        },
+        {
+          "type": "doc",
+          "label": "呼叫中邀请",
+          "id": "calling-config/invite-users-to-an-ongoing-call"
+        },
+        {
+          "type": "doc",
+          "label": "锁屏显示来电呼叫",
+          "id": "calling-config/display-incoming-calls-on-lock-screen"
         }
       ]
     },

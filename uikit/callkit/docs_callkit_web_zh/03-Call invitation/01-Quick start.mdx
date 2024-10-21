@@ -1,10 +1,10 @@
-# Quick start
+# 快速开始
 
 
 <Video src="https://resource.zegocloud.com/prebuilt/call_invitation_pro.mp4"/>
 
 
-## 集成SDK
+## 集成 SDK
 
 ### 导入 SDK
 
@@ -15,7 +15,7 @@
     <Steps>
       <Step title="安装插件">
       ```js
-      npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.9.0 --save 
+      npm i @zegocloud/zego-uikit-prebuilt zego-zim-web@2.16.0 --save 
       ```
       </Step>
       <Step title="在项目的`js`或`ts`文件中导入Call Kit">
@@ -30,7 +30,7 @@
     在 `HTML` 页面中导入以下脚本代码:   
     (**更推荐的方式**：下载并保存在你的应用服务器上，并导入到相应路径。)
     ```html
-    <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
+    <script src="https://unpkg.com/zego-zim-web@2.16.0/index.js"></script>
     <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
     ```
   </Tab>
@@ -43,7 +43,7 @@
 - 生成一个[Kit Token](../Authentication%20and%20Kit%20Token.mdx)
 - 在以下代码中填写所需参数
 
-<Note title="Note">
+<Note title="说明">
 
 - 以下示例代码展示了在客户端生成 Kit Token 的方法，可用于测试 Call Kit。但是，在您的 App 正式上线时，建议参考 [使用 Kit Token 鉴权文档](../Authentication%20and%20Kit%20Token.mdx) 在服务端生成 Kit Token，以避免安全风险。
 
@@ -77,36 +77,32 @@ zp.setCallInvitationConfig({
 
 ### 设置按钮触发事件
 
-Set up a button and add a button-click event for making call invitations.
-
-You can customize the position of the button you set for making call invitations accordingly, passing in the ID of the user you want to call.
-
 设置一个按钮，并为呼叫邀请添加一个按钮点击事件。
 
 您可以自定义上一步设置的按钮位置，并传入呼叫目标用户的 ID。
 
 <CodeGroup>
 ```html title="HTML"
-  <button onclick="invite()">invite</button>
-  ```
+<button onclick="invite()">invite</button>
+```
 ```javascript title="JS"
-  function invite() {
-     const targetUser = {
-          userID:'',
-          userName:''
-      };
-     zp.sendCallInvitation({
-      callees: [targetUser],
-      callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
-      timeout: 60,
-      }).then((res) => {
-          console.warn(res);
-      })
-      .catch((err) => {
-          console.warn(err);
-      });
-  }
-  ```
+function invite() {
+    const targetUser = {
+        userID:'',
+        userName:''
+    };
+    zp.sendCallInvitation({
+    callees: [targetUser],
+    callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+    timeout: 60,
+    }).then((res) => {
+        console.warn(res);
+    })
+    .catch((err) => {
+        console.warn(err);
+    });
+}
+```
 </CodeGroup>
 
 ## 运行和测试

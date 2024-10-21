@@ -21,82 +21,177 @@ This pop-up will show when you receive a call invitation, which can also be cust
 
 ## How do I customize the waiting page?
 
-You can customize the waiting page by calling the `setCallInvitationConfig` interface to set the `enableCustomCallInvitationWaitingPage` parameter and listen for the `onWaitingPageWhenSending` callback.
+You can display a custom waiting page by defining a `div` tag. Call the `setCallInvitationConfig` method provided by the SDK and set `enableCustomCallInvitationWaitingPage` to `true` to enable the ability to use a custom waiting page. Then, listen for the `onWaitingPageWhenSending` event to retrieve the relevant callee information and populate it into your custom waiting page.
 
-<CodeGroup>
-```js JavaScript
-zp.setCallInvitationConfig({
-    enableCustomCallInvitationWaitingPage: true,
-   // The following is the callback for showing the waiting page after a call invitation is sent. This callback function returns [cancel] for you to set the corresponding user interface.
-   onWaitingPageWhenSending: (callType,callees,cancel) =>{
-     // Add your custom logic here. 
-     // The following shows an example, the waitingPageDom is the DOM object that is used to represent the page element, here the page indicates the waiting page when sending a call invitation.
-      waitingPageDom.style.display = 'block';
-     // The method used to set the cancel call invitation operation.
-     cancelButton.onclick = () => {
-        cancel();
-     }
-   },
-   onSetRoomConfigBeforeJoining:(callType) => {
-       // The callback for set room config before joining the room, at which point you can hide the waiting page before joining the room.
-        waitingPageDom.style.display = 'none';
-    },
-    onCallInvitationEnded:(reason) => { 
-       // You will need to hide your custom waiting page when your call invitation is not connected successfully.
-        waitingPageDom.style.display = 'none';
-    }
-    
-})
-```
+<Accordion title="Complete example code" defaultOpen="false">
+```html {12-18,37-56}
+<html>
+    <head>
+        <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="root">
+            <!-- Custom waiting page. -->
+            <div id="waitingPage" style="display: none">
+                <!-- Get callee information from the callees callback on onWaitingPageWhenSending and display it in calleesBox -->
+                <div id="calleesBox"></div>
+                <!-- Bind the click event of cancelButton to the cancel method returned by the onWaitingPageWhenSending callback to cancel the call -->
+                <button id="cancelButton">Cancel</button>
+            </div>
+            <!-- Click this button to initiate a call invitation -->
+            <button onclick="invite()">invite</button>
+            <!-- Other page elements... -->
+        </div>
+    </body>
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
+    <script>
+        // Set the following parameters to the actual valid values in your business and generate TOKEN
+        const userID = "";
+        const userName = "";
+        const appID = 0;
+        const serverSecret = "";
+        const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, null, userID, userName);
 
-```html HTML
-<div id="waitingPage" style="display: none">
-    // Customize your UI
-    // To display information about the callee, you can obtain the callees parameter through the onWaitingPageWhenSending callback
-    // To cancel the call, you can call the cancel method of the onWaitingPageWhenSending callback
-</div>
+        const zp = ZegoUIKitPrebuilt.create(TOKEN);
+        zp.addPlugins({ ZIM });
+        zp.setCallInvitationConfig({
+            enableCustomCallInvitationWaitingPage: true,
+            onWaitingPageWhenSending: (callType, callees, cancel) => {
+                // Add your custom logic here.
+                // waitingPageDom is used to display the waiting page when sending a call invitation.
+                const waitingPageDom = document.querySelector('#waitingPage');
+                waitingPageDom.style.display = 'block';
+                // Generate corresponding callee UI based on the callee parameter returned by the callback
+                // calleesBoxDom is the parent container used to display callee UI on the page
+                const calleesBoxDom = document.querySelector('#calleesBox');
+                for (var i = 0; i < callees.length; i++) {
+                    const div = document.createElement('div');
+                    div.id = callees[i].userID;
+                    div.innerHTML = callees[i].userName;
+                    calleesBoxDom.appendChild(div);
+                }
+                // cancelButtonDOM is a button on the waiting page that is used to cancel the call invitation. Here, it is bound to a method that cancels the invitation.
+                const cancelButtonDOM = document.querySelector('#cancelButton');
+                cancelButtonDOM.onclick = () => {
+                    cancel();
+                }
+            },
+            onSetRoomConfigBeforeJoining: (callType) => {
+                // The callback for set room config before joining the room, at which point you can hide the waiting page before joining the room.
+                const waitingPageDom = document.querySelector('#waitingPage');
+                waitingPageDom.style.display = 'none';
+            },
+            onCallInvitationEnded: (reason) => {
+                // You will need to hide your custom waiting page when your call invitation is not connected successfully.
+                const waitingPageDom = document.querySelector('#waitingPage');
+                waitingPageDom.style.display = 'none';
+            }
+            // Other settings...
+        })
+
+        function invite() {
+            const targetUser = {
+                userID: '',
+                userName: ''
+            };
+            zp.sendCallInvitation({
+                callees: [targetUser],
+                callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+                timeout: 60, // Timeout duration (second). 60s by default, range from [1-600s].
+            }).then((res) => {
+                console.warn(res);
+            }).catch((err) => {
+                console.warn(err);
+            });
+        }
+    </script>
+
+</html>
 ```
-</CodeGroup>
+</Accordion>
 
 ## How do I customize the call invitation dialog?
 
-You can customize the call invitation dialog by setting the `enableCustomCallInvitationDialog` parameter and listening to the `onConfirmDialogWhenReceiving` callback through the `setCallInvitationConfig` interface.
+You can display a custom call invitation dialog by defining a `div` tag. Use the `setCallInvitationConfig` method provided by the SDK to set `enableCustomCallInvitationDialog` to `true` to enable the ability to customize the call invitation dialog. Then, listen for the `onConfirmDialogWhenReceiving` event to retrieve the caller information and populate it into your custom call invitation dialog.
 
-<CodeGroup>
-```javascript JavaScript
-zp.setCallInvitationConfig({
-    enableCustomCallInvitationDialog: true,
-   // The following is the callback for showing the call invitation pop-up dialog when receiving a call invitation, this callback returns [accept] and [refuse] for you to set the corresponding UI.
-   onConfirmDialogWhenReceiving: (callType,caller,refuse,accept,data) =>{
-     // Add your custom logic here.
-     // The following shows an example, the confirmDialogDom is the DOM dialog object that you used to represent the dialog element. here the dialog indicates your custom call invitation dialog. 
-        confirmDialogDom.style.display = 'block';
-     // The method used to set refuse and accept operations.
-        refuseButton.onclick = () => { 
-              refuse();          
-              confirmDialogDom.style.display = 'none';
+<Accordion title="Complete example code" defaultOpen="false">
+```html {12-20,37-58}
+<html>
+    <head>
+        <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
         }
-        acceptButton.onclick = () => { 
-              accept();          
-              confirmDialogDom.style.display = 'none';
-        }
-   },
-   onCallInvitationEnded:(reason)=> {
-        // You will need to hide your customized call invitation dialog when the call invitation timed out or is canceled.
-          confirmDialogDom.style.display = 'none';
-    }
-})
-```
+    </style>
+    </head>
+    <body>
+        <div id="root">
+            <!-- Custom call invitation dialog -->
+            <div id="confirmDialog" style="display: none">
+              <!-- Use the caller information obtained from the onConfirmDialogWhenReceiving callback and display it in the caller tag -->
+              <div id="caller"></div>
+              <!-- Bind the click event of the acceptButton to the accept method returned from the onConfirmDialogWhenReceiving callback to accept the call invitation -->
+              <button id="acceptButton">Accept</button>
+              <!-- Bind the click event of the refuseButton to the refuse method returned from the onConfirmDialogWhenReceiving callback to refuse the call invitation -->
+              <button id="refuseButton">Refuse</button>
+            </div>
+            <!-- Other page elements... -->
+        </div>
+    </body>
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    <script src="https://unpkg.com/zego-zim-web@2.9.0/index.js"></script>
+    <script>
+        // Set the following parameters to the actual valid values in your business and generate TOKEN
+        const userID = "";
+        const userName = "";
+        const appID = 0;
+        const serverSecret = "";
+        const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, null, userID, userName);
 
-```html HTML
-<div id="confirmDialog" style="display: none">
-    // Customize your UI
-    // To display information about the caller, you can access the caller parameter through the onConfirmDialogWhenReceiving callback
-    // To accept a call, you can call the accept method in the onConfirmDialogWhenReceiving callback
-    // To reject a call, you can call the refuse method in the onConfirmDialogWhenReceiving callback
-</div>
+        const zp = ZegoUIKitPrebuilt.create(TOKEN);
+        zp.addPlugins({ ZIM });
+        zp.setCallInvitationConfig({
+            enableCustomCallInvitationDialog: true,
+            // The following is a callback triggered when receiving a call invitation. This callback returns [accept] and [refuse] which can be used to accept or refuse the call invitation on a custom page.
+            onConfirmDialogWhenReceiving: (callType,caller,refuse,accept,data) =>{
+                // Add your custom logic here.
+                // Here is an example, confirmDialogDom is the DOM object representing the dialog element, which in this case represents your custom call invitation dialog.
+                const confirmDialogDom = document.querySelector('#confirmDialog');
+                confirmDialogDom.style.display = 'block';
+                // Generate caller info UI based on the caller parameter returned by the callback
+                const callerDom = document.querySelector('#caller');
+                callerDom.innerHTML = caller.userName;
+                // Bind methods for reject and accept.
+                const refuseButtonDOM = document.querySelector('#refuseButton');
+                refuseButtonDOM.onclick = () => { 
+                    refuse();          
+                    confirmDialogDom.style.display = 'none';
+                }
+                const acceptButtonDOM = document.querySelector('#acceptButton');
+                acceptButtonDOM.onclick = () => { 
+                    accept();          
+                    confirmDialogDom.style.display = 'none';
+                }
+            },
+            onCallInvitationEnded:(reason)=> {
+                // When a call invitation times out or is canceled, the custom call invitation dialog needs to be hidden.
+                const confirmDialogDom = document.querySelector('#confirmDialog');
+                confirmDialogDom.style.display = 'none';
+            }
+            // Other settings...
+        })
+    </script>
+
+</html>
 ```
-</CodeGroup>
+</Accordion>
 
 ## Reference
 <Accordion title="onWaitingPageWhenSending" defaultOpen="false">

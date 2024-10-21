@@ -1,0 +1,716 @@
+---
+articleID: 14215
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js'
+
+export const queryGroupInfoByGroupIDMap = {
+  'Android': <a href='@queryGroupInfo' target='_blank'>queryGroupInfo</a>,
+  'U3d': <a href='@QueryGroupInfo' target='_blank'>QueryGroupInfo</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupInfo.html' target='_blank'>queryGroupInfo</a>,
+  'iOS,mac': <a href='@queryGroupInfoByGroupID' target='_blank'>queryGroupInfoByGroupID</a>,
+}
+export const ZIMGroupInfoQueriedCallbackMap = {
+  'Android': <a href='@-ZIMGroupInfoQueriedCallback' target='_blank'>ZIMGroupInfoQueriedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupInfoQueriedResult-class.html' target='_blank'>ZIMGroupInfoQueriedResult</a>,
+  'Web,RN': <a href='@-ZIMGroupInfoQueriedResult' target='_blank'>ZIMGroupInfoQueriedResult</a>,
+  'iOS,mac,window,U3d': <a href='@ZIMGroupInfoQueriedCallback' target='_blank'>ZIMGroupInfoQueriedCallback</a>,
+}
+export const updateGroupNameMap = {
+  'Android': <a href='@updateGroupName' target='_blank'>updateGroupName</a>,
+  'U3d': <a href='@UpdateGroupName' target='_blank'>UpdateGroupName</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupName.html' target='_blank'>updateGroupName</a>,
+}
+export const onGroupNameUpdatedMap = {
+  'Android': <a href='@onGroupNameUpdated' target='_blank'>onGroupNameUpdated</a>,
+  'U3d': <a href='@OnGroupNameUpdated' target='_blank'>OnGroupNameUpdated</a>,
+  'Web,RN': <a href='@groupNameUpdated' target='_blank'>groupNameUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupNameUpdated.html' target='_blank'>onGroupNameUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-name-updated-operated-info-group-id' target='_blank'>groupNameUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-name-updated-operated-info-group-id' target='_blank'>groupNameUpdated</a>,
+}
+export const updateGroupAvatarUrlMap = {
+  'Android': <a href='@updateGroupAvatarUrl' target='_blank'>updateGroupAvatarUrl</a>,
+  'U3d': <a href='@UpdateGroupAvatarUrl' target='_blank'>UpdateGroupAvatarUrl</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupAvatarUrl.html' target='_blank'>updateGroupAvatarUrl</a>,
+}
+export const onGroupAvatarUrlUpdatedMap = {
+  'Android': <a href='@onGroupAvatarUrlUpdated' target='_blank'>onGroupAvatarUrlUpdated</a>,
+  'U3d': <a href='@OnGroupAvatarUrlUpdated' target='_blank'>OnGroupAvatarUrlUpdated</a>,
+  'Web,RN': <a href='@groupAvatarUrlUpdated' target='_blank'>groupAvatarUrlUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupAvatarUrlUpdatedResult-class.html' target='_blank'>onGroupAvatarUrlUpdatedResult</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-avatar-url-updated-operated-info-group-id' target='_blank'>groupAvatarUrlUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-avatar-url-updated-operated-info-group-id' target='_blank'>groupAvatarUrlUpdated</a>,
+}
+export const updateGroupNoticeMap = {
+  'Android': <a href='@updateGroupNotice' target='_blank'>updateGroupNotice</a>,
+  'U3d': <a href='@UpdateGroupNotice' target='_blank'>UpdateGroupNotice</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupNotice.html' target='_blank'>updateGroupNotice</a>,
+}
+export const onGroupNoticeUpdatedMap = {
+  'Android': <a href='@onGroupNoticeUpdated' target='_blank'>onGroupNoticeUpdated</a>,
+  'U3d': <a href='@OnGroupNoticeUpdated' target='_blank'>OnGroupNoticeUpdated</a>,
+  'Web,RN': <a href='@groupNoticeUpdated' target='_blank'>groupNoticeUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupNoticeUpdated.html' target='_blank'>onGroupNoticeUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-notice-updated-operated-info-group-id' target='_blank'>groupNoticeUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-notice-updated-operated-info-group-id' target='_blank'>groupNoticeUpdated</a>,
+}
+export const updateGroupAliasMap = {
+  'Android': <a href='@updateGroupAlias' target='_blank'>updateGroupAlias</a>,
+  'Web,RN': <a href='@updateGroupAlias' target='_blank'>updateGroupAlias</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupAlias.html' target='_blank'>updateGroupAlias</a>,
+  'iOS': <a href='@updateGroupAlias' target='_blank'>updateGroupAlias</a>,
+  'mac': <a href='@updateGroupAlias' target='_blank'>updateGroupAlias</a>,
+}
+
+export const onGroupAliasUpdatedMap = {
+  'Android': <a href='@onGroupAliasUpdated' target='_blank'>onGroupAliasUpdated</a>,
+  'Web,,RN': <a href='@groupAliasUpdated' target='_blank'>groupAliasUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupAliasUpdated.html' target='_blank'>onGroupAliasUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-group-alias-updated-operated-user-id-group-id' target='_blank'>groupAliasUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-group-alias-updated-operated-user-id-group-id' target='_blank'>groupAliasUpdated</a>,
+}
+
+export const onConversationChangedMap = {
+  'Android': <a href='@onConversationChanged' target='_blank'>onConversationChanged</a>,
+  'Web,RN': <a href='@conversationChanged' target='_blank'>conversationChanged</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationChanged.html' target='_blank'>conversationChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-changed' target='_blank'>conversationChanged</a>,
+}
+
+# Manage group info
+
+- - -
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group information management, allowing you to get or modify group info, such as group name, nickname in the group, group avatar, group notice, and more.
+
+<Warning title="Warning">
+
+- Before you use this feature, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](./Manage%20groups.mdx).
+- All in-group members (group owner included) can use this feature.
+</Warning>
+
+![/Pics/In_app_Chat/14535.jpeg](//doc.oa.zego.im/Pics/In_app_Chat/14535.jpeg)
+
+
+## Get group info
+
+To know the detailed info of the group you joined, call the {getPlatformData(props,queryGroupInfoByGroupIDMap)} method.
+
+You will receive the group info through the callback {getPlatformData(props,ZIMGroupInfoQueriedCallbackMap)} after the query succeeds.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Get the group info, such as group name, nicknames, group notice.
+zim.queryGroupInfo(group_id, new ZIMGroupInfoQueriedCallback() {
+    @Override
+    public void onGroupInfoQueried(ZIMGroupInfo groupInfo, ZIMError errorInfo) {
+        // Get the result of querying group information through errorInfo.
+    }
+});
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Get the group info, such as group name, nicknames, group notice.
+[zim queryGroupInfoByGroupID:groupID callback:^(ZIMGroupInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for query the group info, such as group name, nicknames, group notice here. 
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Get the group info, such as group name, nicknames, group notice.
+[zim queryGroupInfoByGroupID:groupID callback:^(ZIMGroupInfo * _Nonnull groupInfo, ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for query the group info, such as group name, nicknames, group notice here. 
+}];
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Get the group info, such as group name, nicknames, group notice.
+zim_->queryGroupInfo(group_id, 
+    [=](const ZIMGroupInfo &groupInfo, zim::ZIMError errorInfo) {
+        int code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Get the group info, such as group name, nicknames, group notice.
+ZIM
+    .getInstance()
+    .queryGroupInfo('groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="Web|RN"}
+<CodeGroup>
+```javascript SampleCode
+// Get the group info, such as group name, nicknames, group notice, and group avatar URL.
+var groupID = '';
+zim.queryGroupInfo(groupID)
+    .then(function ({ groupInfo }) {
+        // Query successful. 
+    })
+    .catch(function (err) {
+        // Query failed. 
+    });
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members query group information, such as group name, group nickname, group announcement, etc.
+ZIM.GetInstance().QueryGroupInfo("groupID", (ZIMGroupFullInfo groupInfo, ZIMError errorInfo) =>
+{
+    // You can get the result of querying group information by accessing errorInfo
+});
+```
+</CodeGroup>
+:::
+
+## Modify the group name
+
+To modify the group name after joining a group, call the {getPlatformData(props,updateGroupNameMap)} method.
+
+All group members receive a notification through the callback {getPlatformData(props,onGroupNameUpdatedMap)} after the group name is modified successfully.
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Modify the group name.
+// groupName is a string with a maximum of 64 bytes, with no special character restrictions.
+zim.updateGroupName("new_group_name", group_id, new ZIMGroupNameUpdatedCallback() {
+    @Override
+    public void onGroupNameUpdated(ZIMError errorInfo) {
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group name.
+// groupName is a string with a maximum of 64 bytes, with no special character restrictions.
+[zim updateGroupName:groupName groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for the results of modify the group name here. 
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group name.
+// groupName is a string with a maximum of 64 bytes, with no special character restrictions.
+[zim updateGroupName:groupName groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for the results of modify the group name here. 
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Modify the group name.
+zim_->updateGroupName("new_group_name", group_id, 
+    [=](const std::string &groupID, const std::string &groupName, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;    
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+//  Modify the group name.
+ZIM
+    .getInstance()
+    .updateGroupName('groupName', 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web|RN"}
+<CodeGroup>
+```javascript SampleCode
+// Group members  modify group name
+// groupName is a string with a maximum of 64 bytes, with no special character restrictions.
+var groupID = '';
+var groupName = '';
+zim.updateGroupName(groupName, groupID)
+    .then(function ({ groupID, groupName }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Register and listen for the callback groupNameUpdated
+zim.on('groupNameUpdated', function (zim, { groupID, groupName, operatedInfo }) {
+    console.log('groupNameUpdated', groupID, groupName, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members modify group name
+// groupName is a string with a maximum of 64 bytes, with no special character restrictions.
+ZIM.GetInstance().UpdateGroupName("newGroupName", "groupID", (string groupID, string groupName, ZIMError errorInfo) => { });
+```
+</CodeGroup>
+:::
+
+## Modify the group avatar
+
+After logging in and joining a group, if a user wants to modify the avatar of the group they have joined, they can do so by calling the {getPlatformData(props,updateGroupAvatarUrlMap)} interface to modify the group avatar.
+
+After a successful modification, all group members will receive a notification through {getPlatformData(props,onGroupAvatarUrlUpdatedMap)}.
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Group members modify the group avatar.
+// The URL can be up to 500 bytes long with no special character restrictions.
+String groupAvatarUrl = "";
+String groupId = "";
+zim.updateGroupAvatarUrl(groupAvatarUrl, groupId, new ZIMGroupAvatarUrlUpdatedCallback() {
+            @Override
+            public void onGroupAvatarUrlUpdated(String groupID, String groupAvatarUrl, ZIMError errorInfo) {
+                
+            }
+        });
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Group members modify the group avatar
+// The URL can be up to 500 bytes long with no special character restrictions.
+[zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+         // Write your business code here after calling the interface to modify the group avatar.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Group members modify the group avatar
+// The URL can be up to 500 bytes long with no special character restrictions.
+[zim updateGroupAvatarUrl:groupAvatarUrl groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+         // Write your business code here after calling the interface to modify the group avatar.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Group members modify group avatar
+// URL maximum 500 bytes, no special character restrictions
+zim_->updateGroupAvatarUrl("new_group_avatar_url", group_id, 
+    [=](const std::string &groupID, const std::string &groupName, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;    
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Modify group avatar by group members
+// groupAvatarUrl is a string with a maximum of 500 bytes, no special character restrictions.
+ZIM.getInstance()
+  !.updateGroupAvatarUrl('groupAvatarUrl', 'groupID')
+   .then((value) => {
+       // Triggered when successful
+   })
+   .catchError((onError) {
+       // Triggered when failed
+   });
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="Web|RN"}
+<CodeGroup>
+```javascript SampleCode
+// Group members  modify group avatar
+// The URL can be up to 500 bytes with no special character limitations.
+var groupID = '';
+var groupAvatarUrl = '';
+zim.updateGroupAvatarUrl(groupAvatarUrl, groupID)
+.then(function ({ groupID, groupAvatarUrl }) {
+// Operation successful.
+})
+.catch(function (err) {
+    // Operation failed.
+});
+
+// Register and listen for the callback groupAvatarUrlUpdated
+zim.on('groupAvatarUrlUpdated', function (zim, { groupID, groupAvatarUrl, operatedInfo }) {
+console.log('groupAvatarUrlUpdated', groupID, groupAvatarUrl, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members modify group avatar
+// URL has a maximum of 500 bytes, with no special character restrictions.
+ZIM.GetInstance().UpdateGroupAvatarUrl("groupAvatarUrl", "groupID", (string groupID, string groupAvatarUrl, ZIMError errorInfo) => { });
+```
+</CodeGroup>
+:::
+
+
+## Modify the group notice
+
+To modify the group notice after joining a group, call the {getPlatformData(props,updateGroupNoticeMap)} method.
+
+All group members receive a notification through the callback {getPlatformData(props,onGroupNoticeUpdatedMap)} when the group notice is modified successfully.
+
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Modify the group notice.
+zim.updateGroupNotice("new_group_notice", group_id, new ZIMGroupNameUpdatedCallback() {
+    @Override
+    public void onGroupNoticeUpdated(ZIMError errorInfo) {
+       // Get the result of querying group information through errorInfo.  
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group notice.
+[zim updateGroupNotice:groupNotice groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for modifying the group notice here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group notice.
+[zim updateGroupNotice:groupNotice groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
+        //Implement the event callback for modifying the group notice here.
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Modify the group notice.
+zim_->updateGroupNotice("new_group_notice", group_id, 
+    [=](const std::string &groupID, const std::string &groupNotice, ZIMError errorInfo){
+        int error_code = errorInfo.code;
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Modify the group notice.
+ZIM
+    .getInstance()
+    .updateGroupNotice('groupNotice', 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web|RN"}
+<CodeGroup>
+```javascript SampleCode
+// Group members Modify the group notice
+var groupID = '';
+var groupNotice = '';
+zim.updateGroupNotice(groupNotice, groupID)
+    .then(function ({ groupID, groupNotice }) {
+        // Operation successful.
+    })
+    .catch(function (err) {
+        // Operation failed.
+    });
+
+// Register and listen for the callback groupNoticeUpdated
+zim.on('groupNoticeUpdated', function (zim, { groupID, groupNotice, operatedInfo }) {
+    console.log('groupNoticeUpdated', groupID, groupNotice, operatedInfo);
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="U3d"}
+<CodeGroup>
+```c# SampleCode
+// Group members modify group notice
+ZIM.GetInstance().UpdateGroupNotice("new_group_notice", "group_id", (string groupID, string groupNotice, ZIMError errorInfo) =>
+    {
+        // Use errorInfo.code to get the result of modifying group notice     
+    }
+);
+```
+</CodeGroup>
+:::
+
+:::if{props.platform="undefined|Android|window|Flutter|RN"}
+## Modify the group alias
+
+Group alias is a personalized nickname set by users for a group chat to distinguish from other group chats. For example, you can set the alias for a work group as "Work Group" and the alias for a family group as "Family Group", which makes it more convenient to identify the group chats.
+
+<Note title="Note">
+
+Group alias is only visible to the user who sets it and does not affect the display of the group name for other group chat members.
+</Note>
+
+After logging in and joining a group, if a user wants to modify the group alias, the user can call the {getPlatformData(props,updateGroupAliasMap)} interface to modify the group alias. The group alias is only visible to the user themselves, and the alias for the corresponding conversation will be automatically synchronized.
+:::
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java SampleCode
+// Modify the group alias
+// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+String group_alias = "NewAlias";
+String group_id = "GroupID";
+zim.updateGroupAlias(group_alias, group_id, new ZIMGroupAliasUpdatedCallback() {
+    @Override
+    public void onGroupAliasUpdated(String groupID, String groupAlias, ZIMError errorInfo) {
+        // Get the result of modifying the group alias through errorInfo.code
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group alias
+// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+NSString *groupAlias = @"NewAlias";
+NSString *groupID = @"GroupID";
+[zim updateGroupAlias:groupAlias groupID:groupID callback:^(NSString *groupID, NSString *groupAlias, ZIMError *errorInfo) {
+        // Write your business logic after calling the method to modify the group alias here
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+// Modify the group alias
+// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+NSString *groupAlias = @"NewAlias";
+NSString *groupID = @"GroupID";
+[zim updateGroupAlias:groupAlias groupID:groupID callback:^(NSString *groupID, NSString *groupAlias, ZIMError *errorInfo) {
+        // Write your business logic after calling the method to modify the group alias here
+}];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Modify the group alias
+// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+std::string group_alias = "NewAlias";
+std::string group_id = "GroupID";
+zim_->updateGroupAlias(group_alias, group_id, 
+    [=](const std::string &groupID, const std::string &groupAlias, zim::ZIMError errorInfo){
+        int error_code = errorInfo.code;    
+    });
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart SampleCode
+// Modify the group alias
+// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+String groupAlias = 'newAlias';
+String groupId = 'groupID';
+try{
+    ZIMGroupAliasUpdatedResult? result = await ZIM.getInstance()?.updateGroupAlias(groupAlias, groupId);
+} on PlatformException catch (onError){
+    onError.code; // Failed to modify the group alias, error code
+    onError.message; // Error message for modifying the group alias
+}
+```
+</CodeGroup>
+:::
+:::if{props.platform="RN"}
+```javascript SampleCode
+// Modify the group alias
+try {
+    const groupAlias = "new_group_alias_example"; // groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
+
+    const groupID = "example_group_id"; 
+
+    // Call the updateGroupAlias method
+    const result = await zim.updateGroupAlias(groupAlias, groupID);
+    console.log("Update succeeded:", result);
+} catch (error) {
+    console.error("Update failed:", error);
+}
+```
+:::
+
+:::if{props.platform="iOS|undefined|mac|window|RN"}
+After the modification is successful, all devices of the user can receive notifications through {getPlatformData(props,onGroupAliasUpdatedMap)}.
+:::
+
+:::if{props.platform=undefined}
+```java SampleCode
+// Listen for group alias update notifications
+public class SelfEventHandler extends ZIMEventHandler {
+    @Override
+    public void onGroupAliasUpdated(ZIM zim, String groupAlias, String operatedUserID, String groupID) {
+        // Business logic
+    }
+}
+```
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc SampleCode
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+// Listen for group alias update notifications
+- (void)zim:(ZIM *)zim
+    groupAliasUpdated:(NSString *)groupAlias
+       operatedUserID:(NSString *)operatedUserID
+              groupID:(NSString *)groupID {
+    // Business logic
+}
+
+// Other callback events...
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc SampleCode
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+// Listen for group alias update notifications
+- (void)zim:(ZIM *)zim
+    groupAliasUpdated:(NSString *)groupAlias
+       operatedUserID:(NSString *)operatedUserID
+              groupID:(NSString *)groupID {
+    // Business logic
+}
+
+// Other callback events...
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp SampleCode
+// Listen for group alias update notifications
+class zim_event_handler : public zim::ZIMEventHandler {
+    void onGroupAliasUpdated(ZIM * /*zim*/, const std::string & /*groupAlias*/,
+                                     const std::string & /*operatedUserID*/,
+                                     const std::string & /*groupID*/) override {
+        // Business logic
+    }
+}
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+```dart SampleCode
+// Listen for group alias update notifications
+ZIMEventHandler.onGroupAliasUpdated = (ZIM zim, String groupAlias, String operatedUserID, String groupID){
+    // Business logic
+};
+```
+:::
+:::if{props.platform="RN"}
+```javascript SampleCode
+// Listen for group alias update notifications
+zim.on('groupAliasUpdated', function (zim, { groupID, groupAlias, operatedUserID }) {
+    // You can handle the logic after the group alias is updated here, such as updating the UI or notifying the user
+});
+```
+:::
+
+:::if{props.platform="iOS|undefined|mac|window|RN"}
+In addition, the user will also receive the {getPlatformData(props,onConversationChangedMap)} callback to know when the `conversationAlias` is updated. For more details, please refer to [Get the conversation list - Listen for conversation changes](./../Conversation/Get%20the%20conversation%20list.mdx#listen-for-conversation-changes).
+:::
