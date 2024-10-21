@@ -1,4 +1,51 @@
+---
+articleID: 13932
+---
 
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+export const createMap = {
+'Android': <a href='@create' target='_blank'>create</a>,
+}
+export const setEventHandlerMap = {
+'Android': <a href='@setEventHandler' target='_blank'>setEventHandler</a>,
+}
+export const onReceivePeerMessageMap = {
+'Android': <a href='@onReceivePeerMessage' target='_blank'>onReceivePeerMessage</a>,
+}
+export const onReceiveGroupMessageMap = {
+'Android': <a href='@onReceiveGroupMessage' target='_blank'>onReceiveGroupMessage</a>,
+}
+export const onReceiveRoomMessageMap = {
+'Android': <a href='@onReceiveRoomMessage' target='_blank'>onReceiveRoomMessage</a>,
+}
+export const ZIMUserInfoMap = {
+'Android': <a href='@-ZIMUserInfo' target='_blank'>ZIMUserInfo</a>,
+}
+export const loginMap = {
+'Android': <a href='@login' target='_blank'>login</a>,
+}
+export const sendMessageMap = {
+'Android': <a href='@sendMessage' target='_blank'>sendMessage</a>,
+}
+export const onMessageSentMap = {
+'Android': <a href='@onMessageSent' target='_blank'>onMessageSent</a>,
+}
+export const ZIMConversationTypeMap = {
+'Android': <a href='@-ZIMConversationType' target='_blank'>ZIMConversationType</a>,
+}
+export const onMessageAttachedMap = {
+'Android': <a href='@onMessageAttached' target='_blank'>onMessageAttached</a>,
+}
+export const ZIMMessageMap = {
+'Android': <a href='@-ZIMMessage' target='_blank'>ZIMMessage</a>,
+}
+export const logoutMap = {
+'Android': <a href='@logout' target='_blank'>logout</a>,
+}
+export const destroyMap = {
+'Android': <a href='@destroy' target='_blank'>destroy</a>,
+}
 
 # Send and receive messages
 
@@ -10,7 +57,7 @@ This document describes how to use the ZIM SDK (In-app Chat) to send and receive
 
 The following shows the access solution that the ZIM SDK provides.
 
-![/Pics/InappChat/im_solution_en.png](/Pics/InappChat/im_solution_en.png)
+![](https://storage.zego.im/sdk-doc/Pics/InappChat/im_solution_en.png)
 
 In this solution, you will need to implement the following business logic based on your actual business requirements:
 
@@ -20,28 +67,37 @@ In this solution, you will need to implement the following business logic based 
 
 Before you begin, make sure:
 
-@@@ZIM_BasicPrerequisites@@@
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+- Create a project, get the **AppID** and **AppSign**.
+- Activate the **In-app Chat** service (as shown in the following figure).
+![](https://storage.zego.im/sdk-doc/Pics/InappChat/ActivateZIMinConsole2.png)
+
 
 - Android Studio 2020.3.1 or later
 - Android SDK Packages: Android SDK 25, Android SDK Build-Tools 25.0.2, Android SDK Platform-Tools 25.x.x or later.
 - An Android device or Simulator that is running on Android 4.4 or later and supports audio and video. We recommend you use a real device.
 
-@@@ZIM_AppSign@@@
+<Warning title="Warning">
+
+For SDK `2.3.0` or later, the AppSign authentication mode and Token-based authentication mode are both supported.
+
+If you want to change your authentication mode, please refer to the [Upgrade the authentication mode from using the AppSign to Token](https://docs.zegocloud.com/faq/token_upgrade).
+</Warning>
 
 ## Integrate the SDK
 
 ### Optional: Create a new project
 
-<details class="zg-primary">
-    <summary>Create a new project</summary>
+<details className="zg-primary">
+<summary>Create a new project</summary>
 
 1. Open Android Studio, select **File > New > Project**.
 
-    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/android_new_project.png" /></Frame>
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/android_new_project.png" /></Frame>
 
 2. Configure your new project with **Application name** and **Project location**.
 
-    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/android_new_project_finish.png" /></Frame>
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/android_new_project_finish.png" /></Frame>
 
 3. All other items in the panel can be left as their defaults, click **Next** and then click **Finish**.
 
@@ -57,97 +113,97 @@ Choose either of the following methods to integrate the SDK into your project.
 
 1. Set up repositories
 
-    - If your Android Gradle Plugin is **v7.1.0 or later**: go to the root directory of your project, open the `settings.gradle` file, and add the following line to the `dependencyResolutionManagement`:
-
-        ```groovy
-        ...
-        dependencyResolutionManagement {
-            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-            repositories {
-                maven { url 'https://storage.zego.im/maven' }
-                mavenCentral()
-                google()
-            }
-        }
-        ```
-
-        <div class="mk-warning">
-
-        If you can not find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0.
-
-        For more details, see [Android Gradle Plugin Release Note v7.1.0\|_blank](https://developer.android.com/build/releases/past-releases/agp-7-1-0-release-notes#settings-gradle).
-        </div>
-
-    - If your Android Gradle Plugin is **earlier than 7.1.0**: go to the root directory of your project, open the `build.gradle` file, and add the following line to the `allprojects`:
-
-        ```groovy
-        ...
-        allprojects {
-            repositories {
-                maven { url 'https://storage.zego.im/maven' }
-                mavenCentral()
-                google()
-            }
-        }
-        ```
-
-2. Declare dependencies:
-
-    Go to the `app` directory, open the `build.gradle` file, and add the following line to the `dependencies`. (**x.y.z** is the SDK version number, to obtain the latest version number, see [Release Note\|_blank](#14167))
+- If your Android Gradle Plugin is **v7.1.0 or later**: go to the root directory of your project, open the `settings.gradle` file, and add the following line to the `dependencyResolutionManagement`:
 
     ```groovy
     ...
-    dependencies {
-        ...
-        implementation 'im.zego:zim:x.y.z'
+    dependencyResolutionManagement {
+        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+        repositories {
+            maven { url 'https://storage.zego.im/maven' }
+            mavenCentral()
+            google()
+        }
     }
     ```
 
+    <Warning title="Warning">
+
+    If you can not find the above fields in `settings.gradle`, it's probably because your Android Gradle Plugin version is lower than v7.1.0.
+
+    For more details, see [Android Gradle Plugin Release Note v7.1.0](https://developer.android.com/build/releases/past-releases/agp-7-1-0-release-notes#settings-gradle).
+    </Warning>
+
+- If your Android Gradle Plugin is **earlier than 7.1.0**: go to the root directory of your project, open the `build.gradle` file, and add the following line to the `allprojects`:
+
+    ```groovy
+    ...
+    allprojects {
+        repositories {
+            maven { url 'https://storage.zego.im/maven' }
+            mavenCentral()
+            google()
+        }
+    }
+    ```
+
+2. Declare dependencies:
+
+Go to the `app` directory, open the `build.gradle` file, and add the following line to the `dependencies`. (**x.y.z** is the SDK version number, to obtain the latest version number, see [Release Note](#14167))
+
+```groovy
+...
+dependencies {
+    ...
+    implementation 'im.zego:zim:x.y.z'
+}
+```
+
 #### Method 2: Manually add the SDK to the project
 
-1. Download the latest version of SDK from [SDK downloads\|_blank](!Download_SDK).
+1. Download the latest version of SDK from [SDK downloads](./Client%20SDKs/SDK%20downloads.mdx).
 
 2. Extract the files from the SDK packages into your project directory, for example, `app/libs`.
 
-    ![/Pics/Android/ZIM/android_studio_im_sdk.jpg](http://doc.oa.zego.im/Pics/Android/ZIM/android_studio_im_sdk.jpg)
+![/Pics/Android/ZIM/android_studio_im_sdk.jpg](https://storage.zego.im/sdk-doc/Pics/Android/ZIM/android_studio_im_sdk.jpg)
 
 3. Add SDK Import Statements. Open the file `app/build.gradle`, and add the following contents:
 
-    1. Add the `ndk` node inside the `defaultConfig` node to specify the supported ABIs.
+1. Add the `ndk` node inside the `defaultConfig` node to specify the supported ABIs.
 
-        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_ndk_node.png" /></Frame>
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_ndk_node.png" /></Frame>
 
-        ```groovy
-        ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+    ```groovy
+    ndk {
+        abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+    }
+    ```
+
+2. Add the `sourceSets` node inside the `android` node to specify the directory containing the SDK files.
+
+    <Note title="Note">
+
+    The directory **libs** is only an example for illustration, you can fill in based on the actual situation.
+    </Note>
+
+    <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_sourceSets_node.png" /></Frame>
+
+    ```groovy
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
-        ```
+    }
+    ```
 
-    2. Add the `sourceSets` node inside the `android` node to specify the directory containing the SDK files.
+3. Add the following code in the `dependencies` node.
 
-        <Note title="Note">
-
-        The directory **libs** is only an example for illustration, you can fill in based on the actual situation.
-        </Note>
-
-        <Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/Android/ExpressSDK/Integration/add_sourceSets_node.png" /></Frame>
-
-        ```groovy
-        sourceSets {
-            main {
-                jniLibs.srcDirs = ['libs']
-            }
-        }
-        ```
-
-    3. Add the following code in the `dependencies` node.
-
-        ```groovy
-        dependencies {
-            implementation fileTree(dir: 'libs', include: ['*.jar'])
-            ......
-        }
-        ```
+    ```groovy
+    dependencies {
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+        ......
+    }
+    ```
 
 ## Add permissions
 
@@ -174,13 +230,13 @@ To prevent the ZEGO SDK public class names from being obfuscated, you can add th
 
 ### Get the sample code
 
-To download and run the sample code, see [Sample app\|_blank](!Sample_Codes).
+To download and run the sample code, see [Sample app](./Sample%20app.mdx).
 
 For the sample code related to this feature, check out the source files in the `app/src/main/java/im/zego/zimexample/ui/room/ZIMPeerSessionActivity` directory in the SDK sample code package.
 
 ### Import the class file
 
-Import the class file to your project:
+  Import the class file to your project:
 
 ```java
 import im.zego.zim.ZIM
@@ -190,7 +246,7 @@ import im.zego.zim.ZIM
 
 Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
 
-So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [`create`\|_blank](@create) method with the AppID and AppSign you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the {getPlatformData(props,createMap)} method with the AppID and AppSign you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
 
 ```java
 // Create a ZIM SDK object and pass the AppID, AppSign, and Application in Android.
@@ -200,8 +256,8 @@ appConfig.appSign = "appSign";
 zim = ZIM.create(appConfig, application);
 ```
 
-<details class="zg-primary">
-    <summary>The sample code to create a ZIM SDK singleton</summary>
+<details className="zg-primary">
+<summary>The sample code to create a ZIM SDK singleton</summary>
 
 For most cases, you will only need to create the ZIM SDK instance once. We recommend you create a singleton and save it.
 
@@ -210,26 +266,26 @@ Then, when you import the `SDKManager` class anywhere in the project and call th
 
 ```java
 public class SDKManager {
-    private static SDKManager sdkManager;
-    public ZIM zim;
+private static SDKManager sdkManager;
+public ZIM zim;
 
-    public static SDKManager sharedInstance() {
-        if (sdkManager == null) {
-            synchronized (SDKManager.class) {
-                if (sdkManager == null) {
-                    sdkManager = new SDKManager();
-                }
+public static SDKManager sharedInstance() {
+    if (sdkManager == null) {
+        synchronized (SDKManager.class) {
+            if (sdkManager == null) {
+                sdkManager = new SDKManager();
             }
         }
-        return sdkManager;
     }
+    return sdkManager;
+}
 
-    public void create(Application application) {
-        ZIMAppConfig appConfig = new ZIMAppConfig();
-        appConfig.appID = 12345;
-        appConfig.appSign = "appSign";
-        zim = ZIM.create(appConfig, application);
-    }
+public void create(Application application) {
+    ZIMAppConfig appConfig = new ZIMAppConfig();
+    appConfig.appID = 12345;
+    appConfig.appSign = "appSign";
+    zim = ZIM.create(appConfig, application);
+}
 }
 ```
 </details>
@@ -238,28 +294,35 @@ public class SDKManager {
 ### Set an event handler object
 
 
-Before a client user's login, you will need to call the [`setEventHandler`\|_blank](@setEventHandler) method to implement an event handler object, and customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message related callback notifications.
+Before a client user's login, you will need to call the {getPlatformData(props,setEventHandlerMap)} method to implement an event handler object, and customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message related callback notifications.
 
 ```java
 zim.setEventHandler(new ZIMEventHandler() {
-    @Override
-    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
-        // Implement the callback for receiving the one-to-one messages.
-    }
+@Override
+public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+    // Implement the callback for receiving the one-to-one messages.
+}
 });
 ```
-For more details about related callbacks, see [`onReceivePeerMessage`\|_blank](@onReceivePeerMessage), [`onReceiveGroupMessage`\|_blank](@onReceiveGroupMessage), and [`onReceiveRoomMessage`\|_blank](@onReceiveRoomMessage).
+For more details about related callbacks, see {getPlatformData(props,onReceivePeerMessageMap)}, {getPlatformData(props,onReceiveGroupMessageMap)}, and {getPlatformData(props,onReceiveRoomMessageMap)}.
 
 ### Log in to the ZIM SDK
 
 For client A and client B to send and receive messages after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
 
 To log in, Clients A and B both need to do the following:
-1. Call the [`ZIMUserInfo`\|_blank](@-ZIMUserInfo)  method to create a user object.
-2. Then, call the [`login`\|_blank](@login) method with their own user information.
+1. Call the {getPlatformData(props,ZIMUserInfoMap)}  method to create a user object.
+2. Then, call the {getPlatformData(props,loginMap)} method with their own user information.
 
 
-@@@ZIM_login_warning@@@
+<Warning title="Warning">
+
+- You can custom the **userID** and **userName**, and we recommend you set the  **userID** to a meaningful value and associate them with the account system of your application.
+- For SDK 2.3.0 or later: The SDK uses the AppSign authentication mode by default. You only need to pass the {getPlatformData(props,ZIMUserInfoMap)} when logging in. 
+
+- If you use the Token-based authentication mode, please refer to the [Authentication](./Guides/Users/Authentication.mdx) to get the Token first, and pass it when logging in. 
+</Warning>
+
 
 ```java
 // userID must be within 32 bytes, and can only contain letters, numbers, and the following special characters: '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
@@ -273,24 +336,65 @@ zimUserInfo.userName = userName;
 // If you are using the AppSign mode for authentication (the default auth mode for v2.3.0 or later), leave the Token parameter blank.
 
 zim.login(zimUserInfo, new ZIMLoggedInCallback() {
-    @Override
-    public void onLoggedIn(ZIMError error) {
-          // You can know whether the login is successful according to the ZIMError.
-    }
- });
+@Override
+public void onLoggedIn(ZIMError error) {
+      // You can know whether the login is successful according to the ZIMError.
+}
+});
 ```
 
 ### Send one-to-one messages
 
 Client A can send messages to client B after logging in successfully.
 
-@@@ZIM_Message_Type@@@
+Currently, the ZIM SDK supports the following message types:
 
-To send one-to-one messages, for example, client A wants to send a message to client B, then client A needs to call the [`sendMessage`\|_blank](@sendMessage) method with client B's userID, message content, and message type [`ZIMConversationType`\|_blank](@-ZIMConversationType).
-And client A can be notified whether the message is delivered successfully through the callback [`onMessageSent`\|_blank](@onMessageSent).
+<table>
+<tbody><tr data-row-level="1">
+<th>Message type</th>
+<th>Description</th>
+<th>Details</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>Text message. Size limit: 32 KB. Rate limit: 10 requests/second.</td>
+<td>Enable messages to be more deliverable, and can be stored as message history. Suitable for one-on-one chat and group chat.</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message. Size limit: 5 KB. Rate limit: 10 requests/second. </td>
+<td>Supports massive concurrency. Suitable for live audio room, online classroom, the messages won't be stored after the room is destroyed. </td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>In-room barrage message (bullet) screen message). Size limit: 5 KB. No specific rate limit. </td>
+<td><p>The high-frequency messages that don't require 100% deliverability, this message type is often used to send bullet screen messages. </p><p>Supports massive concurrency, but the message deliverability can't be guaranteed. </p></td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports major image formats, including JPG, PNG, BMP, TIFF, and GIF. Size limit: 10 MB. Rate limit: 10 requests/second. </td>
+<td rowspan="4">Enable messages to be more deliverable, and can be stored as history messages. Suitable for one-on-one chat, room chat, and group chat.</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. Supports files in any format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports voice messages in MP3 format within 300 seconds. Size limit: 6 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>Video message. Supports video messages in MP4 or MOV format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+</tbody>
+</table>
+
+To send one-to-one messages, for example, client A wants to send a message to client B, then client A needs to call the {getPlatformData(props,sendMessageMap)} method with client B's userID, message content, and message type {getPlatformData(props,ZIMConversationTypeMap)}.
+And client A can be notified whether the message is delivered successfully through the callback {getPlatformData(props,onMessageSentMap)}.
 
 
-- [onMessageAttached\|_blank](@onMessageAttached-ZIMMediaMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage\|_blank](@-ZIMMessage) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
+- {getPlatformData(props,onMessageAttachedMap)} callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary {getPlatformData(props,ZIMMessageMap)} message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
 
 ```java
 // The following shows how to send one-to-one message, the [conversationType] needs to be set to [ZIMConversationTypePeer].
@@ -311,47 +415,47 @@ config.pushConfig = pushConfig;
 
 // In 1-on-1 chats, the conversationID is the peer user ID. In group chats, the conversationID is the groupID. In the chat room, the conversationID is the roomID.
 zim.sendMessage(zimMessage, conversationID, ZIMConversationType.Peer,config, new ZIMMessageSentCallback() {
-    @Override
-    public void onMessageAttached(ZIMMessage zimMessage){
-         // The callback on the message not sent yet. You can get a temporary object here and this object must be the same as that created zimMessage object. You can make your own business logic using this as needed, for example, display a UI ahead of time.
-    }
-    @Override
-    public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
-        // Implement the event callback on message sent.
-    }
+@Override
+public void onMessageAttached(ZIMMessage zimMessage){
+      // The callback on the message not sent yet. You can get a temporary object here and this object must be the same as that created zimMessage object. You can make your own business logic using this as needed, for example, display a UI ahead of time.
+}
+@Override
+public void onMessageSent(ZIMMessage zimMessage, ZIMError error) {
+    // Implement the event callback on message sent.
+}
 });
 ```
 
 
 ### Receive one-to-one messages
 
-After client B logs in, he will receive client A's message through the callback [`onReceivePeerMessage`\|_blank](@onReceivePeerMessage) which is already set in the [`setEventHandler`\|_blank](@setEventHandler) method.
+After client B logs in, he will receive client A's message through the callback {getPlatformData(props,onReceivePeerMessageMap)} which is already set in the {getPlatformData(props,setEventHandlerMap)} method.
 
 
-<div class = 'mk-warning'>
-
+<Warning title="Warning">
 When a message is received, you need to determine the message is a Text message or a Command message because these two message types are based on the basic message. You need to convert the basic message class to a concrete message type and then retrieve the message content from the `Message` field.
-</div>
+</Warning>
+
 
 ```java
 zim.setEventHandler(new ZIMEventHandler() {
-    @Override
-    public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
+@Override
+public void onReceivePeerMessage(ZIM zim, ArrayList<ZIMMessage> messageList, String fromUserID) {
 
-      for (ZIMMessage zimMessage : messageList) {
-          if (zimMessage instanceof ZIMTextMessage)
-          {
-            ZIMTextMessage zimTextMessage = (ZIMTextMessage) zimMessage;
-            Log.e(TAG, "Received message:"+ zimTextMessage.message);
-          }
+  for (ZIMMessage zimMessage : messageList) {
+      if (zimMessage instanceof ZIMTextMessage)
+      {
+        ZIMTextMessage zimTextMessage = (ZIMTextMessage) zimMessage;
+        Log.e(TAG, "Received message:"+ zimTextMessage.message);
       }
-   }
+  }
+}
 });
 ```
 
 ### Log out
 
-For a client to log out, call the [`logout`\|_blank](@logout) method.
+For a client to log out, call the {getPlatformData(props,logoutMap)} method.
 
 ```java
 zim.logout();
@@ -359,7 +463,7 @@ zim.logout();
 
 ### Destroy the ZIM SDK instance
 
-To destroy the ZIM SDK instance, call the [`destroy`\|_blank](@destroy) method.
+To destroy the ZIM SDK instance, call the {getPlatformData(props,destroyMap)} method.
 
 ```java
 zim.destroy();

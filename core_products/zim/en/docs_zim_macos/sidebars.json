@@ -18,11 +18,6 @@
     },
     {
       "type": "doc",
-      "label": "Sample app",
-      "id": "sample-app"
-    },
-    {
-      "type": "doc",
       "label": "Send and receive messages",
       "id": "send-and-receive-messages"
     },
