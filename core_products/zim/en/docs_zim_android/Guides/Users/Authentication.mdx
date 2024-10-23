@@ -10,6 +10,7 @@ export const getPlatformData = (props, data) => {
 
 export const onTokenWillExpireMap = {
   'Android': <a href="@onTokenWillExpire" target="_blank">onTokenWillExpire</a>,
+  'U3D': <a href="@OnTokenWillExpire" target="_blank">OnTokenWillExpire</a>,
   'iOS': <a href="https://docs.zegocloud.com/article/api?doc=zim_API~objectivec_ios~protocol~ZIMEventHandler#zim-token-will-expire" target="_blank">tokenWillExpire</a>,
   'MacOS': <a href="https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-token-will-expire" target="_blank">tokenWillExpire</a>,
   'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onTokenWillExpire.html" target="_blank">onTokenWillExpire</a>
@@ -17,9 +18,33 @@ export const onTokenWillExpireMap = {
 
 export const renewTokenMap = {
   'Android': <a href="@renewToken" target="_blank">renewToken</a>,
+  'U3D': <a href="@renewTokenMap" target="_blank">RenewTokenMap</a>,
   'iOS': <a href="@renewToken" target="_blank">renewToken</a>,
   'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/renewToken.html" target="_blank">onTokenWillExpire</a>
 }
+
+export const onConnectionStateChangedMap = {
+  'Android': <a href="@onConnectionStateChanged" target="_blank">onConnectionStateChanged</a>,
+  'U3D': <a href="@onConnectionStateChanged" target="_blank">OnConnectionStateChanged</a>,
+  'iOS': <a href="/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data" target="_blank">connectionStateChanged</a>,
+  'MacOS': <a href="/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data" target="_blank">connectionStateChanged</a>,
+  'Flutter': <a href="https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html" target="_blank">onConnectionStateChanged</a>
+}
+
+export const TokenExipredMap = {
+  'Android': `TOKEN_EXPIRED`,
+  'U3D': `TokenExpired`,
+  'iOS,MacOS': `ZIMConnectionEventTokenExpired`,
+  'Flutter': `tokenExpired`
+}
+
+export const DisconnectedMap = {
+  'Android': `DISCONNECTED`,
+  'U3D': `Disconnected`,
+  'iOS,MacOS': `ZIMConnectionStateDisconnected`,
+  'Flutter': `disconnected`
+}
+
 
 # Authentication
 - - -
@@ -56,7 +81,7 @@ For business security, you must generate Tokens on your app server.
 2. Use the `token generator` plug-in provided by ZEGOCLOUD to generate Tokens on your app server.
 
 
-Take Go language as an example, you can do the following steps to generate a Token：
+Take Go language as an example, you can do the following steps to generate a Token:
 
 1. go get github.com/ZEGOCLOUD/zego_server_assistant
 2. import "github.com/ZEGOCLOUD/zego_server_assistant/token/go/src/token04"
@@ -130,7 +155,8 @@ The following code shows how to generate a user identity Token:
     <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-base.js">GitHub</a></li></ul></td>
     <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/nodejs/sample/sample-rtc-room.js">GitHub</a></li></ul></td>
   </tr>
-</tbody></table>
+</tbody>
+</table>
 
 <CodeGroup>
 ```go
@@ -276,11 +302,14 @@ zim->login(userInfo, token, [=](zim::ZIMError errorInfo) {
 
 ## Renew the Token
 
-- 30 seconds before a Token expires, the SDK sends out a notification through the {getPlatformData(props,onTokenWillExpireMap)} callback.
+In the 30 seconds before a Token expires, the SDK sends out a notification through the {getPlatformData(props,onTokenWillExpireMap)} callback.
 (If the period of validity of the Token is less than 30 seconds after a successful room login, the callback triggers immediately. )
 
-- Upon receiving this callback, you need to get a new Token from your app server first, and then pass the new Token to the {getPlatformData(props,renewTokenMap)} method.
+Upon receiving this callback, you need to get a new Token from your app server first, and then pass the new Token to the {getPlatformData(props,renewTokenMap)} method.
 
+<Note title="Note">
+When the token expires and is not updated, the user will be disconnected and receive the {getPlatformData(props,onConnectionStateChangedMap)} callback, where the event is {getPlatformData(props,TokenExipredMap)} and the state is {getPlatformData(props,DisconnectedMap)}.
+</Note>
 
 :::if{props.platform=undefined}
 
@@ -368,16 +397,6 @@ void onTokenWillExpire(ZIM * zim, unsigned int second) override {
 </CodeGroup>
 :::
 
-:::if{props.platform=undefined}
-## API Reference
-
-| Method | Description |
-|-------|--------|
-| [login](@login) | Log in to ZIM service. |
-| [renewToken](@renewToken) | Renew authentication token. |
-| [onTokenWillExpire](@onTokenWillExpire) | Token expiration callback. |
-
-:::
 
 
 
