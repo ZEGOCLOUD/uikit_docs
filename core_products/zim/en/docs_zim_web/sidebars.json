@@ -325,6 +325,23 @@
       "type": "doc",
       "label": "Migration solution",
       "id": "migration-solution"
+    },
+    {
+      "type": "category",
+      "collapsed": true,
+      "label": "API Reference",
+      "items": [
+        {
+          "type": "link",
+          "label": "Client API",
+          "href": "https://docs.zegocloud.com/article/17319"
+        },
+        {
+          "type": "link",
+          "label": "Server API",
+          "href": "https://www.zegocloud.com/docs/zim-server/overview"
+        }
+      ]
     }
   ]
 }

@@ -2,6 +2,7 @@
   "mySidebar": [
     {
       "type": "category",
+      "collapsed": true,
       "label": "Introduction",
       "items": [
         {
@@ -28,6 +29,7 @@
     },
     {
       "type": "category",
+      "collapsed": true,
       "label": "Client SDKs",
       "items": [
         {
@@ -64,10 +66,12 @@
     },
     {
       "type": "category",
+      "collapsed": true,
       "label": "Guides",
       "items": [
         {
           "type": "category",
+          "collapsed": true,
           "label": "Users",
           "items": [
             {
@@ -109,6 +113,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Room",
           "items": [
             {
@@ -135,6 +140,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Group",
           "items": [
             {
@@ -161,6 +167,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Messaging",
           "items": [
             {
@@ -242,6 +249,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Conversation",
           "items": [
             {
@@ -293,6 +301,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Content Moderation",
           "items": [
             {
@@ -311,6 +320,7 @@
     },
     {
       "type": "category",
+      "collapsed": true,
       "label": "Offline push notifications",
       "items": [
         {
@@ -355,6 +365,7 @@
         },
         {
           "type": "category",
+          "collapsed": true,
           "label": "Best Practices",
           "items": [
             {
@@ -373,6 +384,7 @@
     },
     {
       "type": "category",
+      "collapsed": true,
       "label": "ZIM Audio",
       "items": [
         {
@@ -409,6 +421,7 @@
     },
     {
       "type": "category",
+      "collapsed": true,
       "label": "SDK Error Codes",
       "items": [
         {
@@ -432,6 +445,23 @@
       "type": "doc",
       "label": "Migration solution",
       "id": "migration-solution"
+    },
+    {
+      "type": "category",
+      "collapsed": true,
+      "label": "API Reference",
+      "items": [
+        {
+          "type": "link",
+          "label": "Client API",
+          "href": "https://docs.zegocloud.com/article/17316"
+        },
+        {
+          "type": "link",
+          "label": "Server API",
+          "href": "https://www.zegocloud.com/docs/zim-server/overview"
+        }
+      ]
     }
   ]
 }
