@@ -283,17 +283,18 @@ Known issues fixed.
 
 <h5>Others</h5>
 
-#### 1. Starting from version 2.8.0, ZIM no longer supports iOS versions below 11.0. Developers' iOS Deployment Target (minimum supported version) is raised to iOS 11.0.
+<h6>1. Starting from version 2.8.0, ZIM no longer supports iOS versions below 11.0. Developers' iOS Deployment Target (minimum supported version) is raised to iOS 11.0.</h6>
 
 For more details, please refer to [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
 
-#### 2. Starting from version 2.8.0, ZIM iOS SDK no longer supports the 32-bit armv7 architecture.
+<h6>12. Starting from version 2.8.0, ZIM iOS SDK no longer supports the 32-bit armv7 architecture.</h6>
 
 For more details, please refer to [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
 
-#### 3. Starting from version 2.8.0, ZIM no longer supports macOS versions below 10.13. Developers' macOS Deployment Target (minimum supported version) is raised to macOS 10.13.
+<h6>13. Starting from version 2.8.0, ZIM no longer supports macOS versions below 10.13. Developers' macOS Deployment Target (minimum supported version) is raised to macOS 10.13.</h6>
 
 For more details, please refer to [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
 ---
 
 
@@ -367,7 +368,7 @@ Known issues fixed.
 
 <h5>Deprecation</h5>
 
-#### 1. bitcode is no longer supported.
+<h6>1. bitcode is no longer supported.</h6>
 
 Starting with version 2.5.0, bitcode is no longer supported in the Flutter SDK. For more details, see [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Deprecations).
 
@@ -380,7 +381,7 @@ Starting with version 2.5.0, bitcode is no longer supported in the Flutter SDK. 
 
 | Feature  | Description | Method |
 |-------|-------|-------|
-|Manage in-room user properties| Support room users to customize user properties. For example, user level, badge, status, etc.| <ul><li>[setRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomMembersAttributes.html)</li><li>[[queryRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembersAttributes.html)</li><li>[queryRoomMemberAttributesList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberAttributesList.html)</li></ul>|
+|Manage in-room user properties| Support room users to customize user properties. For example, user level, badge, status, etc.| <ul><li>[setRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomMembersAttributes.html)</li><li>[queryRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembersAttributes.html)</li><li>[queryRoomMemberAttributesList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberAttributesList.html)</li></ul>|
 | System message added| The message type of the system message was added, and the SDK was supported to trigger the notification of entering the group, the change of the group owner, and other system messages.|- |
 | Inserting local messages| Support for inserting a message of any message type directly into the local. You can convert callback notifications (e.g., invite someone to a group, remove someone from a group, etc.) into system messages on the client side and insert them into the local database to achieve the effect of system prompts.| [insertMessageToLocalDB](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/insertMessageToLocalDB.html)|
 
