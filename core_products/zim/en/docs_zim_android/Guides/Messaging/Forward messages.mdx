@@ -98,7 +98,7 @@ zim.sendMessage(combineMessage,"conv_id", type, config, new ZIMMessageSentCallba
 :::
 
 :::if{props.platform="iOS"}
-```oc
+```objc
 // Send a merged message in a one-on-one chat session
 ZIMConversationType type = ZIMConversationTypePeer; // Conversation type, values: one-on-one: 0, room: 1, group: 2
 ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
@@ -175,7 +175,7 @@ The following is an example code for a user to receive merged messages in a one-
 :::
 
 :::if{props.platform="iOS"}
-```oc
+```objc
 // Send a merged message in a one-on-one chat session
 ZIMConversationType type = ZIMConversationTypePeer; // Conversation type, values: one-on-one: 0, room: 1, group: 2
 ZIMMessageSendConfig *config = [[ZIMMessageSendConfig alloc] init];
@@ -224,7 +224,7 @@ public abstract void queryCombineMessageDetail(ZIMCombineMessage message,
 ```
 :::
 :::if{props.platform="iOS"}
-```oc
+```objc
 - (void)queryCombineMessageDetailByMessage:(ZIMCombineMessage *)message
                                   callback:(ZIMCombineMessageDetailQueriedCallback)callback
 ```

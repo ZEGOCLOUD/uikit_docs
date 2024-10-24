@@ -49,7 +49,7 @@ Import the PushKit and CallKit libraries.
 
 :::if{props.platform=undefined}
 <Step title="Import the header files before use">
-```oc
+```objc
 #import "CallKit/CallKit.h"
 #import "PushKit/PushKit.h"
 ```
@@ -57,7 +57,7 @@ Import the PushKit and CallKit libraries.
 <Step title="Apply for the VoIP token">
 Run the following code to apply for the VoIP token.
    
-```oc
+```objc
 dispatch_queue_t mainQueue = dispatch_get_main_queue();
 PKPushRegistry *voipRegistry = [[PKPushRegistry alloc] initWithQueue:mainQueue];
 [voipRegistry setDelegate:self]; // Replace `self` with the object to receive the VoIP notification.
@@ -69,7 +69,7 @@ voipRegistry.desiredPushTypes = desiredPushTypes;
 <Step title="Obtain the VoIP token">
 Call the `didUpdatePushCredentials` method to obtain the VoIP token, and then call the [setVoipToken](@setVoipToken) method to pass it to the ZPNs SDK.
    
-```oc
+```objc
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials: (PKPushCredentials *)credentials forType:(NSString *)type {
     NSData *voIPToken = credentials.token;
     [[ZPNs shared] setVoipToken:voIPToken isProduct:TRUE];
@@ -91,7 +91,7 @@ Obtain `resourceID` with the **VoIP policy** from ZEGOCLOUD Technical Support.
 In the [`Call invitation`](./../Guides/Call%20invitation%20signaling.mdx) scenario or other scenarios that require VoIP notifications, pass in `resourceID` in the [`ZIMPushConfig`](@-ZIMPushConfig) method to set the push to a VoIP push.
 
      
-```oc
+```objc
 pushConfig.resourcesID = @"Contact ZEGOCLOUD Technical Support to obtain the value.";
 ```
    
@@ -99,7 +99,7 @@ pushConfig.resourcesID = @"Contact ZEGOCLOUD Technical Support to obtain the val
      
 If a VoIP notification is received, your app is called to trigger the [didReceiveIncomingPushWithPayload](https://developer.apple.com/documentation/pushkit/pkpushregistrydelegate/2875784-pushregistry?language=objc) method. Call the [reportNewIncomingCallWithUUID](https://developer.apple.com/documentation/callkit/cxprovider/1930694-reportnewincomingcallwithuuid/) method of CallKit in the callback to pull the call interface, write the logic (for more information, see [CallKit](https://developer.apple.com/documentation/callkit?language=objc)), and call the `completion()`.
      
-```oc
+```objc
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion{
     // Write the logic. For more information, visit https://developer.apple.com/documentation/callkit?language=objc.
     // Call the `reportNewIncomingCallWithUUID` method to pull the call interface of CallKit.

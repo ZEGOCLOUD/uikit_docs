@@ -20,7 +20,12 @@ The mappable parameters for resourcesID vary for different push service provider
 <td rowspan="2">Apple</td>
 <td>Sound</td>
 <td>Custom push sound field, only effective when the push type is <strong>Normal</strong>.</td>
+:::if{props.platform=undefined}
 <td>[Customize notification sound](./Customize%20notification%20sound.mdx)</td>
+:::
+:::if{props.platform="Web"}
+<td>-</td>
+:::
 </tr>
 <tr>
 <td>mutable_content</td>
@@ -31,7 +36,12 @@ The mappable parameters for resourcesID vary for different push service provider
 <td rowspan="3">FCM<br/>(Only for android devices)</td>
 <td>Sound</td>
 <td>Custom push sound field, only effective when the push type is notification messages.</td>
+:::if{props.platform=undefined}
 <td>[Customize notification sound](./Customize%20notification%20sound.mdx)</td>
+:::
+:::if{props.platform="Web"}
+<td>-</td>
+:::
 </tr>
 <tr>
 <td>Channel ID</td>
@@ -41,7 +51,15 @@ The mappable parameters for resourcesID vary for different push service provider
 <tr>
 <td>Push Type</td>
 <td><ul><li><strong>Notification messages</strong>: System default pop-up notification.</li><li><strong>Data messages</strong>: This push only triggers relevant callbacks and does not trigger system notifications.</li></ul></td>
+
+:::if{props.platform="undefined"}
+
 <td>[Implement silent push notifications](./Implement%20silent%20push%20notifications.mdx)</td>
+:::
+:::if{props.platform="Web"}
+  <td>-</td>
+:::
+
 </tr>
 </tbody></table>
 
