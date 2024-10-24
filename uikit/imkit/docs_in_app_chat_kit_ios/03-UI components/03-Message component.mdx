@@ -98,4 +98,75 @@ config.bottomConfig.expandButtons.append(.voiceCall)
 
 </Accordion>
 
+<Accordion title="Customize long-press message operations" defaultOpen="false">
 
+To customize what happens after a message is long pressed, you can configure it using 'ZIMKitMessageConfig' :
+
+The system includes text messages, picture messages, video messages, file messages, voice messages, and merge and forward messages
+
+Here is the reference code:
+
+```swift
+let config = ZIMKitConfig()
+config.messageConfig.textMessageConfig.operations = [.copy, .reply, .forward, .multipleChoice, .delete, .revoke, .reaction] 
+```
+
+</Accordion>
+
+<Accordion title="Custom text input box default text" defaultOpen="false">
+To customize the default prompt text for the bottom input box, you can configure it using 'inputPlaceholder'
+
+Here is the reference code:
+```swift
+let config = ZIMKitConfig()
+config.inputPlaceholder =  NSAttributedString(string: "请输入", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, 
+                                                                            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)])
+```
+</Accordion>
+
+<Accordion title="Customize the top navigation bar" defaultOpen="false">
+Navigation bar to customize the answer page, you can use ` ZIMKitMessagesListVCDelegate ` configured
+
+Here is the reference code:
+```swift
+ 
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+        var header: ZIMKitHeaderBar = ZIMKitHeaderBar()
+        header.titleView = UIView()
+        let button:UIBarButtonItem = UIBarButtonItem(customView:UIButton(type: .infoLight))
+
+        header.leftItems: [UIBarButtonItem] = [button]
+        header.rightItems: [UIBarButtonItem] = [button]
+        return header
+    }
+    
+    func getMessageListHeaderCustomerview(_ messageListVC: ZIMKitMessagesListVC) -> UIView?
+        let view = UIView().withoutAutoresizingMaskConstraints
+        let button = UIButton(type: .contactAdd)
+        button.frame = CGRect(x: 10, y: 10, width: 30, height: 30)
+        button.addTarget(self, action: #selector(customerButtonClick(_:)), for: .touchUpInside)
+        view.addSubview(button)
+    return view
+``` 
+</Accordion>
+
+<Accordion title="Destruction of the listening session page" defaultOpen="false">
+Want to listen to answer page, do some operation, you can use ` ZIMKitMessagesListVCDelegate ` configured
+
+Here is the reference code:
+```swift
+func messageListViewWillDisappear() {
+// do something
+}
+```
+</Accordion>
+
+<Accordion title="Customize the emoji panel" defaultOpen="false">
+To change the default emojis, you can configure them through 'emojis'
+
+Here is the reference code:
+```swift
+let config = ZIMKitConfig()
+config.bottomConfig.emojis = ["😀", "😃", "😄", "😁", "😆", "😅", "😂"]
+```
+</Accordion>

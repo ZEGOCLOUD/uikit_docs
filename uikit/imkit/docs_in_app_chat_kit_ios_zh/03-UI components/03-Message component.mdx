@@ -98,3 +98,69 @@ config.bottomConfig.expandButtons.append(.voiceCall)
 </Accordion>
 
 
+<Accordion title="自定义长按消息操作" defaultOpen="false">
+
+要自定义消息长按之后的操作，您可以使用 `ZIMKitMessageConfig` 进行配置：
+包括文字消息、图片消息、视频消息、文件消息、语音消息、合并转发消息
+以下是参考代码：
+
+```swift
+let config = ZIMKitConfig()
+config.messageConfig.textMessageConfig.operations = [.copy, .reply, .forward, .multipleChoice, .delete, .revoke, .reaction] 
+```
+
+</Accordion>
+
+<Accordion title="自定义文本输入框默认文字" defaultOpen="false">
+要自定义底部输入框的默认提示文字，您可以使用 `inputPlaceholder` 进行配置
+以下是参考代码:
+```swift
+let config = ZIMKitConfig()
+config.inputPlaceholder =  NSAttributedString(string: "请输入", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, 
+                                                                            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)])
+```
+</Accordion>
+
+<Accordion title="自定义顶部导航栏" defaultOpen="false">
+要自定义回话页面的导航栏，您可以通过 `ZIMKitMessagesListVCDelegate` 进行配置
+以下是参考代码:
+```swift
+ 
+    func getMessageListHeaderBar(_ messageListVC: ZIMKitMessagesListVC) -> ZIMKitHeaderBar? {
+        var header: ZIMKitHeaderBar = ZIMKitHeaderBar()
+        header.titleView = UIView()
+        let button:UIBarButtonItem = UIBarButtonItem(customView:UIButton(type: .infoLight))
+
+        header.leftItems: [UIBarButtonItem] = [button]
+        header.rightItems: [UIBarButtonItem] = [button]
+        return header
+    }
+    
+    func getMessageListHeaderCustomerview(_ messageListVC: ZIMKitMessagesListVC) -> UIView?
+        let view = UIView().withoutAutoresizingMaskConstraints
+        let button = UIButton(type: .contactAdd)
+        button.frame = CGRect(x: 10, y: 10, width: 30, height: 30)
+        button.addTarget(self, action: #selector(customerButtonClick(_:)), for: .touchUpInside)
+        view.addSubview(button)
+    return view
+``` 
+</Accordion>
+
+<Accordion title="监听会话页面的销毁" defaultOpen="false">
+要监听会话页面销毁，做一些操作的时候，您可以通过 `ZIMKitMessagesListVCDelegate` 进行配置
+以下是参考代码:
+```swift
+func messageListViewWillDisappear() {
+// do something
+}
+```
+</Accordion>
+
+<Accordion title="自定义表情面板" defaultOpen="false">
+要修改默认的表情，您可以通过 `emojis` 进行配置
+以下是参考代码:
+```swift
+let config = ZIMKitConfig()
+config.bottomConfig.emojis = ["😀", "😃", "😄", "😁", "😆", "😅", "😂"]
+```
+</Accordion>
