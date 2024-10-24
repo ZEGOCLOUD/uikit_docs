@@ -1,0 +1,125 @@
+# ZPNs upgrade guide
+
+- - -
+
+
+This article introduces some instructions and precautions for upgrading the ZPNs Flutter framework SDK version.
+
+<a id="2_6_0"></a>
+
+## 2.6.0 Upgrade Guide
+
+ZPNs 2.6.0 separates CallKit into a separate plugin. If your project uses an older version of ZPNs, you need to integrate the zego_callkit plugin separately to achieve compatibility after the upgrade.
+
+1. Import the zego_callkit plugin
+
+    Open the "pubspec.yaml" file and add the "zego_callkit" dependency in "pub" format:
+
+    ```yaml
+    dependencies:
+        # Please fill in the specific SDK version number
+        # Please query the latest version of the SDK from xxx and modify x.y.z to the specific version number
+        zego_callkit: ^x.y.z
+    ```
+
+2. Use the new header file to achieve compatibility after the upgrade.
+
+    ```dart
+    import 'package:zego_callkit/zego_callkit.dart';
+    ```
+
+
+<a id="2_5_0"></a>
+
+## 2.5.0 Upgrade Guide
+
+### Changes in data class member variable types
+
+The type of "extras" in [ZPNsMessage](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsMessage-class.html) has been changed from Map{"<String, Object>"} to Map{"<String, Object?>"}to support the case where the value of the Map may be null when converting Json to map. If you are using ZPNs version 2.5.0 or below and need to use [extras](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsMessage/extras.html), please note that the value type of this field Map has been changed.
+
+#### ZPNsMessage
+
+<CodeGroup>
+```dart title="New Type"
+  class ZPNsMessage {
+      String title = "";
+      String content = "";
+      Map<String, Object?> extras = {}; // The value of extras "Object?" supports null
+      ZPNsPushSourceType pushSourceType;
+      ZPNsMessage({required this.pushSourceType});
+  }
+  ```
+```dart title="Old Type"
+  class ZPNsMessage {
+      String title = "";
+      String content = "";
+      Map<String, Object> extras = {}; // The value of extras "Object" does not support null
+      ZPNsPushSourceType pushSourceType;
+      ZPNsMessage({required this.pushSourceType});
+  }
+  ```
+</CodeGroup>
+
+## 2.2.0 Upgrade Guide
+
+### Interface changes
+
+#### enableDebug
+
+The [enableDebug](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/enableDebug.html) interface is no longer used for the iOS platform.
+
+#### setPushConfig
+
+<CodeGroup>
+```dart title="New Interface"
+  static setPushConfig(ZPNsConfig config)
+```
+```dart title="Old Interface"
+  static Future<void> setPushConfig(ZPNsConfig config)
+```
+</CodeGroup>
+
+#### registerPush
+
+When using [registerPush](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNs/registerPush.html) on the iOS side, [ZPNsIOSEnvironment]() needs to be filled in advance based on whether the certificate selected during packaging is development or production.
+
+<CodeGroup>
+```dart title="New Interface"
+  Future<void> registerPush({ZPNsIOSEnvironment iOSEnvironment});
+```
+```dart title="Old Interface"
+  static Future<void> registerPush();
+```
+</CodeGroup>
+
+#### applyNotificationPermission
+
+<CodeGroup>
+```dart title="New Interface"
+  Future<void> applyNotificationPermission();
+  ```
+```dart title="Old Interface"
+  static Future<void> applyNotificationPermission();
+  ```
+</CodeGroup>
+
+### Changes in payload acquisition method
+
+- Old method:
+
+    Get it from the payload in ZPNsMessage.
+
+- New method:
+
+```dart
+ZPNsEventHandler.onNotificationClicked = (ZPNsMessage zpnsMessage) {
+    if (zpnsMessage.pushSourceType == ZPNsPushSourceType.APNs) {
+        Map aps = Map.from(zpnsMessage.extras['aps'] as Map);
+        String payload = aps['payload'];
+        log("My payload is $payload");
+    } else if (zpnsMessage.pushSourceType == ZPNsPushSourceType.FCM) {
+        // This interface is not supported by FCM. Please use Intent in Android Activity to get the payload field.
+    }
+    log("user clicked the offline push notification,title is ${zpnsMessage.title},content is ${zpnsMessage.content}");
+  };
+```

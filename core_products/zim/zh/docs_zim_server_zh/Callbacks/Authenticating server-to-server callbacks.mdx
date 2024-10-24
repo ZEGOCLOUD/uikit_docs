@@ -1,0 +1,80 @@
+# Authenticating server-to-server callbacks 
+
+---
+
+To ensure system security, you must authenticate every callback request sent from the ZEGO server to your application server. You can verify the callback request by comparing the signature included in the request with the locally calculated signature.
+
+## Verifying the callback request signature
+
+The following flow chart shows the signature calculation and verification process:
+
+![](/Pics/server_v2/Verify_signature_en.png)
+
+| Parameter      | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| callbacksecret | The secret key for verifying the callback request sent from the ZEGOCLOUD server to your application server. <br />This callback secret key is automatically generated for your project when you create your project in the ZEGOCLOUD Admin Console.  <br />To view the callback secret of your project: <br />1. Log in to the [ZEGOCLOUD Admin Console](https://console.zegocloud.com/).<br />2. Click **Edit** for your project.<br />3. In the **Basic Configurations** section, view the **ServerSecret**. |
+| timestamp      | A Unix timestamp.                                            |
+| nonce          | A random number.                                             |
+
+
+
+## Sample code
+
+Refer to the following sample code for how to generate and verify the callback request signature.
+
+
+- Sample code in PHP
+
+```PHP
+// Obtain the value of signature, timestamp, and nonce from the request parameters.
+$signature = $_POST["signature"];
+$timestamp = $_POST["timestamp"];
+$nonce = $_POST["nonce"];
+
+$secret = callbacksecret;// Use the CallbackSecret obtained from the ZEGO Admin Console.
+$tmpArr = array($secret, $timestamp, $nonce);
+sort($tmpArr, SORT_STRING);
+$tmpStr = implode( $tmpArr );
+$tmpStr = sha1( $tmpStr );
+
+if( $tmpStr == $signature ){
+    return true;
+} else {
+    return false;
+}
+```
+
+- Sample code in Java
+
+```java
+//  Obtain the value of signature, timestamp, and nonce from the request parameters.
+String signature = request.getParameter("signature");
+long timestamp = request.getParameter("timestamp");
+String nonce = request.getParameter("nonce");
+
+// Use the CallbackSecret obtained from the ZEGO Admin Console.
+String secret = callbacksecret;
+
+String[] tempArr = {secret, ""+timestamp, nonce};
+Arrays.sort(tempArr);
+        
+String tmpStr = "";
+for (int i = 0; i < tempArr.length; i++) {
+    tmpStr += tempArr[i];
+}
+tmpStr = org.apache.commons.codec.digest.DigestUtils.sha1Hex(tmpStr);
+
+return tmpStr.equals(signature);
+```
+
+
+## Sample output
+
+```
+$timestamp = 1470820198;
+$nonce = 123412;
+$secret = 'secret';
+
+The concatenated string before encryption:1234121470820198secret
+The string generated after encryption:5bd59fd62953a8059fb7eaba95720f66d19e4517
+```

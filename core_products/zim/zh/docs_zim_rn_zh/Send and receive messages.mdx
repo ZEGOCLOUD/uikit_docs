@@ -1,0 +1,344 @@
+---
+articleID: 14696
+---
+
+
+# Send and receive messages
+
+--- 
+
+This document describes how to use the ZIM SDK (In-app Chat) to send and receive messages.
+
+
+
+## Prerequisites
+
+Before you begin, make sure:
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+  - Create a project, get the **AppID** and **AppSign**.
+  - Activate the **In-app Chat** service (as shown in the following figure).
+![/Pics/InappChat/ActivateZIMinConsole2.png](https://storage.zego.im/sdk-doc/Pics/InappChat/ActivateZIMinConsole2.png)
+
+- Platform-specific requirements:
+    - React Native 0.60.0 or later
+    - A real iOS device that is running on iOS 11.0 or later and supports audio and video.
+    -  An Android device or Simulator that is running on Android 4.0.3 or later and supports audio and video. We recommend you use a real device (enable the "USB Debugging" option).
+    - Your device is connected to the internet.
+    - Configure Visual Studio Code, search for the "React Native Tools" extension, and install it.
+
+
+
+## Integrate the SDK  
+
+
+### Optional: Create a new project
+
+Skip to this step if a project already exists.
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+
+1. Use React Native's built-in command line utility to create a new project called `Zego-zim-example`.
+
+    
+This command line utility doesn't need to be installed and can be used directly with the Node.js `npx` command:
+
+    ```
+    npx react-native init zego-zim-example
+    ```
+
+2. Compile and run the project on iOS:
+
+    ```
+    yarn react-native run-ios
+    ```
+
+
+3. Compile and run the project on Android:
+
+    ```
+    yarn react-native run-android
+    ```
+</details>
+
+
+### Import the SDK 
+
+The following shows how to integrate the SDK using NPM:
+
+1. Execute the `npm i zego-zim-react-native` or  `yarn add zego-zim-react-native`command to install the dependencies.
+
+    <div class="mk-hint">
+
+    We recommend you use the NPM package that supports the TypeScript language.
+    </div>
+
+2. Import the SDK.
+
+    ```javascript
+    import ZIM from 'zego-zim-react-native';
+    ```
+
+3. Go to the iOS root directory, run the `pod install` command to install the dependencies.
+
+After completing the above steps, you can use the `zego-zim-react-native` SDK in your project using JavaScript or TypeScript (recommended).
+
+## Implementation steps
+
+### Get the sample code
+
+Get the sample code from [Sample app](./Sample%20app.mdx).
+
+
+### Import the SDK file 
+
+Refer to the [**Integrate the SDK using NPM**](#integrate-the-sdk-) to import the SDK package file.
+
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging into the system as a client.
+
+So, let's suppose we have two clients now, client A and client B. 
+
+To send and receive messages to each other, both of them will need to call the [create](@create) method with the AppID in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+
+
+```javascript
+// Since In-app Chat 2.3.0, the SDK uses the AppSign authentication mode by default. To change the authentication mode:
+// 1. For SDK 2.3.3 or later, you can change the authentication mode by yourself.  2. For SDK 2.3.0 or later, if you want to change your authentication mode back to using the Token, contact Technical Support.
+
+// Use a static synchronized method to create a ZIM SDK object and pass the AppID and AppSign. 
+// The create method creates a ZIM instance only the first time it is called. Any subsequent use will return null. 
+ZIM.create({ appID: 0, appSign: '' });
+// Please get a single instance via the getInstance method to avoid hot updates that return null multiple times using the create method.
+var zim = ZIM.getInstance();
+``` 
+
+### Set event callbacks
+
+Before a client user's login, you will need to call the [on](@on) method to customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message-related callback notifications.
+
+
+```javascript
+// Set up and listen for the callback for receiving error codes.  
+zim.on('error', function (zim, errorInfo) {
+    console.log('error', errorInfo.code, errorInfo.message);
+});
+
+// Set up and listen for the callback for connection status changes. 
+zim.on('connectionStateChanged', function (zim, { state, event, extendedData }) {
+    console.log('connectionStateChanged', state, event, extendedData);
+});
+
+// Set up and listen for the callback for receiving one-to-one messages. 
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log('receivePeerMessage', messageList, fromConversationID);
+});
+// Register a callback to listen for "Token is about to expire"
+zim.on('tokenWillExpire', function (zim, { second }) {
+console.log('tokenWillExpire', second);
+// You can call the renewToken interface here to update the token
+// For new token generation, please refer to the above
+zim.renewToken(token)
+.then(function({ token }){
+// Update successful
+})
+.catch(function(err){
+// Update failed
+})
+});
+ ```
+
+### Log in to the ZIM SDK
+
+For client A and client B to send, receive messages, and renew the token after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
+
+To log in, Clients A and B both need to do the following:
+1. Call the [ZIMLoginConfig ](@-ZIMLoginConfig) method to create a user object.
+2. Then, call the [login](@ login__2) method with their own user information and the Token they get in the previous **Prerequisites** steps.
+
+<Warning title="Warning">
+
+- You can custom the **userID** and **userName**, and we recommend you set the  **userID** to a meaningful value and associate them with the account system of your application.
+- For SDK 2.3.0 or later: The SDK uses the AppSign authentication mode by default. You only need to pass the [ZIMUserInfo`\](@-ZIMUserInfo) when logging in. 
+
+- If you use the Token-based authentication mode, please refer to the [Authentication\](!token_authentication/token_authentication) to get the Token first, and pass it when logging in. 
+</Warning>
+
+
+```javascript
+// userID must be within 32 characters, and can only contain letters, numbers, and the following special characters: '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
+// userName A string of up to 256 bytes, with no restrictions on special characters.
+var userInfo = { userID: 'xxxx', userName: 'xxxx' };
+var userID = 'xxxx';
+var config = {
+   userName: 'xxxx',
+     token: '',
+ }
+
+
+
+// When logging in:
+// If you use the Token-based authentication, pass the Token you get by referring to the [Guides - Authentication] document.
+// If you use the AppSign authentication mode (the default auth mode by SDK 2.3.0), you need to leave the Token field empty. 
+
+zim.login(userID, config)
+    .then(function () {
+        // Login successful.
+    })
+    .catch(function (err) {
+        // Login failed.
+    });
+```
+
+### Send messages 
+
+Client A can send messages to client B after logging in successfully. 
+
+
+<table>
+
+<tbody><tr data-row-level="1">
+<th>Message Type</th>
+<th>Description</th>
+<th>Feature and Scenario</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>The text message. A text message cannot exceed 32 KB in size, and up to 10 text messages can be sent per second per client.</td>
+<td>
+Text messages are reliable and in order and can be stored as historical messages, applicable to one-to-one chats, group chats, and on-screen comments in chat rooms. After a room is disbanded, messages in it are not stored.
+
+API: [sendMessage](@sendMessage)
+</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>The signaling message whose content can be customized. A signaling message cannot exceed 5 KB in size, and up to 10 signaling messages can be sent per second per client.</td>
+<td>
+Signaling messages are applicable to signaling transmission (for example, co-hosting, virtual gifting, and course materials sending) in scenarios with a higher concurrency, such as chat rooms and online classrooms.
+
+API: [sendMessage](@sendMessage)
+</td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>The on-screen comment in a chat room. An on-screen comment cannot exceed 5 KB in size, and there is no limit on the number of comments that can be sent per second per client.</td>
+<td>
+<p>On-screen comments are usually unreliable messages that are sent at a high frequency and can be discarded.</p><p>A high concurrency is supported, but reliability cannot be guaranteed.</p>
+
+API: [sendMessage](@sendMessage)
+</td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>The image message. Mainstream image formats, such as JPG, PNG, BMP, TIFF, GIF, and WebP, are supported. An image message cannot exceed 10 MB in size, and up to 10 image messages can be sent per second per client.</td>
+<td rowspan="4">
+Image messages are reliable and in order and can be stored as historical messages (for 14 days by default), usually applicable to one-to-one chats, chat rooms, and group chats.
+
+API: 
+[sendMediaMessage](@sendMediaMessage)
+</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>The file message. A file message contains a file of any format and cannot exceed 100 MB in size. Up to 10 file messages can be sent per second per client.</td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>The audio message. An audio message contains an MP3 or M4A audio of up to 300 seconds and cannot exceed 6 MB in size. Up to 10 audio messages can be sent per second per client.</td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>
+The video message. A video message contains an MP4 or MOV video and cannot exceed 100 MB in size. Up to 10 video messages can be sent per second per client. 
+
+**The width and height of the first frame of a video can be obtained after successful message sending only if the video is H.264- or H.265-encoded.**
+</td>
+</tr>
+<tr data-row-level="9">
+<td>ZIMCombineMessage(100)</td>
+<td>Merge messages, there is no limit on message size, and the sending frequency of a single client is limited to 10 times/second.</td>
+<td>
+Text messages are reliable and in order and can be stored as historical messages, applicable to real-time chat scenarios such as one-to-one chats, room, group chats, etc.
+
+API: [sendMessage](@sendMessage)
+</td>
+</tr>
+<tr data-row-level="10">
+<td>ZIMCustomMessage(200)</td>
+<td>The custom message. You can customize the message type and parse the message without using the ZIM SDK.</td>
+<td>
+Custom messages are usually applicable to votes, solitaire, and video cards.
+
+API: 
+[sendMessage](@sendMessage)
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+To send one-to-one messages, for example, if client A wants to send a message to client B, then client A needs to call the [sendMessage](@sendMessage) method with client B's userID, message content, and message type (conversationType).
+
+- [ZIMMessageSentResult](@-ZIMMessageSentResult): Callback for the results that whether the message is sent successfully. 
+
+- [onMessageAttached](@onMessageAttached-ZIMMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage](@-ZIMMessage) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
+
+```javascript
+// The following shows to send a one-to-one message, set the ZIMConversationType to Peer. 
+var toUserID = 'xxxx1';
+var config = { 
+    priority: 1 // Set priority for the message. 1: Low (by default). 2: Medium. 3: High.
+};
+var type = 0; // Session type. Values are: 0: One-on-one chat.  1: Chat room  2: Group chat.
+var notification = {
+    onMessageAttached: function(message) {
+        // todo: Loading
+    }
+};
+
+// Send one-to-one text messages. 
+var messageTextObj = { type: 1, message: 'Text message content' };
+zim.sendMessage(messageTextObj, toUserID, type, config, notification)
+    .then(function ({ message }) {
+        // Message sent successfully.
+    })
+    .catch(function (err) {
+        // Failed to send the message.
+    });
+```
+
+
+### Receive messages
+
+After client B logs in, he will receive client A's message through the callback [on](@on) which is already set in the [receivePeerMessage](@receivePeerMessage) method. 
+
+```javascript 
+// Set up and listen for the callback for receiving the one-to-one messages.
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log('receivePeerMessage', messageList, fromConversationID);
+});
+```
+
+
+### Log out 
+
+For a client to log out, call the [logout](@logout) method. 
+
+```java
+zim.logout();
+```
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [destroy](@destroy) method.
+
+```java
+zim.destroy();
+```

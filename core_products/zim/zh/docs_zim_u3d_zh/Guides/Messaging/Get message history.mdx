@@ -1,0 +1,74 @@
+---
+articleID: 16371
+---
+
+
+# Get message history  
+
+- - -
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+This document describes how to query the one-to-one message history, group message history, and in-room message history with the ZIM SDK.
+
+<Note title="Note">
+
+This feature allows you to get historical messages of types **other than command messages and pop-up messages**.
+</Note>
+
+
+## Get message history
+ 
+To get the one-to-one message history, group message history, and in-room message history using the ZIM SDK, call the [QueryHistoryMessage](@QueryHistoryMessage) method and pass the `conversationID` and `config` parameters.
+
+The following process shows how Client A gets his message history with Client B:
+
+1. Client A and Client B log in to the ZIM SDK to send and receive messages to and from each other.
+2. When Client A wants to get his message history with Client B:
+    1. Client A logs in to the ZIM SDK first.
+    2. Client A calls the [QueryHistoryMessage](@QueryHistoryMessage) method and passes the `conversationID` and `config` parameters.
+    3. Client A receives the returned message history through the callback [ZIMMessageQueriedCallback](@ZIMMessageQueriedCallback).
+
+
+<CodeGroup>
+```c# titile="Sample code"
+// 1. Create a ZIM object and pass in the appID and appSign
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace with your assigned AppID
+appConfig.appSign = "appSign";   // Replace with your assigned AppSign
+ZIM.Create(appConfig);
+
+
+// 2. Log in
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+ZIM.GetInstance().Login(zimUserInfo, (ZIMError errorInfo) =>
+{
+    // Developers can use ZIMError to determine if the login is successful.
+}
+);
+
+
+// 3. Get the chat history of a single conversation
+List<ZIMMessage> curMessageList = new List<ZIMMessage>();
+
+string conversationID = "xxxx";
+
+// Get conversation history messages from latest to earliest, retrieve 30 messages each time
+ZIMMessageQueryConfig config = new ZIMMessageQueryConfig();
+// Set nextMessage to null for the first query
+config.nextMessage = null;
+config.count = 30;
+config.reverse = true;
+
+ZIM.GetInstance().QueryHistoryMessage(conversationID, ZIMConversationType.Peer, config, (string conversationID, ZIMConversationType conversationType,
+List<ZIMMessage> messageList, ZIMError errorInfo) =>
+{
+    // Get the result
+});
+```
+</CodeGroup>

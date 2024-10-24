@@ -1,0 +1,83 @@
+---
+articleID: 17555
+---
+
+# ZPNs release notes
+
+- - -
+
+## Version 2.6.0
+
+**Release Date: 2023-11-28**
+
+<Warning title="Warning">
+
+[Upgrade to version 2.6.0 compilation issues, must-read before upgrading >> >>](./ZPNs%20upgrade%20guide.mdx)
+
+</Warning>
+
+<h4>New Features</h4>
+
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Custom Notification Icon | In addition to displaying the app's default icon in offline push notifications, you can now customize the notification icon for offline pushes with ZPNs. This can be used to display the sender's avatar in push notifications for one-on-one or group messages. For more details, please refer to [Custom notification icon](./../Offline%20push%20notifications/Best%20Practices/Custom%20notification%20icon.mdx). | - |
+| Notification with Image | Supports including an image in offline push notifications. For more details, please refer to [Notify with photo attachment](./../Offline%20push%20notifications/Best%20Practices/Notify%20with%20photo%20attachment.mdx). | <ul><li>[ZIMPushConfig > resourcesID](@resourcesID-ZIMPushConfig)</li><li>[Push message to all users](/zim-server/push-message-to-all-users)</li></ul> |
+| Update App Icon Badge | Supports updating the app icon badge to remind users of unread messages when they are offline. For more details, please refer to [Modify a notification badge](./../Offline%20push%20notifications/Best%20Practices/Modify%20a%20notification%20badge.mdx). | <ul><li>[setServerBadge](@setServerBadge)</li><li>[ZIMPushConfig > enableBadge](@enableBadge-ZIMPushConfig)</li><li>[ZIMPushConfig > badgeIncrement](@badgeIncrement-ZIMPushConfig)</li></ul> |
+| Replace Notification | Supports replacing the content of the original push notification. For more details, please refer to [Update a push notification](./../Offline%20push%20notifications/Best%20Practices/Update%20a%20push%20notification.mdx). | - |
+| Improved iOS VoIP Development Experience | To facilitate React Native developers in implementing VoIP functionality, ZEGO has encapsulated some functions of the iOS CallKit and PushKit libraries into an independent plugin called zego_callkit. For more details, please refer to [CalKit user guide](./../Offline%20push%20notifications/Best%20Practices/CalKit%20user%20guide.mdx). | - |
+
+<br/>
+---
+
+## Version 2.5.0
+
+**Release Date: 2023-09-22**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Local Logs | Added ZPNs local log component, which can upload logs of both ZIM and ZPNs by calling [uploadLog](@uploadLog). | [uploadLog](@uploadLog) |
+| Unregister Push | Support unregistering offline push and disabling push notifications. | [unregisterPush](@unregisterPush) |
+| iOS Push Display Settings | Added parameter [ZPNsIOSNotificationArrivedConfig](@-ZPNsIOSNotificationArrivedConfig) to [registerPush](@registerPush), which allows specifying whether to display iOS push alerts, sounds, and badges when registering for offline push. | [ZPNsIOSNotificationArrivedConfig](@-ZPNsIOSNotificationArrivedConfig) |
+| Push Private Messages to Android Devices | Support pushing messages through the private message channel of Android device manufacturers, achieving unlimited push. | [ZIMPushConfig > resourcesID](@resourcesID-ZIMPushConfig) |
+
+<h4>Improvements</h4>
+
+| Feature | Description | Related APIs |
+| -- | -- | -- |
+| Automatic Detection of iOS Environment | Added `Automatic` to [ZPNsIOSEnvironment](@-ZPNsIOSEnvironment) enumeration. When developers call [registerPush](@registerPush) to register for offline push and are not familiar with the iOS environment, they can pass this enumeration and ZPNs will automatically detect the environment. | [ZPNsIOSEnvironment > Automatic](@Automatic-ZPNsIOSEnvironment) |
+| Initiate iOS Callkit Call Interface | Added `reportIncomingCall` interface, which supports initiating the iOS Callkit call interface. For more details, please refer to [Implement VoIP Notifications - Initiate iOS CallKit Incoming Call Interface](./../Offline%20push%20notifications/Implement%20VoIP%20notification.mdx). | `reportIncomingCall` |
+
+<br/>
+---
+
+## Version 2.3.3
+
+**Release Date: 2023-04-03**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Silent Push Support | Support synchronizing data between the app running in the background and the server through silent push. | <ul><li>[setBackgroundMessageHandler](@setBackgroundMessageHandler)</li><li>[throughMessageReceived](@throughMessageReceived)</li></ul>|
+| iOS VoIP Support | Support VoIP notifications through iOS CallKit. | - |
+| Encapsulated Android Channel Creation | For Android 8.0 and above, custom ringtones require creating a channel. ZPNs React Native SDK has simplified this API for easy use by customers. | [createNotificationChannel](@createNotificationChannel) |
+| Send Local Notifications | Support sending local notifications to display information to users. | [addLocalNotification](@addLocalNotification) |
+
+<br/>
+---
+
+## Version 2.2.0
+
+**Release Date: 2022-12-07**
+
+ZPNs SDK is first released. Please use it with ZIM SDK.
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Register for Offline Push | Register for offline push using vendor channels. Please configure the vendor information before using. | <ul><li>[setPushConfig](@setPushConfig)</li><li>[registerPush](@registerPush)</li></ul> |
+| Receive Vendor Notification Click Callback | Vendor notification click callbacks are unified in the related APIs. | [notificationClicked](@notificationClicked)|
+| Receive Vendor Notification Display Callback | Vendor notification display callbacks are unified in this API. | [notificationArrived](@notificationClicked)|
+| Receive Vendor Transparent Message Callback | Vendor transparent message callbacks are unified in this API. | [throughMessageReceived\|blank](@throughMessageReceived) |

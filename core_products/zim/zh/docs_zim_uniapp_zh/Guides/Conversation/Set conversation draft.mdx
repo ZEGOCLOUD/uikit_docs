@@ -1,0 +1,35 @@
+---
+articleID: 17785
+---
+
+
+# Set conversation draft
+
+- - -
+
+## Introduction
+
+A conversation draft refers to a text message that the user is currently editing but has not yet sent. ZIM supports saving conversation drafts locally even after the user exits the conversation, so that the user can continue editing.
+
+## Procedures
+
+By calling the [setConversationDraft](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationDraft.html) interface and specifying the conversation ID and conversation type, you can save the draft to the conversation.
+
+<Note title="Note">
+
+To clear the conversation draft, pass an empty string for the `draft` field.
+</Note>
+
+After successfully saving the draft, the operation result will be asynchronously returned through [ZIMConversationDraftSetResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationDraftSetResult-class.html).
+
+The user can use the [onConversationChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationChanged.html) callback to obtain the updated conversation information after the draft has been changed.
+
+```dart
+// Set a draft for a conversation
+// Take a group conversation as an example
+ZIM.getInstance().setConversationDraft("draft", "Group_ID", ZIMConversationType.group).then((value){
+     // Logic after the successful operation
+}).catchError((onError){
+     // Seek ZEGO official error code document for solution
+});
+```

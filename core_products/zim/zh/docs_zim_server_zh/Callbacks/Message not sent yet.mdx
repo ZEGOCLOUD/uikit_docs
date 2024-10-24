@@ -1,0 +1,193 @@
+
+# Callback on message not sent yet
+
+- - -
+
+## Description
+
+After setting this callback, when a user sends a message to a one-on-one chat, group chat or room chat, In-app Chat will initiate a request to your business server, and you can perform real-time operations on the message through the response, such as:
+- Recording chat messages and intercepting requests for inappropriate speech;
+- Implementing black and white list functions to determine which messages can be sent normally.
+
+<Warning title="Warning">
+
+- The supported message types for this callback are text messages, image messages, file messages, audio messages, video messages, and custom messages. command messages and barrage messages are not supported.
+- This callback only supports messages sent via the client SDK. If messages are sent through the server, your business backend will not receive this callback.
+</Warning>
+
+Based on the value of the response from your business server, you can make one of the following four judgments on whether to send the message:
+
+| Value | Judgment | Whether to send the message | Result returned to the message sender | Whether the message recipient can receive the message |
+| -- | -- | -- | -- | -- |
+| 0 | Neutral (not judged whether to send) | Send | Sent | Receivable |
+| 1 | Send | Send | Sent | Receivable |
+| 2 | Silently send | Send | Sent | Not receivable |
+| 3 | Do not send | Do not send | Not sent | Not receivable |
+
+
+## Callback request
+
+- Request method: POST/JSON
+
+<Note title="Note">
+
+- The callback data needs to be decoded by UrlDecode.
+- When using the POST request method to pass parameters:
+  - The parameters in the body can be directly passed in the JsonObject format, without the need to serialize them into a string format.
+  - In the headers, set "Content-type" to "application/json".
+</Note>
+
+- Request endpoint: Contact ZEGOCLOUD Technical Support to configure the corresponding callback endpoint.
+
+- Transmission protocol: HTTPS/HTTP (HTTPS is recommended.)
+
+## Request parameters
+
+<table>
+
+<tbody><tr>
+<th>Public parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>appid</td>
+<td>String</td>
+<td>A unique identifier for the App.</td>
+</tr>
+<tr>
+<td>event</td>
+<td>String</td>
+<td>Callback event, the return value of this callback is `before_send_msg`.</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>String</td>
+<td>Random number, used to calculate signature.</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>String</td>
+<td>The verification string, see [Authenticating server-to-server callbacks](./Authenticating%20server-to-server%20callbacks.mdx) for details.</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>Int</td>
+<td>The current server time in Unix timestamp format, in seconds, used to calculate the signature.</td>
+</tr>
+<tr>
+<td>request_id</td>
+<td>String</td>
+<td>Request ID.</td>
+</tr>
+<tr>
+<th>Business parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>from_user_id</td>
+<td>String</td>
+<td>Message sender ID.</td>
+</tr>
+<tr>
+<td>conv_id</td>
+<td>String</td>
+<td>Target session ID.</td>
+</tr>
+<tr>
+<td>conv_type</td>
+<td>Int</td>
+<td>Target session type: <ul><li>0: One-on-one chat. </li><li>1: Room chat. </li><li>2: Group chat. </li></ul></td>
+</tr>
+<tr>
+<td>msg_id</td>
+<td>String</td>
+<td>Message ID, which can be used to determine the uniqueness of the message.</td>
+</tr>
+<tr>
+<td>payload</td>
+<td>String</td>
+<td>Extra field.</td>
+</tr>
+<tr>
+<td>msg_type</td>
+<td>Int</td>
+<td>Message type: <ul><li>1: Text. </li><li>11: Images. </li><li>12: File. </li><li>13: Audio. </li><li>14: Video. </li><li>200: Custom. </li></ul></td>
+</tr>
+<tr>
+<td>sub_msg_type</td>
+<td>Int</td>
+<td>The specific custom type. The value is filled in when the user sends a custom message, and the value range is [0,200]. This parameter is meaningful only when msg_type is 200 (custom type).</td>
+</tr>
+<tr>
+<td>msg_body</td>
+<td>String</td>
+<td>Message content. <ul><li>When msg_type is 1 (text type) or 200 (custom type), msg_body is the message content passed in when sending a message, and you can directly read the message content. </li><li>When msg_type is 11, 12, 13, 14, that is, when the message is a media type, msg_body is a JSON string. Please use URLDecode to decode this JSON string, and parse this JSON string according to the multimedia message structure, and then obtain <a href="#msgbody-json-string-parsing-result-parameter-description">each field data</a> in the message. </li></ul></td>
+</tr>
+</tbody></table>
+
+
+<Note title="Note">
+
+We recommend that you convert some parameters to Int for logical processing. The relevant fields include `appid` and `nonce`.
+</Note>
+
+#### msg_body JSON string parsing result parameter description
+
+| Parameters | Type | Description|
+|-----------------|--------|-------|
+| md5 | String | The MD5 value of the file. |
+| file_name | String | File name. |
+| file_size | String | File size in bytes. |
+| download_url | String | Download URL. |
+| media_duration | String | Audio and Video duration, in seconds. |
+
+## Callback example
+
+```json
+{
+    "appid": "1",
+    "event": "before_send_msg",
+    "from_user_id": "sender",
+    "conv_id": "receiver",
+    "request_id": "3501907290370176",
+    "msg_id": "1234232421343",
+    "conv_type": 0,
+    "timestamp": 1499676968,
+    "msg_body": "msg_body",
+    "msg_type": 1,
+    "signature": "abc",
+    "nonce": "321",
+    "sub_msg_type": 0,
+    "payload": "payload"
+}
+```
+
+## Response parameters
+
+| Parameters | Type | Description|
+|--------|--------|-------|
+| result | Int | The value of your business server response to determine whether to send the message. <ul><li>0: neutral (do not judge whether to send). </li><li>1: Send. </li><li>2: Push silently. </li><li>3: Do not send. </li><li>Others: default to be neutral. </li></ul> |
+
+## Sample response
+
+```json
+{
+    "result": 0
+}
+```
+
+## Return response
+
+Returning an HTTP status code of 2XX (e.g., 200) indicates success, and other responses indicate failure.
+
+
+## Retry mechanism
+
+If the ZEGOCLOUD server does not receive a response, it will retry after 3 seconds. If the callback fails after the second retry, it will no longer be retried and an exception is judged.
+
+
+## Note
+
+When the ZEGOCLOUD client initiates a request to you, if an exception occurs on your business server, no message will be sent by default. If you want to send messages by default, contact ZEGOCLOUD Technical Support.

@@ -1,0 +1,515 @@
+---
+articleID: 15087
+---
+
+# ZIM upgrade Guide
+
+- - -
+
+:::if{props.platform=undefined}
+This article introduces some instructions and precautions when upgrading the In-app Chat iOS SDK.
+:::
+
+:::if{props.platform="mac"}
+This article introduces some instructions and precautions when upgrading the In-app Chat macOS SDK.
+:::
+
+
+## 2.16.0 upgrade guide
+
+<Warning title="Warning">
+
+Starting from version 2.16.0, the following interfaces have undergone significant changes. Therefore, when upgrading from an older version to version 2.16.0, please read the following guidelines.
+</Warning>
+
+#### callCancel
+
+<Note title="Note">
+
+The following changes only apply to **Advanced Mode** call invitations.
+</Note>
+
+In the new version of [callCancelWithInvitees](@callCancelWithInvitees), if the parameter userIDs contains a userID, the interface will only cancel the invitation for that callee. If the userIDs parameter is empty, the interface will cancel the invitation for all callees.
+
+For the old version of the `callCancelWithInvitees` interface, regardless of whether the userIDs parameter is empty or not, it is considered as canceling the invitation for all callees.
+
+Since the old version of the ZIM SDK is not compatible with individual cancellation logic, if you need to retain the cancellation logic implemented using the old version of ZIM while also using the new version's individual cancellation feature, please isolate the call functionality between the old and new versions of ZIM.
+
+<CodeGroup>
+```objc title="Usage in version 2.16.0"
+ZIMCallCancelConfig *cancelConfig = [[ZIMCallCancelConfig alloc] init];
+// Cancel userIdA and userIdB individually
+[[ZIM getInstance] callCancelWithInvitees:@[@"userIdA",@"userIdB"] callID:@"callId" config:cancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    
+}];
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+[[ZIM getInstance] callCancelWithInvitees:@[] callID:@"callId" config:cancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    
+}];
+
+```
+```objc title="Usage in old versions"
+
+ZIMCallCancelConfig *cancelConfig = [[ZIMCallCancelConfig alloc] init];
+// Regardless of whether the userID is passed in the userIDs array, it cancels the entire call, can be called successfully when none of the callees in the call have accepted
+[[ZIM getInstance] callCancelWithInvitees:@[@"userIdA",@"userIdB"] callID:@"callId" config:cancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    
+}];
+
+// Cancel the entire call invitation, can be called successfully when none of the callees in the call have accepted    
+[[ZIM getInstance] callCancelWithInvitees:@[] callID:@"callId" config:cancelConfig callback:^(NSString * _Nonnull callID, NSArray<NSString *> * _Nonnull errorInvitees, ZIMError * _Nonnull errorInfo) {
+    
+}];
+```
+</CodeGroup>
+
+
+## 2.5.0 upgrade guide
+
+<Warning title="Warning">
+
+In-app Chat SDK has optimized the naming of Swift Language API methods in version 2.5.0, so when upgrading from an older version to version 2.5.0, you will need to read the changes listed below.
+</Warning>
+
+### getInstance
+
+```swift
+// old interface
+open class func getInstance() -> ZIM
+
+// new interface
+open class func shared() -> ZIM?
+```
+
+### create
+
+```swift
+// old interface
+open class func create(with config: ZIMAppConfig) -> ZIM
+
+// new interface
+open class func create(with config: ZIMAppConfig) -> ZIM?
+```
+
+### setAdvancedConfigWithKey
+
+```swift
+// old interface
+open class func setAdvancedConfigWithKey(_ key: String, value: String)
+
+// new interface
+open class func setAdvancedConfig(key: String, value: String)
+```
+
+### uploadLog
+
+```swift
+// old interface
+open func uploadLog(_ callback: @escaping ZIMLogUploadedCallback)
+
+// new interface
+open func uploadLog(with callback: @escaping ZIMLogUploadedCallback)
+
+```
+
+### queryUsersInfo
+
+```swift
+// old interface
+open func queryUsersInfo(_ userIDs: [String], config: ZIMUsersInfoQueryConfig, callback: @escaping ZIMUsersInfoQueriedCallback)
+
+// new interface
+open func queryUsersInfo(by userIDs: [String], config: ZIMUsersInfoQueryConfig, callback: @escaping ZIMUsersInfoQueriedCallback)
+
+```
+
+### deleteConversation
+
+```swift
+// old interface
+open func deleteConversation(_ conversationID: String, conversationType: ZIMConversationType, config: ZIMConversationDeleteConfig, callback: @escaping ZIMConversationDeletedCallback)
+
+// new interface
+open func deleteConversation(by conversationID: String, conversationType: ZIMConversationType, config: ZIMConversationDeleteConfig, callback: @escaping ZIMConversationDeletedCallback)
+```
+
+### clearConversationUnreadMessageCount
+
+```swift
+// old interface
+open func clearConversationUnreadMessageCount(_ conversationID: String, conversationType: ZIMConversationType, callback: @escaping ZIMConversationUnreadMessageCountClearedCallback)
+
+// new interface
+open func clearConversationUnreadMessageCount(for conversationID: String, conversationType: ZIMConversationType, callback: @escaping ZIMConversationUnreadMessageCountClearedCallback)
+```
+
+### send (send normal message)
+
+```swift
+// old interface
+open func send(_ message: ZIMMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, notification: ZIMMessageSendNotification?, callback: @escaping ZIMMessageSentCallback)
+
+// new interface
+open func sendMessage(_ message: ZIMMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, notification: ZIMMessageSendNotification?, callback: @escaping ZIMMessageSentCallback)
+```
+
+### send (the interface for sending rich media messages in the old version, which has been deprecated since version 2.4.0)
+
+```swift
+// old interface
+@available(*, deprecated, message: "Deprecated since ZIM 2.4.0, please use another [sendMediaMessage] instead")
+open func send(_ message: ZIMMediaMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, progress: @escaping ZIMMediaUploadingProgress, callback: @escaping ZIMMessageSentCallback)
+
+// new interface
+@available(*, deprecated, message: "Deprecated since ZIM 2.4.0, please use another [sendMediaMessage] instead")
+open func sendMediaMessage(_ message: ZIMMediaMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, progress: @escaping ZIMMediaUploadingProgress, callback: @escaping ZIMMessageSentCallback)
+```
+
+### send (new version sends rich media message interface, version 2.4.0 or above is available)
+
+```swift
+// old interface
+open func send(_ message: ZIMMediaMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, notification: ZIMMediaMessageSendNotification?, callback: @escaping ZIMMessageSentCallback)
+
+// new interface
+open func sendMediaMessage(_ message: ZIMMediaMessage, toConversationID: String, conversationType: ZIMConversationType, config: ZIMMessageSendConfig, notification: ZIMMediaMessageSendNotification?, callback: @escaping ZIMMessageSentCallback)
+```
+
+### queryHistoryMessage
+
+```swift
+// old interface
+open func queryHistoryMessage(byConversationID conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageQueryConfig, callback: @escaping ZIMMessageQueriedCallback)
+
+// new interface
+open func queryHistoryMessage(by conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageQueryConfig, callback: @escaping ZIMMessageQueriedCallback)
+```
+
+### deleteAllMessage
+
+```swift
+// old interface
+open func deleteAllMessage(byConversationID conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageDeleteConfig, callback: @escaping ZIMMessageDeletedCallback)
+
+// new interface
+open func deleteAllMessage(by conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageDeleteConfig, callback: @escaping ZIMMessageDeletedCallback)
+```
+
+### delete
+
+```swift
+// old interface
+open func delete(_ messageList: [ZIMMessage], conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageDeleteConfig, callback: @escaping ZIMMessageDeletedCallback)
+
+// new interface
+open func deleteMessages(_ messageList: [ZIMMessage], conversationID: String, conversationType: ZIMConversationType, config: ZIMMessageDeleteConfig, callback: @escaping ZIMMessageDeletedCallback)
+```
+
+### insertMessage
+
+```swift
+// old interface
+open func insertMessage(toLocalDB message: ZIMMessage, conversationID: String, conversationType: ZIMConversationType, senderUserID: String, callback: @escaping ZIMMessageInsertedCallback)
+
+// new interface
+open func insertMessageToLocalDB(_ message: ZIMMessage, conversationID: String, conversationType: ZIMConversationType, senderUserID: String, callback: @escaping ZIMMessageInsertedCallback)
+```
+
+### createRoom (create and join a room)
+
+```swift
+// old interface
+open func createRoom(_ roomInfo: ZIMRoomInfo, callback: @escaping ZIMRoomCreatedCallback)
+
+// new interface
+open func createRoom(with roomInfo: ZIMRoomInfo, callback: @escaping ZIMRoomCreatedCallback)
+```
+
+### createRoom (create a room with advanced settings)
+
+```swift
+// old interface
+open func createRoom(_ roomInfo: ZIMRoomInfo, config: ZIMRoomAdvancedConfig, callback: @escaping ZIMRoomCreatedCallback)
+
+// new interface
+open func createRoom(with roomInfo: ZIMRoomInfo, config: ZIMRoomAdvancedConfig, callback: @escaping ZIMRoomCreatedCallback)
+```
+
+### joinRoom
+
+```swift
+// old interface
+open func joinRoom(_ roomID: String, callback: @escaping ZIMRoomJoinedCallback)
+
+// new interface
+open func joinRoom(by roomID: String, callback: @escaping ZIMRoomJoinedCallback)
+```
+
+### enterRoom
+
+```swift
+// old interface
+open func enterRoom(_ roomInfo: ZIMRoomInfo, config: ZIMRoomAdvancedConfig?, callback: @escaping ZIMRoomEnteredCallback)
+
+// new interface
+open func enterRoom(with roomInfo: ZIMRoomInfo, config: ZIMRoomAdvancedConfig?, callback: @escaping ZIMRoomEnteredCallback)
+```
+
+### leaveRoom
+
+```swift
+// old interface
+open func leaveRoom(_ roomID: String, callback: @escaping ZIMRoomLeftCallback)
+
+// new interface
+open func leaveRoom(by roomID: String, callback: @escaping ZIMRoomLeftCallback)
+```
+
+### queryRoomMemberList
+
+```swift
+// old interface
+open func queryRoomMemberList(byRoomID roomID: String, config: ZIMRoomMemberQueryConfig, callback: @escaping ZIMRoomMemberQueriedCallback)
+
+// new interface
+open func queryRoomMemberList(by roomID: String, config: ZIMRoomMemberQueryConfig, callback: @escaping ZIMRoomMemberQueriedCallback)
+```
+
+### queryRoomOnlineMemberCount
+
+```swift
+// old interface
+open func queryRoomOnlineMemberCount(byRoomID roomID: String, callback: @escaping ZIMRoomOnlineMemberCountQueriedCallback)
+
+// new interface
+open func queryRoomOnlineMemberCount(by roomID: String, callback: @escaping ZIMRoomOnlineMemberCountQueriedCallback)
+```
+
+### beginRoomAttributesBatchOperation
+
+```swift
+// old interface
+open func beginRoomAttributesBatchOperation(withRoomID roomID: String, config: ZIMRoomAttributesBatchOperationConfig?)
+
+// new interface
+open func beginRoomAttributesBatchOperation(with roomID: String, config: ZIMRoomAttributesBatchOperationConfig?)
+```
+
+### endRoomAttributesBatchOperation
+
+```swift
+// old interface
+open func endRoomAttributesBatchOperation(withRoomID roomID: String, callback: @escaping ZIMRoomAttributesBatchOperatedCallback)
+
+// new interface
+open func endRoomAttributesBatchOperation(with roomID: String, callback: @escaping ZIMRoomAttributesBatchOperatedCallback)
+```
+
+### queryRoomAllAttributes
+
+```swift
+// old interface
+open func queryRoomAllAttributes(byRoomID roomID: String, callback: @escaping ZIMRoomAttributesQueriedCallback)
+
+// new interface
+open func queryRoomAllAttributes(by roomID: String, callback: @escaping ZIMRoomAttributesQueriedCallback)
+```
+
+### queryRoomMembersAttributes
+
+```swift
+// old interface
+open func queryRoomMembersAttributes(byUserIDs userIDs: [String], roomID: String, callback: @escaping ZIMRoomMembersAttributesQueriedCallback)
+
+// new interface
+open func queryRoomMembersAttributes(by userIDs: [String], roomID: String, callback: @escaping ZIMRoomMembersAttributesQueriedCallback)
+```
+
+### queryRoomMemberAttributesList
+
+```swift
+// old interface
+open func queryRoomMemberAttributesList(byRoomID roomID: String, config: ZIMRoomMemberAttributesQueryConfig, callback: @escaping ZIMRoomMemberAttributesListQueriedCallback)
+
+// new interface
+open func queryRoomMemberAttributesList(by roomID: String, config: ZIMRoomMemberAttributesQueryConfig, callback: @escaping ZIMRoomMemberAttributesListQueriedCallback)
+```
+
+### createGroup (create and join a group)
+
+```swift
+// old interface
+open func createGroup(_ groupInfo: ZIMGroupInfo, userIDs: [String], callback: @escaping ZIMGroupCreatedCallback)
+
+// new interface
+open func createGroup(with groupInfo: ZIMGroupInfo, userIDs: [String], callback: @escaping ZIMGroupCreatedCallback)
+```
+
+### createGroup (create and join a group with group attributes)
+
+```swift
+// old interface
+open func createGroup(_ groupInfo: ZIMGroupInfo, userIDs: [String], config: ZIMGroupAdvancedConfig, callback: @escaping ZIMGroupCreatedCallback)
+
+// new interface
+open func createGroup(with groupInfo: ZIMGroupInfo, userIDs: [String], config: ZIMGroupAdvancedConfig, callback: @escaping ZIMGroupCreatedCallback)
+```
+
+### dismissGroup
+
+```swift
+// old interface
+open func dismissGroup(_ groupID: String, callback: @escaping ZIMGroupDismissedCallback)
+
+// new interface
+open func dismissGroup(by groupID: String, callback: @escaping ZIMGroupDismissedCallback)
+```
+
+### joinGroup
+
+```swift
+// old interface
+open func joinGroup(_ groupID: String, callback: @escaping ZIMGroupJoinedCallback)
+
+// new interface
+open func joinGroup(by groupID: String, callback: @escaping ZIMGroupJoinedCallback)
+```
+
+### leaveGroup
+
+```swift
+// old interface
+open func leaveGroup(_ groupID: String, callback: @escaping ZIMGroupLeftCallback)
+
+// new interface
+open func leaveGroup(by groupID: String, callback: @escaping ZIMGroupLeftCallback)
+```
+
+### inviteUsers
+
+```swift
+// old interface
+open func inviteUsers(intoGroup userIDs: [String], groupID: String, callback: @escaping ZIMGroupUsersInvitedCallback)
+
+// new interface
+open func inviteUsersIntoGroup(with userIDs: [String], groupID: String, callback: @escaping ZIMGroupUsersInvitedCallback)
+```
+
+### kickGroupMembers
+
+```swift
+// old interface
+open func kickGroupMembers(_ userIDs: [String], groupID: String, callback: @escaping ZIMGroupMemberKickedCallback)
+
+// new interface
+open func kickGroupMembers(by userIDs: [String], groupID: String, callback: @escaping ZIMGroupMemberKickedCallback)
+```
+
+### transferGroupOwner
+
+```swift
+// old interface
+open func transferGroupOwner(toUserID: String, groupID: String, callback: @escaping ZIMGroupOwnerTransferredCallback)
+// new interface
+open func transferGroupOwner(to toUserID: String, groupID: String, callback: @escaping ZIMGroupOwnerTransferredCallback)
+```
+
+### queryGroupInfo
+
+```swift
+// old interface
+open func queryGroupInfo(byGroupID groupID: String, callback: @escaping ZIMGroupInfoQueriedCallback)
+// new interface
+open func queryGroupInfo(by groupID: String, callback: @escaping ZIMGroupInfoQueriedCallback)
+```
+
+### deleteGroupAttributes
+
+```swift
+// old interface
+open func deleteGroupAttributes(byKeys keys: [String], groupID: String, callback: @escaping ZIMGroupAttributesOperatedCallback)
+// new interface
+open func deleteGroupAttributes(by keys: [String], groupID: String, callback: @escaping ZIMGroupAttributesOperatedCallback)
+```
+
+### queryGroupAttributes
+
+```swift
+// old interface
+open func queryGroupAttributes(byKeys keys: [String], groupID: String, callback: @escaping ZIMGroupAttributesQueriedCallback)
+// new interface
+open func queryGroupAttributes(by keys: [String], groupID: String, callback: @escaping ZIMGroupAttributesQueriedCallback)
+```
+
+### queryGroupAllAttributes
+
+```swift
+// old interface
+open func queryGroupAllAttributes(byGroupID groupID: String, callback: @escaping ZIMGroupAttributesQueriedCallback)
+// new interface
+open func queryGroupAllAttributes(by groupID: String, callback: @escaping ZIMGroupAttributesQueriedCallback)
+```
+
+### queryGroupMemberInfo
+
+```swift
+// old interface
+open func queryGroupMemberInfo(byUserID userID: String, groupID: String, callback: @escaping ZIMGroupMemberInfoQueriedCallback)
+// new interface
+open func queryGroupMemberInfo(by userID: String, groupID: String, callback: @escaping ZIMGroupMemberInfoQueriedCallback)
+```
+
+### queryGroupMemberList
+
+```swift
+// old interface
+open func queryGroupMemberList(byGroupID groupID: String, config: ZIMGroupMemberQueryConfig, callback: @escaping ZIMGroupMemberListQueriedCallback)
+// new interface
+open func queryGroupMemberList(by groupID: String, config: ZIMGroupMemberQueryConfig, callback: @escaping ZIMGroupMemberListQueriedCallback)
+```
+
+### queryGroupMemberCount
+
+```swift
+// old interface
+open func queryGroupMemberCount(byGroupID groupID: String, callback: @escaping ZIMGroupMemberCountQueriedCallback)
+// new interface
+open func queryGroupMemberCount(by groupID: String, callback: @escaping ZIMGroupMemberCountQueriedCallback)
+```
+
+### callInvite
+
+```swift
+// old interface
+open func callInvite(withInvitees invitees: [String], config: ZIMCallInviteConfig, callback: @escaping ZIMCallInvitationSentCallback)
+// new interface
+open func callInvite(with invitees: [String], config: ZIMCallInviteConfig, callback: @escaping ZIMCallInvitationSentCallback)
+```
+
+### callCancel
+
+```swift
+// old interface
+open func callCancel(withInvitees invitees: [String], callID: String, config: ZIMCallCancelConfig, callback: @escaping ZIMCallCancelSentCallback)
+// new interface
+open func callCancel(with invitees: [String], callID: String, config: ZIMCallCancelConfig, callback: @escaping ZIMCallCancelSentCallback)
+```
+
+### callAccept
+
+```swift
+// old interface
+open func callAccept(withCallID callID: String, config: ZIMCallAcceptConfig, callback: @escaping ZIMCallAcceptanceSentCallback)
+// new interface
+open func callAccept(with callID: String, config: ZIMCallAcceptConfig, callback: @escaping ZIMCallAcceptanceSentCallback)
+```
+
+### callReject
+
+```swift
+// old interface
+open func callReject(withCallID callID: String, config: ZIMCallRejectConfig, callback: @escaping ZIMCallRejectionSentCallback)
+// new interface
+open func callReject(with callID: String, config: ZIMCallRejectConfig, callback: @escaping ZIMCallRejectionSentCallback)
+```

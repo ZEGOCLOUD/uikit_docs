@@ -1,0 +1,21 @@
+---
+articleID: 17486
+---
+
+# ZIM Audio release notes
+
+
+- - -
+
+## Version 1.0.0
+
+**Release date: 2024-04-17**
+
+ZIM Audio SDK is first released, providing complete voice processing capabilities including voice capture, playback, ambient noise suppression (ANS), automatic gain control (AGC), and more. Developers can easily implement high-definition voice messaging without worrying about the underlying implementation of audio processing. To use it, please integrate it with ZIM SDK simultaneously.
+
+| Item  | Description | Method |
+|-------|-------|-------|
+| Voice Capture  | Supports recording audio in M4A and MP3 formats for up to 120 seconds and checking the recording status. | <ul><li>[startRecord\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/startRecord.html)</li><li>[onRecorderStarted\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderStarted.html)</li><li>[onRecorderProgress\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderProgress.html)</li><li>[onRecorderFailed\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderFailed.html)</li><li>[completeRecord\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/completeRecord.html)</li><li>[cancelRecord\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/cancelRecord.html)</li><li>[onRecorderCompleted\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCompleted.html)</li><li>[isRecording\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/isRecording.html)</li><li>[cancelRecord\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/cancelRecord.html)</li><li>[onRecorderCancelled\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onRecorderCancelled.html)</li></ul>  |
+| Voice Playback | Supports playing M4A and MP3 format audio, as well as setting the audio output playback device. |<ul><li>[startPlay\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/startPlay.html)</li><li>[onPlayerStarted\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerStarted.html)</li><li>[onPlayerFailed\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerFailed.html)</li><li>[onPlayerInterrupted\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerInterrupted.html)</li><li>[onPlayerEnded\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerEnded.html)</li><li>[setAudioRouteType\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/setAudioRouteType.html)</li><li>[stopPlay\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/stopPlay.html)</li><li>[onPlayerStopped\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudioEventHandler/onPlayerStopped.html)</li></ul>  |
+| Automatic Gain Control（AGC） | Supports automatic adjustment of microphone volume to adapt to varying distances and maintain stable volume. <div class="mk-hint"><p>To use this feature, please contact ZEGOCLOUD Technical Support to enable it. Professional and Enterprise edition users can activate it for free.</p></div> | [enableAGC\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/enableAGC.html)  |
+| Ambient Noise Suppression（ANS） | Supports the recognition and elimination of background noise in audio, enabling clearer voice quality when this feature is enabled.<div class="mk-hint"><p>To use this feature, please contact ZEGOCLOUD Technical Support to enable it. Professional and Enterprise edition users can activate it for free.</p></div>  | [enableANS\|_blank](https://pub.dev/documentation/zego_zim_audio/latest/zego_zim_audio/ZIMAudio/enableANS.html)  |

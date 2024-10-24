@@ -1,0 +1,40 @@
+---
+articleID: 17762
+---
+
+# Delete conversations
+
+- - -
+
+## Introduction
+
+ZIM supports users to delete a specific conversation or all conversations in the conversation list.
+
+
+## Delete a conversation
+
+
+To delete the specified conversation after login, call the [DeleteConversation](@DeleteConversation) with the `conversationID` parameter.
+
+<Note title="Note">
+
+When deleting a specified conversation:
+
+- All messages in the conversation are not automatically deleted. If you need to delete both the conversation and all messages in the conversation, call the [DeleteConversation](@DeleteConversation) method. 
+- If the conversation has unread messages, the total number of unread messages will be reduced and shown in the [OnConversationTotalUnreadMessageCountUpdated](@OnConversationTotalUnreadMessageCountUpdated) callback. For details, see the chapter **Get the number of unread messages** above.
+</Note>
+
+<CodeGroup>
+```c# title = "Sample code"
+// Delete a conversation, following is an example of deleting a one-on-one conversation
+ZIMConversationDeleteConfig config = new ZIMConversationDeleteConfig();
+config.isAlsoDeleteServerConversation = true;
+
+ZIM.GetInstance().DeleteConversation("CONV_ID", ZIMConversationType.Group, config,
+    (string conversationID, ZIMConversationType conversationType,
+                    ZIMError errorInfo) =>
+    {
+        // Result of deleting the conversation
+    });
+```
+</CodeGroup>

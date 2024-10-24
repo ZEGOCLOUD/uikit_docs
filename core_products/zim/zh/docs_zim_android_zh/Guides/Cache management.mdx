@@ -1,0 +1,234 @@
+---
+articleID: 17415
+---
+
+import { getPlatformData } from '/snippets/utils-content-parser.js';
+
+export const queryLocalFileCacheMap = {
+  'Android': <a href='@queryLocalFileCache' target='_blank'>queryLocalFileCache</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryLocalFileCache.html' target='_blank'>queryLocalFileCache</a>,
+  'iOS': <a href='@queryLocalFileCacheWithConfig' target='_blank'>queryLocalFileCacheWithConfig</a>,
+}
+export const ZIMFileCacheQueryConfigMap = {
+  'Android': <a href='@-ZIMFileCacheQueryConfig' target='_blank'>ZIMFileCacheQueryConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMFileCacheQueryConfig-class.html' target='_blank'>ZIMFileCacheQueryConfig</a>,
+  
+}
+export const ZIMFileCacheQueriedCallbackMap = {
+  'Android': <a href='@-ZIMFileCacheQueriedCallback' target='_blank'>ZIMFileCacheQueriedCallback</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMFileCacheQueriedResult-class.html' target='_blank'>ZIMFileCacheQueriedResult</a>,
+  'iOS,window': <a href='@ZIMFileCacheQueriedCallback' target='_blank'>ZIMFileCacheQueriedCallback</a>,
+  'RN': <a href='@-ZIMFileCacheQueriedResult' target='_blank'>ZIMFileCacheQueriedResult</a>,
+}
+export const clearLocalFileCacheMap = {
+  'Android': <a href='@clearLocalFileCache' target='_blank'>clearLocalFileCache</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/clearLocalFileCache.html' target='_blank'>clearLocalFileCache</a>,
+  'iOS': <a href='@clearLocalFileCacheWithConfig' target='_blank'>clearLocalFileCacheWithConfig</a>,
+}
+export const ZIMFileCacheClearConfigMap = {
+  'Android': <a href='@-ZIMFileCacheClearConfig' target='_blank'>ZIMFileCacheClearConfig</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMFileCacheClearConfig-class.html' target='_blank'>ZIMFileCacheClearConfig</a>,
+}
+export const ZIMFileCacheClearedCallbackMap = {
+  'Android': <a href='@-ZIMFileCacheClearedCallback' target='_blank'>ZIMFileCacheClearedCallback</a>,
+  'iOS,window': <a href='@ZIMFileCacheClearedCallback' target='_blank'>ZIMFileCacheClearedCallback</a>,
+}
+
+# Cache management
+
+- - -
+
+## Function overview
+
+With the ZIM SDK, you can query the local cache file size of the currently logged-in user and clear the local cache.
+
+
+## Query cache
+
+After creating a ZIM object and logging in, you can invoke the {getPlatformData(props,queryLocalFileCacheMap)} interface and pass {getPlatformData(props,ZIMFileCacheQueryConfigMap)} to query the size of the cache for the current user locally.
+
+The query result will be returned through the callback interface {getPlatformData(props,ZIMFileCacheQueriedCallbackMap)}.
+
+:::if{props.platform=undefined}
+```java
+ZIMFileCacheQueryConfig config = new ZIMFileCacheQueryConfig ();
+config.endTime = 0; // Query the cache size of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to get the full cache size of the current user.
+zim.queryLocalFileCache(config,  new ZIMFileCacheQueriedCallback() {
+    @Override
+    public void onFileCacheQueried(ZIMFileCacheInfo fileCacheInfo, ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+          // Query results
+        } else {
+          // ......
+        }      
+    }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMFileCacheQueryConfig *config = [[ZIMFileCacheQueryConfig alloc] init];
+config.endTime = 0; // Query the cache size of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to get the full cache size of the current user.
+[self.zim queryLocalFileCacheWithConfig:config callback:^(ZIMFileCacheInfo *fileCacheInfo, ZIMError *errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+          // Query results
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMFileCacheQueryConfig *config = [[ZIMFileCacheQueryConfig alloc] init];
+config.endTime = 0; // Query the cache size of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to get the full cache size of the current user.
+[self.zim queryLocalFileCacheWithConfig:config callback:^(ZIMFileCacheInfo *fileCacheInfo, ZIMError *errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+          // Query results
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+zim::ZIMFileCacheQueryConfig config;
+config.endTime = 0; // Query the cache size of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to get the full cache size of the current user.
+zim::ZIM::getInstance()->queryLocalFileCache(config, [=](const zim::ZIMFileCacheInfo& fileCacheInfo, const zim::ZIMError& errorInfo) {
+    // Query results
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMFileCacheQueryConfig config = ZIMFileCacheQueryConfig();
+    config.endTime = 0; // Query the cache size of the current user before this timestamp (UNIX).
+                        // Fill in 0 or a value later than the current time to get the complete cache size of the current user.
+    ZIMFileCacheQueriedResult result = await ZIM.getInstance()!.queryLocalFileCache(config);
+    // Query cache result
+} on PlatformException catch (onError) {
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+var config = {
+    endTime: 0 // Query the cache size for the current user before this timestamp (UNIX). Fill in 0 or a value later than the current time to get the complete cache size for the current user.
+};
+
+zim.queryLocalFileCache(config)
+    .then(function ({ totalFileSize }) {
+        // Operation succeeded
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::
+
+## Clear cache
+
+After creating a ZIM object and logging in, you can invoke the {getPlatformData(props,clearLocalFileCacheMap)} interface and pass {getPlatformData(props,ZIMFileCacheClearConfigMap)} to clear the cache for the current user locally.
+
+
+:::if{props.platform=undefined}
+The clearing result will be returned through the callback interface {getPlatformData(props,ZIMFileCacheClearedCallbackMap)}.
+
+```java
+ZIMFileCacheClearConfig config = new ZIMFileCacheClearConfig ();
+config.endTime = 0; // Clear the cache of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to clear the complete cache of the current user.
+zim.clearLocalFileCache(config,  new ZIMFileCacheClearedCallback() {
+    @Override
+    public void onFileCacheCleared(ZIMError errorInfo) {
+        if(errorInfo.code == ZIMErrorCode.SUCCESS) {
+          // Get the result of clearing the cache.
+        } else {
+          // ......
+        }      
+    }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+The clearing result will be returned through the callback interface {getPlatformData(props,ZIMFileCacheClearedCallbackMap)}.
+
+```objc
+ZIMFileCacheClearConfig *config = [[ZIMFileCacheClearConfig alloc] init];
+config.endTime = 0; // Clear the cache of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to clear the complete cache of the current user.
+[self.zim clearLocalFileCacheWithConfig:config callback:^(ZIMError *errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+           // Get the result of clearing the cache.
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+The clearing result will be returned through the callback interface {getPlatformData(props,ZIMFileCacheClearedCallbackMap)}.
+
+```objc
+ZIMFileCacheClearConfig *config = [[ZIMFileCacheClearConfig alloc] init];
+config.endTime = 0; // Clear the cache of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to clear the complete cache of the current user.
+[self.zim clearLocalFileCacheWithConfig:config callback:^(ZIMError *errorInfo) {
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+           // Get the result of clearing the cache.
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+The clearing result will be returned through the callback interface {getPlatformData(props,ZIMFileCacheClearedCallbackMap)}.
+
+```cpp
+zim::ZIMFileCacheClearConfig config;
+config.endTime = 0; // Clear the cache of the current user before this timestamp (UNIX).
+                    // Fill in 0 or a value later than the current time to clear the complete cache of the current user.
+zim::ZIM::getInstance()->clearLocalFileCache(config, [=](const zim::ZIMError& errorInfo) {
+    // Get the result of clearing the cache.
+});
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+try{
+    ZIMFileCacheClearConfig config = ZIMFileCacheClearConfig();
+    config.endTime = 0; // Clear the cache size before this timestamp (UNIX) for the current user.
+                        // Fill in 0 or a value later than the current time to clear the complete cache for the current user.
+    await ZIM.getInstance()!.clearLocalFileCache(config);
+} on PlatformException catch (onError) {
+    onError.code;
+    onError.message;
+}
+```
+:::
+:::if{props.platform="RN"}
+```javascript
+var config = {
+    endTime: 0 // Clear the cache size for the current user before this timestamp (UNIX). Fill in 0 or a value later than the current time to clear the complete cache size for the current user.
+};
+
+zim.clearLocalFileCache(config)
+    .then(function () {
+        // Operation succeeded
+    })
+    .catch(function (err) {
+        // Operation failed
+    });
+```
+:::

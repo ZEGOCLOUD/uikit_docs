@@ -1,0 +1,71 @@
+# Get the payload field
+
+import Content from '/core_products/zim/en/snippets/CrossPlatformSuitableNote.mdx'
+
+<Content />
+
+## Introduction
+
+The offline push sender sends additional information to the receiver by configuring the payload parameter of [ZIMPushConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) (the version before 2.5.0 is the extendedData parameter). When the receiver needs to use the ZPNs SDK, the payload in the extras of the push channel field to get this information.
+
+This document introduces how to use the ZPNs SDK interface to obtain the payload transparent transmission field.
+
+<Warning title="Warning">
+Before using the ZPNs SDK, please configure the ZIM offline push certificate in the [ZEGO Admin Console](https://console.zego.im) (for details, please refer to [Project Management- IM- Offline Push Configuration](https://docs.zegocloud.com/article/16233)), If it cannot be configured, please contact ZEGO technical support.
+</Warning>
+
+## Prerequisites
+Before getting the payload transparent field, please make sure:
+
+- Integrate the ZPNs SDK. For more, refer to the [Implement offline push notification](./Implement%20offline%20push%20notification.mdx).
+
+
+## Common Usage
+
+According to the push service provider of the offline push receiving end, developers should choose different ways to obtain the payload transparent transmission field, which are respectively listening to the notification of ZPNsEventHandler and obtaining it from the Activity in a native way.
+
+### Obtained through the ZPNsMessage object in the ZPNsEventHandler callback method
+
+
+1. Get the callback notification by implementing the method in ZPNsEventHandler:
+
+```dart
+// For the support of the following interfaces by each push service provider, refer to the offline push document.
+ZPNsEventHandler.onRegistered = (ZPNsRegisterMessage registerMessage) {};
+ZPNsEventHandler.onNotificationArrived = (ZPNsMessage message) {};
+ZPNsEventHandler.onNotificationClicked = (ZPNsMessage message) {};
+ZPNsEventHandler.onThroughMessageReceived = (ZPNsMessage message) {};
+```
+
+2. Implement the following method as needed. When the above method is triggered, pass the [ZPNsMessage](https://pub.dev/documentation/zego_zpns/latest/zego_zpns/ZPNsMessage-class.html) object to this method and take out the payload field.
+
+```dart
+String getZPNsMessagePayload(ZPNsMessage message) {
+    return message.extras['payload'];
+}
+```
+
+### Obtain from Activity (only supports Google FCM)
+
+1. In the AndroidManifest.xml file, set the exported attribute of the main Activity to true, and configure the intent-filter.
+
+```xml
+<activity
+    android:name="The main Activity path of your project"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+2. The developer obtains the data in the `onCreate` or `onNewIntent` of the main Activity through the following methods.
+
+```JAVA
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    String payload = getIntent().getExtras().getString("payload");
+}
+```

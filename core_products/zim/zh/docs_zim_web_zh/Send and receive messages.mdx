@@ -1,0 +1,327 @@
+---
+articleID: 13935
+---
+
+
+# Send and receive messages
+
+--- 
+
+This document describes how to use the ZIM SDK to send and receive messages.
+<br/>
+<br/>
+
+---
+
+## Solution 
+
+The following shows the access solution that ZEGOCLOUD'S In-app Chat (the ZIM SDK) provides.  
+
+![/Pics/InappChat/im_solution_en.png](https://storage.zego.im/sdk-doc/Pics/InappChat/im_solution_en.png)
+
+In this solution, you will need to implement the following business logic based on your actual business requirements: 
+
+- The logic for managing the users on the client, and the logic for distributing user ID for users to log in. 
+- The logic for generating the **Token** for SDK to authenticate the user. We recommend you implement the logic for generating tokens on your app server for data security.
+
+## Prerequisites
+
+Before you begin, make sure:
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+  - Create a project, get the **AppID** and **ServerSecret**.
+  - Activate the **In-app Chat** service (as shown in the following figure).
+![/Pics/InappChat/ActivateZIMinConsole2.png](https://storage.zego.im/sdk-doc/Pics/InappChat/ActivateZIMinConsole2.png)
+
+
+- Get the **Token** that SDK required for login authentication. For details, see [Authentication](./Guides/Users/Authentication.mdx).
+
+## Integrate the SDK
+
+### Optional: Create a new project
+
+Skip to this step if a project already exists.
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+1. Create a folder as the basic audio and video project folder as shown below: 
+
+    ```bash
+    ├── assets
+    │   ├── css
+    │   │   └── index.css # Used to set the page style.
+    │   └── js
+    │       ├── biz.js    # The JavaScript code that is used to implement the features.
+    │       └── zim.js    # zim sdk
+    ├── index.html        # The front page file of the application
+    ```
+
+2. Copy the following code to the `index.html` file.
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="renderer" content="webkit" />
+        <title>ZIM</title>
+        <link rel="stylesheet" href="assets/css/index.css" />
+    </head>
+
+    <body></body>
+
+    <script src="./assets/js/zim.js"></script>
+    <script src="./assets/js/biz.js"></script>
+    </html>
+    ```
+
+3. Open the `index.html` on the local browser.
+
+</details>
+
+
+### Import the SDK 
+
+Choose either of the following methods to integrate the SDK into your project.
+
+#### Method 1: Integrate the SDK manually
+
+1. Download and extract the latest version of SDK from [SDK downloads](./Client%20SDKs/SDK%20downloads.mdx).
+
+
+2. Import the SDK using the following script.
+
+    ```html
+    <!-- Path to index.html corresponding to zim SDK -->
+    <script src="./zego-zim-web/index.js"></script>
+    ```
+
+#### Method 2: Integrate the SDK with NPM
+
+1. Execute the `npm i zego-zim-web` command to install the dependencies.
+
+    <Note title="Note">
+
+    - We recommend you use the NPM package that supports the TypeScript language.
+    - If the error `permission denied` occurs when executing the npm command on macOS or Linux, add a `sudo` before the npm command and try again.
+    </Note>
+
+2. Import the SDK.
+
+    ```javascript
+    import { ZIM } from 'zego-zim-web';
+    ```
+   
+    or
+
+    ```javascript
+    const ZIM = require('zego-zim-web').ZIM;
+    ```
+
+## Implementation steps
+
+### Get the sample code
+
+To download and run the sample code, see [Sample app](./Sample%20app.mdx).
+
+
+### Import the SDK file 
+
+Refer to the [**Method 2: Integrate the SDK with NPM**](#method-2-integrate-the-sdk-with-npm) to import the SDK package file. 
+
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
+
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [create](@create) method with the AppID in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+
+```javascript
+var appID = xxxx; // Note: the appID is a set of numbers, not a String. 
+// The [create] method creates a ZIM instance only on the first call. Any subsequent calls return null.
+ZIM.create({ appID });
+// Get the instance via [getInstance] to avoid hot updates that cause you to use the [create] method multiple times to create a singleton and return null.
+var zim = ZIM.getInstance();
+```   
+
+### Set event callbacks
+
+Before a client user's login, you will need to call the [on](@on) method to customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receiving message related callback notifications.
+
+
+```javascript
+// Set up and listen for the callback for receiving error codes. 
+zim.on('error', function (zim, errorInfo) {
+    console.log('error', errorInfo.code, errorInfo.message);
+});
+
+// Set up and listen for the callback for connection status changes.
+zim.on('connectionStateChanged', function (zim, { state, event, extendedData }) {
+    console.log('connectionStateChanged', state, event, extendedData);
+    // When SDK logout occurred due to a long-time network disconnection, you will need to log in again. 
+    if (state == 0 && event == 3) {
+        zim.login(userInfo, token)
+    }
+});
+
+// Set up and listen for the callback for receiving one-to-one messages. 
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log('receivePeerMessage', messageList, fromConversationID);
+});
+
+// Set up and listen for the callback for token expires.
+zim.on('tokenWillExpire', function (zim, { second }) {
+    console.log('tokenWillExpire', second);
+    // You can call the renewToken method to renew the token. 
+    // To generate a new Token, refer to the Prerequisites.
+    zim.renewToken(token)
+        .then(function({ token }){
+            // Renewed successfully.
+        })
+        .catch(function(err){
+            // Renew failed.
+        })
+});
+```
+
+
+
+### Log in to the ZIM SDK
+
+For client A and client B to send, receive messages, and renew the token after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
+
+To log in, Clients A and B both need to do the following:
+1. Call the [ZIMUserInfo](@-ZIMUserInfo)  method to create a user object.
+2. Then, call the [login](@login) method with their own user information and the Token they get in the previous **Prerequisites** steps.
+
+<Warning title="Warning">
+
+- You can custom the **userID** and **userName**, and we recommend you set these two to a meaningful value and associate them with the account system of your application.
+- If the token has expired, you will need to call the [renewToken](@renewToken) method in the [tokenWillExpire](@tokenWillExpire) method to renew the token before you try again.
+</Warning>
+
+
+```javascript
+// To get the token for login, refer to the [Guides - Authentication] document. 
+// userID must be within 32 bytes, and can only contain letters, numbers, and the following special characters: '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
+// userName must be within 256 bytes, no special characters limited.
+var userInfo = { userID: 'xxxx', userName: 'xxxx' };
+var token = '';
+
+zim.login(userInfo, token)
+    .then(function () {
+        // Login successful.
+    })
+    .catch(function (err) {
+        // Login failed.
+    });
+```
+
+### Send messages 
+
+Client A can send messages to client B after logging in successfully. 
+
+<table>
+
+<tbody><tr data-row-level="1">
+<th>Message type</th>
+<th>Description</th>
+<th>Details</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>Text message. Size limit: 32 KB. Rate limit: 10 requests/second.</td>
+<td>Enable messages to be more deliverable, and can be stored as message history. Suitable for one-on-one chat and group chat.</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message. Size limit: 5 KB. Rate limit: 10 requests/second. </td>
+<td>Supports massive concurrency. Suitable for live audio room, online classroom, the messages won't be stored after the room is destroyed. </td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>In-room barrage message (bullet) screen message). Size limit: 5 KB. No specific rate limit. </td>
+<td><p>The high-frequency messages that don't require 100% deliverability, this message type is often used to send bullet screen messages. </p><p>Supports massive concurrency, but the message deliverability can't be guaranteed. </p></td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports major image formats, including JPG, PNG, BMP, TIFF, and GIF. Size limit: 10 MB. Rate limit: 10 requests/second. </td>
+<td rowspan="4">Enable messages to be more deliverable, and can be stored as history messages. Suitable for one-on-one chat, room chat, and group chat.</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. Supports files in any format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports voice messages in MP3 format within 300 seconds. Size limit: 6 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>Video message. Supports video messages in MP4 or MOV format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+</tbody>
+</table>
+
+
+To send one-to-one messages, for example, if client A wants to send a message to client B, then client A needs to call the [sendMessage](@sendMessage) method with client B's userID, message content, and other info.
+And client A can be notified whether the message is delivered successfully through the callback [ZIMMessageSentResult](@-ZIMMessageSentResult).
+
+- [onMessageAttached](@onMessageAttached-ZIMMediaMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage](@-ZIMMessage) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
+
+```javascript
+//  Send one-to-one text messages. 
+
+var toConversationID = ''; // Peer user's ID.
+var conversationType = 0; // Message type; 1-on- chat: 0, in-room chat: 1, group chat:2 
+var config = { 
+    priority: 1, // Set priority for the message. 1: Low (by default). 2: Medium. 3: High.
+};
+
+var messageTextObj = { type: 1, message: 'Message text', extendedData: 'Message extended info(optional)' };
+var notification = {
+    onMessageAttached: function(message) {
+        // todo: Loading
+    }
+}
+
+zim.sendMessage(messageTextObj, toConversationID, conversationType, config, notification)
+    .then(function ({ message }) {
+        // Message sent successfully.
+    })
+    .catch(function (err) {
+        // Failed to send a message.
+    });
+```
+
+
+### Receive messages
+
+After client B logs in, he will receive client A's message through the callback [on](@on) which is already set in the [receivePeerMessage](@receivePeerMessage) method. 
+
+
+```javascript 
+// Set up and listen for the callback for receiving the one-to-one messages. 
+zim.on('receivePeerMessage', function (zim, { messageList, fromConversationID }) {
+    console.log('receivePeerMessage', messageList, fromConversationID);
+});
+```
+
+### Log out 
+
+For a client to log out, call the [logout](@logout) method. 
+```java
+zim.logout();
+```
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [destroy](@destroy) method.
+
+```java
+zim.destroy();
+```
