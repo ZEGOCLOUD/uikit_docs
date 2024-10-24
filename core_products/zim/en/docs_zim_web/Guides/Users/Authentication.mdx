@@ -243,6 +243,9 @@ zim.login(useID, config)
 
 Upon receiving this callback, developers need to obtain a new valid token from their own server and use the [renewToken](@renewToken) interface provided by the SDK to update the token.
 
+<Note title="Note">
+When the token expires and is not updated, the user will be disconnected and receive the [connectionStateChanged](@connectionStateChanged) callback, where the event is <code>TokenExpired</code> and the state is <code>Disconnected</code>.
+</Note>
 
 <CodeGroup>
 ```javascript
