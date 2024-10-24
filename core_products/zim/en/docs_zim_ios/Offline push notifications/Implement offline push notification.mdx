@@ -100,7 +100,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 ```
 
 2. Call the [`registerAPNs`](@registerAPNs) method to set up the APNs. You will receive the DeviceToken through the callback `didRegisterForRemoteNotificationsWithDeviceToken` when APNs is set successfully. 
-```oc
+```objc
 [[ZPNs shared] registerAPNs];
 ```
 

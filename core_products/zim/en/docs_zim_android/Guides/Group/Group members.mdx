@@ -82,7 +82,7 @@ export const ZIMGroupMemberMutedListQueriedCallbackMap = {
   'iOS,mac,window': <a href='@ZIMGroupMemberMutedListQueriedCallback' target='_blank'>ZIMGroupMemberMutedListQueriedCallback</a>,
 }
 export const mutedExpiredTimeMap = {
-  'Android': <a href="mutedExpiredTime-ZIMGroupConversation" target='_blank'>mutedExpiredTime</a>,
+  'Android': <a href="@mutedExpiredTime-ZIMGroupConversation" target='_blank'>mutedExpiredTime</a>,
 }
 export const ZIMConversationMap = {
   'Android': <a href='@-ZIMConversation' target='_blank'>ZIMConversation</a>,
@@ -141,7 +141,7 @@ zim.queryGroupMemberList(group_id, config, new ZIMGroupMemberListQueriedCallback
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Get group member list.
 int myNextFlag = 0;
     ZIMGroupMemberQueryConfig *config = [[ZIMGroupMemberQueryConfig alloc] init];
@@ -158,7 +158,7 @@ int myNextFlag = 0;
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Get group member list.
 int myNextFlag = 0;
     ZIMGroupMemberQueryConfig *config = [[ZIMGroupMemberQueryConfig alloc] init];
@@ -235,7 +235,7 @@ zim.queryGroupMemberInfo(user_id, group_id, new ZIMGroupMemberListQueriedCallbac
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Get group member info.
 [zim queryGroupMemberInfo:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
     //Implement the event callback for querying the group member info.
@@ -245,7 +245,7 @@ zim.queryGroupMemberInfo(user_id, group_id, new ZIMGroupMemberListQueriedCallbac
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Get group member info.
 [zim queryGroupMemberInfo:userID groupID:groupID callback:^(NSString * _Nonnull groupID, ZIMGroupMemberInfo * _Nonnull userInfo, ZIMError * _Nonnull errorInfo) {
     //Implement the event callback for querying the group member info.
@@ -314,7 +314,7 @@ zim.setGroupMemberNickname(member_new_nick_name, user_id, group_id, new ZIMGroup
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Set an alias. 
 // Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
 [zim setGroupMemberNickname:nickName forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
@@ -325,7 +325,7 @@ zim.setGroupMemberNickname(member_new_nick_name, user_id, group_id, new ZIMGroup
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Set an alias. 
 // Note: The group owner can set the alias of all group members. But the group members can only set their own aliases. 
 [zim setGroupMemberNickname:nickName forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
@@ -460,7 +460,7 @@ zim.setGroupMemberRole(2, user_id, group_id, new ZIMGroupMemberRoleUpdatedCallba
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Group owner sets ordinary members as administrators.
 [zim setGroupMemberRole:role forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
         //Implement business code after setting the role here.
@@ -470,7 +470,7 @@ zim.setGroupMemberRole(2, user_id, group_id, new ZIMGroupMemberRoleUpdatedCallba
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Group owner sets ordinary members as administrators.
 [zim setGroupMemberRole:role forUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
         //Implement business code after setting the role here.
@@ -546,7 +546,7 @@ zim.transferGroupOwner(new_group_owner_id, group_id, new ZIMGroupOwnerTransferre
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Change the group owner.
 [zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
         //Implement the event callback for changing the group owner here.
@@ -556,7 +556,7 @@ zim.transferGroupOwner(new_group_owner_id, group_id, new ZIMGroupOwnerTransferre
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // Change the group owner.
 [zim transferGroupOwnerToUserID:userID groupID:groupID callback:^(ZIMError * _Nonnull errorInfo) {
         //Implement the event callback for changing the group owner here.
@@ -629,7 +629,7 @@ zim.queryGroupMemberCount("GROUP_ID", new ZIMGroupMemberCountQueriedCallback() {
 :::
 :::if{props.platform="iOS"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // For an in-group member to query the number of group members.
 [zim queryGroupMemberCountByGroupID:self.toGroupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
 
@@ -639,7 +639,7 @@ zim.queryGroupMemberCount("GROUP_ID", new ZIMGroupMemberCountQueriedCallback() {
 :::
 :::if{props.platform="mac"}
 <CodeGroup>
-```oc SampleCode
+```objc SampleCode
 // For an in-group member to query the number of group members.
 [zim queryGroupMemberCountByGroupID:self.toGroupID callback:^(NSString * _Nonnull groupID, unsigned int count, ZIMError * _Nonnull errorInfo) {
 

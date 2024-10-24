@@ -57,14 +57,14 @@ export const ZIMMessageMap = {
   'Android': <a href='@-ZIMMessage' target='_blank'>ZIMMessage</a>,
 }
 export const setMentionedUserIDsMap = {
-  'Android': "`setMentionedUserIDs</a>`",
+  'Android': "`setMentionedUserIDs`",
   'iOS,mac': <a href='@mentionedUserIDs-ZIMMessage' target='_blank'>mentionedUserIDs</a>,
 }
 export const isMentionAllMap = {
   'Android': <a href='@isMentionAll-ZIMMessage' target='_blank'>isMentionAll</a>,
 }
 export const mentionedInfoListMap = {
-  'Android': <a href='mentionedInfoList-ZIMConversation' target='_blank'>mentionedInfoList</a>,
+  'Android': <a href='@mentionedInfoList-ZIMConversation' target='_blank'>mentionedInfoList</a>,
 }
 export const ZIMMessageMentionedTypeMap = {
   'Android': <a href='@-ZIMMessageMentionedType' target='_blank'>ZIMMessageMentionedType</a>,
@@ -1313,7 +1313,7 @@ When a user is mentioned, the {getPlatformData(props,onConversationChangedMap)} 
 
 :::
 :::if{props.platform="mac"}
-```oc
+```objc
  - (void)zim:(ZIM *)zim
      conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList {
          // Retrieve mentionInfoList from the conversationChangeInfoList of the mentioned conversation
@@ -1321,7 +1321,7 @@ When a user is mentioned, the {getPlatformData(props,onConversationChangedMap)} 
 ```
 :::
 :::if{props.platform="iOS"}
-```oc
+```objc
  - (void)zim:(ZIM *)zim
      conversationChanged:(NSArray<ZIMConversationChangeInfo *> *)conversationChangeInfoList {
          // Retrieve mentionInfoList from the conversationChangeInfoList of the mentioned conversation
@@ -1341,12 +1341,12 @@ ArrayList<ZIMMessageMentionedInfo> mentionedInfoList = conversation.mentionedInf
 
 :::
 :::if{props.platform="mac"}
-```oc
+```objc
  NSArray<ZIMMessageMentionedInfo *> * mentionedInfoList = conversation.mentionedInfoList;
  ```
 :::
 :::if{props.platform="iOS"}
-```oc
+```objc
  NSArray<ZIMMessageMentionedInfo *> * mentionedInfoList = conversation.mentionedInfoList;
  ```
 :::
@@ -1370,12 +1370,12 @@ ArrayList<String> userIds = message.getMentionedUserIDs();
 
 :::
 :::if{props.platform="mac"}
-```oc
+```objc
  NSArray<NSString *> *userIds = message.mentionedUserIDs;
 ```
 :::
 :::if{props.platform="iOS"}
-```oc
+```objc
  NSArray<NSString *> *userIds = message.mentionedUserIDs;
 ```
 :::
@@ -1391,12 +1391,12 @@ boolean isMentionAll = message.isMentionAll();
 
 :::
 :::if{props.platform="mac"}
-```oc
+```objc
 BOOL isMentionAll = message.isMentionAll;
 ```
 :::
 :::if{props.platform="iOS"}
-```oc
+```objc
 BOOL isMentionAll = message.isMentionAll;
 ```
 :::

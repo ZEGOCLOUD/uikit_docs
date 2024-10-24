@@ -97,7 +97,7 @@ zim.updateUserExtendedData(newUserExtendedData, new ZIMUserExtendedDataUpdatedCa
 ```
 :::
 :::if{props.platform="iOS"}
-```oc Example
+```objc Example
 // Update the extended field of user information.
 NSString *extendedData = @"";
 
@@ -193,7 +193,7 @@ zim.updateUserName(newUserName, new ZIMUserNameUpdatedCallback() {
 ```
 :::
 :::if{props.platform="iOS"}
-```oc Example
+```objc Example
 // Modify the username.
 // The `userName` parameter can contain up to 256 bytes in length, with no limit on characters.
 NSString *userName = @"";
@@ -300,7 +300,7 @@ zim.updateUserAvatarUrl(userAvatarUrl, new ZIMUserAvatarUrlUpdatedCallback() {
 ```
 :::
 :::if{props.platform="iOS"}
-```oc Example
+```objc Example
 // Set the user avatar.
 // The URL can contain up to 500 bytes in length, with no limit on characters.
 NSString *userAvatarUrl = @"";
@@ -404,7 +404,7 @@ zim.queryUsersInfo(userIDList, config, new ZIMUsersInfoQueriedCallback() {
 ```
 :::
 :::if{props.platform="iOS"}
-```oc Example
+```objc Example
 // Query user information.
 // Restrictions: You can query up to 10 user IDs per call or by multiple calls within 10 seconds.
 [self.zim queryUsersInfo:@[@"userID_1",@"userID_2"] callback:^(NSArray<ZIMUserFullInfo *> * _Nonnull userList, NSArray<ZIMErrorUserInfo *> * _Nonnull errorUserList, ZIMError * _Nonnull errorInfo) {
