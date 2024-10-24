@@ -1,0 +1,382 @@
+---
+articleID: 13934
+---
+
+
+# Send and receive messages
+
+---
+
+This document describes how to use the ZIM SDK (In-app Chat) to send and receive messages.
+
+
+---
+
+## Solution
+
+The following shows the access solution that the ZIM SDK provides.
+
+![/Pics/InappChat/im_solution_en.png](https://storage.zego.im/sdk-doc/Pics/InappChat/im_solution_en.png)
+
+In this solution, you will need to implement the following business logic based on your actual business requirements:
+
+- The logic for managing the users on the client, and the logic for distributing user ID for users to log in.
+
+## Prerequisites
+
+Before you begin, make sure:
+
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+  - Create a project, get the **AppID** and **AppSign**.
+  - Activate the **In-app Chat** service (as shown in the following figure).
+![/Pics/InappChat/ActivateZIMinConsole2.png](https://storage.zego.im/sdk-doc/Pics/InappChat/ActivateZIMinConsole2.png)
+
+
+- Visual Studio 2015 or later
+- Windows 7 or later
+
+## Integrate the SDK
+
+### Optional: Create a project
+
+Skip this step if a project already exists.
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+1. Open Xcode, and in the **Welcome to Xcode** window, click **Create a new Xcode project** or select **File > New > Project**. In the dialog that appears, select the **iOS** tab, then select **App** in the **Application** section.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/QuickStart/NewProject_1.png" /></Frame>
+
+2. Fill in items or choose options for the new project, click **Next** after configuration is completed.
+
+**Product Name** and **Organization Identifier** are required, which will be used for creating the App UID - **Bundle Identifier**.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/QuickStart/NewProject_2.png" /></Frame>
+
+3. Choose a particular directory to restore the project to be created, and click **Create** to create a project.
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/QuickStart/NewProject_3.png" /></Frame>
+
+</details>
+
+### Import the SDK 
+
+1. Download the latest version of SDK from [SDK downloads](./Client%20SDKs/SDK%20downloads.mdx).
+2. Extract the files from the SDK packages and copy the files to your project directory.
+
+    The SDK package includes two directories: **include** and **lib**. The SDK contains two folders as illustrated below: 
+    
+    ```cpp
+    x86            --------------- 32-bit version
+    | include      --------------- SDK header file included.
+    x64            --------------- 64-bit version
+    | include      --------------- SDK header file included.
+   ```
+
+
+### Set project property 
+
+To set project property, right-click the project name in the **Solution Explorer** window, click **Properties**, and configure the following :
+
+1. Add the `include` directory to the header file search path.
+* **C/C++** -> **General**-> Add the `include` directory to **Additional include Directories**
+2. Add the `lib` directory to the library search path.
+
+* **Linker**-> **General**-> Add the library directory `lib/x86` or ` lib/x64` to the **Additional Library Directories**
+
+3. Specify the link library `ZIM.lib`.
+
+* **Linker**-> **Input**-> Add `ZIM.lib` to **Additional Dependencies**
+
+## Implementation steps
+
+### Get the sample code
+
+To download and run the sample code, see [Sample app](./Sample%20app.mdx).
+
+For the sample code related to this feature, check out the source files in the `CZIMConversationView.h` and `CZIMConversationView.cpp` files under the `ZIMDemo` directory in the SDK sample code package. 
+
+
+
+### Import the header file 
+
+Import the header file `ZIM.h` to the project, and define the macro `ZIM_MAIN_CONFIG` once in the source file of the project file (`*.cpp` or `*.cc` file) (you only need to define the macro once at the very beginning).
+
+```cpp
+//The header file.
+#include "ZIM.h"
+...
+```
+
+```cpp
+//The source file.
+#include "pch.h"
+#define ZIM_MAIN_CONFIG
+#include "framework.h"
+...
+```
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
+
+
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [create](@create) method with the AppID and the AppSign you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+```cpp
+// Create a ZIM SDK instance. We recommend creating a ZIM SDK instance for a client.
+zim_ = zim::ZIM::create(app_id)
+```
+
+<details class="zg-primary">
+    <summary>The sample code to create a ZIM SDK singleton</summary>
+
+
+For most cases, you will only need to create the ZIM SDK instance once. We recommend you create a singleton and save it.
+
+
+Create a `ZIMManage` class, declare and implement a `sharedInstance` static method in this class, which will create and return a `ZIMManager` object the first time it is called.
+Then, when you import the `ZIMManager` class anywhere in the project and call the `sharedInstance`, a zim object will be returned.
+
+```cpp
+...
+class ZIMManager {
+    ...
+    zim::ZIM * sharedInstance() {
+        static zim::ZIM* zim_instance = nullptr;
+        if(!zim_instance)
+            zim_instance = zim::ZIM::create(app_id);
+        return zim_instance;
+    }
+    ...
+}
+...
+```
+
+```cpp
+// Use this in other situations. 
+#include "ZIMManager.h"
+...
+
+// Take login as an example. 
+ZIMManager::sharedInstance()->login(userInfo, token, [=](zim::ZIMError errorInfo){
+    // Callback for the result of login. 
+});
+...
+```
+</details>
+
+### Set an event handler object 
+
+
+Before a client user's login, you will need to call the [setEventHandler](@setEventHandler) method to implement an event handler object, and customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message related callback notifications.
+
+```cpp
+class CZIMEventHandler :public zim::ZIMEventHandler
+{
+public:
+    CZIMEventHandler();
+    ~CZIMEventHandler();
+private:
+    // The callback for receiving error codes. This callback will be triggered when SDK returns error codes.   
+    virtual void onError(zim::ZIM* /*zim*/, zim::ZIMError /*errorInfo*/, const std::string& /*desc*/) override;
+    // The callback for connection status changes. This callback will be triggered when the connection status changes, and you can customize a UI for this event.
+    virtual void onConnectionStateChanged(zim::ZIM* /*zim*/, zim::ZIMConnectionState /*state*/, zim::ZIMConnectionEvent /*event*/, const std::string& /*extendedData*/)  override;
+    // The callback for room state changes. 
+    virtual void onRoomStateChanged(zim::ZIM* /*zim*/,  const std::string& /*roomID*/, zim::ZIMRoomState /*state*/, zim::ZIMRoomEvent /*event*/, const std::string& /*extendedData*/)  override;
+    // The callback for Token expires. This callback will be triggered when the Token is about to expire, and you can customize a UI for this event. 
+    virtual void onTokenWillExpire(zim::ZIM* /*zim*/, unsigned int /*second*/)  override;
+    // The callback for receiving one-to-one messages. You can receive message notifications through this callback after login. 
+    virtual void onReceivePeerMessage(zim::ZIM* /*zim*/, const std::vector<std::shared_ptr<zim::ZIMMessage>>& /*messageList*/, const std::string& /*fromUserID*/)  override;
+    // The callback for receiving the in-room messages. You can receive in-room message notifications through this callback after login and joining a room.
+    virtual void onReceiveRoomMessage(zim::ZIM* /*zim*/, const std::vector<std::shared_ptr<zim::ZIMMessage>>& /*messageList*/, const std::string& /*fromRoomID*/)  override;
+    // The callback for a new user joins the room. You can receive notifications when a new user joins the room through this callback after login and joining a room.
+    virtual void onRoomMemberJoined(zim::ZIM* /*zim*/, const std::vector<zim::ZIMUserInfo>& /*memberList*/, const std::string& /*roomID*/)  override;
+    // The callback for an existing user leaves the room. You can receive notifications when an existing user leaves the room through this callback after login and joining a room.
+    virtual void onRoomMemberLeft(zim::ZIM* /*zim*/, const std::vector<zim::ZIMUserInfo>& /*memberList*/, const std::string& /*roomID*/)  override;
+}
+```
+
+```cpp
+im_event_handler_ = std::make_shared<CZIMEventHandler>();
+zim_->setEventHandler(im_event_handler_);
+
+// You can set the event callbacks by Register##callback_name as needed.
+```
+
+<Warning title="Warning">
+
+You need to switch to your own thread for further operations When you receive callbacks.
+
+</Warning>
+
+For example, when you receive an in-room message, to process the message, you need to switch it to your own thread (the following sample code is for switching to the UI thread).
+
+```cpp
+// The OnReceiveRoomMessage here refers to the onReceiveRoomMessage of the bounded SDK.
+void CZIMDemoDlg::OnReceiveRoomMessage(zim::ZIM* zim, const std::vector<std::shared_ptr<zim::ZIMMessage>>& message_list, const std::string& from_room_id)
+{
+  global_main_dialog_->PostUiThread([=]() {
+    global_main_dialog_->im_mode_select_dialog_->OnReceiveRoomMessage(zim, message_list, from_room_id);
+  });
+}
+```
+
+### Log in to the ZIM SDK
+
+For client A and client B to send, receive, and renew the Token after creating the ZIM SDK instance, they will need to log in to the ZIM SDK.
+
+To log in, Clients A and B both need to do the following:
+1. Call the [ZIMUserInfo](@-ZIMUserInfo)  method to create a user object.
+2. Then, call the [login](@login) method with their own user information and the Token they get in the previous **Prerequisites** steps.
+
+<Warning title="Warning">
+
+- You can custom the **userID** and **userName**, and we recommend you set the  **userID** to a meaningful value and associate them with the account system of your application.
+- For SDK 2.3.0 or later: The SDK uses the AppSign authentication mode by default. You only need to pass the [ZIMUserInfo](@-ZIMUserInfo) when logging in. 
+
+- If you use the Token-based authentication mode, please refer to the [Authentication](./Guides/Users/Authentication.mdx) to get the Token first, and pass it when logging in. 
+</Warning>
+
+
+```cpp
+// userID must be within 32 bytes, and can only contain letters, numbers, and the following special characters: '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '=', '-', '`', ';', '’', ',', '.', '<', '>', '/', '\'.
+//  userName must be within 256 bytes, no special characters limited.
+zim::ZIMUserInfo user_info;
+user_info.userID = user_id;
+user_info.userName = user_name;
+
+// When logging in: 
+// If you are using the Token-based authentication mode, you will need to fill in the Token which you generated by referring to the [Authentication] doc.
+// If you are using the AppSign mode for authentication (the default auth mode for v2.3.0 or later), leave the Token parameter blank. 
+
+zim_->login(user_info, [=](zim::ZIMError errorInfo){
+    // You can get the return code to check whether the login is successful. And handle it accordingly if the login fails. 
+});
+```
+
+
+### Send messages 
+
+Client A can send messages to client B after logging in successfully. 
+
+Currently, the ZIM SDK supports the following message types:
+
+<table>
+
+<tbody><tr data-row-level="1">
+<th>Message type</th>
+<th>Description</th>
+<th>Details</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>Text message. Size limit: 32 KB. Rate limit: 10 requests/second.</td>
+<td>Enable messages to be more deliverable, and can be stored as message history. Suitable for one-on-one chat and group chat.</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message. Size limit: 5 KB. Rate limit: 10 requests/second. </td>
+<td>Supports massive concurrency. Suitable for live audio room, online classroom, the messages won't be stored after the room is destroyed. </td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>In-room barrage message (bullet) screen message). Size limit: 5 KB. No specific rate limit. </td>
+<td><p>The high-frequency messages that don't require 100% deliverability, this message type is often used to send bullet screen messages. </p><p>Supports massive concurrency, but the message deliverability can't be guaranteed. </p></td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports major image formats, including JPG, PNG, BMP, TIFF, and GIF. Size limit: 10 MB. Rate limit: 10 requests/second. </td>
+<td rowspan="4">Enable messages to be more deliverable, and can be stored as history messages. Suitable for one-on-one chat, room chat, and group chat.</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. Supports files in any format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports voice messages in MP3 format within 300 seconds. Size limit: 6 MB. Rate limit: 10 requests/second. </td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>Video message. Supports video messages in MP4 or MOV format. Size limit: 100 MB. Rate limit: 10 requests/second. </td>
+</tr>
+</tbody>
+</table>
+
+
+
+To send one-to-one messages, for example, client A wants to send a message to client B, then client A needs to call the [sendMessage](@sendMessage) method with client B's userID, message content, and the [ZIMConversationType](@-ZIMConversationType)
+And client A can be notified whether the message is delivered successfully through the callback [ZIMMessageSentCallback](/article/api?doc=zim_API~cpp_windows~interface~ZIMDefines#zim-message-sent-callback) (correspond to the `send_callback` shows below).
+
+- [onMessageAttached](@onMessageAttached-ZIMMediaMessageSendNotification) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage](@-ZIMMessage) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of th
+
+```cpp
+// The following shows how to send one-to-one text message.
+zim::ZIMMessage* message = nullptr;
+zim::ZIMTextMessage text_message;
+text_message.message = "message";
+// Set priority for the message. 1: Low (by default). 2: Medium. 3: High.
+zim::ZIMMessageSendConfig config;
+config.priority = zim::ZIM_MESSAGE_PRIORITY_LOW;
+message = &text_message;
+
+auto smessage = std::make_shared<zim::ZIMTextMessage>("test 1");
+auto notification = std::make_shared<zim::ZIMMessageSendNotification>();
+
+notification->onMessageAttached = std::move([=](const std::shared_ptr<zim::ZIMMessage> &message) { int i = 0; });
+
+// In 1-on-1 chats, the conversationID is the peer user ID. In group chats, the conversationID is the groupID. In the chat room, the conversationID is the roomID.
+zim_->sendMessage(std::static_pointer_cast<zim::ZIMMessage>(smessage), "conversationID",
+                          zim::ZIMConversationType::ZIM_CONVERSATION_TYPE_PEER, sendConfig,
+                          notification,
+                          [=](const std::shared_ptr<zim::ZIMMessage> &message,
+                              const zim::ZIMError &errorInfo) { int i = 0; });
+```
+
+
+### Receive messages
+
+After client B logs in, he will receive client A's message through the callback [onReceivePeerMessage](@onReceivePeerMessage) which is already set in the [setEventHandler](@setEventHandler) method. 
+
+<div class = 'mk-warning'>
+
+When a message is received, you need to determine whether the message is a Text message or a Command message because these two message types are based on the basic message. You need to convert the basic message class to a concrete message type and then retrieve the message content from the `Message` field.
+</div>
+
+```cpp
+// The OnReceiveRoomMessage here refers to the onReceiveRoomMessage of the bounded SDK.
+void ZIMConversationView::OnReceivePeerMessage(zim::ZIM* zim, const std::vector<std::shared_ptr<zim::ZIMMessage>>& message_list, const std::string& from_user_id)
+{
+  for (auto message : message_list)
+  {
+    if (message->type == zim::ZIM_MESSAGE_TYPE_CUSTOM)
+    {
+      auto custom_message = std::dynamic_pointer_cast<zim::ZIMCustomMessage>(message);
+
+      CFile file;
+      file.Open(L"Binary message file", CFile::typeBinary | CFile::shareDenyNone | CFile::modeCreate | CFile::modeReadWrite);
+
+      file.Write(&custom_message->message[0], custom_message->message.size());
+    }
+  }
+
+  auto conversation = FindConversation(Utf8ToUnicode(from_user_id), kCurrentConversationTypePeer);
+  conversation->messages.insert(conversation->messages.end(), message_list.begin(), message_list.end());
+  UpdateConversationList();
+}
+```
+
+### Log out 
+
+For a client to log out, call the [logout](@logout) method. 
+
+```cpp
+zim_->logout();
+```
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [destroy](@destroy) method.
+
+```cpp
+zim_->destroy();
+```

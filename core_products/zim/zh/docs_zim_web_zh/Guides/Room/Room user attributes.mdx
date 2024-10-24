@@ -1,0 +1,138 @@
+---
+articleID: 15514
+---
+# Manage room user attributes
+- - -
+## Overview
+The In-app Chat SDK provides the feature of configuring user attributes of users in a room, that is, customizing user attributes of users in a room.
+This feature applies to the following scenarios:
+- Configure roles of room members, such as setting the room owner, administrator, participant, and participant level.
+- Turn on/off the camera, turn on/off the microphone, mute/unmute a user, and enable/disable whiteboard sharing.
+
+## Implementation process
+
+<Warning title="Warning">
+
+- User attributes of up to 500 users can be configured in each room, and the user attributes are stored in `Key-Value` format. To increase the maximum number of user attributes that can be configured in each room, developers can contact ZEGOCLOUD technical support.
+  
+- The total length of user attribute `Key-Value` pairs of each user in a room cannot exceed 144 bytes, and the number of `Key-Value` pairs cannot exceed 30. In a single `Key-Value` pair, the key cannot exceed 8 bytes, and the value cannot exceed 64 bytes. To increase the maximum length of a `Key-Value` pair, developers can contact ZEGOCLOUD technical support.
+  
+- After a room is destroyed, the configured customized user attributes are also deleted.
+</Warning>
+
+### Configure user attributes
+
+<Warning title="Warning">
+
+The operator and the user whose attributes are configured or modified must be users in the room.
+</Warning>
+
+Developers can call the [setRoomMembersAttributes](@setRoomMembersAttributes) API to configure user attributes of users in a room. Configured user attributes are stored in `Key-Value` format.
+- When a key does not exist, configuring user attributes indicates adding a user attribute.
+- When a key already exists, configuring user attributes indicates updating the value of an existing attribute.
+
+#### Parameter description
+
+| Parameter/Callback | Type | Required | Description |
+| ---- | ----| -------| -----|
+| attributes | Record{"<string, string>"}| Yes | The configured user attribute. |
+| userIDs | string[] | Yes | The IDs of the users whose attributes need to be configured. |
+| roomID | String | Yes | The ID of the room in which user attributes need to be configured. |
+| config | [ZIMRoomMemberAttributesSetConfig](@-ZIMRoomAttributesSetConfig)| Yes | <p>The configuration of a user attribute. `isDeleteAfterOwnerLeft` indicates whether the user attribute involved in this operation is automatically deleted after the owner leaves the room.</p><p><b> **If `config` is not configured, the user attribute is automatically deleted after the owner leaves the room by default.**</b></p> |
+| Promise | [ZIMRoomAttributesOperatedResult](@-ZIMRoomMembersAttributesOperatedResult) | Yes |<p> The result callback of the user attribute operation.</p> |
+
+#### Sample code
+
+```javascript
+const config = {
+    isDeleteAfterOwnerLeft: false
+};
+zim.setRoomMembersAttributes({'key1': 'value1'}, ['user1', 'user2'], 'roomID', config).then(res => {
+    // The service logic after the configuration result is returned. 
+});
+```
+
+### Query user attributes of some users
+
+Users in a room can call the [queryRoomMembersAttributes](@queryRoomMembersAttributes) API to query the user attributes of some users in the room.
+
+#### Parameter description
+
+
+| Parameter/Callback | Type | Required | Description |
+| ---- | ----| -------| -----|
+| userIDs | String | Yes | The IDs of the users whose user attributes need to be queried. |
+| roomID | String | Yes | The ID of the room in which the user attributes need to be queried. |
+| Promise | [ZIMRoomMembersAttributesQueriedResult](@-ZIMRoomMembersAttributesQueriedResult) | Yes | The result callback for querying user attributes. |
+
+#### Sample code
+```javascript
+ zim.queryRoomMembersAttributes['user1', 'user2'], 'roomID').then(res => {
+    // The service logic after the query result is returned. 
+});
+```
+
+
+### Query user attributes of all users
+
+
+Users in a room can call the [queryRoomMemberAttributesList](@queryRoomMemberAttributesList) API to query the user attributes of all users in the room.
+
+
+| Parameter/Callback | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomID | String| Yes | The ID of the room in which the user attributes need to be configured. |
+| config | [ZIMRoomMemberAttributesQueryConfig](@-ZIMRoomMemberAttributesQueryConfig)| Yes | <p>The configuration of a user attribute. </p><ul><li>`nextFlag`: During the first query, a null character string is passed. During second and subsequent queries, `nextFlag` returned in `callback` is passed. If `nextflag` returned in `callback` is null, the query is completed.</li> <li>`count`: The number of users on one page during the page-based query.</li> </ul> |
+| Promise  | [ZIMRoomMembersAttributesQueriedResult](@-ZIMRoomMembersAttributesQueriedResult) | Yes | The result callback for querying user attributes of all users. After a successful query, user attributes of all users in the room are returned. |
+
+#### Sample code
+
+```javascript
+const config = {
+    nextFlag: '',
+    count: 100
+}
+zim.queryRoomMemberAttributesList('roomID', config).then(res => {
+    // The service logic after the query result is returned.  
+});
+```
+
+### User attribute change notification
+When user attributes of members in a room are changed, developers can register the [roomMemberAttributesUpdated](@roomMemberAttributesUpdated) method of the [on](@on) callback API to listen for user attribute change notifications of members in the room.
+
+```typescript
+zim.on('roomMemberAttributesUpdated', (zim, data) => {
+    //The service logic after user attributes of members in a room are changed.
+});
+```
+
+<Note title="Note">
+
+When a user in a room calls the [setRoomMembersAttributes](@setRoomMembersAttributes) API:
+    
+- If the number of users in the room is less than or equal to 500, all users in the room will receive the user attribute change notification.
+  
+- If the number of users in the room exceeds 500, only the operator and the user whose attribute is configured or modified will receive the user attribute change notification.
+  
+To increase the maximum number of users in the room who can receive the user attribute change notification, developers can contact ZEGOCLOUD technical support.
+</Note>
+
+### Batch query room user information
+
+Developers can use the [queryRoomMembers](@queryRoomMembers) interface to batch query the information of users in a room by providing the roomID and an array of userIDs. After a successful API call, the interface will return the memberList of users found in the room (which can be used to confirm the presence of the target users in the room), as well as the errorUserList of users not found in the room.
+
+<Note title="Note">
+
+The default limit for batch querying user quantity is 10.
+</Note>
+
+The example code is shown below:
+
+```javascript
+
+const userIDs = ['user1', 'user2'];
+
+zim.queryRoomMembers(userIDs, 'roomID').then(res => {
+    // Write your business logic here after receiving the query result  
+});
+```

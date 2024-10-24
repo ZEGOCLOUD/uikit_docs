@@ -1,0 +1,468 @@
+# ZIM release Note 
+
+- - -
+
+## Version 2.17.1 
+
+**Release date: 2024-08-15**
+
+<h5>Enhancement</h5>
+
+Known issues fixed.
+
+---
+
+## Version 2.17.0
+
+**Release date: 2024-08-05**
+
+<h5>New features</h5>
+
+| Feature | Description | Related APIs |
+| ----- | ---- | ----- |
+| Conversation Marking | Supports users to mark conversations, suitable for scenarios where users need to pay attention to certain conversations or cannot handle certain conversations. This feature can be used to group conversations by setting the same mark for multiple conversations. For client implementation, please refer to [Mark Conversations](./../Guides/Conversation/Mark%20conversations.mdx). For server implementation, please refer to [Set Conversation Marks](/zim-server/conversation/set-conversation-marks). | <ul><li>[setConversationMark](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationMark.html)</li><li>[Set Conversation Marks](/zim-server/conversation/set-conversation-marks)</li></ul> |
+| Query Conversation List | Supports filtering conversation list by mark, conversation type, and whether it contains unread messages. For more details, please refer to [Mark Conversations](./../Guides/Conversation/Mark%20conversations.mdx). | [queryConversationList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html) |
+| Query Total Unread Message Count By Marks | Supports filtering unread message count by mark. For more details, please refer to [Mark Conversations](./../Guides/Conversation/Mark%20conversations.mdx). | [queryConversationTotalUnreadMessageCount](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationTotalUnreadMessageCount.html) |
+| Reply to Message | Supports users to reply to a specific message within a conversation. Currently supports replying with text, image, file, audio, video, merged, and custom messages. In addition, users can also query the reply tree to get the complete list of replied messages. For more details, please refer to [Reply to a message](./../Guides/Messaging/Reply%20to%20a%20message.md). | <ul><li>[replyMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/replyMessage.html)</li><li>[queryMessageRepliedList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageRepliedList.html)</li></ul> |
+| Get Specific Message List | Supports querying a specific list of historical messages, suitable for scenarios where users need to understand the context of a certain message. For more details, please refer to [Get message history](./../Guides/Messaging/Get%20message%20history.md) | [queryMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessages.html) |
+| Sender Unaware When Sending Messages by Server APIs | Newly adds `SenderUnaware` field, allowing the client corresponding to the `FromUserId` (sender's user ID) in the request parameters to be unaware of the sending of the peer-to-peer message sent by the server. | [Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message) |
+
+---
+
+## Version 2.16.0 
+
+**Release date: 2024-06-03**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method|
+| -----  | ---- | ----- |
+| Server-side management of call invitations | Supports initiating, accepting and rejecting call invitations on the server side.| <ul><li>[Send a call invitation](/zim-server/call-invitation/send-a-call-invitation)</li><li>[Accept a call invitation](/zim-server/call-invitation/accept-a-call-invitation)</li><li>[Reject a call invitation](/zim-server/call-invitation/reject-a-call-invitation)</li></ul> |
+| Server-side management muting | Supports muting groups and specific group members on the server. | <ul><li> [Mute a group](/zim-server/group/mute-a-group)</li><li>[Mute group members](/zim-server/group/mute-group-members)</li></ul> |
+| Server-side setting group member roles| Supports modifying group member roles on the server. | [Set group member roles](/zim-server/group/set-group-member-roles) |
+| Supports iOS version 17.0 | <p>Warning: Starting from this version, iOS 11.0 and earlier versions are no longer supported. </p> Starting from 2024-04-29, all apps listed on the App Store must support iOS 17.0. For details, please refer to [Official description on Apple Developer website](https://developer.apple.com/news/upcoming-requirements/?id=04292024a). | - |
+
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Optimize receipts| Includes real-time perception of receipt expiration status, supports offline query of receipt details, and supports query of group receipt details for groups with more than 100 members; | <ul><li>[queryGroupMessageReceiptReadMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptReadMemberList.html)</li><li>[queryGroupMessageReceiptUnreadMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptUnreadMemberList.html)</li></ul> |
+| Call invitation | Supports users to pass in a specified userID through the [callCancel](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callCancel.html) interface when making advanced call invitations, and only cancel the call for this user without affecting the global call status. |   [callCancel](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callCancel.html)|
+| Privacy file | This iteration of ZIM iOS SDK adds the privacy manifest file PrivacyInfo.xcprivacy. <p>Warning: If the developer has integrated an SDK before version 2.16.0, please update the latest version of the SDK to avoid the risk of review when the App Store is listed without a privacy manifest file. </p> | - |
+
+
+
+## Version 2.14.1
+
+**Release date: 2024-03-05**
+
+<h5>Enhancement</h5>
+
+Known issues fixed.
+
+---
+
+
+## Version 2.14.0 
+
+**Release date: 2024-02-04**
+
+<h5>New features</h5>
+
+| Item  | Description | Method |
+|-------|-------|-------|
+| Forwarding messages | <ul><li>Users can construct a merged message body and pass it to the send message API to forward merged messages.<p>Note: If you want to forward messages one by one, you can simply pass the existing message as a parameter to the send message API.</p></li><li>Supports querying the specific content of sub-messages included in a merged message.</li></ul> | <ul><li>[ZIMCombineMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCombineMessage-class.html)</li><li>[sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)</li><li>[queryCombineMessageDetail](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryCombineMessageDetail.html)</li></ul> |
+| Send and receive @ messages| Users can mention specific users (who may not be in the current conversation) or mention all members in a conversation when sending a message. | <ul><li>[ZIMMessage > mentionedUserIDs](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/mentionedUserIds.html)</li><li>[ZIMMessage > isMentionAll](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/isMentionAll.html)</li></ul> |
+| Deleting messages | Users can delete all messages in a conversation at once.| [deleteAllConversationMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversationMessages.html) |
+| Saving conversation drafts |  ZIM allows users to save conversation drafts locally even after exiting one-on-one or group chat conversations for future editing.  | [setConversationDraft](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationDraft.html) |
+| Do not disturb for one-on-one conversations  | In addition to "Do Not Disturb" for group conversations, ZIM now supports setting "Do Not Disturb" for one-on-one conversations. Users will not receive notifications for new messages in one-on-one conversations.  |[setConversationNotificationStatus](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setConversationNotificationStatus.html)  |
+| Muting | Supports group owners to mute groups and mute specific group members. Muting groups can be applied to all members, ordinary members, or members with specific roles.  | <ul><li>[muteGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/muteGroup.html)</li><li>[muteGroupMembers](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/muteGroupMembers.html)</li></ul>|
+| Friend management | Users can directly add and delete friends, view friend lists, send friend requests to users, accept or reject friend requests, view friend request lists, check the friend relationship between other users and themselves, query or modify friend information, and search for friends. | <ul><li>[addFriend](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/addFriend.html)</li><li>[deleteFriends](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteFriends.html)</li><li>[sendFriendApplication](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendFriendApplication.html)</li><li>[acceptFriendApplication](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/acceptFriendApplication.html)</li><li>[rejectFriendApplication](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/rejectFriendApplication.html)</li><li>[checkFriendsRelation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/checkFriendsRelation.html)</li><li>[queryFriendList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryFriendList.html)</li><li>[queryFriendApplicationList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryFriendApplicationList.html)</li><li>[updateFriendAlias](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateFriendAlias.html)</li><li>[updateFriendAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateFriendAttributes.html)</li><li>[queryFriendsInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryFriendsInfo.html)</li><li>[searchLocalFriends](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalFriends.html)</li></ul> |
+| Set sensitive word filtering | After enabling the security audit, developers can add additional sensitive words. When a user sends a message containing sensitive words, the message will be audited, and the content may be replaced or intercepted. <p>Note: To use this feature, please contact the ZEGOCLOUD technical support team.</p> | - |
+| Server-side Conversation Muting | Supports setting the mute notification status for group chat and one-on-one conversations on the server-side.| [Mute notifications for conversations](/zim-server/conversation/mute-notifications-for-conversations) |
+| Pin conversations on the server side | Supports setting the pinned status for user conversations on the server side.  | [Pin conversations to the top](/zim-server/conversation/pin-conversations-to-the-top) |
+| Modify group information on the server side | Supports modifying the avatar, name, and announcement of a pinned group on the server side. <p>Note: To use this feature, please contact the ZEGOCLOUD technical support team.</p> | - |
+| Manage friends on the server side| Supports adding and deleting friends for users, querying the friend list, checking friend relationships, and updating friend aliases and attributes.  | <ul><li>[Batch add friends](/zim-server/user/batch-add-friends)</li><li>[Batch send friend requests](/zim-server/user/batch-send-friend-requests)</li><li>[Batch delete friends](/zim-server/user/batch-delete-friends)</li><li>[Query the friend list](/zim-server/user/query-the-friend-list)</li><li>[Check friendships](/zim-server/user/check-friendships)</li><li>[Change the alias of a friend](/zim-server/user/change-the-alias-of-a-friend)</li><li>[Modify the attributes of a friend](/zim-server/user/modify-the-attributes-of-a-friend)</li></ul> |
+| Manage blacklist on the server side  | Supports batch blocking and unblocking users, querying the blacklist, and checking blacklist relationships for users. | <ul><li>[Batch block users](/zim-server/user/batch-block-users)</li><li>[Batch unblock users](/zim-server/user/batch-unblock-users)</li><li>[Query the blocklist](/zim-server/user/query-the-blocklist)</li><li>[Check blockships](/zim-server/user/check-blockships)</li></ul> |
+
+---
+
+## Version 2.13.1 
+
+**Release date: 2024-01-12**
+
+<h5>Enhancement</h5>
+
+Known issues fixed.
+
+---
+
+## Version 2.13.0 
+
+**Release date: 2024-01-08**
+
+<Warning title="Warning">
+
+[Compilation issues when upgrading to version 2.13.0, must read before upgrading >>](#15086#2_13_0)
+
+</Warning>
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Multi-device login | The "multi-device login" strategy supports configuring the logic for kicking each other out. Currently, it only supports kicking out between Android and iOS devices, as well as between Windows and Mac devices.  | [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html)) |
+| Offline login | Supports users to login to the IM service and access local SDK data while being offline. | [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) |
+| Blacklist management | You can query your own blacklist, block specific users (no longer receive messages from them), remove users from the blacklist, and check if a specific user is in the blacklist. | <ul><li>[queryBlackLis</li><li>[queryBlackList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryBlacklist.html)</li><li>[addUsersToBlacklist](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/addUsersToBlacklist.html)</li><li>[removeUsersFromBlacklist](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/removeUsersFromBlacklist.html)</li><li>[checkUserIsInBlacklist](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/checkUserIsInBlacklist.html)</li></ul> |
+| Insert local message | Support inserting local messages into room conversations. | [insertMessageToLocalDB](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/insertMessageToLocalDB.html) |
+| Call Invitation | Add callback [onCallInvitationCreated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationCreated.html). The initiator of the call invitation can know that the call invitation has been created by listening to this callback. | [onCallInvitationCreated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationCreated.html) |
+| Server-side message retraction |Supports calling the interface from the server to retract one-on-one messages and group chat messages. | <ul><li>[Recall a one-to-one message](/zim-server/messaging/recall-a-one-to-one-message)</li><li>[Recall a group message](/zim-server/messaging/recall-a-group-message)</li></ul> |
+| Server-side user profile modification | Supports calling the interface from the server to modify user profile information, including user nickname, avatar, etc. | [Modify user information](/zim-server/user/modify-user-information) |
+
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Optimize roomID length limitation | Supports a maximum length of 128 bytes for [roomID](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomInfo/roomID.html).| [ZIMRoomInfo > roomID](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomInfo/roomID.html) |
+| Added user avatar field to user information related classes | [ZIMUserInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfo-class.html) and [ZIMGroupMemberInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberInfo-class.html) added `userAvatarUrl` field, which is used to set or describe the user avatar address.<p>Warning: The user avatar field for room members is currently not supported. This means that the `userAvatarUrl` in the `ZIMUserInfo` obtained through [queryRoomMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberList.html) and [queryRoomMembers](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembers.html) will be empty.</p> | <ul><li>[ZIMUserInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfo-class.html)</li><li>[ZIMGroupMemberInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberInfo-class.html)</li></ul> |
+| Optimize the call back logic of [onRoomStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html) | When developers call the ZIM server API to destroy a room in the backend, the callback [onRoomStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html) that describes the room state change reason is modified to `roomNotExist`. | [onRoomStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomStateChanged.html) |
+| Added new response parameters to the server interface for sending one-to-one chat messages  | Added the  `SuccessList` parameter, with member parameters including `UserId`、`MsgId` and `MsgSeq`, to provide information about users who have successfully received the message. `MsgSeq` can be used for [Recall a one-to-one message](/zim-server/messaging/recall-a-one-to-one-message).| [Send a one-to-one messages](/zim-server/messaging/send-a-one-to-one-message) |
+| Added new response parameters to the server interface for sending group chat messages | Added `MsgSeq`, which can be used to [Recall a group message](/zim-server/messaging/recall-a-group-message). | [Send group messages](/zim-server/messaging/send-group-messages) |
+| New field for server callback after the message is sent | Added `user_list` field, used to return messages in batches to receive user information. <p>Warning: Only when developers call the server interface [Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message), this field will have a value.</p> | [Callback on message sent](/zim-server/callbacks/message-sent) |
+
+<h5>Deprecation</h5>
+
+| Item | Description | Method |
+| -----  | ---- | ----- |
+| Abandon the `loginWithUserInfo` interface | Abandon the old login interface and add a new login interface [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html). The new version of the login interface supports more configurations through [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html), such as whether to use Token authentication and whether to log in offline.| [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) |
+| Part of the user information-related classes have deprecated the old avatar field. | <ul><li>The `memberAvatarUrl` in [ZIMGroupMemberInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberInfo-class.html) is deprecated . Please use the new field `userAvatarUrl`.</li><li>The `userAvatarUrl` in [ZIMUserFullInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserFullInfo-class.html) is deprecated. Please retrieve `userAvatarUrl` from `baseInfo`. </li></ul> | <ul><li>[ZIMGroupMemberInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberInfo-class.html)</li><li>[ZIMUserFullInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserFullInfo-class.html)</li></ul> |
+
+---
+
+## Version 2.12.1 
+
+**Release date: 2023-11-29**
+
+<h5>Enhancement</h5>
+
+Known issues fixed.
+
+---
+
+## Version 2.12.0 
+
+**Release date: 2023-11-21**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Geofencing |  Provides geofencing services, ensuring that IM data is stored locally and suitable for high-security overseas scenarios. | [setGeofencingConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setGeofencingConfig.html) |
+| Group message management | Supports automatic retrieval of group history messages for new members joining the group. <p>If you need to use this feature, please contact the ZEGOCLOUD technical support team for configuration.</p> | <ul><li>[joinGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/joinGroup.html)</li><li>[inviteUsersIntoGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/inviteUsersIntoGroup.html)</li></ul> |
+| Read all with one click | Supports clearing the unread message count and total unread message count for all conversations. | [clearConversationTotalUnreadMessageCount](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/clearConversationTotalUnreadMessageCount.html) |
+| Call invitation| Supports calling external users to join advanced mode calls or calling internal users to switch devices. | [callJoin](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callJoin.html)  |
+| Delete all conversation lists | Supports clearing the current conversation list. |[deleteAllConversations](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversations.html) | |
+| Server-Side API for adding group members | Supports adding specified users to a group.  | [Add group members](/zim-server/group/add-group-members) |
+| Server-side API for dismissing a group | Supports dismissing a specified group.  | [Disband a group chat](/zim-server/group/disband-a-group-chat) |
+| Server-side API for transferring group ownership | Supports transferring group ownership to a specified group member. | [Transfer the group ownership](/zim-server/group/transfer-the-group-ownership) |
+| Server-side API for setting group member nickname | Supports setting the nickname for a specified group member. | [Set nicknames of group members](/zim-server/group/set-nicknames-of-group-members) |
+| Server-side message with receipt | When sending one-to-one messages or group messages through the server, you can attach a receipt to know if the message has been read. Supported message types include text, image, file, audio, video, and custom messages. For more details, please refer to [MessageBody introduction](/zim-server/messagebody-introduction). | <ul><li>[Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message)</li><li>[Send group messages](/zim-server/messaging/send-group-messages)</li></ul> |
+| Server-Side login and logout callback |When a user logs in or logs out, the ZIM server will actively notify the developer's server through callbacks.  | [ Login and logout callback ](/zim-server/callbacks/login-and-logout) |
+| Offline push to all users  | When using the server-side API for pushing messages to all users, you can choose the push type to achieve offline push. | [Push message to all users](/zim-server/messaging/push-message-to-all-users) |
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+|  Login logic optimization| Optimized the login logic to avoid multiple devices kicking each other out in weak network environments. | - |
+| Server callback for call creation | The server callback for call creation now includes the `caller` field, which indicates the user who initiated the call. For more details, please refer to [Callback on call invitation sent](/zim-server/callbacks/call-invitation-sent). | - |
+
+---
+
+## Version 2.11.0 
+
+**Release date: 2023-10-26**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Multi-device login| Support for configuring dual-platform or multi-platform login strategies allows users to log in to the same account on multiple platforms or devices simultaneously, enabling data synchronization for sessions, messages, groups, and other features across multiple devices. For more information on the impact of multi-platform login on other functions, please refer to [Multi-device login](./../Guides/Users/Multi-device%20login.mdx).<p>Note: This feature is only supported for users of the Professional or Ultimate packages and they must contact the ZEGOCLOUD technical support team to configure the login policy.</p> | [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) |
+
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Added support for server-Side signaling message types | Supports sending binary signaling messages encoded in base64 through the server. For more details, please refer to [MessageBody introduction](/zim-server/messagebody-introduction). | - |
+| Optimized logic for unpinning conversations| After deleting a pinned conversation, the pinned status of the conversation（[ZIMConversation > isPinned](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversation/isPinned.html)）will not be automatically changed to `No`. When there are new messages in this conversation and it appears in the conversation list again, it will still be a pinned conversation. | - |
+
+---
+
+
+## Version 2.10.0
+
+**Release date: 2023-09-01**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+|  Respond to messages with emoticons | Supports responding to messages with emoticons in one-on-one chats and group chats. It can be used for scenarios such as replying with emojis and initiating group polls or confirming group results. Additionally, it supports deleting one's own reactions and querying user information related to a specific reaction.  | <ul><li>[addMessageReaction](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/addMessageReaction.html)</li><li>[deleteMessageReaction](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessageReaction.html)</li><li>[queryMessageReactionUserList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageReactionUserList.html)</li></ul> |
+| Sender unaware for server-side peer messaging  | Added the `SenderUnaware`  field, which allows the client associated with the `FromUserId`(sender's user ID) to be unaware of the server-side peer message being sent.  | [Send one-to-one messages](/zim-server/messaging/send-a-one-to-one-message) |
+| Server-side broadcast messaging | Supports sending messages with specific content, such as text and images, to all online users, including the message sender. This feature is suitable for scenarios like broadcasting announcements or displaying cross-room gift animations.  | <ul><li>[Push message to all users](/zim-server/messaging/push-message-to-all-users)</li><li>[onBroadcastMessageReceived](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onBroadcastMessageReceived.html)</li></ul>  |
+| The server has added a new interface to query whether the user is in the room | This interface supports querying whether a specified user is present in the target room. | [Query whether a user is in a room](/zim-server/room/query-whether-a-user-is-in-a-room) |
+
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Adjusting the maximum length of user nickname, UserName | Extended from 64 bytes to 256 bytes, supports longer nicknames, applicable to ZIM SDK version 2.0.0 and later. | [ZIMUserInfo > userName](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfo/userName.html) |
+
+---
+
+## Version 2.9.0 
+
+**Release date: 2023-07-19**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Call invitation new mode | Added advanced mode, supports inviting, exiting, and ending calls during a call. | <ul><li>[callingInvite](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callingInvite.html)</li><li>[callQuit](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callQuit.html)</li><li>[callEnd](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callEnd.html)</li></ul> |
+| Revoke other's message | In group conversations, the group owner can revoke messages sent by others. | [revokeMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/revokeMessage.html) |
+| Get room member information | Supports calling server-side API to get information about room members based on room ID, including the number of users in the room, user IDs, and names.| [Obtain information about users in a room](/zim-server/room/obtain-information-about-users-in-a-room) |
+| Server-side message sending API now supports more message types |  Supports sending image, file, audio, video, custom, and barrage message types through the server-side API. For details, please refer to [MessageBody introduction](/zim-server/messagebody-introduction). | <ul><li>[Send a one-to-one message](/zim-server/messaging/send-a-one-to-one-message)</li><li>[Send group messages](/zim-server/messaging/send-group-messages)</li><li>[Send room messages](/zim-server/messaging/send-room-messages)</li></ul> |
+| Set message extension fields | Added message extension fields that are only visible on the local end, supports updating this field, can be used to display message translation status or other content. | <ul><li>[localExtendedData](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/localExtendedData.html)</li><li>[updateMessageLocalExtendedData](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateMessageLocalExtendedData.html)</li></ul> | 
+| Search local messages | Search local messages in individual or all 'one-to-one' and 'group' conversations based on keywords, user IDs, and other conditions, and retrieve a list of messages that meet the criteria; can also search conversations based on local messages. | <ul><li>[searchLocalMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalMessages.html)</li><li>[searchGlobalLocalMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchGlobalLocalMessages.html)</li><li>[searchLocalConversations](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalConversations.html)</li></ul> |
+| Search groups |  Supports searching for group names based on keywords, and also supports including group member names and nicknames in the search scope.| [searchLocalGroups](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalGroups.html) |
+| Search group members |  Supports searching for group members' names in a specific group based on keywords, and also supports including group members' nicknames in the search scope.   | [searchLocalGroupMembers](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/searchLocalGroupMembers.html) |
+
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Call invitation reception callback |  Optimize the regular mode of call invitation, support offline users to receive call invitations and be immediately notified upon going online within the timeout period of the call invitation.| [onCallUserStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallUserStateChanged.html) |
+
+<h5>Deprecation</h5>
+
+| Method | Description | Change version |
+| -----  | ---- | ----- |
+| <ul><li>[onCallInvitationAccepted](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationAccepted.html)</li><li>[onCallInvitationRejected](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationRejected.html)</li><li>[onCallInviteesAnsweredTimeout](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInviteesAnsweredTimeout.html)</li></ul> | To facilitate developers to monitor the call status changes of users in call invitations, [onCallUserStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallUserStateChanged.html) is added to replace the original call invitation callbacks `onCallInvitationAccepted`、`onCallInvitationRejected` and `onCallInviteesAnsweredTimeout`. | 2.9.0 |
+
+---
+
+
+## Version 2.8.0
+
+**Release date: 2023-05-23**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+|  Pin conversation | Users can choose conversations they want to prioritize and pin them at the top of the conversation list.  | [onCallUserStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallUserStateChanged.html) |
+| Custom message types | Added custom message types, developers can define their own message types, such as voting, chain reaction, video card, etc., and handle message parsing themselves. ZIM SDK does not define or parse the specific content of custom messages. | [ZIMCustomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCustomMessage-class.html) |
+| Query conversation information | Query detailed information of a conversation by specifying the conversation ID. | [queryConversation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversation.html) |
+| Query user status in a room | By specifying multiple user IDs and the room ID, query whether the target users are in the specified room, in order to design business logic such as inviting for co-live streaming. <p>Note: Supports querying information of up to 10 users at a time.</p> | [queryRoomMember](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembers.html) |
+| Pre-send message callback | By setting server-side callbacks, when users send one-on-one, group, or room chat messages, ZIM sends requests to the developer's server. Developers can implement:<ul><li>Intercepting inappropriate messages.</li><li>Establishing user blacklists and whitelists.</li></ul>  | [Callback on message not sent yet](/zim-server/callbacks/message-not-sent-yet) |
+| Post-send message callback| By setting server-side callbacks, after users successfully or unsuccessfully send one-on-one, group, or room chat messages, ZIM sends requests to the developer's server. Developers can implement:<ul><li>Real-time recording of messages sent by users.</li><li>Statistics of messages sent by users.</li><li>In live streaming and screen recording scenarios, embedding chat records into recorded videos using timestamps.</li></ul>  | [Callback on message sent](/zim-server/callbacks/message-sent) |
+| Batch user registration | Supports calling server-side APIs to specify user information (user ID, etc.), allowing developers to register multiple users with a single request.<p>Note: Supports registering up to 100 users at a time.</p> | [Batch register users](/zim-server/user/batch-register-users) |
+| Query group list under an app | Supports calling server-side APIs to retrieve the IDs of all groups in the app.  | [Query group list in the app](/zim-server/group/query-group-list-in-the-app) |
+| Query group member list | Supports calling server-side APIs to specify the group ID and retrieve the member list of the corresponding group.  | [Query group member list](/zim-server/group/query-group-member-list) |
+| Remove group members | Supports calling server-side APIs to specify the group ID and user ID, and remove group members in batch. <p>Note: Supports removing up to 50 group members at a time.</p> | [Remove group member](/zim-server/group/remove-group-member) |
+
+<h5>Deprecation</h5>
+
+| Item | Description | Method |
+| -----  | ---- | ----- |
+| Deprecated system message types | The system message type (value 30) in [ZIMMessageType](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageType.html) have been deprecated. Developers are advised to use more versatile custom messages (value 200) instead. | [ZIMMessageTypeCustom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageType.html#custom) |
+
+<h5>Others</h5>
+
+#### 1. Starting from version 2.8.0, ZIM no longer supports iOS versions below 11.0. Developers' iOS Deployment Target (minimum supported version) is raised to iOS 11.0.
+
+For more details, please refer to [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
+#### 2. Starting from version 2.8.0, ZIM iOS SDK no longer supports the 32-bit armv7 architecture.
+
+For more details, please refer to [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+
+#### 3. Starting from version 2.8.0, ZIM no longer supports macOS versions below 10.13. Developers' macOS Deployment Target (minimum supported version) is raised to macOS 10.13.
+
+For more details, please refer to [App Store submission requirement starts April 25](https://developer.apple.com/news/?id=jd9wcyov) and [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Build-System).
+---
+
+
+
+## Version 2.7.1  
+
+**Release date: 2023-03-15**
+
+<h5>Enhancement</h5>
+
+Known issues fixed.
+
+---
+
+## Version 2.7.0
+
+**Release date: 2023-03-07**
+
+<h5>Enhancement</h5>
+
+| Item  | Description | Method |
+| -----  | ---- | ----- |
+| Optimization of clearing userName during user login | Distinguish between the interface for modifying the username and the interface for logging in. When a user logs in and clears the userName, the userName will no longer be modified, optimizing the user login experience. | [userName](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserInfo/userName.html) |
+| Optimization of session message fetching timing | The SDK intelligently detects the user's session activity to optimize the timing of data synchronization, improving user query speed and experience. | - |
+| Optimization of network reconnection timing | After the APP loses network connection, the SDK will continuously detect changes in network status and the foreground/background status of the APP, speeding up the user's reconnection process. | - |
+
+---
+
+
+## Version 2.6.0 
+
+
+**Release date: 2023-01-11**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Added server callbacks related to call invitation| You can confirm the results of the call invitation via the server callbacks provided by In-app Chat, which suits the call invitations made in a weak network condition (results returned by the SDK can be volatile).   | <ul><li>[Callback on call invitation sent](/zim-server/callbacks/call-invitation-sent)</li><li>[Callback on call invitation canceled](/zim-server/callbacks/call-invitation-canceled)</li><li>[Callback on call invitation accepted](/zim-server/callbacks/call-invitation-accepted)</li><li>[Callback on call invitation rejected](/zim-server/callbacks/call-invitation-rejected)</li><li>[Callback on call invitation timed out](/zim-server/callbacks/call-invitation-timed-out)</li></ul>  |
+| Extended fields are added to the message body | The [extendedData](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/extendedData.html)  field is added to the [ZIMMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage-class.html), which enables the user avatars and nicknames to be passed in this field, and those can be displayed in real time when sending messages. 	| [extendedData](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage/extendedData.html) |
+| Added the callback for the message sending status | You can refine the logic of message sending status by listening for this callback. You can design UI logic to notify users when the message status changes. | [onMessageSentStatusChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onMessageSentStatusChanged.html) |
+
+<h5>Enhancement</h5>
+
+| Item | Description | Method |
+| -----  | ---- | ----- |
+| Optimized the logic of message sending under weak network conditions| When a message is sent on a weak network condition, the SDK uses policy logic to ensure the message sending status as much as possible. | - |
+
+---
+
+
+
+## Version 2.5.0 
+
+**Release date: 2022-11-30**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+|Message recall|  Sent messages can be recalled within 2 minutes by default. This is only supported in one-on-one chats and group chats. <p>Note: To customize the recall time, please contact ZEGOCLOUD technical support.</p>| <ul><li>[revokeMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/revokeMessage.html)</li><li>[ZIMMessageRevokedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageRevokedResult-class.html)</li></ul>|
+|Read receipts| [ZIMMessageSendConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSendConfig-class.html) added the hasReceipt parameter to allow sending messages with receipts in one-on-one and group chats. <br />In-app Chat SDK supports checking whether a user has read locally sent messages In a one-on-one chat and a group chat, as well as the number of read and unread messages in a group chat and the corresponding user information. **Receipts for signaling messages, barrage messages, and in-room messages are not supported.**| <ul><li>[ZIMMessageSendConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSendConfig-class.html)</li><li>[sendMessageReceiptsRead](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessageReceiptsRead.html)</li><li>[sendConversationMessageReceiptRead](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendConversationMessageReceiptRead.html)</li><li>[queryGroupMessageReceiptReadMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptReadMemberList.html)</li><li>[queryGroupMessageReceiptUnreadMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMessageReceiptUnreadMemberList.html)</li><li>[queryMessageReceiptsInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryMessageReceiptsInfo.html)</li></ul> |
+| Receives push notifications for all offline call invitations | Add the pushConfig parameter to support push call invitations to offline users. Offline users need to use the ZPNs SDK together to accept call invitations. | [ZIMCallInviteConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMCallInviteConfig-class.html) |
+
+<h5>Enhancement</h5>
+
+| Feature  | Description | Method |
+| -----  | ---- | ----- |
+| Changed the name of the extra field of [ZIMPushConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) | To avoid confusion, the extendedData parameter of [ZIMPushConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMPushConfig-class.html) is changed to payload, and the functionality remains the same. When you use the ZPNs SDK, you can retrieve additional fields passed in by the sender via the payload field in extras on the vendor channel. <p>Note: After integrating In-app Chat SDK 2.5.0, if you use the offline push function and the interface fails to compile, please change the extendedData to payload. </p> | - |
+
+
+<h5>Deprecation</h5>
+
+#### 1. bitcode is no longer supported.
+
+Starting with version 2.5.0, bitcode is no longer supported in the Flutter SDK. For more details, see [Xcode 14 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-14-release-notes#Deprecations).
+
+
+## Version 2.4.0 
+
+**Release date: 2022-10-17**
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+|Manage in-room user properties| Support room users to customize user properties. For example, user level, badge, status, etc.| <ul><li>[setRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomMembersAttributes.html)</li><li>[[queryRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembersAttributes.html)</li><li>[queryRoomMemberAttributesList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberAttributesList.html)</li></ul>|
+| System message added| The message type of the system message was added, and the SDK was supported to trigger the notification of entering the group, the change of the group owner, and other system messages.|- |
+| Inserting local messages| Support for inserting a message of any message type directly into the local. You can convert callback notifications (e.g., invite someone to a group, remove someone from a group, etc.) into system messages on the client side and insert them into the local database to achieve the effect of system prompts.| [insertMessageToLocalDB](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/insertMessageToLocalDB.html)|
+
+
+<h5>Enhancement</h5>
+
+| Feature  | Description | Method |
+| -----  | ---- | ----- |
+| Method for sending message is optimized| Optimized message object to be the same object before and after sending. When you are sending a large message such as a video, you can cache the message object before the message is uploaded. When you receive the SDK notification of successful delivery, you can achieve the effect of Loading before sending by comparing the objects to be the same.|  [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)  |
+| Logic of reconnection after disconnection is optimized | The logic for no-network status and reconnection after disconnection is optimized. | -|
+| Performance optimized | Optimized database performance. | -|
+
+
+<h5>API method changes</h5>
+
+- **New methods**
+
+| Method | Description | Change version |
+| :-------- | :------- | :----- |
+| [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html) |  New method to send messages, support one-to-one, in-room, and group messages. | 2.4.0 |
+
+
+- **Deprecation**
+
+| Method | Description | Change version |
+| :-------- | :------- | :----- |
+| <ul><li>[sendPeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendPeerMessage.html)</li><li>[sendRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendRoomMessage.html)</li><li>[sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html)</li></ul> | The method for sending one-to-one, in-room, and group messages ([sendPeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendPeerMessage.html), [sendRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendRoomMessage.html), [sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html)) are abandoned. We will be unified using the [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html) interface, making a more standard way of sending a message.   | 2.4.0 |
+
+
+## Version 2.3.0 
+
+**Release date: 2022-09-02**
+
+<Warning title="Warning">
+
+There may be compilation issues after upgrading to 2.3.0. We recommend that you check this before upgrading: [Upgrade guide](./ZIM%20upgrade%20guide.mdx)
+</Warning>
+
+
+<h5>New features</h5>
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Added extension fields | Support users to set their own personal information through the extension field, such as user profile picture, personality signature, gender, and other personal information. | [updateUserExtendedData](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserExtendedData.html) |
+| Added avatar field| In the user information and group related methods, the avatar field has been added, users can upload their own avatar, or custom group avatar.| <ul><li>[updateUserAvatarUrl](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateUserAvatarUrl.html)</li><li>[ZIMUserFullInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMUserFullInfo-class.html)</li><li>[updateGroupAvatarUrl](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/updateGroupAvatarUrl.html)</li><li>[ZIMGroupInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupInfo-class.html)</li><li>[ZIMConversation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversation-class.html)</li></ul>|
+| Supports AppSign authentication mode  | <p> The AppSign authentication mode is supported on iOS, Android, macOS, and Windows, which facilitates the integration process. </p><p>When authentication, you only need to call the [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html) method and fill in the AppSign you get, and you can use the In-app Chat service when authentication is passed. </p> | [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html)|
+|Support to set the width and height of image/video messages | <p>Make it more convenient to design the display effect of the picture:</p><ul><li>Image message: support to set the width and height of the "original image", the width and height of the "detail image", and the width and height of the "thumbnail".</li><li>Video message: support to set the width and height of the "first frame".</li></ul> | <ul><li>[ZIMImageMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMImageMessage-class.html)</li><li>[ZIMVideoMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMVideoMessage-class.html)</li></ul>|
+| Added a method for singleton instance object | This allows you to get the In-app Chat instance object easier.| [getInstance](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/getInstance.html)|
+
+
+
+
+<h5>Enhancement</h5>
+
+| Feature  | Description | Method |
+| -----  | ---- | ----- |
+| Logic optimized  | <ul><li>Improved API logic when the network is disconnected.</li><li>Optimizes the logic for getting a list of room members.</li></ul> | - |
+| Performance optimized | Thread switching performance is optimized | - |
+
+
+<h5>API method changes</h5>
+
+- **Deprecation**
+
+| Method | Description | Change version |
+| :-------- | :------- | :----- |
+| [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html) |The original [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html)method has been deprecated and replaced with [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html), which allows you to pass in AppSign for authentication and make the integration easier. | 2.3.0 |
+
+
+## Version 2.1.5 (first release)
+
+**Release date: 2022-06-15**
+
+
+The features supported are as follows: 
+
+| Feature  | Description | Method |
+|-------|-------|-------|
+| Session management  | <ul><li>Supports updating, searching, and deleting the session list.</li><li>Supports obtaining the session list to display all sessions and implementing a real-time message list.</li></ul>| <ul><li>[queryConversationList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryConversationList.html)</li><li>[deleteConversation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteConversation.html)</li></ul>|
+| Room chat| <ul><li>Supports creating, joining and leaving a room chat after a successful login. </li><li>When entering a room, supports automatic room creation when the room does not exist.</li><li>Supports configuring the room properties</li></ul>| <ul><li>[createRoom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createRoom.html)</li><li>[joinRoom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/joinRoom.html)</li><li>[enterRoom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/enterRoom.html)</li><li>[leaveRoom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/leaveRoom.html)</li><li>[setRoomAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomAttributes.html)</li></ul>|
+| Group chat | Supports creating a group chat, ungroup, joining and leaving a group chat. Supports transferring the group ownership, setting group notice, and more.| <ul><li>[createGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createGroup.html)</li><li>[joinGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/joinGroup.html)</li><li>[leaveGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/leaveGroup.html)</li><li>[dismissGroup](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/dismissGroup.html)</li><li>[transferGroupOwner](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/transferGroupOwner.html)</li></ul>|
+| Offline notifications  | <ul><li>Supports caching the one-to-one or group messages you sent when the receiver is offline. The receiver will get the message when back online.</li><li>Supports sending offline notifications to the client. We now support Apple, Huawei, Xiaomi, Vivo, Oppo, and more.</li></ul>| <ul><li>[sendPeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendPeerMessage.html)</li><li>[sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html)</li></ul>|
+| Message management  | <ul><li>Supports saving the one-to-one, group, in-room messages on the local database for retrieval after changing your devices or getting back from offline status.</li><li>Supports deleting specified or all one-to-one or group messages.</li></ul>| <ul><li>[queryHistoryMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryHistoryMessage.html)</li><li>[deleteMessages](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessages.html)</li><li>[deleteMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteMessages.html)</li><li>[sendMediaMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMediaMessage.html)</li><li>[downloadMediaFile](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/downloadMediaFile.html)</li></ul>|
+| Call invitation | <ul><li>Supports sending and responding to call invitations.</li><li>Suitbale for multiple scenarios, such as, video calls, send seat-taking invitation in live audio room, and more.</li></ul>| <ul><li>[callInvite](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callInvite.html)</li><li>[callCancel](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callCancel.html)</li><li>[callAccept](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callAccept.html)</li><li>[callReject](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callReject.html)</li></ul> |
+| Content moderation  | Supports moderating the text messages, and images in one-on-one, group, and room chat. The mechanism can help moderate the following inappropriate content: Sex solicitation, terrorism, violence, advertisements, and more.| <ul><li>[sendPeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendPeerMessage.html)</li><li>[sendGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendGroupMessage.html)</li><li>[sendRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendRoomMessage.html)</li><li>[sendMediaMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMediaMessage.html)</li></ul> |

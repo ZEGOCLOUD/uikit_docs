@@ -1,0 +1,180 @@
+---
+articleID: 15515
+---
+
+# Manage room user attributes
+- - -
+
+## Overview
+
+The In-app Chat SDK provides the feature of configuring user attributes of users in a room, that is, customizing user attributes of users in a room.
+This feature applies to the following scenarios:
+- Configure roles of room members, such as setting the room owner, administrator, participant, and participant level.
+- Turn on/off the camera, turn on/off the microphone, mute/unmute a user, and enable/disable whiteboard sharing.
+
+## Implementation process
+
+<Warning title="Warning">
+
+- User attributes of up to 500 users can be configured in each room, and the user attributes are stored in `Key-Value` format. To increase the maximum number of user attributes that can be configured in each room, developers can contact ZEGOCLOUD technical support.
+  
+- The total length of user attribute `Key-Value` pairs of each user in a room cannot exceed 144 bytes, and the number of `Key-Value` pairs cannot exceed 30. In a single `Key-Value` pair, the key cannot exceed 8 bytes, and the value cannot exceed 64 bytes. To increase the maximum length of a `Key-Value` pair, developers can contact ZEGOCLOUD technical support.
+  
+- After a room is destroyed, the configured customized user attributes are also deleted.
+</Warning>
+
+### Configure user attributes
+
+<Warning title="Warning">
+
+The operator and the user whose attributes are configured or modified must be users in the room.
+</Warning>
+
+Developers can call the [setRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomMembersAttributes.html) API to configure user attributes of users in a room. Configured user attributes are stored in `Key-Value` format.
+- When a key does not exist, configuring user attributes indicates adding a user attribute.
+- When a key already exists, configuring user attributes indicates updating the value of an existing attribute.
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| attributes | Map {"<String,String> "}| Yes | The configured user attribute. |
+| roomID | String | Yes | The ID of the room in which user attributes need to be configured. |
+| userIDs | List{"<String>"} | Yes | The IDs of the users whose attributes need to be configured. |
+| config | [ZIMRoomMemberAttributesSetConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMemberAttributesSetConfig-class.html) | Yes | <p>The configuration of a user attribute. `isDeleteAfterOwnerLeft` indicates whether the user attribute involved in this operation is automatically deleted after the owner leaves the room.</p><p><b> **If `config` is not configured, the user attribute is automatically deleted after the owner leaves the room by default.**</b></p> |
+
+
+After the configuration is successful, developers can obtain the operation result based on the asynchronous return value of [ZIMRoomMembersAttributesOperatedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMembersAttributesOperatedResult-class.html).
+
+#### Sample code
+
+```dart
+Map<String, String> attributes = {"key1": "value1"};
+List<String> userIDs = ["userID1"];
+ZIM
+    .getInstance()
+    ?.setRoomMembersAttributes(
+        attributes, userIDs, 'roomID', ZIMRoomMemberAttributesSetConfig())
+    .then((value) {
+        // The logic after the configuration is successful.
+    })
+    .catchError((onError) {
+        // The logic after the configuration fails.
+});
+```
+
+### Query user attributes of some users
+
+Users in a room can call the [queryRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembersAttributes.html) API to query the user attributes of some users in the room.
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| userIDs | List{"<String>"} | Yes | The IDs of the users whose user attributes need to be queried. |
+| roomID | String | Yes | The ID of the room in which the user attributes need to be queried. |
+
+
+After the query is successful, developers can obtain the query result based on the asynchronous return value of [ZIMRoomMembersAttributesQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMembersAttributesQueriedResult-class.html).
+
+#### Sample code
+
+```dart
+Map<String, String> attributes = {"key1": "value1"};
+List<String> userIDs = ["userID1"];
+ZIM
+    .getInstance()
+    ?.queryRoomMembersAttributes(userIDs, 'roomID')
+    .then((value) {
+        // The logic after the configuration is successful.
+    })
+    .catchError((onError) {
+        // The logic after the configuration fails.
+    });
+```
+
+### Query user attributes of all users
+
+Users in a room can call the [queryRoomMemberAttributesList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMemberAttributesList.html) API to query the user attributes of all users in the room.
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| roomID | String| Yes | The ID of the room in which the user attributes need to be configured. |
+| config | [ZIMRoomMemberAttributesQueryConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMemberAttributesQueryConfig-class.html) | Yes | <p>The configuration of a user attribute. </p><ul><li>`nextFlag`: During the first query, a null character string is passed. During second and subsequent queries, `nextFlag` returned in the result is passed. If `nextflag` returned in the result is null, the query is completed.</li> <li>`count`: The number of users on one page during the page-based query.</li> </ul> |
+
+
+After a successful query, user attributes of all users in the room are returned. Developers can obtain the query result based on the asynchronous return value of [ZIMRoomMemberAttributesListQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomMemberAttributesListQueriedResult-class.html).
+
+
+#### Sample code
+
+```dart
+ZIM
+    .getInstance()
+    ?.queryRoomMemberAttributesList(
+        'roomID', ZIMRoomMemberAttributesQueryConfig())
+    .then((value) {
+        // The logic after the configuration is successful.
+    })
+    .catchError((onError) {
+        // The logic after the configuration fails.
+    });
+```
+
+
+### User attribute change notification
+
+When user attributes of members in a room are changed, developers can register the [onRoomMemberAttributesUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberAttributesUpdated.html) methods of the [ZIMEventHandler](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html) callback API to listen for user attribute change notifications of members in the room.
+
+```dart
+
+   ZIMEventHandler.onRoomMemberAttributesUpdated = (
+       ZIM zim,List<ZIMRoomMemberAttributesUpdateInfo> infos,ZIMRoomOperatedInfo operatedInfo, String roomID){
+    //The service logic after user attributes of members in a room are changed.
+   };
+```
+
+
+<Note title="Note">
+
+When a user in a room calls the [setRoomMembersAttributes](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setRoomMembersAttributes.html) API:
+    
+- If the number of users in the room is less than or equal to 500, all users in the room will receive the user attribute change notification.
+  
+- If the number of users in the room exceeds 500, only the operator and the user whose attribute is configured or modified will receive the user attribute change notification.
+  
+
+To increase the maximum number of users in the room who can receive the user attribute change notification, developers can contact ZEGOCLOUD technical support.
+</Note>
+
+### Batch query room user information
+
+Developers can use the [queryRoomMembers](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryRoomMembers.html) interface to batch query the information of users in a room by passing the roomID and an array of userIDs. After a successful API call, the callback will return the userList (which can be used to confirm the target users in the room) and the errorUserList (which can be used to confirm the target users not in the room).
+
+<Note title="Note">
+
+The default upper limit for batch querying user quantity is 10.
+</Note>
+
+The sample code is as follows:
+
+```dart
+ZIM.getInstance().queryRoomMembers(["userA","userB"], "roomID")
+.then((ZIMRoomMembersQueriedResult value) {
+    // Map of userID mapped to ZIMErrorUserInfo, if there is a need to pay attention to the failure reason, you can read this data structure
+    Map<String, ZIMErrorUserInfo> targetErrorUserInfoMap = {};
+
+    Map<String, ZIMRoomMemberInfo> targetRoomMemberMap = {};    
+
+    for (ZIMRoomMemberInfo currentMemberInfo in value.memberList) {
+        targetRoomMemberMap[currentMemberInfo.userID] = currentMemberInfo;
+    }
+    for (ZIMErrorUserInfo currentErrorUserInfo in value.errorUserList) {
+       targetErrorUserInfoMap[currentErrorUserInfo.userID] = currentErrorUserInfo;
+    }
+    // Check if the target member is in the room
+    bool isTargetUserIdAInTheRoom = targetRoomMemberMap.containsKey(userIdA);    
+}).catchError((onError){
+    // Handle failure
+});
+```

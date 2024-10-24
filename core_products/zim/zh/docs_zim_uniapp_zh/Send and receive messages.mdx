@@ -1,0 +1,390 @@
+---
+articleID: 14546
+---
+
+
+# Send and receive messages
+
+--- 
+
+This document describes how to use the ZIM SDK (In-app Chat) to send and receive messages.
+
+---
+
+## Solution 
+
+The following shows the access solution that the ZIM SDK provides.  
+
+
+In this solution, you will need to implement the following business logic based on your actual business requirements: 
+
+- The logic for managing the users on the client, and the logic for distributing user ID for users to log in. 
+
+
+## Prerequisites
+
+Before you begin, make sure:
+
+- Flutter has been installed.
+- Dart has been installed and the version is [2.12.0, 3.0.0).
+- The test device meets the following requirements:
+- iOS device or simulator with iOS 11.0 or above (real device is recommended).
+- Android device or simulator with Android 4.1 or above (real device is recommended). If it is a real device, please turn on the "Allow debugging" option.
+- Windows: Windows 10 or above (64-bit operating system based on x86-64).
+- macOS: macOS 10.13 or above.
+- Web browser:
+- Chrome 58 or above
+- Firefox 56 or above
+- Safari 11 or above
+- Opera 45 or above
+- QQ Browser Windows 10.1 or above/macOS 4.4 or above
+- 360 Security Browser Speed ​​Mode
+- The device is connected to the Internet.
+- Go to [ZEGOCLOUD Admin Console](https://console.zegocloud.com), and do the following:
+    - Create a project, get the AppID and AppSign.
+    - Subscribe to the In-app Chat service (contact us if the subscription doesn't go well).
+
+<Warning title="Warning">
+
+For SDK `2.3.0` or later, the AppSign authentication mode and Token-based authentication mode are both supported.
+
+If you want to change your authentication mode, please refer to the [Upgrade the authentication mode from using the AppSign to Token](https://docs.zegocloud.com/faq/token_upgrade).
+</Warning>
+
+## Integrate the SDK  
+
+### Optional: Create a project
+
+Skip this step if a project already exists.
+
+<details class="zg-primary">
+    <summary>Create a new project</summary>
+
+To create a new project, refer to the [Flutter Doc - Get started](https://flutter.dev/docs/get-started/test-drive#create-app).
+</details>  
+
+### Import the SDK 
+
+1. Open the `pubspec.yaml` file, add the `zego_zim` dependencies as follows:
+
+
+  ```yaml
+ dependencies:
+         # Please fill in the specific SDK version number.
+         # Please query the latest SDK version from the release log and modify x.y.z to the specific version number.
+         zego_zim: ^x.y.z
+    
+```
+
+2. After adding and saving the file, run the command `flutter pub get` in the terminal.
+
+3. If you are configuring a Web platform, then you will need to in your `index.html` file, add the following to import the Web SDK. 
+
+    ```html
+    <script src="assets/packages/zego_zim/assets/index.js" type="application/javascript"></script>
+    ``` 
+
+### Set permissions
+
+- For iOS, Web: no special permissions need to be set.
+- For Android:
+    Go to the `app/src/main` directory, in the `AndroidManifest.xml` file, add the permissions.
+
+    ```java
+    <!-- The permissions required by SDK-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    ```
+
+### Prevent code obfuscation
+
+ 
+When building your Android app with Flutter, to prevent obfuscation of the SDK public class names, in your project's `proguard-rules.pro` file, add the following:
+
+```java
+-keep class **.zego.**{*;}
+```
+
+## Implementation steps
+
+### Import the header file
+
+Import the header file `zego_zim.dart`.
+
+```dart
+import 'package:zego_zim/zego_zim.dart';
+```
+
+### Create a ZIM SDK instance
+
+Creating a ZIM instance is the very first step, an instance corresponds to a user logging in to the system as a client.
+
+
+So, let's suppose we have two clients now, client A and client B. To send and receive messages to each other, both of them will need to call the [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html) method with the AppID and AppSign (for Web, AppSign is not required) you get in the previous **Prerequisites** steps to create a ZIM SDK instance of their own:
+
+```dart
+// Create a ZIM SDK instance.
+//Create a ZIM SDK instance and pass in the AppID and AppSign.
+ZIMAppConfig appConfig = ZIMAppConfig();
+appConfig.appID = appID;
+appConfig.appSign = appSign;
+
+ZIM.create(appConfig);
+```
+
+### Set up the ZIMEventHandler and listen for related event callbacks
+
+Before a client user's login, you will need to call the [ZIMEventHandler](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html) method to implement a static Function object that contains various event callbacks of the `ZIMEventHandler`. And you can receive callback notifications when SDK errors occur or receive message with the `Function` passed in.
+
+implement the methods involved in the protocol to receive callbacks (you can customize the event callbacks, such as you can receive callback notifications when SDK errors occur or receive message-related callback notifications).
+
+
+
+The following is the sample code for changing the connection status changes in the `zim_event_handler_manager.dart` file: 
+
+![/Pics/ZIM/flutter/1.png](https://storage.zego.im/sdk-doc/Pics/ZIM/flutter/1.png)
+
+```dart
+// The callback for receiving error codes. This callback will be triggered when SDK returns error codes. 
+static void Function(ZIMError errorInfo)? onError;
+
+// Used to remind that the token is about to expire. Developers can use this callback to listen to notifications that the token is about to expire and customize the UI state to deal with this event.
+static void Function(ZIM zim, int second)? onTokenWillExpire;
+ 
+// The callback for connection status changes. This callback will be triggered when the connection status changes, and you can customize a UI for this event.
+static void Function(ZIMConnectionState state, ZIMConnectionEvent event, Map extendedData)? onConnectionStateChanged;
+
+// The callback for receiving one-on-one messages. You can receive message notifications through this callback after login. 
+static void Function(List<ZIMMessage> messageList, String fromUserID)? onReceivePeerMessage;
+
+  
+
+```
+
+For more detailed description for methods, refer to the [onTokenWillExpire](@https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onTokenWillExpire.html), [onConnectionStateChanged](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConnectionStateChanged.html), [onReceivePeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceivePeerMessage.html), [onReceiveRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveRoomMessage.html), [onRoomMemberJoined](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberJoined.html), [onRoomMemberLeft](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onRoomMemberLeft.html).
+
+
+### Log in to the ZIM SDK
+
+
+After creating an instance, clients A and B need to log in to ZIM before they can start sending, receiving messages, updating tokens, etc.
+
+Call the [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) interface and pass in the userID and login configuration [ZIMLoginConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig-class.html) object to log in.
+
+<Warning title="Warning">
+
+- "userID" and "userName" support custom rules generated by developers. It is recommended that developers set "userID" to a meaningful value and associate it with their own business account system.
+- For SDK version `2.3.0` or above, the default authentication method is "AppSign authentication", and no `Token` needs to be passed in when logging in to ZIM.
+- If you are using "Token authentication", please refer to the [Authentication](./Guides/Users/Authentication.mdx) document to obtain the Token and pass it as an optional parameter when logging in to ZIM. Only after the authentication is successful can you log in successfully.
+</Warning>
+
+```dart
+// During login:
+// If using Token authentication, developers need to fill in the Token generated according to the "Authentication" document. For details, please refer to the "Authenticate users with tokens" document; when developing web platform applications, only Token authentication is supported.
+// If using AppSign authentication (default authentication method for version 2.3.0 or above), leave the Token parameter as an empty string.
+
+try {
+    ZIMLoginConfig loginConfig = ZIMLoginConfig();
+    // The user's nickname, leave it blank if you don't want to modify the user's nickname
+    loginConfig.userName = 'userName';
+    // If using Token authentication, please fill in this parameter; otherwise, leave it blank
+    loginConfig.token = '';
+    // Whether this login is an offline login, please refer to the offline login related documents for details
+    loginConfig.isOfflineLogin = false;
+    await ZIM.getInstance()?.login('zego', loginConfig);
+    // Login successful, write the business logic for successful login
+} on PlatformException catch (onError) {
+    // Login failed
+    // Error code for login failure, please refer to the error code document for handling
+    onError.code;
+    // Error message for login failure
+    onError.message;
+}
+```
+
+### Send messages 
+
+Client A can send messages to client B after logging in successfully. 
+
+Currently, the supported message types in ZIM are as follows:
+
+<table>
+<tbody><tr data-row-level="1">
+<th>Message Type</th>
+<th>Description</th>
+<th>Features and Applicable Scenarios</th>
+</tr>
+<tr data-row-level="2">
+<td>ZIMTextMessage(1)</td>
+<td>
+Text message. The message size should not exceed 32 KB, and the sending frequency limit for a single client is 10 times per second.
+</td>
+<td>
+Reliable and ordered message delivery, can be stored as historical messages ; generally applicable to scenarios such as "one-on-one chat", "group chat", and "public screen chat" in "room chat". The messages of "room chat" are not stored after the room is dissolved.
+
+Related API: [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)
+</td>
+</tr>
+<tr data-row-level="3">
+<td>ZIMCommandMessage(2)</td>
+<td>Customizable signaling message with user-defined data content. The message size should not exceed 5 KB, and the sending frequency limit for a single client is 10 times per second.</td>
+<td>
+Supports higher concurrency; generally applicable to signaling transmission in scenarios such as "voice chat room" and "online classroom", such as microphone on/off operations, sending gifts, sending online courseware, etc.
+
+Related API: [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)
+</td>
+</tr>
+<tr data-row-level="4">
+<td>ZIMBarrageMessage(20)</td>
+<td>Barrage text message in a room. The message size should not exceed 5 KB, and there is no sending frequency limit for a single client.</td>
+<td>
+<p>Specially used for high-frequency, unreliable, and discardable messages in a room, generally applicable to scenarios of sending "barrage messages".</p><p>Supports high concurrency, but is unreliable and does not guarantee message delivery.</p>
+
+Related API: [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)
+</td>
+</tr>
+<tr data-row-level="5">
+<td>ZIMImageMessage(11)</td>
+<td>Image message. Supports mainstream image formats, including JPG, PNG, BMP, TIFF, GIF, WebP, with a size limit of 10 MB, and the sending frequency limit for a single client is 10 times per second.</td>
+<td rowspan="4">
+Reliable and ordered message delivery, can be stored as historical messages; generally used in scenarios such as one-on-one chat, room chat, group chat, etc.
+
+Related API: [sendMediaMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMediaMessage.html)
+</td>
+</tr>
+<tr data-row-level="6">
+<td>ZIMFileMessage(12)</td>
+<td>File message. The message content is a file with no format restrictions, with a size limit of 100 MB, and the sending frequency limit for a single client is 10 times per second.</td>
+</tr>
+<tr data-row-level="7">
+<td>ZIMAudioMessage(13)</td>
+<td>Voice message. Supports MP3 and M4A formats for voice files, with a duration limit of 300 seconds and a size limit of 6 MB, and the sending frequency limit for a single client is 10 times per second.</td>
+</tr>
+<tr data-row-level="8">
+<td>ZIMVideoMessage(14)</td>
+<td>Video message. Supports MP4 and MOV formats for video files, with a size limit of 100 MB, and the sending frequency limit for a single client is 10 times per second. **Only supports obtaining the width and height information of the first frame of a video file with video encoding formats H264 and H265 after the message is successfully sent.**</td>
+</tr>
+<tr data-row-level="9">
+<td>ZIMCombineMessage(100)</td>
+<td>Combined message, with no size limit, and the sending frequency limit for a single client is 10 times per second.</td>
+<td>
+Reliable and ordered message delivery, can be stored as historical messages; generally used in scenarios such as one-on-one chat, room chat, group chat, etc.
+
+Related API: [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)
+</td>
+</tr>
+<tr data-row-level="10">
+<td>ZIMCustomMessage(200)</td>
+<td>Custom message. Developers can define the type of the message and complete the parsing of the message content on their own. ZIM SDK is not responsible for defining and parsing the specific content of custom messages.</td>
+<td>
+Generally used for sending messages such as voting types, solitaire types, video card types, etc.
+
+Related API: [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+To send one-to-one messages, for example, if client A wants to send a message to client B, then client A needs to call the [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html)  method with client B's userID, message content, and the message type [ZIMConversationType](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMConversationType.html).
+And client A can be notified whether the message is delivered successfully through the callback [ZIMMessageSentResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSentResult-class.html).
+
+
+- [onMessageAttached](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessageSendNotification/onMessageAttached.html) callback: The callback on the message not sent yet. Before the message is sent, you can get a temporary [ZIMMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMMessage-class.html) message for you to implement your business logic as needed. For example, you can get the ID of the message before sending it. Or when sending a message with large content, such as a video, you can get the localMessageID of the message before the message is uploaded to implement a Loading UI effect.
+
+```dart
+// The following shows how to send one-to-one message, the [conversationType] needs to be set to ZIMConversationType.peer.
+ZIMTextMessage textMessage = ZIMTextMessage(message: "message");
+ZIMMessageSendConfig sendConfig = ZIMMessageSendConfig();
+// Set priority for the message
+sendConfig.priority = ZIMMessagePriority.low;
+
+ZIMPushConfig pushConfig = ZIMPushConfig();
+pushConfig.title = "Title of the offline push";
+pushConfig.content = "Content of the offline push";
+pushConfig.extendedData = "Extended info of the offline push";
+sendConfig.pushConfig = pushConfig;
+ZIMMessageSendNotification notification = ZIMMessageSendNotification(onMessageAttached: (message){
+    //  The callback on the message not sent yet. You can get a temporary object here and this object must be the same as that created zimMessage object. You can make your own business logic using this as needed, for example, display a UI ahead of time.
+});
+
+// Set message type.
+ZIMConversationType type = ZIMConversationType.peer;
+
+ZIM.getInstance()!.sendMessage(textMessage, toConversationID, type, sendConfig).then((value) => {
+    // The callback on the results of message sending.
+}).catchError((onError){
+    // This callback can be used to catch the reason for message sending failure.
+});
+```
+
+
+### Receive messages
+
+
+After client B logs in, he will receive client A's message through the callback [onReceivePeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceivePeerMessage.html) which is already set in the [ZIMEventHandler](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler-class.html) method. 
+
+<Warning title="Warning">
+
+When a message is received, you need to determine whether the message is a Text message or a Command message because these two message types are based on the basic message. You need to convert the basic message class to a concrete message type and then retrieve the message content from the `Message` field.
+</Warning>
+
+
+```dart 
+ZIMEventHandler.onReceivePeerMessage = (messageList, fromUserID) {
+    //Receives the messageList from fromUserID.
+    //This callback will be triggered when receiving one-to-one messgaes.
+    for (ZIMMessage message in messageList) {
+        switch (message.type) {
+            case ZIMMessageType.text:
+                message as ZIMTextMessage;
+                break;
+            case ZIMMessageType.command:
+                message as ZIMCommandMessage;
+                break;
+            case ZIMMessageType.image:
+                message as ZIMImageMessage;
+                break;
+            case ZIMMessageType.file:
+                message as ZIMFileMessage;
+                break;
+            default:
+        }
+    }
+};
+```
+
+
+### Log out 
+
+For a client to log out, call the [logout](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/logout.html) method. 
+
+```dart
+ZIM.getInstance().logout();
+```
+
+### Destroy the ZIM SDK instance
+
+To destroy the ZIM SDK instance, call the [destroy](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/destroy.html)  method.
+
+
+```dart
+ZIM.getInstance().destroy();
+```
+### API Sequence Diagram
+
+Based on the implementation process described above, the API interface invocation sequence diagram is as follows:
+
+
+![/Pics/in_app_chat/14546.png](//doc.oa.zego.im/Pics/in_app_chat/14546.png)
+
+<Note title="Note">
+
+- When sending a message, use the [sendMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/sendMessage.html) interface and pass the corresponding value of ZIMConversationType according to the message type.
+- When receiving a message:
+    - For peer-to-peer messages (Peer type), use the [onReceivePeerMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceivePeerMessage.html) callback to receive.
+    - For room messages (Room type), use the [onReceiveRoomMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveRoomMessage.html) callback to receive.
+    - For group messages (Group type), use the [onReceiveGroupMessage](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onReceiveGroupMessage.html) callback to receive.
+</Note>

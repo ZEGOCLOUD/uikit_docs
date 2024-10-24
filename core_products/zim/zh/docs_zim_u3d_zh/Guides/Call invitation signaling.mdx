@@ -1,0 +1,208 @@
+---
+articleID: 16364
+---
+
+# Call invitation (signaling)
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides call invitation functionality, supporting the caller to send call invitations to the callee (who may be offline), and the callee (who may also be offline) to accept or reject the invitation, as well as complete control over the entire business process flow.
+
+
+<Warning title="Warning">
+
+The call invitation feature provided by the ZIM SDK **only implements the basic control logic** of the call invitation: sending, canceling, accepting, and refusing the call invitation. 
+The implementation steps described in this document won't initiate a real call invitation. You must implement that yourself according to your business requirements.
+</Warning>
+
+- (Optional) When need to send call invitations to offline users, configure the ZIM offline push certificate in the [ZEGOCLOUD Admin Console](https://console.zegocloud.com) (refer to [How to configure Offline Push Certificates](#16146) for details). If you are unable to configure it, please contact ZEGOCLOUD technical support.
+
+Let's suppose we have Client A (caller) and Client B (callee). The following shows how they implement the call invitation.
+
+
+## Send a call invitation
+
+The following process shows how Client A sends a call invitation to Client B.
+
+1. Client A calls the [CallInvite](@CallInvite) method to send a call invitation to Client B. Client B can accept or decline the call as wanted.
+2. Client B listens for the [OnCallInvitationReceived](@OnCallInvitationReceived) callback to receive the event callback when Client A sends a call invitation.
+
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| invitees | List\<string>  | Yes | The list of the callee. You need to fill in the userID of the callee. The list can include 9 users at most. |
+| config | [ZIMCallInviteConfig](@-ZIMCallInviteConfig) | Yes | Configurations for sending a call invitation .|
+| callback | [ZIMCallInvitationSentCallback](@ZIMCallInvitationSentCallback) | Yes | Callback for the results of sends a call invitation . |
+
+#### Sample code
+
+```c#
+// Send call invitation
+List<string> invitees = new List<string>();  // List of invitees
+invitees.Add("421234");       // Invitee ID
+ZIMCallInviteConfig config = new ZIMCallInviteConfig();
+config.timeout = 200; // Timeout for the invitation in seconds, range: 1-600 
+
+// (Optional) Fill in when it is necessary to send a call invitation to an offline user
+ZIMPushConfig pushConfig = new ZIMPushConfig();
+pushConfig.title = "your title";
+pushConfig.content = "your content";
+pushConfig.payload = "your payload";
+config.pushConfig = pushConfig;
+
+ZIM.GetInstance().CallInvite(invitees, config, (string callID, ZIMCallInvitationSentInfo info, ZIMError errorInfo) => { });
+
+ZIM.GetInstance().onCallInvitationReceived = (ZIM zim,
+                                          ZIMCallInvitationReceivedInfo info,
+                                          string callID) =>
+{
+    // Callback notification for the invitee after receiving the invitation
+};
+```
+
+## Cancel a call invitation
+
+The following process shows how Client A cancels the call invitation to Client B:
+
+1. To cancel the outbound call, Client A needs to call the [CallCancel](@CallCancel) method.
+@@@call_invitation_cancelled@@@
+2. Client B receives a notification through the callback [OnCallInvitationCancelled](@OnCallInvitationCancelled) when the call invitation is canceled.
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| invitees | List\<string>  | Yes | <p>The list of the callee. You need to fill in the userID of the callee. </p><p>One or more users are supported at a time. </p>|
+| callID | string | Yes |The ID of the call invitation you made. |
+| config | [ZIMCallCancelConfig](@-ZIMCallCancelConfig) | Yes | Configurations for canceling the call invitation. |
+| callback | [ZIMCallCancelSentCallback](@ZIMCallCancelSentCallback) | Yes | Callback for the results of cancel the call invitation. |
+
+#### Sample code
+
+```c#
+// Cancel call invitation
+List<string> invitees = new List<string>();  // List of invitees
+invitees.Add("421234");       // Invitee ID
+string callid = "12352435";        // Call ID
+ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+ZIM.GetInstance().CallCancel(invitees, callid, config, (string callID, List<string> errorInvitees,
+                   ZIMError errorInfo) =>
+{ 
+    // Callback for canceling call invitation
+});
+
+ZIM.GetInstance().onCallInvitationCancelled = (ZIM zim,
+                                            ZIMCallInvitationCancelledInfo info,
+                                            string callID) =>
+{
+    // Callback notification for the invitee after receiving the cancellation of the invitation
+};
+```
+
+## Accept a call invitation
+
+The following process shows how Client B accepts Client A's call invitation:
+
+1. After receiving Client A's call invitation, to accept it, Client B needs to call the [CallAccept](@CallAccept) method.
+2. After Client B accepts the call invitation, Client A receives a notification through the callback [OnCallInvitationAccepted](@OnCallInvitationAccepted).
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| callID | String | Yes |The ID of the callee.|
+| config | [ZIMCallAcceptConfig](@-ZIMCallAcceptConfig) | Yes | Configurations for accepting the call invitation.|
+| callback | [ZIMCallAcceptanceSentCallback](@ZIMCallAcceptanceSentCallback) | Yes | Callback for the results of accept the call invitation. |
+
+#### Sample code
+
+```c#
+string callid = "12352435";        // Call ID
+ZIMCallAcceptConfig config = new ZIMCallAcceptConfig();
+ZIM.GetInstance().CallAccept(callid, config, (string callID, ZIMError errorInfo) => 
+{
+    // Callback result for accepting the call
+});
+
+ZIM.GetInstance().onCallInvitationAccepted = (ZIM zim,
+                                        ZIMCallInvitationAcceptedInfo info,
+                                        string callID) =>
+{
+    // Callback notification for the inviter after the invitee accepts the invitation
+};
+```
+
+## Refuse a call invitation
+
+The following process shows how Client B refuses Client A's call invitation:
+
+1. After receiving Client A's call invitation, to refuse it, Client B needs to call the [CallReject](@CallReject) method.
+2. After Client B refuses the call invitation, Client A receives a notification through the callback [OnCallInvitationRejected](@OnCallInvitationRejected).
+
+
+#### Parameter description
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| callID | string | Yes | The ID of the callee. |
+| config | [ZIMCallRejectConfig](@-ZIMCallRejectConfig) | Yes | Configurations for refusing the call invitation.|
+| callback | [ZIMCallRejectionSentCallback](@ZIMCallRejectionSentCallback) | Yes | Callback for the results of refusing the incoming call. |
+
+#### Sample code
+
+```c#
+string callid = "12352435";        // Call ID
+ZIMCallRejectConfig config = new ZIMCallRejectConfig();
+ZIM.GetInstance().CallReject(callid, config, (string callID, ZIMError errorInfo) => { });
+
+ZIM.GetInstance().onCallInvitationRejected = (ZIM zim,
+                                        ZIMCallInvitationRejectedInfo info,
+                                        string callID) =>
+{
+    // Callback notification for the inviter after the invitee rejects the invitation
+};
+```
+
+## Call invitation timed out
+
+
+The following process shows Client B doesn't answer Client A's call within the timeout duration:
+
+1. Client A (caller) receives a notification through the callback [OnCallInviteesAnsweredTimeout](@OnCallInviteesAnsweredTimeout) when the call didn't get answered by Client B.
+2. Client B (callee) receives a notification through the callback [OnCallInvitationTimeout](@OnCallInvitationTimeout) and is notified that the call invitation has timed out.
+
+#### Parameter description
+
+- [onCallInviteesAnsweredTimeout](@onCallInviteesAnsweredTimeout)
+
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| zim | ZIM  | Yes | ZIM instance. |
+| invitees | List{'<string>'}| Yes | The ID of the callee.|
+| callID | string | Yes | The ID of the timed-out call. |
+
+- [OnCallInvitationTimeout](@OnCallInvitationTimeout)
+
+| Parameter | Type | Required | Description |
+| ---- | ----| -------| -----|
+| zim | ZIM | Yes | ZIM instance. |
+| callID | string | Yes | The ID of the timed-out call.  |
+
+#### Sample code
+
+```c#
+ZIM.GetInstance().onCallInviteesAnsweredTimeout = (ZIM zim,
+                                                    List<string> invitees,
+                                                    string callID) =>
+{
+    // Callback notification for the "inviter" after the invitees' response timeout, timeout in seconds
+};
+
+ZIM.GetInstance().onCallInvitationTimeout = (ZIM zim, string callID) =>
+{
+    // Callback notification for the "invitee" after the response timeout, timeout in seconds
+};
+```
+

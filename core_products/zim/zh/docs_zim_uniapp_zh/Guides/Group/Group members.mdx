@@ -1,0 +1,274 @@
+---
+articleID: 14556
+---
+
+
+# Manage group members
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of group member management, allowing you to query the group member list and group member info, change the group owner, and more.
+
+
+<Warning title="Warning">
+
+- Before you use the following features, you must join a group first. To join a group, refer to the Chapter **Join a group** of [Manage groups](./Manage%20groups.mdx).
+</Warning>
+
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/14556.png" /></Frame>
+
+
+## Get group member list
+
+
+To know who is in the current group and get the group member list after login, call the [queryGroupMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberList.html) method. 
+
+To know the results of the query, you can check the return value of the class [queryGroupMemberList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberList.html).
+
+
+#### Sample code
+
+```dart
+// Get group member list.
+ZIMGroupMemberQueryConfig groupMemberQueryConfig =
+      ZIMGroupMemberQueryConfig();
+groupMemberQueryConfig.count = 100;
+
+ZIM
+    .getInstance()
+    .queryGroupMemberList('groupID', groupMemberQueryConfig)
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+
+## Get group member info
+
+To know the info of a specified member after joining a group, call the [queryGroupMemberInfo](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberInfo.html)method.
+
+To know the results of the query, you can check the return value of the class [ZIMGroupMemberInfoQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberInfoQueriedResult-class.html). 
+
+
+#### Sample code
+
+
+```dart
+// Get group member info.
+ZIM
+    .getInstance()
+    .queryGroupMemberInfo('userID', 'groupID')
+    .then((value) {
+      //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+      //This will be triggered when operation failed.
+    });
+```
+
+
+## Set a nickname
+
+
+To set a nickname after joining a group, call the [setGroupMemberNickname](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setGroupMemberNickname.html) method.
+
+<Warning title="Warning">
+
+The group owner can set the nickname of all group members. But the group members can only set their own nicknames.
+</Warning>
+
+To know whether the nickname is set successfully, you can check the return value of the class [ZIMGroupMemberNicknameUpdatedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberNicknameUpdatedResult-class.html).
+
+#### Sample code
+
+
+```dart
+// Set a nickname. Note: The group owner can set the nickname of all group members. But the group members can only set their own nicknames. 
+ZIM
+    .getInstance()
+    .setGroupMemberNickname('nickname', 'forUserID', 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+
+
+
+## Set a role for a group member
+
+
+For a group owner to set a role for a group member, call the [setGroupMemberRole](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setGroupMemberRole.html) method. You can set the group member to a regular member or admin.
+
+After the setting is successful, the group owner can receive the results of the operation through the return value of the class [ZIMGroupMemberRoleUpdatedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberRoleUpdatedResult-class.html).
+
+Group members can receive notifications of user role changes through [onGroupMemberInfoUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMemberInfoUpdated.html).
+
+#### Description of group member roles and permissions
+
+The ZIM SDK supports setting users as group owners, administrators, and regular members by default. In a group, the group owner has all **client permissions** and can perform all group functions. Administrators have most **client permissions**, while regular members have the fewest **client permissions**. The specific client permissions for each role are shown in the table below:
+
+<table>
+<tbody>
+<tr>
+<th>Client Permissions</th>
+<th>Group Owner<br/>(corresponding enum value: 1)</th>
+<th>Administrator<br/>(corresponding enum value: 2)</th>
+<th>Regular Member<br/>(corresponding enum value: 3)</th>
+</tr>
+<tr>
+<th>Modify group avatar, group name, group notice</th>
+<td rowspan="2">Supported</td>
+<td rowspan="2">Supported</td>
+<td rowspan="2">Supported</td>
+</tr>
+<tr>
+<th>Modify group attributes</th>
+</tr>
+<tr>
+<th>Modify group member nickname</th>
+<td rowspan="9">Supported, can be used for all group role users</td>
+<td rowspan="5">Supported, can be used for all regular members</td>
+<td rowspan="2">Supported, can only be used for oneself</td>
+</tr>
+<tr>
+<th>Recall group member messages</th>
+</tr>
+<tr>
+<th>Kick out members</th>
+<td rowspan="7">Not supported</td>
+</tr>
+<tr>
+<th>Mute individual group members</th>
+</tr>
+<tr>
+<th>Mute specific group roles</th>
+</tr>
+<tr>
+<th>Set group member roles</th>
+<td rowspan="4">Not supported</td>
+</tr>
+<tr>
+<th>Transfer group ownership</th>
+</tr>
+<tr>
+<th>Dismiss the group</th>
+</tr>
+<tr>
+<th>Mute all members</th>
+</tr>
+</tbody>
+</table>
+
+#### setGroupMemberRole description
+
+
+#### Sample code
+
+```dart
+// The group owner sets regular users as administrators.
+ZIM
+    .getInstance()
+    .setGroupMemberRole(2, 'forUserID', 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+
+
+## Transfer the group ownership
+
+
+For a group owner to transfer the group ownership, call the [transferGroupOwner](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/transferGroupOwner.html) method with the `toUserID` (the ID of the member you want to transfer the ownership to).
+
+<Warning title="Warning">
+
+- Only the group owner has permission to change the group owner.
+- The member you want to transfer the ownership to must be in the group; otherwise, the operation fails.
+</Warning>
+
+
+All group members can be told whether the group owner is changed through the return value of the class [ZIMGroupOwnerTransferredResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupOwnerTransferredResult-class.html).
+
+
+
+#### Sample code
+
+
+```dart
+// Change the group owner.
+ZIM
+    .getInstance()
+    .transferGroupOwner('toUserID', 'groupID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+
+ 
+### Set Group Member Mute Status
+
+After logging into the ZIM SDK, users can mute or unmute specific members within the groups they manage. By calling the [muteGroupMembers](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/muteGroupMembers.html)interface, you can batch modify the mute status of up to 100 group members. The mute duration can be permanent or up to a maximum of 604,800 seconds (7 days).
+
+<Note title="Note">
+
+- Group owners can mute all group members, including themselves.
+- If you need to increase the number of operations per request or extend the maximum mute duration, please contact ZEGOCLOUD technical support.
+</Note>
+
+After a successful setting, the operating user will receive a notification through  [ZIMGroupMembersMutedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMembersMutedResult-class.html).
+
+After muting or unmuting, all group members will receive  [onGroupMemberInfoUpdated](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onGroupMemberInfoUpdated.html), which informs them of which members are unable to speak or have their mute status lifted in the group.
+
+<Note title="Note">
+
+If you want to mute certain group members , please refer [Manage groups - Mute group](./Manage%20groups.mdx#mute-or-unmute-a-group).
+</Note>
+
+```dart
+try {
+    bool isMute = true;
+    List<String> userIDs = ['user_1','user_2','user_3'];
+    String groupID = 'group_id';
+    ZIMGroupMemberMuteConfig config = ZIMGroupMemberMuteConfig();
+  // Mute duration of 30 seconds.
+    config.duration = 30;
+    ZIMGroupMembersMutedResult result = await ZIM.getInstance()!.muteGroupMembers(isMute, userIDs, groupID, config);
+    // Developers can obtain mute result-related information from the parameters in the result.
+} on PlatformException catch (onError){
+    onError.code;//Handle according to the error code table.
+    onError.message;//Error message.
+}
+```
+
+### Query the list of muted members in a group
+
+
+After logging into the ZIM SDK, if group members want to know the list of members muted in the group, they can call the [queryGroupMemberMutedList](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/queryGroupMemberMutedList.html) interface to query.
+
+After a successful query, the operating user can retrieve specific information using [ZIMGroupMemberMutedListQueriedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMGroupMemberMutedListQueriedResult-class.html).
+
+```dart
+try {
+    // Query the list of members muted in the group by group members.
+  ZIMGroupMemberMutedListQueryConfig config = ZIMGroupMemberMutedListQueryConfig();
+    //Get up to 100 members in one request
+  config.count = 100;
+    config.nextFlag = 0;
+    ZIMGroupMemberMutedListQueriedResult result = await ZIM.getInstance()!.queryGroupMemberMutedList('gorupID', config);
+} on PlatformException catch (onError){
+    onError.code; // Handle according to the error code table.
+    onError.message; // Error message.
+}
+```

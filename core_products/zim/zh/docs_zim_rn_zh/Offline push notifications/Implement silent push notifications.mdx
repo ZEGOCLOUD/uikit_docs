@@ -1,0 +1,85 @@
+---
+articleID: 17638
+---
+# Implement silent push notifications
+
+
+## Introduction
+
+Silent push notifications are a special type of remote notification, mainly used for data synchronization between the App running in the background and the server. For example: when the App is not active and the data within the App is outdated, the server will send a silent push notification, and the App will update the data without any user awareness.
+
+<Warning title="Warning">
+- Silent push notifications are primarily used for updating and synchronizing data, without any user awareness. Therefore, silent push notifications generally do not have content, sounds, or badge notifications.
+- When silent push notifications awaken the background App for download tasks, there is a maximum of 30 seconds to perform.
+- Notifications callbacks can be triggered when the App is running in the foreground/background, or when the background process is suspended (retaining the App's memory resources). Callbacks cannot be triggered after the App is closed.
+- Silent push requests are low priority tasks at APNs, and Apple does not guarantee the delivery rate of silent pushes.
+- Do not use silent push notifications to keep the App alive. If APNs detect a high frequency of silent push requests, it may terminate their transmission.
+</Warning>
+
+
+<Note title="Note">
+This documentation is applicable to the following platforms: iOS and Android (only smart devices that support Google services).
+</Note>
+
+## Prerequisites
+
+Before implementing silent push notifications, please make sure of the following:
+
+- Integrate ZPNs SDK version ZPNs SDK **2.3.3 or above** and implement offline push notifications. For more details, please refer to [Implement offline push notification](./Implement%20offline%20push%20notification.mdx).
+
+## Implementation steps
+
+### Send silent push notifications
+
+1. Contact ZEGOCLOUD technical support to configure the resourceID for carrying silent push strategies. There are two types of silent push strategies: iOS and FCM. Depending on your specific requirements, you can choose to only carry one type of silent push strategy's `resourceID`.
+
+2. In scenarios where offline push notifications need to be sent (such as [call invitation](./../Guides/Call%20invitation%20signaling.mdx), [offline push notification](./Implement%20offline%20push%20notification.mdx), etc.), fill in the resourceID field of [ZIMPushConfig](@-ZIMPushConfig) with the pre-configured value obtained from ZEGOCLOUD technical support. Additionally, fill in the payload field according to the specific business scenario.
+
+```js
+var pushConfig = {
+    resourcesID: "your resourcesID", // resourcesID configured by ZEGOCLOUD technical
+    title: "your title",
+    content: "your content",
+    payload: "your payload",
+};
+```
+
+3. Once the above steps are completed, you can send silent push notifications to others.
+
+### Receive silent push notifications
+
+#### When an iOS or Android app is in the foreground, or in the background but not terminated
+
+To receive online silent push notifications, register the [throughMessageReceived](@throughMessageReceived) event.
+
+
+```js
+ZPNs.getInstance().on('throughMessageReceived', message => {
+    console.log('ZPNs throughMessageReceived', message);
+    // Handle online silent push notifications
+})
+```
+
+#### When Android App is terminated in the Background
+
+You need to import ZPNs in **the entry file of your project** and call [setBackgroundMessageHandler](@setBackgroundMessageHandler) to set a callback for receiving offline silent push notifications.
+
+```js
+import ZPNs from 'zego-zpns-react-native';
+
+/** Code in the entry file of your project, no need for you to modify **/
+// import { AppRegistry, Platform } from 'react-native';
+// import App from './App';
+// import { name as appName } from './app.json';
+
+// AppRegistry.registerComponent(appName, () => App);
+/** Code in the entry file of your project, no need for you to modify **/
+
+// Note: The following code should not be called in UI components!
+ZPNs.setBackgroundMessageHandler(message => {
+    console.log('ZPNs backgroundMessageHandler', message);
+    // Handle offline silent push notifications on Android
+})
+```
+
+By completing the above steps, you will be able to receive silent push notifications from others.

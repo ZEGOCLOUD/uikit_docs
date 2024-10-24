@@ -1,0 +1,66 @@
+---
+articleID: 17739
+---
+# Manage unread message counts
+
+- - -
+
+## Introduction
+
+Through ZIM, you can get the unread message count for an individual conversation, acquire the total unread message count for all conversations, and clear the aforementioned values.
+
+
+## Get the unread message count of one conversation
+
+ZIM supports actively or passively obtaining the number of unread messages of a conversation.
+
+### Actively obtaining
+
+To actively obtain the number of unread messages in a conversation, first call [QueryConversationList](@QueryConversationList) or [QueryConversation](@QueryConversation) to obtain the target conversation object. Then, you can use the [unreadMessageCount](@unreadMessageCount-ZIMConversation) property of the target conversation object to know the number of unread messages in that conversation.
+
+### Passively obtaining
+
+Listen for the [OnConversationChanged](@OnConversationChanged) callback to obtain the [unreadMessageCount](@unreadMessageCount-ZIMConversation) property of a conversation and know the latest number of unread messages in that conversation. For more details, refer to [Get conversation list - Listen for conversation changes](./Get%20the%20conversation%20list.mdx#listen-for-conversation-changes).
+
+## Get the total unread message count of all conversations
+To know how many unread messages you currently have after login, listen for the callback [OnConversationTotalUnreadMessageCountUpdated](@OnConversationTotalUnreadMessageCountUpdated) callback. 
+
+
+
+After a successful login, the client user is notified of the update of the total number of unread messages through the callback in any of the following situations:
+
+- The user receives a new message and the message notification is enabled for the current conversation.
+- The user proactively clears the number of unread conversation messages. For details, see the chapter above **Clear the number of unread conversation messages**.
+
+With this callback, you can adjust your app's UI display to remind the client user how many messages are currently unread.  
+<CodeGroup>
+```c# title="Sample code"
+// Callback notification for receiving the total unread message count
+ZIM.GetInstance().onConversationTotalUnreadMessageCountUpdated = (ZIM zim,
+                                             uint totalUnreadMessageCount) =>
+{
+    // Obtain the total unread count of conversations for UI display
+};
+```
+</CodeGroup>
+
+## Clear the unread message count of one conversation
+
+To clear the unread message number of one conversation after getting the conversation list, call the [ClearConversationUnreadMessageCount](@ClearConversationUnreadMessageCount) method.
+
+Because the ZIM SDK does not know when your app users should clear the unread count of the conversation, you need to call this method when your app users interact with specific pages. The following are some common scenarios to call this method:
+
+- Users click a conversation to enter the chat interface. 
+- Users stay in the same conversation, and this method should be called every time the user receiving a new message. 
+- Users mark a specified conversation as read in the conversation list interface. 
+
+<CodeGroup>
+```c# title="Sample code"
+ZIM.GetInstance().ClearConversationUnreadMessageCount("CONV_ID", ZIMConversationType.Peer,
+    (string conversationID, ZIMConversationType conversationType,
+                ZIMError errorInfo) =>
+    {
+        // Result of clear the conversation unread message count.
+    });
+```
+</CodeGroup>

@@ -1,0 +1,277 @@
+---
+articleID: 15086
+---
+
+# ZIM upgrade Guide
+
+- - -
+
+This article introduces some instructions and precautions when upgrading the In-app Chat Flutter SDK.
+
+<a id="2_13_0"></a>
+
+## 2.16.0 Upgrade Guide
+
+<Warning title="Warning">
+
+Please note that starting from version 2.16.0, there are significant changes to the following interfaces. Therefore, when upgrading from an older version to version 2.16.0, please read the following guide.
+</Warning>
+
+#### 1. Changes to the callCancel method
+
+The following changes only apply to **advanced mode** call invitations.
+
+
+In the new version of [callCancel](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/callCancel.html), if the parameter userIDs contains a userID, the interface will only cancel the invitation for that callee. If the userIDs parameter is empty, the interface will cancel the invitation for all callees.
+
+For the old version of the `callCancel` method, regardless of whether the userIDs parameter is empty or not, it is considered as canceling the invitation for all callees.
+
+Since the old version of the ZIM SDK is not compatible with separate cancellation logic, if you need to retain the cancellation logic implemented using the old version of ZIM and also need to use the separate cancellation feature of the new version, please isolate the call functionality between the old and new versions of ZIM.
+
+<CodeGroup>
+```dart title="Usage in version 2.16.0"
+  // Cancel userIdA and userIdB separately
+  List<String> invitees;  // List of invitees
+  invitees.add("userIdA","userIdB");  // IDs of invitees
+  String callid = "12352435";  // Call ID
+  ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+  ZIM
+      .getInstance()
+      !.callCancel(invitees, callID, callCancelConfig)
+      .then((value) => {
+  })
+      .catchError((onError) {});
+
+
+  // Cancel the entire call invitation by passing an empty array to invitees. This can be called successfully when none of the callees in the entire call have accepted the invitation
+  List<String> invitees;  // List of invitees
+  String callid = "12352435";  // Call ID
+  ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+  ZIM
+      .getInstance()
+      !.callCancel(invitees, callID, callCancelConfig)
+      .then((value) => {
+  })
+      .catchError((onError) {});
+  ```
+```dart title="Usage in old versions"
+  // Whether the userID is passed in the userIDs parameter or not, it is considered as canceling the entire call. This can be called successfully when none of the callees in the entire call have accepted the invitation
+  List<String> invitees;  // List of invitees
+  invitees.add("userIdA","userIdB");  // IDs of invitees
+  String callid = "12352435";  // Call ID
+  ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+  ZIM
+      .getInstance()
+      !.callCancel(invitees, callID, callCancelConfig)
+      .then((value) => {
+  })
+      .catchError((onError) {});
+
+
+  // Cancel the entire call invitation by passing an empty array to invitees. This can be called successfully when none of the callees in the entire call have accepted the invitation
+  List<String> invitees;  // List of invitees
+  String callid = "12352435";  // Call ID
+  ZIMCallCancelConfig config = new ZIMCallCancelConfig();
+
+  ZIM
+      .getInstance()
+      !.callCancel(invitees, callID, callCancelConfig)
+      .then((value) => {
+  })
+      .catchError((onError) {});
+  ```
+</CodeGroup>
+
+## 2.13.0 Upgrade Guide
+
+<Warning title="Warning">
+
+Please note that starting from version 2.13.0, there are significant changes to the following interfaces. Therefore, when upgrading from an older version to version 2.13.0, please read the following guide.
+</Warning>
+
+#### 1. Changes to the login method
+
+The old version of the `login` method has been deprecated. The new version of [login](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/login.html) method supports more configurations through [ZIMLoginConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMLoginConfig-class.html), such as whether to use Token authentication and whether to login offline.
+
+<CodeGroup>
+```dart title="Usage in version 2.13.0"
+  try{
+      // When logging in, developers need to generate a token according to the "Token Authentication" document
+      // userID is a string with a maximum of 32 bytes. It only supports numbers, English characters, and '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'.
+      // userName is a string with a maximum of 256 bytes, with no special character restrictions.
+      ZIMLoginConfig loginConfig = ZIMLoginConfig();
+      // The user nickname, leave it blank if you don't want to modify the user nickname
+      loginConfig.userName = 'userName';
+      // If using token for login authentication, please fill in this parameter, otherwise no need to fill in
+      loginConfig.token = '';
+      // Whether this login is an offline login, please refer to the offline login documentation for details
+      loginConfig.isOfflineLogin = false;
+      await ZIM.getInstance()?.login('zego', loginConfig);
+      // Login successful, write the business logic for successful login
+  } on PlatformException catch(onError){
+      // Login failed
+      // Error code for login failure, please refer to the error code documentation for handling
+      onError.code;
+      // Error message for login failure
+      onError.message;
+  }
+  ```
+```dart title="Usage in old versions"
+  // When logging in, developers need to generate a token according to the "Token Authentication" document
+  // userID is a string with a maximum of 32 bytes. It only supports numbers, English characters, and '!', '#', '$', '%', '&', '(', ')', '+', '-', ':', ';', '<', '=', '.', '>', '?', '@', '[', ']', '^', '_', '{', '}', '|', '~'.
+  // userName is a string with a maximum of 256 bytes, with no special character restrictions.
+  var userInfo = { userID: 'xxxx', userName: 'xxxx' };
+  var token = '';
+
+  zim.login(userInfo, token)
+  .then(function () {
+      // Login successful
+  })
+  .catch(function (err) {
+      // Login failed
+  });
+  ```
+</CodeGroup>
+<a id="2_9_0"></a>
+
+## 2.9.0 upgrade guide
+
+<Warning title="Warning">
+
+Please note that starting from version 2.9.0, the API method has undergone major changes, so please read the following guidelines when upgrading from older versions to version 2.9.0.
+
+</Warning>
+
+#### The [onCallInvitationTimeout](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationTimeout.html) method changed
+
+The [onCallInvitationTimeout](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onCallInvitationTimeout.html) callback method has added a new parameter `ZIMCallInvitationTimeoutInfo`, developers are required to provide this parameter, otherwise the code cannot be compiled successfully.
+ 
+
+<CodeGroup>
+```dart title="Usage in old versions"
+  ZIMEventHandler.onCallInvitationTimeout = (ZIM zim, String callID){
+
+  };
+  ```
+```dart title="Usage in old 2.9.0"
+  ZIMEventHandler.onCallInvitationTimeout = (ZIM zim, ZIMCallInvitationTimeoutInfo info, String callID){
+    
+  };
+  ```
+</CodeGroup>
+
+
+## 2.3.0 upgrade guide
+
+<Warning title="Warning">
+
+Please note that starting from version 2.3.0, the API method has undergone major changes, so please read the following guidelines when upgrading from older versions to version 2.3.0.
+</Warning>
+
+#### 1. The [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html) method changed
+
+Changed the [create](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/create.html) method from a member function to a static function, and changed the return value from `Future<ZIM>` to `ZIM?`.
+
+When you use In-app Chat, please call this method first. **Also, you should remove the keyword `await`.**
+
+* How we use it with the older version of SDK:
+
+    ```dart
+    await ZIM.getInstance().create(12345678);
+    ```
+
+* To use it with SDK V2.3.0:
+
+    ```dart
+    ZIMAppConfig appConfig = ZIMAppConfig();
+    appConfig.appID = 12345678;
+    appConfig.appSign = 'abcdefg...';
+
+    ZIM.create(appConfig);
+    ```
+
+#### 2. The [getInstance](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/getInstance.html) method changed
+
+Changed the return value of the [getInstance](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/getInstance.html) method from `ZIM` to `ZIM?`, so please be careful about null safety.
+
+Every API method needs to be adjusted, and one of the API usage adjustments is shown below.
+
+* How we use it with the older version of SDK:
+
+    ```dart
+    await ZIM.getInstance().login(userInfo, token);
+    ```
+
+* To use it with SDK V2.3.0:
+
+    ```dart
+    await ZIM.getInstance()!.login(userInfo, token);
+    ```
+
+#### 3. Instance parameters added
+
+We added the In-app Chat instance parameter as a callback parameter. Each callback needs to be adjusted, and the following takes a method as an example: 
+
+* How we use it with the older version of SDK:
+
+    ```dart
+    ZIMEventHandler.onConnectionStateChanged = (state, event, extendedData) {
+        // to do something...
+    };
+    ```
+
+* To use it with SDK V2.3.0:
+
+    ```dart
+    ZIMEventHandler.onConnectionStateChanged = (zim, state, event, extendedData) {
+        // to do something...
+    };
+    ```
+
+#### 4. Unnecessary Future return value removed
+
+We removed unnecessary Future return values in some API methods, so that `await` return values are not needed.
+
+The methods involved are: [destroy](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/destroy.html), [logout](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/logout.html), [setLogConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setLogConfig.html), [setCacheConfig](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/setCacheConfig.html), and [beginRoomAttributesBatchOperation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/beginRoomAttributesBatchOperation.html).
+
+* How we use it with the older version of SDK:
+
+    ```dart
+    await ZIM.getInstance().setLogConfig(config);
+    ......
+
+    await ZIM.getInstance().setCacheConfig(config);
+    ......
+
+    await ZIM.getInstance().beginRoomAttributesBatchOperation(roomID, config);
+    ......
+
+    await ZIM.getInstance().logout();
+    ......
+
+    await ZIM.getInstance().destroy();
+    ......
+    ```
+
+* To use it with SDK V2.3.0:
+
+    ```dart
+    ZIM.setLogConfig(config);
+    ......
+
+    ZIM.setCacheConfig(config);
+    ......
+
+    ZIM.getInstance()!.beginRoomAttributesBatchOperation(roomID, config);
+    ......
+
+    ZIM.getInstance()!.logout();
+    ......
+
+    ZIM.getInstance()!.destroy();
+    ......
+    ```
+

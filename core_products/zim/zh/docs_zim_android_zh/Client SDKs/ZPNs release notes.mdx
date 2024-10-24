@@ -1,0 +1,107 @@
+---
+articleID: 17552
+---
+
+
+# ZPNs release notes
+
+---
+## Version 2.7.0
+
+**Release Date: 2024-07-01**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related API |
+|-------|-------|-------|
+| Vendor Package Separation | Separate the implementation of ZPNs for different vendors into corresponding vendor packages. You can choose to integrate different ZPNs vendor packages based on your own vendor access situation, avoiding unnecessary dependencies on vendor packages and reducing unnecessary review risks during deployment. | - |
+
+<br/>
+- - -
+
+## Version 2.6.0
+
+**Release Date: November 22, 2023**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related API |
+|-------|-------|-------|
+| Notification with Image | Support for including an image in offline push notifications. For more details, please refer to the documentation [Notify with photo attachment](./../Offline%20push%20notifications/Best%20Practices/Notify%20with%20photo%20attachment.mdx). | <ul><li>[Push message to all users](/zim-server/push-message-to-all-users)</li></ul> |
+| Update Icon Badge | Support updating the app icon badge to remind users of unread messages even when they are offline. For more details, please refer to the documentation [Modify a notification badge](./../Offline%20push%20notifications/Best%20Practices/Modify%20a%20notification%20badge.mdx). | <ul><li>[ZIMPushConfig > enableBadge](@enableBadge-ZIMPushConfig)</li><li>[ZIMPushConfig > enableBadge](@badgeIncrement-ZIMPushConfig)</li><li>[ZPNsConfig > enableHwBadge](@enableHwBadge-ZPNsConfig)</li></ul> |
+
+<br/>
+- - -
+
+
+## Version 2.5.0
+
+**Release Date: 2023-09-14**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related API |
+|-------|-------|-------|
+| Local Logs | Added ZPNs local log component, call [uploadLog](@uploadLog) of ZIM SDK to upload logs of both ZIM and ZPNs. | [uploadLog](@uploadLog) |
+| Send private message  | Support unregistering offline push and disabling push notifications. | [ZIMPushConfig > resourcesID](@resourcesID-ZIMPushConfig) |
+
+<p class="hthree">Improvement and optimization</p>
+
+| Feature | Description | Related Interface |
+| ------- | ----------- | ----------------- |
+| Get payload passthrough field | Add interface to retrieve payload passthrough field, simplifying the retrieval process. | [getZPNsMessage](@getZPNsMessage) |
+<br/>
+- - -
+
+## Version 2.3.0
+
+**Release Date: 2023-03-07**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Silent Push Support | Supports synchronizing data between the app running in the background and the server through silent push. | - |
+
+<br/>
+- - -
+
+## Version 2.2.0
+
+**Release Date: 2022-12-01**
+
+<p class="hthree">Improvements</p>
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| ZPNs Interface Optimization | Refactored and optimized the ZPNs interface. <Warning title="Warning"><p>If you encounter compilation issues after upgrading to 2.2.0, please refer to the [Upgrade guide - ZPNs](./ZPNs%20upgrade%20guide.mdx).</p></Warning> | - |
+
+<br/>
+- - -
+
+## Version 2.1.0
+
+**Release Date: 2022-08-15**
+
+<h4>New Features</h4>
+
+| Feature | Description | Related API |
+|-------|-------|-------|
+| Support for Google FCM Push Channel | Added support for Google FCM Push Channel, please refer to [Integrate Google FCM push notification](./../Offline%20push%20notifications/Integrate%20FCM.mdx) for more details. | N/A |
+<br/>
+- - -
+
+
+
+## Version 2.0.0
+
+**Release Date: 2022-03-21**
+
+ZPNs SDK is released for the first time. To use it, please combine it with the ZIM SDK.
+
+| Feature | Description | Related APIs |
+|-------|-------|-------|
+| Register Offline Push | Register for offline push notifications from manufacturers' channels. Please configure the required manufacturer information before using it. | <ul><li>[setPushConfig](@setPushConfig)</li><li>[registerPush](@registerPush)</li></ul> |
+| Receive Manufacturer's Transparent Message Callback | Callback triggered by transparent messages returned by various manufacturers, and notifications are thrown in this interface. | [onThroughMessageReceived](@onThroughMessageReceived) |
+| Receive Manufacturer's Notification Click Callback | Callback for notification clicks from various manufacturers, unified in the related interface. | [onNotificationClicked](@onNotificationClicked)|
+| Receive Manufacturer's Notification Display Callback | Callback for notification display from manufacturers, unified in this interface. | [onNotificationArrived](@onNotificationArrived)|

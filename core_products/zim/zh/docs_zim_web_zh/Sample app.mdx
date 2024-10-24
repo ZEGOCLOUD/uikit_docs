@@ -1,0 +1,61 @@
+import Content2 from '/snippets/Reuse/ZIMSampleAppIntro-en.md'
+
+# Sample app
+
+<Content2 />
+
+## Prepare the environment
+
+- Install a browser on your computer or smartphone.
+- Connect your device to the Internet.
+- Install <a href="https://nodejs.org/en/" target="_blank">node.js</a>, preferably version 14.18.1 or above.
+- For browser versions and compatibility, please refer to [compatibility](./Introduction/Overview.mdx#compatibility).
+
+## Prerequisites
+
+You have created a project in the [ZEGOCLOUD Console](https://console.zegocloud.com/account/login) and obtained the AppID and ServerSecret required for accessing the In-app Chat service. The service is not enabled by default, so please first enable the service on the [ZEGOCLOUD Console](https://console.zegocloud.com/account/login) before using it (for more details, please refer to [Project Management - How to activate the In-app Chat Service](https://www.zegocloud.com/docs/admin-console/activate-inapp-chat?platform=all&language=all)). If you are unable to enable the service, please contact ZEGOCLOUD technical support for assistance.
+
+
+## Get the sample code
+
+<Card title="Sample Code" href="https://storage.zego.im/zim/example/web/ZIMExampleJavaScript.zip" target="_blank">Click here to get the complete sample code.</Card>
+
+The following structure shows the subdirectory structure of the sample code:
+
+```bash
+.
+├── README.md                     # Description on how to run the sample project
+├── index.html
+├── package.json                    
+├── public                        
+├── src 
+│   ├── App.vue                   # Business component   
+│   ├── assets                    # Media resources   
+│   ├── components                # Business component directory  
+│   ├── components.d.ts            
+│   ├── env.d.ts                    
+│   ├── main.ts                   # Entry file
+│   ├── utils.ts                  # Utility class methods    
+│   ├── store                     
+│   ├── styles                    # css file directory    
+├── tsconfig.json                 # ts config file  
+├── vite.config.ts                # vite config file 
+```
+
+## Run the sample code
+
+1. Open the `utils.ts` file under the `src` folder, and modify the configurations with the AppID and ServerSecret you get in the **Prerequisites** steps and save it.
+
+    ```javascript
+    const appConfig = {
+        appID: 0, // Contact the ZEGOCLOUD techinical support to get the AppID. 
+        serverSecret: '', // ontact the ZEGOCLOUD techinical support to get the ServerSecret.
+    };
+    ```
+
+2. Run the following command in sequence to start the project by referring to the `README.md` file.
+
+    ```bash
+    npm install # Install dependencies required.
+    npm run dev # Run the sample project after installing dependencies.
+    ```

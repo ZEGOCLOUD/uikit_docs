@@ -1,0 +1,122 @@
+---
+articleID: 16372
+---
+
+
+# Delete messages
+
+- - -
+
+<Note title="Note">
+
+This document is applicable to the following platforms of Unity framework: iOS, Android, macOS, and Windows.
+</Note>
+
+
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of message management, allowing you to send and receive one-to-one, group, in-room messages, query message history, delete messages, and more. With the message management feature, you can meet different requirements of various scenarios such as social entertainment, online shopping, online education, interactive live streaming, and more. 
+
+This document describes how to delete the specified messages in a specified session, or delete all the messages in a specified session.
+
+<Warning title="Warning">
+The ZIM SDK currently supports deleting "one-on-one/group" conversation messages, but does not support deleting "room" conversation messages.
+</Warning>
+
+## Implementation process
+
+The ZIM SDK supports deleting specific messages in a conversation or deleting all messages in a conversation. Deleting messages can be divided into "delete local message records" and "delete server message records". Developers can use the [ZIMMessageDeleteConfig](@-ZIMMessageDeleteConfig) object to set advanced properties for deleting messages.
+
+Taking the example of client A deleting certain messages or all messages with client B:
+
+<Frame width="512" height="auto" caption=""><img src="https://storage.zego.im/sdk-doc/Pics/in_app_chat/deleteMessage.png" /></Frame>
+
+## Delete the specified messages
+
+The following process shows how Client A deletes the specified messages with Client B:
+
+1. Client A and Client B log in to the ZIM SDK to send and receive messages to and from each other.
+2. When Client A wants to delete the specified messages with Client B:
+    1. Client A logs in to the ZIM SDK first.
+    2. Client A calls the [DeleteMessages](@DeleteMessages) method and pass the `messageList` and `config` parameters.
+    3. Client A receives the results through the callback [ZIMMessageDeletedCallback](@ZIMMessageDeletedCallback).
+
+
+
+<CodeGroup>
+```c# SampleCode
+// 1. Create a ZIM object and pass in the appID and appSign
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace with your assigned AppID
+appConfig.appSign = "appSign";   // Replace with your assigned AppSign
+ZIM.Create(appConfig);
+
+// 2. Log in
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+ZIM.GetInstance().Login(zimUserInfo, (ZIMError errorInfo) =>
+{
+    // Developers can use ZIMError to determine if the login is successful.
+}
+);
+
+
+// 3. Delete specific messages in a conversation
+string conversationID = "xxxx";
+List<ZIMMessage> deleteMessageList = new List<ZIMMessage>();
+
+ZIMMessageDeleteConfig config = new ZIMMessageDeleteConfig();
+config.isAlsoDeleteServerMessage = false;
+
+ZIM.GetInstance().DeleteMessages(deleteMessageList, conversationID, ZIMConversationType.Peer, config, (string conversationID, ZIMConversationType conversationType,
+    ZIMError errorInfo) => {
+    // Delete callback
+});
+```
+</CodeGroup>
+
+
+
+## Delete all messages of the specified session
+
+The following process shows how Client A deletes all messages with Client B:
+
+1. Client A and Client B log in to the ZIM SDK to send and receive messages to and from each other.
+2. When Client A wants to delete all messages with Client B:
+    1. Client A logs in to the ZIM SDK first.
+    2. Client A calls the [DeleteAllMessage](@DeleteAllMessage)  method and pass the `conversationID`, `conversationType`, and `config` parameters.
+    3. Client A receives the results through the callback [ZIMMessageDeletedCallback](@ZIMMessageDeletedCallback) .
+
+
+
+<CodeGroup>
+```c# SampleCode
+// 1. Create a ZIM object and pass in the appID and appSign
+ZIMAppConfig appConfig = new ZIMAppConfig();
+appConfig.appID = 12345;  // Replace with your assigned AppID
+appConfig.appSign = "appSign";   // Replace with your assigned AppSign
+ZIM.Create(appConfig);
+
+// 2. Log in
+ZIMUserInfo zimUserInfo = new ZIMUserInfo();
+zimUserInfo.userID = "xxxx";
+zimUserInfo.userName = "xxxx";
+ZIM.GetInstance().Login(zimUserInfo, (ZIMError errorInfo) =>
+{
+    // Developers can use ZIMError to determine if the login is successful.
+}
+);
+
+// 3. Delete all messages in a specific conversation
+string conversationID = "xxxx";
+
+ZIMMessageDeleteConfig config = new ZIMMessageDeleteConfig();
+config.isAlsoDeleteServerMessage = false;
+
+ZIM.GetInstance().DeleteAllMessage(conversationID, ZIMConversationType.Peer, config, (string conversationID, ZIMConversationType conversationType,
+    ZIMError errorInfo) =>
+{
+    // Developers can listen to this callback to check if the messages are deleted successfully.
+});
+```
+</CodeGroup>

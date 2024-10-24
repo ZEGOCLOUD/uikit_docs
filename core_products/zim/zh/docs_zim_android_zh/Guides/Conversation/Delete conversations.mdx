@@ -1,0 +1,253 @@
+---
+articleID: 17756
+---
+
+import {getPlatformData} from "/snippets/utils-content-parser.js"
+
+
+export const deleteConversationMap = {
+  'Android': <a href='@deleteConversation' target='_blank'>deleteConversation</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteConversation.html' target='_blank'>deleteConversation</a>,
+}
+export const deleteAllMessageMap = {
+  'Android': <a href='@deleteAllMessage' target='_blank'>deleteAllMessage</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllMessage.html' target='_blank'>deleteAllMessage</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIM#delete-all-message-by-conversation-id-conversation-id-conversation-type-config-callback' target='_blank'>deleteAllMessageByConversationID</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIM#delete-all-message-by-conversation-id-conversation-id-conversation-type-config-callback' target='_blank'>deleteAllMessageByConversationID</a>,
+
+}
+export const onConversationTotalUnreadMessageCountUpdatedMap = {
+  'Android': <a href='@onConversationTotalUnreadMessageCountUpdated' target='_blank'>onConversationTotalUnreadMessageCountUpdated</a>,
+  'Web': <a href='@conversationTotalUnreadMessageCountUpdated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMEventHandler/onConversationTotalUnreadMessageCountUpdated.html' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-conversation-total-unread-message-count-updated' target='_blank'>conversationTotalUnreadMessageCountUpdated</a>,
+}
+export const deleteAllConversationsMap = {
+  'Android': <a href='@deleteAllConversations' target='_blank'>deleteAllConversations</a>,
+  'Flutter': <a href='https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/deleteAllConversations.html' target='_blank'>deleteAllConversations</a>,
+  'iOS,mac': <a href='@deleteAllConversationsWithConfig' target='_blank'>deleteAllConversationsWithConfig</a>,
+}
+
+# Delete conversations
+
+- - -
+
+## Introduction
+
+ZIM supports users to delete a specific conversation or all conversations in the conversation list.
+
+## Delete a conversation
+
+To delete a specified conversation after login, call the {getPlatformData(props,deleteConversationMap)} with the `conversationID` parameter.
+
+<Note title="Note">
+
+When deleting a specified conversation:
+
+- All messages in the conversation are not automatically deleted. If you need to delete both the conversation and all messages in the conversation, call the {getPlatformData(props,deleteAllMessageMap)} method. For details, see the chapter **Delete all messages of the specified conversation** of [Delete messages](./../Messaging/Delete%20messages.mdx).
+- If the conversation has unread messages, the total number of unread messages will be reduced and shown in the {getPlatformData(props,onConversationTotalUnreadMessageCountUpdatedMap)} callback. For details, see the chapter **Get the number of unread messages** above.
+</Note>
+
+
+:::if{props.platform=undefined}
+<CodeGroup>
+```java title = "Sample code"
+// Delete a specified conversation
+ZIMConversationDeleteConfig config = new ZIMConversationDeleteConfig();
+config.isAlsoDeleteServerConversation = true;
+
+zim.deleteConversation("CONV_ID", ZIMConversationType.PEER, config, new ZIMConversationDeletedCallback() {
+    @Override
+    public void onConversationDeleted(ZIMError errorInfo) {
+        // The results of delete a specified result. 
+        if(errorInfo.code == ZIMErrorCodeSuccess) {
+          // ......
+        } else {
+          // ......
+        }            
+    }
+});
+```
+</CodeGroup>
+
+:::
+:::if{props.platform="iOS"}
+<CodeGroup>
+```objc title = "Sample code"
+// Delete a specified conversation.
+ZIMConversationDeleteConfig *config = [[ZIMConversationDeleteConfig alloc] init];
+config.isAlsoDeleteServerConversation = YES;
+[self.zim deleteConversation:@"CONV_ID" conversationType: ZIMConversationTypePeer config:config callback:^(ZIMError * _Nonnull errorInfo) {
+    // The results of delete a specified result. 
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+}];
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="mac"}
+<CodeGroup>
+```objc title = "Sample code"
+// Delete a specified conversation.
+ZIMConversationDeleteConfig *config = [[ZIMConversationDeleteConfig alloc] init];
+config.isAlsoDeleteServerConversation = YES;
+[self.zim deleteConversation:@"CONV_ID" conversationType: ZIMConversationTypePeer config:config callback:^(ZIMError * _Nonnull errorInfo) {
+    // The results of delete a specified result. 
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+}];
+```
+
+</CodeGroup>
+:::
+:::if{props.platform="window"}
+<CodeGroup>
+```cpp title = "Sample code"
+// Delete a specified conversation
+ZIMConversationDeleteConfig config;
+config.isAlsoDeleteServerConversation = true;
+
+zim.deleteConversation("CONV_ID", ZIMConversationTypePeer, config, [=](ZIMError errorInfo) {
+    // The results of delete a specified result. 
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+});
+```
+</CodeGroup>
+:::
+:::if{props.platform="Web"}
+<CodeGroup>
+```javascript title="Sample code"
+// Delete an one-to-one chat.
+var conversationID = '';
+var conversationType = 0;
+var config = { isAlsoDeleteServerConversation: true };
+zim.deleteConversation(conversationID, conversationType, config)
+    .then(function(res){
+        // Operation succeeded.
+    })
+    .catch(function(err){
+        // Operation failed.
+    })
+```
+</CodeGroup>
+:::
+:::if{props.platform="Flutter"}
+<CodeGroup>
+```dart title="Sample code"
+// Delete a specified conversation.
+ZIMConversationDeleteConfig conversationDeleteConfig =
+      ZIMConversationDeleteConfig();
+conversationDeleteConfig.isAlsoDeleteServerConversation = true;
+ZIM
+    .getInstance()
+    .deleteConversation(
+        'conversationID', ZIMConversationType.peer, conversationDeleteConfig)
+    .then((value) {})
+    .catchError((onError) {});
+```
+</CodeGroup>
+:::
+
+## Delete all conversations
+
+After the login, a user can delete all conversations in the conversation list by calling the {getPlatformData(props,deleteAllConversationsMap)} interface.
+
+:::if{props.platform=undefined}
+```java
+ZIMConversationDeleteConfig config = new ZIMConversationDeleteConfig();
+config.isAlsoDeleteServerConversation = true;
+
+zim.deleteAllConversations(config, new ZIMConversationsAllDeletedCallback() {
+    @Override
+    public void onConversationsAllDeleted(ZIMError errorInfo) {
+             // Callback of deletion
+        }
+});
+```
+
+:::
+:::if{props.platform="iOS"}
+```objc
+// Delete all conversations
+
+ZIMConversationDeleteConfig *config = [[ZIMConversationDeleteConfig alloc] init];
+config.isAlsoDeleteServerConversation = YES;
+
+[self.zim deleteAllConversationsWithConfig:config callback:^(ZIMError * _Nonnull errorInfo) {
+    // Get the result of deleting conversations
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+// Delete all conversations
+
+ZIMConversationDeleteConfig *config = [[ZIMConversationDeleteConfig alloc] init];
+config.isAlsoDeleteServerConversation = YES;
+
+[self.zim deleteAllConversationsWithConfig:config callback:^(ZIMError * _Nonnull errorInfo) {
+    // Get the result of deleting conversations
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+// Delete all conversations
+ZIMConversationDeleteConfig config;
+config.isAlsoDeleteServerConversation = true;
+
+zim->deleteAllConversations(config, [=](ZIMError errorInfo) {
+    // Operation result
+    if(errorInfo.code == ZIMErrorCodeSuccess) {
+      // ......
+    } else {
+      // ......
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Delete all conversations
+var config = { isAlsoDeleteServerConversation: true };
+zim.deleteAllConversations(config)
+    .then(function(){
+        // Operation succeeded
+    })
+    .catch(function(err){
+        // Operation failed
+    })
+```
+:::
+:::if{props.platform="Flutter"}
+```dart
+// Delete all conversations
+ZIMConversationDeleteConfig config = ZIMConversationDeleteConfig();
+config.isAlsoDeleteServerConversation = true;
+
+ZIM.getInstance()!.deleteAllConversations(config).then((value) => {})
+    .catchError((onError) {});
+```
+:::

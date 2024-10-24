@@ -1,0 +1,145 @@
+---
+articleID: 14552
+---
+
+
+# Manage room properties
+
+- - -
+
+ZEGOCLOUD's In-app Chat (the ZIM SDK) provides the capability of room property management, allowing you to customize the properties of a specified room.
+
+With this feature, you can build your app to meet different requirements of various scenarios: customize the in-room properties in a live audio streaming or live chatroom, manage your speaker seats in a live audio room, mark player roles and the latest facts and figures in an online Werewolf and other online board games.
+
+<Video src="https://www.youtube.com/embed/ga-wHRhsbvE"/>
+
+## Set room properties
+
+To set room properties, set them when you call the [createRoom](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/createRoom.html) method to create a room.
+
+```dart
+Future<ZIMRoomCreatedResult> createRoom(ZIMRoomInfo roomInfo,[ZIMRoomAdvancedConfig? config]);
+```
+
+<Warning title="Warning">
+
+- Up to 20 room properties can be set in a room. The room property is stored in the format of `Key-Value`. The maximum length of `Key` is 16 bytes, the maximum length of `Value` is 1024 bytes, and the total length of all properties must not exceed 5120 bytes. For more customizable room properties, contact ZEGOCLOUD Technical Support. 
+- The customized room properties you set will be cleared after the room is destroyed.
+</Warning>
+
+
+<CodeGroup>
+```dart title="Sample code"
+ZIMRoomMemberQueryConfig roomMemberQueryConfig = ZIMRoomMemberQueryConfig();
+roomMemberQueryConfig.count = 100;
+
+ZIMRoomInfo roomInfo = ZIMRoomInfo();
+roomInfo.roomID = 'roomID';
+roomInfo.roomName = 'roomName';
+ZIMRoomAdvancedConfig advancedConfig = ZIMRoomAdvancedConfig();
+advancedConfig.roomAttributes = {'key': 'value'};
+
+ZIM
+    .getInstance()
+    .createRoom(roomInfo,advancedConfig)
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+### Modify room properties
+
+The room properties you set are stored as `key-value`.
+
+- When Key does not exist: Setting room property means adding room property.
+- When the Key already exists: Setting the room property means updating the value of the existing room property.
+
+
+<CodeGroup>
+```dart title="Sample code"
+Map<String, String> roomAttributes = {'key': 'value'};
+ZIMRoomAttributesSetConfig roomAttributesSetConfig = ZIMRoomAttributesSetConfig();
+ZIM
+    .getInstance()
+    .setRoomAttributes(roomAttributes, 'roomID', roomAttributesSetConfig)
+    .then((value) {
+      //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+      //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+
+## Delete room properties
+
+Generally, you can only delete the room properties that you own. You can also delete the room properties created by others by setting the `isForce` value in `config`.
+
+
+<CodeGroup>
+```dart title="Sample code"
+List<String> keys = ['key1', 'key2'];
+ZIMRoomAttributesDeleteConfig roomAttributesDeleteConfig = ZIMRoomAttributesDeleteConfig();
+
+ZIM
+    .getInstance()
+    .deleteRoomAttributes(keys, 'roomID', roomAttributesDeleteConfig)
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+
+## Get room properties
+
+
+<CodeGroup>
+```dart title="Sample code"
+ZIM
+    .getInstance()
+    .queryRoomAllAttributes('roomID')
+    .then((value) {
+      //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+      //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>
+
+## Combined room properties operation
+
+The merge operation means that you can combine multiple operations within the same room into one operation using the [beginRoomAttributesBatchOperation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/beginRoomAttributesBatchOperation.html) and [endRoomAttributesBatchOperation](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIM/endRoomAttributesBatchOperation.html) methods. This is typically used when you want to perform consecutive operations without being interrupted by other users' operations.
+
+To know the operation results after making a combined room properties operation, you can check the return value of the class [ZIMRoomAttributesBatchOperatedResult](https://pub.dev/documentation/zego_zim/latest/zego_zim/ZIMRoomAttributesBatchOperatedResult-class.html). 
+
+
+<CodeGroup>
+```dart title="Sample code"
+ZIM
+    .getInstance()
+    .beginRoomAttributesBatchOperation('roomID', batchOperationConfig)
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed. 
+    });
+
+ZIM
+    .getInstance()
+    .endRoomAttributesBatchOperation('roomID')
+    .then((value) {
+        //This will be triggered when operation successful. 
+    })
+    .catchError((onError) {
+        //This will be triggered when operation failed.
+    });
+```
+</CodeGroup>

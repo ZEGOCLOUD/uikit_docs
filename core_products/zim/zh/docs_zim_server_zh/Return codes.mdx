@@ -1,0 +1,55 @@
+# Return codes
+
+- - -
+
+## Public return codes
+
+| 0 | Request successful. |
+| :-- | :-- | 
+| 1 | Request failed. Server is busy. Please try again later. |
+| 2 | Incorrect input parameter. Please enter the correct parameters. |
+| 3 | Verification failed. Please contact ZEGOCLOUD technical support. |
+| 7 | The number of requests per second has exceeded the API rate limit. The service request is overloaded. Please try again later. |
+| 50014 | The length of the UserName exceeds the limit.  Please make sure the length of the UserName is within 64 bytes. |
+| 51102 | The user does not exist. The user has not logged in to In-app Chat. The user needs to log in to In-app Chat. |
+| 100000000 | Incorrect Host in the request header. The Host in the URL is incorrect. Please check the Host in the request URL. |
+| 100000001 | Invalid AppId format. Please check whether the AppId is correct. |
+| 100000002 | Timestamp is null. Please fill in the Timestamp. |
+| 100000003 | Invalid Timestamp format. Please check the timestamp format. |
+| 100000004 | Signature expired. Please try again. |
+| 100000005 | Invalid signature. Please try again. |
+| 100000006 | Action is null. Please check the request URL. |
+| 100000007 | Unsupported Action. Please check the request URL. |
+| 100000008 | SignatureNonce is null. Please try again. |
+| 100000009 | Signature is null. Please try again. |
+| 100000010 | Failed to get ServerSecret. Please contact ZEGOCLOUD technical support. |
+| 100000011 | Failed to get App configuration. Please contact ZEGOCLOUD technical support. |
+| 100000012 | Failed to get request body. Please contact ZEGOCLOUD technical support. |
+| 100000013 | SignatureVersion is null. Please try again. |
+| 100000014 | Unsupported SignatureVersion. Please check whether the SignatureVersion is correct. |
+| 100000015 | API gateway internal error. Please contact ZEGOCLOUD technical support. |
+| 100000016 | The App has not configured with the production environment. Please check whether the AppId is configured with the permission of the production environment. |
+| 100000017 | The App has not activated this service. Please contact ZEGOCLOUD technical support. |
+
+
+## Business-specific return codes
+
+| 660000001 | Business related general error.&nbsp; Please try again or contact ZEGOCLOUD Technical Support. |
+| :-- | :-- | 
+| 660000002 | Invalid parameter. The parameter entered is missing or invalid. Please check the parameters. |
+| 660000003 | Logic processing errors. An error occurs when the server processes the logic. Please try again or contact ZEGOCLOUD Technical Support. |
+| 660000011 | The number of users has exceeded the upper limit. Please check the user list. |
+| 660300001 | The room does not exist. Please check the room ID. |
+| 660300002 | The user is not in the room. Please check the user ID. |
+| 660400001 | The length of the message has exceeded the upper limit. Please check the length of the message. |
+| 660500002 | Unregistered user. The message sender has not logged in. Please log in first before sending messages. |
+| 660600001 | The group does not exist. Please check the group ID.&nbsp; |
+| 660600003 | An error occurred while querying the group member list. Service-side processing exception. Please contact ZEGOCLOUD technical support. |
+| 660600004 | The frequency of calling the QueryGroupMemberList interface exceeds the limit. The rate limit is 20 requests/second. Please do not exceed the limit. |
+| 660600005 | The frequency of calling the KickoutGroupUser interface exceeds the limit. The rate limit is 20 requests/second. Please do not exceed the limit. |
+| 660600006 | An error occurred while querying the group list data. Service-side processing exception. Please contact ZEGOCLOUD technical support. |
+| 660600007 | The frequency of calling the QueryAppGroupList interface exceeds the limit. The rate limit is 1 request/second. Please do not exceed the limit. |
+| 660700001 | The frequency of calling the UserRegister interface exceeds the limit. The request frequency exceeds 20 requests/second. |
+| 660700002 | The user already exists. The UserID that sent the request already exists. Please avoid registering the same UserID repeatedly. |
+| 660700006 | The length of UserName exceeds the limit. The maximum length of UserName is 64 bytes. Please confirm the length of UserName. |
+| 660700007 | The length of UserAvatar address exceeds the limit. The maximum length of UserAvatar address is 500 bytes. Please confirm the length of UserAvatar. |

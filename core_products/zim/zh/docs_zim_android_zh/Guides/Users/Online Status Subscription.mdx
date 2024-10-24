@@ -1,0 +1,967 @@
+---
+articleID: 14239
+---
+
+import { getPlatformData } from "/snippets/utils-content-parser.js"
+
+export const ZIMUserOnlineStatusMap = {
+  'Android': <a href='@-ZIMUserOnlineStatus' target='_blank'>ZIMUserOnlineStatus</a>,
+  
+}
+export const subscribeUsersStatusMap = {
+  'Android': <a href='@subscribeUsersStatus' target='_blank'>subscribeUsersStatus</a>,
+  
+}
+export const onUserStatusUpdatedMap = {
+  'Android': <a href='@onUserStatusUpdated' target='_blank'>onUserStatusUpdated</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-user-status-updated' target='_blank'>userStatusUpdated</a>,
+  "Web": <a href="@userStatusUpdated">userStatusUpdated</a>
+  
+}
+export const ZIMEventHandlerMap = {
+  'Android': <a href='@-ZIMEventHandler' target='_blank'>ZIMEventHandler</a>,
+  'Web': <a href="@on">on</a>,
+  
+}
+export const unsubscribeUsersStatusMap = {
+  'Android': <a href='@unsubscribeUsersStatus' target='_blank'>subscribeUsersStatus</a>,
+  
+}
+export const queryUsersStatusMap = {
+  'Android': <a href='@queryUsersStatus' target='_blank'>queryUsersStatus</a>,
+  
+}
+export const querySubscribedUserStatusListMap = {
+  'Android': <a href='@querySubscribedUserStatusList' target='_blank'>querySubscribedUserStatusList</a>,
+  
+}
+export const onConnectionStateChangedMap = {
+  'Android': <a href='@onConnectionStateChanged' target='_blank'>onConnectionStateChanged</a>,
+  'iOS': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_ios~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
+  'mac': <a href='https://docs.zegocloud.com/article/api?doc=zim_API~objective-c_macos~protocol~ZIMEventHandler#zim-connection-state-changed-event-extended-data' target='_blank'>connectionStateChanged</a>,
+  'Web': <a href='@connectionStateChanged' target='_blank'>connectionStateChanged</a>,
+
+}
+export const ZIMConnectionStateMap = {
+  'Android': <a href='@-ZIMConnectionState' target='_blank'>ZIMConnectionState</a>,
+  
+}
+export const ConnectedMap = {
+  'Android': `CONNECTED`,
+  'iOS, mac': `ZIMConnectionStateConnected`,
+  'window': `ZIM_CONNECTION_STATE_CONNECTED`,
+  'Web':`Connected`,
+}
+export const DisconnectedMap = {
+  'Android': `DISCONNECTED`,
+  'iOS, mac': `ZIMConnectionStateDisconnected`,
+  'window': `ZIM_CONNECTION_STATE_DISCONNECTED`,
+  'Web':`Disconnected`,
+}
+export const ConnectingMap = {
+  'Android': `CONNECTING`,
+  'iOS, mac': `ZIMConnectionStateConnecting`,
+  'window': `ZIM_CONNECTION_STATE_CONNECTING`,
+  'Web':`Connecting`,  
+}
+export const ReconnectingMap = {
+  'Android': `RECONNECTING`,
+  'iOS, mac': `ZIMConnectionStateReconnecting`,
+  'window': `ZIM_CONNECTION_STATE_RECONNECTING`,
+  'Web':`Reconnecting`,    
+}
+
+
+# Online Status Subscription
+
+- - -
+
+<Note title="Note">
+
+To use this feature, please subscribe to the enterprise plan.
+</Note>
+
+## Introduction
+
+User online statuses {getPlatformData(props,ZIMUserOnlineStatusMap)} include three types: online, logout, and offline.
+
+- Online: When the user actively calls the `login` method to log in and maintains a network connection, the user's status changes to online.
+- Logout: After the user actively calls the `logout` method, the user's status changes to logout.
+- Offline: After the user logs in by calling the `login` method, if the user kills the app or locks the screen, or the app is in the background, causing the network to disconnect, the user's status changes to offline.
+
+This article introduces how to subscribe to and query users' online statuses.
+
+## Subscribe to user online statuses
+
+To continuously monitor the online status of certain users, you can call the {getPlatformData(props,subscribeUsersStatusMap)} method and pass the target user IDs in the `userIDs` parameter (up to 100 registered users, excluding the subscriber itself). You also need to pass the `subscriptionDuration` in the config (during which the online status changes of the target users will be continuously monitored), so that the target users can be added in the subscriber's online status subscription list.
+
+<Note title="Note">
+
+- A user can subscribe to up to 3,000 people. When the number of subscribed users exceeds 3,000, the earliest subscribed users will be replaced.
+- After a user subscribing to another user's online status, the subscription remains valid even if the user logs out and logs back in within the `subscriptionDuration` period. There's no need to resubscribe.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+ZIMUserStatusSubscribeConfig config = new ZIMUserStatusSubscribeConfig();
+config.subscriptionDuration = 60; // Subscription duration in minutes, valid range is 1 to 43200 (30 days)
+
+ArrayList<String> userIDs = new ArrayList<>();
+userIDs.add("userIdA");
+userIDs.add("userIdB");
+
+zim.subscribeUsersStatus(userIDs, config, new ZIMUsersStatusSubscribedCallback() {
+    @Override
+    public void onUsersStatusSubscribed(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        // Handle subscription callback
+        for (ZIMErrorUserInfo errorUserInfo : errorUserList) {
+            System.out.println("User ID failed to subscribe: " + errorUserInfo.userID);
+            System.out.println("Failure reason: " + errorUserInfo.reason);
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMUserStatusSubscribeConfig *config = [[ZIMUserStatusSubscribeConfig alloc] init];
+config.subscriptionDuration = 60; // Subscription duration in minutes, valid range is 1 to 43200 (30 days)
+
+[zim subscribeUsersStatus:@[@"userIdA",@"userIdB"]
+                   config:config
+                 callback:^(NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                            ZIMError *_Nonnull errorInfo) {
+                for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+                    errorUserInfo.userID; // User ID of the failed subscription
+                    errorUserInfo.reason; // Error code of the failed subscription
+                }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMUserStatusSubscribeConfig *config = [[ZIMUserStatusSubscribeConfig alloc] init];
+config.subscriptionDuration = 60; // Subscription duration in minutes, valid range is 1 to 43200 (30 days)
+
+[zim subscribeUsersStatus:@[@"userIdA",@"userIdB"]
+                   config:config
+                 callback:^(NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                            ZIMError *_Nonnull errorInfo) {
+                for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+                    errorUserInfo.userID; // User ID of the failed subscription
+                    errorUserInfo.reason; // Error code of the failed subscription
+                }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMUserStatusSubscribeConfig config;
+config.subscriptionDuration = 60; // Subscription duration in minutes, valid range is 1 to 43200 (30 days)
+
+std::vector<std::string> userIDs = {"userIdA", "userIdB"};
+
+zim_->subscribeUsersStatus(userIDs, config, [](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
+    for (const ZIMErrorUserInfo &errorUserInfo : errorUserList) {
+        errorUserInfo.userID;   // User ID failed to subscribe
+        errorUserInfo.reason;   // Failure reason
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Create the subscription configuration
+const config = {
+    subscriptionDuration: 60, // The duration is in minute
+};
+
+// Subscription user ID list
+const userIDs = ['userIdA', 'userIdB'];
+
+try {
+    // Call the subscribeUsersStatus method
+    const result = await zim.subscribeUsersStatus(userIDs, config);
+
+    // Check for users with failed subscriptions
+    if (result.errorUserList.length > 0) {
+        result.errorUserList.forEach((errorUserInfo) => {
+            console.log('User ID with failed subscription: ', errorUserInfo.userID);
+            console.log('Error code for failed subscription: ', errorUserInfo.reason);
+        });
+    } else {
+        console.log('All users subscribed successfully!');
+    }
+} catch (error) {
+    // Catch the exception and handle the error code
+    console.error('Error occurred while subscribing:', error);
+}
+```
+:::
+
+
+
+#### Event notification
+
+Subsequently, the online status changes of the target users within the specified `subscriptionDuration` will be returned through the {getPlatformData(props,onUserStatusUpdatedMap)} event callback registered by the {getPlatformData(props,ZIMEventHandlerMap)} method.
+
+<Note title="Note">
+
+If the user logs off and then logs back in after subscribing, the ZIM SDK will proactively notify the user via the callback about the last status changes of the subscribed target users during the user’s offline period.
+</Note>
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onUserStatusUpdated(ZIM zim, ArrayList<ZIMUserStatus> userStatusList) {
+        for (ZIMUserStatus userStatus : userStatusList) {
+            String userID = userStatus.userID; // Target user ID
+            String onlineStatus = userStatus.onlineStatus; // Target user's online status
+            ArrayList<String> onlinePlatforms = userStatus.onlinePlatforms; // User online platforms list 
+            long lastUpdateTime = userStatus.lastUpdateTime; // Last update time of online status
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+@method ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        userStatus.userID; // Target user ID
+        userStatus.onlineStatus; // User online status
+        userStatus.onlinePlatforms; // User online platforms list
+        userStatus.lastUpdateTime; // Last update time of online status
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+@method ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        userStatus.userID; // Target user ID
+        userStatus.onlineStatus; // User online status
+        userStatus.onlinePlatforms; // User online platforms list
+        userStatus.lastUpdateTime; // Last update time of online status
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+class CZIMEventHandler :public zim::ZIMEventHandler
+{
+    public:
+        CZIMEventHandler();
+        ~CZIMEventHandler();
+    private:
+        virtual void onUserStatusUpdated(ZIM* zim, const std::vector<ZIMUserStatus>& userStatusList) override;
+        // Other callbacks
+}
+
+...
+
+im_event_handler_ = std::make_shared<CZIMEventHandler>();
+zim_->setEventHandler(im_event_handler_);
+```
+```cpp
+void onUserStatusUpdated(ZIM* zim, const std::vector<ZIMUserStatus>& userStatusList)  {
+    for (const ZIMUserStatus& userStatus : userStatusList) {
+        userStatus.userID;            // Target user ID
+        userStatus.onlineStatus;      // Target user's online status
+        userStatus.onlinePlatforms;   // User online platforms list 
+        userStatus.lastUpdateTime;    // Last update time of online status
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Listen for the user status update event
+zim.on('userStatusUpdated', function (zim, { userStatusList }) {
+    userStatusList.forEach((userStatus) => {
+        const { userID, onlineStatus, onlinePlatforms, lastUpdateTime } = userStatus;
+
+        console.log('userStatusUpdated:', userID, onlineStatus, onlinePlatforms, lastUpdateTime);
+
+        // Handle the logic after user status update here, such as updating UI or other operations
+    });
+});
+```
+:::
+
+## Unsubscribe from user online statuses
+
+If you no longer need to monitor the online status of certain users, you can call the {getPlatformData(props,unsubscribeUsersStatusMap)} method and pass the target user IDs in the `userIDs` parameter (up to 100 users).
+
+:::if{props.platform=undefined}
+```java
+ArrayList<String> userIDs = new ArrayList<>();
+userIDs.add("userIdA");
+userIDs.add("userIdB");
+
+zim.unsubscribeUsersStatus(userIDs, new ZIMUsersStatusUnsubscribedCallback() {
+    @Override
+    public void onUsersStatusUnsubscribed(ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        for (ZIMErrorUserInfo errorUserInfo : errorUserList) {
+            System.out.println("User ID failed to unsubscribe: " + errorUserInfo.userID);
+            System.out.println("Failure reason: " + errorUserInfo.reason);
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim unsubscribeUserStatus:@[@"userIdA",@"userIdB"]
+                  callback:^(NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                                ZIMError *_Nonnull errorInfo) {
+        for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+            errorUserInfo.userID; // User ID of the failed unsubscription
+            errorUserInfo.reason; // Error code of the failed unsubscription
+        }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+[zim unsubscribeUserStatus:@[@"userIdA",@"userIdB"]
+                  callback:^(NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                                ZIMError *_Nonnull errorInfo) {
+        for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+            errorUserInfo.userID; // User ID of the failed unsubscription
+            errorUserInfo.reason; // Error code of the failed unsubscription
+        }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+std::vector<std::string> userIDs = {"userIdA", "userIdB"};
+
+zim_->unsubscribeUsersStatus(userIDs, [](const std::vector<ZIMErrorUserInfo> &errorUserList, const ZIMError &errorInfo) {
+    for (const ZIMErrorUserInfo &errorUserInfo : errorUserList) {
+        errorUserInfo.userID;   // User ID failed to unsubscribe
+        errorUserInfo.reason;   // Failure reason
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// List of user IDs to unsubscribe
+const userIDs = ['userIdA', 'userIdB'];
+
+try {
+    // Call the unsubscribeUsersStatus method
+    const result = await zim.unsubscribeUsersStatus(userIDs);
+// Check for users who could not be unsubscribed
+if (result.errorUserList.length > 0) {
+    result.errorUserList.forEach((errorUserInfo) => {
+        console.log('User ID of failed unsubscription: ', errorUserInfo.userID);
+        console.log('Error code of failed unsubscription: ', errorUserInfo.reason);
+        });
+    } else {
+        console.log('Successfully unsubscribe all users');
+    }
+} catch (error) {
+    // Catch the exception and handle the error
+    console.error('An error occurred while unsubscribing:', error);
+}
+```
+:::
+
+
+## Query user online statuses
+
+If you only need to get the online statuses of target users once, you can call the {getPlatformData(props,queryUsersStatusMap)} method and pass the target user IDs (up to 200 users, excluding the current user).
+
+:::if{props.platform=undefined}
+```java
+ArrayList<String> userIDs = new ArrayList<>();
+userIDs.add("userIdA");
+userIDs.add("userIdB");
+
+zim.queryUsersStatus(userIDs, new ZIMUsersStatusQueriedCallback() {
+    @Override
+    public void onUsersStatusQueried(ArrayList<ZIMUserStatus> userStatusList,
+                                        ArrayList<ZIMErrorUserInfo> errorUserList, ZIMError errorInfo) {
+        for (ZIMUserStatus userStatus : userStatusList) {
+            System.out.println("User ID: " + userStatus.userID); // Target user ID
+            System.out.println("Online Status: " + userStatus.onlineStatus); // User online status
+            System.out.println("Online Platforms: " + userStatus.onlineStatus); // User online platforms list
+            System.out.println("Last Update Time: " + userStatus.lastUpdateTime); // Last update time of online status
+        }
+
+        for (ZIMErrorUserInfo errorUserInfo : errorUserList) {
+            System.out.println("Failed user ID: " + errorUserInfo.userID);
+            System.out.println("Failed error code: " + errorUserInfo.reason);
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+[zim queryUsersStatusByUserIDs:userIDs
+                      callback:^(NSArray<ZIMUserStatus *> *_Nonnull userStatusList,
+                            NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                            ZIMError *_Nonnull errorInfo) {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        userStatus.userID; // Target user ID
+        userStatus.onlineStatus; // User online status
+        userStatus.onlinePlatforms; // User online platforms list
+        userStatus.lastUpdateTime; // Last update time of online status
+    }
+    for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+        errorUserInfo.userID; // User ID of the failed query
+        errorUserInfo.reason; // Error code of the failed query
+    }
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+[zim queryUsersStatusByUserIDs:userIDs
+                      callback:^(NSArray<ZIMUserStatus *> *_Nonnull userStatusList,
+                            NSArray<ZIMErrorUserInfo *> *_Nonnull errorUserList,
+                            ZIMError *_Nonnull errorInfo) {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        userStatus.userID; // Target user ID
+        userStatus.onlineStatus; // User online status
+        userStatus.onlinePlatforms; // User online platforms list
+        userStatus.lastUpdateTime; // Last update time of online status
+    }
+    for(ZIMErrorUserInfo *errorUserInfo in errorUserList){
+        errorUserInfo.userID; // User ID of the failed query
+        errorUserInfo.reason; // Error code of the failed query
+    }
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+std::vector<std::string> userIDs = {"userIdA", "userIdB"};
+
+zim_->queryUsersStatus(userIDs, [](const std::vector<ZIMUserStatus> &userStatusList,
+                                    const std::vector<ZIMErrorUserInfo> &errorUserList,
+                                    const ZIMError &errorInfo) {
+    for (const ZIMUserStatus &userStatus : userStatusList) {
+        userStatus.userID;          // Target user ID
+        userStatus.onlineStatus;    // User online status
+        userStatus.onlinePlatforms; // User online platforms list
+        userStatus.lastUpdateTime;  // Last update time of online status
+    }
+    for (const ZIMErrorUserInfo &errorUserInfo : errorUserList) {
+        errorUserInfo.userID; // Failed user ID
+        errorUserInfo.reason; // Failure reason
+    }
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// User ID list for querying status
+const userIDs = ['userIdA', 'userIdB'];
+
+try {
+    // Call the method to query user status
+    const result = await zim.queryUsersStatus(userIDs);
+
+    // Traverse the successfully queried user statuses
+    result.userStatusList.forEach((userStatus) => {
+        console.log('User ID:', userStatus.userID); // Target user ID
+        console.log('Online Status:', userStatus.onlineStatus); // User online status
+        console.log('Online Platforms:', userStatus.onlinePlatforms); // List of user online platforms
+        console.log('Last Update Time:', userStatus.lastUpdateTime); // Last update time of online status
+    });
+
+    // Check for failed user queries
+    result.errorUserList.forEach((errorUserInfo) => {
+        console.log('Failed User ID:', errorUserInfo.userID);
+        console.log('Error Code for Failed Query:', errorUserInfo.reason);
+    });
+} catch (error) {
+    // Catch and handle errors
+    console.error('Error occurred while querying user status:', error);
+}
+```
+:::
+
+## Query the online status subscription list
+
+If users want to know their own online status subscription list, they can use the {getPlatformData(props,querySubscribedUserStatusListMap)} method. If the `config.userIDs` parameter is empty, the complete subscription list will be returned, including the current status and subscription duration of the target users. 
+
+If the `config.userIDs` parameter is not empty, it means the user wants to check if certain users are in the subscription list. The result callback will only include the status information of users who are in the list.
+
+:::if{props.platform=undefined}
+```java
+// Target user IDs for query (up to 200 users in a single query)
+// When userIDs is empty, it means getting the complete subscription table information
+// When userIDs is not empty, it means checking if the target users are in the subscription list
+// If they are, the result will include their status information
+// If they are not, the result will not include any related information
+ZIMSubscribedUserStatusQueryConfig config = new ZIMSubscribedUserStatusQueryConfig();
+config.userIDs.add("userIdA");
+config.userIDs.add("userIdB");
+
+zim.querySubscribedUserStatusList(config, new ZIMSubscribedUserStatusListQueriedCallback() {
+    @Override
+    public void onSubscribedUserStatusListQueried(ArrayList<ZIMUserStatusSubscription> userStatusSubscriptionList, ZIMError errorInfo) {
+        for (ZIMUserStatusSubscription subscription : userStatusSubscriptionList) {
+            subscription.subscribeExpiredTime; // The subscription expiration timestamp of the user in the subscription list
+            subscription.userStatus; // The status information of the user in the subscription list
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+ZIMSubscribedUserStatusQueryConfig *config = [[ZIMSubscribedUserStatusQueryConfig alloc] init];
+// Target user IDs for query (up to 200 users in a single query)
+// When userIDs is empty, it means getting the complete subscription table information
+// When userIDs is not empty, it means checking if the target users are in the subscription list
+// If they are, the result callback will include their status information
+// If they are not, the result callback will not include any related information
+config.userIDs = @[@"userIdA",@"userIdB"];
+
+[zim
+    querySubscribedUserStatusListWithConfig:config
+                                    callback:^(NSArray<ZIMUserStatusSubscription *>
+                                        *_Nonnull userStatusSubscriptionList,
+                                    ZIMError *_Nonnull errorInfo) {
+
+}];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+ZIMSubscribedUserStatusQueryConfig *config = [[ZIMSubscribedUserStatusQueryConfig alloc] init];
+// Target user IDs for query (up to 200 users in a single query)
+// When userIDs is empty, it means getting the complete subscription table information
+// When userIDs is not empty, it means checking if the target users are in the subscription list
+// If they are, the result callback will include their status information
+// If they are not, the result callback will not include any related information
+config.userIDs = @[@"userIdA",@"userIdB"];
+
+[zim
+    querySubscribedUserStatusListWithConfig:config
+                                    callback:^(NSArray<ZIMUserStatusSubscription *>
+                                        *_Nonnull userStatusSubscriptionList,
+                                    ZIMError *_Nonnull errorInfo) {
+
+}];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+ZIMSubscribedUserStatusQueryConfig config;
+// Target user IDs for query (up to 200 users in a single query)
+// When userIDs is empty, it means getting the complete subscription table information
+// When userIDs is not empty, it means checking if the target users are in the subscription list
+// If they are, the result will include their status information
+// If they are not, the result will not include any related information
+config.userIDs = {"userIdA", "userIdB"};
+
+zim_->querySubscribedUserStatusList(config, [](const std::vector<ZIMUserStatusSubscription> &userStatusSubscriptionList,
+                                                const ZIMError &errorInfo) {
+});
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+// Query configuration object
+const config = {
+    userIDs: ['userIdA', 'userIdB'], // If empty, query all subscribed users
+};
+
+try {
+    // Call the method to query the subscribed user status list
+    const result = await zim.querySubscribedUserStatusList(config);
+
+    // Traverse the subscribed user status information
+    result.userStatusSubscriptionList.forEach((subscription) => {
+        console.log('Subscription expiration time:', subscription.subscribeExpiredTime); // Subscription expiration timestamp
+        console.log('User status information:', subscription.userStatus); // User status information
+    });
+} catch (error) {
+    // Catch the exception and handle the error
+    console.error('An error occurred while querying the subscribed user status list:', error);
+}
+```
+:::
+
+
+
+## Listen to the online status of the current user on the current device
+
+If you want to know the online status of the current user on the current device, you can listen to the {getPlatformData(props,onConnectionStateChangedMap)} callback to get the current connection status of the user {getPlatformData(props,ZIMConnectionStateMap)}, and determine the online status of the current user based on it.
+
+In {getPlatformData(props,ZIMConnectionStateMap)}, {getPlatformData(props,ConnectedMap)} means the user is online, {getPlatformData(props,DisconnectedMap)} means the user is offline. The remaining {getPlatformData(props,ConnectingMap)} and {getPlatformData(props,ReconnectingMap)} connection states can be determined as either online or offline based on your business logic.
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onConnectionStateChanged(ZIM zim, ZIMConnectionState state,
+                                        ZIMConnectionEvent event, JSONObject extendedData) {
+        switch (state) {
+            case CONNECTED:
+                // Connected, you can map the current user's status as online
+                break;
+            case CONNECTING:
+                // Connecting, you can map the current user's status as online or offline based on your business logic
+                break;
+            case RECONNECTING:
+                // Reconnecting, you can map the current user's status as online or offline based on your business logic
+                break;
+            case DISCONNECTED:
+                // Disconnected, you can map the current user's status as offline
+                break;
+            default:
+                break;
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)connectionStateChanged:(ZIMConnectionState)state event:(ZIMConnectionEvent)event extendedData:(NSDictionary *)extendedData{
+    switch (state) {
+        case ZIMConnectionStateConnected:
+            // Connected, you can map the current user's status as online
+            break;
+        case ZIMConnectionStateConnecting:
+            // Connecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateReconnecting:
+            // Reconnecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateDisconnected:
+            // Disconnected, you can map the current user's status as offline
+            break;
+        default:
+            break;
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)connectionStateChanged:(ZIMConnectionState)state event:(ZIMConnectionEvent)event extendedData:(NSDictionary *)extendedData{
+    switch (state) {
+        case ZIMConnectionStateConnected:
+            // Connected, you can map the current user's status as online
+            break;
+        case ZIMConnectionStateConnecting:
+            // Connecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateReconnecting:
+            // Reconnecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateDisconnected:
+            // Disconnected, you can map the current user's status as offline
+            break;
+        default:
+            break;
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="window"}
+```objc
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)connectionStateChanged:(ZIMConnectionState)state event:(ZIMConnectionEvent)event extendedData:(NSDictionary *)extendedData{
+    switch (state) {
+        case ZIMConnectionStateConnected:
+            // Connected, you can map the current user's status as online
+            break;
+        case ZIMConnectionStateConnecting:
+            // Connecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateReconnecting:
+            // Reconnecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIMConnectionStateDisconnected:
+            // Disconnected, you can map the current user's status as offline
+            break;
+        default:
+            break;
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+
+```
+:::
+:::if{props.platform="window"}
+```cpp
+class CZIMEventHandler :public zim::ZIMEventHandler
+{
+    public:
+        CZIMEventHandler();
+        ~CZIMEventHandler();
+    private:
+        virtual void onConnectionStateChanged(ZIM* /*zim*/, ZIMConnectionState state, ZIMConnectionEvent event, const std::string & /*extendedData*/) override;
+        // Other callbacks
+}
+
+...
+
+im_event_handler_ = std::make_shared<CZIMEventHandler>();
+zim_->setEventHandler(im_event_handler_);
+```
+```cpp
+void onConnectionStateChanged(ZIM* /*zim*/, ZIMConnectionState state, ZIMConnectionEvent event, const std::string & /*extendedData*/) {
+    switch (state) {
+        case ZIM_CONNECTION_STATE_CONNECTED:
+            // Connected, you can map the current user's status as online
+            break;
+        case ZIM_CONNECTION_STATE_CONNECTING:
+            // Connecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIM_CONNECTION_STATE_RECONNECTING:
+            // Reconnecting, you can map the current user's status as online or offline based on your business logic
+            break;
+        case ZIM_CONNECTION_STATE_DISCONNECTED:
+            // Disconnected, you can map the current user's status as offline
+            break;
+        default:
+            // Other possible states
+            break;
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('connectionStateChanged', function (zim, { state, event }) {
+    switch (state) {
+        case 2: // Connected
+            console.log('Connected');
+            break;
+        case 1: // Connecting:
+            console.log('Connecting');
+            break;
+        case 3: // Reconnecting:
+            console.log('Reconnecting');
+            break;
+        case 0: // Disconnected:
+            console.log('Disconnected');
+            break;
+        default:
+            console.log('Unknown');
+            break;
+    }
+
+    console.log('Connection event:', event, state);
+});
+```
+:::
+
+## Listen to the online platforms list of the current user
+
+In the multi-login scenario, when a user logs in to a second platform, you can listen to the {getPlatformData(props,onUserStatusUpdatedMap)} callback to get the current user's online platforms from the `userStatus.onlinePlatforms` property. You can use this information to display the user's online status on different platforms (e.g., showing that the user is online on iOS and Windows).
+
+<Note title="Note">
+
+When the {getPlatformData(props,onUserStatusUpdatedMap)} callback returns the userStatus information of the current user, the `onlineStatus` will be `unknown` and `lastUpdateTime` will be 0, which cannot accurately reflect the online status.
+</Note> 
+
+:::if{props.platform=undefined}
+```java
+zim.setEventHandler(new ZIMEventHandler(){
+    public void onUserStatusUpdated(ZIM zim, ArrayList<ZIMUserStatus> userStatusList) {
+        String myUserID = "Current User ID"; // The current user ID
+        for (ZIMUserStatus userStatus : userStatusList) {
+            if (userStatus.userID.equals(myUserID)) {
+                // If it is the current user, onlineStatus will be UNKNOWN
+                ZIMUserOnlineStatus onlineStatus = userStatus.onlineStatus;
+
+                // Online platforms list of the current user
+                ArrayList<ZIMPlatformType> onlinePlatforms = userStatus.onlinePlatforms;
+
+                // If it is the current user, lastUpdateTime will be 0
+                long lastUpdateTime = userStatus.lastUpdateTime;
+            }
+        }
+    }
+});
+```
+:::
+:::if{props.platform="iOS"}
+```objc
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        if([userStatus.userID isEqual:myUserID]){
+            userStatus.onlineStatus; // If it is the current user, onlineStatus will be unknown
+            userStatus.onlinePlatforms; // Online platforms list of the current user
+            userStatus.lastUpdateTime;  // If it is the current user, lastUpdateTime will be 0
+        }
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="mac"}
+```objc
+@interface ZIMEventHandlerImpl : NSObject<ZIMEventHandler>
+
++(ZIMEventHandlerImpl *)getInstance();
+
+@end
+
+@implementation ZIMEventHandlerImpl
+
+- (void)zim:(ZIM *)zim userStatusUpdated:(NSArray<ZIMUserStatus *> *)userStatusList {
+    for(ZIMUserStatus *userStatus in userStatusList){
+        if([userStatus.userID isEqual:myUserID]){
+            userStatus.onlineStatus; // If it is the current user, onlineStatus will be unknown
+            userStatus.onlinePlatforms; // Online platforms list of the current user
+            userStatus.lastUpdateTime;  // If it is the current user, lastUpdateTime will be 0
+        }
+    }
+}
+
+// Other callback events..
+
+@end
+
+ZIMEventHandlerImpl *eventHandlerImpl = [ZIMEventHandlerImpl getInstance];
+
+[zim setEventHandler: eventHandlerImpl];
+```
+:::
+:::if{props.platform="window"}
+```cpp
+void onUserStatusUpdated(ZIM* /*zim*/, const std::vector<ZIMUserStatus>& userStatusList) {
+    for (const ZIMUserStatus& userStatus : userStatusList) {
+        if (userStatus.userID == "myUserID") {  // Check if it is the current user
+            userStatus.onlineStatus;            // If it is the current user, onlineStatus will be UNKNOWN
+            userStatus.onlinePlatforms;         // List of online platforms for the current user
+            userStatus.lastUpdateTime;          // If it is the current user, lastUpdateTime will be 0
+        }
+    }
+}
+```
+:::
+:::if{props.platform="Web"}
+```javascript
+zim.on('userStatusUpdated', function (zim, userStatusList) {
+    const myUserID = 'current user ID'; // Replace with the actual ID of the current user
+
+    userStatusList.forEach((userStatus) => {
+        if (userStatus.userID === myUserID) {
+            // If it is the current user, onlineStatus will be unknown and cannot accurately reflect the current user's online status
+            const onlineStatus = userStatus.onlineStatus;
+
+            // List of online platforms for the current user
+            const onlinePlatforms = userStatus.onlinePlatforms;
+
+            // If it is the current user, lastUpdateTime will be 0
+            const lastUpdateTime = userStatus.lastUpdateTime;
+
+            // Handle logic for online status, online platforms, etc.
+            console.log('Current user online status:', onlineStatus);
+            console.log('Current user online platforms:', onlinePlatforms);
+            console.log('Last status update time:', lastUpdateTime);
+        }
+    });
+});
+```
+:::
