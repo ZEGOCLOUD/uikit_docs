@@ -13,7 +13,7 @@ To use your own business server instead of using the Firebase, refer to the [Use
 
 2. Create a new Realtime Database in Firebase. 
 
-    ![/Pics/ZEGOCall/rtd.png](http://doc.oa.zego.im/Pics/ZEGOCall/rtd.png)
+    ![/Pics/ZEGOCall/rtd.png](https://storage.zego.im/sdk-doc/Pics/ZEGOCall/rtd.png)
 
 3. Edit the rules of the Realtime Database by adding the following:
 
