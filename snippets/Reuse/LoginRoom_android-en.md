@@ -1,4 +1,4 @@
-To log in to a room, call the [`loginRoom`\|_blank](/article/api?doc=Express_Video_SDK_API~Java_android~class~im-zego-zegoexpress-zego-express-engine#login-room) method. If the roomID does not exist, a new room will be created and you will log in automatically when you call the `loginRoom` method.
+To log in to a room, call the [`loginRoom`](https://www.zegocloud.com/article/api?doc=Express_Video_SDK_API~Java_android~class~im-zego-zegoexpress-zego-express-engine#login-room) method. If the roomID does not exist, a new room will be created and you will log in automatically when you call the `loginRoom` method.
 
 ```java
 /** create a user */
