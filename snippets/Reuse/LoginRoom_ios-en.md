@@ -1,4 +1,4 @@
-To log in to a room, call the [`loginRoom`\|_blank](/article/api?doc=express_video_sdk_API~ObjectiveC~class~zego-express-engine#login-room-callback-user-config) method. If the roomID does not exist, a new room will be created and you will log in automatically when you call the `loginRoom` method.
+To log in to a room, call the [`loginRoom`](https://www.zegocloud.com/article/api?doc=express_video_sdk_API~ObjectiveC~class~zego-express-engine#login-room-callback-user-config) method. If the roomID does not exist, a new room will be created and you will log in automatically when you call the `loginRoom` method.
 
 ```objc
 //create a user

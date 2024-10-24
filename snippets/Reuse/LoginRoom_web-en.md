@@ -4,7 +4,7 @@ When logging in to a room, you need to pass in a **token for user authentication
 
 </div>
 
-To log in to a room, call the [`loginRoom`\|_blank](/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) with the following parameters: 
+To log in to a room, call the [`loginRoom`](https://www.zegocloud.com/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) with the following parameters: 
 
 - A unique room ID as the `roomID` parameter
 - The login token you obtained in the previous step 
