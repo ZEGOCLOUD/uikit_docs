@@ -1,0 +1,122 @@
+# Customize member's avatar
+
+This doc describes how to customize member's avatar in member list.
+
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_duration.jpeg" />
+</Frame> 
+
+To custom member's avatar in member list, do the following:
+
+1. When the user initiates ZegoUIKitPrebuiltLiveStreaming, pass his avatar url address as a parameter.
+
+<Warning title="Warning">
+
+Please note that here you need to set different avatars url for different users in the avatar parameters. If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+
+</Warning>
+
+2. Customize avatar display style through `memberListConfig.avatarBuilder` for each role, such as HostPage or AudiencePage.
+
+Here is the reference code:
+
+```typescript {8-9,18,24-45}
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG, ZegoLiveStreamingRole } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+
+    // This is just an example; please replace it with the storage address for user avatars in your app.
+    let userAvatar = `https://robohash.org/${userID}.png`
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                userAvatar={userAvatar}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    memberListConfig: {
+                        avatarBuilder: (userInfo: any) => {
+                            const showMe = userInfo.isSelf ? 'You' : '';
+                            const roleName = userInfo.role === ZegoLiveStreamingRole.host ? 'Host' : (userInfo.role === ZegoLiveStreamingRole.coHost ? 'Co-host' : '');
+                            let roleDesc = ''
+                            if (!showMe) {
+                              roleDesc = `${roleName ? ('(' + roleName + ')') : ''}`;
+                            } else {
+                              roleDesc = `(${showMe + (roleName ? (',' + roleName) : '')})`;
+                            } 
+                        
+                            return (
+                              <View style={styles.memberItemLeft}>
+                                <Image
+                                      style={styles.memberAvatar}
+                                      source={userInfo.avatar ? { uri: userInfo.avatar } : require('./resources/avatar_def.png')}
+                                />
+                                <View style={[styles.memberName]}>
+                                    <Text numberOfLines={1} style={{fontSize: 16, color: '#FFFFFF'}}>{userInfo.userName}{roleDesc}</Text>
+                                </View>
+                              </View>
+                            );
+                        }
+                    },
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 0,
+    },
+    hostInfo: {
+      flexDirection: 'row',
+      backgroundColor: 'rgba(30, 39, 64, 0.4)',
+      borderRadius: 1000,
+      paddingLeft: 3,
+      paddingRight: 12,
+      paddingTop: 3,
+      paddingBottom: 3,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 16,
+      display: 'flex',
+    },
+    hostName: {
+      color: '#FFFFFF',
+      fontSize: 14,
+    },
+    memberAvatar: {
+        width: 36,
+        height: 36,
+        backgroundColor: '#DBDDE3',
+        borderRadius: 1000,
+        marginRight: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    memberItemLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    memberName: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+})
+```

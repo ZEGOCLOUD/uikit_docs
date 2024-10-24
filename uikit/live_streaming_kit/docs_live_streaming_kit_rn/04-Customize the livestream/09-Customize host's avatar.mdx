@@ -1,0 +1,104 @@
+# Customize host's avatar
+
+This doc describes how to customize host's avatar.
+
+
+<Frame width="30%" height="auto" caption="">
+  <img src="https://storage.zego.im/sdk-doc/Pics/ZegoUIKit/Flutter/live/live_duration.jpeg" />
+</Frame> 
+
+To custom host's avatar, do the following:
+
+1. When the host initiates ZegoUIKitPrebuiltLiveStreaming, pass the host's avatar url address as a parameter.
+
+<Warning title="Warning">
+
+Please note that here you need to set different avatars url for different users in the avatar parameters. If you hardcode a URL, then everyone's avatar will be the one you hardcoded.
+
+</Warning>
+
+2. Customize avatar display style through `topMenuBarConfig.buttonBuilders.hostAvatarBuilder` for each role, such as HostPage or AudiencePage.
+
+Here is the reference code:
+
+```typescript {8-9,18,25-35}
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import ZegoUIKitPrebuiltLiveStreaming, { HOST_DEFAULT_CONFIG } from '@zegocloud/zego-uikit-prebuilt-live-streaming-rn';
+import * as ZIM from 'zego-zim-react-native';
+
+export default function HostPage(props) {
+
+    // This is just an example; please replace it with the storage address for user avatars in your app.
+    let userAvatar = `https://robohash.org/${userID}.png`
+
+    return (
+        <View style={styles.container}>
+            <ZegoUIKitPrebuiltLiveStreaming
+                appID={yourAppID}
+                appSign={yourAppSign}
+                userID={userID}
+                userName={userName}
+                userAvatar={userAvatar}
+                liveID={liveID}
+
+                config={{
+                    ...HOST_DEFAULT_CONFIG,
+                    topMenuBarConfig: {
+                        buttonBuilders: {
+                            hostAvatarBuilder: (hostInfo: any) => {
+                                return (
+                                    <View style={[styles.hostInfo]}>
+                                        <Image
+                                            style={styles.memberAvatar}
+                                            source={hostInfo.avatar ? { uri: hostInfo.avatar } : require('./resources/avatar_def.png')}
+                                        />
+                                        <Text style={styles.hostName}>{hostInfo.userName}</Text>
+                                    </View>
+                                )
+                            },
+                        },
+                    },
+                }}
+                plugins={[ZIM]}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 0,
+    },
+    hostInfo: {
+      flexDirection: 'row',
+      backgroundColor: 'rgba(30, 39, 64, 0.4)',
+      borderRadius: 1000,
+      paddingLeft: 3,
+      paddingRight: 12,
+      paddingTop: 3,
+      paddingBottom: 3,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 16,
+      display: 'flex',
+    },
+    hostName: {
+      color: '#FFFFFF',
+      fontSize: 14,
+    },
+    memberAvatar: {
+        width: 36,
+        height: 36,
+        backgroundColor: '#DBDDE3',
+        borderRadius: 1000,
+        marginRight: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+})
+```
