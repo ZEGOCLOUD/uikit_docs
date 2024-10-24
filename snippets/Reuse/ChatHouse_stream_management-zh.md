@@ -25,7 +25,7 @@
 </tr>
 </tbody></table>
 
-![/Pics/GoEnjoy/MetaChat/metachat_stream_management.png](http://doc.oa.zego.im/Pics/GoEnjoy/MetaChat/metachat_stream_management.png)
+![/Pics/GoEnjoy/MetaChat/metachat_stream_management.png](https://storage.zego.im/sdk-doc/Pics/GoEnjoy/MetaChat/metachat_stream_management.png)
 
 
 

@@ -45,7 +45,7 @@ The client receives the change for conversations being pinned or unpinned in the
 ## Operation prototype
 
 - Request method: POST
-- Request URL: https://zim-api.zego.im/?Action=ConvPinned
+- Request URL: `https://zim-api.zego.im/?Action=ConvPinned`
 - Protocol: HTTPS
 - QPS limit: 20 calls per second
 
@@ -138,7 +138,7 @@ The `FromUserId` parameter can contain only digits, letters, and the following c
 <tr data-row-level="2">
 <td>Code</td>
 <td>Number</td>
-<td>The return code.<div class="mk-hint">When you request to pin or unpin multiple conversations, take note of the following items:<ul><li>If one or more conversations are successfully pinned or unpinned, `0` is returned, indicating a success. For more information, see `ErrorList`.</li><li>If all conversations fail to be pinned or unpinned, a corresponding code is returned. For more information, see <a href="https://doc-preview-en.zego.im/article/14024">Return codes</a>.</li></ul></div></td>
+<td>The return code.<div class="mk-hint">When you request to pin or unpin multiple conversations, take note of the following items:<ul><li>If one or more conversations are successfully pinned or unpinned, `0` is returned, indicating a success. For more information, see `ErrorList`.</li><li>If all conversations fail to be pinned or unpinned, a corresponding code is returned. For more information, see <a href="../Return%20codes.mdx">Return codes</a>.</li></ul></div></td>
 </tr>
 <tr data-row-level="3">
 <td>Message</td>

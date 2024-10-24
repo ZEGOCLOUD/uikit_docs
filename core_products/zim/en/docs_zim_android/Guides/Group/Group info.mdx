@@ -505,7 +505,7 @@ ZIM.GetInstance().UpdateGroupNotice("new_group_notice", "group_id", (string grou
 </CodeGroup>
 :::
 
-:::if{props.platform="undefined|Android|window|Flutter|RN"}
+:::if{props.platform="undefined|Android|window|RN"}
 ## Modify the group alias
 
 Group alias is a personalized nickname set by users for a group chat to distinguish from other group chats. For example, you can set the alias for a work group as "Work Group" and the alias for a family group as "Family Group", which makes it more convenient to identify the group chats.
@@ -571,22 +571,6 @@ zim_->updateGroupAlias(group_alias, group_id,
     [=](const std::string &groupID, const std::string &groupAlias, zim::ZIMError errorInfo){
         int error_code = errorInfo.code;    
     });
-```
-</CodeGroup>
-:::
-:::if{props.platform="Flutter"}
-<CodeGroup>
-```dart SampleCode
-// Modify the group alias
-// groupAlias is a string with a maximum of 256 bytes, with no special character restrictions.
-String groupAlias = 'newAlias';
-String groupId = 'groupID';
-try{
-    ZIMGroupAliasUpdatedResult? result = await ZIM.getInstance()?.updateGroupAlias(groupAlias, groupId);
-} on PlatformException catch (onError){
-    onError.code; // Failed to modify the group alias, error code
-    onError.message; // Error message for modifying the group alias
-}
 ```
 </CodeGroup>
 :::
@@ -693,14 +677,6 @@ class zim_event_handler : public zim::ZIMEventHandler {
 }
 ```
 </CodeGroup>
-:::
-:::if{props.platform="Flutter"}
-```dart SampleCode
-// Listen for group alias update notifications
-ZIMEventHandler.onGroupAliasUpdated = (ZIM zim, String groupAlias, String operatedUserID, String groupID){
-    // Business logic
-};
-```
 :::
 :::if{props.platform="RN"}
 ```javascript SampleCode

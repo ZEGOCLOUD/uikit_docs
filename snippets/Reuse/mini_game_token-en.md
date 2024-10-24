@@ -73,7 +73,7 @@ For ease of use, ZEGO provides the open source zego_server_assistant plug-in on 
     <td>Go 1.14.15 or later</td>
     <td>GenerateToken04</td>
     <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/src/token04">GitHub</a></li></ul></td>
-    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample.go">GitHub</a></li></ul></td>
+    <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-base.go">GitHub</a></li></ul></td>
     <td><ul><li><a target="_blank" href="https://github.com/ZEGOCLOUD/zego_server_assistant/blob/master/token/go/sample/sample-for-rtcroom.go">GitHub</a></li></ul></td>
   </tr>
   <tr>

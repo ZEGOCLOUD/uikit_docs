@@ -48,7 +48,7 @@ Your app clients request tokens from your app server and provide the token for p
 
 The following diagram shows the process of room login privilege validation:
 
-![/Pics/QuickStart/authenticaiton_flow_web.png](http://doc.oa.zego.im/Pics/QuickStart/authenticaiton_flow_web.png)
+![/Pics/QuickStart/authenticaiton_flow_web.png](https://storage.zego.im/sdk-doc/Pics/QuickStart/authenticaiton_flow_web.png)
 
 1. Your app client requests a token from your app server.
 2. Your app server generates a token and passes it to the client.
@@ -199,16 +199,16 @@ To make it easier for you to try and test the user authentication feature, [ZEGO
 1. Go to [ZEGO Admin Console\|_blank](hhttps://console.zegocloud.com). In the **Basic Information** section, click **Generate temp token** in the **Temp token for audio/video call** column.
 
 
-![/Pics/QuickStart/tem_token_1.png](http://doc.oa.zego.im/Pics/QuickStart/tem_token_1.png)
+![/Pics/QuickStart/tem_token_1.png](https://storage.zego.im/sdk-doc/Pics/QuickStart/tem_token_1.png)
 
 
 2. Fill in the **RoomId** and **UserId** information, and click **Generate**.
 
-![/Pics/QuickStart/tem_token_3.png](http://doc.oa.zego.im/Pics/QuickStart/tem_token_3.png)
+![/Pics/QuickStart/tem_token_3.png](https://storage.zego.im/sdk-doc/Pics/QuickStart/tem_token_3.png)
 
 3. In the popup window that appears, you will get the **Temp token**, which is valid for 24 hours.
 
-![/Pics/QuickStart/tem_token_4.png](http://doc.oa.zego.im/Pics/QuickStart/tem_token_4.png)
+![/Pics/QuickStart/tem_token_4.png](https://storage.zego.im/sdk-doc/Pics/QuickStart/tem_token_4.png)
 
 
 
