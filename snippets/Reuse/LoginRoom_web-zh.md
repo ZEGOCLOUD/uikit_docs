@@ -1,6 +1,6 @@
 **1. 获取登录 Token**
 
-调用 [ZegoExpressEngine\|_blank](/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine) 的 [loginRoom\|_blank](/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) 接口登录房间。登录时，请传入本文 [前提条件](!QuickStart/CreateWboard#2) 所获取到的 Token 进行鉴权。
+调用 [ZegoExpressEngine](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine) 的 [loginRoom](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) 接口登录房间。登录时，请传入本文 [前提条件](!QuickStart/CreateWboard#2) 所获取到的 Token 进行鉴权。
 
 
 **注意：临时 Token 仅供调试，正式上线时，请从开发者的业务服务器生成 token，详情可参考 [使用 Token 鉴权\|_blank](!User_Access_Control)。如果 Token 错误，请参考 [错误码\|_blank](!ExpressVideoSDK-Error_Code/Error_Code) 文档中的 1002067 和 1003072 排查问题。** 
@@ -8,7 +8,7 @@
 
 **2. 登录房间**  
 
-调用 [loginRoom \|_blank](/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) 接口，传入房间 ID 参数 “roomID”、“token” 和用户参数 “user”，根据实际情况传入参数 “config”，登录房间。
+调用 [loginRoom ](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~javascript_web~class~ZegoExpressEngine#login-room) 接口，传入房间 ID 参数 “roomID”、“token” 和用户参数 “user”，根据实际情况传入参数 “config”，登录房间。
 
 <div class="mk-warning">
 

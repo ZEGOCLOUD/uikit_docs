@@ -32,8 +32,8 @@ ZEGO 提供了[示例 Demo\|_blank](!DownloadDemo/DownloadDemo)，以供开发�
     - 操作按钮（包含播放，暂停，进度条等功能）
 
 2. 创建引擎。      
-调用 ZEGO Express SDK 的 [createEngine\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#create-engine) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
-注册回调，可将实现了 [IZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 的对象传入参数 “eventHandler”。
+调用 ZEGO Express SDK 的 [createEngine](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#create-engine) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
+注册回调，可将实现了 [IZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 的对象传入参数 “eventHandler”。
 
     ```java
     ZegoEngineProfile zegoEngineProfile = new ZegoEngineProfile();
@@ -72,7 +72,7 @@ ZEGO 提供了[示例 Demo\|_blank](!DownloadDemo/DownloadDemo)，以供开发�
     }
     ```
 
-2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [init\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#init) 接口，传入 userID，设置用户角色为 “ ZegoAccurateSyncUserRoleAudience”，初始化 ZegoAccurateSyncMediaPlayer SDK。
+2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [init](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#init) 接口，传入 userID，设置用户角色为 “ ZegoAccurateSyncUserRoleAudience”，初始化 ZegoAccurateSyncMediaPlayer SDK。
 
     <div class="mk-hint">
 
@@ -95,7 +95,7 @@ ZEGO 提供了[示例 Demo\|_blank](!DownloadDemo/DownloadDemo)，以供开发�
 
 ### 4 登录房间
 
-调用 ZEGO Express SDK 的 [loginRoom\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#login-room) 接口登录房间。roomID 和 user 的参数由开发者的本地业务生成，但是需要满足以下条件：
+调用 ZEGO Express SDK 的 [loginRoom](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#login-room) 接口登录房间。roomID 和 user 的参数由开发者的本地业务生成，但是需要满足以下条件：
 
 - 同一个 AppID 内，需保证 “roomID” 全局唯一。  
 - 需要和 [3 初始化 ZegoAccurateSyncMediaPlayer SDK](!Audience2_Implementation_Third_Party_Video_Resource_Solution#4_3) 中的 userID 一致。
@@ -110,12 +110,12 @@ ZegoExpressEngine.getEngine().loginRoom(roomID, user);
 
 <div class="mk-warning">
 
-必须收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示登录房间成功，后续才能成功 [加载视频](!Audience2_Implementation_Third_Party_Video_Resource_Solution#4_6)。
+必须收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示登录房间成功，后续才能成功 [加载视频](!Audience2_Implementation_Third_Party_Video_Resource_Solution#4_6)。
 </div>
 
 ### 5 透传房间附加消息
 
-在 ZEGO Express SDK 的 [IZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-extra-info-update) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#room-extra-info-updated) 接口，同步“主持人端”和“观众端”的视频播放进度。
+在 ZEGO Express SDK 的 [IZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-extra-info-update) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#room-extra-info-updated) 接口，同步“主持人端”和“观众端”的视频播放进度。
 
 ``` Java
 ZegoAccurateSync.roomExtraInfoUpdated(roomID, roomExtraInfoList);
@@ -124,13 +124,13 @@ ZegoAccurateSync.roomExtraInfoUpdated(roomID, roomExtraInfoList);
 
 ### 6 获取播放资源
 
-主持人端播放视频时，房间会保存播放过的视频信息，观众端在首次进房时，可以通过注册 ZegoAccurateSyncMediaPlayer SDK 的 [onRoomVideoUrlUpdate\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncEventHandler#on-room-video-url-update) 回调，收到房间新增视频的通知（视频 URL）。
+主持人端播放视频时，房间会保存播放过的视频信息，观众端在首次进房时，可以通过注册 ZegoAccurateSyncMediaPlayer SDK 的 [onRoomVideoUrlUpdate](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncEventHandler#on-room-video-url-update) 回调，收到房间新增视频的通知（视频 URL）。
 
-调用 ZegoAccurateSyncMediaPlayer SDK 的 [createMediaPlayer\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#create-media-player) 创建播放器，设置播放界面视图。调用 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#load-video) 接口，传入视频 URL，加载视频资源。
+调用 ZegoAccurateSyncMediaPlayer SDK 的 [createMediaPlayer](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#create-media-player) 创建播放器，设置播放界面视图。调用 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#load-video) 接口，传入视频 URL，加载视频资源。
 
 <div class="mk-warning">
 
-- 加载视频前，请确认是否收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示指示 [登录房间](!Audience2_Implementation_Third_Party_Video_Resource_Solution#4_4) 成功，否则可能会导致加载视频失败。
+- 加载视频前，请确认是否收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示指示 [登录房间](!Audience2_Implementation_Third_Party_Video_Resource_Solution#4_4) 成功，否则可能会导致加载视频失败。
 - 播放器支持的格式有：MP3、MP4、FLV、WAV、AAC、M3U8 和 MKV，如需支持其它格式，请联系 ZEGO 技术支持。
 </div>
 
@@ -147,7 +147,7 @@ mediaPlayer.loadVideo(
 
 ### 7 暂停/恢复播放
 
-播放过程中，观众可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，然后调用 ZegoAccurateSyncMediaPlayer SDK 的 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放。
+播放过程中，观众可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，然后调用 ZegoAccurateSyncMediaPlayer SDK 的 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放。
 
 ```java
 mediaPlayer.pause(); //暂停播放
@@ -157,8 +157,8 @@ mediaPlayer.resume(); //恢复播放
 
 <div class="mk-hint">
 
-- 主持人端调用 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放时，房间内的所有观众端会同步暂停；调用 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，房间内的所有观众端会同步恢复。（如果观众主动点击了暂停按钮，则观众端不会恢复。）
-- 观众端也可以调用 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，但只暂停自己的播放进度，并且不受主持人的影响；观众端调用 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，会继续播放视频（如果此时主持人已暂停播放，则观众端的影片仍为暂停状态），但不会同步主持人的视频进度，而是从原来暂停的地方继续播放。
+- 主持人端调用 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放时，房间内的所有观众端会同步暂停；调用 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，房间内的所有观众端会同步恢复。（如果观众主动点击了暂停按钮，则观众端不会恢复。）
+- 观众端也可以调用 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，但只暂停自己的播放进度，并且不受主持人的影响；观众端调用 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，会继续播放视频（如果此时主持人已暂停播放，则观众端的影片仍为暂停状态），但不会同步主持人的视频进度，而是从原来暂停的地方继续播放。
 
 </div>
 
@@ -166,7 +166,7 @@ mediaPlayer.resume(); //恢复播放
 
 ### 播放器播放状态变化回调通知
 
-播放过程中，播放器的状态发生变化时，开发者可以通过 ZegoAccurateSyncMediaPlayer SDK 的 [ZegoAccurateSyncMediaPlayerEventHandler\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayerEventHandler) 回调接口，获取相关的状态通知，并在回调中根据不同状态处理业务逻辑。
+播放过程中，播放器的状态发生变化时，开发者可以通过 ZegoAccurateSyncMediaPlayer SDK 的 [ZegoAccurateSyncMediaPlayerEventHandler](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayerEventHandler) 回调接口，获取相关的状态通知，并在回调中根据不同状态处理业务逻辑。
 
 
 ```java
@@ -195,7 +195,7 @@ ZegoAccurateSyncMediaPlayerEventHandler playerEventHandler = new ZegoAccurateSyn
 
 ### 进度同步
 
-观众注册了 ZegoAccurateSyncMediaPlayer SDK 的 [ZegoAccurateSyncMediaPlayerEventHandler\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayerEventHandler) 后，在播放过程中，会收到进度不同步的相关通知，此时可以调用 [syncServerProgress\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#sync-server-progress) 接口，同步自己的播放进度，和服务器保持一致。
+观众注册了 ZegoAccurateSyncMediaPlayer SDK 的 [ZegoAccurateSyncMediaPlayerEventHandler](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayerEventHandler) 后，在播放过程中，会收到进度不同步的相关通知，此时可以调用 [syncServerProgress](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#sync-server-progress) 接口，同步自己的播放进度，和服务器保持一致。
 
 ```Java
 // videoID 为房间内正在播放的视频的 ID
@@ -205,13 +205,13 @@ ZegoAccurateSync.syncServerProgress(videoID);
 
 <div class="mk-hint">
 
-自定义影视资源的 videoID，需要调用 ZegoAccurateSyncMediaPlayer SDK 的 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#load-video) 接口加载成功后，才能从 ZegoAccurateSyncMediaPlayer 的 属性 [videoID\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#video-id) 获得。
+自定义影视资源的 videoID，需要调用 ZegoAccurateSyncMediaPlayer SDK 的 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#load-video) 接口加载成功后，才能从 ZegoAccurateSyncMediaPlayer 的 属性 [videoID](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSyncMediaPlayer#video-id) 获得。
 </div>
 
 ### 资源回收
 
 1. 退出房间    
-观众可以调用 ZEGO Express SDK 的 [logoutRoom\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#logout-room) 接口，退出房间。   
+观众可以调用 ZEGO Express SDK 的 [logoutRoom](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#logout-room) 接口，退出房间。   
 
     ```java
     // 退出房间
@@ -219,7 +219,7 @@ ZegoAccurateSync.syncServerProgress(videoID);
     ```
 
 2. 销毁播放的视频资源   
-播放视频结束后，观众如需销毁本地的视频播放资源，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [unInit\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#un-init) 接口，销毁本地资源，并反初始化 SDK。   
+播放视频结束后，观众如需销毁本地的视频播放资源，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [unInit](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~java_android~class~ZegoAccurateSync#un-init) 接口，销毁本地资源，并反初始化 SDK。   
 
     ``` Java
     // 销毁播放器
@@ -230,7 +230,7 @@ ZegoAccurateSync.syncServerProgress(videoID);
     ```
 
 3. 销毁引擎    
-如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。   
+如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。   
 
     ``` Java
     ZegoExpressEngine.destroyEngine {  };    

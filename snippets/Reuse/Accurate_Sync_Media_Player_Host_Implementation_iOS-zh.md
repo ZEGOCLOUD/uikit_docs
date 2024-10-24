@@ -38,8 +38,8 @@ ZEGO 提供了[示例 Demo\|_blank](!DownloadDemo/DownloadDemo)，以供开发�
 ```
 
 3. 创建引擎。   
-调用 ZEGO Express SDK 的 [createEngineWithProfile\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~class~ZegoExpressEngine#create-engine-with-profile-event-handler) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
-注册回调，可将实现了 [ZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler) 的对象（例如 “self”）传入参数 “eventHandler”。   
+调用 ZEGO Express SDK 的 [createEngineWithProfile](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~class~ZegoExpressEngine#create-engine-with-profile-event-handler) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
+注册回调，可将实现了 [ZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler) 的对象（例如 “self”）传入参数 “eventHandler”。   
 ```objc
 ZegoEngineProfile *profile = [[ZegoEngineProfile alloc] init];
 // 请通过 ZEGO 控制台获取，格式为：1234567890
@@ -61,7 +61,7 @@ profile.scenario = ZegoScenarioCommunication;
     #import <ZegoAccurateSyncMediaPlayer/ZegoAccurateSyncMediaPlayer.h>
     ```
 
-2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [init\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#init-config-callback) 接口，传入 userID，设置用户角色为 “ZegoAccurateSyncUserRoleHost”，初始化 ZegoAccurateSyncMediaPlayer SDK。
+2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [init](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#init-config-callback) 接口，传入 userID，设置用户角色为 “ZegoAccurateSyncUserRoleHost”，初始化 ZegoAccurateSyncMediaPlayer SDK。
 
     <div class="mk-hint">
 
@@ -85,7 +85,7 @@ profile.scenario = ZegoScenarioCommunication;
 
 ### 4 登录房间
 
-调用 ZEGO Express SDK 的 [loginRoom\|_blank](/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#login-room-user) 接口登录房间。roomID 和 userID 的参数由开发者的本地业务生成，但是需要满足以下条件：
+调用 ZEGO Express SDK 的 [loginRoom](https://doc-zh.zego.im/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#login-room-user) 接口登录房间。roomID 和 userID 的参数由开发者的本地业务生成，但是需要满足以下条件：
 - 同一个 AppID 内，需保证 “roomID” 全局唯一。  
 - 需要和 <a href="#4_3">3 初始化 ZegoAccurateSyncMediaPlayer SDK</a> 中的 userID 一致。
 
@@ -109,12 +109,12 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 <div class="mk-warning">
 
-必须收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-state-changed-error-code-extended-data-room-id) 指示登录房间成功，后续才能成功 <a href="#4_6">加载视频</a>。
+必须收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-state-changed-error-code-extended-data-room-id) 指示登录房间成功，后续才能成功 <a href="#4_6">加载视频</a>。
 </div>
 
 ### 5 透传房间附加消息
 
-在 ZEGO Express SDK 的 [ZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-extra-info-update-room-id) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#room-extra-info-updated-room-id-room-extra-info-list) 接口，同步“主持人端”和“观众端”的视频播放进度。
+在 ZEGO Express SDK 的 [ZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-extra-info-update-room-id) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#room-extra-info-updated-room-id-room-extra-info-list) 接口，同步“主持人端”和“观众端”的视频播放进度。
 
 ```objc
 - (void)onRoomExtraInfoUpdate:(NSArray<ZegoRoomExtraInfo *> *)roomExtraInfoList roomID:(NSString *)roomID
@@ -135,11 +135,11 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
     @end
     ```
 
-2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [createMediaPlayer\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#create-media-player) 创建播放器，设置播放界面视图。传入视频资源 URL，调用 ZegoAccurateSyncMediaPlayer SDK 的 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 接口加载视频。
+2. 调用 ZegoAccurateSyncMediaPlayer SDK 的 [createMediaPlayer](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#create-media-player) 创建播放器，设置播放界面视图。传入视频资源 URL，调用 ZegoAccurateSyncMediaPlayer SDK 的 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 接口加载视频。
 
     <div class="mk-warning">
 
-    - 加载视频前，请确认是否收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-state-changed-error-code-extended-data-room-id) 指示 <a href="#4_4">登录房间</a> 成功，否则可能会导致加载视频失败。
+    - 加载视频前，请确认是否收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~objective-c_ios~protocol~ZegoEventHandler#on-room-state-changed-error-code-extended-data-room-id) 指示 <a href="#4_4">登录房间</a> 成功，否则可能会导致加载视频失败。
     - 播放器支持的格式有：MP3、MP4、FLV、WAV、AAC、M3U8 和 MKV，如需支持其它格式，请联系 ZEGO 技术支持。
     </div>
 
@@ -161,12 +161,12 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 ### 7 开始播放
 
-主持人登录房间，并且播放器设置完成后，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [start\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#start) 接口，开始播放选择的视频资源了。
+主持人登录房间，并且播放器设置完成后，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [start](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#start) 接口，开始播放选择的视频资源了。
 
 <div class=mk-warning>
 
-- 只有 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 成功后，才能调用 [start\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#start) 开始播放视频。
-- 如果在播放视频资源过程中需要切换视频，不能直接调用 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback)，需要先调用 [stop\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#stop) 接口停止播放当前视频，具体做法请参看 <a href="4_10">停止播放</a>。
+- 只有 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 成功后，才能调用 [start](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#start) 开始播放视频。
+- 如果在播放视频资源过程中需要切换视频，不能直接调用 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback)，需要先调用 [stop](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#stop) 接口停止播放当前视频，具体做法请参看 <a href="4_10">停止播放</a>。
 
 </div>
 
@@ -176,7 +176,7 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 ### 8 暂停/恢复播放
 
-播放过程中，主持人可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，然后调用 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放。
+播放过程中，主持人可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，然后调用 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放。
 
 ```objc
 [self.player pause];//暂停播放
@@ -186,14 +186,14 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 <div class="mk-hint">
 
-- 主持人端调用 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放时，房间内的所有观众端会同步暂停；调用 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，房间内的所有观众端会同步恢复。（如果观众主动点击了暂停按钮，则观众端不会恢复。）
-- 观众端也可以调用 [pause\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，但只暂停自己的播放进度，并且不受主持人的影响；观众端调用 [resume\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，会继续播放视频（如果此时主持人已暂停播放，则观众端的影片仍为暂停状态），但不会同步主持人的视频进度，而是从原来暂停的地方继续播放。
+- 主持人端调用 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放时，房间内的所有观众端会同步暂停；调用 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，房间内的所有观众端会同步恢复。（如果观众主动点击了暂停按钮，则观众端不会恢复。）
+- 观众端也可以调用 [pause](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#pause) 接口暂停播放，但只暂停自己的播放进度，并且不受主持人的影响；观众端调用 [resume](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#resume) 接口恢复播放时，会继续播放视频（如果此时主持人已暂停播放，则观众端的影片仍为暂停状态），但不会同步主持人的视频进度，而是从原来暂停的地方继续播放。
 
 </div>
 
 ### 9 跳转到指定时间播放
 
-播放过程中，主持人如果想要改变播放进度，跳转到指定时间的位置播放，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [seekTo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#seek-to-millisecond-callback) 接口，传入时间（单位为 ms），进行跳转。
+播放过程中，主持人如果想要改变播放进度，跳转到指定时间的位置播放，可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [seekTo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#seek-to-millisecond-callback) 接口，传入时间（单位为 ms），进行跳转。
 
 ```objc
 // your_start_position 为你传入的时间（单位为 ms）
@@ -202,7 +202,7 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 ### 10 停止播放
 
-播放过程中，主持人可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [stop\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#stop) 接口，直接停止播放。
+播放过程中，主持人可以调用 ZegoAccurateSyncMediaPlayer SDK 的 [stop](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#stop) 接口，直接停止播放。
 
 ```objc
 [self.player stop];//停止播放
@@ -285,7 +285,7 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 ### 进度同步
 
-主持人注册了 ZegoAccurateSyncMediaPlayer SDK 的 [onVideoProgressGapWithServer\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayerEventHandler#on-video-progress-gap-with-server-media-player-progress-gap) 后，如果在播放过程中，主持人的进度与服务器的进度不同步，主持人会收到相关通知。此时如果主持人调用 ZegoAccurateSyncMediaPlayer SDK 的 [syncServerProgress\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#sync-server-progress-video-id) 接口，房间内所有人会向服务器同步进度。
+主持人注册了 ZegoAccurateSyncMediaPlayer SDK 的 [onVideoProgressGapWithServer](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayerEventHandler#on-video-progress-gap-with-server-media-player-progress-gap) 后，如果在播放过程中，主持人的进度与服务器的进度不同步，主持人会收到相关通知。此时如果主持人调用 ZegoAccurateSyncMediaPlayer SDK 的 [syncServerProgress](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#sync-server-progress-video-id) 接口，房间内所有人会向服务器同步进度。
 
 ```objc
 // videoID 为房间内正在播放的视频的 ID
@@ -294,13 +294,13 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
 
 <div class="mk-hint">
 
-自定义影视资源的 videoID，需要调用 [loadVideo\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 接口加载成功后，才能从 ZegoAccurateSyncMediaPlayer 的 属性 [videoID\|_blank\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#current-state) 获得。
+自定义影视资源的 videoID，需要调用 [loadVideo](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#load-video-play-url-start-position-callback) 接口加载成功后，才能从 ZegoAccurateSyncMediaPlayer 的 属性 [videoID\|_blank](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSyncMediaPlayer#current-state) 获得。
 </div>
 
 ### 资源回收
 
 1. 退出房间  
-主持人调用 ZEGO Express SDK 的 [logoutRoom\|_blank](/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#logout-room) 接口，退出房间。
+主持人调用 ZEGO Express SDK 的 [logoutRoom](https://doc-zh.zego.im/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#logout-room) 接口，退出房间。
 
     ```objc
     // 退出房间
@@ -313,14 +313,14 @@ ZegoRoomConfig *roomConfig = [[ZegoRoomConfig alloc] init];
     </div>
 
 2. 销毁播放的视频资源  
-播放视频结束后，主持人如需销毁本地的视频播放资源，可以调用 ZegoAccurateSyncMediaPlayer SDK 的  [unInit\|_blank](/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#un-init) 接口，销毁本地资源，并反初始化 SDK。
+播放视频结束后，主持人如需销毁本地的视频播放资源，可以调用 ZegoAccurateSyncMediaPlayer SDK 的  [unInit](https://doc-zh.zego.im/article/api?doc=ZegoAccurateSyncMediaPlayerSDK_API~objective-c_ios~class~ZegoAccurateSync#un-init) 接口，销毁本地资源，并反初始化 SDK。
 
     ```objc
     [[ZegoAccurateSync sharedManager] unInit];
     ```
 
 3. 销毁引擎   
-如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine\|_blank](/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。
+如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine](https://doc-zh.zego.im/article/api?doc=express-video-sdk_API~objectivec_ios~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。
 
     ```objc
     [ZegoExpressEngine destroyEngine:nil];

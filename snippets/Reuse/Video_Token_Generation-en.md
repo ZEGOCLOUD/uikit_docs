@@ -17,7 +17,7 @@
 
 1. 开发者客户端发起申请 ZEGO 影视资源 Token 的请求。
 2. 在开发者的服务端上生成 ZEGO 影视资源 Token ，并返回给开发者客户端。
-3. 开发者客户端携带申请到的 ZEGO 影视资源 Token 和 VideoId 信息，通过 [loadCopyrightedVideo\|_blank](/article/api?doc=Watch_together_API~java_android~class~ZegoCopyrightedVideoPlayer#load-copyrighted-video) 接口传入 SDK。
+3. 开发者客户端携带申请到的 ZEGO 影视资源 Token 和 VideoId 信息，通过 [loadCopyrightedVideo](https://doc-zh.zego.im/article/api?doc=Watch_together_API~java_android~class~ZegoCopyrightedVideoPlayer#load-copyrighted-video) 接口传入 SDK。
 4. ZEGO SDK 会自动将 ZEGO 影视资源 Token 发送到 ZEGO 服务端进行校验。
 5. ZEGO 服务端会将校验结果返回给 ZEGO SDK。
 6. ZEGO SDK 再将校验的结果直接返回给开发者客户端，没有权限的客户端将加载视频失败。

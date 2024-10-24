@@ -31,8 +31,8 @@ ZEGO 提供了[示例 Demo\|_blank](#15769)，以供开发者进一步了解。
     - 操作按钮（包含播放，暂停，进度条等功能）
 
 2. 创建引擎。      
-调用 ZEGO Express SDK 的 [createEngine\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#create-engine) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
-注册回调，可将实现了 [IZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 的对象传入参数 “eventHandler”。
+调用 ZEGO Express SDK 的 [createEngine](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#create-engine) 接口，将申请到的 AppID 和 AppSign 分别传入参数“appID”和“appSign”，创建引擎单例对象。   
+注册回调，可将实现了 [IZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 的对象传入参数 “eventHandler”。
 
     ```java
     ZegoEngineProfile zegoEngineProfile = new ZegoEngineProfile();
@@ -94,7 +94,7 @@ ZEGO 提供了[示例 Demo\|_blank](#15769)，以供开发者进一步了解。
 
 ### 4 登录房间
 
-调用 ZEGO Express SDK 的 [loginRoom\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#login-room) 接口登录房间。roomID 和 user 的参数由开发者的本地业务生成，但是需要满足以下条件：
+调用 ZEGO Express SDK 的 [loginRoom](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#login-room) 接口登录房间。roomID 和 user 的参数由开发者的本地业务生成，但是需要满足以下条件：
 
 - 同一个 AppID 内，需保证 “roomID” 全局唯一。  
 - 需要和 [3 初始化 ZegoAccurateSyncMediaPlayer SDK](#15761#4_3) 中的 userID 一致。
@@ -109,12 +109,12 @@ ZegoExpressEngine.getEngine().loginRoom(roomID, user);
 
 <div class="mk-warning">
 
-必须收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示登录房间成功，后续才能成功 [加载视频](#15761#4_6)。
+必须收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示登录房间成功，后续才能成功 [加载视频](#15761#4_6)。
 </div>
 
 ### 5 透传房间附加消息
 
-在 ZEGO Express SDK 的 [IZegoEventHandler\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-extra-info-update) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated\|_blank](@roomExtraInfoUpdated) 接口，同步“主持人端”和“观众端”的视频播放进度。
+在 ZEGO Express SDK 的 [IZegoEventHandler](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler) 回调中，注册 [onRoomExtraInfoUpdate](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-extra-info-update) 监听，将房间内的附加消息，透传给 ZegoAccurateSyncMediaPlayer SDK。再调用 ZegoAccurateSyncMediaPlayer SDK 的 [roomExtraInfoUpdated\|_blank](@roomExtraInfoUpdated) 接口，同步“主持人端”和“观众端”的视频播放进度。
 
 ``` Java
 ZegoAccurateSync.roomExtraInfoUpdated(roomID, roomExtraInfoList);
@@ -129,7 +129,7 @@ ZegoAccurateSync.roomExtraInfoUpdated(roomID, roomExtraInfoList);
 
 <div class="mk-warning">
 
-- 加载视频前，请确认是否收到 [onRoomStateChanged\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示指示 [登录房间](#15761#4_4) 成功，否则可能会导致加载视频失败。
+- 加载视频前，请确认是否收到 [onRoomStateChanged](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~IZegoEventHandler#on-room-state-changed) 指示指示 [登录房间](#15761#4_4) 成功，否则可能会导致加载视频失败。
 - 播放器支持的格式有：MP3、MP4、FLV、WAV、AAC、M3U8 和 MKV，如需支持其它格式，请联系 ZEGO 技术支持。
 </div>
 
@@ -205,7 +205,7 @@ ZegoAccurateSync.syncServerProgress(videoID);
 ### 资源回收
 
 1. 退出房间    
-观众可以调用 ZEGO Express SDK 的 [logoutRoom\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#logout-room) 接口，退出房间。   
+观众可以调用 ZEGO Express SDK 的 [logoutRoom](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#logout-room) 接口，退出房间。   
 
     ```java
     // 退出房间
@@ -224,7 +224,7 @@ ZegoAccurateSync.syncServerProgress(videoID);
     ```
 
 3. 销毁引擎    
-如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine\|_blank](/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。   
+如果退出房间，不需要使用到引擎资源，可以调用 ZEGO Express SDK 的 [destroyEngine](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~java_android~class~ZegoExpressEngine#destroy-engine) 接口，销毁引擎。   
 
     ``` Java
     ZegoExpressEngine.destroyEngine {  };    

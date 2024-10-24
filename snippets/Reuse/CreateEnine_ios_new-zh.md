@@ -1,4 +1,4 @@
-调用 [createEngineWithProfile \|_blank](/article/api?doc=Express_Video_SDK_API~ObjectiveC_ios~class~zego-express-engine#create-engine-with-profile-event-handler) 接口，将申请到的 AppID 传入参数 “appID”，创建引擎单例对象。
+调用 [createEngineWithProfile ](https://doc-zh.zego.im/article/api?doc=Express_Video_SDK_API~ObjectiveC_ios~class~zego-express-engine#create-engine-with-profile-event-handler) 接口，将申请到的 AppID 传入参数 “appID”，创建引擎单例对象。
 
 如果需要注册回调，可将实现了 [ZegoEventHandler\|_blank](/zh/api?doc=Express_Video_SDK_API~ObjectiveC_ios~protocol~zego-event-handler) 的对象（例如 “self”）传入参数 “eventHandler”。如果不需要注册回调，可将 “nil” 传入参数 “eventHandler”，创建引擎后仍需要注册回调时可通过调用 [setEventHandler\|_blank](/zh/api?doc=Express_Video_SDK_API~ObjectiveC_ios~class~zego-express-engine#set-event-handler) 接口设置回调。
 
